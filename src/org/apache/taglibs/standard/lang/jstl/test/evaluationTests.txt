@@ -857,3 +857,200 @@ ${ "" == null }
 java.lang.Object
 ${ "" != null }
 java.lang.Object
+
+#######################################################
+# arithmetic operators involving Strings
+
+${ 4 + 3 }
+java.lang.Object
+${ 4.0 + 3 }
+java.lang.Object
+${ 4 + 3.0 }
+java.lang.Object
+${ 4.0 + 3.0 }
+java.lang.Object
+${ "4" + 3 }
+java.lang.Object
+${ "4.0" + 3 }
+java.lang.Object
+${ "4" + 3.0 }
+java.lang.Object
+${ "4.0" + 3.0 }
+java.lang.Object
+${ 4 + "3" }
+java.lang.Object
+${ 4.0 + "3" }
+java.lang.Object
+${ 4 + "3.0" }
+java.lang.Object
+${ 4.0 + "3.0" }
+java.lang.Object
+${ "4" + "3" }
+java.lang.Object
+${ "4.0" + "3" }
+java.lang.Object
+${ "4" + "3.0" }
+java.lang.Object
+${ "4.0" + "3.0" }
+java.lang.Object
+
+
+${ 4 - 3 }
+java.lang.Object
+${ 4.0 - 3 }
+java.lang.Object
+${ 4 - 3.0 }
+java.lang.Object
+${ 4.0 - 3.0 }
+java.lang.Object
+${ "4" - 3 }
+java.lang.Object
+${ "4.0" - 3 }
+java.lang.Object
+${ "4" - 3.0 }
+java.lang.Object
+${ "4.0" - 3.0 }
+java.lang.Object
+${ 4 - "3" }
+java.lang.Object
+${ 4.0 - "3" }
+java.lang.Object
+${ 4 - "3.0" }
+java.lang.Object
+${ 4.0 - "3.0" }
+java.lang.Object
+${ "4" - "3" }
+java.lang.Object
+${ "4.0" - "3" }
+java.lang.Object
+${ "4" - "3.0" }
+java.lang.Object
+${ "4.0" - "3.0" }
+java.lang.Object
+
+
+${ 4 * 3 }
+java.lang.Object
+${ 4.0 * 3 }
+java.lang.Object
+${ 4 * 3.0 }
+java.lang.Object
+${ 4.0 * 3.0 }
+java.lang.Object
+${ "4" * 3 }
+java.lang.Object
+${ "4.0" * 3 }
+java.lang.Object
+${ "4" * 3.0 }
+java.lang.Object
+${ "4.0" * 3.0 }
+java.lang.Object
+${ 4 * "3" }
+java.lang.Object
+${ 4.0 * "3" }
+java.lang.Object
+${ 4 * "3.0" }
+java.lang.Object
+${ 4.0 * "3.0" }
+java.lang.Object
+${ "4" * "3" }
+java.lang.Object
+${ "4.0" * "3" }
+java.lang.Object
+${ "4" * "3.0" }
+java.lang.Object
+${ "4.0" * "3.0" }
+java.lang.Object
+
+
+${ 4 / 3 }
+java.lang.Object
+${ 4.0 / 3 }
+java.lang.Object
+${ 4 / 3.0 }
+java.lang.Object
+${ 4.0 / 3.0 }
+java.lang.Object
+${ "4" / 3 }
+java.lang.Object
+${ "4.0" / 3 }
+java.lang.Object
+${ "4" / 3.0 }
+java.lang.Object
+${ "4.0" / 3.0 }
+java.lang.Object
+${ 4 / "3" }
+java.lang.Object
+${ 4.0 / "3" }
+java.lang.Object
+${ 4 / "3.0" }
+java.lang.Object
+${ 4.0 / "3.0" }
+java.lang.Object
+${ "4" / "3" }
+java.lang.Object
+${ "4.0" / "3" }
+java.lang.Object
+${ "4" / "3.0" }
+java.lang.Object
+${ "4.0" / "3.0" }
+java.lang.Object
+
+
+${ 4 % 3 }
+java.lang.Object
+${ 4.0 % 3 }
+java.lang.Object
+${ 4 % 3.0 }
+java.lang.Object
+${ 4.0 % 3.0 }
+java.lang.Object
+${ "4" % 3 }
+java.lang.Object
+${ "4.0" % 3 }
+java.lang.Object
+${ "4" % 3.0 }
+java.lang.Object
+${ "4.0" % 3.0 }
+java.lang.Object
+${ 4 % "3" }
+java.lang.Object
+${ 4.0 % "3" }
+java.lang.Object
+${ 4 % "3.0" }
+java.lang.Object
+${ 4.0 % "3.0" }
+java.lang.Object
+${ "4" % "3" }
+java.lang.Object
+${ "4.0" % "3" }
+java.lang.Object
+${ "4" % "3.0" }
+java.lang.Object
+${ "4.0" % "3.0" }
+java.lang.Object
+
+
+${ "8" / "2" }
+java.lang.Object
+${ "4e2" + "3" }
+java.lang.Object
+${ "4" + "3e2" }
+java.lang.Object
+${ "4e2" + "3e2" }
+java.lang.Object
+
+
+#######################################################
+# unary minus operator involving Strings
+
+${ -3 }
+java.lang.Object
+${ -3.0 }
+java.lang.Object
+${ -"3" }
+java.lang.Object
+${ -"3.0" }
+java.lang.Object
+${ -"3e2" }
+java.lang.Object

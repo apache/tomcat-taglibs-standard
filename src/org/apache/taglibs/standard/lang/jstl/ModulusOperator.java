@@ -116,9 +116,11 @@ public class ModulusOperator
     }
 
     if ((pLeft != null &&
-	 Coercions.isFloatingPointType (pLeft)) ||
+	 (Coercions.isFloatingPointType (pLeft) ||
+	  Coercions.isFloatingPointString (pLeft))) ||
 	(pRight != null &&
-	 Coercions.isFloatingPointType (pRight))) {
+	 (Coercions.isFloatingPointType (pRight) ||
+	  Coercions.isFloatingPointString (pRight)))) {
       double left =
 	Coercions.coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
 	doubleValue ();

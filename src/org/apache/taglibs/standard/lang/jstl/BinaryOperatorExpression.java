@@ -59,7 +59,7 @@ import java.util.List;
 
 /**
  *
- * <p>An expression representing a unary operator on a value
+ * <p>An expression representing a binary operator on a value
  * 
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$

@@ -1539,7 +1539,7 @@ With type: java.lang.Integer
 
 Expression: ${ "a" + "bcd" }
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ "a" + "bcd" }": Attempt to apply operator "+" to arguments of type "java.lang.String" and "java.lang.String"
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ "a" + "bcd" }": An exception occured trying to convert String "a" to type "java.lang.Long"
 With type: javax.servlet.jsp.JspException
 
 Expression: ${ "a" + (4*3) }
@@ -1549,7 +1549,7 @@ With type: javax.servlet.jsp.JspException
 
 Expression: ${ bean1a.map1 ["key" + (5-4)] }
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ bean1a.map1 ["key" + (5-4)] }": An exception occured trying to convert String "key" to type "java.lang.Long"
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ bean1a.map1 ["key" + (5-4)] }": An exception occured trying to convert String "key" to type "java.lang.Double"
 With type: javax.servlet.jsp.JspException
 
 
@@ -1769,13 +1769,13 @@ With type: java.lang.Long
 
 Expression: ${ 3 + "4.5" }
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ 3 + "4.5" }": An exception occured trying to convert String "4.5" to type "java.lang.Long"
-With type: javax.servlet.jsp.JspException
+Evaluates to: 7.5
+With type: java.lang.Double
 
 Expression: ${ "4.5" + 3 }
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ "4.5" + 3 }": An exception occured trying to convert String "4.5" to type "java.lang.Long"
-With type: javax.servlet.jsp.JspException
+Evaluates to: 7.5
+With type: java.lang.Double
 
 Expression: ${ 3.0 + 6.0}
 ExpectedType: class java.lang.Object
@@ -1923,4 +1923,468 @@ Expression: ${ "" != null }
 ExpectedType: class java.lang.Object
 Evaluates to: true
 With type: java.lang.Boolean
+
+
+#######################################################
+# arithmetic operators involving Strings
+
+Expression: ${ 4 + 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 7
+With type: java.lang.Long
+
+Expression: ${ 4.0 + 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ 4 + 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ 4.0 + 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ "4" + 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 7
+With type: java.lang.Long
+
+Expression: ${ "4.0" + 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ "4" + 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ "4.0" + 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ 4 + "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 7
+With type: java.lang.Long
+
+Expression: ${ 4.0 + "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ 4 + "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ 4.0 + "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ "4" + "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 7
+With type: java.lang.Long
+
+Expression: ${ "4.0" + "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ "4" + "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+Expression: ${ "4.0" + "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 7.0
+With type: java.lang.Double
+
+
+
+Expression: ${ 4 - 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1
+With type: java.lang.Long
+
+Expression: ${ 4.0 - 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4 - 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4.0 - 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4" - 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1
+With type: java.lang.Long
+
+Expression: ${ "4.0" - 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4" - 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4.0" - 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4 - "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1
+With type: java.lang.Long
+
+Expression: ${ 4.0 - "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4 - "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4.0 - "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4" - "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1
+With type: java.lang.Long
+
+Expression: ${ "4.0" - "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4" - "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4.0" - "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+
+
+Expression: ${ 4 * 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 12
+With type: java.lang.Long
+
+Expression: ${ 4.0 * 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ 4 * 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ 4.0 * 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ "4" * 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 12
+With type: java.lang.Long
+
+Expression: ${ "4.0" * 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ "4" * 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ "4.0" * 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ 4 * "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 12
+With type: java.lang.Long
+
+Expression: ${ 4.0 * "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ 4 * "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ 4.0 * "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ "4" * "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 12
+With type: java.lang.Long
+
+Expression: ${ "4.0" * "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ "4" * "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+Expression: ${ "4.0" * "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 12.0
+With type: java.lang.Double
+
+
+
+Expression: ${ 4 / 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ 4.0 / 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ 4 / 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ 4.0 / 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ "4" / 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ "4.0" / 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ "4" / 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ "4.0" / 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ 4 / "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ 4.0 / "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ 4 / "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ 4.0 / "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ "4" / "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ "4.0" / "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ "4" / "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+Expression: ${ "4.0" / "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.3333333333333333
+With type: java.lang.Double
+
+
+
+Expression: ${ 4 % 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1
+With type: java.lang.Long
+
+Expression: ${ 4.0 % 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4 % 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4.0 % 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4" % 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1
+With type: java.lang.Long
+
+Expression: ${ "4.0" % 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4" % 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4.0" % 3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4 % "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1
+With type: java.lang.Long
+
+Expression: ${ 4.0 % "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4 % "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ 4.0 % "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4" % "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1
+With type: java.lang.Long
+
+Expression: ${ "4.0" % "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4" % "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+Expression: ${ "4.0" % "3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.0
+With type: java.lang.Double
+
+
+
+Expression: ${ "8" / "2" }
+ExpectedType: class java.lang.Object
+Evaluates to: 4.0
+With type: java.lang.Double
+
+Expression: ${ "4e2" + "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 403.0
+With type: java.lang.Double
+
+Expression: ${ "4" + "3e2" }
+ExpectedType: class java.lang.Object
+Evaluates to: 304.0
+With type: java.lang.Double
+
+Expression: ${ "4e2" + "3e2" }
+ExpectedType: class java.lang.Object
+Evaluates to: 700.0
+With type: java.lang.Double
+
+
+
+#######################################################
+# unary minus operator involving Strings
+
+Expression: ${ -3 }
+ExpectedType: class java.lang.Object
+Evaluates to: -3
+With type: java.lang.Long
+
+Expression: ${ -3.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: -3.0
+With type: java.lang.Double
+
+Expression: ${ -"3" }
+ExpectedType: class java.lang.Object
+Evaluates to: -3
+With type: java.lang.Long
+
+Expression: ${ -"3.0" }
+ExpectedType: class java.lang.Object
+Evaluates to: -3.0
+With type: java.lang.Double
+
+Expression: ${ -"3e2" }
+ExpectedType: class java.lang.Object
+Evaluates to: -300.0
+With type: java.lang.Double
 

@@ -116,12 +116,22 @@ public class UnaryMinusOperator
     }
 
     else if (pValue instanceof String) {
-      double dval =
-	((Number) 
-	 (Coercions.coerceToPrimitiveNumber 
-	  (pValue, Double.class, pLogger))).
-	doubleValue ();
-      return PrimitiveObjects.getDouble (-dval);
+      if (Coercions.isFloatingPointString (pValue)) {
+	double dval =
+	  ((Number) 
+	   (Coercions.coerceToPrimitiveNumber 
+	    (pValue, Double.class, pLogger))).
+	  doubleValue ();
+	return PrimitiveObjects.getDouble (-dval);
+      }
+      else {
+	long lval =
+	  ((Number) 
+	   (Coercions.coerceToPrimitiveNumber 
+	    (pValue, Long.class, pLogger))).
+	  longValue ();
+	return PrimitiveObjects.getLong (-lval);
+      }
     }
 
     else if (pValue instanceof Byte) {

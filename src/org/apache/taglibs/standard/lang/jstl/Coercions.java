@@ -71,15 +71,13 @@ import java.beans.PropertyEditorManager;
  *   Binary operator - A {+,-,*} B
  *     if A and B are null
  *       return 0
- *     if A or B is Float or Double
+ *     if A or B is Float, Double, or String containing ".", "e", or "E"
  *       coerce both A and B to Double
  *       apply operator
- *     if A or B is Byte,Short,Character,Integer,Long
+ *     otherwise
  *       coerce both A and B to Long
  *       apply operator
  *     if operator results in exception (such as divide by 0), error
- *     otherwise
- *       error
  * 
  *   Binary operator - A {/,div} B
  *     if A and B are null
@@ -92,7 +90,7 @@ import java.beans.PropertyEditorManager;
  *   Binary operator - A {%,mod} B
  *     if A and B are null
  *       return 0
- *     if A or B is Float or Double
+ *     if A or B is Float, Double, or String containing ".", "e" or "E"
  *       coerce both to Double
  *       apply operator
  *     otherwise
@@ -104,7 +102,10 @@ import java.beans.PropertyEditorManager;
  *     if A is null
  *       return 0
  *     if A is String
- *       coerce to Double, apply operator
+ *       if A contains ".", "e", or "E"
+ *         coerce to Double, apply operator
+ *       otherwise
+ *         coerce to a Long and apply operator
  *     if A is Byte,Short,Integer,Long,Float,Double
  *       retain type, apply operator
  *     if operator results in exception, error
@@ -765,7 +766,9 @@ public class Coercions
     }
 
     else if (isFloatingPointType (pLeft) ||
-	     isFloatingPointType (pRight)) {
+	     isFloatingPointType (pRight) ||
+	     isFloatingPointString (pLeft) ||
+	     isFloatingPointString (pRight)) {
       double left =
 	coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
 	doubleValue ();
@@ -776,8 +779,7 @@ public class Coercions
 	PrimitiveObjects.getDouble (pOperator.apply (left, right, pLogger));
     }
 
-    else if (isIntegerType (pLeft) ||
-	     isIntegerType (pRight)) {
+    else {
       long left =
 	coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
 	longValue ();
@@ -786,17 +788,6 @@ public class Coercions
 	longValue ();
       return
 	PrimitiveObjects.getLong (pOperator.apply (left, right, pLogger));
-    }
-
-    else {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.ARITH_OP_BAD_TYPE,
-	   pOperator.getOperatorSymbol (),
-	   pLeft == null ? "null" : pLeft.getClass ().getName (),
-	   pRight == null ? "null" : pRight.getClass ().getName ());
-      }
-      return PrimitiveObjects.getInteger (0);
     }
   }
 
@@ -1007,6 +998,32 @@ public class Coercions
       pClass == Float.TYPE ||
       pClass == Double.class ||
       pClass == Double.TYPE;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns true if the given string might contain a floating point
+   * number - i.e., it contains ".", "e", or "E"
+   **/
+  public static boolean isFloatingPointString (Object pObject)
+  {
+    if (pObject instanceof String) {
+      String str = (String) pObject;
+      int len = str.length ();
+      for (int i = 0; i < len; i++) {
+	char ch = str.charAt (i);
+	if (ch == '.' ||
+	    ch == 'e' ||
+	    ch == 'E') {
+	  return true;
+	}
+      }
+      return false;
+    }
+    else {
+      return false;
+    }
   }
 
   //-------------------------------------
