@@ -331,8 +331,12 @@ public abstract class TransformSupport extends BodyTagSupport {
                 return null;
 
 	    // remove "jstl" marker from 'base'
-	    if (base != null && base.startsWith("jstl:"))
-		base = base.substring(5);
+            // NOTE: how 'base' is determined varies among different Xalan
+            // xsltc implementations
+            int index;
+            if (base != null && (index = base.indexOf("jstl:")) != -1) {
+                base = base.substring(index + 5);
+            }  
 
             // we're only concerned with relative URLs
             if (ImportSupport.isAbsoluteUrl(href)
