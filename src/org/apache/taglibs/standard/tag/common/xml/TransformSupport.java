@@ -187,20 +187,27 @@ public abstract class TransformSupport extends BodyTagSupport {
 	    t.transform(xml, doc);
 	    pageContext.setAttribute(var, d, scope);
 	} else {
-	    /*
-	     * We're going to output the text directly.  I'd love to
-	     * construct a StreamResult directly from pageContext.getOut(),
-	     * but I can't trust the transformer not to flush our writer.
-	     */
-	    StringWriter bufferedResult = new StringWriter();
-	    Result page = new StreamResult(bufferedResult);
+	 ////
+         // Replaced in favor of the optimized method below, suggested
+         // by Bob Lee.
+	 //   /*
+	 //    * We're going to output the text directly.  I'd love to
+	 //    * construct a StreamResult directly from pageContext.getOut(),
+	 //    * but I can't trust the transformer not to flush our writer.
+	 //    */
+	 //   StringWriter bufferedResult = new StringWriter();
+	 //   Result page = new StreamResult(bufferedResult);
+	 //   t.transform(xml, page);
+	 //   pageContext.getOut().print(bufferedResult);
+
+	    Result page =
+		new StreamResult(new SafeWriter(pageContext.getOut()));
 	    t.transform(xml, page);
-	    pageContext.getOut().print(bufferedResult);
 	}
 
 	return EVAL_PAGE;
-      } catch (IOException ex) {
-	throw new JspTagException(ex.toString());
+         //   } catch (IOException ex) {
+	 //   throw new JspTagException(ex.toString());
       } catch (ParserConfigurationException ex) {
 	throw new JspTagException(ex.toString());
       } catch (TransformerException ex) {
@@ -251,4 +258,22 @@ public abstract class TransformSupport extends BodyTagSupport {
         this.scope = Util.getScope(scope);
     }
 
+
+    //*********************************************************************
+    // Private utility class
+
+    /**
+     * A Writer based on a wrapped Writer but ignoring requests to
+     * close() and flush() it.  (Someone must have wrapped the
+     * toilet in my office similarly...)
+     */
+    private static class SafeWriter extends Writer {
+	private Writer w;
+	public SafeWriter(Writer w) { this.w = w; }
+	public void close() { }
+	public void flush() { }
+	public void write(char[] cbuf, int off, int len) throws IOException {
+	    w.write(cbuf, off, len);
+	}
+    }	
 }
