@@ -228,15 +228,17 @@ public abstract class SetLocaleSupport extends TagSupport {
      * the given locale
      * @param locale the response locale
      */
-    static void setResponseLocale(PageContext pageContext, Locale locale) {
+    static void setResponseLocale(PageContext pc, Locale locale) {
 	// set response locale
-	ServletResponse response = pageContext.getResponse();
+	ServletResponse response = pc.getResponse();
 	response.setLocale(locale);
 	
 	// get response character encoding and store it in session attribute
-	pageContext.setAttribute(RequestEncodingSupport.REQUEST_CHAR_SET,
-				 response.getCharacterEncoding(),
-				 PageContext.SESSION_SCOPE);
+	if (pc.getSession() != null) {
+	    pc.setAttribute(RequestEncodingSupport.REQUEST_CHAR_SET,
+			    response.getCharacterEncoding(),
+			    PageContext.SESSION_SCOPE);
+	}
     }
  
     /*
