@@ -2,9 +2,10 @@
 
 <html>
 <head>
-  <title>JSTL: I18N Support -- Exception Example</title>
+  <title>JSTL: Formatting/I18N Support -- Exception Example</title>
 </head>
 <body bgcolor="#FFFFFF">
+<h3>Localized Error Page Exception</h3>
 
 <%@ page isErrorPage="true" %>
 Looking up exception's fully qualified class name in resource bundle:<br>

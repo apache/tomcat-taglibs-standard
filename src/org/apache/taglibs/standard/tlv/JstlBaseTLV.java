@@ -91,6 +91,15 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     // parameter names
     private final String EXP_ATT_PARAM = "expressionAttributes";
 
+    // attributes
+    protected static final String SCOPE = "scope";  
+
+    //scopes
+    protected static final String PAGE_SCOPE = "page";        
+    protected static final String REQUEST_SCOPE = "request";  
+    protected static final String SESSION_SCOPE = "session";  
+    protected static final String APPLICATION_SCOPE = "application";
+
 
     //*********************************************************************
     // Validation and configuration state (protected)
@@ -212,6 +221,33 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
         messageVector.add(new ValidationMessage(lastElementId, message));
     }
 
+    // returns true if the given attribute name is specified, false otherwise
+    protected boolean isSpecified(TagData data, String attributeName) {
+        return (data.getAttribute(attributeName) != null);
+    }
+
+    // returns true if the 'scope' attribute is valid
+    protected boolean hasNoInvalidScope(Attributes a) {
+        String scope = a.getValue(SCOPE);
+
+	if ((scope != null)
+	    && !scope.equals(PAGE_SCOPE)
+	    && !scope.equals(REQUEST_SCOPE)
+	    && !scope.equals(SESSION_SCOPE)
+	    && !scope.equals(APPLICATION_SCOPE))
+	    return false;
+
+        return true;
+    }
+
+    // retrieves the local part of a QName
+    protected String getLocalPart(String qname) {
+	int colon = qname.indexOf(":");
+	if (colon == -1)
+	    return qname;
+	else
+	    return qname.substring(colon + 1);
+    }
 
     //*********************************************************************
     // Miscellaneous utility functions

@@ -28,6 +28,6 @@
  </tr>
  <tr>
   <td>a=b</td>
-  <td><c:urlEncode>a=b</jx:urlEncode></td>        <%-- bodies work too --%>
+  <td><c:urlEncode>a=b</c:urlEncode></td>        <%-- bodies work too --%>
  </tr>
 </table>

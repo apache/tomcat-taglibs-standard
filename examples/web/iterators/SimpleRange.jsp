@@ -11,6 +11,6 @@
 
 <c:forEach var="i" begin="1" end="10">
   <c:expr value="$i"/> &#149;
-</c:forEach> 
+</c:forEach>
 </body>
 </html>

@@ -75,14 +75,15 @@ public abstract class MessageFormatSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected String value;                              // 'value' attribute
+    protected String value;                          // 'value' attribute
+    protected Object[] messageArgs;                  // 'messageArgs' attribute
 
 
     //*********************************************************************
     // Private state
 
-    private String var;                                  // 'var' attribute
-    private int scope;                                   // 'scope' attribute
+    private String var;                              // 'var' attribute
+    private int scope;                               // 'scope' attribute
     private List arguments;
 
 
@@ -98,6 +99,7 @@ public abstract class MessageFormatSupport extends BodyTagSupport {
     private void init() {
 	value = var = null;
 	scope = PageContext.PAGE_SCOPE;
+	messageArgs = null;
 	arguments.clear();
     }
 
@@ -131,12 +133,21 @@ public abstract class MessageFormatSupport extends BodyTagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	String message = value;
+	if (value == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (value = bcs.trim()).equals(""))
+                throw new JspTagException(
+                    Resources.getMessage("MESSAGE_FORMAT_NO_VALUE"));
+	}
 
-	if (!arguments.isEmpty()) {
+	String message = value;
+	// Perform parametric replacement if required
+	if (!arguments.isEmpty())
+	    messageArgs = arguments.toArray();
+	if (messageArgs != null) {
 	    MessageFormat formatter = new MessageFormat("");
 	    formatter.applyPattern(value);
-	    message = formatter.format(arguments.toArray());
+	    message = formatter.format(messageArgs);
 	}
 
 	if (var != null) {

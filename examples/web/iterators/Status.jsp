@@ -26,8 +26,8 @@
       <td><c:expr value="$status.first"/></td>
       <td><c:expr value="$status.last"/></td>
     </tr>
-	<c:if test="$status.last">
-	  <c:set var="count" value="$status.count"/>
+    <c:if test="$status.last">
+      <c:set var="count" value="$status.count"/>
     </c:if>  
   </c:forEach>
 </table>
@@ -38,9 +38,9 @@
 <h4>Iteration using range attributes</h4>
 <c:forEach var="i" begin="100" end="200" step="5" status="status">
   <c:if test="$status.first">
-    begin:<c:expr value="$status.begin">begin</jx:expr> &nbsp; &nbsp; 
-      end:<c:expr value="$status.end">end</jx:expr> &nbsp; &nbsp; 
-     step:<c:expr value="$status.step">step</jx:expr><br>
+    begin:<c:expr value="$status.begin">begin</c:expr> &nbsp; &nbsp; 
+      end:<c:expr value="$status.end">end</c:expr> &nbsp; &nbsp; 
+     step:<c:expr value="$status.step">step</c:expr><br>
     sequence: 
   </c:if>  
   <c:expr value="$i"/> 

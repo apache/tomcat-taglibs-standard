@@ -90,10 +90,10 @@ public class ExpressionEvaluatorManager {
     //*********************************************************************
     // Constants
 
+    public static final String DEFAULT_EVALUATOR_CLASS =
+        "org.apache.taglibs.standard.lang.javascript.JavascriptExpressionEvaluator";
     private static final String EVALUATOR_PARAMETER =
         "javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass";
-    private static final String DEFAULT_EVALUATOR_CLASS =
-        "org.apache.taglibs.standard.lang.javascript.JavascriptExpressionEvaluator";
 
     //*********************************************************************
     // Internal, static state
@@ -226,17 +226,17 @@ public class ExpressionEvaluatorManager {
         } catch (ClassCastException ex) {
             // just to display a better error message
             throw new JspException("invalid ExpressionEvaluator: " +
-                ex.getMessage());
+                ex.getMessage(), ex);
         } catch (ClassNotFoundException ex) {
             throw new JspException("couldn't find ExpressionEvaluator: " +
-                ex.getMessage());
+                ex.getMessage(), ex);
         } catch (IllegalAccessException ex) {
             throw new JspException("couldn't access ExpressionEvaluator: " +
-                ex.getMessage());
+                ex.getMessage(), ex);
         } catch (InstantiationException ex) {
             throw new JspException(
                 "couldn't instantiate ExpressionEvaluator: " +
-                ex.getMessage());
+                ex.getMessage(), ex);
         }
     }
 

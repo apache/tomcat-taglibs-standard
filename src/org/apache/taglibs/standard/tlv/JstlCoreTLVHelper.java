@@ -56,6 +56,7 @@
 package org.apache.taglibs.standard.tlv;
 
 import javax.servlet.*;
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 
 /**
  * <p>A helper class for the TLV that listens to the servlet context
@@ -85,7 +86,10 @@ public class JstlCoreTLVHelper implements ServletContextListener {
     // Static state retrival methods
 
     public static String getEvaluatorName() {
-	return evaluatorName;
+	if (evaluatorName != null)
+	    return evaluatorName;
+	else
+	   return ExpressionEvaluatorManager.DEFAULT_EVALUATOR_CLASS;
     }
 
 
