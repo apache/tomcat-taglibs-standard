@@ -60,6 +60,8 @@ import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.jstl.core.Config;
+import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 
@@ -71,14 +73,6 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Justyna Horwat
  */
 public class DriverTagSupport extends TagSupport {
-    private static final String DRIVER_CLASS_NAME =
-	"javax.servlet.jsp.jstl.sql.driver";
-    private static final String JDBC_URL =
-	"javax.servlet.jsp.jstl.sql.url";
-    private static final String USER_NAME =
-	"javax.servlet.jsp.jstl.sql.user";
-    private static final String PASSWORD =
-	"javax.servlet.jsp.jstl.sql.password";
 
     protected String driverClassName;
     protected String jdbcURL;
@@ -97,18 +91,7 @@ public class DriverTagSupport extends TagSupport {
      *
      */
     public void setScope(String scopeName) {
-        if ("page".equals(scopeName)) {
-            scope = PageContext.PAGE_SCOPE;
-        }
-        else if ("request".equals(scopeName)) {
-            scope = PageContext.REQUEST_SCOPE;
-        }
-        else if ("session".equals(scopeName)) {
-            scope = PageContext.SESSION_SCOPE;
-        }
-        else if ("application".equals(scopeName)) {
-            scope = PageContext.APPLICATION_SCOPE;
-        }
+        Util.getScope(scopeName);
     }
 
     public void setVar(String var) {
@@ -142,32 +125,28 @@ public class DriverTagSupport extends TagSupport {
 	if (driverClassName != null) {
 	    return driverClassName;
 	}
-	ServletContext application = pageContext.getServletContext();
-	return application.getInitParameter(DRIVER_CLASS_NAME);
+	return (String) Config.find(pageContext, Config.SQL_DRIVER);
     }
 
     private String getJdbcURL() {
 	if (jdbcURL != null) {
 	    return jdbcURL;
 	}
-	ServletContext application = pageContext.getServletContext();
-	return application.getInitParameter(JDBC_URL);
+	return (String) Config.find(pageContext, Config.SQL_URL);
     }
 
     private String getUserName() {
 	if (userName != null) {
 	    return userName;
 	}
-	ServletContext application = pageContext.getServletContext();
-	return application.getInitParameter(USER_NAME);
+	return (String) Config.find(pageContext, Config.SQL_USER);
     }
 
     private String getPassword() {
 	if (password != null) {
 	    return password;
 	}
-	ServletContext application = pageContext.getServletContext();
-	return application.getInitParameter(PASSWORD);
+	return (String) Config.find(pageContext, Config.SQL_PASSWORD);
     }
 
 }

@@ -62,6 +62,7 @@ import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.jstl.core.Config;
 import javax.naming.InitialContext;
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -76,9 +77,6 @@ import org.apache.taglibs.standard.resources.Resources;
 
 public abstract class TransactionTagSupport extends TagSupport 
     implements TryCatchFinally {
-
-    private static final String DATASOURCE =
-        "javax.servlet.jsp.jstl.sql.dataSource";
 
     private static final int DEFAULT_ISOLATION = -1;
 
@@ -215,24 +213,23 @@ public abstract class TransactionTagSupport extends TagSupport
 
     private void setDataSource() throws JspException {
 
-        if (rawDataSource != null) {
-            // If the 'dataSource' attribute's value resolves to a String
-            // after rtexpr/EL evaluation, use the string as JNDI path to
-            // a DataSource
-            if (rawDataSource instanceof String) {
-                try {
-                    Context ctx = new InitialContext();
-                    dataSource = (DataSource) ctx.lookup((String)rawDataSource);
-                } catch (NamingException ex) {
-                    throw new JspTagException(ex.toString());
-                }
-            }
-            else {
-                dataSource = (DataSource) rawDataSource;
+        if (rawDataSource == null) {
+            rawDataSource = Config.find(pageContext, Config.SQL_DATASOURCE);
+        }
+
+        // If the 'dataSource' attribute's value resolves to a String
+        // after rtexpr/EL evaluation, use the string as JNDI path to
+        // a DataSource
+        if (rawDataSource instanceof String) {
+            try {
+                Context ctx = new InitialContext();
+                dataSource = (DataSource) ctx.lookup((String)rawDataSource);
+            } catch (NamingException ex) {
+                throw new JspTagException(ex.toString());
             }
         }
         else {
-            dataSource = (DataSource) pageContext.findAttribute(DATASOURCE);
+            dataSource = (DataSource) rawDataSource;
         }
     }
 

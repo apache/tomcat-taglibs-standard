@@ -62,9 +62,11 @@ import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.jstl.core.Config;
 import javax.naming.InitialContext;
 import javax.naming.Context;
 import javax.naming.NamingException;
+import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 
@@ -77,12 +79,6 @@ import org.apache.taglibs.standard.resources.Resources;
 
 public abstract class QueryTagSupport extends BodyTagSupport 
     implements TryCatchFinally, SQLExecutionTag {
-
-    private static final String MAX_ROWS =
-        "javax.servlet.jsp.jstl.sql.maxRows";
-
-    private static final String DATASOURCE =
-        "javax.servlet.jsp.jstl.sql.dataSource";
 
     private String var;
     private int scope;
@@ -105,6 +101,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
     private Connection conn;
     private List parameters;
     private boolean isPartOfTransaction;
+    private boolean hasDataSourceAttribute;
 
     //*********************************************************************
     // Constructor
@@ -139,18 +136,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
      *
      */
     public void setScope(String scopeName) {
-        if ("page".equals(scopeName)) {
-            scope = PageContext.PAGE_SCOPE;
-        }
-        else if ("request".equals(scopeName)) {
-            scope = PageContext.REQUEST_SCOPE;
-        }
-        else if ("session".equals(scopeName)) {
-            scope = PageContext.SESSION_SCOPE;
-        }
-        else if ("application".equals(scopeName)) {
-            scope = PageContext.APPLICATION_SCOPE;
-        }
+        scope = Util.getScope(scopeName);
     }
 
     //*********************************************************************
@@ -178,7 +164,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
         if (maxRows == -999) {
             try {
                 maxRows = Integer.parseInt(
-                    pageContext.getServletContext().getInitParameter(MAX_ROWS));
+                    (String) Config.find(pageContext, Config.SQL_MAXROWS));
             } catch (Exception ex) {
                 maxRows = -1;
             }
@@ -273,6 +259,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	conn = null;
         dataSource = null;
         rawDataSource = null;
+        hasDataSourceAttribute = false;
     }
 
     //*********************************************************************
@@ -280,23 +267,25 @@ public abstract class QueryTagSupport extends BodyTagSupport
 
     private void setDataSource() throws JspException {
 
-        if (rawDataSource != null) {
-            // If the 'dataSource' attribute's value resolves to a String
-            // after rtexpr/EL evaluation, use the string as JNDI path to 
-            // a DataSource
-            if (rawDataSource instanceof String) {
-                try {
-                    Context ctx = new InitialContext();
-                    dataSource = (DataSource) ctx.lookup((String)rawDataSource);
-                } catch (NamingException ex) {
-                    throw new JspException(ex.toString(), ex);
-                }
-            }
-            else dataSource = (DataSource) rawDataSource;
+        if (rawDataSource == null) {
+            rawDataSource = Config.find(pageContext, Config.SQL_DATASOURCE);
         }
         else {
-            dataSource = (DataSource) pageContext.findAttribute(DATASOURCE);
+            hasDataSourceAttribute = true;
         }
+
+        // If the 'dataSource' attribute's value resolves to a String
+        // after rtexpr/EL evaluation, use the string as JNDI path to 
+        // a DataSource
+        if (rawDataSource instanceof String) {
+            try {
+                Context ctx = new InitialContext();
+                dataSource = (DataSource) ctx.lookup((String)rawDataSource);
+            } catch (NamingException ex) {
+                throw new JspException(ex.toString(), ex);
+            }
+        }
+        else dataSource = (DataSource) rawDataSource;
     }
 
 
@@ -306,7 +295,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	TransactionTagSupport parent = (TransactionTagSupport) 
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
-            if (rawDataSource != null) {
+            if (hasDataSourceAttribute) {
                 throw new JspTagException(
                     Resources.getMessage("ERROR_NESTED_DATASOURCE"));
             }

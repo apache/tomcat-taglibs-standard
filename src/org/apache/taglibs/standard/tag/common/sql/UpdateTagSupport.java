@@ -62,9 +62,11 @@ import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.jstl.core.Config;
 import javax.naming.InitialContext;
 import javax.naming.Context;
 import javax.naming.NamingException;
+import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
@@ -76,9 +78,6 @@ import org.apache.taglibs.standard.resources.Resources;
 
 public abstract class UpdateTagSupport extends BodyTagSupport 
     implements TryCatchFinally, SQLExecutionTag {
-
-    private static final String DATASOURCE =
-        "javax.servlet.jsp.jstl.sql.dataSource";
 
     private String var;
     private int scope = PageContext.PAGE_SCOPE;
@@ -98,6 +97,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
     private Connection conn;
     private List parameters;
     private boolean isPartOfTransaction;
+    private boolean hasDataSourceAttribute;
 
     //*********************************************************************
     // Accessor methods
@@ -117,18 +117,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      *
      */
     public void setScope(String scopeName) {
-        if ("page".equals(scopeName)) {
-            scope = PageContext.PAGE_SCOPE;
-        }
-        else if ("request".equals(scopeName)) {
-            scope = PageContext.REQUEST_SCOPE;
-        }
-        else if ("session".equals(scopeName)) {
-            scope = PageContext.SESSION_SCOPE;
-        }
-        else if ("application".equals(scopeName)) {
-            scope = PageContext.APPLICATION_SCOPE;
-        }
+        scope = Util.getScope(scopeName);
     }
 
     //*********************************************************************
@@ -235,6 +224,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
         dataSource = null;
         bodyContent = null;
         rawDataSource = null;
+        hasDataSourceAttribute = false;
     }
 
     //*********************************************************************
@@ -242,23 +232,26 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 
     private void setDataSource() throws JspException {
 
-        if (rawDataSource != null) {
-            // If the 'dataSource' attribute's value resolves to a String
-            // after rtexpr/EL evaluation, use the string as JNDI path to
-            // a DataSource
-            if (rawDataSource instanceof String) {
-                try {
-                    Context ctx = new InitialContext();
-                    dataSource = (DataSource) ctx.lookup((String)rawDataSource);
-                } catch (NamingException ex) {
-                    throw new JspException(ex.toString(), ex);
-                }
-            }
-            else dataSource = (DataSource) rawDataSource;
+        if (rawDataSource == null) {
+            rawDataSource = Config.find(pageContext, Config.SQL_DATASOURCE);
         }
         else {
-            dataSource = (DataSource) pageContext.findAttribute(DATASOURCE);
+            hasDataSourceAttribute = true;
         }
+
+
+        // If the 'dataSource' attribute's value resolves to a String
+        // after rtexpr/EL evaluation, use the string as JNDI path to
+        // a DataSource
+        if (rawDataSource instanceof String) {
+            try {
+                Context ctx = new InitialContext();
+                dataSource = (DataSource) ctx.lookup((String)rawDataSource);
+            } catch (NamingException ex) {
+                throw new JspException(ex.toString(), ex);
+            }
+        }
+        else dataSource = (DataSource) rawDataSource;
     }
 
     private Connection getConnection() throws JspException, SQLException {
@@ -267,7 +260,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	TransactionTagSupport parent = (TransactionTagSupport) 
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
-            if (rawDataSource != null) {
+            if (hasDataSourceAttribute) {
                 throw new JspTagException(
                     Resources.getMessage("ERROR_NESTED_DATASOURCE"));
             }
