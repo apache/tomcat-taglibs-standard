@@ -192,7 +192,8 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	    throw new JspTagException("Error processing SQL: " +
 		e.getMessage());
 	}
-	pageContext.setAttribute(var, new Integer(result), scope);
+	if (var != null)
+	    pageContext.setAttribute(var, new Integer(result), scope);
 	return SKIP_BODY;
     }
 
