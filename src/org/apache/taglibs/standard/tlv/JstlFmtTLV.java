@@ -142,9 +142,6 @@ public class JstlFmtTLV extends JstlBaseTLV {
     private class Handler extends DefaultHandler {
 
 	// parser state
-	private int depth = 0;
-	// private Stack expressionLanguage = new Stack();
-	private Stack messageDepths = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
@@ -196,28 +193,6 @@ public class JstlFmtTLV extends JstlBaseTLV {
                 && hasDanglingScope(a))
                 fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 
-	    /*
-	     * Make sure <fmt:param> is nested inside <fmt:message>. Note that
-	     * <fmt:param> does not need to be a direct child of <fmt:message>.
-	     * Otherwise, the following would not work:
-	     *
-	     *  <fmt:message key="..." bundle="...">
-	     *   <c:forEach var="arg" items="...">
-	     *    <fmt:param value="${arg}"/>
-	     *   </c:forEach>
-	     *  </fmt:message>
-	     */
-	    if (isTag(qn, MESSAGE_PARAM) && messageDepths.empty()) {
-		fail(Resources.getMessage("PARAM_OUTSIDE_MESSAGE"));
-	    }
-
-	    // Now, modify state
-
-	    // If we're in a <message>, record relevant state
-	    if (isTag(qn, MESSAGE)) {
-		messageDepths.push(new Integer(depth));
-	    }
-
 	    // set up a check against illegal attribute/body combinations
 	    bodyIllegal = false;
 	    bodyNecessary = false;
@@ -238,9 +213,6 @@ public class JstlFmtTLV extends JstlBaseTLV {
 	    // record the most recent tag (for error reporting)
 	    lastElementName = qn;
 	    lastElementId = a.getValue("id");
-
-	    // we're a new element, so increase depth
-	    depth++;
 	}
 
 	public void characters(char[] ch, int start, int length) {
@@ -268,14 +240,6 @@ public class JstlFmtTLV extends JstlBaseTLV {
 		fail(Resources.getMessage("TLV_MISSING_BODY",
 		    lastElementName));
 	    bodyIllegal = false;	// reset: we've left the tag
-
-	    // update <message>-related state
-	    if (isTag(qn, MESSAGE)) {
-		messageDepths.pop();
-	    }
-
-	    // update our depth
-	    depth--;
 	}
     }
 }
