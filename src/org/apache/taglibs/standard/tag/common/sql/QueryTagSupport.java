@@ -168,12 +168,18 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    if (obj != null) {
 		if (obj instanceof Integer) {
 		    maxRows = ((Integer) obj).intValue();
-		} else {
+		} else if (obj instanceof String) {
 		    try {
 			maxRows = Integer.parseInt((String) obj);
-		    } catch (Exception ex) {
-			maxRows = -1;
+		    } catch (NumberFormatException nfe) {
+			throw new JspException(
+			    Resources.getMessage("SQL_MAXROWS_PARSE_ERROR",
+						 (String) obj),
+			    nfe);
 		    }
+		} else {
+		    throw new JspException(
+                        Resources.getMessage("SQL_MAXROWS_INVALID"));
 		}
             }
         }
