@@ -99,20 +99,25 @@ public class ExpressionEvaluatorManager {
      * Gets an ExpressionEvaluator from the cache, or seeds the cache
      * if we haven't seen a particular ExpressionEvaluator before.
      */
-    public static synchronized
+    public static
 	    ExpressionEvaluator getEvaluatorByName(String name)
             throws JspException {
-        try {
 
-            Object oEvaluator = nameMap.get(name);
-            if (oEvaluator == null) {
+        Object oEvaluator = nameMap.get(name);
+        if (oEvaluator != null) {
+            return ((ExpressionEvaluator) oEvaluator);
+        }
+        try {
+            synchronized (nameMap) {
+                oEvaluator = nameMap.get(name);
+                if (oEvaluator != null) {
+                    return ((ExpressionEvaluator) oEvaluator);
+                }
                 ExpressionEvaluator e = (ExpressionEvaluator)
                     Class.forName(name).newInstance();
                 nameMap.put(name, e);
                 return (e);
-            } else
-                return ((ExpressionEvaluator) oEvaluator);
-
+            }
         } catch (ClassCastException ex) {
             // just to display a better error message
             throw new JspException("invalid ExpressionEvaluator: " +
