@@ -107,7 +107,6 @@ public abstract class MessageSupport extends BodyTagSupport {
 	key = var = null;
 	bundle = null;
 	scope = PageContext.PAGE_SCOPE;
-	params.clear();
     }
 
 
@@ -138,6 +137,11 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     //*********************************************************************
     // Tag logic
+
+    public int doStartTag() throws JspException {
+	params.clear();
+	return EVAL_BODY_BUFFERED;
+    }
 
     public int doEndTag() throws JspException {
 	if (key == null) {
