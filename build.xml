@@ -13,8 +13,9 @@
   <!-- Inherited properties                                                -->
   <!-- =================================================================== -->
 
-  <property file="../build.properties"/>
-  <property file="${user.home}/build.properties"/>
+  <property file="build.properties"/>			<!-- Component local -->
+  <property file="../build.properties"/>		<!-- Commons local   -->
+  <property file="${user.home}/build.properties"/>	<!-- User local      -->
   <property file="../common.properties"/>
 
   <!-- =================================================================== -->
@@ -468,5 +469,20 @@
 
   <!-- target that does nothing -->
   <target name="nop"/>
+
+  <!-- =================================================================== -->
+  <!-- Unit Test PassThru Targets -->
+  <!-- =================================================================== -->
+  <target name="test" depends="build">
+    <ant antfile="build-tests.xml" target="run.test"/>
+  </target>
+
+  <target name="run.cactus" depends="build">
+    <ant antfile="build-tests.xml" target="run.cactus"/>
+  </target>
+
+  <target name="run.junit" depends="build">
+    <ant antfile="build-tests.xml" target="junit"/>
+  </target>
 
 </project>

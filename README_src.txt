@@ -191,3 +191,154 @@ See the README file of the binary distribution you have built with these
 instructions.
 
 ---------------------------------------------------------------------------
+
+UNIT TESTING THE STANDARD TAG LIBRARY
+
+---------------------------------------------------------------------------
+OVERVIEW OF THE UNIT TEST FRAMEWORK
+
+The Unit test directory hierarchy should mimic the RI implementation hierarchy. This way, you have a mapping between the unit test and the file that it covers.
+
+If there's no appropriate mapping you can put the test in the general test directory:
+
+<JSTL_HOME>/test/org/apache/taglibs/standard 
+
+The Test should be written using Junit Test name conventions and start with
+"Test*.java"
+
+Here is the Unit test directory hierarchy:
+
+  <JSTL_HOME>/
+    test/
+      conf/                            <-- unit test configuration files
+      web/                             <-- unit test web application files
+        WEB-INF/
+      org/
+        apache/
+          taglibs/
+            standard/
+              extra/
+                spath/
+              functions/
+              lang/
+                jstl/
+              resources/
+              tag/
+                common/
+                  core/
+                  fmt/
+                  sql/
+                  xml/
+                el/
+                  core/
+                  fmt/
+                  sql/
+                  xml/
+                rt/
+                  core/
+                  fmt/
+                  sql/
+                  xml/
+              tei/
+              tlv/
+
+
+---------------------------------------------------------------------------
+UNIT TEST BUILD ENVIRONMENT SETUP
+
+In order to build the Standard Unit Test Framework, you will need to set the
+following properties and download the corresponding implementation files. See the "build_sample_standard.properties" for the definitions:
+
+        build.dir                     Base directory into which we are building
+                                      the components.
+        build.classes                 Base JSTL classes directory 
+
+        jstl.jar                      JSTL API jar file
+        standard.jar                  JSTL implementation jar file
+
+        servlet24.jar                 Servlet jar
+        jsp20.jar                     JSP jar
+
+        junit.jar                     JUnit jar
+
+        cactus.jar                    Cactus jar 
+        cactus.ant.jar                Cactus custom Ant tasks jar
+        aspectjrt.jar                 Cactus AspectJ Language Support jar
+        httpclient.jar                Cactus httpclient jar
+        commons-logging.jar           Cactus logging jar
+
+        tomcat.home                   Home directory where Tomcat 
+                                      is installed
+        tomcat.webapps                Tomcat webapps directory
+        username                      Tomcat username with manager role
+                                      privileges
+        password                      password for the user with manager
+                                      privileges
+
+        web.server.host               hostname for the running webserver
+        web.server.port               port for the running webserver
+
+        compile.debug                 debug mode for compilation
+        compile.deprecation           deprecation mode for compilation
+        compile.optimize              optimization mode for compilation
+
+---------------------------------------------------------------------------
+BUILDING THE UNIT TESTS
+
+Some common unit test build targets include:
+    > ant test                       <-- Build, deploy and run all the tests
+    > ant run.cactus                 <-- Build, deploy and run the Cactus tests
+    > ant run.junit                  <-- Build, deploy and run the Junit tests
+
+The following directories and files are created when building the unit tests:
+
+To execute the build-tests.xml unit test targets directly you can do the following:
+
+    > ant -f build-tests.xml <target>
+
+Some examples of targets available in the build-tests.xml file include:
+
+    > ant -f build-tests.xml props    <-- Print out test environment properties
+    > ant -f build-tests.xml undeploy <-- Manually undeploy the Cactus 
+                                          Tests web application
+    > ant -f build-tests.xml deploy   <-- Manually deploy the Cactus Test 
+                                          web application
+
+The following directories will be created when building the Unit Tests:
+    build/
+      standard/
+        standard/
+          test/
+            WEB-INF/
+              classes/
+                ...
+              lib/
+            org/
+                ...                  
+
+A Unit Test web application war file will also be created. It is located here:
+    build/standard/standard/jstl_test.war
+
+---------------------------------------------------------------------------
+UNIT TEST RUNTIME SETUP
+
+You will need to have the Tomcat manager administration application enabled in
+order to run the tests. The Unit Test build file uses the Tomcat manager to
+automatically deploy and undeploy the Cactus tests.
+
+The following runtime properties need to be properly set in order to successfully run the unit tests:
+
+        tomcat.webapps                Tomcat webapps directory
+        username                      Tomcat username with manager role
+                                      privileges
+        password                      password for the user with manager
+                                      privileges
+
+        web.server.host               hostname for the running webserver
+        web.server.port               port for the running webserver
+
+The Tomcat manager application may sometimes get into an unstable state after
+many web application deployments and undeployments. If the Cactus tests start
+failing for unknown reasons, stop your web container and clean out your work
+directory before restarting.
+---------------------------------------------------------------------------

@@ -1,0 +1,393 @@
+<project name="JSTL Unit Tests" default="run.test" basedir=".">
+
+<!--
+        This is a generic build.xml file for Ant that is used to run the
+        JSTL unit tests.
+-->
+
+<!-- ========== Prerequisite Properties =================================== -->
+
+
+<!--
+        These properties MUST be set on the "ant" command line, the "antrc"
+        properties file in your home directory, or from settings in a superior
+        build.xml script.
+
+        build.dir                     Base directory into which we are building
+                                      the components.
+        build.classes                 Base JSTL classes directory 
+
+        jstl.jar                      JSTL API jar file
+        standard.jar                  JSTL implementation jar file
+
+        servlet24.jar                 Servlet 2.4 jar
+        jsp20.jar                     JSP 2.0 jar
+
+        junit.jar                     JUnit jar
+
+        cactus.jar                    Cactus jar 
+        cactus.ant.jar                Cactus custom Ant tasks jar
+        aspectjrt.jar                 Cactus AspectJ Language Support jar
+        httpclient.jar                Cactus httpclient jar
+        commons-logging.jar           Cactus logging jar
+
+        tomcat.home                   Home directory where Tomcat 
+                                      is installed
+        tomcat.webapps                Tomcat webapps directory
+        username                      Tomcat username with manager role
+                                      privileges
+        password                      password for the user with manager
+                                      privileges
+
+        web.server.host               hostname for the running webserver
+        web.server.port               port for the running webserver
+
+        compile.debug                 debug mode for compilation
+        compile.deprecation           deprecation mode for compilation
+        compile.optimize              optimization mode for compilation
+
+-->
+
+<!-- ========== Initialization Properties ================================= -->
+
+<!-- ========== Derived Properties ======================================== -->
+
+<!--
+        These property values are derived from values defined above, and
+        generally should NOT be overridden by command line settings
+-->
+
+  <property file="build.properties"/>              <!-- Component local   -->
+  <property file="../build.properties"/>           <!-- Commons local     -->
+  <property file="${user.home}/build.properties"/> <!-- User local        -->
+
+  <!-- Default value for debugging arguments is no.  Override in
+       build.properties -->
+  <property name="debug.jvm.args" value=""/>
+
+  <!-- Source directory for tests -->
+  <property name="src.test.dir" 
+            value="${basedir}/test"/>
+
+  <!-- Configuration directory for tests -->
+  <property name="conf.test.dir" 
+            value="test/conf"/>
+
+  <!-- Output directory for tests -->
+  <property name="out.test.dir" 
+            value="${basedir}/build/standard/standard/test"/>
+
+  <property name="test.context.path" 
+            value="jstl_test"/>
+  <property name="test.war" 
+            value="${test.context.path}.war"/>
+
+  <!-- all of these properties must have valid values -->
+  <property name="catalina-ant.jar" 
+            value="${tomcat.home}/server/lib/catalina-ant.jar"/>
+  <property name="cactus.home" 
+            value="${tomcat.home}/../jakarta-cactus-13-1.4.1"/>
+  <property name="cactus.ant.jar" 
+            value="${cactus.home}/lib/cactus-ant-1.4.1.jar"/>
+  <property name="cactus.jar" 
+            value="${cactus.home}/lib/cactus-1.4.1.jar"/>
+  <property name="aspectjrt.jar" 
+            value="${cactus.home}/lib/aspectjrt-1.0.5.jar"/>
+  <property name="httpclient.jar" 
+            value="${cactus.home}/lib/commons-httpclient-2.0alpha1-20020606.jar"/>
+
+  <property name="junit.jar" 
+            value="${tomcat.home}/../junit3.8.1/junit.jar"/>
+
+  <property name="standard.jar" 
+            value="${tomcat.home}/jstl/lib/standard.jar"/>
+    
+  <property name="username" value="tomcat"/>
+  <property name="password" value="tomcat"/>
+
+  <property name="tomcat.manager.url" 
+            value="http://${web.server.host}:${web.server.port}/manager"/>
+
+  <property name="cactus.contextURL"
+            value="http://${web.server.host}:${web.server.port}/${test.context.path}"/>
+
+  <target name="props"
+          description="Display resolved properties" >
+
+    <!-- Info on build environment -->
+    <echo>---------- Environment Information ----------</echo>
+    <echo>java.home: ${java.home}</echo>
+    <echo>ant.java.version: ${ant.java.version}</echo>
+    <echo>jstl.jar=${jstl.jar}</echo>
+    <echo>standard.jar=${standard.jar}</echo>
+    <echo>deprecation: ${compile.deprecation}</echo>
+    <echo>debug: ${compile.debug}</echo>
+    <echo>optimize: ${compile.optimize}</echo>
+    <echo>---------- Dependencies ---------------------</echo>
+    <echo>tomcat.home=${tomcat.home}</echo>
+    <echo>servlet24.jar: ${servlet24.jar}</echo>
+    <echo>jsp20.jar: ${jsp20.jar}</echo>
+    <echo>junit.jar: ${junit.jar}</echo>
+    <echo>cactus.home: ${cactus.home}</echo>
+    <echo>cactus.ant.jar: ${cactus.ant.jar}</echo>
+    <echo>cactus.jar: ${cactus.jar}</echo>
+    <echo>aspectjrt.jar: ${aspectjrt.jar}</echo>
+    <echo>httpclient.jar: ${httpclient.jar}</echo>
+    <echo>commons-logging.jar: ${commons-logging.jar}</echo>
+    <echo>---------- Build directories ----------------</echo>
+    <echo>build.dir: ${build.dir}</echo>
+    <echo>build.classes: ${build.classes}</echo>
+    <echo>dist.dir: ${dist.dir}</echo>
+    <echo>---------- Run-Time ----------------</echo>
+    <echo>tomcat.webapps: ${tomcat.webapps}</echo>
+    <echo>username: ${username}</echo>
+    <echo>password: ${password}</echo>
+    <echo>web.server.host: ${web.server.host}</echo>
+    <echo>web.server.port: ${web.server.port}</echo>
+  </target>
+
+  <!-- Compilation Classpath -->
+  <path id="compile.classpath">
+    <pathelement location="${jstl.jar}"/>
+    <pathelement location="${standard.jar}"/>
+    <pathelement location="${servlet24.jar}"/>
+    <pathelement location="${jsp20.jar}"/>
+    <pathelement location="${junit.jar}"/>
+    <pathelement location="${cactus.jar}"/>
+    <pathelement location="${httpclient.jar}"/>
+    <pathelement location="${aspectjrt.jar}"/>
+    <pathelement location="${build.classes}"/>
+    <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
+    <!-- For cactus.properties -->
+    <!--
+      <pathelement location="${conf.test.dir}"/>
+    -->
+  </path>
+
+  <path id="catalina-ant.classpath">
+    <pathelement location="${catalina-ant.jar}"/>
+  </path>
+
+<!-- ========== Custom Tasks Definition ================================== -->
+
+  <taskdef name="install" classname="org.apache.catalina.ant.InstallTask">
+    <classpath>
+      <pathelement location="${catalina-ant.jar}" />
+    </classpath>
+  </taskdef>
+
+  <taskdef name="remove" classname="org.apache.catalina.ant.RemoveTask">
+    <classpath>
+      <pathelement location="${catalina-ant.jar}" />
+    </classpath>
+  </taskdef>
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="init">
+    <uptodate property="skip.build" 
+              targetfile="${out.test.dir}/last-testrun">
+      <srcfiles dir="${basedir}">
+        <include name="src/**/*.*"/>
+        <include name="test/**/*.*"/>
+      </srcfiles>
+    </uptodate>
+  </target>
+
+<!-- ========== Test Preparation ========================================= -->
+
+  <!-- Create directories and copy files for the tests -->
+  <target name="prepare.test" 
+          depends="init">
+
+    <!-- Create target directories for classes -->
+    <mkdir dir="${out.test.dir}/WEB-INF/classes"/>
+
+    <!-- Create a lib directory where needed libs for the test war will
+         be put -->
+    <mkdir dir="${out.test.dir}/WEB-INF/lib"/>
+
+  </target>
+
+<!-- ========== Build and Package Tests =================================== -->
+
+  <!-- Compile unit tests -->
+  <target name="compile.test" depends="prepare.test">
+
+    <javac srcdir="${src.test.dir}"
+           destdir="${out.test.dir}/WEB-INF/classes"
+           debug="${compile.debug}"
+           optimize="${compile.optimize}"
+           deprecation="${compile.deprecation}">
+      <classpath refid="compile.classpath"/>
+    </javac>
+    <copy todir="${out.test.dir}/WEB-INF/classes">
+      <fileset dir="${src.test.dir}" includes="**/*.properties"
+               excludes="conf/"/>
+    </copy>
+  </target>
+
+  <target name="copy-test-data-files">
+    <!-- Copy Unit test static files. -->
+    <copy todir="${out.test.dir}">
+      <fileset dir="${basedir}/test/web"/>
+      <fileset dir="${cactus.home}/web" includes="jspRedirector.jsp"/>
+    </copy>
+  </target>
+
+  <target name="war" 
+          description="put the test webapp in the WAR file format in out.test.dir"
+          depends="compile.test">
+
+    <!-- Copy needed libs in /lib -->
+    <copy file="${jstl.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+    <copy file="${standard.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+    <copy file="${junit.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+    <copy file="${cactus.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+    <copy file="${httpclient.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+    <copy file="${aspectjrt.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+
+    <!-- copy the all important web.xml -->
+    <echo message="out.test.dir ${out.test.dir}" />
+    <filter token="test.root.dir" value="${out.test.dir}"/>
+    <copy file="${src.test.dir}/web/WEB-INF/web.xml" todir="${out.test.dir}/WEB-INF"
+          filtering="on"/>
+    <copy todir="${out.test.dir}/WEB-INF/classes" overwrite="true">
+      <filterset>
+        <filter token="cactus.contextURL" value="${cactus.contextURL}"/>
+      </filterset>
+      <fileset dir="${src.test.dir}/conf">
+        <include name="cactus.properties"/>
+      </fileset>
+    </copy>
+    <!-- copy the test data files -->
+    <antcall target="copy-test-data-files"/>
+    <jar jarfile="${out.test.dir}/../${test.war}" basedir="${out.test.dir}"/>
+  </target>
+
+<!-- ========== Server Management Tasks =================================== -->
+
+  <target name="deploy" depends="war"
+          description="Install cactus unit test webapp">
+    <!-- unreliable in tomcat 5.0.24 -->
+    <install url="${tomcat.manager.url}" 
+             username="${username}" 
+             password="${password}"
+             path="/${test.context.path}"
+             war="file://${out.test.dir}/../${test.war}"/>
+  </target>
+
+  <target name="autodeploy" depends="war">
+    <copy todir="${tomcat.webapps}" overwrite="true">
+      <fileset dir="${out.test.dir}/..">
+        <include name="*.war"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="undeploy"
+          description="Remove cactus unit test webapp"> 
+    <remove url="${tomcat.manager.url}" 
+            username="${username}" 
+            password="${password}"
+            path="/${test.context.path}"/>
+    </target>
+
+  <target name="safe.undeploy"
+          description="Remove cactus unit test webapp, don't FAIL on error">
+    <exec executable="ant.bat" os="Windows 2000" failonerror="false">
+      <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} undeploy"/>
+    </exec>
+    <exec executable="ant" os="SunOS,Linux,Mac OS X" failonerror="false">
+      <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} undeploy"/>
+    </exec>
+  </target>
+
+<!-- ========== Cactus Test Task Definitions ============================== -->
+
+  <target name="cactus" depends="war">
+    <antcall target="safe.undeploy"/>
+    <antcall target="deploy"/>
+    <touch file="${out.test.dir}/last-testrun"/>
+    <!-- pause to allow container to finish deployment before running tests -->
+    <waitfor maxwait="20" maxwaitunit="second">
+      <http url="${cactus.contextURL}/JspRedirector"/>
+    </waitfor>
+    <antcall target="run.cactus"/>
+  </target>
+
+  <target name="cactus.force">
+    <antcall target="remove.tstamp"/>
+    <antcall target="cactus"/>
+  </target>
+
+  <target name="remove.tstamp">
+    <delete file="${out.test.dir}/last-testrun"/>
+  </target>
+
+  <!-- Run the Cactus tests using JUnit test runner -->
+  <target name="run.cactus">
+
+    <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement location="${out.test.dir}/WEB-INF/classes"/>
+        <!-- For cactus.properties -->
+        <!--
+          <pathelement location="${conf.test.dir}"/>
+        -->
+      </classpath>
+      <classpath refid="compile.classpath"/>
+      <formatter type="plain" usefile="false"/>
+
+      <!-- Suite of Cactus tests to be executed -->
+      <batchtest>
+        <fileset dir="${src.test.dir}">
+          <include name="**/tag/**/Test*.java"/>
+          <exclude name="**/testutil/*.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+
+  </target>
+
+<!-- ========== Junit Test Task Definitions =============================== -->
+
+  <target name="junit" depends="compile.test,copy-test-data-files">
+    <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
+      <!-- uncomment the below line to enable attaching a debugger -->
+      <jvmarg line="${debug.jvm.args}"/>
+
+      <classpath>
+        <pathelement path="${java.class.path}"/>
+        <pathelement location="${out.test.dir}/WEB-INF/classes"/>
+      </classpath>
+      <classpath refid="compile.classpath"/>
+      <formatter type="plain" usefile="false"/>
+
+      <!-- Suite of Junit tests to be executed -->
+      <batchtest>
+        <fileset dir="${src.test.dir}">
+          <include name="**/TestVersion.java"/>
+          <exclude name="**/testutil/*.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+<!-- ========== Default Task Definitions =============================== -->
+
+  <target name="run.test" depends="junit,cactus"
+          description="Run all Junit and Cactus tests" >
+  </target>
+
+  <target name="clean">
+    <delete failonerror="no" includeEmptyDirs="yes">
+      <fileset dir="${out.test.dir}/..">
+        <include name="${test.war}"/>
+        <include name="test/"/>
+      </fileset>
+    </delete>
+  </target>
+
+</project>
