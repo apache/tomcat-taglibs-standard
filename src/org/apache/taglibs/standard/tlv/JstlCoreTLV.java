@@ -113,6 +113,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
     private final String EXPR = "expr";
     private final String SET = "set";
     private final String IMPORT = "import";
+    private final String URL = "url";
+    private final String REDIRECT = "redirect";
     private final String PARAM = "param";
     private final String URL_ENCODE = "urlEncode";
     // private final String EXPLANG = "expressionLanguage";
@@ -124,6 +126,9 @@ public class JstlCoreTLV extends JstlBaseTLV {
     private final String DEFAULT = "default";
     private final String VAR_READER = "varReader";
 
+    // alternative identifiers for tags
+    private final String IMPORT_WITH_READER = "import varReader=''";
+    private final String IMPORT_WITHOUT_READER = "import var=''";
 
     //*********************************************************************
     // Contract fulfillment
@@ -143,8 +148,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	private int depth = 0;
 	private Stack chooseDepths = new Stack();
 	private Stack chooseHasOtherwise = new Stack();
-	private Stack importWithReaderDepths = new Stack();
-	private Stack importWithoutReaderDepths = new Stack();
+        private Stack urlTags = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
@@ -211,19 +215,21 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    }
 
-	    // check invariants for <import>
-	    if (lastImportHadReader()) {
-		// we're immediately under an <import varReader="..."> tag,
-		// where <param> tags are illegal
-		if (isTag(qn, PARAM)) {
+	    // check constraints for <param> vis-a-vis URL-related tags
+	    if (isTag(qn, PARAM)) {
+		// no <param> outside URL tags.
+		if (urlTags.empty() || urlTags.peek().equals(PARAM))
+		    fail(Resources.getMessage("TLV_ILLEGAL_ORPHAN", PARAM));
+
+		// no <param> where the most recent <import> has a reader
+		if (!urlTags.empty() &&
+			urlTags.peek().equals(IMPORT_WITH_READER))
 		    fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
 			prefix, PARAM, IMPORT, VAR_READER));
-		}
-	    }
-	    if (!importWithoutReaderDepths.empty()) {
-		// we're in an <import> without a Reader; nothing but
-		// <param> is allowed
-		if (!isTag(qn, PARAM))
+	    } else {
+		// tag ISN'T <param>, so it's illegal under non-reader <import>
+		if (!urlTags.empty()
+			&& urlTags.peek().equals(IMPORT_WITHOUT_READER))
 		    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
 			prefix, IMPORT, qn));
 	    }
@@ -236,13 +242,18 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		chooseHasOtherwise.push(new Boolean(false));
 	    }
 
-	    // if we're in an import, record relevant state
+	    // if we're introducing a URL-related tag, record it
 	    if (isTag(qn, IMPORT)) {
 		if (hasAttribute(a, VAR_READER))
-		    importWithReaderDepths.push(new Integer(depth));
+		    urlTags.push(IMPORT_WITH_READER);
 		else
-		    importWithoutReaderDepths.push(new Integer(depth));
-	    }
+		    urlTags.push(IMPORT_WITHOUT_READER);
+	    } else if (isTag(qn, PARAM))
+		urlTags.push(PARAM);
+	    else if (isTag(qn, REDIRECT))
+		urlTags.push(REDIRECT);
+	    else if (isTag(qn, URL))
+		urlTags.push(URL);
 
 	    // set up a check against illegal attribute/body combinations
 	    bodyIllegal = false;
@@ -276,7 +287,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    if (bodyIllegal)
 		fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
 	    bodyNecessary = false;		// body is no longer necessary!
-	    if (!importWithoutReaderDepths.empty()) {
+	    if (!urlTags.empty()
+		    && urlTags.peek().equals(IMPORT_WITHOUT_READER)) {
 		// we're in an <import> without a Reader; nothing but
 		// <param> is allowed
 		fail(Resources.getMessage("TLV_ILLEGAL_BODY",
@@ -311,14 +323,10 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		chooseHasOtherwise.pop();
 	    }
 
-	    // update <import>-related state
-	    if (isTag(qn, IMPORT)) {
-		// pop from the appropriate "import" stack
-		if (lastImportHadReader())
-		    importWithReaderDepths.pop();
-		else
-		    importWithoutReaderDepths.pop();
-	    }
+	    // update state related to URL tags
+	    if (isTag(qn, IMPORT) || isTag(qn, PARAM) || isTag(qn, REDIRECT)
+		    || isTag(qn, URL))
+		urlTags.pop();
 
 	    // update our depth
 	    depth--;
@@ -337,12 +345,6 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    else
 		return ((Integer) s.peek()).intValue();
 	}
-
-	// did the last <import> tag have a varReader attribute?
-	private boolean lastImportHadReader() {
-	    return (!importWithReaderDepths.empty()
-		&& (topDepth(importWithReaderDepths) >
-                    topDepth(importWithoutReaderDepths)));
-	}
+	
     }
 }
