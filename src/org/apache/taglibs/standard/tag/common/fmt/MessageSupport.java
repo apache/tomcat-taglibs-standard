@@ -165,8 +165,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 		bundle = parent.getBundle();
 		prefix = parent.getPrefix();
 	    } else {
-		bundle = BundleSupport.getDefaultBundle(
-                    pageContext, BundleSupport.DEFAULT_BASENAME);
+		bundle = BundleSupport.getDefaultBundle(pageContext);
 	    }
 	}
 

@@ -172,12 +172,11 @@ public class LocaleSupport {
 	String message = MessageSupport.UNDEFINED_KEY + key
 	    + MessageSupport.UNDEFINED_KEY;
 
-	if (basename != null)
+	if (basename != null) {
 	    bundle = BundleSupport.getBundle(pageContext, basename);
-	else
-	    bundle = BundleSupport.getDefaultBundle(
-                pageContext, BundleSupport.DEFAULT_BASENAME);
-
+	} else {
+	    bundle = BundleSupport.getDefaultBundle(pageContext);
+	}
 	if (bundle != null) {
 	    try {
 		message = bundle.getString(key);

@@ -72,10 +72,10 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class TimeZoneSupport extends BodyTagSupport {
 
     //*********************************************************************
-    // Package-scoped constants
+    // Private Constants
 
-    static final String TIMEZONE_ATTRIBUTE =
-	"javax.servlet.jsp.jstl.fmt.timeZone";
+    private static final String TIMEZONE
+	= "javax.servlet.jsp.jstl.fmt.timeZone";
 
 
     //*********************************************************************
@@ -87,7 +87,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     //*********************************************************************
     // Private state
 
-    private int scope;                           // 'scope' attribute
+    private String scope;                        // 'scope' attribute
     private String var;                          // 'var' attribute
     private TimeZone timeZone;
 
@@ -102,7 +102,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 
     private void init() {
 	value = var = null;
-	scope = PageContext.PAGE_SCOPE;
+	scope = "page";
     }
 
 
@@ -114,7 +114,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     }
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
+	this.scope = scope;
     }
 
 
@@ -140,13 +140,14 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 	if (var != null) {
-	    pageContext.setAttribute(var, timeZone, scope);	
+	    pageContext.setAttribute(var, timeZone, Util.getScope(scope));
 	} else if (getBodyContent() == null) {
 	    /*
 	     * If no 'var' attribute and empty body, we store our time zone
 	     * in the javax.servlet.jsp.jstl.fmt.timeZone scoped attribute
 	     */
-	    pageContext.setAttribute(TIMEZONE_ATTRIBUTE, timeZone, scope);
+	    pageContext.setAttribute(TIMEZONE + "." + scope, timeZone,
+				     Util.getScope(scope));
 	} else {
 	    try {
 		pageContext.getOut().print(getBodyContent().getString());
@@ -186,7 +187,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
      *
      * @return the time zone
      */
-    static TimeZone getTimeZone(PageContext pageContext, Tag fromTag) {
+    static TimeZone getTimeZone(PageContext pc, Tag fromTag) {
 	TimeZone ret = null;
 
 	Tag t = findAncestorWithClass(fromTag, TimeZoneSupport.class);
@@ -196,11 +197,9 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 	    ret = parent.getTimeZone();
 	} else {
 	    // get time zone from scoped attribute
-	    ret = (TimeZone)
-		pageContext.findAttribute(TIMEZONE_ATTRIBUTE);
+	    ret = (TimeZone) Util.getAttribute(pc, TIMEZONE);
 	    if (ret == null) {
-		String tz = pageContext.getServletContext().getInitParameter(
-		    TIMEZONE_ATTRIBUTE);
+		String tz = pc.getServletContext().getInitParameter(TIMEZONE);
 		if (tz != null)
 		    ret = TimeZone.getTimeZone(tz);
 	    }

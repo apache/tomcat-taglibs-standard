@@ -96,7 +96,7 @@ public abstract class LocaleSupport extends TagSupport {
     //*********************************************************************
     // Private state
 
-    private int scope;                           // 'scope' attribute
+    private String scope;                        // 'scope' attribute
 
 
     //*********************************************************************
@@ -109,7 +109,7 @@ public abstract class LocaleSupport extends TagSupport {
 
     private void init() {
 	value = variant = null;
-	scope = PageContext.PAGE_SCOPE;
+	scope = "page";
     }
 
 
@@ -117,7 +117,7 @@ public abstract class LocaleSupport extends TagSupport {
     // Tag attributes known at translation time
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
+	this.scope = scope;
     }
 
 
@@ -126,7 +126,8 @@ public abstract class LocaleSupport extends TagSupport {
 
     public int doEndTag() throws JspException {
 	Locale locale = parseLocale(value, variant);
-	pageContext.setAttribute(LOCALE, locale, scope);
+	pageContext.setAttribute(LOCALE + "." + scope, locale,
+				 Util.getScope(scope));
 	setResponseLocale(pageContext, locale);
 
 	return EVAL_PAGE;
@@ -232,8 +233,8 @@ public abstract class LocaleSupport extends TagSupport {
      * Returns the formatting locale to use with the given formatting action
      * in the given page.
      *
-     * @param pageContext the page containing the formatting action
-     * @param fromTag the formatting action
+     * @param pc The page context containing the formatting action
+     * @param fromTag The formatting action
      * @param format <tt>true</tt> if the formatting action is of type
      * <formatXXX> (as opposed to <parseXXX>), and <tt>false</tt> otherwise
      * (if set to <tt>true</tt>, the formatting locale that is returned by
@@ -243,7 +244,7 @@ public abstract class LocaleSupport extends TagSupport {
      *
      * @return the formatting locale to use
      */
-    static Locale getFormattingLocale(PageContext pageContext,
+    static Locale getFormattingLocale(PageContext pc,
 				      Tag fromTag,
 				      boolean format,
 				      Locale[] avail) {
@@ -254,9 +255,7 @@ public abstract class LocaleSupport extends TagSupport {
 	if (parent != null) {
 	    // use locale from parent <fmt:bundle> tag
 	    match = ((BundleSupport) parent).getBundle().getLocale();
-	} else if ((bundle = BundleSupport.getDefaultBundle(
-	                            pageContext,
-				    BundleSupport.DEFAULT_BASENAME)) != null) {
+	} else if ((bundle = BundleSupport.getDefaultBundle(pc)) != null) {
 	    // Use locale associated with default bundle base name.
 	    match = bundle.getLocale();
 	} else {
@@ -265,17 +264,17 @@ public abstract class LocaleSupport extends TagSupport {
 	     * the available formatting locales, and determine the best
 	     * matching locale.
 	     */
-	    Locale pref = getLocale(pageContext, LOCALE);
+	    Locale pref = getLocale(pc, LOCALE, true);
 	    if (pref != null) {
 		// Preferred locale is application-based
 		match = findFormattingMatch(pref, avail);
 	    } else {
 		// Preferred locales are browser-based 
-		match = findFormattingMatch(pageContext, avail);
+		match = findFormattingMatch(pc, avail);
 	    }
 	    if (match == null) {
 		//Use fallback locale.
-		pref = getLocale(pageContext, FALLBACK_LOCALE);
+		pref = getLocale(pc, FALLBACK_LOCALE, false);
 		if ((pref == null)
 		        || ((match = findFormattingMatch(pref,
 							 avail)) == null)) {
@@ -286,7 +285,7 @@ public abstract class LocaleSupport extends TagSupport {
 	}
 
 	if (format) {
-	    LocaleSupport.setResponseLocale(pageContext, match);
+	    LocaleSupport.setResponseLocale(pc, match);
 	}
 
 	return match;
@@ -305,13 +304,23 @@ public abstract class LocaleSupport extends TagSupport {
      * attribute or context configuration parameter
      * @param name the name of the scoped attribute or context configuration
      * parameter
+     * @param extend <tt>true</tt> if the given attribute name should be
+     * searched in each scope with the scope's name appended to it, prior to
+     * being searched in all scopes using the PageContext method
+     * findAttribute()
      *
      * @return the locale specified by the named scoped attribute or context
      * configuration parameter, or <tt>null</tt> if no scoped attribute or
      * configuration parameter with the given name exists
      */
-    static Locale getLocale(PageContext pageContext, String name) {
-	Locale ret = (Locale) pageContext.findAttribute(name);
+    static Locale getLocale(PageContext pageContext, String name,
+			    boolean extend) {
+	Locale ret = null;
+	if (extend) {
+	    ret = (Locale) Util.getAttribute(pageContext, name);
+	} else {
+	    ret = (Locale) pageContext.findAttribute(name);
+	}
 	if (ret == null) {
 	    String loc =
 		pageContext.getServletContext().getInitParameter(name);

@@ -73,17 +73,10 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class BundleSupport extends BodyTagSupport {
 
     //*********************************************************************
-    // Public constants
+    // Private constants
 
-    public static final String DEFAULT_BASENAME =
+    private static final String DEFAULT_BASE =
 	"javax.servlet.jsp.jstl.fmt.basename";
-
-
-    //*********************************************************************
-    // Package-scoped constants
-
-    static final String DEFAULT_EXCEPTION_BASENAME =
-	"javax.servlet.jsp.jstl.fmt.exception.basename";
 
 
     //*********************************************************************
@@ -98,7 +91,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     private static ResourceBundle emptyResourceBundle;
 
-    private int scope;                                  // 'scope' attribute
+    private String scope;                               // 'scope' attribute
     private String var;                                 // 'var' attribute
     private Locale fallbackLocale;
     private ResourceBundle bundle;
@@ -123,7 +116,7 @@ public abstract class BundleSupport extends BodyTagSupport {
     private void init() {
 	basename = prefix = var = null;
 	bundle = null;
-	scope = PageContext.PAGE_SCOPE;
+	scope = "page";
     }
 
     
@@ -135,7 +128,7 @@ public abstract class BundleSupport extends BodyTagSupport {
     }
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
+	this.scope = scope;
     }
     
 
@@ -163,16 +156,19 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 	if (var != null) {
-	    if (bundle != null)
-		pageContext.setAttribute(var, bundle, scope);
-	    else
-		pageContext.setAttribute(var, emptyResourceBundle, scope);
+	    if (bundle != null) {
+		pageContext.setAttribute(var, bundle, Util.getScope(scope));
+	    } else {
+		pageContext.setAttribute(var, emptyResourceBundle,
+					 Util.getScope(scope));
+	    }
 	} else if (getBodyContent() == null) {
 	    /*
 	     * If no 'var' attribute and empty body, we store our base name
 	     * in the javax.servlet.jsp.jstl.fmt.basename scoped attribute
 	     */
-	    pageContext.setAttribute(DEFAULT_BASENAME, basename, scope);
+	    pageContext.setAttribute(DEFAULT_BASE + "." + scope, basename,
+				     Util.getScope(scope));
 	} else {
 	    try {
 		pageContext.getOut().print(getBodyContent().getString());
@@ -223,7 +219,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 	ResourceBundle ret = null;
 	    
 	Locale pref = LocaleSupport.getLocale(pageContext,
-					      LocaleSupport.LOCALE);
+					      LocaleSupport.LOCALE, true);
 	if (pref != null) {
 	    // Preferred locale is application-based
 	    ret = findMatch(basename, pref);
@@ -235,7 +231,8 @@ public abstract class BundleSupport extends BodyTagSupport {
 	if (ret == null) {
 	    // no match found, use fallback locale (if present)
 	    pref = LocaleSupport.getLocale(pageContext,
-					   LocaleSupport.FALLBACK_LOCALE);
+					   LocaleSupport.FALLBACK_LOCALE,
+					   false);
 	    if (pref != null) {
 		ret = findMatch(basename, pref);
 	    }
@@ -253,8 +250,9 @@ public abstract class BundleSupport extends BodyTagSupport {
     }
 
     /**
-     * Gets the resource bundle whose base name is determined from the scoped
-     * attribute or initialization parameter with the given name.
+     * Gets the resource bundle with the default base name, which is given by
+     * the scoped attribute or initialization parameter named
+     * javax.servlet.jsp.jstl.fmt.exception.basename.
      *
      * @param pageContext the page in which the resource bundle is requested
      * @name the name of the scoped attribute or initialization parameter
@@ -263,16 +261,14 @@ public abstract class BundleSupport extends BodyTagSupport {
      * if the scoped attribute or initialization parameter with the given name
      * does not exist, or the requested resource bundle does not exist
      */
-    public static ResourceBundle getDefaultBundle(PageContext pageContext,
-						  String name) {	
+    public static ResourceBundle getDefaultBundle(PageContext pc) {
 	ResourceBundle ret = null;
 
-	String defaultBasename = (String) pageContext.findAttribute(name);
-	if (defaultBasename == null)
-	    defaultBasename =
-		pageContext.getServletContext().getInitParameter(name);
-	if (defaultBasename != null)
-	    ret = getBundle(pageContext, defaultBasename);
+	String def = (String) Util.getAttribute(pc, DEFAULT_BASE);
+	if (def == null)
+	    def = pc.getServletContext().getInitParameter(DEFAULT_BASE);
+	if (def != null)
+	    ret = getBundle(pc, def);
 
 	return ret;
     }
