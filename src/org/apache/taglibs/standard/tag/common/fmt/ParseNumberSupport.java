@@ -190,7 +190,7 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
     private NumberFormat createParser(Locale loc) throws JspException {
 	NumberFormat parser = null;
 
-	if (NUMBER.equalsIgnoreCase(type)) {
+	if ((type == null) || NUMBER.equalsIgnoreCase(type)) {
 	    parser = NumberFormat.getNumberInstance(loc);
 	    if (pattern != null) {
 		DecimalFormat df = (DecimalFormat) parser;

@@ -223,7 +223,7 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
     private NumberFormat createFormatter(Locale loc) throws JspException {
 	NumberFormat formatter = null;
 	
-	if (NUMBER.equalsIgnoreCase(type)) {
+	if ((type == null) || NUMBER.equalsIgnoreCase(type)) {
 	    formatter = NumberFormat.getNumberInstance(loc);
 	    if (pattern != null) {
 		/*

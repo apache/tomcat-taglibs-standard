@@ -136,11 +136,18 @@ public abstract class FormatDateSupport extends BodyTagSupport {
     public int doEndTag() throws JspException {
 
 	/*
-	 * If no date or time is given, the current date and time are used.
+	 * If 'value' is null or equal to "", format the current date/time.
+	 * Note that this is the only action in which we need to check for an
+	 * empty body if 'value' is missing. For all other actions, the
+	 * TLV would have reported this as an error. However, with this action,
+	 * it is legal for 'value' to be missing and the body to be empty, in
+	 * which case the current date/time is formatted. 
 	 */
 	if (value == null) {
-            String bcs = getBodyContent().getString();
-            if ((bcs == null) || (value = bcs.trim()).equals("")) {
+            String bcs = null;
+	    if ((getBodyContent() == null)
+		    || ((bcs = getBodyContent().getString()) == null)
+		    || (value = bcs.trim()).equals("")) {
 		value = new Date();
 	    }
 	}

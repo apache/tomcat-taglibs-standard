@@ -11,12 +11,8 @@
 Looking up exception's fully qualified class name in resource bundle:<br>
 <fmt:locale value="de"/>
 <fmt:bundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="deBundle"/>
-<ul>
- <li> Localized exception message:<br>
-  <fmt:exception bundle="${deBundle}"/>
- <li> Localized exception message plus stack trace:<br>
-  <fmt:exception bundle="${deBundle}" stackTrace="true"/>
-</ul>
+Localized exception message:<br>
+<fmt:exception bundle="${deBundle}"/>
 
 </body>
 </html>
