@@ -86,7 +86,6 @@ public abstract class FormatNumberSupport extends TagSupport {
     static final int NUMBER_TYPE = 0;
     static final int CURRENCY_TYPE = 1;
     static final int PERCENT_TYPE = 2;
-    static final Locale EN_LOCALE = new Locale("en", "");
 
 
     //*********************************************************************
@@ -157,7 +156,7 @@ public abstract class FormatNumberSupport extends TagSupport {
 	    if (parseLocale != null)
 		parser = NumberFormat.getNumberInstance(parseLocale);
 	    else
-		parser = NumberFormat.getNumberInstance(EN_LOCALE);
+		parser = NumberFormat.getNumberInstance(Locale.ENGLISH);
 	    try {
 		value = parser.parse((String) value);
 	    } catch (ParseException pe) {

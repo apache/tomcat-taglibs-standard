@@ -182,9 +182,8 @@ public abstract class FormatDateSupport extends TagSupport {
 		parser = DateFormat.getDateInstance(DateFormat.DEFAULT,
 						    parseLocale);
 	    else
-		parser = DateFormat.getDateInstance(
-                    DateFormat.DEFAULT,
-		    FormatNumberSupport.EN_LOCALE);
+		parser = DateFormat.getDateInstance(DateFormat.DEFAULT,
+						    Locale.ENGLISH);
 	    try {
 		value = parser.parse((String) value);
 	    } catch (ParseException pe) {
