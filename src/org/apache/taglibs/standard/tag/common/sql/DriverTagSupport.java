@@ -71,9 +71,9 @@ public class DriverTagSupport extends TagSupport {
     private static final String DRIVER_CLASS_NAME =
 	"javax.servlet.jsp.jstl.sql.driver";
     private static final String JDBC_URL =
-	"javax.servlet.jsp.jstl.sql.jdbcURL";
+	"javax.servlet.jsp.jstl.sql.url";
     private static final String USER_NAME =
-	"javax.servlet.jsp.jstl.sql.userName";
+	"javax.servlet.jsp.jstl.sql.user";
     private static final String PASSWORD =
 	"javax.servlet.jsp.jstl.sql.password";
 
