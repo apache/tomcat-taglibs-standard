@@ -110,13 +110,12 @@ public class JstlCoreTLV extends JstlBaseTLV {
     private final String CHOOSE = "choose";
     private final String WHEN = "when";
     private final String OTHERWISE = "otherwise";
-    private final String EXPR = "expr";
+    private final String EXPR = "out";
     private final String SET = "set";
     private final String IMPORT = "import";
     private final String URL = "url";
     private final String REDIRECT = "redirect";
     private final String PARAM = "param";
-    private final String URL_ENCODE = "urlEncode";
     // private final String EXPLANG = "expressionLanguage";
     private final String TEXT = "text";
 
