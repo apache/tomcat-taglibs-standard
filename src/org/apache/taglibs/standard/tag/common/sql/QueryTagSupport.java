@@ -117,6 +117,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
     private void init() {
         scope = PageContext.PAGE_SCOPE;
         startRow = 0;
+        maxRows = -999;
     }
 
 
@@ -174,11 +175,13 @@ public abstract class QueryTagSupport extends BodyTagSupport
      * getting the <code>Connection</code>
      */
     public int doStartTag() throws JspException {
-        try {
-            maxRows = Integer.parseInt(
-                pageContext.getServletContext().getInitParameter(MAX_ROWS));
-        } catch (Exception ex) {
-            maxRows = -1;
+        if (maxRows == -999) {
+            try {
+                maxRows = Integer.parseInt(
+                    pageContext.getServletContext().getInitParameter(MAX_ROWS));
+            } catch (Exception ex) {
+                maxRows = -1;
+            }
         }
 
         setDataSource();
