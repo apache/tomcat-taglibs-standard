@@ -21,7 +21,7 @@
 
 <h4>Enumeration (warning: this only works until enumeration is exhausted!)</h4>
 
-<c:forEach var="item" items="$enum" begin="2" end="10" step="2">
+<c:forEach var="item" items="$enumeration" begin="2" end="10" step="2">
   <c:expr value="$item"/><br>
 </c:forEach>
 

@@ -9,6 +9,7 @@ package org.apache.taglibs.standard.lang.spel.parser;
 
 import org.apache.taglibs.standard.lang.spel.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SpelParser {
 
@@ -142,6 +143,8 @@ TOKEN :
 | < LE: "<=" >
 | < GE: ">=" >
 | < NE: "!=" >
+| < START_BRACKET: "[" >
+| < END_BRACKET: "]" >
 }
 
 
@@ -209,28 +212,54 @@ Expression PropertyValue () :
   Expression base;
   ArrayList l = null;
   StringLiteral pname;
+  ArrayList baseIndexes = null;    // index values for the base
+  ArrayList pnameIndexes = null;   // list of pname indexes (list of lists)
+  IntegerLiteral index;		   // individual (working) index
 }
 {
   (
    base = NamedValue ()
+     (
+	<START_BRACKET> index = IntegerLiteral() <END_BRACKET>
+        {
+	  if (baseIndexes == null) baseIndexes = new ArrayList();
+	  baseIndexes.add (index.getValue());
+        }
+     )*
    (<DOT>
-   (pname = Identifier ()
-    | pname = StringLiteral ())
-   {
-     if (l == null) l = new ArrayList ();
+    (pname = Identifier ()
+     | pname = StringLiteral ()
+    )
+    {
+     if (l == null) {
+	l = new ArrayList ();
+	pnameIndexes = new ArrayList();
+     }
      l.add (pname.getValue ());
-   }
+     pnameIndexes.add(new ArrayList());		// seed with empty list
+    }
+      (
+	<START_BRACKET> index = IntegerLiteral() <END_BRACKET>
+        {
+	  // get the last index-list
+	  List ind = (List) pnameIndexes.get(pnameIndexes.size() - 1);
+	  ind.add(index.getValue());
+        }
+      )*
     )*
    )
 
     {
+      String[] pnames;
       if (l == null) {
-	return base;
+        // (SB: Let's collapse this distinction for simplicity;
+        //   it won't matter later -- 'pnames' can sensibly be null.)
+        // return base;
+	pnames = null;
+      } else {
+	pnames = (String []) l.toArray (new String [l.size ()]);
       }
-      else {
-	String [] pnames = (String []) l.toArray (new String [l.size ()]);
-	return new PropertyExpression (base, pnames);
-      }
+      return new PropertyExpression (base, baseIndexes, pnames, pnameIndexes);
     }
 }
 

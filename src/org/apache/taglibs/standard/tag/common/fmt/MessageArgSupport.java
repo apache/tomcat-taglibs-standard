@@ -98,16 +98,17 @@ public abstract class MessageArgSupport extends BodyTagSupport {
 	if (parent == null) {
 	    parent = findAncestorWithClass(this, MessageFormatSupport.class);
 	    if (parent == null)
-		throw new JspTagException(
-		    Resources.getMessage("MESSAGEARG_OUTSIDE_MESSAGE"));
+		throw new JspTagException(Resources.getMessage(
+                    "MESSAGE_ARG_OUTSIDE_MESSAGE_AND_MESSAGE_FORMAT"));
 	}
 
 	// get argument from 'value' attribute or body, as appropriate
-	if (value == null)
-	    value = getBodyContent().getString();
-	if (value == null)
-	    throw new JspTagException(
-                Resources.getMessage("MESSAGEARG_NO_VALUE"));
+	if (value == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (value = bcs.trim()).equals(""))
+                throw new JspTagException(
+                    Resources.getMessage("MESSAGE_ARG_NO_VALUE"));
+	}
 
 	if (parent instanceof MessageSupport)
 	    ((MessageSupport) parent).addMessageArg(value);

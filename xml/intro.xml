@@ -1,29 +1,16 @@
 <?xml version="1.0"?>
 <document url="./intro.xml">
 
-<!-- Change all instances of jsptl with the jakarta-taglib
-     name for this tag library.
-
-     Change all instances of {display-name} with the name to use
-     for things such as titles in the tag library documentation.
-
-     Change all instances of {your-name} with your name, this is
-     for things such as document author and list of contributors.
-
-     If you are doing a release of the taglib, replace {release-version}
-     with the version of the taglib.
-
-     For a news item, replace date="MM/DD/YYYY" with the date.
-     -->
-
 <properties>
-  <author>Glenn Nielsen</author>
-  <title>The Jakarta-Taglibs Project: JSP Standard Tag Library (JSTL)</title>
+  <author>Shawn Bayern</author>
+  <title>The Jakarta-Taglibs Project: 'Standard' taglib: JSP(tm) Standard Tag Library (JSTL) RI</title>
 </properties>
 
 <body>
 
-  <section name="JSP Standard Tag Library" href="Welcome">
+  <section name="'Standard' Taglib" href="Welcome">
+
+    <big><b>JSP(tm) Standard Tag Library reference implementation</b></big>
 
     <p>The <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 Expert Group</a>,
       operating under the Java Community Process, will be hosting the
@@ -49,16 +36,24 @@
 
   </section>
 
-  <section name="JSP Standard Tag Library News" href="News">
+  <section name="'Standard' Taglib News" href="News">
 
     <news>
+      <newsitem date="12/15/2001">
+	Early Access Release 3 made available for
+	<a href="/builds/jakarta-taglibs/releases/standard">download</a>.
+      </newsitem>
+      <newsitem date="11/21/2001">
+	Early Access Release 2 was made available for download.
+	The "jsptl" tag library has been renamed to the "standard" tag
+	library.  JSPTL has been renamed to JSTL.
+      </newsitem>
       <newsitem date="10/09/2001">
-	Early Access Release 1.2 is now available for
-	<a href="/builds/jakarta-taglibs/releases/jsptl">download</a>.
-	This version, like EA 1.1, is compatible with Tomcat 4.0.
+	Early Access Release 1.2 was made available for download.
+	This version, like EA 1.1, was compatible with Tomcat 4.0.
       </newsitem>
       <newsitem date="07/23/2001">
-        Early Access Release 1.1 as made available for download.
+        Early Access Release 1.1 was made available for download.
         This version was compatible with 
         Tomcat 4 B6 and Tomcat 4.0.
       </newsitem>
@@ -78,17 +73,17 @@
   <section name="Documentation" href="Documentation">
 
     <p>For more information about the JSP Standard Tag Library,
-       look at the on-line documentation:</p>
+       look at the on-line documentation for Early Access 3:</p>
     <ul>
       <!--  Uncomment this section and modify as needed when you start
             doing releases of the taglib, a link can be made to each
             available release. -->
-      <li>View the current release (EA2.2)
-        <a href="jsptl-ea1/index.html">
-        JSP Standard Tag Library EA2 Documentation</a>
+      <li>View the Early Access 3 documentation
+        <a href="standard-ea3/index.html">
+        JSP Standard Tag Library EA3 Documentation</a>
       </li>
 
-      <li>View the development version of the
+      <li>View the most recent, nightly build of the
         <a href="index.html">JSP Standard Tag Library Documentation</a>
       </li>
     </ul>
@@ -112,19 +107,18 @@
     <!--  Uncomment this section and modify as needed when you start
           doing releases of the taglib. -->
     <p>Download a binary distribution of the JSP Standard Tag Library
-      EA2 release</p>
+      EA3 release:</p>
     <ul>
-      <li>Download
-        <a href="http://jakarta.apache.org/builds/jakarta-taglibs/releases/jsptl/">
-        JSP Standard Tag Library EA2 release</a></li>
+      <li>
+        <a href="http://jakarta.apache.org/builds/jakarta-taglibs/releases/standard/">
+        JSP Standard Tag Library EA3 release</a></li>
     </ul>
 
-    <p>A download of the nightly development build for the JSP Standard
-      Tag Library as a binary distribution is available</p>
+    <p>Download the most recent, nightly snapshot:</p>
     <ul>
-      <li>Download
-        <a href="http://jakarta.apache.org/builds/jakarta-taglibs/nightly/projects/jsptl/">
-        JSP Standard Tag Library build</a></li>
+      <li>
+        <a href="http://jakarta.apache.org/builds/jakarta-taglibs/nightly/projects/standard/">
+        JSP Standard Tag Library nightly snapshot</a></li>
     </ul>
 
     <p>Nightly build distributions of the development version for all the
@@ -146,14 +140,16 @@
 
     <ul>
       <li>The <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 Expert Group</a></li>
-      <li>Shawn Bayern</li>
-      <li>Pierre Delisle</li>
-      <li>Scott Hasse</li>
+      <li>Pierre Delisle (specification lead)</li>
+      <li>Shawn Bayern (implementation lead)</li>
       <li>Nathan Abramson</li>
-      <li>Glenn Nielsen</li>
-      <li>Mark Kolb</li>
-      <li>Dmitri Plotnikov</li>
+      <li>Hans Bergsten</li>
+      <li>Scott Hasse</li>
       <li>Justyna Horwat</li>
+      <li>Mark Kolb</li>
+      <li>Jan Luehe</li>
+      <li>Glenn Nielsen</li>
+      <li>Dmitri Plotnikov</li>
     </ul>
 
   </section>

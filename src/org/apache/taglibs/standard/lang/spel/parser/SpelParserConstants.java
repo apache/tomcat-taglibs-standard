@@ -40,6 +40,8 @@ public interface SpelParserConstants {
   int LE = 39;
   int GE = 40;
   int NE = 41;
+  int START_BRACKET = 42;
+  int END_BRACKET = 43;
 
   int DEFAULT = 0;
 
@@ -86,6 +88,8 @@ public interface SpelParserConstants {
     "\"<=\"",
     "\">=\"",
     "\"!=\"",
+    "\"[\"",
+    "\"]\"",
   };
 
 }

@@ -37,7 +37,7 @@
     <th>Result</th>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[0]"/> + " " + <jx:expr value="$strArray[1]"/></code></td>
+    <td><code><c:expr value="$strArray[0]"/> + " " + <c:expr value="$strArray[1]"/></code></td>
     <td><c:expr value="$strArray[0] + ' ' + strArray[1]"/></td>
   </tr>
 </table>
@@ -49,11 +49,11 @@
     <th>Result</th>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[3]"/> &lt; <jx:expr value="$strArray[2]"/></code></td>
+    <td><code><c:expr value="$strArray[3]"/> &lt; <c:expr value="$strArray[2]"/></code></td>
     <td><c:expr value="$strArray[3] < strArray[2]"/></td>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[4]"/> &lt; <jx:expr value="$strArray[5]"/></code></td>
+    <td><code><c:expr value="$strArray[4]"/> &lt; <c:expr value="$strArray[5]"/></code></td>
     <td><c:expr value="$strArray[4] < strArray[5]"/></td>
   </tr>
 </table>
@@ -65,7 +65,7 @@
     <th>Result</th>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[2]"/> &lt;= <jx:expr value="$strArray[2]"/> </code></td>
+    <td><code><c:expr value="$strArray[2]"/> &lt;= <c:expr value="$strArray[2]"/> </code></td>
     <td><c:expr value="$strArray[2] <= strArray[2]"/></td>
   </tr>
 </table>
@@ -77,11 +77,11 @@
     <th>Result</th>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[3]"/> &gt; <jx:expr value="$strArray[2]"/></code></td>
+    <td><code><c:expr value="$strArray[3]"/> &gt; <c:expr value="$strArray[2]"/></code></td>
     <td><c:expr value="$strArray[3] > strArray[2]"/></td>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[4]"/> &gt; <jx:expr value="$strArray[5]"/></code></td>
+    <td><code><c:expr value="$strArray[4]"/> &gt; <c:expr value="$strArray[5]"/></code></td>
     <td><c:expr value="$strArray[4] > strArray[5]"/></td>
   </tr>
 </table>
@@ -93,7 +93,7 @@
     <th>Result</th>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[2]"/> &gt;= <jx:expr value="$strArray[3]"/></code></td>
+    <td><code><c:expr value="$strArray[2]"/> &gt;= <c:expr value="$strArray[3]"/></code></td>
     <td><c:expr value="$strArray[2] >= strArray[3]"/></td>
   </tr>
 </table>
@@ -105,11 +105,11 @@
     <th>Result</th>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[0]"/> == <jx:expr value="$strArray[0]"/></code></td>
+    <td><code><c:expr value="$strArray[0]"/> == <c:expr value="$strArray[0]"/></code></td>
     <td><c:expr value="$strArray[0] == strArray[0]"/></td>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[0]"/> == <jx:expr value="$strArray[1]"/></code></td>
+    <td><code><c:expr value="$strArray[0]"/> == <c:expr value="$strArray[1]"/></code></td>
     <td><c:expr value="$strArray[0] == strArray[1]"/></td>
   </tr>
 </table>
@@ -121,11 +121,11 @@
     <th>Result</th>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[0]"/> != <jx:expr value="$strArray[1]"/></code></td>
+    <td><code><c:expr value="$strArray[0]"/> != <c:expr value="$strArray[1]"/></code></td>
     <td><c:expr value="$strArray[0] != strArray[1]"/></td>
   </tr>
   <tr>
-    <td><code><c:expr value="$strArray[0]"/> != <jx:expr value="$strArray[0]"/></code></td>
+    <td><code><c:expr value="$strArray[0]"/> != <c:expr value="$strArray[0]"/></code></td>
     <td><c:expr value="$strArray[0] != strArray[0]"/></td>
   </tr>
 </table>

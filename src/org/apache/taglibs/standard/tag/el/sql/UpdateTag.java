@@ -52,23 +52,47 @@
  * <http://www.apache.org/>.
  *
  */ 
+package org.apache.taglibs.standard.tag.el.sql;
 
-package org.apache.taglibs.standard.tei;
-
-import javax.servlet.jsp.tagext.*;
+import javax.sql.*;
+import javax.servlet.jsp.*;
+import org.apache.taglibs.standard.lang.support.*;
+import org.apache.taglibs.standard.tag.common.sql.UpdateTagSupport;
 
 /**
- * An implementation of TagExtraInfo that implements validation for
- * &lt;message&gt; tag's attributes.
+ * Subclass for the JSTL library with EL support.
  *
- * @author Jan Luehe
+ * @author Hans Bergsten
  */
-public class MessageTEI extends TagExtraInfo {
+public class UpdateTag extends UpdateTagSupport {
+    
+    private String dataSourceEL;
+    private String sqlEL;
+
+    public void setDataSource(String dataSourceEL) {
+	this.dataSourceEL = dataSourceEL;
+    }
 
     /**
-     * Validates the <tt>scope</tt> attribute of the &lt;message&gt; tag.
+     * Setter method for the SQL statement to use for the
+     * query. The statement may contain parameter markers
+     * (question marks, ?). If so, the parameter values must
+     * be set using nested value elements.
      */
-    public boolean isValid(TagData data) {
-	return Util.isValidScope(data);
+    public void setSql(String sqlEL) {
+	this.sqlEL = sqlEL;
+    }
+
+    public int doStartTag() throws JspException {
+	if (dataSourceEL != null) {
+	    dataSource = (DataSource) 
+		ExpressionEvaluatorManager.evaluate("dataSource", 
+		    dataSourceEL, DataSource.class, this, pageContext);
+	}
+	if (sqlEL != null) {
+	    sql = (String) ExpressionEvaluatorManager.evaluate("sql", sqlEL, 
+	        String.class, this, pageContext);
+	}
+	return super.doStartTag();
     }
 }

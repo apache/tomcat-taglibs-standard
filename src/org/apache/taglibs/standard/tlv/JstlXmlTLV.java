@@ -101,8 +101,10 @@ public class JstlXmlTLV extends JstlBaseTLV {
      *
      * Much of the code and structure is duplicated from JstlCoreTLV.
      * An effort has been made to re-use code where unambiguously useful.
-     * However, splitting logic among parent/child classes isn't the
-     * cleanest approach when writing a parser like the one we need.
+     * However, splitting logic among parent/child classes isn't
+     * necessarily the cleanest approach when writing a parser like the
+     * one we need.  I'd like to reorganize this somewhat, but it's not
+     * a priority.
      */
 
 
@@ -147,6 +149,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
+	private Stack transformWithSource = new Stack();
 
 	public Handler() {
 	    // "install" the default evaluator
@@ -158,6 +161,10 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	// process under the existing context (state), then modify it
 	public void startElement(
 	        String ns, String ln, String qn, Attributes a) {
+
+            // substitute our own parsed 'ln' if it's not provided
+            if (ln == null)
+                ln = getLocalPart(qn);
 
 	    // for simplicity, we can ignore <jsp:text> for our purposes
 	    // (don't bother distinguishing between it and its characters)
@@ -194,6 +201,11 @@ public class JstlXmlTLV extends JstlBaseTLV {
 		}
 	    }
 
+            // validate attributes
+            if (!hasNoInvalidScope(a))
+                fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
+                    SCOPE, qn, a.getValue(SCOPE)));
+
 	    // check invariants for <choose>
 	    if (chooseChild()) {
 		// ensure <choose> has the right children
@@ -214,6 +226,18 @@ public class JstlXmlTLV extends JstlBaseTLV {
 
 	    }
 
+	    // Specific check, directly inside <transform source="...">
+	    if (!transformWithSource.empty() &&
+		    topDepth(transformWithSource) == (depth - 1)) {
+		// only allow <param>
+		if (!isTag(qn, PARAM))
+		    fail(Resources.getMessage("TLV_ILLEGAL_BODY",
+			prefix + ":" + TRANSFORM));
+
+		// thus, if we get the opportunity to hit depth++,
+		// we know we've got a <param> subtag
+	    }
+
 	    // now, modify state
 
 	    // we're a choose, so record new choose-specific state
@@ -225,7 +249,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	    // set up a check against illegal attribute/body combinations
 	    bodyIllegal = false;
 	    bodyNecessary = false;
-	    if (isTag(qn, PARSE) || isTag(qn, TRANSFORM)) {
+	    if (isTag(qn, PARSE)) {
 		if (hasAttribute(a, SOURCE))
 		    bodyIllegal = true;
 	    } else if (isTag(qn, PARAM)) {
@@ -233,6 +257,9 @@ public class JstlXmlTLV extends JstlBaseTLV {
 		    bodyIllegal = true;
 		else
 		    bodyNecessary = true;
+	    } else if (isTag(qn, TRANSFORM)) {
+		if (hasAttribute(a, SOURCE))
+		    transformWithSource.push(new Integer(depth));
 	    }
 
 	    // record the most recent tag (for error reporting)
@@ -263,6 +290,13 @@ public class JstlXmlTLV extends JstlBaseTLV {
 			(s.length() < 7 ? s : s.substring(0,7)));
 		fail(msg);
 	    }
+
+            // Specific check, directly inside <transform source="...">
+            if (!transformWithSource.empty()
+		    && topDepth(transformWithSource) == (depth - 1)) {
+                fail(Resources.getMessage("TLV_ILLEGAL_BODY",
+                    prefix + ":" + TRANSFORM));
+            }
 	}
 
 	public void endElement(String ns, String ln, String qn) {
@@ -283,6 +317,11 @@ public class JstlXmlTLV extends JstlBaseTLV {
 		chooseHasOtherwise.pop();
 	    }
 
+	    // update <transform source="...">-related state
+	    if (!transformWithSource.empty()
+		    && topDepth(transformWithSource) == (depth - 1))
+		transformWithSource.pop();
+
 	    // update language state
 	    if (isTag(qn, EXPLANG))
 		expressionLanguage.pop();
@@ -297,5 +336,9 @@ public class JstlXmlTLV extends JstlBaseTLV {
 		&& (depth - 1) == ((Integer) chooseDepths.peek()).intValue());
 	}
 
+        // returns the top int depth (peeked at) from a Stack of Integer
+        private int topDepth(Stack s) {
+            return ((Integer) s.peek()).intValue();
+        }
     }
 }

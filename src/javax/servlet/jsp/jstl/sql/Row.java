@@ -53,22 +53,31 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tei;
-
-import javax.servlet.jsp.tagext.*;
+package javax.servlet.jsp.jstl.sql;
 
 /**
- * An implementation of TagExtraInfo that implements validation for
- * &lt;timeZone&gt; tag's attributes.
+ * 
+ * <p>An implementation of this class encapsulates the columns 
+ * for a given row. 
  *
- * @author Jan Luehe
  */
-public class TimeZoneTEI extends TagExtraInfo {
+public interface Row {
 
     /**
-     * Validates the <tt>scope</tt> attribute of the &lt;timeZone&gt; tag.
+     * Returns the Column object for the named column
+     *
      */
-    public boolean isValid(TagData data) {
-	return Util.isValidScope(data);
-    }
+    public Column get(String name);
+
+    /**
+     * Returns the Column for the given column index
+     *
+     */
+    public Column get(int index);
+
+    /**
+     * Returns an array Column objects
+     *
+     */
+    public Column[] getColumns();
 }

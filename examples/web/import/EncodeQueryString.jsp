@@ -7,11 +7,9 @@
 <body bgcolor="#FFFFFF">
 <h3>URL Encoding with Query String</h3>
 
-<h4>&lt;urlEncode&gt;</h4>
+<h4>Encoding paramaters with import tag</h4>
 
 <c:urlEncode var="name" value="horwat"/>
-<c:urlEncode var="email" value="horwatMail"/>
-<c:urlEncode var="action" value="Submit"/>
+<c:urlEncode var="email" value="horwat@fakeaddress.com"/>
 
-<c:import url="$'/jsp/cal/cal1.jsp?name=' + name + '&email=' + email + '&action=' + action" context="/examples"/>
-
+<c:import url="$'LocalQueryString.jsp?name=' + name + '&email=' + email" />
