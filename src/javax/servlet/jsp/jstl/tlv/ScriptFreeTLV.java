@@ -233,7 +233,8 @@ public class ScriptFreeTLV extends TagLibraryValidator {
      * class to use the new API.  -- SB.
      */
     public ValidationMessage[] reportResults () {
-      if (declarationCount + scriptletCount + expressionCount > 0) {
+      if (declarationCount + scriptletCount + expressionCount 
+          + rtExpressionCount > 0) {
 	StringBuffer results = new StringBuffer("JSP page contains ");
 	boolean first = true;
 	if (declarationCount > 0) {
