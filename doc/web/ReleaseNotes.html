@@ -38,6 +38,17 @@ Release Notes
       <tr>
         <td width="27%" height="15">
           <div align="center">
+          <a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=31313">31313</a></div>
+        </td>
+        <td width="73%" height="15">
+          <p>According to the W3C document the schemaLocation declaration is made up of a pair of URI references.  One defines the namespace name and the other is a hint as to the location of the schema document.  The space in the schemaLocation definition separates the two declarations.<p>
+          <p>For a complete explanation you can take a look at Section 4.3.2 of <a href=http://www.w3.org/TR/xmlschema-1/#schema-loc">W3C Xml Schema Document</a>
+          <p>In the JSTL case the location is not an absolute URI which can be confusing especially to some IDE's. Went ahead and changed it to be an absolute URI pointing to the schema document location.</p>
+        </td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center">
           <a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=30646">30646</a></div>
         </td>
         <td width="73%" height="15">
