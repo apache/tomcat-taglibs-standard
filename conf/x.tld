@@ -1,39 +1,24 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE taglib
-  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
-  "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
-<taglib>
-  <tlib-version>1.0</tlib-version>
-  <jsp-version>1.2</jsp-version>
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+    
+  <tlib-version>1.1</tlib-version>
+  <jsp-version>2.0</jsp-version>
   <short-name>x</short-name>
-  <uri>http://java.sun.com/jstl/xml</uri>
+  <uri>http://java.sun.com/jstl-el/xml</uri>
   <display-name>JSTL XML</display-name>
-  <description>JSTL 1.0 XML library</description>
+  <description>JSTL 1.1 XML library</description>
 
   <validator>
     <validator-class>
 	org.apache.taglibs.standard.tlv.JstlXmlTLV
     </validator-class>
-    <init-param>
-	<param-name>expressionAttributes</param-name>
-	<param-value>
-	    out:escapeXml
-	    parse:xml
-	    parse:systemId
-	    parse:filter
-	    transform:xml
-	    transform:xmlSystemId
-	    transform:xslt
-	    transform:xsltSystemId
-	    transform:result
-	</param-value>
-	<description>
-	    Whitespace-separated list of colon-separated token pairs
-	    describing tag:attribute combinations that accept expressions.
-	    The validator uses this information to determine which
-	    attributes need their syntax validated.
-	</description>
-     </init-param>
+    <description>
+        Provides validation features for JSTL XML tags.
+    </description>
   </validator>
 
   <tag>
@@ -49,7 +34,7 @@
 
   <tag>
     <name>out</name>
-    <tag-class>org.apache.taglibs.standard.tag.el.xml.ExprTag</tag-class>
+    <tag-class>org.apache.taglibs.standard.tag.rt.xml.ExprTag</tag-class>
     <body-content>empty</body-content>
     <description>
 	Like &lt;%= ... &gt;, but for XPath expressions.
@@ -62,7 +47,7 @@
     <attribute>
         <name>escapeXml</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -71,8 +56,8 @@
     <tag-class>org.apache.taglibs.standard.tag.common.xml.IfTag</tag-class>
     <body-content>JSP</body-content>
     <description>
-      XML conditional tag, which evalutes its body if the
-      supplied XPath expression evalutes to 'true' as a boolean
+        XML conditional tag, which evalutes its body if the
+        supplied XPath expression evalutes to 'true' as a boolean
     </description>
     <attribute>
         <name>select</name>
@@ -123,7 +108,7 @@
 
   <tag>
     <name>param</name>
-    <tag-class>org.apache.taglibs.standard.tag.el.xml.ParamTag</tag-class>
+    <tag-class>org.apache.taglibs.standard.tag.rt.xml.ParamTag</tag-class>
     <body-content>JSP</body-content>
     <description>
         Adds a parameter to a containing 'transform' tag's Transformer
@@ -131,18 +116,18 @@
     <attribute>
         <name>name</name>
         <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>value</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
   <tag>
     <name>parse</name>
-    <tag-class>org.apache.taglibs.standard.tag.el.xml.ParseTag</tag-class>
+    <tag-class>org.apache.taglibs.standard.tag.rt.xml.ParseTag</tag-class>
     <tei-class>org.apache.taglibs.standard.tei.XmlParseTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
@@ -171,17 +156,17 @@
     <attribute>
         <name>xml</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>systemId</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>filter</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 
@@ -211,7 +196,7 @@
 
   <tag>
     <name>transform</name>
-    <tag-class>org.apache.taglibs.standard.tag.el.xml.TransformTag</tag-class>
+    <tag-class>org.apache.taglibs.standard.tag.rt.xml.TransformTag</tag-class>
     <tei-class>org.apache.taglibs.standard.tei.XmlTransformTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
@@ -231,27 +216,27 @@
     <attribute>
         <name>result</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>xml</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>xmlSystemId</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
 	<name>xslt</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
 	<name>xsltSystemId</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 

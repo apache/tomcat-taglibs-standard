@@ -61,7 +61,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 
 import org.apache.taglibs.standard.examples.util.*;
 
@@ -115,7 +114,7 @@ public class FileTag extends TagSupport {
     // TagSupport methods
     
     public int doStartTag() throws JspException {
-        reader = getReaderFromFile((String)eval("file", file, String.class));
+        reader = getReaderFromFile(file);
         exposeVariable(reader);
         return EVAL_BODY_INCLUDE;
     }
@@ -137,7 +136,7 @@ public class FileTag extends TagSupport {
     }
     
     //*********************************************************************
-    // Tag's scific behavior methods
+    // Tag's specific behavior methods
     
     public Reader getReaderFromFile(String name) throws JspException {
         InputStream in = pageContext.getServletContext().
@@ -152,21 +151,7 @@ public class FileTag extends TagSupport {
     
     //*********************************************************************
     // Utility methods
-    
-    /**
-     * Evaluate elexprvalue
-     */
-    private Object eval(String attName, String attValue, Class clazz)
-    throws JspException {
-        Object obj = ExpressionEvaluatorManager.evaluate(
-        attName, attValue, clazz, this, pageContext);
-        if (obj == null) {
-            throw new NullAttributeException("file", attName);
-        } else {
-            return obj;
-        }
-    }
-    
+        
     private void exposeVariable(Reader reader) {
         if (id != null) {
             pageContext.setAttribute(id, reader);

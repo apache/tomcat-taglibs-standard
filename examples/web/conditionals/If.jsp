@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl-el/core" %>
 
 <html>
 <head>
@@ -12,7 +12,7 @@
 
 <c:forEach var="customer" items="${customers}">
   <c:if test="${customer.address.country == 'USA'}">
-    <c:out value="${customer}"/><br>
+    ${customer}<br>
   </c:if>
 </c:forEach>
 </body>

@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE taglib
-  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
-  "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
-<taglib>
-  <tlib-version>1.0 EA2</tlib-version>
-  <jsp-version>1.2</jsp-version>
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+
+  <tlib-version>1.1</tlib-version>
+  <jsp-version>2.0</jsp-version>
   <short-name>ex</short-name>
   <uri>/jstl-examples-taglib</uri>
 
@@ -15,12 +17,12 @@
     <attribute>
         <name>reader</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>  
     <attribute>
         <name>writer</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>  
   </tag>
 
@@ -52,7 +54,7 @@
     <attribute>
         <name>file</name>
         <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>  
   </tag>
 
@@ -75,7 +77,7 @@
     <attribute>
         <name>customer</name>
         <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>  
     <attribute>
         <name>var</name>

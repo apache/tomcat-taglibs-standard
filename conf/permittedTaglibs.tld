@@ -18,10 +18,10 @@
     <init-param>
       <param-name>permittedTaglibs</param-name>
       <param-value>
-	http://java.sun.com/jstl/core
-	http://java.sun.com/jstl/fmt
-	http://java.sun.com/jstl/sql
-	http://java.sun.com/jstl/xml
+	http://java.sun.com/jstl-el/core
+	http://java.sun.com/jstl-el/fmt
+	http://java.sun.com/jstl-el/sql
+	http://java.sun.com/jstl-el/xml
       </param-value>
       <description>
         Whitespace-separated list of taglib URIs to permit.  This example

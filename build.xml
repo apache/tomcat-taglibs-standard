@@ -13,7 +13,6 @@
     <property file="../common.properties"/>
     <property name="jaxen-full.jar"   value="lib/jaxen-full.jar"/>
     <property name="saxpath.jar"      value="lib/saxpath.jar"/>
-    <property name="classpath" value="${servlet23.jar}"/>
     <property name="taglib.name"    value="standard"/>
 
     <!-- ****************** Project Standard Properties ******************* -->
@@ -51,8 +50,12 @@
     <available file="${jaxp-api.jar}" property="isJaxp12" value="true"/>
     <!-- Make sure required dependencies are available -->
     <antcall target="checkRequiredFile">
-       <param name="file" value="${servlet23.jar}"/>
-       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile the Standard Taglib.  Please define the property servlet23.jar in your build.properties file and ensure that the file exists."/>
+       <param name="file" value="${servlet24.jar}"/>
+       <param name="fail.message" value="A jar file containing the Servlet 2.4 API classes is required to compile the Standard Taglib.  Please define the property servlet24.jar in your build.properties file and ensure that the file exists."/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsp20.jar}"/>
+       <param name="fail.message" value="A jar file containing the JSP 2.0 API classes is required to compile the Standard Taglib.  Please define the property jsp20.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
     <antcall target="checkRequiredFile">
        <param name="file" value="${jdbc2_0-stdext.jar}"/>     
@@ -140,14 +143,14 @@
 
   <target name="compileJaxp11" unless="isJaxp12">
       <javac srcdir="${library.src}" destdir="${build.library}"
-         classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+         classpath="${servlet24.jar}:${jsp20.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
 	 excludes="org/apache/taglibs/standard/lang/jstl/parser/jsp20/*"
          debug="on"/>
   </target>
 
   <target name="compileJaxp12" if="isJaxp12">
       <javac srcdir="${library.src}" destdir="${build.library}"
-         classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+         classpath="${servlet24.jar}:${jsp20.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
 	 excludes="org/apache/taglibs/standard/lang/jstl/parser/jsp20/*"
          debug="on"/>
   </target>
@@ -180,7 +183,7 @@
 
     <javac srcdir="${jsp20el.scratch.dir}"
            destdir="${jsp20el.build.dir}"
-	   classpath="${servlet23.jar}:${build.library}"
+	   classpath="${servlet24.jar}:${jsp20.jar}:${build.library}"
 	   debug="on">
       <include name="${jsp20el.package.dir}/jstl/*"/>
       <include name="${jsp20el.package.dir}/jstl/parser/*"/>
@@ -256,7 +259,7 @@
     <copy file="${dist.library}/lib/jstl.jar"
               tofile="${build.examples}/WEB-INF/lib/jstl.jar"/>
     <javac srcdir="${examples.src}" destdir="${build.examples}/WEB-INF/classes"
-        classpath="${servlet23.jar}:${build.library}"/>
+        classpath="${servlet24.jar}:${jsp20.jar}:${build.library}"/>
   </target>
 
   <!-- Compile the tag library itself -->
@@ -338,14 +341,9 @@
     <antcall target="copyJaxp11Dist"/>
     <antcall target="copyJaxp12Dist"/>
 
-    <copy file="${conf.src}/c.tld" todir="${dist.dir}/${taglib.name}/tld"/>
-    <copy file="${conf.src}/c-rt.tld" todir="${dist.dir}/${taglib.name}/tld"/>
-    <copy file="${conf.src}/x.tld" todir="${dist.dir}/${taglib.name}/tld"/>
-    <copy file="${conf.src}/x-rt.tld" todir="${dist.dir}/${taglib.name}/tld"/>
-    <copy file="${conf.src}/fmt.tld" todir="${dist.dir}/${taglib.name}/tld"/>
-    <copy file="${conf.src}/fmt-rt.tld" todir="${dist.dir}/${taglib.name}/tld"/>
-    <copy file="${conf.src}/sql.tld" todir="${dist.dir}/${taglib.name}/tld"/>
-    <copy file="${conf.src}/sql-rt.tld" todir="${dist.dir}/${taglib.name}/tld"/>
+    <copy todir="${dist.dir}/${taglib.name}/tld">
+      <fileset dir="${conf.src}" includes="*.tld"/>
+    </copy>
   </target>
 
   <!-- javadoc -->
@@ -353,7 +351,7 @@
    <mkdir dir="${dist.library}/javadoc"/>
    <javadoc packagenames="javax.servlet.jsp.jstl.*"
             sourcepath="src"
-            classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+            classpath="${servlet24.jar}:${jsp20.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
             destdir="${dist.library}/javadoc"
             bottom='&lt;font size="-1"&gt;Copyright 2003 Sun Microsystems, Inc. All Rights Reserved.&lt;/font&gt;'/>
   </target>

@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl-el/core" %>
 
 <html>
 <head>
@@ -21,7 +21,7 @@
       <font color="green">	
     </c:otherwise>	
   </c:choose>
-  <c:out value="${customer}"/></font><br>
+  ${customer}</font><br>
 </c:forEach>
 </body>
 </html>

@@ -1,5 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
-<%@ taglib prefix="x" uri="http://java.sun.com/jstl/xml" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl-el/core" %>
+<%@ taglib prefix="x" uri="http://java.sun.com/jstl-el/xml" %>
 
 <html>
 <head>

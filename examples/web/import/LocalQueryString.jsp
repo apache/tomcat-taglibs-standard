@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl-el/core" %>
 
 <hr>
 <h3> This is the output of the imported file </h3>

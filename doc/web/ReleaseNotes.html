@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Standard 1.0 Release Notes</title>
+<title>Standard 1.1 Release Notes</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 
@@ -9,64 +9,30 @@
 <h1>
 Standard: An Implementation of the JSP&#153; Standard Tag Library (JSTL)<br>
 <p>
-Version: 1.0.4-dev (In Development)<br>
+Version: 1.1-dev (In Development)<br>
 Release Notes
 </h1>
 </center>
 
-<p>The Standard 1.0.4-dev release is a minor update to the Standard 1.0.3
-release, which builds on the Standard 1.0 FCS release, an 
-implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0 Specification</a>. The Standard
-1.0.4-dev release includes many bug fixes and updates. An official release of
-JSTL 1.0.4 should happen once important bugs have been fixed and the release is
-stable.</p>
+<p>The Standard 1.1-dev release is an 
+implementation of the <a href="http://java.sun.com/products/jstl">JSTL 1.1 Specification</a>. An official release of
+JSTL 1.1 should happen once the JSTL 1.1 Maintenance Review is accepted and when
+JSP 2.0 is final.</p>
 
-<p>The Standard Taglib, which is hosted at Apache, is used as the source repository for the <a href="http://java.sun.com/products/jstl">JSTL 1.0 reference implementation</a> supplied by Sun Microsystems, Inc.</p>
+<p>The Standard Taglib, which is hosted at Apache, is used as the source repository for the <a href="http://java.sun.com/products/jstl">JSTL reference implementation</a> supplied by Sun Microsystems, Inc.</p>
 <hr/>
 
 <h2>Release History</h2>
 
-<dt><b>As of Today &#149; Standard 1.0.4-dev nightly</b></dt>
-<p><dd>Bugs fixed since Standard 1.0.3 Taglib release:</dd>
+<dt><b>As of Today &#149; Standard 1.1-dev nightly</b></dt>
 <ul>
-  <blockquote>
-    <table width="95%" border="1">
-      <tr>
-        <th width="27%">
-          <div align="center">Bug Id</div>
-        </th>
-        <th width="73%">Summary</th>
-      </tr>
-      <tr>
-        <td width="27%" height="15">
-          <div align="center"><a
-href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=16912">16912</a></div>
-        </td>
-        <td width="73%" height="15">
-        We take advantage of the new method URLEncoder.encode(String,String) if running on J2SE 1.4.
-        &lt;c:param&gt; will then use the proper encoding.
-        </td>
-      </tr>
-      <tr>
-        <td width="27%" height="15">
-          <div align="center"><a
-href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=17440">17440</a></div>
-        </td>
-        <td width="73%" height="15">
-        Resource bundle that only differs with the variant of the locale will
-now be properly selected.
-        </td>
-      </tr>
-    </table>
-  </blockquote>
+<li>Now builds with Servlet 2.4/JSP 2.0 APIs</li>
+<li>TLDs now exist for both 1.1 and 1.0</li>
+<li>standard-examples now uses a Servlet 2.4 deployment descriptor</li>
+<li>All examples now use the new JSTL 1.1 URI</li>
+(web.xml)</li>
 </ul>
-<blockquote> 
-  <p>Other changes and additions:</p>
-  <ul>
-    <li>TBD</li>
-  </ul>
-</blockquote>
-
+<p>
 
 <dt><b>February 2003 &#149; Standard 1.0.3</b></dt>
 <p><dd>Bugs fixed since Standard 1.0.2 Taglib release:</dd>

@@ -7,7 +7,7 @@
        (even as an experiment) into this application --%>
 -->
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl-el/core" %>
 <%@ taglib prefix="ex" uri="/jstl-examples-taglib" %>
 
 <%-- 
@@ -24,7 +24,7 @@
   <title>JSTL: Source code for <c:out value="${filename}"/></title>
 </head>
 <body bgcolor="#FFFFFF">
-<h3>Source code for:&nbsp; <c:out value="${filename}"/></h3>
+<h3>Source code for:&nbsp; ${filename}</h3>
 
 <hr>
 

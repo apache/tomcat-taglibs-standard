@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl-el/core" %>
 
 <html>
 <head>
@@ -13,7 +13,7 @@
 <table border="1">
     <c:forEach var="customer" items="${customers}">
     <tr>
-	  <td><c:out value="${customer.lastName}"/></td>
+	  <td>${customer.lastName}</td>
 	  <td><c:out value="${customer.address}" default="no address specified"/></td>
 	  <td>
 	    <c:out value="${customer.address}">

@@ -60,8 +60,6 @@ import java.io.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
-
 import org.apache.taglibs.standard.examples.util.*;
 
 /**
@@ -75,8 +73,8 @@ public class EscapeHtmlTag extends BodyTagSupport {
     //*********************************************************************
     // Instance variables
     
-    private String reader;
-    private String writer;
+    private Object reader;
+    private Object writer;
     
     //*********************************************************************
     // Constructors
@@ -98,14 +96,14 @@ public class EscapeHtmlTag extends BodyTagSupport {
     /**
      * Tag's 'reader' attribute
      */
-    public void setReader(String reader) {
+    public void setReader(Object reader) {
         this.reader = reader;
     }
     
     /**
      * Tag's 'writer' attribute
      */
-    public void setWriter(String reader) {
+    public void setWriter(Object writer) {
         this.writer = writer;
     }
     
@@ -124,13 +122,13 @@ public class EscapeHtmlTag extends BodyTagSupport {
             }
             in = Util.castToReader(bcs);
         } else {
-            in = Util.castToReader(eval("reader", reader, Object.class));
+            in = Util.castToReader(reader);
         }
         
         if (writer == null) {
             out = pageContext.getOut();
         } else {
-            out = Util.castToWriter(eval("writer", writer, Object.class));
+            out = Util.castToWriter(writer);
         }
         
         transform(in, out);
@@ -169,23 +167,6 @@ public class EscapeHtmlTag extends BodyTagSupport {
         } catch (IOException ex) {
             throw new JspException("EscapeHtml: " +
             "error copying chars", ex);
-        }
-    }
-    
-    //*********************************************************************
-    // Utility methods
-    
-    /**
-     * Evaluate elexprvalue
-     */
-    private Object eval(String attName, String attValue, Class clazz)
-    throws JspException {
-        Object obj = ExpressionEvaluatorManager.evaluate(
-        attName, attValue, clazz, this, pageContext);
-        if (obj == null) {
-            throw new NullAttributeException("escapeHtml", attName);
-        } else {
-            return obj;
         }
     }
 }

@@ -1,5 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
-<%@ taglib prefix="jr" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl-el/core" %>
 <%@ taglib prefix="ex" uri="/jstl-examples-taglib" %>
 
 <html>
@@ -15,14 +14,14 @@
 <c:forEach var="customer" items="${customers}" varStatus="status">
   <tr>
     <jsp:useBean type="javax.servlet.jsp.jstl.core.LoopTagStatus" id="status"/>
-    <jr:choose>
-      <jr:when test="<%= status.getCount() % 2 == 1 %>">
+    <c:choose>
+      <c:when test="<%= status.getCount() % 2 == 1 %>">
 	    <td bgcolor="#FFFF66">
-	  </jr:when>
-	  <jr:otherwise>
+	  </c:when>
+	  <c:otherwise>
 	    <td bgcolor="#99FFCC">
-	  </jr:otherwise>
-    </jr:choose>
+	  </c:otherwise>
+    </c:choose>
     <c:out value="${customer}"/></td>
   </tr>
 </c:forEach> 
