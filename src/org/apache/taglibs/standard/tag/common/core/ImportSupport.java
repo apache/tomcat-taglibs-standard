@@ -125,7 +125,7 @@ public abstract class ImportSupport extends BodyTagSupport
 
     private void init() {
 	url = var = varReader = context = charEncoding = urlWithParams = null;
-	params = new ParamSupport.ParamManager();
+	params = null;
         scope = PageContext.PAGE_SCOPE;
     }
 
@@ -141,6 +141,10 @@ public abstract class ImportSupport extends BodyTagSupport
 	    throw new JspTagException(
 		Resources.getMessage("IMPORT_BAD_RELATIVE"));
 	}
+
+	// reset parameter-related state
+	urlWithParams = null;
+	params = new ParamSupport.ParamManager();
 
 	// Record whether our URL is absolute or relative
 	isAbsoluteUrl = isAbsoluteUrl();
