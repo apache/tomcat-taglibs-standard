@@ -232,7 +232,7 @@
    <mkdir dir="${dist.library}/tld"/>
    <jar jarfile="${dist.library}/lib/standard.jar"
          basedir="${build.library}"
-         includes="org/apache/**"/>
+         excludes="javax/**"/>
     <!-- Create the 'standard' API jar -->
     <jar jarfile="${dist.library}/lib/jstl.jar"
          basedir="${build.library}"
@@ -240,6 +240,10 @@
     <copy file="README.dist" tofile="${dist.dir}/${taglib.name}/README"/>
     <copy file="${jaxen-full.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${saxpath.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+    <copy file="${dom.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+    <copy file="${sax.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+    <copy file="${xercesImpl.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+    <copy file="${jaxp-api.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${conf.src}/c.tld" todir="${dist.dir}/${taglib.name}/tld"/>
     <copy file="${conf.src}/c-rt.tld" todir="${dist.dir}/${taglib.name}/tld"/>
     <copy file="${conf.src}/x.tld" todir="${dist.dir}/${taglib.name}/tld"/>
