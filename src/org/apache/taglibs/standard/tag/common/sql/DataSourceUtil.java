@@ -79,29 +79,25 @@ public class DataSourceUtil {
     private DataSource dataSource;
     private boolean hasDataSourceAttribute = false;
 
-    DataSourceUtil() {
-        dataSource = new DataSourceWrapper();
-    }
-
     public DataSource getDataSource() {
         return dataSource;
     }
 
     /**
      * Useful for Transaction nesting check
-     **/
+     */
     public boolean hasDataSourceAttribute() {
         return hasDataSourceAttribute;
     }
 
     /**
-     *
      * If dataSource is a String first do JNDI lookup
      * If lookup fails parse String like it was a set of JDBC parameters
-     * Otherwise check to see if dataSource is a DataSource object and use as is
-     *
-     **/
-    public void setDataSource(Object rawDataSource, PageContext pageContext) throws JspException {
+     * Otherwise check to see if dataSource is a DataSource object and use as
+     * is
+     */
+    public void setDataSource(Object rawDataSource,
+			      PageContext pageContext) throws JspException {
 
         if (rawDataSource == null) {
             rawDataSource = Config.find(pageContext, Config.SQL_DATASOURCE);
@@ -132,12 +128,10 @@ public class DataSourceUtil {
     }
 
     /**
-     *
      * Parse JDBC parameters and setup dataSource appropriately
-     *
-     **/
+     */
     private void setUsingParams(String params) throws JspException {
-        dataSource = (DataSource) new DataSourceWrapper();
+        dataSource = new DataSourceWrapper();
 
         String[] paramString = new String[4];
         int escCount = 0; 
@@ -166,21 +160,22 @@ public class DataSourceUtil {
         paramString[aryCount] = params.substring(begin);
 
 	// use the JDBC URL from the parameter string
-        ((DataSourceWrapper)dataSource).setJdbcURL(paramString[0]);
+        ((DataSourceWrapper) dataSource).setJdbcURL(paramString[0]);
 
 	// try to load a driver if it's present
         if (paramString[1] != null) {
             try {
-                ((DataSourceWrapper)dataSource).setDriverClassName(paramString[1]);
+                ((DataSourceWrapper) dataSource).setDriverClassName(paramString[1]);
             } catch (Exception ex) {
                 throw new JspTagException(
-                    Resources.getMessage("DRIVER_INVALID_CLASS", ex.getMessage()));
+                    Resources.getMessage("DRIVER_INVALID_CLASS",
+					 ex.getMessage()));
             }
 	}
 
 	// set the username and password
-        ((DataSourceWrapper)dataSource).setUserName(paramString[2]);
-        ((DataSourceWrapper)dataSource).setPassword(paramString[3]);
+        ((DataSourceWrapper) dataSource).setUserName(paramString[2]);
+        ((DataSourceWrapper) dataSource).setPassword(paramString[3]);
     }
 
 }

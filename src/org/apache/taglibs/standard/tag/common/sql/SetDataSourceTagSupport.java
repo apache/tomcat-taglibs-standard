@@ -56,6 +56,7 @@
 package org.apache.taglibs.standard.tag.common.sql;
 
 import java.util.*;
+import javax.sql.DataSource;
 import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
@@ -103,28 +104,30 @@ public class SetDataSourceTagSupport extends TagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
-        DataSourceWrapper ds;
+        DataSource ds;
 
         if (dataSource != null) {
             DataSourceUtil dsUtil = new DataSourceUtil();
             dsUtil.setDataSource(dataSource, pageContext);
-            ds = (DataSourceWrapper) dsUtil.getDataSource();
+            ds = dsUtil.getDataSource();
         }
         else {
-            ds = new DataSourceWrapper();
+            DataSourceWrapper dsw = new DataSourceWrapper();
             try {
                 // set driver class iff provided by the tag
                 if (driverClassName != null) {
-                    ds.setDriverClassName(driverClassName);
+                    dsw.setDriverClassName(driverClassName);
                 }
             }
             catch (Exception e) {
                 throw new JspTagException(
-                    Resources.getMessage("DRIVER_INVALID_CLASS", e.getMessage()));
+                    Resources.getMessage("DRIVER_INVALID_CLASS",
+					 e.getMessage()));
             }
-            ds.setJdbcURL(jdbcURL);
-            ds.setUserName(userName);
-            ds.setPassword(password);
+            dsw.setJdbcURL(jdbcURL);
+            dsw.setUserName(userName);
+            dsw.setPassword(password);
+	    ds = (DataSource) dsw;
         }
 
         if (var != null) {
