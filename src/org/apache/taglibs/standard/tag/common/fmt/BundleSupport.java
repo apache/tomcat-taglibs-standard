@@ -264,11 +264,16 @@ public abstract class BundleSupport extends BodyTagSupport {
     public static ResourceBundle getDefaultBundle(PageContext pc) {
 	ResourceBundle ret = null;
 
-	String def = (String) Util.getAttribute(pc, DEFAULT_BASE);
-	if (def == null)
+	String def = (String) Util.findAttribute(pc, DEFAULT_BASE);
+	if (def == null) {
+	    def = (String) pc.findAttribute(DEFAULT_BASE);
+	}
+	if (def == null) {
 	    def = pc.getServletContext().getInitParameter(DEFAULT_BASE);
-	if (def != null)
+	}
+	if (def != null) {
 	    ret = getBundle(pc, def);
+	}
 
 	return ret;
     }

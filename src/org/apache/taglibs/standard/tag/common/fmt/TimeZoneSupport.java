@@ -197,11 +197,15 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 	    ret = parent.getTimeZone();
 	} else {
 	    // get time zone from scoped attribute
-	    ret = (TimeZone) Util.getAttribute(pc, TIMEZONE);
+	    ret = (TimeZone) Util.findAttribute(pc, TIMEZONE);
 	    if (ret == null) {
-		String tz = pc.getServletContext().getInitParameter(TIMEZONE);
-		if (tz != null)
+		String tz = (String) pc.findAttribute(TIMEZONE);
+		if (tz == null) {
+		    tz = pc.getServletContext().getInitParameter(TIMEZONE);
+		}
+		if (tz != null) {
 		    ret = TimeZone.getTimeZone(tz);
+		}
 	    }
 	}
 

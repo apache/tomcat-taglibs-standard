@@ -143,6 +143,13 @@ public abstract class LocaleSupport extends TagSupport {
     // Public utility methods
 
     /**
+     * See parseLocale(String, String) for details.
+     */
+    public static Locale parseLocale(String locale) {
+	return parseLocale(locale, null);
+    }
+
+    /**
      * Parses the given locale string into its language and (optionally)
      * country components, and returns the corresponding
      * <tt>java.util.Locale</tt> object.
@@ -317,9 +324,10 @@ public abstract class LocaleSupport extends TagSupport {
 			    boolean extend) {
 	Locale ret = null;
 	if (extend) {
-	    ret = (Locale) Util.getAttribute(pageContext, name);
-	} else {
-	    ret = (Locale) pageContext.findAttribute(name);
+	    ret = (Locale) Util.findAttribute(pageContext, name);
+	}
+	if (ret == null) {
+	    ret = parseLocale((String) pageContext.findAttribute(name));
 	}
 	if (ret == null) {
 	    String loc =
