@@ -27,17 +27,23 @@
 	    bundle:prefix
 	    message:key
 	    message:bundle
+	    message:messageArgs
 	    messageFormat:value
 	    messageArg:value
 	    formatNumber:value
 	    formatNumber:pattern
+	    formatNumber:parseLocale
 	    parseNumber:value
 	    parseNumber:pattern
+	    parseNumber:parseLocale
 	    formatDate:value
 	    formatDate:pattern
 	    formatDate:timeZone
+	    formatDate:parseLocale
 	    parseDate:value
 	    parseDate:pattern
+	    parseDate:timeZone
+	    parseDate:parseLocale
 	</param-value>
 	<description>
 	    Whitespace-separated list of colon-separated token pairs
