@@ -18,6 +18,7 @@
         <param-name>expressionAttributes</param-name>
         <param-value>
         transaction:dataSource
+        transaction:isolation
         query:sql
         query:dataSource
         query:startRow
@@ -28,6 +29,7 @@
         driver:driver
         driver:url
         driver:user
+        driver:password
         </param-value>
         <description>
             Whitespace-separated list of colon-separated token pairs

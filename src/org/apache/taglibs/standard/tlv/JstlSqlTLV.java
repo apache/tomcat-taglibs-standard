@@ -77,7 +77,16 @@ public class JstlSqlTLV extends JstlBaseTLV {
     // Constants
 
     // tag names
+    private final String QUERY = "query";
+    private final String UPDATE = "update";
+    private final String TRANSACTION = "transaction";
+    private final String PARAM = "param";
+
     private final String JSP_TEXT = "jsp:text";
+
+    // attribute names
+    private final String SQL = "sql";
+    private final String DATASOURCE = "dataSource";
 
 
     //*********************************************************************
@@ -96,6 +105,9 @@ public class JstlSqlTLV extends JstlBaseTLV {
 
 	// parser state
 	private int depth = 0;
+        private Stack queryDepths = new Stack();
+        private Stack updateDepths = new Stack();
+        private Stack transactionDepths = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
@@ -144,9 +156,47 @@ public class JstlSqlTLV extends JstlBaseTLV {
 
 	    // now, modify state
 
+            /*
+             * Make sure <sql:param> is nested inside <sql:query> or
+             * <sql:update>. Note that <sql:param> does not need to
+             * be a direct child of <sql:query> or <sql:update>.
+             * Otherwise, the following would not work:
+             *
+             *  <sql:query sql="..." var="...">
+             *   <c:forEach var="arg" items="...">
+             *    <sql:param value="${arg}"/>
+             *   </c:forEach>
+             *  </sql:query>
+             */
+            if (isTag(qn, PARAM) && (queryDepths.empty() && updateDepths.empty()) ) {
+                fail(Resources.getMessage("SQL_PARAM_OUTSIDE_PARENT"));
+            }
+
+            // If we're in a <query>, record relevant state
+            if (isTag(qn, QUERY)) {
+                queryDepths.push(new Integer(depth));
+            }
+            // If we're in a <update>, record relevant state
+            if (isTag(qn, UPDATE)) {
+                updateDepths.push(new Integer(depth));
+            }
+            // If we're in a <transaction>, record relevant state
+            if (isTag(qn, TRANSACTION)) {
+                transactionDepths.push(new Integer(depth));
+            }
+
 	    // set up a check against illegal attribute/body combinations
 	    bodyIllegal = false;
 	    bodyNecessary = false;
+
+            if (isTag(qn, QUERY) || isTag(qn, UPDATE)) {
+                if (!hasAttribute(a, SQL)) {
+                    bodyNecessary = true;
+                }
+                if (hasAttribute(a, DATASOURCE) && !transactionDepths.empty()) {
+                    fail(Resources.getMessage("ERROR_NESTED_DATASOURCE"));
+                }
+            }
 
 	    // record the most recent tag (for error reporting)
 	    lastElementName = qn;
@@ -181,6 +231,19 @@ public class JstlSqlTLV extends JstlBaseTLV {
 		fail(Resources.getMessage("TLV_MISSING_BODY",
 		    lastElementName));
 	    bodyIllegal = false;	// reset: we've left the tag
+
+            // update <query>-related state
+            if (isTag(qn, QUERY)) {
+                queryDepths.pop();
+            }
+            // update <update>-related state
+            if (isTag(qn, UPDATE)) {
+                updateDepths.pop();
+            }
+            // update <update>-related state
+            if (isTag(qn, TRANSACTION)) {
+                transactionDepths.pop();
+            }
 
 	    // update our depth
 	    depth--;
