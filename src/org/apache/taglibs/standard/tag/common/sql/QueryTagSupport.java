@@ -244,7 +244,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
                 Resources.getMessage("SQL_PROCESS_ERROR", e.getMessage()));
 	}
 	pageContext.setAttribute(var, result, scope);
-	return SKIP_BODY;
+	return EVAL_PAGE;
     }
 
     /**

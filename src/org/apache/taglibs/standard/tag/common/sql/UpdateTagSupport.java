@@ -207,7 +207,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	}
 	if (var != null)
 	    pageContext.setAttribute(var, new Integer(result), scope);
-	return SKIP_BODY;
+	return EVAL_PAGE;
     }
 
     /**
