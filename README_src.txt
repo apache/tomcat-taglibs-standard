@@ -61,7 +61,7 @@ standard tag library.
 ---
 build.properties
 
-- Copy the file build.properties.sample to build.properties.
+- Copy the file standard/build_sample_standard.properties to build.properties.
 
 - Edit build.properties and make the following modifications:
     - Set the "base.dir" property in build.properties to the base directory
