@@ -125,7 +125,7 @@ public abstract class ImportSupport extends BodyTagSupport
 
     private void init() {
 	url = var = varReader = context = charEncoding = urlWithParams = null;
-	params = null;
+	params = new ParamSupport.ParamManager();
         scope = PageContext.PAGE_SCOPE;
     }
 
@@ -150,9 +150,6 @@ public abstract class ImportSupport extends BodyTagSupport
 	    if  (varReader != null) {
 	        r = acquireReader();
 	        pageContext.setAttribute(varReader, r);
-	    } else {
-		// otherwise, we might have parameters
-		params = new ParamSupport.ParamManager();
 	    }
 	} catch (IOException ex) {
 	    throw new JspTagException(ex.toString());
