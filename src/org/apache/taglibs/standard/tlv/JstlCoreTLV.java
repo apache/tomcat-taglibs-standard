@@ -253,8 +253,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    } else if (isTag(qn, SET)) {
 		if (hasAttribute(a, VALUE))
 		    bodyIllegal = true;
-		else
-		    bodyNecessary = true;
+		// else
+		//    bodyNecessary = true;
 	    }
 
 	    // record the most recent tag (for error reporting)
