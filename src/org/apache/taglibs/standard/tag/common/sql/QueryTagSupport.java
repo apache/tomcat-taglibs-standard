@@ -281,6 +281,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
 	    conn = parent.getSharedConnection();
+            isPartOfTransaction = true;
 	}
 	else {
 	    conn = dataSource.getConnection();

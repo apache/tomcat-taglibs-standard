@@ -232,6 +232,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
 	    conn = parent.getSharedConnection();
+            isPartOfTransaction = true;
 	}
 	else {
 	    conn = dataSource.getConnection();

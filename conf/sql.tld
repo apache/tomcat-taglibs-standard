@@ -149,7 +149,7 @@
 
   <tag>
     <name>driver</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.sql.DriverTag</tag-class>
+    <tag-class>org.apache.taglibs.standard.tag.el.sql.DriverTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Creates a simple DataSource suitable only for prototyping.
