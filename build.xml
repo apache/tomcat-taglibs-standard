@@ -191,7 +191,7 @@
 
   <!-- Create the documentation application WAR file -->
   <target name="documentation-dist" depends="documentation">
-    <jar jarfile="${dist.doc}" basedir="${build.doc}" excludes="intro.html"/>
+    <jar jarfile="${dist.doc}" basedir="${build.doc}"/>
     <mkdir dir="${taglibs.doc}"/>
     <copy todir="${taglibs.doc}">
       <fileset dir="${build.doc}">

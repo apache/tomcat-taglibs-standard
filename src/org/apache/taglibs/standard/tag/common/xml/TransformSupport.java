@@ -114,9 +114,12 @@ public abstract class TransformSupport extends BodyTagSupport {
     //*********************************************************************
     // Tag logic
 
-    // parse 'source' or body, transform via 'xslt' or 'transformer',
-    // store as 'var' or 'result'
-    public int doEndTag() throws JspException {
+    public int doStartTag() throws JspException {
+      /*
+       * We can set up our Transformer here, so we do so, and we let
+       * it receive parameters directly from subtags (instead of
+       * caching them.
+       */
       try {
 
 	//************************************
@@ -125,6 +128,35 @@ public abstract class TransformSupport extends BodyTagSupport {
 	// set up the TransformerFactory if necessary
         if (tf == null)
             tf = TransformerFactory.newInstance();
+
+	//************************************
+	// Determine transformer
+
+	// we can assume only one of 'xslt' or 'transformer' is specified
+	if (transformer != null)
+	    t = transformer;
+	else {
+	    // assume 'xslt'
+	    if (xslt == null)
+		throw new JspTagException(
+		    Resources.getMessage("TRANSFORM_NO_TRANSFORMER"));
+	    t = tf.newTransformer(getSource(xslt));
+	}
+
+	return EVAL_BODY_BUFFERED;
+
+      } catch (TransformerConfigurationException ex) {
+	throw new JspTagException(ex.toString());
+      }
+    }
+
+    // parse 'source' or body, transform via 'xslt' or 'transformer',
+    // store as 'var' or 'result'
+    public int doEndTag() throws JspException {
+      try {
+
+	//************************************
+	// Initialize
 
 	// set up our DocumentBuilderFactory if necessary
 	if (db == null)
@@ -140,20 +172,6 @@ public abstract class TransformSupport extends BodyTagSupport {
 
 	// let the Source be with you
 	Source xml = getSource(source);
-
-	//************************************
-	// Determine transformer
-
-	// we can assume only one of 'xslt' or 'transformer' is specified
-	if (transformer != null)
-	    t = transformer;
-	else {
-	    // assume 'xslt'
-	    if (xslt == null)
-		throw new JspTagException(
-		    Resources.getMessage("TRANSFORM_NO_TRANSFORMER"));
-	    t = tf.newTransformer(getSource(xslt));
-	}
 
 	//************************************
 	// Conduct the transformation
@@ -184,8 +202,6 @@ public abstract class TransformSupport extends BodyTagSupport {
       } catch (IOException ex) {
 	throw new JspTagException(ex.toString());
       } catch (ParserConfigurationException ex) {
-	throw new JspTagException(ex.toString());
-      } catch (TransformerConfigurationException ex) {
 	throw new JspTagException(ex.toString());
       } catch (TransformerException ex) {
 	throw new JspTagException(ex.toString());

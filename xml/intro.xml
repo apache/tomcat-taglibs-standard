@@ -37,7 +37,7 @@
   <section name="JSP Standard Tag Library News" href="News">
 
     <news>
-      <newsitem date="11/22/2001">
+      <newsitem date="11/21/2001">
 	Early Access Release 2 made available for
 	<a href="/builds/jakarta-taglibs/releases/standard">download</a>.
 	The "jsptl" tag library has been renamed to the "standard" tag
@@ -68,19 +68,18 @@
   <section name="Documentation" href="Documentation">
 
     <p>For more information about the JSP Standard Tag Library,
-       look at the on-line documentation:</p>
+       look at the on-line documentation for Early Access 2:</p>
     <ul>
       <!--  Uncomment this section and modify as needed when you start
             doing releases of the taglib, a link can be made to each
-            available release.
-      <li>View the current release (EA2)
-        <a href="jsptl-ea1/index.html">
+            available release. -->
+      <li>View the Early Access 2 documentation
+        <a href="standard-ea2/index.html">
         JSP Standard Tag Library EA2 Documentation</a>
       </li>
-	-->
 
-      <li>View the current version of the
-        <a href="index.html">JSP Standard Tag Library EA2 Documentation</a>
+      <li>View the most recent, nightly build of the
+        <a href="index.html">JSP Standard Tag Library Documentation</a>
       </li>
     </ul>
   
@@ -101,22 +100,20 @@
   <section name="Download" href="Download">
 
     <!--  Uncomment this section and modify as needed when you start
-          doing releases of the taglib.
+          doing releases of the taglib. -->
     <p>Download a binary distribution of the JSP Standard Tag Library
-      EA2 release</p>
+      EA2 release:</p>
     <ul>
-      <li>Download
+      <li>
         <a href="http://jakarta.apache.org/builds/jakarta-taglibs/releases/standard/">
         JSP Standard Tag Library EA2 release</a></li>
     </ul>
-    -->
 
-    <p>A binary distribution of the current nightly build of the
-       JSP Standard Tag Library EA2 reference implementation is available.</p>
+    <p>Download the most recent, nightly snapshot:</p>
     <ul>
-      <li>Download
+      <li>
         <a href="http://jakarta.apache.org/builds/jakarta-taglibs/nightly/projects/standard/">
-        JSP Standard Tag Library EA2 RI build</a></li>
+        JSP Standard Tag Library nightly snapshot</a></li>
     </ul>
 
     <p>Nightly build distributions of the development version for all the
@@ -138,8 +135,8 @@
 
     <ul>
       <li>The <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 Expert Group</a></li>
-      <li>Pierre Delisle (spec lead)</li>
-      <li>Shawn Bayern (RI lead)</li>
+      <li>Pierre Delisle (specification lead)</li>
+      <li>Shawn Bayern (implementation lead)</li>
       <li>Nathan Abramson</li>
       <li>Scott Hasse</li>
       <li>Justyna Horwat</li>
