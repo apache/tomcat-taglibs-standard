@@ -246,7 +246,9 @@ public abstract class UpdateTagSupport extends BodyTagSupport
         if (rawDataSource instanceof String) {
             try {
                 Context ctx = new InitialContext();
-                dataSource = (DataSource) ctx.lookup((String)rawDataSource);
+                // relative to standard JNDI root for J2EE app
+                Context envCtx = (Context) ctx.lookup("java:comp/env");
+                dataSource = (DataSource) envCtx.lookup((String)rawDataSource);
             } catch (NamingException ex) {
                 throw new JspException(ex.toString(), ex);
             }
