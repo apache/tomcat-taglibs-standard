@@ -43,7 +43,7 @@
     <tr> 
       <td>URL</td>
       <td> 
-        <input type="text" size="40" name="dbUrl" value="jdbc:rmi://gibson:1099/jdbc:cloudscape:CloudscapeDB">
+        <input type="text" size="40" name="dbUrl" value="jdbc:rmi://localhost:1099/jdbc:cloudscape:CloudscapeDB;create=true">
       </td>
     </tr>
   </table>
