@@ -1,7 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999 The Apache Software Foundation.  All rights 
+ * Copyright (c) 1999-2003 The Apache Software Foundation.  All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,6 +55,7 @@
 
 package javax.servlet.jsp.jstl.sql;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.util.*;
 
@@ -70,7 +71,7 @@ import java.util.*;
  * @author Justyna Horwat
  */
 
-class ResultImpl implements Result {
+class ResultImpl implements Result, Serializable {
     private List rowMap;
     private List rowByIndex;
     private String[] columnNames;
@@ -82,9 +83,9 @@ class ResultImpl implements Result {
      *
      * @param rs an open <tt>ResultSet</tt>, positioned before the first
      * row
-     * @param startRow, beginning row to be cached
-     * @param maxRows, query maximum rows limit
-     * @exception if a database error occurs
+     * @param startRow beginning row to be cached
+     * @param maxRows query maximum rows limit
+     * @exception java.sql.SQLException if a database error occurs
      */
     public ResultImpl(ResultSet rs, int startRow, int maxRows)
         throws SQLException 
