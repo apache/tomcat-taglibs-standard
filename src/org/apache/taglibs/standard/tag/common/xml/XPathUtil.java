@@ -443,6 +443,23 @@ public class XPathUtil {
         }
         return null;
     }
+
+     static Document getDummyDocumentWithoutRoot( ) {
+        try {
+            if ( dbf == null ) {
+                dbf = DocumentBuilderFactory.newInstance();
+                dbf.setNamespaceAware( true );
+                dbf.setValidating( false );
+            }
+            db = dbf.newDocumentBuilder();
+
+            d = db.newDocument();
+            return d;
+        } catch ( Exception e ) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     
     // The following variable is used for holding the modified xpath string
     // when adapting parameter for Xalan XPath engine, where we need to have
@@ -633,6 +650,7 @@ public class XPathUtil {
         
         modifiedXPath = xpath;
         String origXPath = xpath ;
+        boolean whetherOrigXPath = true;
         
         // If contextNode is not null then  just pass the values to Xalan XPath
         if ( n != null ) {
@@ -657,6 +675,7 @@ public class XPathUtil {
                 xpath = xpath.substring( xpath.indexOf("/"));
             } else  {
                 xpath = "/*";
+                whetherOrigXPath = false; 
             }
            
             
@@ -675,48 +694,59 @@ public class XPathUtil {
                     //System.out.println("Creating a Dummy document to pass " +
                     // " onto as context node " );
                     
-                    if ( Class.forName("org.apache.taglibs.standard.tag.common.xml.JSTLNodeList").isInstance(
-                    varObject ) ) {
+                    if ( Class.forName("org.apache.taglibs.standard.tag.common.xml.JSTLNodeList").isInstance( varObject ) ) {
                         Document newDocument = getDummyDocument();
 
                         JSTLNodeList jstlNodeList = (JSTLNodeList)varObject;
-                        if  ( ( jstlNodeList.getLength() == 1 ) && 
-   (!Class.forName("org.w3c.dom.Node").isInstance( jstlNodeList.elementAt(0) ) ) ) { 
+                        if   ( jstlNodeList.getLength() == 1 ) { 
+                            if ( Class.forName("org.w3c.dom.Node").isInstance(
+                                jstlNodeList.elementAt(0) ) ) { 
+                                Node node = (Node)jstlNodeList.elementAt(0);
+                                Document doc = getDummyDocumentWithoutRoot();
+                                Node importedNode = doc.importNode( node, true);
+                                doc.appendChild (importedNode );
+                                boundDocument = doc;
+                                if ( whetherOrigXPath ) {
+                                    xpath="/*" + xpath;
+                                }
 
-                            //Nodelist with primitive type
-                            Object myObject = jstlNodeList.elementAt(0);
+                            } else {
 
-                            //p("Single Element of primitive type");
-                            //p("Type => " + myObject.getClass());
+                                //Nodelist with primitive type
+                                Object myObject = jstlNodeList.elementAt(0);
 
-                            xpath = myObject.toString();
+                                //p("Single Element of primitive type");
+                                //p("Type => " + myObject.getClass());
 
-                            //p("String value ( xpathwould be this) => " + xpath);
-                            boundDocument = newDocument;
+                                xpath = myObject.toString();
+
+                                //p("String value ( xpathwould be this) => " + xpath);
+                                boundDocument = newDocument;
+                            } 
                             
                         } else {
 
                             Element dummyroot = newDocument.getDocumentElement();
-                        for ( int i=0; i< jstlNodeList.getLength(); i++ ) {
-                            Node currNode = (Node)jstlNodeList.item(i);
+                            for ( int i=0; i< jstlNodeList.getLength(); i++ ) {
+                                Node currNode = (Node)jstlNodeList.item(i);
                             
-                            Node importedNode = newDocument.importNode(
-                            currNode, true );
+                                Node importedNode = newDocument.importNode(
+                                    currNode, true );
 
-                            //printDetails ( newDocument);
+                                //printDetails ( newDocument);
 
-                            dummyroot.appendChild( importedNode );
+                                dummyroot.appendChild( importedNode );
 
-                            //p( "Details of the document After importing  " );
-                            //printDetails ( newDocument);
-                        }
-                        boundDocument = newDocument;
-                        // printDetails ( boundDocument );
-                        // Verify : As we are adding Document element we need to
-                        // change the xpath expression. Hopefully this won't
-                        // change the result
+                                //p( "Details of the document After importing");
+                                //printDetails ( newDocument);
+                            }
+                            boundDocument = newDocument;
+                            // printDetails ( boundDocument );
+                            //Verify :As we are adding Document element we need
+                            // to change the xpath expression.Hopefully this
+                            // won't  change the result
 
-                        xpath = "/*" +  xpath;
+                            xpath = "/*" +  xpath;
                         }
                     } else if ( Class.forName("org.w3c.dom.Node").isInstance(
                     varObject ) ) {
