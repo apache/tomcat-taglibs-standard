@@ -78,9 +78,50 @@ application's WEB-INF/lib directory.</p>
 
 <h3>Multiple tag libraries</h3>
 
-<p>See the <a href="Overview.html">Overview Document</a> for
-information on the constituent tag libraries of Standard 1.0.  That
-document lists the TLD URIs and recommended taglib prefixes.</p>
+<p>
+The constituent tag libraries of Standard 1.0 are as follows:
+</p>
+
+  <table border="1" cellpadding="5">
+    <tr> 
+      <th>Funtional Area</th>
+      <th>URI</th>
+      <th>Prefix</th>
+      <th>Example</th>
+    </tr>
+    <tr> 
+      <td>Core</td>
+      <td>http://java.sun.com/jstl/core</td>
+      <td> 
+        <div align="center"><font face="Courier New, Courier, mono">c</font></div>
+      </td>
+      <td><font face="Courier New, Courier, mono">&lt;c:<i>tagname</i> ...&gt;</font></td>
+    </tr>
+    <tr> 
+      <td>XML processing</td>
+      <td>http://java.sun.com/jstl/xml</td>
+      <td> 
+        <div align="center"><font face="Courier New, Courier, mono">x</font></div>
+      </td>
+      <td><font face="Courier New, Courier, mono">&lt;x:<i>tagname</i> ...&gt;</font></td>
+    </tr>
+    <tr> 
+      <td>I18N capable formatting</td>
+      <td>http://java.sun.com/jstl/fmt</td>
+      <td> 
+        <div align="center"><font face="Courier New, Courier, mono">fmt</font></div>
+      </td>
+      <td><font face="Courier New, Courier, mono">&lt;fmt:<i>tagname</i> ...&gt;</font></td>
+    </tr>
+    <tr> 
+      <td>Database access (SQL)</td>
+      <td>http://java.sun.com/jstl/sql</td>
+      <td> 
+        <div align="center"><font face="Courier New, Courier, mono">sql</font></div>
+      </td>
+      <td><font face="Courier New, Courier, mono">&lt;sql:<i>tagname</i> ...&gt;</font></td>
+    </tr>
+  </table>
 
 <p>Using the Standard 1.0 libraries is simple; you simply need to import
 them into your JSP pages using the <b>taglib</b> directive.  For
