@@ -144,9 +144,12 @@ public abstract class ExceptionSupport extends TagSupport {
 	}
 
 	try {
-	    pageContext.getOut().print(message);
-	    if (stackTrace)
-		value.printStackTrace(new PrintWriter(pageContext.getOut()));
+	    JspWriter writer = pageContext.getOut();
+	    writer.print(message);
+	    if (stackTrace) {
+		writer.newLine();
+		value.printStackTrace(new PrintWriter(writer));
+	    }
 	} catch (IOException ioe) {
 	    throw new JspTagException(ioe.getMessage());
 	}

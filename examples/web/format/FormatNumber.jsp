@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: Formatting Support -- Number, Currency, and Percent Example</title>
+  <title>JSTL: Formatting/I18N Support -- Number, Currency, and Percent Example</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Formatting Numbers, Currencies, and Percentages</h3>

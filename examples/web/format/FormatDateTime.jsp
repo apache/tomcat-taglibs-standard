@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: Formatting Support -- Date and Time Example</title>
+  <title>JSTL: Formatting/I18N Support -- Date and Time Example</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Formatting Dates and Times</h3>
