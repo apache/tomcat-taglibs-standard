@@ -1,4 +1,4 @@
-<%@ taglib prefix="x" uri="http://java.sun.com/jstl/ea/xml" %>
+<%@ taglib prefix="x" uri="http://java.sun.com/jstl/xml" %>
 
 <html>
 <head>

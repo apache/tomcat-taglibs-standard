@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/ea/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 
 <%--
   --   These URLs likely don't exist, but the error that gets reported 

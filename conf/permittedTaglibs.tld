@@ -6,7 +6,7 @@
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>permittedTaglibs</short-name>
-  <uri>http://java.sun.com/jstl/ea/permittedTaglibs</uri>
+  <uri>http://jakarta.apache.org/taglibs/standard/permittedTaglibs</uri>
   <description>
     Validates JSP pages to restrict 'taglib' directives
   </description>
@@ -18,10 +18,10 @@
     <init-param>
       <param-name>permittedTaglibs</param-name>
       <param-value>
-	http://java.sun.com/jstl/ea/core
-	http://java.sun.com/jstl/ea/fmt
-	http://java.sun.com/jstl/ea/sql
-	http://java.sun.com/jstl/ea/xml
+	http://java.sun.com/jstl/core
+	http://java.sun.com/jstl/fmt
+	http://java.sun.com/jstl/sql
+	http://java.sun.com/jstl/xml
       </param-value>
       <description>
         Whitespace-separated list of taglib URIs to permit.  This example

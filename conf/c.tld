@@ -6,7 +6,7 @@
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>c</short-name>
-  <uri>http://java.sun.com/jstl/ea/core</uri>
+  <uri>http://java.sun.com/jstl/core</uri>
   <display-name>JSTL core</display-name>
   <description>JSTL 1.0 core library</description>
 

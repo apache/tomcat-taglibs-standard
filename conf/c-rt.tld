@@ -6,7 +6,7 @@
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>c_rt</short-name>
-  <uri>http://java.sun.com/jstl/ea/core-rt</uri>
+  <uri>http://java.sun.com/jstl/core-rt</uri>
   <display-name>JSTL core RT</display-name>
   <description>JSTL 1.0 core library</description>
 

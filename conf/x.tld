@@ -6,7 +6,7 @@
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>x</short-name>
-  <uri>http://java.sun.com/jstl/ea/xml</uri>
+  <uri>http://java.sun.com/jstl/xml</uri>
   <display-name>JSTL XML</display-name>
   <description>JSTL 1.0 XML library</description>
 

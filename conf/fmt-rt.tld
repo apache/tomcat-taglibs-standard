@@ -6,7 +6,7 @@
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>fmt_rt</short-name>
-  <uri>http://java.sun.com/jstl/ea/fmt-rt</uri>
+  <uri>http://java.sun.com/jstl/fmt-rt</uri>
   <display-name>JSTL fmt RT</display-name>
   <description>JSTL 1.0 i18n-capable formatting library</description>
 
