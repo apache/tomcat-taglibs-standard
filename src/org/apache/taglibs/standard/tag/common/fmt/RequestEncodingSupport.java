@@ -107,23 +107,28 @@ public abstract class RequestEncodingSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	if (value == null) {
-	    // Use charset from request's Content-Type header
-	    value = pageContext.getRequest().getCharacterEncoding();
+	if ((value == null)
+	        && (pageContext.getRequest().getCharacterEncoding() == null)) {
+	    // Use charset from session-scoped attribute
+	    value = (String)
+		pageContext.getAttribute(REQUEST_CHAR_SET,
+					 PageContext.SESSION_SCOPE);
 	    if (value == null) {
-		// Use charset from scoped attribute
-		value = (String) pageContext.findAttribute(REQUEST_CHAR_SET);
-		if (value == null) {
-		    // Use default encoding
-		    value = DEFAULT_ENCODING;
-		}
+		// Use default encoding
+		value = DEFAULT_ENCODING;
 	    }
 	}
 
-	try {
-	    pageContext.getRequest().setCharacterEncoding(value);
-	} catch (UnsupportedEncodingException uee) {
-	    throw new JspTagException(uee.getMessage());
+	/*
+	 * If char encoding was already set in the request, we don't need to 
+	 * set it again.
+	 */
+	if (value != null) {
+	    try {
+		pageContext.getRequest().setCharacterEncoding(value);
+	    } catch (UnsupportedEncodingException uee) {
+		throw new JspTagException(uee.getMessage());
+	    }
 	}
 
 	return EVAL_PAGE;
