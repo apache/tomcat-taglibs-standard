@@ -15,24 +15,90 @@ Release Notes
 </center>
 
 <p>The Standard 1.1-dev release is an 
-implementation of the <a href="http://java.sun.com/products/jstl">JSTL 1.1 Specification</a>. An official release of
-JSTL 1.1 should happen once the JSTL 1.1 Maintenance Review is accepted and when
-JSP 2.0 is final.</p>
+implementation of the <a href="http://java.sun.com/products/jstl">JSTL 1.1 Specification</a>.
+Given that JSTL 1.1 has a dependency on JSP 2.0, an official release of
+JSTL 1.1 will happen once the Final Release of the JSP 2.0 specification is
+published.</p>
 
 <p>The Standard Taglib, which is hosted at Apache, is used as the source repository for the <a href="http://java.sun.com/products/jstl">JSTL reference implementation</a> supplied by Sun Microsystems, Inc.</p>
 <hr/>
 
 <h2>Release History</h2>
 
-<dt><b>As of Today &#149; Standard 1.1-dev nightly</b></dt>
-<ul>
-<li>Now builds with Servlet 2.4/JSP 2.0 APIs</li>
-<li>TLDs now exist for both 1.1 and 1.0</li>
-<li>standard-examples now uses a Servlet 2.4 deployment descriptor</li>
-<li>All examples now use the new JSTL 1.1 URI</li>
-(web.xml)</li>
-</ul>
+<dt><b>As of Today &#149; Standard 1.1-dev</b></dt>
 <p>
+We now have a complete implementation of the JSTL 1.1 Maintenance Release.
+<p><dd>Bugs fixed since Standard 1.0.3 Taglib release:</dd>
+<ul>
+  <blockquote>
+    <table width="95%" border="1">
+      <tr>
+        <th width="27%">
+          <div align="center">Bug Id</div>
+        </th>
+        <th width="73%">Summary</th>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=18498">18498</a></div>
+        </td>
+        <td width="73%" height="15">
+fmt:formatNumber now removes the scoped variable when the
+value is null or empty.
+        </td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=16912">16912</a></div>
+        </td>
+        <td width="73%" height="15">
+c:param now encodes URL with URLEncoder.encode(str, encoding)
+        </td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=17388">17388</a></div>
+        </td>
+        <td width="73%" height="15">
+PreparedStatement used in sql:query closed immediately after use to avoid leaks.
+        </td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=10024">10024</a></div>
+        </td>
+        <td width="73%" height="15">
+Advisory character encoding now properly fetched from "charset" attribute
+of "content-type" header (required change to spec)</td>
+      </tr>    
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=17440">17440</a></div>
+        </td>
+        <td width="73%" height="15">
+Fixed processing of Locale when variant is used.
+        </td>
+      </tr>    
+    </table>
+  </blockquote>
+</ul>
+
+<blockquote> 
+  <p>Other changes and additions:</p>
+  <ul>
+    <li>Added Version class to easily tell the version of the jar file.</li>
+    <li>Added a few sample cases to highlight url rewriting and encoding.</li>
+    <li>New sample JSP page demoing I18N-Formatting capabilities.</li>
+    <li>Our dependency on jaxen and saxpath has been removed by switching
+        our XPath support to Xalan.
+  </ul>
+</blockquote>
+
 
 <dt><b>February 2003 &#149; Standard 1.0.3</b></dt>
 <p><dd>Bugs fixed since Standard 1.0.2 Taglib release:</dd>
