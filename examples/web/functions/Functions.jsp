@@ -236,6 +236,18 @@
     <td>-1</td>
     <td>${fn:substring(s1, -1, -1)}</td>
   </tr>
+  <tr>
+    <td>empty</td>
+    <td>0</td>
+    <td>6</td>
+    <td>&nbsp;${fn:substring("", 0, 6)}</td>
+  </tr>
+  <tr>
+    <td>empty</td>
+    <td>2</td>
+    <td>6</td>
+    <td>&nbsp;${fn:substring("", 2, 6)}</td>
+  </tr>
 </table>
 
 <h4>fn:substringAfter</h4>
@@ -254,6 +266,11 @@
     <td>${s1}</td>
     <td>on a</td>
     <td>${fn:substringAfter(s1, "on a")}</td>
+  </tr>
+  <tr>
+    <td>${s1}</td>
+    <td>not found</td>
+    <td>&nbsp;${fn:substringAfter(s1, "not found")}</td>
   </tr>
   <tr>
     <td>${s1}</td>

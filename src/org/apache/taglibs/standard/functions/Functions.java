@@ -124,6 +124,7 @@ public class Functions {
     
     public static String substring(String input, int beginIndex, int endIndex) {
         if (input == null) input = "";
+        if (beginIndex >= input.length()) beginIndex = input.length() - 1;
         if (beginIndex < 0) beginIndex = 0;
         if (endIndex < 0 || endIndex > input.length()) endIndex = input.length();
         return input.substring(beginIndex, endIndex);
@@ -131,7 +132,10 @@ public class Functions {
     
     public static String substringAfter(String input, String substring) {
         if (input == null) input = "";
+        if (input.length() == 0) return "";
         if (substring == null) substring = "";
+        if (substring.length() == 0) return input;
+        
         int index = input.indexOf(substring);
         if (index == -1) {
             return "";
@@ -142,7 +146,10 @@ public class Functions {
         
     public static String substringBefore(String input, String substring) {
         if (input == null) input = "";
+        if (input.length() == 0) return "";
         if (substring == null) substring = "";
+        if (substring.length() == 0) return "";
+
         int index = input.indexOf(substring);
         if (index == -1) {
             return "";
