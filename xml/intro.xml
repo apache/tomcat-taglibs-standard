@@ -35,6 +35,7 @@
         contains the same JSTL implementation as was included in Sun's Web
         Services Developer Pack, version 1.0.
       </newsitem>
+<!--
       <newsitem date="6/17/2002">
 	Standard Taglib, RC1, was posted.  This release contains the same
         JSTL implementation as was included in Sun's Web Services Developer
@@ -75,6 +76,7 @@
         <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 Expert Group</a>
         and imported into CVS.
       </newsitem>
+-->
     </news>
 
   </section>
@@ -109,8 +111,8 @@
         Source Distribution</a></li>
     </ul>
 
-    <p>See the <a href="#Books">JSTL Books</a> section below
-    for more documentation.</p>
+    <p>Several books have been written about JSTL.  See the <a
+    href="#Books">JSTL Books</a> section below for more documentation.</p>
   
   </section>
 
