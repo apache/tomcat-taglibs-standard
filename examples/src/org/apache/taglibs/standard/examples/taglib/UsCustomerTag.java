@@ -60,6 +60,7 @@ import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.jstl.core.*;
 
 import org.apache.taglibs.standard.examples.beans.Customer;
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.examples.util.*;
 
 /**
@@ -74,7 +75,7 @@ public class UsCustomerTag extends ConditionalTagSupport {
     // Instance Variables
     
     /** Holds value of property customer. */
-    private Customer customer;
+    private String customer;
     
     //*********************************************************************
     // Constructor and lusCustomerecycle management
@@ -100,16 +101,17 @@ public class UsCustomerTag extends ConditionalTagSupport {
     // ConditionalTagSupport methods
     
     protected boolean condition() throws JspTagException {
-        try {
-            if (customer == null) {
-                throw new NullAttributeException("usCustomer", "test");
-            } else {
-                //System.out.println("country: " + customer.getAddress().getCountry());
-                return (customer.getAddress().getCountry().equalsIgnoreCase("USA"));
-            }
+	try {
+         Customer customerObj = (Customer)eval("customer", customer, Customer.class);
+         if (customerObj == null) {
+             throw new NullAttributeException("usCustomer", "test");
+         } else {
+             System.out.println("country: " + customerObj.getAddress().getCountry());
+             return (customerObj.getAddress().getCountry().equalsIgnoreCase("USA"));
+         }
         } catch (JspException ex) {
-            throw new JspTagException(ex.toString());
-        }
+	 throw new JspTagException(ex.toString());
+	}
     }
     
     //*********************************************************************
@@ -119,7 +121,7 @@ public class UsCustomerTag extends ConditionalTagSupport {
      * Getter for property customer.
      * @return Value of property customer.
      */
-    public Customer getCustomer() {
+    public String getCustomer() {
         return customer;
     }
     
@@ -127,7 +129,24 @@ public class UsCustomerTag extends ConditionalTagSupport {
      * Setter for property customer.
      * @param customer New value of property customer.
      */
-    public void setCustomer(Customer customer) {
+    public void setCustomer(String customer) {
         this.customer = customer;
+    }
+    
+    //*********************************************************************
+    // Utility methods
+    
+    /**
+     * Evaluate elexprvalue
+     */
+    private Object eval(String attName, String attValue, Class clazz)
+    throws JspException {
+        Object obj = ExpressionEvaluatorManager.evaluate(
+        attName, attValue, clazz, this, pageContext);
+        if (obj == null) {
+            throw new NullAttributeException(attName, attValue);
+        } else {
+            return obj;
+        }
     }
 }

@@ -59,6 +59,8 @@ import java.util.Locale;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.jstl.core.LoopTagSupport;
 
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+
 /**
  * <p>Tag handler for &lt;locales&gt;
  *
@@ -70,32 +72,42 @@ public class LocalesTag extends LoopTagSupport {
     private static final Locale[] locales = Locale.getAvailableLocales();
     private int pointer; 
     private String varTotal;
+    private String endEL;
+    private String beginEL;
 
     public void setVarTotal( String value ) {
 	varTotal = value;
     }
-
     public void prepare() {
 	pointer = 0;
+	try {
+	    begin = ( (Integer) ExpressionEvaluatorManager.evaluate( "begin", beginEL, Integer.class,
+								     this, super.pageContext )).intValue();
+	    end = ( (Integer) ExpressionEvaluatorManager.evaluate( "end", endEL, Integer.class,
+								   this, super.pageContext )).intValue();
+	} catch( JspException exc ) {
+	    System.err.println( "Exception evaluating  EL expressions: beginEL = " + beginEL +
+				", endEL = " + endEL );
+	    begin = end = -1;
+	    exc.printStackTrace();
+	}
 	if ( varTotal!=null && varTotal.length()>0 ) {
 	    pageContext.setAttribute( varTotal, new Integer(locales.length) );
 	}
     
     } 
-
     public boolean hasNext() {
 	return pointer < locales.length;
     }  
-
     public Object next() {
 	return locales[ pointer++ ];
     }
   
-    public void setBegin( int value ) {
-  	super.begin = value;
+    public void setBegin( String value ) {
+  	beginEL = value;
     }
   
-    public void setEnd( int value ) {
-  	super.end = value;
+    public void setEnd( String value ) {
+  	endEL = value;
     }                     
 }

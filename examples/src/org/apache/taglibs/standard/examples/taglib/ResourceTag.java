@@ -61,6 +61,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 
 import org.apache.taglibs.standard.examples.util.*;
 
@@ -114,7 +115,7 @@ public class ResourceTag extends TagSupport {
     // TagSupport methods
     
     public int doStartTag() throws JspException {
-        reader = getReaderFromResource(resource);
+        reader = getReaderFromResource((String)eval("resource", resource, String.class));
         exposeVariable(reader);
         return EVAL_BODY_INCLUDE;
     }
@@ -163,7 +164,21 @@ public class ResourceTag extends TagSupport {
     
     //*********************************************************************
     // Utility methods
-        
+    
+    /**
+     * Evaluate elexprvalue
+     */
+    private Object eval(String attName, String attValue, Class clazz)
+    throws JspException {
+        Object obj = ExpressionEvaluatorManager.evaluate(
+        attName, attValue, clazz, this, pageContext);
+        if (obj == null) {
+            throw new NullAttributeException("escapeHtml", attName);
+        } else {
+            return obj;
+        }
+    }
+    
     private void exposeVariable(Reader reader) {
         if (id != null) {
             pageContext.setAttribute(id, reader);
