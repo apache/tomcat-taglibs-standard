@@ -55,6 +55,7 @@
 
 package javax.servlet.jsp.jstl.sql;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.util.*;
 
@@ -70,7 +71,7 @@ import java.util.*;
  * @author Justyna Horwat
  */
 
-class ResultImpl implements Result {
+class ResultImpl implements Result, Serializable {
     private List rowMap;
     private List rowByIndex;
     private String[] columnNames;
