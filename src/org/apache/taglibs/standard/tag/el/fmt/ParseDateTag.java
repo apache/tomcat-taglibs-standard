@@ -214,11 +214,17 @@ public class ParseDateTag extends ParseDateSupport {
 
 	// 'parseLocale' attribute
 	if (parseLocale_ != null) {
-	    String pl = (String) ExpressionUtil.evalNotNull(
-	        "parseDate", "parseLocale", parseLocale_, String.class, this,
-		pageContext);
-	    if ((pl != null) && !"".equals(pl)) {
-		parseLocale = LocaleSupport.parseLocale(pl);
+	    Object obj = ExpressionEvaluatorManager.evaluate(
+	        "parseLocale", parseLocale_, Object.class, this, pageContext);
+	    if (obj != null) {
+		if (obj instanceof Locale) {
+		    parseLocale = (Locale) obj;
+		} else {
+		    String localeStr = (String) obj;
+		    if (!"".equals(localeStr)) {
+			parseLocale = LocaleSupport.parseLocale(localeStr);
+		    }
+		}
 	    }
 	}
     }

@@ -186,11 +186,17 @@ public class ParseNumberTag extends ParseNumberSupport {
 
 	// 'parseLocale' attribute
 	if (parseLocale_ != null) {
-	    obj = ExpressionUtil.evalNotNull(
-	        "parseNumber", "parseLocale", parseLocale_, String.class, this,
-		pageContext);
-	    if ((obj != null) && !"".equals((String) obj)) {
-		parseLocale = LocaleSupport.parseLocale((String) obj);
+	    obj = ExpressionEvaluatorManager.evaluate(
+	        "parseLocale", parseLocale_, Object.class, this, pageContext);
+	    if (obj != null) {
+		if (obj instanceof Locale) {
+		    parseLocale = (Locale) obj;
+		} else {
+		    String localeStr = (String) obj;
+		    if (!"".equals(localeStr)) {
+			parseLocale = LocaleSupport.parseLocale(localeStr);
+		    }
+		}
 	    }
 	}
 

@@ -103,9 +103,15 @@ public class ParseDateTag extends ParseDateSupport {
     }
 
     // 'parseLocale' attribute
-    public void setParseLocale(String parseLocale) throws JspTagException {
-	if (! "".equals(parseLocale)) {
-	    this.parseLocale = LocaleSupport.parseLocale(parseLocale);
+    public void setParseLocale(Object loc) throws JspTagException {
+	if (loc != null) {
+	    if (loc instanceof Locale) {
+		this.parseLocale = (Locale) loc;
+	    } else {
+		if (!"".equals((String) loc)) {
+		    this.parseLocale = LocaleSupport.parseLocale((String) loc);
+		}
+	    }
 	}
     }
 }
