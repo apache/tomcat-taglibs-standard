@@ -124,7 +124,24 @@ public class ForEachTag extends LoopTagSupport {
 	this.select = select;
     }
 
+    public void setBegin(int begin) throws JspTagException {
+        this.beginSpecified = true;
+        this.begin = begin;
+        validateBegin();
+    }
 
+    public void setEnd(int end) throws JspTagException {
+        this.endSpecified = true;
+        this.end = end;
+        validateEnd();
+    }
+
+    public void setStep(int step) throws JspTagException {
+        this.stepSpecified = true;
+        this.step = step;
+        validateStep();
+    }
+    
     //*********************************************************************
     // Public methods for subtags
 
