@@ -162,7 +162,8 @@ public class XPathUtil {
 		    localName);
 	    } else if (prefix.equals(INITPARAM_P)) {
 		return notNull(
-		    pageContext.getServletConfig().getInitParameter(localName),
+		    pageContext.getServletContext().
+		      getInitParameter(localName),
 		    prefix,
 		    localName);
 	    } else if (prefix.equals(HEADER_P)) {
