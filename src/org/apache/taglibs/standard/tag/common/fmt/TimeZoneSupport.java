@@ -55,6 +55,7 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
+import java.io.IOException;
 import java.util.TimeZone;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
@@ -130,7 +131,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 
     public int doStartTag() throws JspException {
 	timeZone = TimeZone.getTimeZone(value);
-	return EVAL_BODY_INCLUDE;
+	return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
@@ -138,10 +139,16 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 	    pageContext.setAttribute(var, timeZone, scope);	
 	} else if (getBodyContent() == null) {
 	    /*
-	     * If no 'var' attribute and no body, we store our time zone
+	     * If no 'var' attribute and empty body, we store our time zone
 	     * in the javax.servlet.jsp.jstl.i18n.timeZone scoped attribute
 	     */
 	    pageContext.setAttribute(TIMEZONE_ATTRIBUTE, timeZone, scope);
+	} else {
+	    try {
+		pageContext.getOut().print(getBodyContent().getString());
+	    } catch (IOException ioe) {
+		throw new JspTagException(ioe.getMessage());
+	    }
 	}
 
 	return EVAL_PAGE;

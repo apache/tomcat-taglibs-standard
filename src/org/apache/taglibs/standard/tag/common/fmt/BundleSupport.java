@@ -55,6 +55,7 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
+import java.io.IOException;
 import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.*;
@@ -161,7 +162,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     public int doStartTag() throws JspException {
 	bundle = getBundle(pageContext, basename);
-	return EVAL_BODY_INCLUDE;
+	return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
@@ -172,10 +173,16 @@ public abstract class BundleSupport extends BodyTagSupport {
 		pageContext.setAttribute(var, emptyResourceBundle, scope);
 	} else if (getBodyContent() == null) {
 	    /*
-	     * If no 'var' attribute and no body, we store our base name
+	     * If no 'var' attribute and empty body, we store our base name
 	     * in the javax.servlet.jsp.jstl.i18n.basename scoped attribute
 	     */
 	    pageContext.setAttribute(DEFAULT_BASENAME, basename, scope);
+	} else {
+	    try {
+		pageContext.getOut().print(getBodyContent().getString());
+	    } catch (IOException ioe) {
+		throw new JspTagException(ioe.getMessage());
+	    }
 	}
 
 	return EVAL_PAGE;

@@ -29,7 +29,7 @@
    </fmt:messageArg>
   </fmt:message>
 
- <li>
+ <li> Using 'messageArgs' attribute:<br>
   <fmt:message key="serverInfo" bundle="$deBundle" messageArgs="$messageArgs"/>
 </ul>
 
