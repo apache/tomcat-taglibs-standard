@@ -146,23 +146,23 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     // Package-scoped utility methods
 
     /*
-     * Returns the time zone.
+     * Determines and returns the time zone to be used by the given action.
      *
-     * <p> If the given action is nested inside a &lt;timeZone&gt; tag,
-     * the time zone is taken from the enclosing &lt;timeZone&gt; tag.
+     * <p> If the given action is nested inside a &lt;timeZone&gt; action,
+     * the time zone is taken from the enclosing &lt;timeZone&gt; action.
      *
-     * <p> Otherwise, the default time zone given by the
-     * <tt>javax.servlet.jsp.jstl.fmt.timeZone</tt> scoped attribute is used,
-     * which is searched in the page, request, session (if valid),
-     * and application scope(s) (in this order).
-     * 
-     * <p> If still not found, the JSP container's time zone is used.
+     * <p> Otherwise, the time zone configuration setting
+     * <tt>javax.servlet.jsp.jstl.core.Config.FMT_TIME_ZONE</tt>
+     * is used.
      *
-     * @param pageContext the page containing the action that requires the
-     * time zone
-     * @param fromTag the action that requires the time zone
+     * @param pageContext the page containing the action for which the
+     * time zone needs to be determined
+     * @param fromTag the action for which the time zone needs to be
+     * determined
      *
-     * @return the time zone
+     * @return the time zone, or <tt>null</tt> if the given action is not 
+     * nested inside a &lt;timeZone&gt; action and no time zone configuration
+     * setting exists
      */
     static TimeZone getTimeZone(PageContext pc, Tag fromTag) {
 	TimeZone tz = null;
@@ -173,7 +173,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 	    TimeZoneSupport parent = (TimeZoneSupport) t;
 	    tz = parent.getTimeZone();
 	} else {
-	    // get time zone from config variable or context init param
+	    // get time zone from configuration setting
 	    Object obj = Config.find(pc, Config.FMT_TIME_ZONE);
 	    if (obj != null) {
 		if (obj instanceof TimeZone) {
