@@ -92,8 +92,8 @@ public class SetDataSourceTagSupport extends TagSupport {
      * result.
      *
      */
-    public void setScope(String scopeName) {
-        Util.getScope(scopeName);
+    public void setScope(String scope) {
+        this.scope = Util.getScope(scope);
     }
 
     public void setVar(String var) {
