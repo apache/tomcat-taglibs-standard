@@ -61,13 +61,6 @@
     </description>
   </validator>
 
-  <!-- The validator also listens in order to recover a context parameter -->
-  <listener>
-    <listener-class>
-	org.apache.taglibs.standard.tlv.JstlCoreTLVHelper
-    </listener-class>
-  </listener>
-
   <tag>
     <name>requestEncoding</name>
     <tag-class>org.apache.taglibs.standard.tag.el.fmt.RequestEncodingTag</tag-class>
