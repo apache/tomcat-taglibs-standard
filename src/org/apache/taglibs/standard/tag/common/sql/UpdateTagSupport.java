@@ -142,13 +142,6 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      */
     public int doStartTag() throws JspException {
 
-	// Reset the per-invokation state.
-	parameters = null;
-	isPartOfTransaction = false;
-	conn = null;
-        bodyContent = null;
-        rawDataSource = null;
-
 	try {
 	    conn = getConnection();
 	} catch (SQLException e) {
@@ -219,6 +212,13 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 		conn.close();
 	    } catch (SQLException e) {} // Not much we can do
 	}
+
+	// Reset the per-invokation state.
+	parameters = null;
+	isPartOfTransaction = false;
+	conn = null;
+        bodyContent = null;
+        rawDataSource = null;
     }
 
 

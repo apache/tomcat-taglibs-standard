@@ -161,12 +161,6 @@ public abstract class QueryTagSupport extends BodyTagSupport
      */
     public int doStartTag() throws JspException {
 
-	// Reset the per-invokation state.
-	parameters = null;
-	isPartOfTransaction = false;
-	conn = null;
-        rawDataSource = null;
-
         if (!maxRowsSpecified) {
 	    Object obj = Config.find(pageContext, Config.SQL_MAXROWS);
 	    if (obj != null) {
@@ -272,6 +266,12 @@ public abstract class QueryTagSupport extends BodyTagSupport
 		conn.close();
 	    } catch (SQLException e) {} // Not much we can do
 	}
+
+	// Reset the per-invokation state.
+	parameters = null;
+	isPartOfTransaction = false;
+	conn = null;
+        rawDataSource = null;
     }
 
 
