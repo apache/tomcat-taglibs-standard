@@ -81,4 +81,9 @@ public class ParseDateTag extends ParseDateSupport {
     public void setPattern(String pattern) throws JspTagException {
         this.pattern = pattern;
     }
+
+    // for tag attribute
+    public void setTimeZone(String timeZone) throws JspTagException {
+        this.timeZone = TimeZone.getTimeZone(timeZone);
+    }
 }

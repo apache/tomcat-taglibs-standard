@@ -151,4 +151,50 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     public void release() {
 	init();
     }
+
+
+    //*********************************************************************
+    // Package-scoped utility methods
+
+    /*
+     * Returns the time zone.
+     *
+     * <p> If the given action is nested inside a &lt;timeZone&gt; tag,
+     * the time zone is taken from the enclosing &lt;timeZone&gt; tag.
+     *
+     * <p> Otherwise, the default time zone given by the
+     * <tt>javax.servlet.jsp.jstl.i18n.timeZone</tt> scoped attribute is used,
+     * which is searched in the page, request, session (if valid),
+     * and application scope(s) (in this order).
+     * 
+     * <p> If still not found, the JSP container's time zone is used.
+     *
+     * @param pageContext the page containing the action that requires the
+     * time zone
+     * @param fromTag the action that requires the time zone
+     *
+     * @return the time zone
+     */
+    static TimeZone getTimeZone(PageContext pageContext, Tag fromTag) {
+	TimeZone ret = null;
+
+	Tag t = findAncestorWithClass(fromTag, TimeZoneSupport.class);
+	if (t != null) {
+	    // use time zone from parent <timeZone> tag
+	    TimeZoneSupport parent = (TimeZoneSupport) t;
+	    ret = parent.getTimeZone();
+	} else {
+	    // get time zone from scoped attribute
+	    ret = (TimeZone)
+		pageContext.findAttribute(TIMEZONE_ATTRIBUTE);
+	    if (ret == null) {
+		String tz = pageContext.getServletContext().getInitParameter(
+		    TIMEZONE_ATTRIBUTE);
+		if (tz != null)
+		    ret = TimeZone.getTimeZone(tz);
+	    }
+	}
+
+	return ret;
+    }
 }

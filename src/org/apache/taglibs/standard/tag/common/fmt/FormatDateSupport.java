@@ -202,6 +202,7 @@ public abstract class FormatDateSupport extends TagSupport {
 	    break;
 	} // switch
 
+	// Apply pattern, if present
 	if (pattern != null) {
 	    try {
 		((SimpleDateFormat) formatter).applyPattern(pattern);
@@ -210,25 +211,9 @@ public abstract class FormatDateSupport extends TagSupport {
 	    }
 	}
 
-	if (timeZone == null) {
-	    Tag t = findAncestorWithClass(this, TimeZoneSupport.class);
-	    if (t != null) {
-		// use time zone from parent <timeZone> tag
-		TimeZoneSupport parent = (TimeZoneSupport) t;
-		timeZone = parent.getTimeZone();
-	    } else {
-		// get time zone from scoped attribute
-		timeZone = (TimeZone) pageContext.findAttribute(
-                    TimeZoneSupport.TIMEZONE_ATTRIBUTE);
-		if (timeZone == null) {
-		    String tz =
-			pageContext.getServletContext().getInitParameter(
-			    TimeZoneSupport.TIMEZONE_ATTRIBUTE);
-		    if (tz != null)
-			timeZone = TimeZone.getTimeZone(tz);
-		}
-	    }
-	}
+	// Set time zone
+	if (timeZone == null)
+	    timeZone = TimeZoneSupport.getTimeZone(pageContext, this);
 	if (timeZone != null)
 	    formatter.setTimeZone(timeZone);
 
@@ -253,9 +238,9 @@ public abstract class FormatDateSupport extends TagSupport {
 
 
     //*********************************************************************
-    // Private utility methods
+    // Package-scoped utility methods
 
-    private int getStyle(String style) {
+    static int getStyle(String style) {
 	int ret = DateFormat.DEFAULT;
 
 	if (SHORT_STYLE.equalsIgnoreCase(style))
