@@ -58,6 +58,7 @@ package org.apache.taglibs.standard.lang.javascript;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*; 
 import java.util.Enumeration;
+import java.lang.Boolean;
 
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluator;
 import org.apache.taglibs.standard.lang.spel.Evaluator;
@@ -121,6 +122,8 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
 
             if (result instanceof NativeString)
                 result = result.toString();
+            if (result instanceof NativeBoolean)
+                result = new Boolean(result.toString());
 
 	} catch (JavaScriptException jse) {
 	    throw new JspException(jse.getMessage());
