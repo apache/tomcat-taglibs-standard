@@ -160,6 +160,11 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <name>dataSource</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>driver</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
