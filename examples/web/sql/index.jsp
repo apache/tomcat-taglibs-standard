@@ -20,10 +20,10 @@
   <tr> 
     <td colspan="3" bgcolor="#CCCCFF">JSTL Examples &nbsp;&nbsp;&nbsp;&nbsp;<a href="../index.html">Introduction</a> 
       &#149; <a href="../elsupport/index.html">EL Support </a> &#149; <a href="../conditionals/index.html">Conditionals</a> 
-      &#149; <a href="../import/index.html"></a><a href="../iterators/index.html">Iterators</a> 
-      &#149; <a href="../import/index.html">Import</a> &#149; <a href="../format/index.html">I18N 
-      & Formatting</a> &#149; <a href="../xml/index.html">XML</a> &#149; <a href="index.jsp">SQL</a> 
-      &#149; <a href="../ecmascript/index.html">EcmaScript</a> &#149; <a href="../misc/index.html">Misc.</a></td>
+      &#149; <a href="../iterators/index.html">Iterators</a> &#149; <a href="../import/index.jsp">Import</a> 
+      &#149; <a href="../format/index.html">I18N & Formatting</a> &#149; <a href="../xml/index.html">XML</a> 
+      &#149; <a href="index.jsp">SQL</a> &#149; <a href="../ecmascript/index.html">EcmaScript</a> 
+      &#149; <a href="../misc/index.html">Misc.</a></td>
   </tr>
 </table>
 <!-- #BeginEditable "body" --> 
@@ -51,8 +51,6 @@
     <input type="submit" name="Submit" value="Submit">
   </p>
 </form>
-<%@ include file="links.html" %>
-<hr noshade color="#000099">
 <!-- #EndEditable --> 
 <hr noshade color="#000099">
 <table width="100%" border="0" cellpadding="5">
