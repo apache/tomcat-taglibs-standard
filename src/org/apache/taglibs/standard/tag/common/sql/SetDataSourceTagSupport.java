@@ -106,7 +106,8 @@ public class SetDataSourceTagSupport extends TagSupport {
         DataSourceWrapper ds;
 
         if (dataSource != null) {
-            DataSourceUtil dsUtil = new DataSourceUtil(dataSource, pageContext);
+            DataSourceUtil dsUtil = new DataSourceUtil();
+            dsUtil.setDataSource(dataSource, pageContext);
             ds = (DataSourceWrapper) dsUtil.getDataSource();
         }
         else {
