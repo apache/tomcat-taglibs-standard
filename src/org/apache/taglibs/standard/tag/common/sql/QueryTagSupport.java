@@ -272,6 +272,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	isPartOfTransaction = false;
 	conn = null;
         dataSource = null;
+        rawDataSource = null;
     }
 
     //*********************************************************************
@@ -305,9 +306,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	TransactionTagSupport parent = (TransactionTagSupport) 
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
-            ServletContext application = pageContext.getServletContext();
-            if (dataSource != null &&
-                application.getInitParameter(DATASOURCE) == null) {
+            if (rawDataSource != null) {
                 throw new JspTagException(
                     Resources.getMessage("ERROR_NESTED_DATASOURCE"));
             }
