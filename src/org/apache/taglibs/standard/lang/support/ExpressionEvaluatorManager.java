@@ -110,6 +110,24 @@ public class ExpressionEvaluatorManager {
             attributeName, expression, expectedType, tag, pageContext));
     }
 
+    /** 
+     * Invokes the evaluate() method on the "active" ExpressionEvaluator
+     * for the given pageContext.
+     */ 
+    public static Object evaluate(String attributeName, 
+                                  String expression, 
+                                  Class expectedType, 
+                                  PageContext pageContext) 
+           throws JspException
+    {
+
+        // the evaluator we'll use
+        ExpressionEvaluator target = getEvaluatorByName(EVALUATOR_CLASS);
+
+        // delegate the call
+        return (target.evaluate(
+            attributeName, expression, expectedType, null, pageContext));
+    }
 
     //*********************************************************************
     // Public static utility method (un-spec'd, local to RI)

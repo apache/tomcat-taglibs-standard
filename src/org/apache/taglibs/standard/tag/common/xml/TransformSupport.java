@@ -369,6 +369,8 @@ public abstract class TransformSupport extends BodyTagSupport {
                     pagePath.substring(0, pagePath.lastIndexOf("/"));
                 s = ctx.getServletContext().getResourceAsStream(
                       basePath + "/" + href);
+		if (s == null)
+		    throw new TransformerException(href);
             }
             return new StreamSource(s);
         }

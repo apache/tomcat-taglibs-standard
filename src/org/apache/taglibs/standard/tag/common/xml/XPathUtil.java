@@ -230,22 +230,23 @@ public class XPathUtil {
      */
     public String valueOf(Node n, String xpath) throws SAXPathException {
 	staticInit();
-        XPath xp = new XPath(xpath);
-        return xp.valueOf(getLocalContext(n));
+        XPath xp = new DOMXPath(xpath);
+        // return xp.valueOf(getLocalContext(n));
+        return xp.stringValueOf(getLocalContext(n));
     }
 
     /** Evaluates an XPath expression to a boolean value. */
     public boolean booleanValueOf(Node n, String xpath)
 	    throws SAXPathException {
 	staticInit();
-	XPath xp = new XPath(xpath);
+	XPath xp = new DOMXPath(xpath);
 	return xp.booleanValueOf(getLocalContext(n));
     }
 
     /** Evalutes an XPath expression to a List of nodes. */
     public List selectNodes(Node n, String xpath) throws SAXPathException {
 	staticInit();
-	XPath xp = new XPath(xpath);
+	XPath xp = new DOMXPath(xpath);
 	return xp.selectNodes(getLocalContext(n));
     }
 
@@ -253,7 +254,7 @@ public class XPathUtil {
     public Node selectSingleNode(Node n, String xpath)
 	    throws SAXPathException {
 	staticInit();
-	XPath xp = new XPath(xpath);
+	XPath xp = new DOMXPath(xpath);
 	return (Node) xp.selectSingleNode(getLocalContext(n));
     }
 
