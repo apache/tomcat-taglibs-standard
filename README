@@ -1,0 +1,74 @@
+JSP Standard Tag Library (JSTL)
+Release: Early Access 2 (EA2)
+
+Thanks for downloading the JSTL EA2 release.  We hope you find the tags,
+documents, and examples here of interest.  We're curious to hear your
+feedback on this release, which represents work in progress toward a
+standard JSP Tag Library.  Please contact us at
+
+	mailto:jsr052-comments@sun.com
+
+with any comments you might have.
+
+Included in this distibution:
+
+    DOCUMENTATION ('doc/web' directory)
+
+	GettingStarted.html:  A quick roadmap to help you get started
+	    with this release.
+
+	Overview.html:  An overview of JSTL's design philosophy and
+	    current syntax.
+
+	Functional descriptions:  Technical guides representing the
+	    design considerations and functionality of JSTL's tag set.
+	    Note that these are not formal specifications, just technical
+	    overviews of functionality and intent.
+
+    EXAMPLES ('examples' directory)
+
+	The standard-examples application included with this distribution
+	demonstrates the current capabilities of JSTL, exploring idioms
+	and usage patterns when appropriate.
+
+    REFERENCE IMPLEMENTATION ('src' and 'conf' directories)
+
+	Every effort has been made to provide a functional, robust, and
+	speedy reference implementation (RI) for the current functionality
+	JSTL offers.  For developers, the code is commented thoroughly
+	to help provide an understanding of design considerations and
+	salient implementation details.
+
+	Classes in the javax.servlet.jsp.jstl represent the current
+	draft of the JSTL API classes.  Classes under org.apache.*
+	represent the reference implementation, expected to be released
+	through Jakarta Taglibs.  The package structure for the RI is
+	organized as follows:
+
+  org.apache.taglibs.standard
+   .tag         tag handlers and routines related to them
+      .common      handlers and support routines common for RT/EL attributes
+          .core	   core library (common)
+	  .fmt	   internationalization-capable formatting tags (common)
+	  .xml	   XML manipulation library (common)
+      .el	   handlers specific to expression language (EL) evaluation
+          .core	   core library (EL)
+	  .fmt	   internationalization-capable formatting tags (EL)
+	  .xml	   XML manipulation library (EL)
+      .rt	   handlers specific to rtexprvalue (rt) evaluation
+          .core	   core library (rt)
+	  .fmt	   internationalization-capable formatting tags (rt)
+	  .xml	   XML manipulation library (rt)
+   .tei         TagExtraInfo classes (common to both libraries)
+   .tlv		TagLibraryValidator classes (and associated helpers)
+   .lang        expression-language support and implementation
+      .dummy       dummy ExpressionEvaluator
+      .support     ExpressionEvaluator, ExpressionEvaluatorManager
+      .spel        SPEL
+      .jpath	   JPath
+      .jxpath      JXPath
+      .javascript  ECMAScript (JavaScript/Rhino)
+
+Enjoy!
+
+  -- JSR-052 (JSTL) Expert Group

@@ -1,0 +1,152 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>JSTL: Conditional Tags -- Functional Description</title>
+<style media="screen" type="text/css"><!--
+.fixme { color: red }
+--></style>
+</head>
+<body bgcolor="#FFFFFF">
+<h3>
+
+  <hr width="100%" noshade>
+</h3>
+
+<h2> Conditional Tags &#151; Functional Description</h2>
+
+<h2> <tt>&lt;if></tt><br>
+  <tt>&lt;choose> &lt;when> &lt;otherwise>&nbsp;</tt></h2>
+<hr WIDTH="100%" noshade>
+<h3>
+1. Introduction</h3>
+The set of JSTL conditional tags are designed to support the two most
+common usage patterns associated with conditional processing: <i>simple</i>
+conditional execution and <i>mutually exclusive</i> conditional execution.
+The JSTL conditional tags are similar to the XSLT instructions for conditional
+processing (<tt>&lt;xsl:if></tt> and <tt>&lt;xsl:choose></tt>).
+<p>A simple conditional execution tag evaluates its body content only if
+the test condition associated with it is true. In the following example,
+a special greeting is displayed only if this is a customer's first visit
+to the site.
+<p><tt>&nbsp; &lt;c:if test="$user.visitCount == 1"></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp; This is your first visit. Welcome to the
+site!</tt>
+<br>
+  <tt>&nbsp; &lt;/c:if></tt> 
+<p>With mutually exclusive conditional execution, only one among a number
+of possible alternative tags gets its body content evaluated. In the example
+below, the information displayed for a specific product depends on the
+verbosity level selected.
+<p><tt>&nbsp; &lt;choose></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;when test="$verbosityLevel == 'short'></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;c:expr value=&quot;$product.shortDescription&quot;/&gt;</tt> 
+  <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;/when></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;when test="$verbosityLevel == 'medium'></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;c:expr value=&quot;$product.mediumDescription&quot;/&gt;</tt> 
+  <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;/when></tt><br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;otherwise></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;c:expr value=&quot;$product.longDescription&quot;/&gt;</tt> 
+  <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;/otherwise></tt> <br>
+  <tt>&nbsp; &lt;/choose></tt> 
+<h3>
+2. <tt>&lt;if></tt></h3>
+The <tt>&lt;if></tt> tag evaluates its body only if the test condition
+returns true.
+<br>&nbsp;
+<table BORDER CELLSPACING=2 CELLPADDING=5 WIDTH="709" >
+  <tr BGCOLOR="#FFFACD"> 
+    <th ALIGN=LEFT COLSPAN="4">Attributes</th>
+  </tr>
+  <tr> 
+    <td><tt>test</tt></td>
+    <td>required</td>
+    <td>expr</td>
+    <td>The test condition to be evaluated. The value returned by the attribute 
+      must either be a <tt>boolean</tt> primitive or a <tt>Boolean</tt> object 
+      (EL library). Must be a Boolean object in the RT library.</td>
+  </tr>
+  <tr> 
+    <td><tt>var</tt></td>
+    <td>optional</td>
+    <td>string</td>
+    <td>Name of the page scope attribute used to store the current result of the 
+      test condition. Visibility is &quot;at_end&quot;.</td>
+  </tr>
+</table>
+
+<h3>
+3. <tt>&lt;choose></tt></h3>
+The <tt>&lt;choose></tt> tag performs conditional block execution embedded
+by the <tt>&lt;when></tt> sub tags. It renders the body of the first <tt>&lt;when></tt>
+tag whose test condition evaluates to true. If none of the test conditions
+of nested <tt>&lt;when></tt> tags evaluate to true, then the body of an
+<tt>&lt;otherwise></tt>
+tag is evaluated, if present.
+<p>The <tt>&lt;choose></tt> tag has no attributes.
+<h3>
+4. <tt>&lt;when></tt></h3>
+The <tt>&lt;when></tt> tag is used within a <tt>&lt;choose></tt> tag. The
+<tt>&lt;choose></tt>
+tag renders the body of the first <tt>&lt;when></tt> tag whose test condition
+evaluates to true. The immediate parent of a <tt>&lt;when></tt> tag must
+be a <tt>&lt;choose></tt> tag, otherwise an exception will be thrown.
+<br>&nbsp;
+<table BORDER CELLSPACING=2 CELLPADDING=5 WIDTH="709" >
+<tr BGCOLOR="#FFFACD">
+<th ALIGN=LEFT COLSPAN="4">Attributes</th>
+</tr>
+
+<tr>
+<td><tt>test</tt></td>
+
+<td>required</td>
+
+<td>expr</td>
+
+    <td>The test condition to be evaluated. The value returned by the attribute 
+      must either be a <tt>boolean</tt> primitive or a <tt>Boolean</tt> object 
+      (EL library). Must be a Boolean object in the RT library. </td>
+</tr>
+</table>
+
+<h3>
+5. <tt>&lt;otherwise></tt></h3>
+The <tt>&lt;otherwise></tt> tag is used as the last subtag within a <tt>&lt;choose></tt>
+tag. The <tt>&lt;choose></tt> tag renders the body of the <tt>&lt;otherwise></tt>
+tag if none of the preceding <tt>&lt;when></tt> tags test conditions evaluated
+to true. The immediate parent of an <tt>&lt;otherwise></tt> tag must be
+a <tt>&lt;choose></tt> tag otherwise an exception will be thrown.
+<p>This tag has no attributes. 
+<h3> 6. Custom logic tags</h3>
+It is important to note that <tt>&lt;if></tt> and <tt>&lt;when></tt> tags
+have different semantics. These semantic differences are enforced by the
+fact that only <tt>&lt;when></tt> tags can be used within the context of
+a mutually exclusive conditional execution (<tt>&lt;choose></tt> tag).
+<p>This clean separation of behavior also impacts the way custom logic
+tags (i.e. tags who render their bodies depending on the result of a test
+condition) should be developed. Ideally, the result associated with the
+evaluation of custom logic tag should be usable both in the context of
+a simple conditional execution, as well as in a mutually exclusive conditional
+execution.
+<p>The proper way to support this is by simply having a custom logic tag
+export a boolean scripting variable. This boolean scripting variable can
+then be used as the test condition of a <tt>&lt;when></tt> subtag. For
+example:
+<p><tt>&nbsp; &lt;paramExists name="hotel" var="needsHotel"/></tt> <br>
+  <tt>&nbsp; &lt;choose></tt>
+<br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;when test="$needsHotel"></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/when></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;otherwise></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/otherwise></tt>
+<br><tt>&nbsp; &lt;/choose></tt>
+<br>
+  &nbsp; 
+</body>
+</html>

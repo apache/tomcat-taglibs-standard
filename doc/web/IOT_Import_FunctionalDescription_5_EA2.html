@@ -1,0 +1,346 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>Import Tag -- Functional Description</title>
+<style media="screen" type="text/css"><!--
+.fixme { color: red }
+--></style>
+</head>
+<body bgcolor="#FFFFFF">
+<h3> 
+  <hr width="100%" noshade>
+</h3>
+<h2> Import Tags &#151; Functional Description <br>
+</h2>
+<h2> <tt>&lt;c:import><br>
+  </tt><tt>&lt;c:param&gt;<br>
+  &lt;c:urlEncode&gt; <br>
+  </tt></h2>
+<hr width="100%" noshade>
+<h3> 1. Introduction</h3>
+<p>In the JSP specification, a &lt;jsp:include .../&gt; element provides for the 
+  inclusion of static and dynamic resources in the same context as the current 
+  page. This is a very convenient feature that is widely used by page authors. 
+</p>
+<p>However, &lt;jsp:include&gt; falls short in flexibility and efficiency when 
+  page authors need to get access to resources that reside outside of the web 
+  application, as well as when the content of the imported resource is used as 
+  the source for a companion process/transformation element. More specifically:</p>
+<blockquote> 
+  <p><b>Limited to web-app resources</b></p>
+  <p>&lt;jsp:include&gt; only supports the inclusion of resources within the same 
+    web application. In many situations, page authors have the need to import 
+    the content of internet resources specified via an absolute URL. Moreover, 
+    as sites grow in size, they may have to be implemented as a set of web applications 
+    where importing resources across web-applications is a requirement.</p>
+  <p><b>Unnecessary buffering when the resource included is fed into another element 
+    </b> </p>
+  <p>In the example below, the &lt;transform&gt; element uses the content of the 
+    included resource as the input of its transformation. The &lt;jsp:include&gt; 
+    reads the content of the response, writes it to the body content of the enclosing 
+    &lt;transform&gt; element, which then re-reads the exact same content. It 
+    would be more efficient if the &lt;transform&gt; element could access the 
+    input source directly and avoid the buffering involved in the body content 
+    of the &lt;transform&gt; tag.</p>
+  <pre>&nbsp; &lt;acme:transform&gt;
+&nbsp;     &lt;jsp:include page=&quot;/exec/employeesList&quot;/><br>&nbsp; &lt;acme:transform/></pre>
+</blockquote>
+<p>The &lt;import&gt; tag has been designed to address the above shortcomings.</p>
+<h3>2. &lt;import&gt;</h3>
+<p>There is a wide variety of resources that a page author might be interested 
+  in including and/or processing within a JSP page. For instance, the example 
+  below shows how the content of the README file at the ftp site of acme.com could 
+  be included within the page.</p>
+<blockquote> 
+  <p><code>&lt;c:import url=&quot;ftp://ftp.acme.com/README&quot;/&gt;</code></p>
+</blockquote>
+<p>The main motivation behind &lt;import&gt; is to provide a simple, straightforward 
+  mechanism to access resources that can be specified via a URL, nothing more. 
+  If accessing a resource requires specifying more arguments, then a protocol 
+  specific action (e.g. an &lt;http&gt; action) should be used for that purpose. 
+  JSTL1.0 does not currently address these protocol specific elements but may 
+  do so in future releases.</p>
+<p>&lt;import&gt; is therefore the simple, generic way to access URL based resources 
+  whose content can then be included and or processed within the JSP page.</p>
+<p><b>Exporting an object: String or Reader</b></p>
+<p>By default, the content of the resource is included inline into the JSP page. 
+</p>
+<p>It is also possible to export the content of the resource in two different 
+  ways: as a String object (attribute &quot;var&quot;), or as a Reader object 
+  (attribute &quot;varReader&quot;). Process/Transform tags can get access to 
+  a resource's content through that exported object. Only one of &quot;var&quot; 
+  and &quot;varReader&quot; can be specified.</p>
+<p>Simplest way to export the resource content as an object is via the &quot;var&quot; 
+  atttibute. The data is <i>cached</i> in a String object and is <i>reusable</i>. 
+</p>
+<p>Although more complex in its usage, there may be some performance gains if 
+  the resource content is exported as a Reader object (instead of String object). 
+  Depending on the implementation and on the type of URL being accessed, it may 
+  be possible to access the content directly, without any unnecessary buffering. 
+  But please note that there are no performance guarantees; this is an implementation 
+  detail.</p>
+<p>The use of the varReader attribute comes with some restrictions. It is the 
+  responsibility of the &lt;import&gt; tag to ensure that if a Reader object is 
+  exported, it is properly closed by the end of the page.<br>
+  <font size="-1">[If the responsibility was left to the consumer tag, this could 
+  lead to resource leaks (e.g. connection left open, memory space for buffers) 
+  until garbage collection is activated if a consumer tag would not close the 
+  Reader, or simply if the page author would remove the consumer tag while leaving 
+  inadvertantly the &lt;import&gt; tag in the page.]</font></p>
+<p>Because of this, the visibility of a varReader object is nested, so that the 
+  Reader may be properly closed when reaching the closing &lt;/import&gt;. It 
+  therefore makes sense to export a Reader object only when the &lt;import&gt; 
+  has nested content that consumes the resource. Using a bodyless &lt;import&gt; 
+  tag with varReader is flagged as an error at translation time.<br>
+  <font size="-1">[This restriction could eventually be lifted when the JSP spec 
+  supports the notion of page events that actions could register to. On a <i>pageExit</i> 
+  event, an &lt;import&gt; tag would then simply release its resources if it had 
+  not already been done, removing the requirement for nested visibility. An RFE 
+  has been submitted to the JSP expert group.]</font></p>
+<p>It is also illegal to use nested &lt;param&gt; tags with varReader.<br>
+  <font size="-1">[Because varReader takes an arbitrary body and exposes a Reader 
+  for it, it needs to open a connection when the start tag is encountered. But 
+  if it opens the connection there, it won't have had a chance to hear from its 
+  &lt;param&gt; subtags (which modify the URL that &lt;import&gt; connects to).]</font></p>
+<p><b>Character Encoding</b></p>
+<p>When the var attribute is used to expose a Reader object, it is possible to 
+  specify the character encoding of the content at the input resource. For example:</p>
+<pre>&nbsp; &lt;c:import url=&quot;...&quot; varReader=&quot;doc&quot; charEncoding=&quot;...&quot;/></pre>
+<p>If the character encoding is not specified, the following rules apply:</p>
+<ul>
+  <li>If the response of the &lt;import&gt; request has a &quot;content-type&quot; 
+    header field, then the character encoding specified is used (the imported 
+    resource tells us about its encoding, we just use it)</li>
+  <li>Use ISO-8859-1 (which is the default value of charset for the contentType 
+    of the JSP &quot;page&quot; directive)</li>
+</ul>
+<p>Note that the charEncoding attribute should normally only be required when 
+  accessing absolute URL resources where the protocol is not HTTP, and where the 
+  encoding is not ISO-8859-1.</p>
+<p>Also, when dealing with relative URLs and the HTTP protocol, if the target 
+  resource declares a content encoding but proceeds to write a character invalid 
+  in that encoding, the treatment of that character is undefined.</p>
+<h3>3. Relative and Absolute URLs</h3>
+<p>The <code>url</code> attribute is used to specify the URL of the resource to 
+  access. It can either be an absolute URL (i.e. one that starts with a protocol 
+  followed by a colon), a relative URL used to access a resource within the same 
+  context, or a relative URL used to access a resource within a foreign context 
+  (context name must be specified).</p>
+<p>The exact semantics of the &lt;import&gt; tag depends on what type of URL is 
+  being accessed.</p>
+<p><b>Relative URL - same context</b></p>
+<p> This is processed in the exact same way as the standard include action (&lt;jsp:include&gt;) 
+  of the JSP specification. The resource belongs to the same web-app as the including 
+  page and it is specified as a relative URL. For example:</p>
+<pre>  &lt;c:import url=&quot;/copyright.html&quot;/&gt;</pre>
+<p>As specified in the JSP spec, a relative URL may either be a <i>context-relative</i> 
+  path, or a <i>page-relative</i> path. A context-relative path is a path that 
+  starts with a &#147;/&#148;. It is to be interpreted as relative to the application 
+  to which the JSP page belongs. A page-relative path is a path that does not 
+  start with a &#147;/&#148;. It is to be interpreted as relative to the current 
+  JSP page.</p>
+<p>The semantics of importing a resource specified with a relative URL in the 
+  same context are the same as an include performed by a RequestDispatcher in 
+  the Servlet specification. This means that the whole environment (request, session, 
+  application) of the importing page is available to the target resource (including 
+  request parameters of the importing page).</p>
+<p><b>Relative URL - foreign context</b><br>
+</p>
+<p> The resource belongs to a foreign context (web application) hosted under the 
+  same container as the importing page. The context name for the resource is specified 
+  via argument &quot;context&quot;. For example:</p>
+<pre>  &lt;c:import url=&quot;/logo.html&quot; context=&quot;/master&quot;/&gt;</pre>
+<p>The relative URL must be context-relative (i.e. must start with a &quot;/&quot;) 
+  since the including page does not belong to the same context. Similarly, the 
+  context name must also start with a &quot;/&quot;.</p>
+<p>The semantics of importing a resource specified with a relative URL in a foreign 
+  context are the same as an include performed by a RequestDispatcher on a foreign 
+  context in the Servlet specification. This means that only the &quot;request&quot; 
+  environment of the importing page is available to the target resource.</p>
+<p>It is important to note though that importing resources in foreign contexts 
+  may not work in all containers. A security conscious environment may not allow 
+  access to foreign contexts. As a workaround, a foreign context resource can 
+  also be accessed using an absolute URL. For example:</p>
+<pre>  &lt;c:import url=&quot;http://www.acme.com/master/logo.html&quot;/&gt;</pre>
+<p>However, it is much more efficient to use a relative URL because the resource 
+  is then accessed using RequestDispatcher of the servlet API. </p>
+<p><b>Absolute URL</b></p>
+<p>Given that JSP1.2 assumes a J2SE platform at a minimum, the &lt;import&gt; 
+  tag therefore supports at a minimum the protocols offered in that platform for 
+  absolute URLs. More protocols can still be available to a web application, but 
+  this will depend on the the class libraries made available to the webapp by 
+  the platform the container runs on.</p>
+<p>The example below shows how a request is sent to a remote site to obtain a 
+  list of customers, and how that list is then used as input to a notification 
+  tag.</p>
+<pre>  &lt;c:import url=&quot;http://acme.com/exec/customers?country=USA&quot; var=&quot;customers&quot;/&gt;<br>  &lt;acme:notify in=&quot;$customers&quot;/&gt;</pre>
+<p>When using an absolute URL to import a resource, none of the current execution 
+  environment (request, session, application) is made available to the target 
+  resource, even if that absolute URL resolves to the same host and context path. 
+  Therefore, the request parameters of the importing page are not propagated to 
+  the target &quot;absolute URL&quot;.</p>
+<h3><b>4. &lt;urlEncode&gt;</b></h3>
+<p>URL encoding refers to the process of encoding special characters in a string, 
+  according to the encoding rules defined in RFC 1738 (section 2.2. URL Character 
+  Encoding Issues). </p>
+<p>For example, a space must be encoded in a URL string as a '+':</p>
+<blockquote>
+  <p><code>http://www.acme.com/app/register?name=Aristide+Bertrand&amp;country=Republique+Dominicaine 
+    </code> </p>
+</blockquote>
+<p>The &lt;urlEncode&gt; action will encode the string specified in attribute 
+  'value'. If the value attribute is not specified, encoding is performed on the 
+  tag's body content.</p>
+<p>By default, the result of the encoding is written to the page. It is also possible 
+  to export the result of the encoding as a JSP scoped attribute (java.lang.String) 
+  defined via attribute &quot;var&quot;. For example:</p>
+<pre>  &lt;urlEncode var=&quot;nameEncoded&quot; value=&quot;$name&quot;/&gt;
+</pre>
+<p>With respect to the &lt;import&gt; tag, it is important to note that all URLs 
+  need to be encoded. However, URL encoding is normally necessary only when dealing 
+  with query string parameters.</p>
+<p>For example, assuming the following absolute URL</p>
+<blockquote> 
+  <p><code>http://www.acme.com/app/register</code></p>
+</blockquote>
+<p>to which two query string parameters must be passed: &quot;name&quot; and &quot;country&quot;, 
+  both of which are retrieved from JSP scoped attributes. Since special characters 
+  can be part of these scoped attributes, they must be encoded before they can 
+  be added to the URL. This could be done as follows:</p>
+<blockquote> 
+  <p> <code>&lt;urlEncode var=&quot;nameEncoded&quot; value=&quot;$name&quot;/&gt;<br>
+    &lt;urlEncode var=&quot;countryEncoded&quot; value=&quot;$country&quot;/&gt;<br>
+    &lt;c:import url=&quot;$'http://www.acme.com/app/register?name='+nameEncoded+'&amp;country='+countryEncoded&quot;/&gt;</code></p>
+</blockquote>
+<p>However this is somewhat awkward. A better way is to use nested &lt;param&gt; 
+  tags to specify the query string parameters to be added to the URL. As a convenience, 
+  the &lt;param&gt; action has been designed such that query string parameters 
+  (both &quot;name&quot; and &quot;value&quot;) are automatically encoded for 
+  the &lt;import&gt; action. The following could therefore be used without having 
+  to worry about any encoding:</p>
+<blockquote> 
+  <pre>&lt;c:import url=&quot;http://www.acme.com/app/register&quot;&gt;
+  &lt;param name=&quot;name&quot; value=&quot;$name&quot;/&gt;
+  &lt;param name=&quot;country&quot; value=&quot;$country&quot;/&gt;
+&lt;/c:import&gt;</pre>
+</blockquote>
+<h3>5. &lt;param&gt;</h3>
+<p>The &lt;param&gt; element can be used with &lt;import&gt; to specify request 
+  parameters.</p>
+<p>One might argue that this is redundant given that the URL can be constructed 
+  to include query string parameters.</p>
+<p>For example:</p>
+<pre>  &lt;c:import url=&quot;/exec/doIt&gt;<br>    &lt;c:param name=&quot;action&quot; value=&quot;register&quot;/&gt;<br>  &lt;/c:import&gt;</pre>
+<p>is the same as:</p>
+<pre>  &lt;c:import url=&quot;/exec/doIt?action=register&quot;/&gt;</pre>
+<p>It is indeed redundant, but is consistent with &lt;jsp:include&gt; supporting 
+  nested &lt;jsp:param&gt; sub-elements. Moreover, it has been designed such that 
+  the parameter &quot;name&quot; and &quot;value&quot; are automatically <i>url 
+  encoded</i> (as described in the previous section). Automatic encoding can be 
+  disabled using optional attribute &quot;encode&quot;, whose value defaults to 
+  &quot;true&quot; otherwise.</p>
+<p>It is important to note that that the query parameter aggregation rules work 
+  the same way they do with &lt;jsp:include&gt;; the original parameters are augmented 
+  with the new parameters, with new values taking precedence over existing values 
+  when applicable.The scope of the new parameters is the import call; the new 
+  parameters (and values) will not apply after the import. This is the same behavior 
+  as in the ServletRequest include and forward methods (see Section 8.1.1 in the 
+  Servlet 2.2 specification).</p>
+<p>For example:</p>
+<pre>  &lt;c:import url=&quot;http://acme.com/exec/doIt?foo=foovalOne&quot;/&gt;<br>    &lt;c:param name=&quot;foo&quot; value=&quot;fooval 2&quot;/&gt;<br>    &lt;c:param name=&quot;bar&quot; value=&quot;bar value&quot;/&gt;<br>  &lt;/c:import&gt;
+</pre>
+modifies the absolute URL as follows: 
+<pre>&nbsp;&nbsp;http://acme.com/exec/doIt?foo=fooval+2&amp;bar=bar+value&amp;foo=foovalOne</pre>
+<h3>5. Summary</h3>
+<table width="100%" border="1" cellpadding="5">
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">Import 
+      Tags</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td width="39%"><b>Element</b></td>
+    <td width="61%"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="39%" height="123"> 
+      <p><code><b>&lt;import&gt;<br>
+        </b><font color="#FF0000"><b><font color="#000000">url</font></b></font><font color="#0000FF"> 
+        <font color="#000000">var varReader charEncoding</font></font> <font color="#000000">context 
+        </font><br>
+        <b></b><font color="#0000FF"> </font></code></p>
+      <p>Action for a simple, generic way to access URL based resources. Extends 
+        &lt;jsp:include&gt; to support foreign contexts and absolute URLs, as 
+        well as to export an object for explicit collaboration with process/transformation 
+        tags (avoiding unnecessary buffering).</p>
+    </td>
+    <td width="61%" height="123"> 
+      <p><code>&lt;c:import url=&quot;ftp://ftp.acme.com/README&quot;/&gt;<br>
+        <br>
+        </code><code>&lt;c:import url=&quot;/xml/doc.xml&quot; varReader=&quot;in&quot;/><br>
+        &lt;acme:process in=&quot;$in&quot;</code><code>/></code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="39%"> 
+      <p><code><b>&lt;param&gt;</b><br>
+        <font color="#000000"><b>name</b></font><font color="#CC0000"> </font><font color="#000000">value 
+        encode</font></code></p>
+      <p>Sub-element to specify request parameters for the enclosing &lt;import&gt;. 
+        If importing a resource using an absolute URL, the value of the parameter 
+        is automatically encoded.</p>
+    </td>
+    <td width="61%"> 
+      <p><code>&lt;c:import url=&quot;/exec/register&quot;><br>
+        &nbsp;&nbsp;&lt;c:param name=&quot;id&quot; value=&quot;foo&quot;/&gt;<br>
+        &lt;/c:import&gt; </code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="39%"> 
+      <p><code><b>&lt;urlEncode&gt;</b><br>
+        <font color="#FF0000">value</font><font color="#CC0000"> </font><font color="#0000FF">var</font></code></p>
+      <p>URL encoding.</p>
+    </td>
+    <td width="61%"> 
+      <pre>&lt;a href=&quot;http://acme.com/register
+   ?name=&lt;c:urlEncode value='$name'/&gt;&quot;/></pre>
+    </td>
+  </tr>
+</table>
+<h3>6. Notes</h3>
+<ul>
+  <li> 
+    <p>&lt;c:import&gt; tags are all independent from one another; they do not 
+      create an implicit session among themselves using cookies. 
+  </li>
+  <li>There is no way using the &lt;import&gt; tag to authenticate to a URL that 
+    requires HTTP basic authentication.</li>
+</ul>
+<h3>7. Design decisions of interest</h3>
+<p>We know you'd eventually ask these questions. Here are the answers...</p>
+<p><b><a name="map"></a>Transparently map absolute URLs to relative ones when 
+  possible? No.</b></p>
+<p>If a resource is specified as an absolute URL, it may still refer to a resource 
+  located on the same container (same or foreign context). Why not have the &lt;import&gt; 
+  tag transparently map absolute URLs to relative ones when possible to improve 
+  performance? </p>
+<p>We've decided against it simply because doing things behind the scenes may 
+  lead to confusion. Users should understand the difference between absolute and 
+  relative URLs, and the impact of using one vs the other in terms of performance 
+  as well as execution environment of the imported resource.</p>
+<p>So, even if a request with an absolute URL does go back to the same webapp, 
+  we are not propogating session identity either.</p>
+<p><b>Transparently map foreign context relative URLs to absolute URLs in &quot;security 
+  conscious&quot; containers? No.</b></p>
+<p>If accessing a resource in a foreign context using a relative URL fails (security 
+  conscious container that does not allow it), why not design the tag so it transparently 
+  maps the foreign context relative URL to an absolute URL? </p>
+<p>We've decided against it because for the same reason as above, as well as for 
+  portability concerns. In container X, the resource might be accessed via RequestDispatcher 
+  and has therefore access to request attributes, the foreign context session 
+  and application environment. However, if in container Y the resource is accessed 
+  via a new HTTP request, the resource is not accessed with that same environment.</p>
+</body>
+</html>

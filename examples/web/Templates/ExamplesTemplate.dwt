@@ -1,0 +1,44 @@
+<html>
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Untitled Document</title>
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../global.css" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<table width="100%" border="0" cellpadding="5">
+  <tr>
+    <td height="0"><font size="-1" color="#000099"><b>JSTL Early Access</b></font></td>
+    <td align="center" height="0"><font size="-1" color="#000099"> <b>Beware &#151; 
+      API and Tags may/will change</b></font></td>
+    <td align="right" height="0"><font size="-1" color="#003399"><a href="mailto:taglibs-user@jakarta.apache.org"><b>support</b></a> 
+      &nbsp;&nbsp;<b><a href="mailto:taglibs-dev@jakarta.apache.org">development</a>&nbsp;&nbsp; 
+      <a href="mailto:jsr052-comments@sun.com">comments to JSR052 EG</a></b></font></td>
+  </tr>
+  <tr> 
+    <td colspan="3" bgcolor="#CCCCFF"><font color="#CCFF00"><b><font color="#000099">JSTL 
+      Examples</font><font color="#FFFFFF">&nbsp;&nbsp;&nbsp;&nbsp;<a href="../index.html">Introduction</a> 
+      &#149; <a href="../iterators/index.html">Iterators</a> &#149; <a href="../conditionals/index.html">Conditionals</a> 
+      &#149; <a href="../elsupport/index.html">EL Support </a></font><font color="#CCFF00"><b><font color="#FFFFFF">&#149; 
+      <a href="../misc/index.html">Misc</a></font></b></font><font color="#FFFFFF">
+      &#149; <a href="../ecmascript/index.html">EcmaScript</a>
+      &#149; <a href="../import/index.html">Import</a></font></b></font></td>
+  </tr>
+</table>
+<!-- #BeginEditable "body" -->{body}<!-- #EndEditable -->
+<hr noshade color="#000099">
+<table width="100%" border="0" cellpadding="5">
+  <tr> 
+    <td height="24"><font size="-1" color="#000099"><b>JSTL Early Access</b></font></td>
+    <td align="center" height="24"><font size="-1" color="#000099"> <b>Beware 
+      &#151; API and Tags may/will change</b></font></td>
+    <td align="right" height="24"><font size="-1" color="#003399"><a href="mailto:taglibs-user@jakarta.apache.org"><b>support</b></a> 
+      <b>&nbsp;&nbsp; <a href="mailto:taglibs-dev@jakarta.apache.org">development</a> 
+      &nbsp;&nbsp;<a href="mailto:jsr052-comments@sun.com">comments to JSR052 
+      EG</a></b></font></td>
+  </tr>
+</table>
+</body>
+</html>

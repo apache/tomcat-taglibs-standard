@@ -1,0 +1,163 @@
+# The set of parser tests
+
+# literals
+Expression: $1
+Parses to: 1
+Expression: $-12
+Parses to: -12
+Expression: $true
+Parses to: true
+Expression: $false
+Parses to: false
+Expression: $null
+Parses to: null
+Expression: $4.2
+Parses to: 4.2
+Expression: $-21.3
+Parses to: -21.3
+Expression: $4.
+Parses to: 4.0
+Expression: $.21
+Parses to: 0.21
+Expression: $3e-1
+Parses to: 0.3
+Expression: $.2222222222
+Parses to: 0.2222222222
+
+# string literals with "
+Expression: $"abc"
+Parses to: "abc"
+Expression: $""
+Parses to: ""
+Expression: $"a"
+Parses to: "a"
+Expression: $"         "
+Parses to: "         "
+Expression: $" some string ''' "
+Parses to: " some string ''' "
+Expression: $" with escaping \\"
+Parses to: " with escaping \\"
+Expression: $" with escaping \""
+Parses to: " with escaping \""
+Expression: $" with escaping \"\\\""
+Parses to: " with escaping \"\\\""
+Expression: $" bad \ escaping"
+Causes an error: org.apache.taglibs.standard.lang.spel.SpelException: Unable to parse the expression: Lexical error at line 1, column 8.  Encountered: " " (32), after : "\" bad \\"
+Expression: $" bad \' escaping"
+Causes an error: org.apache.taglibs.standard.lang.spel.SpelException: Unable to parse the expression: Lexical error at line 1, column 8.  Encountered: "\'" (39), after : "\" bad \\"
+
+# string literals with '
+Expression: $'abc'
+Parses to: "abc"
+Expression: $''
+Parses to: ""
+Expression: $'a'
+Parses to: "a"
+Expression: $'         '
+Parses to: "         "
+Expression: $' some string """ '
+Parses to: " some string \"\"\" "
+Expression: $' with escaping \\'
+Parses to: " with escaping \\"
+Expression: $' with escaping \''
+Parses to: " with escaping '"
+Expression: $' with escaping \'\\\''
+Parses to: " with escaping '\\'"
+Expression: $' bad \ escaping'
+Causes an error: org.apache.taglibs.standard.lang.spel.SpelException: Unable to parse the expression: Lexical error at line 1, column 8.  Encountered: " " (32), after : "\' bad \\"
+Expression: $' bad \" escaping'
+Causes an error: org.apache.taglibs.standard.lang.spel.SpelException: Unable to parse the expression: Lexical error at line 1, column 8.  Encountered: "\"" (34), after : "\' bad \\"
+
+# identifiers
+Expression: $abc
+Parses to: :abc
+Expression: $abc123
+Parses to: :abc123
+Expression: $abc_123
+Parses to: :abc_123
+Expression: $bad*identifier
+Causes an error: org.apache.taglibs.standard.lang.spel.SpelException: Unable to parse the expression: Lexical error at line 1, column 4.  Encountered: "*" (42), after : ""
+
+# scoped names
+Expression: $page:abc
+Parses to: page:abc
+Expression: $session:def
+Parses to: session:def
+Expression: $request:ghi
+Parses to: request:ghi
+Expression: $app:jkl
+Parses to: app:jkl
+Expression: $unknown:abc
+Causes an error: org.apache.taglibs.standard.lang.spel.SpelException: Unable to parse the expression: Encountered "unknown :" at line 1, column 1.
+Was expecting one of:
+    "page" ...
+    "request" ...
+    "session" ...
+    "app" ...
+    "header" ...
+    "param" ...
+    "paramvalues" ...
+    ":" ...
+    <IDENTIFIER> "." ...
+    <IDENTIFIER> "==" ...
+    <IDENTIFIER> "!=" ...
+    <IDENTIFIER> "<" ...
+    <IDENTIFIER> ">" ...
+    <IDENTIFIER> "<=" ...
+    <IDENTIFIER> ">=" ...
+    <IDENTIFIER> <EOF> 
+    
+Expression: $page:"my long name"
+Parses to: page:"my long name"
+Expression: $page:'quotedName'
+Parses to: page:quotedName
+Expression: $session:'Name-With@@@special !@# chars'
+Parses to: session:"Name-With@@@special !@# chars"
+Expression: $:abc
+Parses to: :abc
+Expression: $:"something else"
+Parses to: :"something else"
+Expression: $:'def'
+Parses to: :def
+
+# property expressions
+Expression: $a.b
+Parses to: :a.b
+Expression: $a.b.c.d.e.f.g.h
+Parses to: :a.b.c.d.e.f.g.h
+Expression: $page:a.b.c.d.e
+Parses to: page:a.b.c.d.e
+Expression: $page:a."bbb".c.'###"def'
+Parses to: page:a.bbb.c."###\"def"
+
+# relational expressions
+Expression: $a < b
+Parses to: :a < :b
+Expression: $c == 3
+Parses to: :c == 3
+Expression: $d == "my string"
+Parses to: :d == "my string"
+Expression: $e > -17
+Parses to: :e > -17
+Expression: $f <= a.b.c.d
+Parses to: :f <= :a.b.c.d
+Expression: $g >= asdfd
+Parses to: :g >= :asdfd
+Expression: $h != null
+Parses to: :h != null
+Expression: $i != true
+Parses to: :i != true
+
+# header, param, paramvalues expressions
+Expression: $header:sessionCcontext
+Parses to: header:sessionCcontext
+Expression: $param:'a-parameter'
+Parses to: param:"a-parameter"
+Expression: $paramvalues:morevalues
+Parses to: paramvalues:morevalues
+
+# complex expressions
+Expression: $a.b.c.def <= page:no.time.like.the.present
+Parses to: :a.b.c.def <= page:no.time.like.the.present
+Expression: $14 != param:so.small
+Parses to: 14 != param:so.small

@@ -1,0 +1,430 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>JSTL: Iterator Tags -- Functional Description</title>
+<style media="screen" type="text/css"><!--
+.fixme { color: red }
+--></style>
+</head>
+<body bgcolor="#FFFFFF">
+<h3>
+
+  <hr width="100%" noshade>
+</h3>
+
+<h2> Iterator Tags &#151; Functional Description</h2>
+
+<h2> <tt>&lt;forEach><br>
+  &lt;forTokens></tt></h2>
+<hr width="100%" noshade>
+<h3>
+1. Introduction</h3>
+The <tt>&lt;forEach&gt;</tt> tag repeats its nested body content over the collection 
+of objects defined by the <tt>items</tt> attribute. For example, the JSP code 
+below creates an HTML table with one column that shows the default <i>display</i> 
+value of each item in the collection. 
+<pre>&nbsp; &lt;table>
+&nbsp;&nbsp;&nbsp; &lt;c:forEach var="customer" items="$customers">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr>&lt;td>&lt;c:expr value="$customer"/>&lt;/td>&lt;/tr>
+&nbsp;&nbsp;&nbsp; &lt;/c:forEach>
+&nbsp; &lt;/table></pre>
+The <tt>forEach</tt> tag has the following features: 
+<ul>
+<li>
+Supports all standard J2SE <a href="#items">collection types.</a></li>
+
+<li>
+Exports an object that holds the <a href="#currentItem">current item</a>
+of the iteration.</li>
+
+<li>
+Exports an object that holds information about the <a href="#status">status
+of the iteration.</a></li>
+
+<li>
+Supports <a href="#range">range attributes</a> to iterate over a subset
+of the original collection.</li>
+
+<li>
+Exposes an <a href="#IteratorTag">interface</a> as well as a <a href="#IteratorTagSupport">base
+implementation class</a> so developers can easily implement collaborating
+subtags as well their own iteration tags according to their specific needs.</li>
+</ul>
+The forEach tag is the <i>base</i> iteration tag. It handles the most common
+iteration cases conveniently. Other iteration tags are also provided in
+the stardard tag library to support specific, specialized functionality
+not handled by the <tt>forEach</tt> tag (e.g. the <tt>forTokens</tt> tag).
+Developers can also easily extend the behavior of this base iteration tag
+to customize it according to an application's specific needs.
+<h3>
+<a NAME="items"></a>2. Collection of objects to iterate over</h3>
+The <tt>forEach</tt> tag supports the following data types for the collection 
+of objects to iterate over. 
+<ul>
+  <li> Array of Java Objects</li>
+  <ul>
+    <li> If the array contains a set of primitive types, then the current item 
+      for the iteration is automatically wrapped with its standard wrapper class 
+      (e.g. <tt>Integer</tt> for <tt>int</tt>, <tt>Float</tt> for <tt>float</tt>, 
+      etc...)</li>
+  </ul>
+  <li> Implementation of <tt>java.util.Collection</tt>. This includes among others: 
+    <tt>List, LinkedList, ArrayList, Vector, Stack, Set.</tt></li>
+  <li> Implementation of <tt>java.util.Iterator</tt>.</li>
+  <ul>
+    <li> Use with caution. An <code>Iterator</code> object is not resettable so 
+      it should not be used within more than one iteration tag.</li>
+  </ul>
+  <li> Implementation of <tt>java.util.Enumeration</tt>. 
+    <ul>
+      <li>Use with caution. An <code>Enumeration</code> object is not resettable 
+        so it should not be used within more than one iteration tag.</li>
+    </ul>
+  </li>
+  <li> Implementation of <tt>java.util.Map</tt>. This includes among others: <tt>HashMap, 
+    Hashtable, Properties, Provider, Attributes. </tt>See below for additional 
+    information about accessing the <a href="#currentItemMap">current item of 
+    a Map</a>.</li>
+  <li> Implementation of <tt>java.sql.ResultSet</tt>, including <tt>javax.sql.RowSet</tt>. 
+    See below for additional information about accessing the <a href="#currentItemResultSet">current 
+    item of a ResultSet</a>.</li>
+  <li> String. The string represents a list of Comma Separated Values (e.g. "mon,tue,wed").</li>
+</ul>
+The <tt>items</tt> attribute is optional. If it is not specified, the <a href="#range">range 
+attributes</a> must be specified to iterate a specific number of times over the 
+tag's body. 
+<h3>
+<a NAME="currentItem"></a>3. The current item</h3>
+<p>The current item of the iteration is made available via a JSP page scope attribute 
+  defined with attribute <tt>var</tt>. Attribute var has nested visibility, i.e. 
+  it only exists within the body of the &lt;forEach&gt; tag. At the end of the 
+  tag, the attribute is removed (no prior value is restored). Attribute <tt>var</tt> 
+  is optional. The page attribute is not created if a value is not defined for 
+  <tt>var.</tt> </p>
+<p>Normally, each object exposed by the <tt>forEach</tt> tag is an item
+of the underlying collection being iterated over. However, if iterating
+over a <tt>Map </tt>or a<tt> ResultSet</tt>, the exposed object is as follows:
+<p><a NAME="currentItemMap"></a>If <tt>items</tt> is of type <tt>Map</tt>,
+then the current item will be of type <tt>Map.Entry</tt> which has the
+following two properties:
+<ul>
+<li>
+<tt>key</tt> - The key under which this item is stored in the underlying
+Map.</li>
+
+<li>
+<tt>value</tt> - The value that corresponds to this key.</li>
+</ul>
+So, to iterate over the values of a <tt>Hashtable</tt>, the code would
+be implemented as follows:
+<p><tt>&nbsp; &lt;c:forEach var="entry" items="$myHashtable"/></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp; Next element is &lt;c:expr value="$entry.value/></tt> 
+  <br>
+  <tt>&nbsp; &lt;/c:forEach></tt>
+<p><a NAME="currentItemResultSet"></a>If items is of type <tt>ResultSet</tt>, 
+  then the current item is the <tt>ResultSet</tt> object itself positioned at 
+  the current row. Columns are accessed using the standard <tt>ResultSet</tt> 
+  API.
+<h3>
+<a NAME="status"></a>5. Iteration Status</h3>
+The iterator tag also makes available a wealth of information relative to the 
+iteration taking place. The set of properties supported by the status object is 
+described <a href="#IteratorTagStatus">here</a>. 
+<p>This status information is accessible by defining a JSP page scope attribute 
+  via the <tt>status</tt> attribute. This page scope attribute has nested visibility, 
+  i.e. it only exists within the body of the &lt;forEach&gt; tag. At the end of 
+  the tag, the attribute is removed (no prior value is restored). This is an optional 
+  attribute with no default. No page attribute is exposed if a value is not specified 
+  for the<tt> status </tt>attribute. 
+<p>In the example below, the JSP code creates an HTML table with the first
+column containing the position of the item in the collection, and the second
+containing the name of the employee.
+<pre>&nbsp; &lt;table>
+&nbsp;&nbsp;&nbsp; &lt;c:forEach var="employee" items="$employees" status="status">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tr>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;td>&lt;c:expr value="$status.count"/>&lt;/td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;td>&lt;c:expr value="$employee.name"/>&lt;/td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/tr>
+&nbsp;&nbsp;&nbsp; &lt;/c:forEach>
+&nbsp; &lt;/table></pre>
+
+<h3>
+<a NAME="range"></a>6. Range Attributes</h3>
+A set of range attributes is available to iterate on a subset of the collection
+of items. The <tt>begin</tt> and <tt>end</tt> indices can be specified,
+along with a <tt>step</tt>. If the <tt>items</tt> attribute is not specified,
+then the value of the current item is set to the integer value of the current
+index.
+<p>In this example, <tt>i</tt> would take values from 100 to 110 (included). 
+<pre>&nbsp; &lt;c:forEach var="i" begin="100" end="110">
+&nbsp;&nbsp;&nbsp; &lt;c:expr value=&quot;$i&quot;/&gt;
+&nbsp; &lt;/c:forEach></pre>
+
+<table BORDER CELLSPACING=2 CELLPADDING=5 WIDTH="685" >
+<tr>
+<td ALIGN=CENTER WIDTH="10%"></td>
+
+<th ALIGN=CENTER>specified</th>
+
+<th ALIGN=CENTER>not specified</th>
+</tr>
+
+<tr>
+<th ALIGN=CENTER WIDTH="10%">begin</th>
+
+<td>iteration starts at the item located at the specified index. First
+item in the collection is at index 0.</td>
+
+    <td>Iteration starts at the first item if items is specified. Illegal if items 
+      is also not specified.</td>
+</tr>
+
+<tr>
+<th ALIGN=CENTER WIDTH="10%">end</th>
+
+<td>iteration ends at the item located at the specified index (inclusive)</td>
+
+    <td>Iteration ends at the last element in the collection. Illegal if items 
+      is also not specified.</td>
+</tr>
+
+<tr>
+<th ALIGN=CENTER WIDTH="10%">step</th>
+
+<td>the iteration will only process every 'step' item of the collection,
+starting with the first one</td>
+
+<td>Every item in the collection is processed</td>
+</tr>
+</table>
+
+<h3><a NAME="attributes"></a>8. Attributes:</h3>
+
+<table BORDER CELLSPACING=2 CELLPADDING=5 WIDTH="709" >
+  <tr BGCOLOR="#FFFACD"> 
+    <th ALIGN=LEFT COLSPAN="4">collection to iterate over</th>
+  </tr>
+  <tr> 
+    <td><tt>items</tt></td>
+    <td>optional</td>
+    <td>expr</td>
+    <td>The collection of objects to iterate over. If not specified, the range 
+      attributes <tt>begin</tt> and/or <tt>end</tt> are required to specify the 
+      range of the iteration (for loop).</td>
+  </tr>
+  <tr> 
+    <th ALIGN=LEFT COLSPAN="4" BGCOLOR="#FFFACD">current item</th>
+  </tr>
+  <tr> 
+    <td height="0"><tt>var</tt></td>
+    <td height="0">optional</td>
+    <td height="0"><tt>String</tt></td>
+    <td height="0">Name of the page scope attribute used to store the current 
+      object being iterated over. Visibility is &quot;nested&quot;.</td>
+  </tr>
+  <tr> 
+    <th ALIGN=LEFT COLSPAN="4" BGCOLOR="#FFFACD">iteration status</th>
+  </tr>
+  <tr> 
+    <td><tt>status</tt></td>
+    <td>optional</td>
+    <td><tt>String</tt></td>
+    <td>Name of the variable used to store the current status of the iteration. 
+      Visibility is &quot;nested&quot;.</td>
+  </tr>
+  <tr> 
+    <th ALIGN=LEFT COLSPAN="4" BGCOLOR="#FFFACD">range</th>
+  </tr>
+  <tr> 
+    <td><tt>begin</tt></td>
+    <td>optional</td>
+    <td>expr</td>
+    <td>Iteration begins at the item located at the specified index. First item 
+      has index 0.</td>
+  </tr>
+  <tr> 
+    <td><tt>end</tt></td>
+    <td>optional</td>
+    <td>expr</td>
+    <td>Iteration ends at the item located at the specified index (inclusive).</td>
+  </tr>
+  <tr> 
+    <td><tt>step</tt></td>
+    <td>optional</td>
+    <td>expr</td>
+    <td>Iteration will only process every 'step' item of the collection.</td>
+  </tr>
+</table>
+
+<h3>
+<a NAME="IteratorTagStatus"></a>9. IteratorTagStatus</h3>
+The iteration status object (attribute <tt>status</tt>) has the following properties. 
+<br>
+&nbsp;
+<table BORDER CELLSPACING=2 CELLPADDING=5 WIDTH="688" >
+  <tr BGCOLOR="#FFFACD"> 
+    <th ALIGN=LEFT COLSPAN="3">current item</th>
+  </tr>
+  <tr BGCOLOR="#FFFACD"> 
+    <td ALIGN=LEFT BGCOLOR="#FFFFFF"><tt>current</tt></td>
+    <td ALIGN=LEFT BGCOLOR="#FFFFFF"><tt>Object</tt></td>
+    <td ALIGN=LEFT BGCOLOR="#FFFFFF">The current item. This object is also accessible 
+      directly from the <tt>IteratorTag</tt> interface. It is also made available 
+      here as a convenience.</td>
+  </tr>
+  <tr BGCOLOR="#FFFACD"> 
+    <th ALIGN=LEFT COLSPAN="3">current index / position</th>
+  </tr>
+  <tr> 
+    <td><tt>index</tt></td>
+    <td><tt>int</tt></td>
+    <td>The absolute, 0 based index of the current item.</td>
+  </tr>
+  <tr> 
+    <td ALIGN=LEFT><tt>count</tt></td>
+    <td ALIGN=LEFT><tt>int</tt></td>
+    <td ALIGN=LEFT>The relative, 1 based position of the current item. This increases 
+      by 1 for each item, regardless of begin, end, or step.</td>
+  </tr>
+  <tr> 
+    <td ALIGN=LEFT><tt>first</tt></td>
+    <td ALIGN=LEFT><tt>boolean</tt></td>
+    <td ALIGN=LEFT>Flag indicating if the current item is the first in the iteration.</td>
+  </tr>
+  <tr> 
+    <td ALIGN=LEFT><tt>last</tt></td>
+    <td ALIGN=LEFT><tt>boolean</tt></td>
+    <td ALIGN=LEFT>Flag indicating if the current item is the last in the iteration. 
+      This property is not supported when iterating over a ResultSet and step 
+      is > 1.&nbsp;</td>
+  </tr>
+  <tr> 
+    <th ALIGN=LEFT COLSPAN="3" BGCOLOR="#FFFACD">range</th>
+  </tr>
+  <tr> 
+    <td COLSPAN="3"><font size=-1>These values (combined with count) are important 
+      for allowing people to define special tags that tell when you're in the 
+      middle of a list, or when you're in an even or odd part of the list, etc. 
+      Because these values might have been specified as complex rtexprvalues or 
+      EL expressions, it's valuable to have these in a "precomputed" form.</font></td>
+  </tr>
+  <tr> 
+    <td><tt>beginSpecified</tt></td>
+    <td><tt>boolean</tt></td>
+    <td>Flag indicating if the <tt>begin</tt> attribute was specified.</td>
+  </tr>
+  <tr> 
+    <td><tt>begin</tt></td>
+    <td><tt>int</tt></td>
+    <td>The value of the <tt>begin</tt> attribute as specified in the tag. If 
+      the attribute was not specified, its corresponding value is undefined.</td>
+  </tr>
+  <tr> 
+    <td><tt>endSpecified</tt></td>
+    <td><tt>boolean</tt></td>
+    <td>Flag indicating if the <tt>end</tt> attribute was specified.</td>
+  </tr>
+  <tr> 
+    <td><tt>end</tt></td>
+    <td><tt>int</tt></td>
+    <td>The value of the <tt>end</tt> attribute as specified in the tag. If the 
+      attribute was not specified, its corresponding value is undefined.</td>
+  </tr>
+  <tr> 
+    <td><tt>stepSpecified</tt></td>
+    <td><tt>boolean</tt></td>
+    <td>Flag indicating if the <tt>step</tt> attribute was specified.</td>
+  </tr>
+  <tr> 
+    <td><tt>step</tt></td>
+    <td><tt>int</tt></td>
+    <td>The value of the <tt>step</tt> attribute as specified in the tag. If the 
+      attribute was not specified, its corresponding value is undefined.</td>
+  </tr>
+</table>
+
+<h3>
+<a NAME="IteratorTag"></a>10. Tag Collaboration</h3>
+Custom tags give developers the power to provide added functionality to
+a JSP application without having the page author to use Java code.
+<p>In this example, a page author must handle an item of the iteration
+differently depending whether it is an odd or even element.
+<p><tt>&nbsp; &lt;c:forEach var=&quot;product&quot; items="products" status=&quot;status&quot;><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;c:declare id=&quot;status&quot; type=&quot;javax.servlet.jsp.jstl.core.IteratorTagStatus&quot;/&gt;</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;c-rt:choose></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;c-rt:when test="&lt;%= status.getCount() 
+  % 2 == 0 %>"></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;!-- even item --></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/c-rt:when></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;c-rt:otherwise></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;!-- odd item --></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/c-rt:otherwise></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;/c-rt:choose></tt> <br>
+  <tt>&nbsp; &lt;/c:forEach></tt> 
+<p>If this type of processing needs to be repeated often in the web applications
+of a company, it might be worth to provide page authors with a couple extra
+tags that would remove the need for conditional tags and expressions. For
+example:
+<p><tt>&nbsp; &lt;c:forEach items="$products"></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;xyz:even></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;!-- even item --></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/xyz:even></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;xyz:odd></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;!-- odd item --></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/xyz:odd></tt>
+<br>
+  <tt>&nbsp; &lt;/c:forEach></tt> 
+<p>In order to make this possible, tags like <tt>&lt;odd></tt> and <tt>&lt;even></tt>
+need to be able to get access to the information exported by the <tt>forEach</tt>
+tag. This could be done explicitely, by specifying the name of the status
+object exported by the forEach tag. For example:
+<p><tt>&nbsp; &lt;c:forEach items="&lt;%=products%>" <font color="#3366FF">status="status"</font>></tt> 
+  <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;xyz:even <font color="#3366FF">iter="status"</font>></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;!-- even item --></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/xyz:even></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;xyz:odd <font color="#3366FF">iter="status"</font>></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;!-- odd item --></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/xyz:odd></tt>
+<br>
+  <tt>&nbsp; &lt;/c:forEach></tt> 
+<p>The cooperation between these tags and the forEach tag can also be done
+implicitely via the <tt>findAncestorWithClass()</tt> method of the JSP
+API. This is possible because the <tt>forEach</tt> tag implements an interface
+that can be used in the call to <tt>findAncestorWithClass</tt> to get to
+the enclosing <tt>forEach</tt> tag.
+<p>The interface is defined as follows:<br>
+  <br>
+  <tt>&nbsp; interface IteratorTag {</tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp; public Object getCurrent();</tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp; public IteratorTagStatus getIteratorStatus();</tt> <br>
+  <tt>&nbsp; }</tt> 
+<p>Interface <code>IteratorTagStatus</code> was described in a previous section. 
+<p>
+The fact that the <tt>forEach</tt> tag exposes an interface also means
+that other tags with iterative behavior can be developed using the same
+interface and will collaborate in the same manner with nested tags. See
+class <tt>IteratorTagSupport</tt> below to make this process even easier.
+<h3>
+<a NAME="IteratorTagSupport"></a>11. Tag Extensibility</h3>
+The forEach tag provides iteration capabilities for the most common cases.
+A developer simply needs to expose an appropriate kind of object to take
+advantage of it.
+<p>However, there will be situations where more specialized functionality
+will be required. A developer may need to write a new tag to expose new
+controlling functionality (e.g. for traversal order of a deep data structure,
+custom filtering, selection of appropriate objects from a custom data source).
+This is why the <tt>IteratorTagSupport </tt>class is provided. It will
+facilitate the implementation of <i>specialized</i> iterator tags that
+will meet an application's specific requirements.
+<pre>&nbsp; public abstract class IteratorTagSupport {
+&nbsp;&nbsp;&nbsp;&nbsp; ... (see source code)...
+&nbsp; }</pre>
+JSTL itself uses this inheritance-based mechanism to support additional specialized 
+iterator tags. For example, the <tt>&lt;forTokens></tt> tag is specialized to 
+support string tokens. It leverages the iteration behavior implemented in <tt>IteratorTagSupport</tt>, 
+and simply exposes a set of attributes that facilitate the specification of how 
+tokens are derived from a <tt>String </tt>object. 
+</body>
+</html>

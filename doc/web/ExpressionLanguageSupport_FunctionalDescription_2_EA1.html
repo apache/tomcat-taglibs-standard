@@ -1,0 +1,357 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Pierre Delisle">
+   <title>JSTL: Expression Language Support -- Functional Description</title>
+</head>
+<body bgcolor="#FFFFFF">
+<h2>
+
+  <hr WIDTH="100%" noshade>
+</h2>
+
+<h2> Expression Language Support &#151; Functional Description</h2>
+<hr width="100%" noshade>
+<h3>
+1. Introduction</h3>
+Support for an Expression Language (EL) is a clear requirement for JSTL1.0. We 
+need to address this requirement even though it is utimately the responsibility 
+of the JSR152 expert group to specify how an EL can be seamlessly integrated in 
+JSP, as well as which expression language(s) is/are to be supported by JSP containers. 
+<p>In our quest for an interim solution, JSTL is constrained by the fact
+that this solution must work in the context of JSP1.2, without requiring
+any change to the spec, and that it should integrate seamlessly with JSP.next
+(where an EL would be supported natively). It is also important to consider
+the fact that the specification of an expression language is a rather controversial
+issue that could trigger long debates among the expert group, preventing
+us from getting anything out in any timely fashion.
+<p>Our strategy therefore consists in allowing the easy integration, selection,
+and use of a variety of expression languages via an Expression Language
+Integration API, a set of tags, as well as conventions used throughout
+JSTL. We won't rule on any specific EL immediately. Rather we will allow
+various implementations of Expression Languages to all play in our sandbox.
+The hope is that through experimentation, it will be much easier to evaluate
+the merits of each approach, paving the way for the selection of a single
+or limited number of Expression Language(s) for the final draft of JSTL.
+<h3>
+2. Integration of an Expression Language in JSTL1.0</h3>
+An important requirement for support of an Expression Language within JSTL
+was that a single attribute should support a value specified in any of
+the following 3 forms:
+<p><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a. String literal&nbsp;&nbsp;&nbsp;
+att="15"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b. rtexprvalue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+att="&lt;%= foo.getBar() %>"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c. elexprvalue&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+att="$foo.bar"</tt>
+<p>This requirement made a lot of sense for the following&nbsp; reasons
+<ul>
+<li>
+logically consistent</li>
+
+<li>
+easy to learn</li>
+
+<li>
+lets our tags transition nicely into the future when JSP.next provides
+native support for an Expression Language</li>
+</ul>
+However, there are many issues in trying to support this given that it
+must work in the context of JSP1.2, without requiring any changes to the
+spec. The most important issue we identified is the danger that an rtexprvalue
+could return a String beginning with '$' (or any other metacharacter used
+by an EL to identify an elexprvalue).&nbsp; This wouldn't be a common 'accidental'
+case, but the fear is that it could become something of a security issue.&nbsp;
+If an rtexprvalue's result is based on user input -- e.g.,
+<p><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;%= request.getParameter("username")
+%></tt>
+<p>-- and the user 'maliciously' enters text beginning with '$' in order
+to establish a context for unchecked evaluation of an expression, an application
+might be coerced into acting in unintentional and unpredicted ways.&nbsp;
+To be safe, every rtexprvalue that picks up data from user input would
+need to be wrapped in a routine that escapes a leading '$' if present.
+<p>Because of this security concern, it was decided to use a different
+mechanism to integrate an EL. It consists in using <i>twin</i> tag libraries,
+as described in the next section.
+<h3>
+2. Twin Tag Libraries to support the Expression Language</h3>
+Among the mechanisms that are now available in JSP1.2 is the ability to deliver 
+more than one taglib in the same JAR file. JSTL therefore has two flavors of libraries: 
+<b>RT</b> (<b>rt</b>exprvalues) and <b>EL</b> (<b>el</b>exprvalues). They only 
+differ in the way they support expressions for attribute values. 
+<p>In an RT tag library, attributes that support expressions support them as 'rtexprvalues'; 
+  i.e. as expressions specified in the page's scripting language (and evaluated 
+  at runtime). This is exactly how things currently work in tag libraries. 
+<p>In an EL tag library, attributes that support expressions support them as 'elexprvalues'; 
+  i.e. as expressions specified in the JSTL Expression Language (and evaluated 
+  at runtime as well). 'rtexprvalues' are not allowed when using an EL tag library. 
+  An 'elexprvalue' is a String literal in the syntax of the EL. It is the responsibility 
+  of the EL to define the metacharacter(s) used to discriminate expressions from 
+  String literals (e.g. use $ at the beginning of an expression). 
+<p>JSTL therefore provides two sets of URIs, one for tags that accept rtexprvalues, 
+  and one for tags that accept elexprvalues. Twin libraries therefore support 
+  the same tags with the same syntax, except that one takes rtexprvalues, the 
+  other takes elexprvalues. 
+<h4>
+Usage</h4>
+<p>These twin tag libraries can be accessed in the following way in a JSP page 
+  (using the &quot;core&quot; taglib as an example):<br>
+  <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;%@ taglib uri="http://java.sun.com/jstl/ea/core" 
+  prefix="c" %><br>
+  &nbsp;&nbsp;&nbsp; </tt><tt>&lt;%@ taglib uri="http://java.sun.com/jstl/ea/core-rt" 
+  prefix="c-rt" %></tt> </p>
+<p>In our examples, we append the value '-rt' to differentiate the 'rtexprvalue" 
+  library from its 'elexprvalue' twin. It is possible to use the two libraries 
+  within the same page, although not recommended for clarity and consistency. 
+</p>
+<p>Within the same tag, all attribute values specified as expressions will
+have to be specified either as 'rtexprvalue' or 'elexprvalue' (cannot mix
+within the same tag), depending on which tag library the tag belongs to.
+<h3>
+3. Expression Language Selection</h3>
+It is possible to define a web-application's default expression language
+via the context parameter <tt>javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass</tt>.
+The class specified must implement interface <tt>ExpressionEvaluator </tt>(see
+below).
+<p>It is also possible to override the default expression language setting
+with the <tt>&lt;expressionLanguage></tt> action. For example:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;jx:expressionLanguage evaluator="<i>evaluator-class</i>"></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;jx:forEach items="{products/@key}"></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+...</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/jx:forEach></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/jx:expressionLanguage></tt>
+<p>The scope of&nbsp; the expression language specified by the action <tt>&lt;expressionLanguage></tt>
+is limited to its body. <tt>&lt;expressionLanguage></tt> actions can be
+nested, where nested occurrences shadow their ancestors .
+<p>It is illegal to use an expression in a context where no expression
+evaluator is specified (i.e., no <tt>web.xml</tt> declaration and no enclosing
+<tt>&lt;expressionLanguage></tt>).
+<p>The above&nbsp; rules make it possible to validate the syntax of an
+<tt>elexprvalue</tt>
+at translation time.
+<p>If JSTL rules on a single EL, then both the context parameter and the
+tag will become illegal.
+<h3>
+6. Expression Language API</h3>
+User code is expected to only interact with <tt>ExpressionEvaluatorManager</tt>
+which is reponsible to delegate the requested operation to the currently
+<i>active
+</i><tt>ExpressionEvaluator</tt>.
+[Even if JSTL eventually selects a single EL, this will still be the way
+to access the EL]
+<p><tt>&nbsp;&nbsp;&nbsp; public class ExpressionEvaluatorManager {</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /**</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Invokes the
+evaluate() method on the</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * "active" ExpressionEvaluator.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public static Object
+evaluate(String attributeName,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String expression,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Class expectedType,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Tag tag,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+PageContext pageContext)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throws
+ExpressionException, JspException;</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; }</tt>
+<p>As a result of evaluating an expression, two types of Exceptions can
+be thrown by the ExpressionEvaluator.
+<ul>
+  <li> <tt>JspException</tt></li>
+  <p>Fatal condition that should never be caught by the user code. <br>
+    &nbsp; 
+  <li> <tt>ExpressionException</tt></li>
+  <br>
+  <p>An error related to the evaluation of a particular exception, which is not 
+    expected to cause further problems when evaluating any other expressions.&nbsp; 
+    Tags may catch this if they wish to detect failure of an expression to complete 
+    evaluation satisfactorily.
+</ul>
+The distinction between these two types of exceptions is useful for actions
+such as <tt>&lt;expr></tt> that prefers displaying a default value rather
+than having an error page displayed should an object in the expression
+be inaccessible (e.g. if <tt>address</tt> yielded a null pointer in the
+expression <tt>$customer.address.city</tt>). The EL therefore decides what's
+fatal (<tt>JspException</tt>) and what isn't (<tt>ExpressionException</tt>).
+<p><tt>&nbsp;&nbsp;&nbsp; public class ExpressionException extends JspException;</tt>
+<p>The&nbsp; integration of custom Expression Languages will be possible
+during the Early Access phase of JSTL to help us experiment with various
+ELs. An Expression Language implementation simply needs to implement interface
+<tt>ExpressionEvaluator</tt>.
+Check the details of the JSTL implementation to see if there are any constraints
+on the implementation of an ExpressionEvaluator.
+<br>[For example, one could impose that the implementation of&nbsp; <tt>ExpressionEvaluator</tt>
+be thread-safe, and&nbsp; that there is no guarantee that a single instance
+will be used for all evaluations (if an implementation of an <tt>ExpressionEvaluator</tt>
+wants to store state (such as an expression cache), a static member variable
+with proper synchronization should then be used).]
+<p><tt>&nbsp;&nbsp;&nbsp; public interface ExpressionEvaluator {</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /**</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Translation
+time validation of an expression.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * This method
+will return a null String if the expression</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * is valid; otherwise
+an error message.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public String validate(String
+attributeName,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String expression);</tt>
+<p><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /**</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Evaluates the
+expression at request time.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public Object evaluate(String
+attributeName,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String expression,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Class expectedType,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Tag tag,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+PageContext pageContext)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throws
+ExpressionException, JspException;</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; }</tt>
+<h3>
+7. Custom Tags using the JSTL Expression Language(s)</h3>
+Custom tag developers can support expression languages in their tags using
+the same conventions established in this document.
+<p>Assuming a custom action named <tt>foo</tt>; one could have the following
+implementation classes:
+<p><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FooTag</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+/&nbsp; \</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp;&nbsp;
+\</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; FooTagRT&nbsp; FooTagEL</tt>
+<p>The only code in FooTagRT and FooTagEL are the setter and getter methods
+for the attributes that support expressions (they cannot be inherited because
+the properties do not have the same type; String for EL and the "native"
+type for RT).
+<p>FooTagEL also needs to override doStartTag() to evaluate the elexprvalue
+first, and then call back into the base class. For example:
+<p><tt>&nbsp; public void setFoo(String fooEL) throws JspException {</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.fooEL = fooEL;</tt>
+<br><tt>&nbsp; }</tt>
+<p><tt>&nbsp; public int doStartTag() throws JspException {</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; foo = ExpressionEvaluatorManager.evaluate</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+("foo", fooEL, FooType.class, this, pageContext);</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return super.doStartTag();</tt>
+<br><tt>&nbsp; }</tt>
+<p>It is important to note that the evaluation of the expression must be
+performed within the <tt>doStartTag()</tt> method. The lifecycle of a tag
+is such that the setter method of values that no not change (string literals)
+may not necessarily be called if the tag is reused by the container. Since
+an elexprvalue is specified as a string literal, this could cause an elexprvalue
+to not to be "re-evaluated" if the evaluation were to be performed in the
+setter method.
+<p>Two TLDs must be written. The only differences are:
+<ul>
+<li>
+tool support info elements (short-name, description, etc...)</li>
+
+<li>
+&lt;uri></li>
+
+<br>(e.g. "http://acme.com/mytaglib-rt", "http://acme.com/mytaglib-el")
+<li>
+&lt;tag-class> for each attribute that supports expression values</li>
+
+<br>(e.g. FooTagRT vs FooTagEL)
+<li>
+&lt;rtexprvalue> true for the RT tag library, false for EL tag library</li>
+</ul>
+When JSP.next comes, a unified tag library can be created. All there is
+to do is merge the base classes with the RT classes, and remove the 'EL'
+classes and the EL TLD.
+<h3>
+8. Validation of elexprvalues at translation time</h3>
+@@@ FIXME During the Early Access phase where multiple ELs are made available 
+for experimentation, translation time validation of elexprvalues must be performed 
+by a TagLibraryValidator so the proper ExpressionEvaluator can be invoked for 
+the validation (a TEI would not be able to establish the execution context). One 
+such TagLibraryValidator, <tt>ExpressionEvaluatorTLV</tt>,&nbsp; is made available 
+to support translation time validation of elexprvalues of JSTL tags, as well 
+as for any other custom tag library. 
+<p>It supports an initialization parameter (<tt>custom-taglibs)</tt> to
+specify the list of custom tag libraries that should be validated for elexprvalues
+(* to specify all).
+<p>For example:
+<p><tt>&nbsp; &lt;taglib></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; ...</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;validator></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;validator-class>javax.servlet.jsp.jstl.core.ExpressionEvaluatorTLV&lt;/validator-class></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;init-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-name>custom-taglibs&lt;/param-name></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-value>*&lt;/param-value></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/init-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/validator></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; ...</tt>
+<br><tt>&nbsp; &lt;/taglib></tt>
+<p>If the JSTL ends up specifying a single EL, then translation-time validation
+could be performed within the TagExtraInfoClass by simply calling <tt>ExpressionEvaluatorManager.validate()
+</tt>on
+each elexprvalue.
+<h3>
+9. Relationship with future JSP specs</h3>
+The expression language integration model for JSTL will work fine with
+JSP 1.2 containers and above. Nothing in that model gets in the way of
+the JSP specification should it decide to include native support for expression
+language(s).
+<p>When a JSP spec comes with native support for an EL (JSP.next), the
+assumption is that EL expressions would be supported natively only for
+attributes where rtexprvalue=true.
+<p>The twin libraries would behave as follows in a JSP.next environment:
+<ul>
+<li>
+<b>JSTL-1.0-RT</b></li>
+
+<br>Will keep working as before, with the addition that it will also be
+possible to specify elexprvalues.
+<li>
+<b>JSTL-1.0-EL</b></li>
+
+<br>Tags will keep working exactly as before; no change. The elexprvalues
+will still be evaluated by the tag library, and not the container since
+rtexprvalue=false for all attributes in that tag library.</ul>
+The only drawback to the semantics of 'EL is only interpreted in a rtexprvalue
+attribute' is that somebody can type a="$expr" and get a literal when they
+really meant "evaluate expr".
+<p>Is it important or not? One may argue that most attributes support rtexprvalues,
+except for the few cases where the value needs to be known at translation
+time (in which case elexprvalues cannot be used). For example:
+<ul>
+<li>
+scripting variable names</li>
+
+<li>
+value is the *type* of a scripting variable exported by the tag</li>
+
+<li>
+value needs to be known by a validator (e.g., for the &lt;jsptl:expressionLanguage>
+tag)</li>
+</ul>
+This is a JSP.next issue. If this is seen as an important issue, it could
+be made a translation-time error to use unescaped $ syntax in a non-rtexpr
+attribute. But this would have the disadvantage of breaking JSPs that use
+the EL version of the twin tag libraries.
+<p>At the same time as JSP.next comes out, the goal would be to have a
+new version of the tag library that removes the distinction between RT
+and EL. For example: "http://java.sun.com/jsptl-1.0" (no suffix). The TLD
+would state a dependency on JSP.next.
+<br>&nbsp;
+<br>&nbsp;
+</body>
+</html>

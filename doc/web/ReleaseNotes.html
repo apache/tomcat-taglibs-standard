@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>JSTL: Release Notes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF">
+<h1>JSTL: Release Notes</h1>
+
+<p><b>JSTL EA2 introduces a variety of new features, and it rounds out
+some of the support initially provided in EA1.  This document contains a
+running list of additions and changes.</b></p>
+
+<hr />
+
+<dl>
+<dt><b>21 Nov 2001</b></dt>
+<dd>JSTL EA2 RI, version 1.0, introduced.  Version includes the following
+major changes and additions:
+<ul>
+ <li>JSPTL has been renamed to JSTL.</li>
+ <li>The "jsptl" library at Jakarta Taglibs has been renamed to
+     "standard."</li>
+ <li>Tags for text inclusion and URL encoding introduced.</li>
+ <li>Tags for i18n-capable text formatting introduced.</li>
+ <li>Tags for XML manipulation introduced.</li>
+ <li>JSTL now divides functionality among multiple TLDs.  Each TLD represents
+     a cohesive unit of functionality, such as "XML manipulation" and
+     "formatting."  'jx' and 'jr' are no longer used; they are replaced
+     with shorter abbreviations for the common cases (e.g., 'c', 'x').
+ <li>ECMAScript is now the default expression evaluator.  Since the
+     first release of EA1, new languages include JXPath and ECMAScript.</li>
+ <li>The RI has been thoroughly repackaged; many classes have moved.</li>
+ <li>The package name for the JSTL API is now javax.servlet.jsp.jstl
+     and is subdivided into cohesive packages.  (The old package for the
+     API was javax.servlet.jsptl.)</li>
+ <li>A small number of minor changes were made to the code.  By and large,
+     these changes are not significant; the easiest way to discover
+     further details is to look at the CVS archive itself.</li>
+</ul>
+</dd>
+
+<dt><b>09 Oct 2001</b></dt>
+<dd>JSTL EA1 RI, version 1.2, introduced.  This version includes support
+for ECMAScript.</dd>
+
+<dt><b>23 Jul 2001</b></dt>
+<dd>JSTL EA1 RI, version 1.1, is released.  This version is compatible
+with Tomcat 4.0 B6 and Tomcat 4.0 release.</dd>
+
+<dt><b>10 Jul 2001</b></dt>
+<dd>JSTL EA1 RI first made available for download.</dd>
+
+<dt><b>08 Jul 2001</b></dt>
+<dd>Initial version of JSTL RI contributed by JSR-052 Expert Group
+    and imported into Jakarta CVS archive.</dd>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/ea/fmt" %>
+
+<html>
+<head>
+  <title>JSTL: Formatting/I18N Support -- German Locale Example</title>
+</head>
+<body bgcolor="#FFFFFF">
+<h3>German Locale</h3>
+
+<fmt:locale value="de"/>
+<fmt:bundle basename="org.apache.taglibs.standard.examples.i18n.Resources">
+ <fmt:message key="greetingMorning"/>
+</fmt:bundle>
+
+</body>
+</html>

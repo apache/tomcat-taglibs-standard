@@ -1,0 +1,633 @@
+<html>
+<head>
+<title>JSTL: Overview</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h1>Overview</h1>
+<p>This document provides a high level overview of the JSP&#153; Standard Tag 
+  Library (JSTL) as it stands for EA2 (Early Access release 2). If you have a 
+  strong opinion on the topic &#151; positive (you really like it), or constructive 
+  (we messed up some parts and you have some constructive comments for improvements) 
+  &#151; we'll be happy to hear from you at <a href="mailto:jsr052-comments@sun.com">jsr052-comments@sun.com</a>. 
+  All comments will be read but we cannot guaranteee personal replies to all of 
+  them. </p>
+<p>Make sure you read this document first, then check out the jstl-examples web 
+  application in the release (once you have installed it on your web container 
+  following the instructions in the <a href="GettingStarted.html">Getting Started</a> 
+  document). This will help you get a good feel for what JSTL is all about. Then 
+  browse the other docs to get all the details, and finally give JSTL a ride in 
+  your own <b>prototype</b> web application. You should use JSTL only in prototype 
+  webapps because this is Early Access and things may/will change as we gather 
+  feedback and make adjustments. Thanks for your help making JSTL an awesome standard 
+  tag library...</p>
+<h3>Design Philosophy</h3>
+<p>JSP tag libraries help provide a clean separation between the business logic 
+  and the presentation layer of web applications. By keeping the programming logic 
+  out of JSP pages, web designers are now empowered to develop sophisticated JSP 
+  pages without having to resort to the scripting language associated with their 
+  JSP pages (usually the Java programming language). </p>
+<p>The base design philosophy in JSTL is therefore to provide page authors with 
+  a script free environment. EA2 defines the foundation elements to make this 
+  possible.</p>
+<h3>Multiple TLDs</h3>
+<p>A Tag Library is a collection of actions that encapsulate functionality to 
+  be used from within a JSP page. JSTL includes a wide variety of actions that 
+  naturally fit into discrete functional areas. This is why JSTL, altough a single 
+  standard tag library, is exposed via multiple TLDs to clearly show the functional 
+  areas it covers, as well as to give each one of them their own namespace. The 
+  table below lists these functional areas along with their URI. The table also 
+  shows the prefixes used in our documentation and examples (although web applications 
+  can use any prefix they want).</p>
+<div align="center"> 
+  <table border="1" cellpadding="5">
+    <tr> 
+      <th>Funtional Area</th>
+      <th>URI</th>
+      <th>Prefix</th>
+      <th>Example</th>
+    </tr>
+    <tr> 
+      <td>Core</td>
+      <td>http://java.sun.com/jstl/ea/core</td>
+      <td> 
+        <div align="center"><font face="Courier New, Courier, mono">c</font></div>
+      </td>
+      <td><font face="Courier New, Courier, mono">&lt;c:<i>tagname</i> ...&gt;</font></td>
+    </tr>
+    <tr> 
+      <td>XML processing</td>
+      <td>http://java.sun.com/jstl/ea/xml</td>
+      <td> 
+        <div align="center"><font face="Courier New, Courier, mono">x</font></div>
+      </td>
+      <td><font face="Courier New, Courier, mono">&lt;x:<i>tagname</i> ...&gt;</font></td>
+    </tr>
+    <tr> 
+      <td>I18N capable formatting</td>
+      <td>http://java.sun.com/jstl/ea/fmt</td>
+      <td> 
+        <div align="center"><font face="Courier New, Courier, mono">fmt</font></div>
+      </td>
+      <td><font face="Courier New, Courier, mono">&lt;fmt:<i>tagname</i> ...&gt;</font></td>
+    </tr>
+    <tr> 
+      <td>Database access</td>
+      <td>http://java.sun.com/jstl/ea/db</td>
+      <td> 
+        <div align="center"><font face="Courier New, Courier, mono">db</font></div>
+      </td>
+      <td><font face="Courier New, Courier, mono">&lt;db:<i>tagname</i> ...&gt;</font></td>
+    </tr>
+  </table>
+</div>
+<h3><br>
+  Expression Language Support</h3>
+<p>A key contribution of JSTL is the integration of an Expression Language (EL). 
+  An EL leverages the fact that JSP scoped attributes are the privileged way to 
+  communicate information from the business logic to the JSP pages. It makes it 
+  possible to easily access application data and manipulate it in simple ways 
+  without having to use scriptlets or request-time expression values. </p>
+<p>For example, this conditional tag tests whether the country of a customer is 
+  the USA.</p>
+<p><code> &nbsp;&nbsp;&lt;c:if test=&quot;$customer.address.country == 'USA'&quot&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;...</code><br>
+  <code>&nbsp;&nbsp;&lt;/c:if&gt;</code></p>
+<p>There were quite a few issues involved with the support of an Expression Language 
+  within JSTL given the constraint that it had to work without requiring any change 
+  to the JSP spec.&nbsp;In order to be able to support both the scripting (rtexprvalues) 
+  and the EL (elexprvalues) worlds, we had to come up with the concept of twin 
+  tag libraries: one that supports the expression language, and one that supports 
+  request time expression values. Our assumption is that people will mostly use 
+  the EL-based tag libraries, while it is still possible for hard core scripting 
+  page authors to use JSTL with rtexprvalues (provides benefits for type safety 
+  and performance) via the request-time based tag libraries (their URI simply 
+  has the &quot;-rt&quot; suffix appended).</p>
+<p>It is a hard task for the Expert Group to decide on a specific EL without first 
+  getting the general feeling from the community. This is why JSTL currently 
+  does not define a specific EL, but provides mechanisms for experimentation with 
+  a variety of ELs. Tell us what you feel is important for that EL, and feel free 
+  to implement one that others can experiment with. The goal is to select a single 
+  EL once the JSTL spec is ready for Community Review.</p>
+<p>Early Access contains several candidate Expression Languages. One of them is 
+  an implementation subset of ECMAScript (JavaScript) and is the one used by default. 
+  You can read an <a href="@@@">overview of the ECMAScript subset of interest 
+  for JSTL</a>.</p>
+<h3>Tag Collaboration</h3>
+<p>Tags usually collaborate with their environment in implicit and/or explicit 
+  ways. Implicit collaboration is done via a well defined interface that allows 
+  nested tags to work seamleasly with the ancestor tag exposing that interface. 
+  The JSTL iterator tags support this mode of collaboration. Explicit collaboration 
+  happens when a tag explicitely exposes information to its environment. Traditionally, 
+  this has been done by exposing a scripting variable (with a JSP scoped attribute 
+  providing the actual object). Because JSTL supports an expression language, 
+  the need for scripting variables is significantly reduced. This is why all the 
+  JSTL tags expose information only as JSP scoped attributes (no scripting variable 
+  exposed). A bold move, we agree, but we feel this is the proper design decision 
+  to support script-free JSP pages. </p>
+<p>The convention is to use the name &quot;var&quot; for any tag attribute that 
+  exports information about the tag. For example, an iterator tag exposes the 
+  current item of the collection it is iterating over in the following way:</p>
+<p><code>&nbsp;&nbsp;&lt;c:forEach var=&quot;customer&quot; items=&quot;$customers&quot;&gt;</code><code><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;...</code><br>
+  <code>&nbsp;&nbsp;&lt;/c:forEach&gt;</code></p>
+<p>It is important to note that a name different than &quot;id&quot; was selected 
+  to stress the fact that a variable is exposed (actually a JSP scoped attribute), 
+  but not a scripting variable (which is normally the case when using an attribute 
+  named &quot;id&quot;).</p>
+<p>The convention also establishes the attribute &quot;scope&quot; to set the 
+  scope (page, request, session, application) of the JSP scoped attribute.</p>
+<p>In situations where a tag exposes more than one piece of information, the name 
+  &quot;var&quot; is used for the primary piece of information being exported, 
+  and an appropriate name is selected for any other secondary piece of information 
+  exposed (e.g. an iteration current status information is exported by the foreach 
+  tag via attribute <code>status</code>.)</p>
+<p>The fact that JSTL tags do not expose scripting variables would make it hard 
+  to collaborate with other tags whose data must be passed as rtexprvalues. To 
+  that effect, tag &lt;declare&gt; allows to declare a scripting variable to be 
+  associated with the JSP scoped attribute of the same name.</p>
+<h3>Tag Overloading</h3>
+<p>In JSTL, we try as much as possible to avoid too much &quot;overloading&quot; 
+  of a tag; i.e. tags with lots of attributes that can do just about anything. 
+  Rather, we privilege a larger number of tags with well focused behavior.</p>
+<hr noshade>
+<h2>JSTL EA2&#151; Quick Reference</h2>
+<h2>Core Actions</h2>
+<table width="100%" border="1" cellpadding="5">
+  <tr bgcolor="#000099"> 
+    <td colspan="2"><b><font color="#FFFFFF" size="+1">Expression Language Support 
+      Tags (Core)</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td width="31%"><b>Element</b></td>
+    <td width="48%"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="31%"> 
+      <p><code><b>&lt;expr&gt;</b></code><br>
+        <code><b>value</b> <font color="#000000">default</font> </code><br>
+        <br>
+        Like <code>&lt;%= ... %&gt;</code> but for EL expressions.<br>
+      </p>
+    </td>
+    <td width="48%"> 
+      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;$customer.address.city&quot;&gt;<br>
+        <br>
+        &lt;c:set var=&quot;customerFmt&quot; scope=&quot;request&quot;&gt;<br>
+        &nbsp;&nbsp;&lt;font color=red&gt;<br>
+        &nbsp;&nbsp;&nbsp; </code><code>&lt;c:expr value=&quot;$customer&quot;/&gt;<br>
+        &nbsp; &lt;/font&gt;<br>
+        &lt;/c:set&gt;</code></p>
+      </td>
+  </tr>
+  <tr> 
+    <td width="31%"><code><b>&lt;set&gt;</b></code><br>
+      <code><b>var</b> <font color="#000000">value</font> <font color="#000000">scope</font></code> 
+      <br>
+      <br>
+      Sets the result of an expression evaluation in a scoped attribute.<br>
+      <code><br>
+      </code></td>
+    <td width="48%"> 
+      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;$customer.address.city&quot;&gt;<br>
+        <br>
+        &lt;c:set var=&quot;customerFmt&quot; scope=&quot;request&quot;&gt;<br>
+        &nbsp;&nbsp;&lt;font color=red&gt;<br>
+        &nbsp;&nbsp;&nbsp; &lt;c:expr value=&quot;$customer&quot;/&gt;<br>
+        &nbsp; &lt;/font&gt;<br>
+        &lt;/c:set&gt;</code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="31%"> 
+      <p><code><b>&lt;declare&gt;<br>
+        id</b> <font color="#000000">type</font><b> </b></code></p>
+      <p>Declares a scripting variable, initially defined by an existing scoped 
+        attribute of the same name. The type of the variable defaults to java.lang.Object 
+        but can be modified by using the 'type' attribute.</p>
+    </td>
+    <td width="48%"> 
+      <p><code>&lt;c:declare id=&quot;customer&quot; type=&quot;acme.Customer&quot;/&gt;</code></p>
+    </td>
+  </tr>
+</table>
+<br>
+<table width="100%" border="1" cellpadding="5">
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">Iterator 
+      Tags (core)</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td width="31%"><b>Element</b></td>
+    <td width="48%"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="38%" height="123"> 
+      <p><code><b>&lt;forEach&gt;<br>
+        </b><font color="#0000FF">var items status<br>
+        begin end step</font></code></p>
+      <p>The basic iteration tag, accepting many different collection types and 
+        supporting subsetting and other functionality</p>
+    </td>
+    <td width="48%" height="123"><code>&lt;c:forEach var=&quot;customer&quot; 
+      items=&quot;$customers&quot;&gt;</code><code><br>
+      &nbsp;&nbsp;...<br>
+      &lt;/c:forEach&gt;<br>
+      <br>
+      &lt;c:forEach var=&quot;customer&quot; items=&quot;$customers&quot;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status=&quot;status&quot; 
+      <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;begin=&quot;100&quot; 
+      end=&quot;200&quot; step=&quot;2&quot;&gt;</code><code><br>
+      &nbsp;&nbsp;...<br>
+      &lt;/c:forEach&gt; </code></td>
+  </tr>
+  <tr> 
+    <td width="38%"> 
+      <p><code><b>&lt;forTokens&gt;<br>
+        </b><font color="#0000FF">var items status<br>
+        begin end step</font><br>
+        delims <b> </b></code></p>
+      <p>Iterates over tokens, separated by the supplied delimiters</p>
+    </td>
+    <td width="48%"><code>&lt;c:forTokens var=&quot;token&quot; items=&quot;blue|white|red&quot;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delims=&quot;|&quot;&gt;</code><code><br>
+      &nbsp;&nbsp;... <br>
+      &lt;/c:forTokens&gt; </code></td>
+  </tr>
+  <tr> 
+    <td width="38%"><code><b>interface IteratorTag</b></code></td>
+    <td>allows developers to write custom iteration tags by implementing the IteratorTag 
+      interface.</td>
+  </tr>
+  <tr> 
+    <td width="38%"><code><b>interface IteratorTagStatus</b></code></td>
+    <td>Provides an interface for objects representing the current status of an 
+      iteration. JSTL 1.0 provides a mechanism for IteratorTags to return information 
+      about the current index of the iteration and convenience methods to determine 
+      whether or not the current round is either the first or last in the iteration. 
+      It also lets authors use the status object to obtain information about the 
+      iteration range, step, and current object.</td>
+  </tr>
+  <tr> 
+    <td width="38%"><code><b>abstract class IteratorTagSupport </b></code></td>
+    <td>Since most iteration tags will behave identically with respect to actual 
+      iterative behavior, JSTL 1.0 provides this base support class to facilitate 
+      implementation. Many iteration tags will extend this and merely implement 
+      the hasNext() and next() methods to provide contents for the handler to 
+      iterate over.</td>
+  </tr>
+</table>
+<br>
+<table width="100%" border="1" cellpadding="5">
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">Conditional 
+      Tags (core)</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td width="31%"><b>Element</b></td>
+    <td width="48%"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="42%" height="123"> 
+      <p><code><b>&lt;if&gt;<br>
+        </b>test<font color="#0000FF"> var</font><b> </b></code></p>
+      <p>Simple conditional tag, which evalutes its body if the supplied condition 
+        is true and optionally exposes a Boolean page attribute representing the 
+        evaluation of this condition.</p>
+    </td>
+    <td width="58%" height="123"> 
+      <p><code>&lt;c:if test=&quot;$customer.address.country == 'USA'&quot;&gt; 
+        </code><code><br>
+        &nbsp;&nbsp;...<br>
+        &lt;/c:if&gt;<br>
+        <br>
+        &lt;c:if var=&quot;isUsCustomer&quot;<br>
+        &nbsp;&nbsp;test=&quot;$customer.address.country == 'USA'&quot;/&gt;</code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="42%"> 
+      <p><code><b>&lt;choose&gt;</b><br>
+        <b>&lt;when&gt;</b><br>
+        &nbsp;&nbsp;test<b> </b> <br>
+        <b>&lt;otherwise&gt;</b></code></p>
+      <p>Simple conditional tag that establishes a context for mutually exclusive 
+        conditional operations, marked by<code> &lt;when&gt;</code> and <code>&lt;otherwise&gt;.</code></p>
+    </td>
+    <td width="58%"> 
+      <p><code>&lt;c:choose&gt;</code><code><br>
+        &nbsp;&nbsp;&lt;when test=&quot;...&quot;&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+        &nbsp;&nbsp;&lt;/when&gt; </code><code><br>
+        &nbsp;&nbsp;&lt;when test=&quot;...&quot;&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+        &nbsp;&nbsp;&lt;/when&gt; </code><code><br>
+        &nbsp;&nbsp;...<br>
+        &nbsp;&nbsp;&lt;otherwise&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+        &nbsp;&nbsp;&lt;/otherwise&gt; </code><code></code><code> </code><code> 
+        <br>
+        &lt;/c:choose&gt; </code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="42%"><code><b>abstract class ConditionalTagSupport</b></code></td>
+    <td width="58%">Abstract class that facilitates implementation of conditional 
+      tags -- specifically, tags in the style of <code>&lt;if&gt;</code>.</td>
+  </tr>
+</table>
+<br>
+<br>
+<table width="100%" border="1" cellpadding="5">
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">Import 
+      Tags (core)</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td width="39%"><b>Element</b></td>
+    <td width="61%"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="39%" height="123"> 
+      <p><code><b>&lt;import&gt;<br>
+        </b><font color="#FF0000"><b><font color="#000000">url</font></b></font><font color="#0000FF"> 
+        <font color="#000000">var varReader charEncoding</font></font> <font color="#000000">context 
+        </font><br>
+        <b></b><font color="#0000FF"> </font></code></p>
+      <p>Action for a simple, generic way to access URL based resources. Extends 
+        &lt;jsp:include&gt; to support foreign contexts and absolute URLs, as 
+        well as to export an object for explicit collaboration with process/transformation 
+        tags (avoiding unnecessary buffering).</p>
+    </td>
+    <td width="61%" height="123"> 
+      <p><code>&lt;c:import url=&quot;ftp://ftp.acme.com/README&quot;/&gt;<br>
+        <br>
+        </code><code>&lt;c:import url=&quot;/xml/doc.xml&quot; varReader=&quot;in&quot;/><br>
+        &lt;acme:process in=&quot;$in&quot;</code><code>/></code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="39%"> 
+      <p><code><b>&lt;param&gt;</b><br>
+        <font color="#000000"><b>name</b></font><font color="#CC0000"> </font><font color="#000000">value 
+        encode</font></code></p>
+      <p>Sub-element to specify request parameters for the enclosing &lt;import&gt;. 
+        If importing a resource using an absolute URL, the value of the parameter 
+        is automatically encoded.</p>
+    </td>
+    <td width="61%"> 
+      <p><code>&lt;c:import url=&quot;/exec/register&quot;><br>
+        &nbsp;&nbsp;&lt;c:param name=&quot;id&quot; value=&quot;foo&quot;/&gt;<br>
+        &lt;/c:import&gt; </code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="39%"> 
+      <p><code><b>&lt;urlEncode&gt;</b><br>
+        <font color="#FF0000">value</font><font color="#CC0000"> </font><font color="#0000FF">var</font></code></p>
+      <p>URL encoding.</p>
+    </td>
+    <td width="61%"> 
+      <pre>&lt;a href=&quot;http://acme.com/register
+   ?name=&lt;c:urlEncode value='$name'/&gt;&quot;/></pre>
+    </td>
+  </tr>
+</table>
+<p>
+<h2>XML Actions</h2>
+<table border="1" cellpadding="5">
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">XML Core 
+      Tags (xml)</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td width="318"><b>Element</b></td>
+    <td width="392"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="318"><code><b>&lt;parse&gt;</b></code><br>
+      <code><font color="#FF0000"><b><font color="#000000">var</font></b></font> 
+      source filter</code><br>
+      <br>
+      Parses an XML and saves its internal representation into the JSP scoped 
+      attribute specified by &quot;var&quot;.</td>
+    <td width="392"> <code>&lt;c:import url=&quot;http://acme.com/athletes?country=ethiopia&quot; 
+      var=&quot;xml&quot;/><br>
+      &lt;x:parse source=&quot;$xml&quot; var=&quot;athletes&quot;/&gt; </code></td>
+  </tr>
+  <tr> 
+    <td width="318"> 
+      <p><code><b>&lt;expr&gt;</b></code><br>
+        <code><font color="#000000"><b>select</b></font></code><br>
+        <br>
+        Evaluates the given XPath expression and outputs its text value.<br>
+      </p>
+    </td>
+    <td width="392"> 
+      <p><code>&lt;x:expr select=&quot;$ath/name&quot;/&gt;</code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="318"> 
+      <p><code><b>&lt;set&gt;</b></code><br>
+        <code><font color="#000000"><b>var</b></font> <b><font color="#000000">select</font></b></code><br>
+        <br>
+        Evaluates the given XPath expression and saves the result into the JSP 
+        scoped attribute specified by &quot;var&quot;.</p>
+    </td>
+    <td width="392"> <code>&lt;x:set<br>
+      &nbsp;&nbsp;select=&quot;$athletes/athlete[country=$request:country]&quot; 
+      &nbsp;&nbsp;var=&quot;athletesOfCountry&quot;/&gt;</code></td>
+  </tr>
+</table>
+<br>
+<table border="1" cellpadding="5" width="100%">
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">XML Control 
+      Flow Tags (xml)</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td width="55%"><b>Element</b></td>
+    <td width="45%"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="55%"><code><b>&lt;forEach&gt;</b></code><br>
+      <b>&nbsp;select</b> var<br>
+      <br>
+      Evaluates the given XPath expression and iterates over the result, setting 
+      the context node to each element in the iteration.</td>
+    <td width="45%"><code>&lt;x:forEach select=&quot;$doc//author&quot;&gt;<br>
+      &nbsp;&nbsp;&lt;x:valueOf select=&quot;@name&quot;&gt;<br>
+      &lt;/x:forEach&gt; </code></td>
+  </tr>
+  <tr> 
+    <td width="55%"> 
+      <p><code><b>&lt;if&gt; <br>
+        &nbsp;select<br>
+        </b></code><br>
+        Simple conditional tag, which evalutes its body if the supplied Xpath 
+        expression evaluates to true (as if by a call to the XPath &quot;boolean&quot; 
+        function).</p>
+    </td>
+    <td width="45%"><code>&lt;x:if select=&quot;$customer/[location='UK']&quot;&gt;<br>
+      &nbsp;&nbsp;UK based<br>
+      &lt;/x:if&gt;</code> </td>
+  </tr>
+  <tr> 
+    <td width="55%"> 
+      <p><code><b>&lt;choose&gt;<br>
+        </b></code><code><b>&lt;when&gt; <br>
+        &nbsp;select</b><b><br>
+        &lt;otherwise&gt;</b></code><br>
+        <br>
+        Simple conditional tag that establishes a context for mutually exclusive 
+        conditional operations, marked by<code> &lt;when&gt;</code> and<code> 
+        &lt;otherwise&gt;.</code></p>
+    </td>
+    <td width="45%"><code>&lt;x:choose&gt;</code><code><br>
+      &nbsp;&nbsp;&lt;x:when select=&quot;...&quot;&gt;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+      &nbsp;&nbsp;&lt;/x:when&gt; </code><code><br>
+      &nbsp;&nbsp;&lt;x:when select=&quot;...&quot;&gt;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+      &nbsp;&nbsp;&lt;/x:when&gt; </code><code><br>
+      &nbsp;&nbsp;...<br>
+      &nbsp;&nbsp;&lt;x:otherwise&gt;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+      &nbsp;&nbsp;&lt;/x:otherwise&gt; </code><code></code><code> </code><code> 
+      <br>
+      &lt;/x:choose&gt; </code></td>
+  </tr>
+</table>
+<br>
+<table width="100%" border="1" cellpadding="5">
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">XML Transformation 
+      Tags (xml)</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td width="39%"><b>Element</b></td>
+    <td width="61%"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="39%" height="123"> 
+      <p><code><b>&lt;transform&gt;<br>
+        </b><font color="#000000">source xslt </font><font color="#000000">transformer</font> 
+        <font color="#000000">result</font> <font color="#000000"></font>var <br>
+        <b></b><font color="#0000FF"> </font></code></p>
+      <p>Applies a transformation to an XML document given a specific XSLT stylesheet 
+        or a transformer object.</p>
+    </td>
+    <td width="61%" height="123"> 
+      <pre>&lt;c:import url=&quot;/xml/employees.xml&quot; var=&quot;xml&quot;/>
+&lt;c:import url=&quot;/xslt/customerList.xsl&quot; var=&quot;xslt&quot;/><br>&lt;x:xslt source=&quot;$xml&quot; xslt=&quot;$xslt&quot;/&gt;</pre>
+    </td>
+  </tr>
+  <tr> 
+    <td width="39%"> 
+      <p><code><b>&lt;param&gt;</b><br>
+        <font color="#000000"><b>name</b> value </font></code></p>
+      <p>Sub-element to specify request parameters for the enclosing &lt;transform&gt;.</p>
+    </td>
+    <td width="61%"> 
+      <pre>
+
+&lt;x:transform source=&quot;$xml&quot; xslt=&quot;$xslt&quot;&gt;<br>  &lt;x:param name=&quot;foo&quot; value=&quot;foo-value&quot;/&gt;<br>&lt;/x:transform&gt;</pre>
+      <p>&nbsp;</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="39%"> 
+      <p><code><b>&lt;transformer&gt;</b><br>
+        <font color="#000000">xslt <b>var</b></font></code></p>
+      <p>Creates a &quot;transformer&quot; object for more efficient transformations 
+        that use the same XSLT stylesheet.</p>
+    </td>
+    <td width="61%"> 
+      <pre>&lt;c:import url=&quot;/xslt/style.xsl&quot; var=&quot;xslt&quot;/&gt;<br>&lt;x:transformer xslt=&quot;$xslt&quot; var=&quot;transformer&quot;/&gt;<br>...<br>&lt;x:transform source=&quot;$xml&quot; transformer=&quot;$transformer&quot; /&gt;
+...
+&lt;x:transform source=&quot;$xml2&quot; transformer=&quot;$transformer&quot; /&gt;</pre>
+    </td>
+  </tr>
+</table>
+<h2>Tag Library Validators</h2>
+<table width="100%" border="1" cellpadding="5">
+  <tr bgcolor="#000099"> 
+    <td colspan="2"><b><font color="#FFFFFF" size="+1">Tag Library Validators</font></b></td>
+  </tr>
+  <tr> 
+    <td colspan="2">EA2 comes with two TagLibraryValidators (TLVs), which are 
+      classes that ensure pages meet particular criteria before they can run.</td>
+  <tr bgcolor="#FFFF66"> 
+    <td width="31%"><b>Tag Library Validator</b></td>
+    <td width="48%"><b>Sample Usage</b></td>
+  </tr>
+  <tr> 
+    <td width="19%"><code><b>JsptlCoreTLV</b></code><br>
+    </td>
+    <td width="53%"> 
+      <p>(Nothing special is required to use the Core TLV. This validator simply 
+        does its best to ensure that JSTL's tags are used correctly, reporting 
+        useful error messages when it can.)</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="19%"><code><b>ScriptFreeTLV</b></code></td>
+    <td width="53%"> The following directive on a JSP page invokes the ScriptFreeTLV 
+      validator to make sure that no scripting elements appear on the page: 
+      <pre>&lt;%@ taglib prefix="scriptfree"
+    uri="http://jakarta.apache.org/taglibs/jsptl/scriptfree" %&gt;</pre>
+    </td>
+  </tr>
+</table>
+<h2>Expression Language Selection</h2>
+<table width="100%" border="1" cellpadding="5">
+  <tr bgcolor="#000099"> 
+    <td colspan="2"><b><font color="#FFFFFF" size="+1">Expression Language Selection</font></b></td>
+  </tr>
+  <tr> 
+    <td colspan="2"> 
+      <p>Temporary mechanisms that allow for runtime pluggability of expression-language 
+        evaluators. This allows for experimentation with expression languages 
+        and is not expected to remain in the final release of JSTL 1.0.</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="24%" bgcolor="#FFFF66"><b>Element</b></td>
+    <td width="76%" bgcolor="#FFFF66"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="24%"> 
+      <p><code><b>context parameter </b></code></p>
+      <p>Establishes the default Expression Language used by the web application.<br>
+      </p>
+    </td>
+    <td width="76%"> 
+      <p><code>&lt;context-param&gt;<br>
+        &nbsp;&nbsp;&lt;param-name&gt;<br>
+        &nbsp;&nbsp;&nbsp; </code><code>javax.servlet.jstl.ExpressionEvaluatorClass<br>
+        &nbsp;&nbsp;&lt;/param-name&gt;<br>
+        &nbsp;&nbsp;&lt;param-value&gt;<br>
+        &nbsp;&nbsp;&nbsp; org.apache.taglibs.standard.lang.spel.Evaluator<br>
+        &nbsp;&nbsp;&lt;/param-value&gt;<br>
+        &lt;/context-param&gt;</code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="24%"> 
+      <p><code><b>&lt;expressionLanguage&gt;</b></code></p>
+      <p>Change the current Expression Language</p>
+    </td>
+    <td width="76%"> 
+      <p><code>&lt;c:expressionLanguage<br>
+        &nbsp;&nbsp;</code><code>evaluator=&quot;org.apache.taglibs.jstl.lang.jpath.Evaluator"&gt;<br>
+        &nbsp;&nbsp;...<br>
+        &lt;/c:expressionLanguage&gt;</code></p>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+</html>
