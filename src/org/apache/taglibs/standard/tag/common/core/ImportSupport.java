@@ -349,7 +349,7 @@ public abstract class ImportSupport extends BodyTagSupport
 
 	        // okay, we've got a stream; encode it appropriately
 	        Reader r = null;
-	        if (charEncoding != null)
+	        if (charEncoding != null && !charEncoding.equals(""))
 		    r = new InputStreamReader(i, charEncoding);
 	        else {
 		    String responseAdvisoryEncoding = uc.getContentEncoding();
@@ -481,7 +481,7 @@ public abstract class ImportSupport extends BodyTagSupport
 	    if (isWriterUsed)
 		return sw.toString();
 	    else if (isStreamUsed) {
-		if (charEncoding != null)
+		if (charEncoding != null && !charEncoding.equals(""))
 		    return bos.toString(charEncoding);
 		else
 		    return bos.toString(DEFAULT_ENCODING);
