@@ -335,7 +335,7 @@
     </copy>
       
     <!-- README file copied at the top level of the distribution -->
-    <copy file="README.dist" tofile="${dist.library}/README"/>
+    <copy file="README.bin" tofile="${dist.library}/README"/>
     
   </target>
 
