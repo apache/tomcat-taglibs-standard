@@ -229,25 +229,31 @@ public abstract class BundleSupport extends BodyTagSupport {
 	Locale loc = null;
 	ResourceBundle ret = null;
 	    
-	loc = (Locale)
-	    pageContext.findAttribute(LocaleSupport.LOCALE_ATTRIBUTE);
+	loc = LocaleSupport.getLocale(pageContext, LocaleSupport.LOCALE);
 	if (loc != null) {
-	    // use resource bundle with specified locale
+	    /*
+	     * Use resource bundle with specified locale. If specified locale
+	     * is not available, fall back on container's default locale.
+	     */
 	    ret = getBundle(basename, loc);
 	} else {
 	    // use resource bundle with best matching locale
 	    ret = getBestMatch(pageContext, basename);
 	    if (ret == null) {
-		// no match available, check if fallback locale exists
-		String fallback = (String)
-		    pageContext.findAttribute(FALLBACK_LOCALE);
-		if (fallback == null)
-		    fallback = pageContext.getServletContext().
-			getInitParameter(FALLBACK_LOCALE);
-		if (fallback != null) {
-		    // use resource bundle with fallback locale
-		    loc = LocaleSupport.parseLocale(fallback, null);
+		// no match available, use fallback locale (if present)
+		loc = LocaleSupport.getLocale(pageContext, FALLBACK_LOCALE);
+		if (loc != null) {
 		    ret = getBundle(basename, loc);
+		} else {
+		    /*
+		     * No fallback locale specified. Use container's default
+		     * locale, which was already considered by
+		     * ResourceBundle.getBundle() in getBestMatch(), but was
+		     * not returned by the latter, since it did not match
+		     * the language/country of any of the client's preferred
+		     * locales
+		     */
+		    ret = getBundle(basename, Locale.getDefault());
 		}
 	    }
 	}

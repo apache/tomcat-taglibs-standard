@@ -85,7 +85,7 @@ customers in their language, and it may even want to label its GUI components
 in that language (for example, a cancel button would be labelled
 <tt>Cancel</tt>&nbsp;
 for English and <tt>Abbrechen</tt> for German speaking customers).
-<p>Any action that requires a locale first calls the <tt>getLocales()</tt>
+<p>Any action that requires a locale first calls the <tt>ServletRequest.getLocales()</tt>
 method on the incoming request, which provides a list, in order of preference,
 of the locales that the client wants to use. This list is processed differently
 depending on whether the action is an I18N or a formatting tag.
@@ -103,27 +103,31 @@ as follows:
 the action checks if there is a matching locale for the resource bundle
 in question, by passing the resource bundle's base name and the client's
 requested locale to the <tt>java.util.ResourceBundle.getBundle()</tt> method.
-This method appends the name of the requested client locale to the given
-base name and searches for a resource bundle with that name. A resource
-bundle may be backed by a class or a properties file. If no resource bundle
-with that name exists (and the requested locale has both a language and
-a country component), the method appends just the requested locale's language
-name to the given base name and searches for a resource bundle with that
-name. If no resource bundle with that name exists, and the requested locale
-differs from the container's default locale, the method continues the search
-by appending the name of the container's default locale to the given base
-name. If no resource bundle with that name exists (and the container's
-default locale has both a language and a country component), the method
+<p><tt>ResourceBundle.getBundle()</tt> implements the following search
+algorithm for resource bundles: It first appends the name of the requested
+client locale to the given base name and searches for a resource bundle
+with that name. A resource bundle may be backed by a class or a properties
+file. If no resource bundle with that name exists (and the requested locale
+has both a language and a country component), <tt>ResourceBundle.getBundle()</tt>
+appends just the requested locale's language name to the given base name
+and searches for a resource bundle with that name. If no resource bundle
+with that name exists, and the requested locale differs from the default
+locale of the container's Java runtime, <tt>ResourceBundle.getBundle()
+</tt>continues
+the search by appending the name of the container's default locale to the
+given base name. If no resource bundle with that name exists (and the container's
+default locale has both a language and a country component),
+<tt>ResourceBundle.getBundle()</tt>
 appends just the language component of the container's default locale to
-the given base name. If there still is no match, the method searches for
-a resource bundle with just the given base name (without any locale name
-appended to it). If there still is no match, <tt>ResourceBundle.getBundle()
+the given base name. If there still is no match, <tt>ResourceBundle.getBundle()</tt>
+searches for a resource bundle with just the given base name (without any
+locale name appended to it). If there still is no match, <tt>ResourceBundle.getBundle()
 </tt>raises
-a <tt>MissingResourceException</tt>, which is caught by the tag handler
-implementation and interpreted as if the resource bundle with the given
-base name does not exist for the requested client locale.
-<p>As a result of the search algorithm implemented by <tt>ResourceBundle.getBundle()</tt>,
-the locale of the resource bundle returned by <tt>ResourceBundle.getBundle()
+a <tt>MissingResourceException</tt>, which is caught by the action's tag
+handler implementation and interpreted as if the resource bundle with the
+given base name does not exist for the requested client locale.
+<p>As a result of this search algorithm for resource bundles, the locale
+of the resource bundle returned by <tt>ResourceBundle.getBundle()
 </tt>may
 either match both the country and language components of the requested
 locale ("exact match"), only its language ("language match"), or neither
@@ -134,13 +138,16 @@ specifies a country.
 <p>If there is an exact match, it is used, and no further client locales
 are checked. Otherwise, all remaining client locales are checked, and the
 first language match is used. If no such match exists, the fallback locale
-stored in the <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt> attribute,
+from the <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt> scoped attribute,
 which is searched in the page, request, session (if valid), and application
-scope(s) (in this order), is used (see Section 16: Configuration parameters).
-If this attribute is not found, or there still is no match, an error message
-of the form <tt>"???&lt;key>???"</tt> (where
-<tt>&lt;key></tt> is the name
-of the message key to be looked up) is returned (see Section 8: &lt;message>).
+scope(s) (in this order), or context configuration parameter (see Section
+17.2) is used. If no fallback locale has been specified, the default locale
+of the container's Java runtime is used. If no resource bundle (with the
+given base name) exists for the fallback or the container's default locale,
+an error message of the form <tt>"???&lt;key>???"</tt> (where
+<tt>&lt;key></tt>
+is the name of the message key to be looked up) is returned (see Section
+8).
 <p>The behavior is implementation-defined if the set of available resource
 bundles changes during execution of the page. Implementations may thus
 cache the best matching locale for a given resource bundle when one is
@@ -211,11 +218,11 @@ to the algorithm described in Section 2.1.1) and used as the formatting
 locale.
 <p>Otherwise, the formatting action checks, for each of the client's preferred
 locales (in order of preference), if there is a matching locale available.
-The <tt>&lt;formatNumber>
-</tt>and<tt> &lt;parseNumber></tt>, and the <tt>&lt;formatDate>
-</tt>and
-<tt>&lt;parseDate>
-</tt>actions
+The <tt>&lt;formatNumber></tt>
+and<tt> &lt;parseNumber></tt>, and the <tt>&lt;formatDate></tt>
+and
+<tt>&lt;parseDate></tt>
+actions
 determine the available locales by calling <tt>java.text.NumberFormat.getAvailableLocales()</tt>
 and <tt>java.text.DateFormat.getAvailableLocales()</tt>, respectively.
 If there is an exact match (that is, a client's preferred locale specifies
@@ -227,34 +234,33 @@ has been determined, it is cached, so that any subsequent formatting actions
 on the same page do not have to determine it again.
 <h4>
 2.2. Application-based locales</h4>
-The browser-sensing capabilities for locales can be disabled by setting
-the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> (scoped) attribute. This
-attribute may be set directly by application code for any of the JSP scopes.
-For example, an application might let its users pick their preferred locale
-and then set the <tt>javax.servlet.jsp.jstl.i18n.locale
-</tt>attribute
-accordingly. Alternatively, the <tt>&lt;locale> </tt>action may be used
-to set the <tt>javax.servlet.jsp.jstl.i18n.locale </tt>attribute with page
-scope only. This may be useful in the case where a client's preferred locale
-is retrieved from a database (using the JSTL database tags)and installed
-on the page using the <tt>&lt;locale></tt> tag.
-<p>The <tt>javax.servlet.jsp.jstl.i18n.locale</tt> attribute is searched
+The browser-sensing capabilities for locales may be disabled by setting
+the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> scoped attribute or context
+configuration parameter (see Section 17.1). The scoped attribute is searched
 in the page, request, session (if valid), and application scope(s) (in
-this order).
+this order), and may be set directly by application code for any of these
+scopes. For example, an application might let its users pick their preferred
+locale and then set the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> attribute
+accordingly. Alternatively, the <tt>&lt;locale></tt> action may be used
+to set this attribute with page scope only. This may be useful in the case
+where a client's preferred locale is retrieved from a database (using the
+JSTL database tags)and installed on the page using the <tt>&lt;locale></tt>
+tag.
 <h3>
 3. Response encoding</h3>
-Every action that is responsible for establishing a locale passes that
-locale to the <tt>setLocale()</tt> method of the <tt>javax.servlet.ServletResponse</tt>.
-(This assumes that the response is buffered with a big enough buffer size,
-since <tt>setLocale()</tt> and <tt>setContentType()</tt> must be called
-before <tt>ServletResponse.getWriter()</tt> in order for the charset to
-affect the construction of the writer.)
+Any I18N-capable formatting action defined in this Functional Description
+that deals with locales sets the response's locale by calling <tt>ServletResponse.setLocale()</tt>
+with the locale determined according to the logic described in Section
+2. This assumes that the response is buffered with a big enough buffer
+size, since <tt>ServletResponse.setLocale()</tt> and <tt>ServletResponse.setContentType()</tt>
+must be called before <tt>ServletResponse.getWriter()</tt> in order for
+the specified locale or charset to affect the construction of the writer.
 <p>More specifically, the response's <tt>setLocale()</tt> method is always
 called by the <tt>&lt;locale></tt> action. In addition, it is called by
 the following actions if browser-sensing capabilities for locales are enabled
 (that is, in the absence of the <tt>javax.servlet.jsp.jstl.i18n.locale</tt>
-attribute):
-<br>&nbsp;
+scoped attribute or context configuration parameter):
+<ul>
 <li>
 Any <tt>&lt;bundle></tt> action.</li>
 
@@ -264,12 +270,10 @@ name (defined by the <tt>javax.servlet.jsp.jstl.i18n.basename</tt> attribute).</
 
 <li>
 A <tt>&lt;formatNumber></tt> or <tt>&lt;formatDate></tt> action that is
-not enclosed within a <tt>&lt;bundle> </tt>action.</li>
-
-<br>&nbsp;
-<p>&nbsp;
-<p>After an action has called <tt>ServletResponse.setLocale()</tt>, it
-determines the character encoding associated with the locale (by calling
+not enclosed within a <tt>&lt;bundle></tt> action.</li>
+</ul>
+After an action has called <tt>ServletResponse.setLocale()</tt>, it determines
+the character encoding associated with the locale (by calling
 <tt>ServletResponse.getCharacterEncoding()</tt>)
 and stores it in the <tt>javax.servlet.jsp.jstl.i18n.request.charset</tt>
 session attribute. This attribute may be used by the <tt>&lt;requestEncoding></tt>
@@ -292,8 +296,8 @@ zone.
 <p>The <tt>javax.servlet.jsp.jstl.i18n.timeZone</tt> attribute may be set
 directly by application code for any of the JSP scopes. For example, an
 application might let its users pick their preferred time zone and then
-set the <tt>javax.servlet.jsp.jstl.i18n.timeZone
-</tt>attribute accordingly.
+set the <tt>javax.servlet.jsp.jstl.i18n.timeZone</tt>
+attribute accordingly.
 Alternatively, the <tt>&lt;timeZone></tt> action may be used to set the
 <tt>javax.servlet.jsp.jstl.i18n.timeZone</tt>
 attribute for the current page context. This may be useful in the case
@@ -305,11 +309,10 @@ in the page, request, session (if valid), and application scope(s) (in
 this order). If not found, the JSP container's time zone is used.
 <h3>
 5. &lt;locale></h3>
-The <tt>&lt;locale></tt> action may be used to set or override the JSP
-attribute
-<tt>javax.servlet.jsp.jstl.i18n.locale</tt> with the locale specified
-by the <tt>value</tt> attribute in the scope given by the <tt>scope</tt>
-attribute (default: "page").
+The <tt>&lt;locale></tt> action may be used to set or override the 
+<tt>javax.servlet.jsp.jstl.i18n.locale</tt>
+scoped attribute with the locale specified by the <tt>value</tt> attribute
+in the scope given by the <tt>scope</tt> attribute (default: "page").
 <p>The locale specified by the <tt>value</tt> attribute must contain a
 two-letter (lower-case) language code (as defined by ISO-639), and may
 contain a two-letter (upper-case) country code (as defined by ISO-3166)<tt>.
@@ -321,7 +324,7 @@ javadocs for more information on variants.
 <p>Example:
 <p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:locale value="en-US" variant="UNIX"/></tt>
 <p>By using this action, the browser-sensing capabilities for locales described
-in Section 2 of this functional description are disabled. This means that
+in Section 2 of this Functional Description are disabled. This means that
 if this action is being used, it should be declared at the beginning of
 a page, before any other I18N-capable formatting tags. Otherwise, a different
 locale might be used up to the position in the page where the <tt>&lt;locale></tt>
@@ -341,8 +344,8 @@ a full name (such as "America/Los_Angeles"), or a custom format (such as
 </tt>for more details
 on the supported time zone formats.
 <p>The <tt>var</tt> attribute may be used to expose the time zone as a
-JSP-scoped attribute of type <tt>java.util.TimeZone
-</tt>(with visibility
+JSP-scoped attribute of type <tt>java.util.TimeZone</tt>
+(with visibility
 <tt>AT_END</tt>),
 so that it can be referenced by any subsequent
 <tt>&lt;formatDate></tt>
@@ -367,10 +370,10 @@ is specified via the <tt>basename</tt> attribute:
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;user-of-bundle/></tt>
 <br><tt>&nbsp;&nbsp;&nbsp; &lt;/fmt:bundle></tt>
 <p>The resource bundle's locale is determined according to Section 2 of
-this functional description.
+this Functional Description.
 <p>The <tt>var</tt> attribute may be used to expose the resource bundle
-as a JSP-scoped attribute of type <tt>java.util.ResourceBundle
-</tt>(with
+as a JSP-scoped attribute of type <tt>java.util.ResourceBundle</tt>
+(with
 visibility <tt>AT_END</tt>), so that it can be referenced by any subsequent
 <tt>&lt;message></tt>
 actions that take a <tt>bundle</tt> attribute:
@@ -398,8 +401,8 @@ to a given message key.
 missing, it is read from the tag's body content.
 <p>The resource bundle in which to look up the message key may be given
 by the <tt>bundle</tt> attribute. If this attribute is missing, and the
-<tt>&lt;message>
-</tt>action
+<tt>&lt;message></tt>
+action
 is nested inside a <tt>&lt;bundle></tt> tag, the resource bundle to use
 is taken from the enclosing <tt>&lt;bundle></tt> tag. Otherwise, the resource
 bundle with the default base name given by the
@@ -426,8 +429,8 @@ bundle with the given base name does not exist, a message is logged to
 the servlet context, and an error message of the form <tt>"???&lt;key>???"</tt>
 (where
 <tt>&lt;key></tt> is the name of the undefined key) is output to
-the current <tt>JspWriter
-</tt>object.
+the current <tt>JspWriter</tt>
+object.
 <p>If the message corresponding to the given key is <i>compound</i>, that
 is, contains one or more variables, it may be supplied with argument values
 for these variables via the <tt>messageArgs</tt> attribute or one or more
@@ -526,7 +529,7 @@ one of "number", "currency", or "percent" (default: "number"), the given
 numeric value is formatted as a number, currency, or percentage, respectively,
 using the default formatting pattern for numbers (currencies, percentages)
 of the page's locale, which is determined according to Section 2 of this
-functional description.
+Functional Description.
 <p>The result is output to the current
 <tt>JspWriter</tt> object, unless
 the <tt>var</tt> attribute is given, in which case it is stored (as a string)
@@ -587,7 +590,7 @@ numeric string is parsed as a number, currency, or percentage, respectively,
 using the default formatting pattern for numbers (currencies, percentages)
 of the locale specified by the <tt>parseLocale</tt> attribute. If the <tt>parseLocale</tt>
 attribute is missing, the page's locale is used, which is determined according
-to Section 2 of this functional description.
+to Section 2 of this Functional Description.
 <p>If the number specified via the <tt>value</tt> attribute uses a format
 different from the page locale's default, the pattern required to parse
 it may be specified using the <tt>pattern</tt> attribute.
@@ -614,7 +617,7 @@ date, or both the time and date components of the date specified via the
 attribute are formatted, using one of the predefined formatting styles
 for dates (specified via the <tt>dateStyle</tt> attribute) and times (specified
 via the <tt>timeStyle</tt> attribute) of the page's locale, which is determined
-according to Section 2 of this functional description.&nbsp; Legal values
+according to Section 2 of this Functional Description.&nbsp; Legal values
 for the
 <tt>dateStyle</tt> and <tt>timeStyle</tt> attributes are "default",
 "short", "medium ", "long", and "full" (default: "default").
@@ -687,7 +690,7 @@ styles for dates (specified via the
 (specified via the <tt>timeStyle</tt> attribute) of the locale specified
 by the <tt>parseLocale</tt> attribute. If the <tt>parseLocale</tt> attribute
 is missing, the page's locale is used, which is determined according to
-Section 2 of this functional description. Legal values for the
+Section 2 of this Functional Description. Legal values for the
 <tt>dateStyle</tt>
 and <tt>timeStyle</tt> attributes are "default", "short", "medium ", "long",
 and "full" (default: "default").
@@ -695,8 +698,8 @@ and "full" (default: "default").
 to parse it may be specified via the <tt>pattern</tt> attribute.
 <p>If the given time information does not specify a time zone, it is interpreted
 in the time zone given by the <tt>timeZone</tt> attribute.&nbsp; If this
-attribute is missing, and the <tt>&lt;parseDate>
-</tt>action is nested
+attribute is missing, and the <tt>&lt;parseDate></tt>
+action is nested
 inside a <tt>&lt;timeZone></tt> tag, the time zone is taken from the enclosing
 <tt>&lt;timeZone></tt>
 tag. Otherwise, the default time zone given by the
@@ -743,18 +746,18 @@ action uses its fully qualified class name as the key to look up in the
 resource bundle for exception messages.
 <p>Otherwise, the <tt>&lt;exception></tt> action uses the return value
 of the exception's
-<tt>getMessageKey()</tt> method as the key . If <tt>getMessageKey</tt>
+<tt>getMessageKey()</tt> method as the key . If <tt>getMessageKey()</tt>
 returns null, the exception's fully qualified class name is used as the
 key.
 <p>The key is looked up in the resource bundle given by the <tt>bundle</tt>
 attribute. If this attribute is missing, and the
-<tt>&lt;exception> </tt>action
-is nested inside a <tt>&lt;bundle> </tt>tag, the resource bundle to use
-is taken from the enclosing <tt>&lt;bundle></tt> tag. Otherwise, the default
-resource bundle for exception messages, whose default base name is given
-by the <tt>javax.servlet.jsp.jstl.i18n.exception.basename</tt> scoped attribute,
-is used. This attribute is searched in the page, request, session (if valid),
-and application scope(s) (in this order).
+<tt>&lt;exception></tt>
+action is nested inside a <tt>&lt;bundle></tt> tag, the resource bundle
+to use is taken from the enclosing <tt>&lt;bundle></tt> tag. Otherwise,
+the default resource bundle for exception messages, whose default base
+name is given by the <tt>javax.servlet.jsp.jstl.i18n.exception.basename</tt>
+scoped attribute, is used. This attribute is searched in the page, request,
+session (if valid), and application scope(s) (in this order).
 <p>The result of looking up the key in the resource bundle is used as the
 localized exception message. If the key is not found in the resource bundle,
 or the default resource bundle for exception messages does not exist, the
@@ -775,29 +778,28 @@ exception message.
 The <tt>&lt;requestEncoding></tt> action may be used to set the request's
 character encoding, in order to be able to correctly decode request parameter
 values whose encoding&nbsp; is different from ISO-8859-1. This action is
-needed because browsers do not follow the HTTP spec by failing to include
-a <tt>Content-Type</tt> header in their requests.
+needed because browsers do not follow the HTTP specification by failing
+to include a <tt>Content-Type</tt> header in their requests.
 <p>More specifically, the purpose of the <tt>&lt;requestEncoding></tt>
 action is to set the request encoding to be the same as the response encoding
-in a page invoked by a form included in the response. Even when the encoding
-of the page that is generating the response containing the form is specified
-via the <tt>contentType</tt> attribute of a page directive, the response's
-locale (and thus character encoding) may differ from the value specified
-in the page directive if the page uses a <tt>&lt;locale> </tt>action or
-has enabled browser-sensing capabilities for locales, in which case the
-tag handler implementation of the I18N-capable formatting action calls
-<tt>ServletResponse.setLocale()</tt> (which also sets the response's encoding)
-with the specified or best-matching locale, respectively.
-<p>This assumes that the JSP&nbsp;container calls <tt>ServletResponse.setContentType()</tt>
+in a page invoked by a form included in the response. This is needed because
+even if the encoding of the page that is generating the response containing
+the form is specified via the <tt>contentType</tt> attribute of a page
+directive, the response's actual locale (and thus character encoding) may
+differ from the value specified in the page directive if the page contains
+an I18N-capable formatting action which sets the response's locale (and
+thus character encoding) by calling <tt>ServletResponse.setLocale()</tt>,
+thereby overriding any encoding specified in the page directive (see Section
+3). This assumes that the JSP container calls <tt>ServletResponse.setContentType()</tt>
 (with the value of the page directive's <tt>contentType</tt> attribute,
 if present) at the beginning of the page, and that any subsequent call
-to<tt> ServletResponse.setLocale() </tt>(by an I18N-capable formatting
+to <tt>ServletResponse.setLocale()</tt> (by any I18N-capable formatting
 action in the page) overrides the page's existing encoding, so that the
-locale (and encoding) set by the last I18N-capable formatting action wins.
-(This assumes that the response is buffered with a big enough buffer size,
-since <tt>setLocale()</tt> and <tt>setContentType()</tt> must be called
-before <tt>ServletResponse.getWriter()</tt> in order for the charset to
-affect the construction of the writer.)
+locale (and encoding) set by the last I18N-capable formatting action in
+the page wins. (This assumes that the response is buffered with a big enough
+buffer size, since <tt>ServletResponse.setLocale()</tt> and <tt>ServletResponse.setContentType()</tt>
+must be called before <tt>ServletResponse.getWriter()</tt> in order for
+the specified locale or charset to affect the construction of the writer.)
 <p>Example:
 <p>&nbsp;&nbsp;&nbsp; <tt>&lt;fmt:requestEncoding value="Shift_JIS" /></tt>
 <p>This action calls the <tt>setCharacterEncoding()</tt> method on the
@@ -814,16 +816,40 @@ attribute, which is searched in the page, request, session (if valid),
 and application scope(s) (in this order). If this attribute is not found,
 the default character encoding (ISO-8859-1) is used.
 <h3>
-17. Configuration parameters</h3>
-This section discusses I18N- and formatting-related initialization parameters
-in a web application's deployment descriptor (DD) file.
+17. Context configuration parameters</h3>
+This section discusses I18N- and formatting-related context configuration
+parameters that may be specified in a web application's deployment descriptor.
 <h4>
-17.1 javax.servlet.jsp.jstl.i18n.basename</h4>
+17.1 javax.servlet.jsp.jstl.i18n.locale</h4>
+This parameter specifies the application's default locale. By specifying
+this parameter, browser-sensing capabilities for locales are disabled.
+<p>Example:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;web-app></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-name>javax.servlet.jsp.jstl.i18n.locale&lt;/param-name></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-value>fr-CA&lt;/param-value></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
+<h4>
+17.2 javax.servlet.jsp.jstl.i18n.fallbackLocale</h4>
+This parameter specifies the application's default fallback locale for
+resource bundles, which is used if browser-sensing capabilities are enabled,
+but none of the available locales for the resource bundle in question match
+any of the client's preferred locales.
+<p>Example:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;web-app></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-name>javax.servlet.jsp.jstl.i18n.fallbackLocale&lt;/param-name></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-value>fr-CA&lt;/param-value></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
+<h4>
+17.3 javax.servlet.jsp.jstl.i18n.basename</h4>
 This parameter specifies the base name of the application's default resource
 bundle, which is used if a <tt>&lt;message></tt> action does not specify
 a <tt>bundle</tt> attribute and is not nested inside a
-<tt>&lt;bundle>
-</tt>action.
+<tt>&lt;bundle></tt>
+action.
 <p>Example:
 <p><tt>&nbsp;&nbsp;&nbsp; &lt;web-app></tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;context-param></tt>
@@ -832,7 +858,7 @@ a <tt>bundle</tt> attribute and is not nested inside a
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/context-param></tt>
 <br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
 <h4>
-17.2 javax.servlet.jsp.jstl.i18n.exception.basename</h4>
+17.4 javax.servlet.jsp.jstl.i18n.exception.basename</h4>
 This parameter specifies the base name of the application's default resource
 bundle for exception messages, which is used by the <tt>&lt;exception></tt>
 action.
@@ -844,20 +870,7 @@ action.
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/context-param></tt>
 <br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
 <h4>
-17.3 javax.servlet.jsp.jstl.i18n.fallbackLocale</h4>
-This parameter specifies the application's default fallback locale, which
-is used if browser-sensing capabilities are enabled, but none of the available
-locales for the resource bundle in question match any of the client's preferred
-locales.
-<p>Example:
-<p><tt>&nbsp;&nbsp;&nbsp; &lt;web-app></tt>
-<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;context-param></tt>
-<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-name>javax.servlet.jsp.jstl.i18n.fallbackLocale&lt;/param-name></tt>
-<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-value>fr-CA&lt;/param-value></tt>
-<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/context-param></tt>
-<br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
-<h4>
-17.4 javax.servlet.jsp.jstl.i18n.timeZone</h4>
+17.5 javax.servlet.jsp.jstl.i18n.timeZone</h4>
 This parameter specifies the application's default time zone in which any
 times and dates formatted using the <tt>&lt;formatDate></tt> action are
 represented.
@@ -870,11 +883,11 @@ represented.
 <br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
 <h3>
 18. Developer support</h3>
-The locale-determination logic for resource bundles described in Section
-2.1.1 is exposed as a general convenience method so it may be used by any
-tag handler implementation that needs to produce localized messages. For
-example, a tag handler's exception messages may be intended directly for
-user consumption on an error page and therefore need to be localized.
+The locale-determination logic for resource bundles, as described in Section
+2.1.1 of this Functional Description, is exposed as a general convenience
+method so that it may be used by any tag handler implementation that needs
+to produce localized messages, e.g., exception messages that are intended
+directly for user consumption on an error page.
 <p>The convenience method, named <tt>getLocalizedMessage()</tt> and exposed
 by the <tt>org.apache.taglibs.jstl.extra.i18n.Locale</tt> class, looks
 up a given message key in the resource bundle with a given base name (or
@@ -893,7 +906,7 @@ scoped</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * attribute and whose locale is determined
 according to the</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * algorithm described in Section 2.1.1
-of the functional description.</tt>
+of this Functional Description.</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * If the javax.servlet.jsp.jstl.i18n.basename
 attribute is not found</tt>
@@ -927,7 +940,7 @@ bundle with the given</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * base name whose locale is determined
 according to the</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * algorithm described in Section 2.1.1
-of the functional description.</tt>
+of this Functional Description.</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * If no resource bundle with the given
 base name exists,</tt>
@@ -968,7 +981,7 @@ scoped</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * attribute and whose locale is determined
 according to the</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * algorithm described in Section 2.1.1
-of the functional description.</tt>
+of this Functional Description.</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * Before being returned, the result of
 the lookup undergoes parametric</tt>
@@ -1012,7 +1025,7 @@ bundle with the given</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * base name whose locale is determined
 according to the</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * algorithm described in Section 2.1.1
-of the functional description.</tt>
+of this Functional Description.</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
 <br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * Before being returned, the result of
 the lookup undergoes parametric</tt>

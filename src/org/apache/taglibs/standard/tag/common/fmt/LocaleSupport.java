@@ -74,8 +74,7 @@ public abstract class LocaleSupport extends TagSupport {
     //*********************************************************************
     // Package-scoped constants
 
-    static final String LOCALE_ATTRIBUTE =
-	"javax.servlet.jsp.jstl.i18n.locale";
+    static final String LOCALE = "javax.servlet.jsp.jstl.i18n.locale";
 
     
     //*********************************************************************
@@ -125,7 +124,7 @@ public abstract class LocaleSupport extends TagSupport {
 
     public int doEndTag() throws JspException {
 	Locale locale = parseLocale(value, variant);
-	pageContext.setAttribute(LOCALE_ATTRIBUTE, locale, scope);
+	pageContext.setAttribute(LOCALE, locale, scope);
 	setResponseLocale(pageContext, locale);
 
 	return EVAL_PAGE;
@@ -252,7 +251,7 @@ public abstract class LocaleSupport extends TagSupport {
 				      Tag fromTag,
 				      boolean format,
 				      Locale[] avail) {
-	Locale ret = (Locale) pageContext.findAttribute(LOCALE_ATTRIBUTE);
+	Locale ret = (Locale) pageContext.findAttribute(LOCALE);
 	if (ret == null) {
 	    Tag t = findAncestorWithClass(fromTag, BundleSupport.class);
 	    if (t != null) {
@@ -282,6 +281,37 @@ public abstract class LocaleSupport extends TagSupport {
 	 */
 	if (format)
 	    LocaleSupport.setResponseLocale(pageContext, ret);
+
+	return ret;
+    }
+
+    /*
+     * Returns the locale specified by the named scoped attribute or context
+     * configuration parameter.
+     *
+     * <p> The named scoped attribute is searched in the page, request,
+     * session (if valid), and application scope(s) (in this order). If no such
+     * attribute exists in any of the scopes, the locale is taken from the
+     * named context configuration parameter.
+     *
+     * @param pageContext the page in which to search for the named scoped
+     * attribute or context configuration parameter
+     * @param name the name of the scoped attribute or context configuration
+     * parameter
+     *
+     * @return the locale specified by the named scoped attribute or context
+     * configuration parameter, or <tt>null</tt> if no scoped attribute or
+     * configuration parameter with the given name exists
+     */
+    static Locale getLocale(PageContext pageContext, String name) {
+	Locale ret = (Locale) pageContext.findAttribute(name);
+	if (ret == null) {
+	    String loc =
+		pageContext.getServletContext().getInitParameter(name);
+	    if (loc != null) {
+		ret = LocaleSupport.parseLocale(loc, null);
+	    }
+	}
 
 	return ret;
     }
