@@ -60,6 +60,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.el.*;
+
 import org.apache.taglibs.standard.tag.common.core.*;
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.resources.Resources;
@@ -173,11 +175,14 @@ public class SetSupport extends BodyTagSupport {
                                     Resources.getMessage("SET_NO_SETTER_METHOD",
 				        property));
                             }
-			    if (result != null) {
+			    if (result != null) {  
+                                try {
 			        m.invoke(target,
 			             new Object[] { 
-				       ExpressionEvaluatorManager.coerce(
-					  result, m.getParameterTypes()[0])});
+                                         convertToExpectedType(result, m.getParameterTypes()[0])});
+                                } catch (javax.servlet.jsp.el.ELException ex) {
+                                    throw new JspTagException(ex);
+                                }
 			    } else {
 				m.invoke(target, new Object[] { null });
 			    }
@@ -204,7 +209,23 @@ public class SetSupport extends BodyTagSupport {
 
 	return EVAL_PAGE;
     }
-
+    
+    /**
+     * Convert an object to an expected type according to the conversion
+     * rules of the Expression Language.
+     */
+    private Object convertToExpectedType( final Object value,
+    Class expectedType )
+    throws javax.servlet.jsp.el.ELException {
+        ExpressionEvaluator evaluator = pageContext.getExpressionEvaluator();
+        return evaluator.evaluate( "${result}", expectedType,
+        new VariableResolver() {
+            public Object resolveVariable( String pName )
+            throws ELException {
+                return value;
+            }
+        }, null );
+    }
 
     //*********************************************************************
     // Accessor methods
