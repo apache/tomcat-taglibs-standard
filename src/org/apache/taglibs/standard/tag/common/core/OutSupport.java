@@ -142,24 +142,51 @@ public class OutSupport extends BodyTagSupport {
                            String text) throws IOException {
         JspWriter w = pageContext.getOut();
 	if (!escapeXml)
-            w.print(text);
+            w.write(text);
         else {
-            // avoid needless double-buffering (is this really more efficient?)
-            for (int i = 0; i < text.length(); i++) {
-                char c = text.charAt(i);
-                if (c == '&')
-                    w.print("&amp;");
-                else if (c == '<')
-                    w.print("&lt;");
-                else if (c == '>')
-                    w.print("&gt;");
-                else if (c == '"')
-                    w.print("&#034;");
-                else if (c == '\'')
-                    w.print("&#039;");
-                else
-                    w.print(c);
+            writeEscapedXml(text.toCharArray(), text.length(), w);
+        }
+    }
+
+    private static final int HIGHEST_SPECIAL = '>';
+    private static char[][] specialCharactersRepresentation =
+        new char[HIGHEST_SPECIAL + 1][];
+    static {
+        specialCharactersRepresentation['&'] = "&amp;".toCharArray();
+        specialCharactersRepresentation['<'] = "&lt;".toCharArray();
+        specialCharactersRepresentation['>'] = "&gt;".toCharArray();
+        specialCharactersRepresentation['"'] = "&#034;".toCharArray();
+        specialCharactersRepresentation['\''] = "&#039;".toCharArray();
+    }
+
+   /**
+     *
+     *  Optimized to create no extra objects and write directly
+     *  to the JspWriter using blocks of escaped and unescaped characters
+     *
+     */
+    private static void writeEscapedXml(char[] buffer, int length, JspWriter w)
+                                        throws IOException {
+        int start = 0;
+
+        for (int i = 0; i < length; i++) {
+            char c = buffer[i];
+            if (c <= HIGHEST_SPECIAL) {                
+                char[] escaped = specialCharactersRepresentation[c];
+                if (escaped != null) {
+                    // add unescaped portion
+                    if (start < i) {
+                        w.write(buffer,start,i-start);
+                    }
+                    // add escaped xml
+                    w.write(escaped);
+                    start = i + 1;
+                }
             }
+        }
+        // add rest of unescaped portion
+        if (start < length) {
+            w.write(buffer,start,length-start);
         }
     }
 }
