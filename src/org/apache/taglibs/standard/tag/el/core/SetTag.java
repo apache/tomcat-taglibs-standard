@@ -111,6 +111,7 @@ public class SetTag extends SetSupport {
 
     public void setValue(String value_) {
         this.value_ = value_;
+	this.valueSpecified = true;
     }
 
     public void setTarget(String target_) {

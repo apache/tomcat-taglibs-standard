@@ -75,6 +75,7 @@ public class SetSupport extends BodyTagSupport {
     // Internal state
 
     protected Object value;                             // tag attribute
+    protected boolean valueSpecified;			// status
     protected Object target;                            // tag attribute
     protected String property;                          // tag attribute
     private String var;					// tag attribute
@@ -96,6 +97,7 @@ public class SetSupport extends BodyTagSupport {
     // resets local state
     private void init() {
         value = var = null;
+	valueSpecified = false;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -117,7 +119,10 @@ public class SetSupport extends BodyTagSupport {
         if (value != null) {
 	    // ... reading our attribute
 	    result = value;
-  	} else {
+  	} else if (valueSpecified) {
+	    // ... accepting an explicit null
+	    result = null;
+	} else {
 	    // ... retrieving and trimming our body
 	    if (bodyContent == null || bodyContent.getString() == null)
 		result = "";

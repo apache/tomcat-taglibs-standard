@@ -73,6 +73,7 @@ public class SetTag extends SetSupport {
     // for tag attribute
     public void setValue(Object value) {
         this.value = value;
+	this.valueSpecified = true;
     }
 
     // for tag attribute
