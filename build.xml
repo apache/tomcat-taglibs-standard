@@ -163,6 +163,11 @@
       <include name="org/apache/taglibs/standard/lang/jstl/parser/jsp20/*"/>
       <include name="org/apache/taglibs/standard/lang/support/**"/>
     </javac>
+    <copy todir="${build.dir}/${taglib.name}/jsp20el">
+	<fileset dir="${library.src}/org/apache/taglibs/standard/lang/jstl">
+	    <include name="**/*.properties"/>
+	</fileset>
+    </copy>
   </target>
 
   <target name="jsp20el.dist" depends="jsp20el.build">
