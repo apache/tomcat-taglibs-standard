@@ -160,10 +160,19 @@ public class SetSupport extends BodyTagSupport {
                     PropertyDescriptor pd[] =
                         Introspector.getBeanInfo(target.getClass())
 			    .getPropertyDescriptors();
-                    for (int i = 0; i < pd.length; i++)
-                        if (pd[i].getName().equals(property))
+		    boolean succeeded = false;
+                    for (int i = 0; i < pd.length; i++) {
+                        if (pd[i].getName().equals(property)) {
 			    pd[i].getWriteMethod().invoke(target,
 			        new Object[] { result });
+			    succeeded = true;
+			}
+		    }
+		    if (!succeeded) {
+			throw new JspTagException(
+			    Resources.getMessage("SET_INVALID_PROPERTY",
+				property));
+		    }
 		} catch (IllegalAccessException ex) {
 		    throw new JspException(ex);
 		} catch (IntrospectionException ex) {
