@@ -69,6 +69,7 @@ public class DriverTag extends DriverTagSupport {
     private String driverClassNameEL;
     private String jdbcURLEL;
     private String userNameEL;
+    private String passwordEL;
 
     //*********************************************************************
     // Accessor methods
@@ -83,6 +84,10 @@ public class DriverTag extends DriverTagSupport {
 
     public void setUser(String userNameEL) {
 	this.userNameEL = userNameEL;
+    }
+
+    public void setPassword(String passwordEL) {
+	this.passwordEL = passwordEL;
     }
 
     //*********************************************************************
@@ -113,6 +118,11 @@ public class DriverTag extends DriverTagSupport {
         if (userNameEL != null) {
                 userName = (String) ExpressionEvaluatorManager.evaluate
                 ("user", userNameEL, String.class, this, pageContext);
+        }
+
+        if (passwordEL != null) {
+                password = (String) ExpressionEvaluatorManager.evaluate
+                ("password", passwordEL, String.class, this, pageContext);
         }
     }
 

@@ -68,6 +68,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * a simple DataSource for prototyping.</p>
  * 
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 public class DriverTagSupport extends TagSupport {
     private static final String DRIVER_CLASS_NAME =
@@ -82,6 +83,7 @@ public class DriverTagSupport extends TagSupport {
     protected String driverClassName;
     protected String jdbcURL;
     protected String userName;
+    protected String password;
 
     private int scope = PageContext.PAGE_SCOPE;
     private String var;
@@ -161,7 +163,11 @@ public class DriverTagSupport extends TagSupport {
     }
 
     private String getPassword() {
+	if (password != null) {
+	    return password;
+	}
 	ServletContext application = pageContext.getServletContext();
 	return application.getInitParameter(PASSWORD);
     }
+
 }

@@ -79,4 +79,8 @@ public class DriverTag extends DriverTagSupport {
 	this.userName = userName;
     }
 
+    public void setPassword(String password) {
+	this.password = password;
+    }
+
 }
