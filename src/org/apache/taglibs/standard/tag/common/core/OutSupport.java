@@ -57,7 +57,6 @@ package org.apache.taglibs.standard.tag.common.core;
 
 import java.io.*;
 import javax.servlet.jsp.*;
-import javax.servlet.jsp.jstl.core.ExpressionException;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.core.*;
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
@@ -65,9 +64,7 @@ import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>Support for handlers of the &lt;out&gt; tag, which simply evalutes and
- * prints the result of the expression it's passed.  If the expression
- * fails to complete evaluation successfully because of a
- * javax.servlet.jsp.jstl.core.ExpressionException, or if the result is
+ * prints the result of the expression it's passed.  If the result is
  * null, we print the value of the 'default' attribute's expression or
  * our body (which two are mutually exclusive, although this constraint
  * is enforced outside this handler, in our TagLibraryValidator).</p>
@@ -137,15 +134,12 @@ public class OutSupport extends BodyTagSupport {
 		return EVAL_BODY_BUFFERED;
 	    }
 
-	    // if we do have 'default', try it
+	    // if we do have 'default', print it
 	    if (def != null) {
 		// good 'default'
                 out(pageContext, escapeXml, def.toString());
-		return SKIP_BODY;
-	    } else {
-		// bad 'default'
-		throw new NullAttributeException("out", "default");
 	    }
+	    return SKIP_BODY;
 	}
       } catch (IOException ex) {
 	throw new JspException(ex.getMessage(), ex);
