@@ -54,6 +54,13 @@ implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0
         <td width="73%" height="15">The <code>&lt;c:url&gt;</code> <code>value</code> attribute and the <code>
           &lt;c:redirect&gt;</code> <code>url</code> attribute are required as defined in the JSTL specification.</td>
       </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=13405">13405</a></div>
+        </td>
+        <td width="73%" height="15">According to the JDBC specification, a null can be passed to the <code>PreparedStatement.setObject()</code> and the parameter will be set to JDBC NULL properly. The broken <code>PreparedStatment.setNull()</code> call has been removed.
+        </td>
+      </tr>
     </table>
   </blockquote>
 </ul>
@@ -66,6 +73,8 @@ implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0
     </li>
     <li>The "jsp20el.build" target was modified so that the JSTP 2.0 EL packages were renamed to avoid potential
       JSTL 1.0 conflict.
+    </li>
+    <li>Root cause now exposed when an EL expression evaluation fails.
     </li>
   </ul>
 </blockquote>
