@@ -112,10 +112,10 @@ public class XPathUtil {
     private static final String HEADER_NS_URL
 	= "http://java.sun.com/jstl/xpath/header";
 
-    private static final String PAGE_P = "page";
-    private static final String REQUEST_P = "request";
-    private static final String SESSION_P = "session";
-    private static final String APP_P = "application";
+    private static final String PAGE_P = "pageScope";
+    private static final String REQUEST_P = "requestScope";
+    private static final String SESSION_P = "sessionScope";
+    private static final String APP_P = "applicationScope";
     private static final String PARAM_P = "param";
     private static final String INITPARAM_P = "initParam";
     private static final String COOKIE_P = "cookie";
