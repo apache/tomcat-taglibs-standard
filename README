@@ -53,14 +53,17 @@ Included in this distibution:
           .core	   core library (common)
 	  .fmt	   internationalization-capable formatting tags (common)
 	  .xml	   XML manipulation library (common)
+	  .sql	   SQL library (common)
       .el	   handlers specific to expression language (EL) evaluation
           .core	   core library (EL)
 	  .fmt	   internationalization-capable formatting tags (EL)
 	  .xml	   XML manipulation library (EL)
+	  .sql	   SQL library (EL)
       .rt	   handlers specific to rtexprvalue (rt) evaluation
           .core	   core library (rt)
 	  .fmt	   internationalization-capable formatting tags (rt)
 	  .xml	   XML manipulation library (rt)
+	  .sql	   SQL library (rt)
    .tei         TagExtraInfo classes (common to both libraries)
    .tlv		TagLibraryValidator classes (and associated helpers)
    .lang        expression-language support and implementation
