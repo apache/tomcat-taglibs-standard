@@ -169,7 +169,12 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	}
 
 	if ((input == null) || input.equals("")) {
-	    // do nothing
+	    // Spec says:
+            // If value is null or empty, remove the scoped variable 
+            // if it is specified (see attributes var and scope).
+	    if (var != null) {
+	        pageContext.removeAttribute(var, scope);
+            }
 	    return EVAL_PAGE;
 	}
 
