@@ -20,10 +20,9 @@
   <tr> 
     <td colspan="3" bgcolor="#CCCCFF">JSTL Examples &nbsp;&nbsp;&nbsp;&nbsp;<a href="../index.html">Introduction</a> 
       &#149; <a href="../elsupport/index.html">EL Support </a> &#149; <a href="../conditionals/index.html">Conditionals</a> 
-      &#149; <a href="../iterators/index.html">Iterators</a> 
-      &#149; <a href="index.jsp">Import</a> &#149; <a href="../format/index.html">I18N 
-      & Formatting</a> &#149; <a href="../xml/index.html">XML</a> &#149; <a href="../sql/index.jsp">SQL</a> 
-      &#149; <a href="../ecmascript/index.html">EcmaScript</a> &#149; <a href="../misc/index.html">Misc.</a></td>
+      &#149; <a href="../iterators/index.html">Iterators</a> &#149; <a href="index.jsp">Import</a> 
+      &#149; <a href="../format/index.html">I18N & Formatting</a> &#149; <a href="../xml/index.html">XML</a> 
+      &#149; <a href="../sql/index.jsp">SQL</a> &#149; <a href="../misc/index.html">Misc.</a></td>
   </tr>
 </table>
 <!-- #BeginEditable "body" --> 
