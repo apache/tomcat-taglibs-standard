@@ -1,12 +1,12 @@
-<html><!-- #BeginTemplate "/examples/web/Templates/ExamplesTemplate.dwt" -->
+<html>
+<!-- #BeginTemplate "/Templates/ExamplesTemplate.dwt" --> 
 <head>
 <!-- #BeginEditable "doctitle" --> 
 <title>Untitled Document</title>
-<!-- #EndEditable -->
+<!-- #EndEditable --> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="../global.css" type="text/css">
 </head>
-
 <body bgcolor="#FFFFFF" text="#000000">
 <table width="100%" border="0" cellpadding="5">
   <tr> 
@@ -20,7 +20,8 @@
       &#149; <a href="../elsupport/index.html">General Purpose</a> &#149; <a href="../conditionals/index.html">Conditionals</a> 
       &#149; <a href="../iterators/index.html">Iterators</a> &#149; <a href="../import/index.jsp">Import</a> 
       &#149; <a href="../format/index.html">I18N & Formatting</a> &#149; <a href="../xml/index.html">XML</a> 
-      &#149; <a href="index.jsp">SQL</a> &#149; <a href="../misc/index.html">Misc.</a></font></td>
+      &#149; <a href="index.jsp">SQL</a> &#149; <a href="../tlv/index.html">TLV</a> 
+      &#149; <a href="../misc/index.html"></a><a href="../misc/index.html">Misc.</a></font></td>
   </tr>
 </table>
 <!-- #BeginEditable "body" --> 
@@ -39,7 +40,8 @@
     )
 </code></pre>
 <p>Enter your Driver Name and DataBase URL to test the Database Tag Library.</p>
-<p>NOTE: You will need to have the DataBase Driver classes available to your server's classloader or in your server's CLASSPATH at startup.</p>
+<p>NOTE: You will need to have the DataBase Driver classes available to your server's 
+  classloader or in your server's CLASSPATH at startup.</p>
 <form name="myform" action="session.jsp" method="post" >
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr> 
@@ -54,10 +56,11 @@
         <input type="text" size="40" name="dbUrl" value="jdbc:rmi://localhost:1099/jdbc:cloudscape:CloudscapeDB;create=true">
       </td>
     </tr>
-    <tr>
-      <td colspan="2">
-<br><p>The following two fields are <strong>Optional</strong>. They are included for convenience.<br>
-NOTE: an unsecure <code>form</code> is used.</p>
+    <tr> 
+      <td colspan="2"> <br>
+        <p>The following two fields are <strong>Optional</strong>. They are included 
+          for convenience.<br>
+          NOTE: an unsecure <code>form</code> is used.</p>
       </td>
     </tr>
     <tr> 
@@ -81,7 +84,7 @@ NOTE: an unsecure <code>form</code> is used.</p>
 <p>NOTE: You can access the tags directly here to look at the source. If you do 
   not provide a valid Driver and URL using the above form the tags NOT run properly.</p>
 <%@ include file="links.html" %>
-<!-- #EndEditable -->
+<!-- #EndEditable --> 
 <hr noshade color="#000099">
 <table width="100%" border="0" cellpadding="5">
   <tr> 
@@ -92,4 +95,5 @@ NOTE: an unsecure <code>form</code> is used.</p>
   </tr>
 </table>
 </body>
-<!-- #EndTemplate --></html>
+<!-- #EndTemplate -->
+</html>
