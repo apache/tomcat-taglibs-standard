@@ -144,12 +144,13 @@ public abstract class MessageSupport extends BodyTagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
-        if (!bundleSpecified) {
-            // must reset the locCtxt to null so it can be reevaluated
-            // (necessary because the tag may be reused and localization
-            // context used for the tag may have changed).
-            locCtxt = null;
-        }
+        // must reset the locCtxt to null so it can be reevaluated
+        // (necessary because the tag may be reused and localization
+        // context used for the tag may have changed).  
+        // [We use to not reset the locCtxt only if (!bundleSpecified),
+        // however the locale component of the locCtxt could also have
+        // changed.]
+        locCtxt = null;
 	params.clear();
 	return EVAL_BODY_BUFFERED;
     }
