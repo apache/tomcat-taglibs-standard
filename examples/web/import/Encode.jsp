@@ -11,19 +11,19 @@
 
 <table border="1" bgcolor="#dddddd">
  <tr>
-  <td>ABC</td>
-  <td><c:url value="abc"/></td>
+  <td>"base", param=ABC</td>
+  <td><c:url value="base"><c:param name="param" value="ABC"/></c:url></td>
  </tr>
  <tr>
-  <td>123</td>
-  <td><c:url value="123"/></td>
+  <td>"base", param=123</td>
+  <td><c:url value="base"><c:param name="param" value="123"/></c:url></td>
  </tr>
  <tr>
-  <td>&</td>
-  <td><c:url value="&"/></td>
+  <td>"base", param=&</td>
+  <td><c:url value="base"><c:param name="param" value="&"/></c:url></td>
  </tr>
  <tr>
-  <td>JSTL is fun</td>
-  <td><c:url value="JSTL is fun"/></td>
+  <td>"base", param="JSTL is fun"</td>
+  <td><c:url value="base"><c:param name="param" value="JSTL is fun"/></c:url></td>
  </tr>
 </table>

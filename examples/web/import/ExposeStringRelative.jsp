@@ -7,6 +7,8 @@
 <body bgcolor="#FFFFFF">
 <h3>String exposure for relative URL</h3>
 
+<h4>Escaped (raw HTML)</h4>
+
 <c:import var="cnn" url="LocalSample.jsp"/>
 
 <c:out value="${cnn}"/>

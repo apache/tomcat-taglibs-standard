@@ -2,10 +2,10 @@
 
 <html>
 <head>
-  <title>JSTL: XML Support -- Parse / Set / Expr</title>
+  <title>JSTL: XML Support -- Parse / Set / Out</title>
 </head>
 <body bgcolor="#FFFFFF">
-<h3>Parse / Set / Expr</h3>
+<h3>Parse / Set / Out</h3>
 
 <x:parse var="a">
   <a>

@@ -5,7 +5,7 @@
   <title>JSTL: Expression Language Support -- Set Example</title>
 </head>
 <body bgcolor="#FFFFFF">
-<h3>&lt;set&gt;</h3>
+<h3>&lt;c:set&gt;</h3>
 
 <h4>Setting application scope attribute "customerTable"</h4>
 

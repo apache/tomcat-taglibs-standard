@@ -5,7 +5,7 @@
 </head>
 <body bgcolor="#FFFFFF">
 
-<h3>&lt;expr&gt;</h3>
+<h3>&lt;c:out&gt;</h3>
 
 <table border="1">
   <c:forEach var="customer" items="${customers}">
@@ -13,7 +13,7 @@
 	  <td><c:out value="${customer.lastName}"/></td>
 	  <td><c:out value="${customer.phoneHome}" default="no home phone specified"/></td>
 	  <td>
-	    <c:out value="${customer.phoneCell}">
+	    <c:out value="${customer.phoneCell}" escapeXml="false">
 		  <font color="red">no cell phone specified</font>
 		</c:out>
       </td>
