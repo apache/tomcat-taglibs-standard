@@ -108,7 +108,7 @@ public abstract class ParamSupport extends BodyTagSupport {
 		Resources.getMessage("PARAM_OUTSIDE_PARENT"));
 
 	// take no action for null or empty names
-	if (name == null && name.equals(""))
+	if (name == null || name.equals(""))
 	    return EVAL_PAGE;
 
 	// send the parameter to the appropriate ancestor
