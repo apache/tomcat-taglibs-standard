@@ -79,7 +79,8 @@ public class DataSourceWrapper implements DataSource {
 	       IllegalAccessException {
 
 	this.driverClassName = driverClassName;
-        Class.forName(driverClassName).newInstance();
+        Class.forName(driverClassName, true, 
+            Thread.currentThread().getContextClassLoader()).newInstance();
     }
 
     public void setJdbcURL(String jdbcURL) {
