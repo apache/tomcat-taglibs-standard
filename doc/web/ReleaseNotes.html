@@ -20,6 +20,8 @@ the support initially provided in Standard 1.0 EA3.</p>
 <p>The Standard 1.0 release, which is hosted at Apache, is used as the source repository for the <a href="http://java.sun.com/products/jsp/jstl">JSTL 1.0 reference implementation</a> supplied by Sun Microsystems, Inc.</p>
 <hr/>
 
+<h2>Release History</h2>
+
 <dt><b>19 Apr 2002 </b></dt>
 <dd>Standard 1.0 Beta2 released, which is compliant with the <a href="http://jcp.org/aboutJava/communityprocess/first/jsr052/">JSTL Proposed Final Draft</a>.</dd>
 
@@ -80,6 +82,21 @@ with Tomcat 4.0 B6 and Tomcat 4.0 release.</dd>
 <p><dt><b>08 Jul 2001</b></dt>
 <dd>Initial version of JSTL RI contributed by JSR-052 Expert Group
     and imported into Jakarta CVS archive.</dd>
+
+
+<h2>Known Issues</h2>
+
+<ol>
+<li>Use of <tt>null</tt> with &lt;sql:param&gt; and &lt;sql:dateParam&gt;
+<p> The Standard 1.0 taglib utilizes the
+<tt>PreparedStatement.setObject(parameterIndex, null)</tt> when
+specifying the &lt;sql:dateParam value="${null}" type='date'/&gt; or
+&lt;sql:param value="${null}" /&gt; actions. Not all JDBC drivers currently
+support the passing of <tt>null</tt> to the <tt>PreparedStatement.setObject()</tt>
+method.  If you encounter a failure with your JDBC driver, please
+execute a SQL DML statement which does not require &lt;sql:param&gt; or
+&lt;sql:dateParam&gt; to specify a <tt>null</tt> value for a given column.
+</ol>
 
 </body>
 </html>
