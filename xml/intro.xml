@@ -12,15 +12,15 @@
 
     <big><b>JSP(tm) Standard Tag Library implementation (1.0)</b></big>
 
-    <p>The <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 Expert Group</a>,
-      operating under the Java Community Process, will be hosting the
-      reference implementation of the
-      <a href="http://java.sun.com/products/jsp/jstl">JSP Standard Tag Library (JSTL)</a> at Jakarta Taglibs.
+    <p>Jakarta Taglibs hosts the Standard Taglib, an implementation of
+      the <a href="http://java.sun.com/products/jsp/jstl">JSP Standard Tag
+      Library (JSTL)</a>, which was developed under the
+      <a href="http://jcp.org/">Java Community Process</a>.
     </p>
 
     <p><b>NOTE:</b> JSTL requires a JSP container that supports
       the Java Servlet 2.3 and JavaServer Pages 1.2 specifications.
-      Jakarta  <a href="http://jakarta.apache.org/tomcat/">
+      Jakarta <a href="http://jakarta.apache.org/tomcat/">
       Tomcat 4</a> supports the new specifications. The Standard 1.0 taglib
       has been tested with Tomcat 4.0.3 and Tomcat 4.0.4B2.
     </p>
@@ -30,6 +30,11 @@
   <section name="'Standard' Taglib News" href="News">
 
     <news>
+      <newsitem date="6/17/2002">
+	Standard Taglib, RC1, was posted.  This release contains the same
+        JSTL implementation as was included in Sun's Web Services Developer
+        Pack, version 1.0.
+      </newsitem>
       <newsitem date="4/19/2002">
 	Standard 1.0 Beta 2 was posted, and the
         <a href="http://java.sun.com/products/jsp/jstl">
