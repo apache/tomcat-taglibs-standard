@@ -5,7 +5,7 @@
 </head>
 
 <body bgcolor="#FFFFFF">
-<h1>Getting Started with the Standard Taglib</h1>
+<h2>Getting Started with the Standard Tag Library</h1>
 
 <p>This document describes how to get up and running quickly with the
 Standard Taglib, an implementation of the Java Server Pages&#153; Standard
@@ -39,8 +39,9 @@ them and optimize their implementations.</p>
 
 <p>JSTL provides support for core iteration
 and control-flow features, text inclusion, internationalizaton-capable
-formatting tags, and XML-manipulation tags.  It also supports an
-<i>expression language</i> to simplify page development.
+formatting tags, and XML-manipulation tags.  The <i>expression language</i> that
+JSTL defined in the 1.0 version of the specification is now an integral part
+of the JSP 2.0 specification.
 Developers may also be interested in JSTL's current extensibility
 mechanisms; JSTL currently provides a framework for integrating custom
 tags with JSTL tags.</p>
@@ -56,14 +57,13 @@ href="http://java.sun.com/products/jstl"
 >http://java.sun.com/products/jstl</a> lists books and other
 resources that will help you learn JSTL.</p>
 
-<p>&nbsp;</p>
-
 <hr />
 <h2><a name="#2" /></a>Getting started quickly</h2>
 
-<p>The Standard Taglib uses features provided only by the JSP 1.2
-specification, so it requires a JSP 1.2 container. We recommend you
-test the Standard Taglib with Tomcat 4.0.</p>
+<p>JSTL 1.1 requires a JSP 2.0 container. We recommend you
+test the Standard Taglib with Tomcat 5.x. JSTL 1.0 only required 
+a JSP 1.2 container and is also available for download from
+<a href="http://jakarta.apache.org/taglibs">Jakarta Taglibs</a></p>
 
 <p>To install Tomcat, follow the instructions at <a
 href="http://jakarta.apache.org/tomcat">http://jakarta.apache.org/tomcat</a>.
@@ -87,10 +87,10 @@ application's WEB-INF/lib directory:</p>
     <tr>
       <td width="25%">
         <div align="center"><a href="http://java.sun.com/products/jstl">JSTL
-          1.0 API classes</a></div>
+          API classes</a></div>
       </td>
       <td width="40%">
-        <div align="left">JSTL 1.0 API classes</div>
+        <div align="left">JSTL API classes</div>
       </td>
       <td width="35%">
         <div align="center">jstl.jar</div>
@@ -99,7 +99,7 @@ application's WEB-INF/lib directory:</p>
     <tr>
       <td width="25%">
         <div align="center"><a href="http://java.sun.com/products/jstl">JSTL
-          1.0 implementation classes</a></div>
+          implementation classes</a></div>
       </td>
       <td width="40%">
         <div align="left">Standard Taglib JSTL implementation classes</div>
@@ -222,7 +222,7 @@ The constituent tag libraries of Standard Taglib are as follows:
     </tr>
     <tr> 
       <td>Core</td>
-      <td>http://java.sun.com/jstl/core</td>
+      <td>http://java.sun.com/jstl-el/core</td>
       <td> 
         <div align="center"><font face="Courier New, Courier, mono">c</font></div>
       </td>
@@ -230,7 +230,7 @@ The constituent tag libraries of Standard Taglib are as follows:
     </tr>
     <tr> 
       <td>XML processing</td>
-      <td>http://java.sun.com/jstl/xml</td>
+      <td>http://java.sun.com/jstl-el/xml</td>
       <td> 
         <div align="center"><font face="Courier New, Courier, mono">x</font></div>
       </td>
@@ -238,7 +238,7 @@ The constituent tag libraries of Standard Taglib are as follows:
     </tr>
     <tr> 
       <td>I18N capable formatting</td>
-      <td>http://java.sun.com/jstl/fmt</td>
+      <td>http://java.sun.com/jstl-el/fmt</td>
       <td> 
         <div align="center"><font face="Courier New, Courier, mono">fmt</font></div>
       </td>
@@ -246,7 +246,7 @@ The constituent tag libraries of Standard Taglib are as follows:
     </tr>
     <tr> 
       <td>Database access (SQL)</td>
-      <td>http://java.sun.com/jstl/sql</td>
+      <td>http://java.sun.com/jstl-el/sql</td>
       <td> 
         <div align="center"><font face="Courier New, Courier, mono">sql</font></div>
       </td>
@@ -261,31 +261,15 @@ include the following line at the top of your JSP page, as
 follows:</p>
 
 <pre>
-    &lt;%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %&gt;
+    &lt;%@ taglib uri="http://java.sun.com/jstl-el/core" prefix="c" %&gt;
 </pre>
 
 <h3>Expression language</h3>
 
-<p>Half of JSTL's tags -- the recommended ones -- rely
-on an expression language. The EL makes it easy for page authors to
-access and manipulate application data.</p>
-
-<p>For an overview and detailed definition of the default EL see Chapter 3 and Appendix A of the <a href="http://java.sun.com/products/jstl">JSTL 1.0 Specification</a>.</p>
- 
-<p>Earlier versions of the Standard Taglib used to
-let you switch between a number of different expression languages to
-facilitate experimentation and feecback. Multiple languages are no
-longer supported since a default EL has been decided upon. </p>
-
-<p>
-
-<p>The attributes in tags for the EL version of the library do not accept
-rtexprvalues.  Instead, you specify literal expressions that the tags
-evaluate at runtime.  For example:</p>
-
-<pre>
-    &lt;c:forEach items="<b>${page.myItems}</b>" /&gt;
-</pre>
+<p>The EL makes it easy for page authors to
+access and manipulate application data. 
+For an overview and detailed definition of the default EL see 
+Chapter 3 of the <a href="http://java.sun.com/products/jstl">JSTL Specification</a>.</p>
 
 <h3>Topics covered in JSTL </h3>
 
@@ -342,8 +326,7 @@ href="http://java.sun.com/products/jstl">JSTL specification</a>. JSTL
 defines some abstract classes that assist with rapid development of tags
 and promote integration of custom tags with JSTL's tag set.</p>
 
-<p>For instance, custom tags can use JSTL's expression-language
-mechanism.  As another example, extending
+<p>For instance, extending
 <tt>javax.servlet.jsp.jstl.core.ConditionalTagSupport</tt> lets you write a
 conditional tag by merely implementing a single method that returns a
 <tt>boolean</tt> value correspondent with your tag's desired conditional
@@ -357,16 +340,6 @@ and &lt;forTokens&gt; tags extend this class and thus implement the
 a well-defined mechanism for iteration tags to communicate with custom
 subtags you can write.  See the "standard-examples" application for one
 example of how you might use such custom subtags.</p>
-
-<h3>Books</h3>
-
-<p>Several books on JSTL are available or will be available shortly:</p>
-
-<ul>
-<li><a href="http://jstlbook.com/"><i>JSTL in Action</i></a>, Shawn Bayern, Manning</li>
-<li><a href="http://TheJSPBook.com/"><i>JavaServer Pages</i></a>, Hans Bergsten, O'Reilly</li>
-<li><a href="http://www.core-jstl.com"><i>Core JSTL: Mastering the JSP Standard Tag Library</i></a>, David Geary, Sun Microsystems Press</li>
-</UL>
 
 </body>
 </html>
