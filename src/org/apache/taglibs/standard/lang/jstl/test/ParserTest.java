@@ -66,7 +66,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import javax.servlet.jsp.JspException;
 import org.apache.taglibs.standard.lang.jstl.Evaluator;
-import org.apache.taglibs.standard.lang.jstl.ELException;
 
 /**
  *
@@ -128,7 +127,7 @@ public class ParserTest
 	  pOut.println ("Parses to: " + result);
 	}
 	catch (JspException exc) {
-	  pOut.println ("Causes an error: " + exc);
+	  pOut.println ("Causes an error: " + exc.getMessage ());
 	}
       }
     }

@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>This is the superclass for all binary arithmetic operators
@@ -76,9 +73,9 @@ public abstract class ArithmeticOperator
    **/
   public Object apply (Object pLeft,
 		       Object pRight,
-		       PageContext pContext,
+		       Object pContext,
 		       Logger pLogger)
-    throws JspException
+    throws ELException
   {
     return Coercions.applyArithmeticOperator (pLeft, pRight, this, pLogger);
   }

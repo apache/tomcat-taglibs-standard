@@ -45,18 +45,11 @@ public interface ELParserConstants {
   int AND2 = 43;
   int OR1 = 44;
   int OR2 = 45;
-  int PAGE_CONTEXT = 46;
-  int PAGE = 47;
-  int REQUEST = 48;
-  int SESSION = 49;
-  int APPLICATION = 50;
-  int PARAM = 51;
-  int PARAMS = 52;
-  int IDENTIFIER = 53;
-  int IMPL_OBJ_START = 54;
-  int LETTER = 55;
-  int DIGIT = 56;
-  int ILLEGAL_CHARACTER = 57;
+  int IDENTIFIER = 46;
+  int IMPL_OBJ_START = 47;
+  int LETTER = 48;
+  int DIGIT = 49;
+  int ILLEGAL_CHARACTER = 50;
 
   int DEFAULT = 0;
   int IN_EXPRESSION = 1;
@@ -108,13 +101,6 @@ public interface ELParserConstants {
     "\"&&\"",
     "\"or\"",
     "\"||\"",
-    "\"pageContext\"",
-    "\"page\"",
-    "\"request\"",
-    "\"session\"",
-    "\"application\"",
-    "\"param\"",
-    "\"params\"",
     "<IDENTIFIER>",
     "\"#\"",
     "<LETTER>",

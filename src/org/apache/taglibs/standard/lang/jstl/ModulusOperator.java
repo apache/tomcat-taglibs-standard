@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>The implementation of the modulus operator
@@ -104,9 +101,9 @@ public class ModulusOperator
    **/
   public Object apply (Object pLeft,
 		       Object pRight,
-		       PageContext pContext,
+		       Object pContext,
 		       Logger pLogger)
-    throws JspException
+    throws ELException
   {
     if (pLeft == null &&
 	pRight == null) {

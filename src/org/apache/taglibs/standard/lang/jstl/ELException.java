@@ -56,7 +56,6 @@
 package org.apache.taglibs.standard.lang.jstl;
 
 import java.text.MessageFormat;
-import javax.servlet.jsp.JspException;
 
 /**
  *
@@ -68,8 +67,14 @@ import javax.servlet.jsp.JspException;
  **/
 
 public class ELException
-  extends JspException
+  extends Exception
 {
+  //-------------------------------------
+  // Member variables
+  //-------------------------------------
+
+  Throwable mRootCause;
+
   //-------------------------------------
   /**
    *
@@ -97,7 +102,7 @@ public class ELException
    **/
   public ELException (Throwable pRootCause)
   {
-    super (pRootCause);
+    mRootCause = pRootCause;
   }
 
   //-------------------------------------
@@ -108,7 +113,18 @@ public class ELException
   public ELException (String pMessage,
 		      Throwable pRootCause)
   {
-    super (pMessage, pRootCause);
+    super (pMessage);
+    mRootCause = pRootCause;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the root cause
+   **/
+  public Throwable getRootCause ()
+  {
+    return mRootCause;
   }
 
   //-------------------------------------
@@ -119,13 +135,13 @@ public class ELException
   public String toString ()
   {
     if (getMessage () == null) {
-      return getRootCause ().toString ();
+      return mRootCause.toString ();
     }
-    else if (getRootCause () == null) {
+    else if (mRootCause == null) {
       return getMessage ();
     }
     else {
-      return getMessage () + ": " + getRootCause ();
+      return getMessage () + ": " + mRootCause;
     }
   }
 

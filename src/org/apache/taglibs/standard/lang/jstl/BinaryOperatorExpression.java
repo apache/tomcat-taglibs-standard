@@ -56,8 +56,6 @@
 package org.apache.taglibs.standard.lang.jstl;
 
 import java.util.List;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 
 /**
  *
@@ -143,11 +141,12 @@ public class BinaryOperatorExpression
    *
    * Evaluates to the literal value
    **/
-  public Object evaluate (PageContext pContext,
+  public Object evaluate (Object pContext,
+			  VariableResolver pResolver,
 			  Logger pLogger)
-    throws JspException
+    throws ELException
   {
-    Object value = mExpression.evaluate (pContext, pLogger);
+    Object value = mExpression.evaluate (pContext, pResolver, pLogger);
     for (int i = 0; i < mOperators.size (); i++) {
       BinaryOperator operator = (BinaryOperator) mOperators.get (i);
 
@@ -159,7 +158,7 @@ public class BinaryOperatorExpression
 
       if (operator.shouldEvaluate (value)) {
 	Expression expression = (Expression) mExpressions.get (i);
-	Object nextValue = expression.evaluate (pContext, pLogger);
+	Object nextValue = expression.evaluate (pContext, pResolver, pLogger);
 
 	value = operator.apply (value, nextValue, pContext, pLogger);
       }

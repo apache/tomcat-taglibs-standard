@@ -56,8 +56,6 @@
 package org.apache.taglibs.standard.lang.jstl;
 
 import java.util.List;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 
 /**
  *
@@ -146,11 +144,12 @@ public class UnaryOperatorExpression
    *
    * Evaluates to the literal value
    **/
-  public Object evaluate (PageContext pContext,
+  public Object evaluate (Object pContext,
+			  VariableResolver pResolver,
 			  Logger pLogger)
-    throws JspException
+    throws ELException
   {
-    Object value = mExpression.evaluate (pContext, pLogger);
+    Object value = mExpression.evaluate (pContext, pResolver, pLogger);
     if (mOperator != null) {
       value = mOperator.apply (value, pContext, pLogger);
     }

@@ -11,7 +11,7 @@ public class ELParser implements ELParserConstants {
        throws ParseException
   {
     ELParser parser = new ELParser (System.in);
-    parser.AttributeValue ();
+    parser.ExpressionString ();
   }
 
 /*****************************************
@@ -20,11 +20,11 @@ public class ELParser implements ELParserConstants {
 
 /**
  *
- * Returns a String if the attribute value is a single String, an
- * Expression if the attribute value is a single Expression, an
- * AttributeValue if it's a mixture of both.
+ * Returns a String if the expression string is a single String, an
+ * Expression if the expression string is a single Expression, an
+ * ExpressionString if it's a mixture of both.
  **/
-  final public Object AttributeValue() throws ParseException {
+  final public Object ExpressionString() throws ParseException {
   Object ret = "";
   List elems = null;
   Object elem;
@@ -70,7 +70,7 @@ public class ELParser implements ELParserConstants {
        elems.add (elem);
     }
     if (elems != null) {
-      ret = new AttributeValue (elems.toArray ());
+      ret = new ExpressionString (elems.toArray ());
     }
     {if (true) return ret;}
     throw new Error("Missing return statement in function");
@@ -644,15 +644,6 @@ public class ELParser implements ELParserConstants {
     case IDENTIFIER:
       ret = NamedValue();
       break;
-    case PAGE_CONTEXT:
-    case PAGE:
-    case REQUEST:
-    case SESSION:
-    case APPLICATION:
-    case PARAM:
-    case PARAMS:
-      ret = ImplicitObject();
-      break;
     default:
       jj_la1[27] = jj_gen;
       jj_consume_token(-1);
@@ -780,75 +771,8 @@ public class ELParser implements ELParserConstants {
 
   final public String Identifier() throws ParseException {
   Token t;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case IDENTIFIER:
-      t = jj_consume_token(IDENTIFIER);
-      break;
-    case PAGE_CONTEXT:
-      t = jj_consume_token(PAGE_CONTEXT);
-      break;
-    case PAGE:
-      t = jj_consume_token(PAGE);
-      break;
-    case REQUEST:
-      t = jj_consume_token(REQUEST);
-      break;
-    case SESSION:
-      t = jj_consume_token(SESSION);
-      break;
-    case APPLICATION:
-      t = jj_consume_token(APPLICATION);
-      break;
-    case PARAM:
-      t = jj_consume_token(PARAM);
-      break;
-    case PARAMS:
-      t = jj_consume_token(PARAMS);
-      break;
-    default:
-      jj_la1[31] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
+    t = jj_consume_token(IDENTIFIER);
       {if (true) return t.image;}
-    throw new Error("Missing return statement in function");
-  }
-
-  final public ImplicitObject ImplicitObject() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case PAGE_CONTEXT:
-      jj_consume_token(PAGE_CONTEXT);
-                   {if (true) return ImplicitObject.PAGE_CONTEXT;}
-      break;
-    case PAGE:
-      jj_consume_token(PAGE);
-             {if (true) return ImplicitObject.PAGE;}
-      break;
-    case REQUEST:
-      jj_consume_token(REQUEST);
-                {if (true) return ImplicitObject.REQUEST;}
-      break;
-    case SESSION:
-      jj_consume_token(SESSION);
-                {if (true) return ImplicitObject.SESSION;}
-      break;
-    case APPLICATION:
-      jj_consume_token(APPLICATION);
-                    {if (true) return ImplicitObject.APPLICATION;}
-      break;
-    case PARAM:
-      jj_consume_token(PARAM);
-              {if (true) return ImplicitObject.PARAM;}
-      break;
-    case PARAMS:
-      jj_consume_token(PARAMS);
-               {if (true) return ImplicitObject.PARAMS;}
-      break;
-    default:
-      jj_la1[32] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
     throw new Error("Missing return statement in function");
   }
 
@@ -857,9 +781,9 @@ public class ELParser implements ELParserConstants {
   public Token token, jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[33];
-  final private int[] jj_la1_0 = {0x6,0x6,0x6,0x0,0x0,0x0,0x0,0x18600000,0x600000,0x18000000,0x18600000,0x79e0000,0x180000,0x60000,0x6000000,0x1800000,0x79e0000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80010000,0x20007580,0x80010000,0x7580,0x3000,0x0,0x0,};
-  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x3000,0x3000,0xc00,0xc00,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6,0x6,0xf8,0x30,0xc0,0xf8,0x304,0x300,0x304,0x0,0x3fc000,0x0,0x0,0x0,0x3fc000,0x1fc000,};
+  final private int[] jj_la1 = new int[31];
+  final private int[] jj_la1_0 = {0x6,0x6,0x6,0x0,0x0,0x0,0x0,0x18600000,0x600000,0x18000000,0x18600000,0x79e0000,0x180000,0x60000,0x6000000,0x1800000,0x79e0000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80010000,0x20007580,0x80010000,0x7580,0x3000,};
+  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x3000,0x3000,0xc00,0xc00,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6,0x6,0xf8,0x30,0xc0,0xf8,0x304,0x300,0x304,0x0,0x4000,0x0,0x0,0x0,};
 
   public ELParser(java.io.InputStream stream) {
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
@@ -867,7 +791,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
   }
 
   public void ReInit(java.io.InputStream stream) {
@@ -876,7 +800,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
   }
 
   public ELParser(java.io.Reader stream) {
@@ -885,7 +809,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
   }
 
   public void ReInit(java.io.Reader stream) {
@@ -894,7 +818,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
   }
 
   public ELParser(ELParserTokenManager tm) {
@@ -902,7 +826,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
   }
 
   public void ReInit(ELParserTokenManager tm) {
@@ -910,7 +834,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
   }
 
   final private Token jj_consume_token(int kind) throws ParseException {
@@ -957,15 +881,15 @@ public class ELParser implements ELParserConstants {
 
   final public ParseException generateParseException() {
     jj_expentries.removeAllElements();
-    boolean[] la1tokens = new boolean[58];
-    for (int i = 0; i < 58; i++) {
+    boolean[] la1tokens = new boolean[51];
+    for (int i = 0; i < 51; i++) {
       la1tokens[i] = false;
     }
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 33; i++) {
+    for (int i = 0; i < 31; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -977,7 +901,7 @@ public class ELParser implements ELParserConstants {
         }
       }
     }
-    for (int i = 0; i < 58; i++) {
+    for (int i = 0; i < 51; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

@@ -58,8 +58,6 @@ package org.apache.taglibs.standard.lang.jstl;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 
 /**
  *
@@ -101,9 +99,10 @@ public class PropertySuffix
    *
    * Gets the value of the index
    **/
-  Object evaluateIndex (PageContext pContext,
+  Object evaluateIndex (Object pContext,
+			VariableResolver pResolver,
 			Logger pLogger)
-    throws JspException
+    throws ELException
   {
     return mName;
   }

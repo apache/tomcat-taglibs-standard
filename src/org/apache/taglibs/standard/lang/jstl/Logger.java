@@ -55,10 +55,8 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
+import java.io.PrintStream;
 import java.text.MessageFormat;
-import javax.servlet.ServletContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 
 /**
  *
@@ -81,16 +79,18 @@ public class Logger
   // Member variables
   //-------------------------------------
 
-  PageContext mPageContext;
+  PrintStream mOut;
 
   //-------------------------------------
   /**
    *
    * Constructor
+   *
+   * @param pOut the PrintStream to which warnings should be printed
    **/
-  public Logger (PageContext pPageContext)
+  public Logger (PrintStream pOut)
   {
-    mPageContext = pPageContext;
+    mOut = pOut;
   }
 
   //-------------------------------------
@@ -114,19 +114,14 @@ public class Logger
     throws ELException
   {
     if (isLoggingWarning ()) {
-      if (mPageContext != null) {
-	ServletContext sc = mPageContext.getServletContext ();
-	if (sc != null) {
-	  if (pMessage == null) {
-	    sc.log ("", pRootCause);
-	  }
-	  else if (pRootCause == null) {
-	    sc.log (pMessage);
-	  }
-	  else {
-	    sc.log (pMessage, pRootCause);
-	  }
-	}
+      if (pMessage == null) {
+	System.out.println (pRootCause);
+      }
+      else if (pRootCause == null) {
+	System.out.println (pMessage);
+      }
+      else {
+	System.out.println (pMessage + ": " + pRootCause);
       }
     }
   }

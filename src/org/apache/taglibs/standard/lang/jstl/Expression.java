@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>The abstract class from which all expression types
@@ -85,9 +82,10 @@ public abstract class Expression
    *
    * Evaluates the expression in the given context
    **/
-  public abstract Object evaluate (PageContext pContext,
+  public abstract Object evaluate (Object pContext,
+				   VariableResolver pResolver,
 				   Logger pLogger)
-    throws JspException;
+    throws ELException;
 
   //-------------------------------------
 

@@ -55,8 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>This converts primitive values to their Object counterparts.

@@ -55,89 +55,36 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
- * <p>Represents an attribute value consisting of a mixture of Strings
- * and Expressions.
+ * <p>This class is used to customize the way the evaluator resolves
+ * variable references.  For example, instances of this class can
+ * implement their own variable lookup mechanisms, or introduce the
+ * notion of "implicit variables" which override any other variables.
+ * An instance of this class should be passed to the evaluator's
+ * constructor.
+ *
+ * <p>Whenever the evaluator is invoked, it is passed a "context"
+ * Object from the application.  For example, in a JSP environment,
+ * the "context" is a PageContext.  That context object is eventually
+ * passed to this class, so that this class has a context in which to
+ * resolve variables.
  * 
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  **/
 
-public class AttributeValue
+public interface VariableResolver
 {
   //-------------------------------------
-  // Properties
-  //-------------------------------------
-  // property elements
-
-  Object [] mElements;
-  public Object [] getElements ()
-  { return mElements; }
-  public void setElements (Object [] pElements)
-  { mElements = pElements; }
-
-  //-------------------------------------
   /**
    *
-   * Constructor
+   * Resolves the specified variable within the given context.
+   * Returns null if the variable is not found.
    **/
-  public AttributeValue (Object [] pElements)
-  {
-    mElements = pElements;
-  }
-
-  //-------------------------------------
-  /**
-   *
-   * Evaluates the attribute value by evaluating each element,
-   * converting it to a String (using toString, or "" for null values)
-   * and concatenating the results into a single String.
-   **/
-  public String evaluate (PageContext pPageContext,
-			  Logger pLogger)
-    throws JspException
-  {
-    StringBuffer buf = new StringBuffer ();
-    for (int i = 0; i < mElements.length; i++) {
-      Object elem = mElements [i];
-      if (elem instanceof String) {
-	buf.append ((String) elem);
-      }
-      else if (elem instanceof Expression) {
-	Object val = ((Expression) elem).evaluate (pPageContext, pLogger);
-	if (val != null) {
-	  buf.append (val.toString ());
-	}
-      }
-    }
-    return buf.toString ();
-  }
-
-  //-------------------------------------
-  /**
-   *
-   * Returns the expression in the expression language syntax
-   **/
-  public String getExpressionString ()
-  {
-    StringBuffer buf = new StringBuffer ();
-    for (int i = 0; i < mElements.length; i++) {
-      Object elem = mElements [i];
-      if (elem instanceof String) {
-	buf.append ((String) elem);
-      }
-      else if (elem instanceof Expression) {
-	buf.append ("${");
-	buf.append (((Expression) elem).getExpressionString ());
-	buf.append ("}");
-      }
-    }
-    return buf.toString ();
-  }
-
+  public Object resolveVariable (String pName,
+				 Object pContext)
+    throws ELException;
+					
   //-------------------------------------
 }

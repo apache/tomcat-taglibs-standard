@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>This is the superclass for all unary operators
@@ -92,9 +89,9 @@ public abstract class UnaryOperator
    * Applies the operator to the given value
    **/
   public abstract Object apply (Object pValue,
-				PageContext pContext,
+				Object pContext,
 				Logger pLogger)
-    throws JspException;
+    throws ELException;
 
   //-------------------------------------
 }

@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>Represents a name that can be used as the first element of a
@@ -108,23 +105,18 @@ public class NamedValue
   //-------------------------------------
   /**
    *
-   * Evaluates by looking up the name as an attribute
+   * Evaluates by looking up the name in the VariableResolver
    **/
-  public Object evaluate (PageContext pContext,
+  public Object evaluate (Object pContext,
+			  VariableResolver pResolver,
 			  Logger pLogger)
-    throws JspException
+    throws ELException
   {
-    Object ret = pContext.findAttribute (mName);
-    if (ret == null) {
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning
-	  (Constants.NAMED_VALUE_NOT_FOUND,
-	   mName);
-      }
+    if (pResolver == null) {
       return null;
     }
     else {
-      return ret;
+      return pResolver.resolveVariable (mName, pContext);
     }
   }
 

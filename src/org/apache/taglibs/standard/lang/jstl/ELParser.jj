@@ -25,7 +25,7 @@ public class ELParser {
        throws ParseException
   {
     ELParser parser = new ELParser (System.in);
-    parser.AttributeValue ();
+    parser.ExpressionString ();
   }
 
 }
@@ -123,13 +123,7 @@ PARSER_END(ELParser)
 | < AND2: "&&" >
 | < OR1: "or" >
 | < OR2: "||" >
-| < PAGE_CONTEXT: "pageContext" >
-| < PAGE: "page" >
-| < REQUEST: "request" >
-| < SESSION: "session" >
-| < APPLICATION: "application" >
-| < PARAM: "param" >
-| < PARAMS: "params" >
+
 
 /* Identifiers */
 
@@ -186,11 +180,11 @@ PARSER_END(ELParser)
 
 /**
  *
- * Returns a String if the attribute value is a single String, an
- * Expression if the attribute value is a single Expression, an
- * AttributeValue if it's a mixture of both.
+ * Returns a String if the expression string is a single String, an
+ * Expression if the expression string is a single Expression, an
+ * ExpressionString if it's a mixture of both.
  **/
-Object AttributeValue () :
+Object ExpressionString () :
 {
   Object ret = "";
   List elems = null;
@@ -215,7 +209,7 @@ Object AttributeValue () :
 
   {
     if (elems != null) {
-      ret = new AttributeValue (elems.toArray ());
+      ret = new ExpressionString (elems.toArray ());
     }
     return ret;
   }
@@ -584,7 +578,6 @@ Expression ValuePrefix () :
    ret = Literal ()
    | <LPAREN> ret = Expression () <RPAREN>
    | ret = NamedValue ()
-   | ret = ImplicitObject ()
    )
     { return ret; }
 }
@@ -714,27 +707,6 @@ String Identifier () :
 {
   (
    t = <IDENTIFIER>
-   | t = <PAGE_CONTEXT>
-   | t = <PAGE>
-   | t = <REQUEST>
-   | t = <SESSION>
-   | t = <APPLICATION>
-   | t = <PARAM>
-   | t = <PARAMS>
    )
     { return t.image; }
-}
-
-
-ImplicitObject ImplicitObject () :
-{
-}
-{
-  <PAGE_CONTEXT> { return ImplicitObject.PAGE_CONTEXT; }
-  | <PAGE> { return ImplicitObject.PAGE; }
-  | <REQUEST> { return ImplicitObject.REQUEST; }
-  | <SESSION> { return ImplicitObject.SESSION; }
-  | <APPLICATION> { return ImplicitObject.APPLICATION; }
-  | <PARAM> { return ImplicitObject.PARAM; }
-  | <PARAMS> { return ImplicitObject.PARAMS; }
 }

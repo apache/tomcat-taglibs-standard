@@ -66,7 +66,6 @@ import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.jsp.JspException;
 
 /**
  *
@@ -174,7 +173,7 @@ public class BeanInfoManager
     (Class pClass,
      String pPropertyName,
      Logger pLogger)
-    throws JspException
+    throws ELException
   {
     return getBeanInfoManager (pClass).getProperty (pPropertyName, pLogger);
   }
@@ -189,7 +188,7 @@ public class BeanInfoManager
     (Class pClass,
      String pIndexedPropertyName,
      Logger pLogger)
-    throws JspException
+    throws ELException
   {
     return getBeanInfoManager 
       (pClass).getIndexedProperty (pIndexedPropertyName, pLogger);
@@ -202,7 +201,7 @@ public class BeanInfoManager
    * the initialization if it's required.
    **/
   void checkInitialized (Logger pLogger)
-    throws JspException
+    throws ELException
   {
     if (!mInitialized) {
       synchronized (this) {
@@ -220,7 +219,7 @@ public class BeanInfoManager
    * Initializes by mapping property names to BeanInfoProperties
    **/
   void initialize (Logger pLogger)
-    throws JspException
+    throws ELException
   {
     try {
       mBeanInfo = Introspector.getBeanInfo (mBeanClass);
@@ -276,7 +275,7 @@ public class BeanInfoManager
    * Returns the BeanInfo for the class
    **/
   BeanInfo getBeanInfo (Logger pLogger)
-    throws JspException
+    throws ELException
   {
     checkInitialized (pLogger);
     return mBeanInfo;
@@ -290,7 +289,7 @@ public class BeanInfoManager
    **/
   public BeanInfoProperty getProperty (String pPropertyName,
 				       Logger pLogger)
-    throws JspException
+    throws ELException
   {
     checkInitialized (pLogger);
     return (BeanInfoProperty) mPropertyByName.get (pPropertyName);
@@ -305,7 +304,7 @@ public class BeanInfoManager
   public BeanInfoIndexedProperty getIndexedProperty 
     (String pIndexedPropertyName,
      Logger pLogger)
-    throws JspException
+    throws ELException
   {
     checkInitialized (pLogger);
     return (BeanInfoIndexedProperty) 
@@ -320,7 +319,7 @@ public class BeanInfoManager
    **/
   public EventSetDescriptor getEventSet (String pEventSetName,
 					 Logger pLogger)
-    throws JspException
+    throws ELException
   {
     checkInitialized (pLogger);
     return (EventSetDescriptor) mEventSetByName.get (pEventSetName);

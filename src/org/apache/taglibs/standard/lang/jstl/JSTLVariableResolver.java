@@ -55,99 +55,73 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
+import javax.servlet.jsp.PageContext;
+
 /**
  *
- * <p>The implementation of the greater than or equals operator
+ * <p>This is the JSTL-specific implementation of VariableResolver.
+ * It looks up variable references in the PageContext, and also
+ * recognizes references to implicit objects.
  * 
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  **/
 
-public class GreaterThanOrEqualsOperator
-  extends RelationalOperator
+public class JSTLVariableResolver
+  implements VariableResolver
 {
   //-------------------------------------
-  // Singleton
-  //-------------------------------------
-
-  public static final GreaterThanOrEqualsOperator SINGLETON =
-    new GreaterThanOrEqualsOperator ();
-
-  //-------------------------------------
   /**
    *
-   * Constructor
+   * Resolves the specified variable within the given context.
+   * Returns null if the variable is not found.
    **/
-  public GreaterThanOrEqualsOperator ()
-  {
-  }
-
-  //-------------------------------------
-  // Expression methods
-  //-------------------------------------
-  /**
-   *
-   * Returns the symbol representing the operator
-   **/
-  public String getOperatorSymbol ()
-  {
-    return ">=";
-  }
-
-  //-------------------------------------
-  /**
-   *
-   * Applies the operator to the given value
-   **/
-  public Object apply (Object pLeft,
-		       Object pRight,
-		       Object pContext,
-		       Logger pLogger)
+  public Object resolveVariable (String pName,
+				 Object pContext)
     throws ELException
   {
-    if (pLeft == pRight) {
-      return Boolean.TRUE;
+    PageContext ctx = (PageContext) pContext;
+
+    // Check for implicit objects
+    if ("pageContext".equals (pName)) {
+      return ctx;
     }
+    else if ("page".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getPageScopeMap ();
+    }
+    else if ("request".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getRequestScopeMap ();
+    }
+    else if ("session".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getSessionScopeMap ();
+    }
+    else if ("application".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getApplicationScopeMap ();
+    }
+    else if ("param".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getParamMap ();
+    }
+    else if ("params".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getParamsMap ();
+    }
+
+    // Otherwise, just look it up in the page context
     else {
-      return super.apply (pLeft, pRight, pContext, pLogger);
+      return ctx.findAttribute (pName);
     }
   }
-
-  //-------------------------------------
-  /**
-   *
-   * Applies the operator to the given double values
-   **/
-  public boolean apply (double pLeft,
-			double pRight,
-			Logger pLogger)
-  {
-    return pLeft >= pRight;
-  }
-  
-  //-------------------------------------
-  /**
-   *
-   * Applies the operator to the given long values
-   **/
-  public boolean apply (long pLeft,
-			long pRight,
-			Logger pLogger)
-  {
-    return pLeft >= pRight;
-  }
-  
-  //-------------------------------------
-  /**
-   *
-   * Applies the operator to the given String values
-   **/
-  public boolean apply (String pLeft,
-			String pRight,
-			Logger pLogger)
-  {
-    return pLeft.compareTo (pRight) >= 0;
-  }
-
+					
   //-------------------------------------
 }

@@ -56,8 +56,6 @@
 package org.apache.taglibs.standard.lang.jstl;
 
 import java.util.List;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 
 /**
  *
@@ -128,18 +126,19 @@ public class ComplexValue
   //-------------------------------------
   /**
    *
-   * Evaluates by looking up the name as an attribute
+   * Evaluates by evaluating the prefix, then applying the suffixes
    **/
-  public Object evaluate (PageContext pContext,
+  public Object evaluate (Object pContext,
+			  VariableResolver pResolver,
 			  Logger pLogger)
-    throws JspException
+    throws ELException
   {
-    Object ret = mPrefix.evaluate (pContext, pLogger);
+    Object ret = mPrefix.evaluate (pContext, pResolver, pLogger);
 
     // Apply the suffixes
     for (int i = 0; mSuffixes != null && i < mSuffixes.size (); i++) {
       ValueSuffix suffix = (ValueSuffix) mSuffixes.get (i);
-      ret = suffix.evaluate (ret, pContext, pLogger);
+      ret = suffix.evaluate (ret, pContext, pResolver, pLogger);
     }
 
     return ret;

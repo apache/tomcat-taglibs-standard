@@ -4,7 +4,7 @@ Parses to: abc
 Attribute value: ${ 3}
 Parses to: ${3}
 Attribute value: a${
-Causes an error: Unable to parse custom action attribute "test" with value "a${": encountered "<EOF>", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: An error occurred while parsing custom action attribute "test" with value "a${": Encountered "<EOF>", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
 Attribute value: a${ 5 }
 Parses to: a${5}
 Attribute value: ${ 3 }b
@@ -76,9 +76,9 @@ Parses to: ${" with escaping \""}
 Attribute value: ${" with escaping \"\\\""}
 Parses to: ${" with escaping \"\\\""}
 Attribute value: ${" bad \ escaping"}
-Causes an error: Unable to parse custom action attribute "test" with value "${" bad \ escaping"}": encountered "" bad \ ", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${" bad \ escaping"}": Encountered "" bad \ ", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
 Attribute value: ${" bad \' escaping"}
-Causes an error: Unable to parse custom action attribute "test" with value "${" bad \' escaping"}": encountered "" bad \'", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${" bad \' escaping"}": Encountered "" bad \'", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
 
 # string literals with '
 Attribute value: ${'abc'}
@@ -98,9 +98,9 @@ Parses to: ${" with escaping '"}
 Attribute value: ${' with escaping \'\\\''}
 Parses to: ${" with escaping '\\'"}
 Attribute value: ${' bad \ escaping'}
-Causes an error: Unable to parse custom action attribute "test" with value "${' bad \ escaping'}": encountered "' bad \ ", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${' bad \ escaping'}": Encountered "' bad \ ", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
 Attribute value: ${' bad \" escaping'}
-Causes an error: Unable to parse custom action attribute "test" with value "${' bad \" escaping'}": encountered "' bad \"", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${' bad \" escaping'}": Encountered "' bad \"", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
 
 # identifiers
 Attribute value: ${abc}
@@ -116,7 +116,7 @@ Parses to: ${(bad * identifier)}
 Attribute value: ${a .b .c}
 Parses to: ${a.b.c}
 Attribute value: ${ abc . 'def.ghi' . ghi . "jkl \"" }
-Causes an error: Unable to parse custom action attribute "test" with value "${ abc . 'def.ghi' . ghi . "jkl \"" }": encountered "'def.ghi'", expected one of ""pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${ abc . 'def.ghi' . ghi . "jkl \"" }": Encountered "'def.ghi'", expected one of [<IDENTIFIER>]
 
 # array accessors
 Attribute value: ${ a[14] }
@@ -150,7 +150,7 @@ Parses to: ${(- - not abc.def)}
 
 # array accessors of non-integer types
 Attribute value: ${  a ["hello"]."12" [17.5] }
-Causes an error: Unable to parse custom action attribute "test" with value "${  a ["hello"]."12" [17.5] }": encountered ""12"", expected one of ""pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${  a ["hello"]."12" [17.5] }": Encountered ""12"", expected one of [<IDENTIFIER>]
 
 # making sure unicode escapes are not recognized
 Attribute value: \u0040

@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>This is the superclass for all relational operators (except ==
@@ -77,9 +74,9 @@ public abstract class RelationalOperator
    **/
   public Object apply (Object pLeft,
 		       Object pRight,
-		       PageContext pContext,
+		       Object pContext,
 		       Logger pLogger)
-    throws JspException
+    throws ELException
   {
     return Coercions.applyRelationalOperator (pLeft, pRight, this, pLogger);
   }

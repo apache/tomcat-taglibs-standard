@@ -75,49 +75,49 @@ java.lang.Object
 # looking up objects in scopes
 
 # val1a - defined in page scope
-${page:val1a}
+${page.val1a}
 java.lang.String
-${request:val1a}
+${request.val1a}
 java.lang.String
-${session:val1a}
+${session.val1a}
 java.lang.String
-${app:val1a}
+${application.val1a}
 java.lang.String
 ${val1a}
 java.lang.String
 
 # val1b - defined in request scope
-${page:val1b}
+${page.val1b}
 java.lang.String
-${request:val1b}
+${request.val1b}
 java.lang.String
-${session:val1b}
+${session.val1b}
 java.lang.String
-${app:val1b}
+${application.val1b}
 java.lang.String
 ${val1b}
 java.lang.String
 
 # val1c - defined in session scope
-${page:val1c}
+${page.val1c}
 java.lang.String
-${request:val1c}
+${request.val1c}
 java.lang.String
-${session:val1c}
+${session.val1c}
 java.lang.String
-${app:val1c}
+${application.val1c}
 java.lang.String
 ${val1c}
 java.lang.String
 
 # val1d - defined in application scope
-${page:val1d}
+${page.val1d}
 java.lang.String
-${request:val1d}
+${request.val1d}
 java.lang.String
-${session:val1d}
+${session.val1d}
 java.lang.String
-${app:val1d}
+${application.val1d}
 java.lang.String
 ${val1d}
 java.lang.String
@@ -517,14 +517,6 @@ ${ge}
 java.lang.Object
 ${instanceof}
 java.lang.Object
-${page}
-java.lang.Object
-${request}
-java.lang.Object
-${session}
-java.lang.Object
-${app}
-java.lang.Object
 ${true}
 java.lang.Object
 ${false}
@@ -562,7 +554,7 @@ ${bean1a.request}
 java.lang.Object
 ${bean1a.session}
 java.lang.Object
-${bean1a.app}
+${bean1a.application}
 java.lang.Object
 ${bean1a.true}
 java.lang.Object
@@ -715,23 +707,23 @@ java.lang.Object
 
 ${ 4 eq 3}
 java.lang.Object
-${ 4 neq 3}
+${ 4 ne 3}
 java.lang.Object
 ${ 4 eq 4}
 java.lang.Object
-${ 4 neq 4}
+${ 4 ne 4}
 java.lang.Object
 ${ 4 lt 3}
 java.lang.Object
 ${ 4 gt 3}
 java.lang.Object
-${ 4 lte 3}
+${ 4 le 3}
 java.lang.Object
-${ 4 gte 3}
+${ 4 ge 3}
 java.lang.Object
-${ 4 lte 4}
+${ 4 le 4}
 java.lang.Object
-${ 4 gte 4}
+${ 4 ge 4}
 java.lang.Object
 
 #######################################################

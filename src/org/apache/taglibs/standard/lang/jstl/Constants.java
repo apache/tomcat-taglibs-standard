@@ -82,8 +82,8 @@ public class Constants
   public static final String EXCEPTION_GETTING_BEANINFO =
     getStringResource ("EXCEPTION_GETTING_BEANINFO");
 
-  public static final String NULL_ATTRIBUTE_VALUE =
-    getStringResource ("NULL_ATTRIBUTE_VALUE");
+  public static final String NULL_EXPRESSION_STRING =
+    getStringResource ("NULL_EXPRESSION_STRING");
 
   public static final String PARSE_EXCEPTION =
     getStringResource ("PARSE_EXCEPTION");
@@ -187,8 +187,11 @@ public class Constants
   public static final String BAD_IMPLICIT_OBJECT =
     getStringResource ("BAD_IMPLICIT_OBJECT");
 
-  public static final String EVALUATION_EXCEPTION =
-    getStringResource ("EVALUATION_EXCEPTION");
+  public static final String ATTRIBUTE_EVALUATION_EXCEPTION =
+    getStringResource ("ATTRIBUTE_EVALUATION_EXCEPTION");
+
+  public static final String ATTRIBUTE_PARSE_EXCEPTION =
+    getStringResource ("ATTRIBUTE_PARSE_EXCEPTION");
 
   //-------------------------------------
   // Getting resources

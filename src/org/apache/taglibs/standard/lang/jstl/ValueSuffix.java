@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>Represents an element that can appear as a suffix in a complex
@@ -83,9 +80,10 @@ public abstract class ValueSuffix
    * given value.
    **/
   public abstract Object evaluate (Object pValue,
-				   PageContext pContext,
+				   Object pContext,
+				   VariableResolver pResolver,
 				   Logger pLogger)
-    throws JspException;
+    throws ELException;
 
   //-------------------------------------
 }

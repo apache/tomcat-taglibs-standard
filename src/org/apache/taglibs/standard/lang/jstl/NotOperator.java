@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>The implementation of the not operator
@@ -103,9 +100,9 @@ public class NotOperator
    * Applies the operator to the given value
    **/
   public Object apply (Object pValue,
-		       PageContext pContext,
+		       Object pContext,
 		       Logger pLogger)
-    throws JspException
+    throws ELException
   {
     // Coerce the value to a boolean
     boolean val = Coercions.coerceToBoolean (pValue, pLogger).booleanValue ();

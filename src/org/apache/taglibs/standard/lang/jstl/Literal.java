@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 /**
  *
  * <p>An expression representing a literal value
@@ -97,9 +94,10 @@ public abstract class Literal
    *
    * Evaluates to the literal value
    **/
-  public Object evaluate (PageContext pContext,
+  public Object evaluate (Object pContext,
+			  VariableResolver pResolver,
 			  Logger pLogger)
-    throws JspException
+    throws ELException
   {
     return mValue;
   }
