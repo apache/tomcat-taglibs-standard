@@ -90,10 +90,10 @@ public class ExpressionEvaluatorManager {
     //*********************************************************************
     // Constants
 
+    public static final String DEFAULT_EVALUATOR_CLASS =
+        "org.apache.taglibs.standard.lang.javascript.JavascriptExpressionEvaluator";
     private static final String EVALUATOR_PARAMETER =
         "javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass";
-    private static final String DEFAULT_EVALUATOR_CLASS =
-        "org.apache.taglibs.standard.lang.javascript.JavascriptExpressionEvaluator";
 
     //*********************************************************************
     // Internal, static state

@@ -161,6 +161,10 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	public void startElement(
 	        String ns, String ln, String qn, Attributes a) {
 
+            // substitute our own parsed 'ln' if it's not provided
+            if (ln == null)
+                ln = getLocalPart(qn);
+
 	    // for simplicity, we can ignore <jsp:text> for our purposes
 	    // (don't bother distinguishing between it and its characters)
 	    if (qn.equals(JSP_TEXT))

@@ -240,6 +240,15 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
         return true;
     }
 
+    // retrieves the local part of a QName
+    protected String getLocalPart(String qname) {
+	int colon = qname.indexOf(":");
+	if (colon == -1)
+	    return qname;
+	else
+	    return qname.substring(colon + 1);
+    }
+
     //*********************************************************************
     // Miscellaneous utility functions
 
