@@ -6,12 +6,10 @@
 </head>
 <body bgcolor="white">
 
-<%
-  String _url = request.getParameter("dbUrl");
-  session.setAttribute("myDbUrl", _url);
-  String _driver = request.getParameter("dbDriver");
-  session.setAttribute("myDbDriver", _driver);
-%>
+<c:set var="myDbUrl" value="${param.dbUrl}" scope="session"/>
+<c:set var="myDbDriver" value="${param.dbDriver}" scope="session"/>
+<c:set var="myDbUserName" value="${param.dbUserName}" scope="session"/>
+<c:set var="myDbPassword" value="${param.dbPassword}" scope="session"/>
 
 <%@ include file="links.html" %>
 

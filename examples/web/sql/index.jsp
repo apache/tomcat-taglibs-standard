@@ -38,21 +38,38 @@
       name varchar(80)
     )
 </code></pre>
-<p>Enter your Driver Name and DataBase URL to test the Database Tag Library. NOTE: 
-  You will need to have the DataBase Driver classes available in your server's 
-  CLASSPATH at startup.</p>
-<form name="myform" action="session.jsp" method="get" >
-  <table width="90%" border="0" cellspacing="0" cellpadding="0">
+<p>Enter your Driver Name and DataBase URL to test the Database Tag Library.</p>
+<p>NOTE: You will need to have the DataBase Driver classes available to your server's classloader or in your server's CLASSPATH at startup.</p>
+<form name="myform" action="session.jsp" method="post" >
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr> 
-      <td>Driver</td>
+      <td>Driver:</td>
       <td> 
         <input type="text" size="40" name="dbDriver" value="RmiJdbc.RJDriver">
       </td>
     </tr>
     <tr> 
-      <td>URL</td>
+      <td>URL:</td>
       <td> 
         <input type="text" size="40" name="dbUrl" value="jdbc:rmi://localhost:1099/jdbc:cloudscape:CloudscapeDB;create=true">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+<br><p>The following two fields are <strong>Optional</strong>. They are included for convenience.<br>
+NOTE: an unsecure <code>form</code> is used.</p>
+      </td>
+    </tr>
+    <tr> 
+      <td>User Name:</td>
+      <td> 
+        <input type="text" size="40" name="dbUserName" value="">
+      </td>
+    </tr>
+    <tr> 
+      <td>Password:</td>
+      <td> 
+        <input type="password" size="40" name="dbPassword" value="">
       </td>
     </tr>
   </table>

@@ -15,8 +15,10 @@
 
 <sql:setDataSource
   var="example"
-  driver="${myDbDriver}"
-  url="${myDbUrl}"
+  driver="${sessionScope.myDbDriver}"
+  url="${sessionScope.myDbUrl}"
+  user="${sessionScope.myDbUserName}"
+  password="${sessionScope.myDbPassword}"
 />
 
 <sql:transaction dataSource="${example}">
