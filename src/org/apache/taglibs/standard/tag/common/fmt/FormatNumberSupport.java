@@ -169,16 +169,19 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 
 	/*
 	 * If 'value' is a String, it is first parsed into an instance of
-	 * java.lang.Number according to the default pattern of the "en"
-	 * locale.
+	 * java.lang.Number
 	 */
 	if (value instanceof String) {
-	    NumberFormat parser
-		= NumberFormat.getNumberInstance(Locale.ENGLISH);
 	    try {
-		value = parser.parse((String) value);
-	    } catch (ParseException pe) {
-		throw new JspTagException(pe.getMessage());
+		if (((String) value).indexOf('.') != -1) {
+		    value = Double.valueOf((String) value);
+		} else {
+		    value = Long.valueOf((String) value);
+		}
+	    } catch (NumberFormatException nfe) {
+		throw new JspException(
+                    Resources.getMessage("FORMAT_NUMBER_PARSE_ERROR", value),
+		    nfe);
 	    }
 	}
 
