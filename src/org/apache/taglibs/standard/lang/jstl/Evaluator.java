@@ -159,46 +159,58 @@ public class Evaluator
 			  Logger pLogger)
     throws JspException
   {
-    // Check for null attribute values
-    if (pAttributeValue == null) {
+    try {
+      // Check for null attribute values
+      if (pAttributeValue == null) {
+	throw new ELException
+	  (Constants.NULL_ATTRIBUTE_VALUE);
+      }
+
+      // Get the parsed version of the attribute value
+      Object parsedValue = getOrParseAttributeValue (pAttributeName,
+						     pAttributeValue);
+
+      // Evaluate differently based on the parsed type
+      if (parsedValue instanceof String) {
+	// Convert the String, and cache the conversion
+	String strValue = (String) parsedValue;
+	return convertStaticValueToExpectedType (strValue, 
+						 pExpectedType, 
+						 pLogger);
+      }
+
+      else if (parsedValue instanceof Expression) {
+	// Evaluate the expression and convert
+	Object value = 
+	  ((Expression) parsedValue).evaluate (pPageContext, pLogger);
+	return convertToExpectedType (value, 
+				      pExpectedType,
+				      pLogger);
+      }
+
+      else if (parsedValue instanceof AttributeValue) {
+	// Evaluate the expression/string list and convert
+	String strValue = 
+	  ((AttributeValue) parsedValue).evaluate (pPageContext, pLogger);
+	return convertToExpectedType (strValue,
+				      pExpectedType,
+				      pLogger);
+      }
+
+      else {
+	// This should never be reached
+	return null;
+      }
+    }
+    catch (ELException exc) {
       throw new ELException
-	(Constants.NULL_ATTRIBUTE_VALUE);
-    }
-
-    // Get the parsed version of the attribute value
-    Object parsedValue = getOrParseAttributeValue (pAttributeName,
-						   pAttributeValue);
-
-    // Evaluate differently based on the parsed type
-    if (parsedValue instanceof String) {
-      // Convert the String, and cache the conversion
-      String strValue = (String) parsedValue;
-      return convertStaticValueToExpectedType (strValue, 
-					       pExpectedType, 
-					       pLogger);
-    }
-
-    else if (parsedValue instanceof Expression) {
-      // Evaluate the expression and convert
-      Object value = 
-	((Expression) parsedValue).evaluate (pPageContext, pLogger);
-      return convertToExpectedType (value, 
-				    pExpectedType,
-				    pLogger);
-    }
-
-    else if (parsedValue instanceof AttributeValue) {
-      // Evaluate the expression/string list and convert
-      String strValue = 
-	((AttributeValue) parsedValue).evaluate (pPageContext, pLogger);
-      return convertToExpectedType (strValue,
-				    pExpectedType,
-				    pLogger);
-    }
-
-    else {
-      // This should never be reached
-      return null;
+	(MessageFormat.format
+	 (Constants.EVALUATION_EXCEPTION,
+	  new Object [] {
+	    "" + pAttributeName,
+	    "" + pAttributeValue,
+	    "" + exc
+	  }));
     }
   }
 

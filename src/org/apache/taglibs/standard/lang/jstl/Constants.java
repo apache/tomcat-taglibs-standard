@@ -187,6 +187,9 @@ public class Constants
   public static final String BAD_IMPLICIT_OBJECT =
     getStringResource ("BAD_IMPLICIT_OBJECT");
 
+  public static final String EVALUATION_EXCEPTION =
+    getStringResource ("EVALUATION_EXCEPTION");
+
   //-------------------------------------
   // Getting resources
   //-------------------------------------
