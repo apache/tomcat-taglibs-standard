@@ -113,7 +113,9 @@ public abstract class ConditionalTagSupport
     //*********************************************************************
     // Lifecycle management and implementation of conditional behavior
 
-    // Includes its body if condition() evalutes to true.
+    /**
+     * Includes its body if <tt>condition()</tt> evalutes to true.
+     */
     public int doStartTag() throws JspException {
 
         // execute our condition() method once per invocation
@@ -129,7 +131,9 @@ public abstract class ConditionalTagSupport
             return SKIP_BODY;
     }
 
-    // Releases any resources we may have (or inherit)
+    /**
+     * Releases any resources this ConditionalTagSupport may have (or inherit).
+     */
     public void release() {
         super.release();
         init();
@@ -146,12 +150,21 @@ public abstract class ConditionalTagSupport
     //*********************************************************************
     // Accessors
 
-    // for tag attribute
+    /**
+     * Sets the 'var' attribute.
+     *
+     * @param var Name of the exported scoped variable storing the result of
+     * <tt>condition()</tt>.
+     */
     public void setVar(String var) {
 	this.var = var;
     }
 
-    // for tag attribute
+    /**
+     * Sets the 'scope' attribute.
+     *
+     * @param scope Scope of the 'var' attribute
+     */
     public void setScope(String scope) {
 	if (scope.equalsIgnoreCase("request"))
 	    this.scope = PageContext.REQUEST_SCOPE;

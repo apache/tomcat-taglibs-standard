@@ -235,13 +235,17 @@ public abstract class LoopTagSupport
     //*********************************************************************
     // Lifecycle management and implementation of iterative behavior
 
-    // Releases any resources we may have (or inherit)
+    /**
+     * Releases any resources this LoopTagSupport may have (or inherit).
+     */
     public void release() {
         super.release();
         init();
     }
 
-    // Begins iterating by processing the first item.
+    /**
+     * Begins iterating by processing the first item.
+     */
     public int doStartTag() throws JspException {
 
         // make sure 'begin' isn't greater than 'end'
@@ -279,7 +283,7 @@ public abstract class LoopTagSupport
         return EVAL_BODY_INCLUDE;
     }
 
-    /*
+    /**
      * Continues the iteration when appropriate -- that is, if we (a) have
      * more items and (b) don't run over our 'end' (given our 'step').
      */
@@ -310,10 +314,12 @@ public abstract class LoopTagSupport
         return EVAL_BODY_AGAIN;
     }
 
-    /*
-     * Removes attributes that our tag set; these attributes are intended
-     * to support scripting variables with NESTED scope, so we don't want
-     * to pollute attribute space by leaving them lying around.
+    /**
+     * Removes any attributes that this LoopTagSupport set.
+     *
+     * <p> These attributes are intended to support scripting variables with
+     * NESTED scope, so we don't want to pollute attribute space by leaving
+     * them lying around.
      */
     public void doFinally() {
 	/*
@@ -323,8 +329,8 @@ public abstract class LoopTagSupport
 	unExposeVariables();
     }
 
-    /*
-     * Be transparent with respect to exceptions: rethrow anything we get.
+    /**
+     * Rethrows the given Throwable.
      */
     public void doCatch(Throwable t) throws Throwable {
 	throw t;
@@ -431,12 +437,22 @@ public abstract class LoopTagSupport
      * two incompatible setters, which is illegal for a JavaBean.
      */
 
-    // for tag attribute
+    /**
+     * Sets the 'var' attribute.
+     *
+     * @param id Name of the exported scoped variable storing the current item
+     * of the iteration.
+     */
     public void setVar(String id) {
         this.itemId = id;
     }
 
-    // for tag attribute
+    /**
+     * Sets the 'varStatus' attribute.
+     *
+     * @param statusId Name of the exported scoped variable storing the status
+     * of the iteration.
+     */
     public void setVarStatus(String statusId) {
         this.statusId = statusId;
     }
