@@ -10,7 +10,7 @@
 
   <section name="'Standard' Taglib" href="Welcome">
 
-    <big><b>JSP(tm) Standard Tag Library implementation (1.0)</b></big>
+    <big><b>JSP(tm) Standard Tag Library implementation</b></big>
 
     <p>Jakarta Taglibs hosts the Standard Taglib, an implementation of
       the <a href="http://java.sun.com/products/jsp/jstl">JSP Standard Tag
@@ -18,11 +18,16 @@
       <a href="http://jcp.org/">Java Community Process</a>.
     </p>
 
-    <p><b>NOTE:</b> JSTL requires a JSP container that supports
+    <p><b>NOTE:</b> JSTL 1.1 requires a JSP container that supports
+      the Java Servlet 2.4 and JavaServer Pages 2.0 specifications.
+      Jakarta <a href="http://jakarta.apache.org/tomcat/">
+      Tomcat 5</a> supports the new specifications. The Standard 1.1 taglib
+      has been tested with Tomcat 5.0.3.</p>
+    <p>JSTL 1.0 requires a JSP container that supports
       the Java Servlet 2.3 and JavaServer Pages 1.2 specifications.
       Jakarta <a href="http://jakarta.apache.org/tomcat/">
-      Tomcat 4</a> supports the new specifications. The Standard 1.0 taglib
-      has been tested with Tomcat 4.0.4.
+      Tomcat 4</a> supports these specifications. The Standard 1.0 taglib
+      has been tested with Tomcat 4.1.24.
     </p>
 
   </section>
@@ -30,6 +35,19 @@
   <section name="'Standard' Taglib News" href="News">
 
     <news>
+    <!--
+      <newsitem date="08/26/2003">
+       Standard Taglib version 1.1.0-B1 - early access (Beta 1) of our 
+       implementation of the JSTL 1.1 - is now
+       available from the <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
+       Apache Jakarta Project Mirrors</a>.
+      </newsitem>
+      <newsitem date="08/26/2003">
+       Standard Taglib version 1.0.4 - another minor bugfix release - is now
+       available from the <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
+       Apache Jakarta Project Mirrors</a>.
+      </newsitem>
+      -->
       <newsitem date="02/20/2003">
        Standard Taglib version 1.0.3 -- another minor bugfix release -- is now
        available from the <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
@@ -100,8 +118,8 @@
       <!--  Uncomment this section and modify as needed when you start
             doing releases of the taglib, a link can be made to each
             available release. -->
-      <li>View the Standard 1.0 taglib documentation
-        <a href="standard/index.html">Standard 1.0 Documentation</a>
+      <li>View the Standard 1.1 taglib documentation
+        <a href="standard/index.html">Standard 1.1 Documentation</a>
       </li>
 
       <li>View the most recent, nightly build of the
@@ -131,10 +149,10 @@
 
     <!--  Uncomment this section and modify as needed when you start
           doing releases of the taglib. -->
-    <p>Download a binary distribution of the Standard 1.0 release:</p>
+    <p>Download a binary distribution of the Standard release:</p>
     <ul>
       <li>
-        Download the Standard Tag Library 1.0 Release from an
+        Download the Standard Tag Library Release from an
         <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
         Apache Jakarta Project Mirror</a>
       </li>
