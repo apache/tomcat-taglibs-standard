@@ -21,6 +21,36 @@ implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0
 <hr/>
 
 <h2>Release History</h2>
+<dt><b>Current</b></dt>
+<p><dd>Bugs fixed since Standard 1.0.1 Taglib release:</dd>
+<ul>
+  <blockquote>
+    <table width="95%" border="1">
+      <tr>
+        <th width="27%">
+          <div align="center">Bug Id</div>
+        </th>
+        <th width="73%">Summary</th>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=11204">11204</a></div>
+        </td>
+        <td width="73%" height="15">The <code>fmt</code> tags used to store the <code>BodyContent</code>
+          from one tag in the same field variable they use for <code>value</code>. This caused problems
+          in a container that supported tag re-use since the old <code>BodyContent</code> was used.</td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=11293">11293</a></div>
+        </td>
+        <td width="73%" height="15">The <code>xml:transform</code> tag can now be used with a series of imported
+          stylesheets.</td>
+      </tr>
+    </table>
+  </blockquote>
+</ul>
+
 <dt><b>26 July 2002</b></dt>
 <p><dd>Standard 1.0.1 Taglib released. Bugs fixed since Standard 1.0 Taglib 
 Final release: </dd>
