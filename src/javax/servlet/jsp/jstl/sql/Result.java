@@ -55,6 +55,8 @@
 
 package javax.servlet.jsp.jstl.sql;
 
+import java.util.Map;
+
 /**
  * <p>This interface represents the result of a &lt;sql:query&gt;
  * action. It provides access to the following information in the
@@ -62,6 +64,7 @@ package javax.servlet.jsp.jstl.sql;
  *
  * <ul>
  * <li> result rows
+ * <li> result rows using an index
  * <li> number of rows in the result
  * <li> result meta data
  * <li> indication whether result returned is a complete set or
@@ -74,18 +77,25 @@ package javax.servlet.jsp.jstl.sql;
 public interface Result {
 
     /**
-     * Returns an array of Row objects.
+     * Returns an array of Map objects. 
      *
-     * @return the result rows as an array of <code>Row</code> objects
+     * @return the result rows as an array of <code>Map</code> objects
      */
-    public Row[] getRows();
+    public Map[] getRows();
 
     /**
-     * Returns the ResultMetaData object of the cached ResultSet
+     * Returns an array of Objects[]
      *
-     * @return the <code>ResultMetaData> object of the result
+     * @return the result rows as an array of <code>Object[]</code> objects
      */
-    public ResultMetaData getMetaData();
+    public Object[][] getRowsByIndex();
+
+    /**
+     * Returns an array of ColumnMetaData objects of the cached ResultSet
+     *
+     * @return an array of <code>ColumnMetaData</code> objects of the result
+     */
+    public ColumnMetaData[] getMetaData();
 
     /**
      * Returns the number of rows in the cached ResultSet

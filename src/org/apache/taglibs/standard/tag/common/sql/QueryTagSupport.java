@@ -122,7 +122,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
             maxRows = Integer.parseInt(
                 pageContext.getServletContext().getInitParameter(MAX_ROWS));
         } catch (Exception ex) {
-            maxRows = 0;
+            maxRows = -1;
         }
     }
 
@@ -231,7 +231,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
             }
 	    setParameters(ps, parameters);
 	    ResultSet rs = ps.executeQuery();
-	    result = new ResultImpl(rs, startRow, (maxRows > 0));
+	    result = new ResultImpl(rs, startRow, maxRows);
 	}
 	catch (SQLException e) {
 	    throw new JspTagException(

@@ -44,26 +44,11 @@
 
 </sql:transaction>
 
-<%-- TBD by JSR 052 EG
-<hr>
-
-<h2>Iterating on each Row using the MetaData</h2>
-
-<table border="1">
-  <c:forEach var="rows" items="${deejays.rows}">
-    <tr>
-      <td> id: <c:out value="${rows.get('nameid')}"/> </td>
-      <td> name: <c:out value="${rows.get('name')}"/> </td>
-    </tr>
-  </c:forEach>
-</table>
---%>
-
 <hr>
 
 <h2>Iterating on each Column getting the MetaData</h2>
 
-<c:forEach var="metaData" items="${deejays.metaData.columns}">
+<c:forEach var="metaData" items="${deejays.metaData}">
   metaData: <c:out value="${metaData.name}"/> <br>
 </c:forEach>
 
@@ -72,9 +57,9 @@
 <h2>Iterating over each Row of the result</h2>
 
 <table border="1">
-  <c:forEach var="rows" items="${deejays.rows}">
+  <c:forEach var="row" items="${deejays.rowsByIndex}">
     <tr>
-      <c:forEach var="column" items="${rows.columns}">
+      <c:forEach var="column" items="${row}">
         <td><c:out value="${column}"/></td>
       </c:forEach>
     </tr>
@@ -83,16 +68,14 @@
 
 <hr>
 
-<h2>Iterating over Columns without knowing the name or index</h2>
+<h2>Iterating over Columns without knowing the index</h2>
 
 <table border="1">
   <c:forEach var="rows" items="${deejays.rows}">
-      <c:forEach var="column" items="${rows.columns}">
   <tr>
-        <td>Name: <c:out value="${column.name}"/></td>
-        <td>Value: <c:out value="${column}"/></td>
+    <td>Name: <c:out value="${rows.NAMEID}"/></td>
+    <td>Value: <c:out value="${rows.NAME}"/></td>
   </tr>
-      </c:forEach>
   </c:forEach>
 </table>
 
@@ -102,13 +85,13 @@
 
 <table border="1">
   <tr>
-    <c:forEach var="metaData" items="${deejays.metaData.columns}">
+    <c:forEach var="metaData" items="${deejays.metaData}">
       <th><c:out value="${metaData.name}"/> </th>
     </c:forEach>
   </tr>
-  <c:forEach var="rows" items="${deejays.rows}">
+  <c:forEach var="row" items="${deejays.rowsByIndex}">
     <tr>
-      <c:forEach var="column" items="${rows.columns}">
+      <c:forEach var="column" items="${row}">
         <td><c:out value="${column}"/></td>
       </c:forEach>
     </tr>

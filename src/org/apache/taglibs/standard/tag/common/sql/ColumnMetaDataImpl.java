@@ -60,7 +60,7 @@ import javax.servlet.jsp.jstl.sql.ColumnMetaData;
 
 /**
  * <p>This class encapsulates all meta data for a column in a database query 
- * result. Instances of this class are used by the <code>ColumnImpl</code>
+ * result. Instances of this class are used by the <code>ResultImpl</code>
  * instances representing specific column values.
  * 
  * <p>All methods may throw an SQLException. In this case, the exception 

@@ -44,64 +44,44 @@
 
 </sql:transaction>
 
-<%-- TBD by JSR 052 EG
 <hr>
 
 <h2>Using the Row index and Column name</h2>
-Row[0].get('nameid'): <c:out value="${deejays.rows[0].get('nameid')}" />
+Row[0].NAMEID: <c:out value="${deejays.rows[0].NAMEID}" />
 <br>
-Row[0].get('name'): <c:out value="${deejays.rows[0].get('name')}" />
+Row[0].NAME: <c:out value="${deejays.rows[0].NAME}" />
 <br>
-Row[1].get('nameid'): <c:out value="${deejays.rows[1].get('nameid')}" />
+Row[1].NAMEID: <c:out value="${deejays.rows[1].NAMEID}" />
 <br>
-Row[1].get('name'): <c:out value="${deejays.rows[1].get('name')}" />
+Row[1].NAME: <c:out value="${deejays.rows[1].NAME}" />
 <br>
-Row[2].get('nameid'): <c:out value="${deejays.rows[2].get('nameid')}" />
+Row[2].NAMEID: <c:out value="${deejays.rows[2].NAMEID}" />
 <br>
-Row[2].get('name'): <c:out value="${deejays.rows[2].get('name')}" />
+Row[2].NAME: <c:out value="${deejays.rows[2].NAME}" />
 <br>
---%>
 
 <hr>
 
-<h2>Using the Row index and Column object</h2>
-Row[0]Cols[0]: <c:out value="${deejays.rows[0].columns[0]}" />
+<h2>Using the Row and Column index</h2>
+Row[0][0]: <c:out value="${deejays.rowsByIndex[0][0]}" />
 <br>
-Row[0]Cols[1]: <c:out value="${deejays.rows[0].columns[1]}" />
+Row[0][1]: <c:out value="${deejays.rowsByIndex[0][1]}" />
 <br>
-Row[1]Cols[0]: <c:out value="${deejays.rows[1].columns[0]}" />
+Row[1][0]: <c:out value="${deejays.rowsByIndex[1][0]}" />
 <br>
-Row[1]Cols[1]: <c:out value="${deejays.rows[1].columns[1]}" />
+Row[1][1]: <c:out value="${deejays.rowsByIndex[1][1]}" />
 <br>
-Row[2]Cols[0]: <c:out value="${deejays.rows[2].columns[0]}" />
+Row[2][0]: <c:out value="${deejays.rowsByIndex[2][0]}" />
 <br>
-Row[2]Cols[1]: <c:out value="${deejays.rows[2].columns[1]}" />
+Row[2][1]: <c:out value="${deejays.rowsByIndex[2][1]}" />
 <br>
-
-<%-- TBD by JSR 052 EG
-<hr>
-
-<h2>Using the Row and Column indexes</h2>
-Row[0].get(0): <c:out value="${deejays.rows[0].get(0)}" />
-<br>
-Row[0].get(1): <c:out value="${deejays.rows[0].get(1)}" />
-<br>
-Row[1].get(0): <c:out value="${deejays.rows[1].get(0)}" />
-<br>
-Row[1].get(1): <c:out value="${deejays.rows[1].get(1)}" />
-<br>
-Row[2].get(0): <c:out value="${deejays.rows[2].get(0)}" />
-<br>
-Row[2].get(1): <c:out value="${deejays.rows[2].get(1)}" />
-<br>
---%>
 
 <hr>
 
 <h2>Getting the MetaData from the Column Object</h2>
-Col[0]MetaData: <c:out value="${deejays.metaData.columns[0].name}" />
+Col[0]MetaData: <c:out value="${deejays.metaData[0].name}" />
 <br>
-Col[1]MetaData: <c:out value="${deejays.metaData.columns[1].name}" />
+Col[1]MetaData: <c:out value="${deejays.metaData[1].name}" />
 
 <sql:update var="newTable" dataSource="${example}">
   drop table mytable

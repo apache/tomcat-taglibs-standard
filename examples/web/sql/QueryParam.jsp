@@ -52,16 +52,14 @@
 
 </sql:transaction>
 
-<%-- TBD by JSR 052 EG
 <table border="1">
-  <c:forEach var="rows" items="${deejay.rows}">
+  <c:forEach var="row" items="${deejay.rows}">
     <tr>
-      <td><c:out value="${rows.get('nameid')}"/></td>
-      <td><c:out value="${rows.get('name')}"/></td>
+      <td><c:out value="${row.NAMEID}"/></td>
+      <td><c:out value="${row.NAME}"/></td>
     </tr>
     </c:forEach>
 </table>
---%>
 
 <sql:update var="newTable" dataSource="${example}">
   drop table mytable

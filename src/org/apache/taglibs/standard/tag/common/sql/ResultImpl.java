@@ -70,8 +70,9 @@ import javax.servlet.jsp.jstl.sql.*;
  */
 
 public class ResultImpl implements Result {
-    private List rows;
-    private ResultMetaData resultMD;
+    private List rowMap;
+    private List rowByIndex;
+    private ResultMetaDataUtil resultMD;
     private boolean isLimited;
 
     /**
@@ -81,60 +82,79 @@ public class ResultImpl implements Result {
      * @param rs an open <code>ResultSet</code>, positioned before the 
      *   first row
      * @param startRow, beginning row to be cached
-     * @param isLimited, whether the query had a MaxRows limit
+     * @param maxRows, query maximum rows limit
      * @exception if a database error occurs
      */
-    public ResultImpl(ResultSet rs, int startRow, boolean isLimited) throws SQLException {
-        this.isLimited = isLimited;
+    public ResultImpl(ResultSet rs, int startRow, int maxRows) throws SQLException {
+	rowMap = new ArrayList();
+	rowByIndex = new ArrayList();
 
 	ResultSetMetaData rsmd = rs.getMetaData();
+        resultMD = new ResultMetaDataUtil(rsmd);
+
 	int noOfColumns = rsmd.getColumnCount();
-
-        resultMD = new ResultMetaDataImpl(rsmd);
-
-	rows = new ArrayList();
         int beginRow = 0;
 
 	while (rs.next()) {
-            if (beginRow >= startRow) {
-                Column[] columns = new ColumnImpl[noOfColumns];
+            if ((maxRows < 0) || (beginRow < maxRows)) {
+                if (beginRow >= startRow) {
+                    Object[] columns = new Object[noOfColumns];
+                    Map columnMap = new HashMap();
 
-	        // JDBC uses 1 as the lowest index!
-	        for (int i = 1; i <= noOfColumns; i++) {
-		    Object value =  rs.getObject(i);
-		    if (rs.wasNull()) {
-		        value = null;
-		    }
-                    // 0-based indexing to be consistent w/JSTL 
-                    columns[i-1] = new ColumnImpl(value, resultMD.get(i-1));
-	        }
-            Row currentRow = new RowImpl(columns);
-            rows.add(currentRow);
-            }
+	            // JDBC uses 1 as the lowest index!
+	            for (int i = 1; i <= noOfColumns; i++) {
+		        Object value =  rs.getObject(i);
+		        if (rs.wasNull()) {
+		            value = null;
+		        }
+                        // 0-based indexing to be consistent w/JSTL 
+                        columns[i-1] = value;
+                        columnMap.put((resultMD.get(i-1)).getName(),value);
+	            }
+                rowMap.add(columnMap);
+                rowByIndex.add(columns);
+                }
             beginRow++;
+            }
 	}
 
+        if (maxRows > 0) { 
+            isLimited = true; 
+        } else { 
+            isLimited = false; 
+        }
     }
 
     /**
-     * Returns an array of Row objects.
+     * Returns an array of Map objects. The Map object key is
+     * the ColumnName and the value is the ColumnValue.
      *
-     * @return an array of Rows, or null if there are no rows
+     * @return an array of Map, or null if there are no rows
      */
-    public Row[] getRows() {
-        if (rows == null) {
+    public Map[] getRows() {
+        if (rowMap == null) {
             return null;
         }
 
-        Row[] rowArray = new Row[rows.size()];
-        int index = 0;
-	Iterator i = rows.iterator();
-	while (i.hasNext()) {
-            // 0-based indexing to be consistent w/JSTL 
-            rowArray[index] = (Row) i.next();
-            index++;
-	}
-        return rowArray;
+        //should just be able to return Map[] object
+        return (Map []) rowMap.toArray(new Map[0]);
+    }
+
+
+    /**
+     * Returns an array of Object[] objects. The first index
+     * designates the Row, the second the Column. The array
+     * stores the value at the specified row and column.
+     *
+     * @return an array of Object[], or null if there are no rows
+     */
+    public Object[][] getRowsByIndex() {
+        if (rowByIndex == null) {
+            return null;
+        }
+
+        //should just be able to return Object[][] object
+        return (Object [][])rowByIndex.toArray(new Object[0][0]);
     }
 
     /**
@@ -144,19 +164,19 @@ public class ResultImpl implements Result {
      *    not be initialized due to SQLExceptions
      */
     public int getSize() {
-	if (rows == null) {
+	if (rowMap == null) {
 	    return -1;
 	}
-	return rows.size();
+	return rowMap.size();
     }
 
     /**
-     * Returns the ResultMetaData object of the cached ResultSet
+     * Returns the ColumnMetaData array object of the cached ResultSet
      *
-     * @return the ResultMetaData object
+     * @return the ColumnMetaData array object
      */
-    public ResultMetaData getMetaData() {
-        return resultMD;
+    public ColumnMetaData[] getMetaData() {
+        return resultMD.getColumns();
     }
 
     /**

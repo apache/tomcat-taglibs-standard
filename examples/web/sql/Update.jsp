@@ -52,13 +52,13 @@
 
 <table border="1">
   <tr>
-    <c:forEach var="metaData" items="${deejays.metaData.columns}">
+    <c:forEach var="metaData" items="${deejays.metaData}">
       <th><c:out value="${metaData.name}"/> </th>
     </c:forEach>
   </tr>
-  <c:forEach var="rows" items="${deejays.rows}">
+  <c:forEach var="row" items="${deejays.rowsByIndex}">
     <tr>
-      <c:forEach var="column" items="${rows.columns}">
+      <c:forEach var="column" items="${row}">
         <td><c:out value="${column}"/></td>
       </c:forEach>
     </tr>
@@ -81,13 +81,13 @@
 
 <table border="1">
   <tr>
-    <c:forEach var="metaData" items="${deejays.metaData.columns}">
+    <c:forEach var="metaData" items="${deejays.metaData}">
       <th><c:out value="${metaData.name}"/> </th>
     </c:forEach>
   </tr>
-  <c:forEach var="rows" items="${deejays.rows}">
+  <c:forEach var="row" items="${deejays.rowsByIndex}">
     <tr>
-      <c:forEach var="column" items="${rows.columns}">
+      <c:forEach var="column" items="${row}">
         <td><c:out value="${column}"/></td>
       </c:forEach>
     </tr>
