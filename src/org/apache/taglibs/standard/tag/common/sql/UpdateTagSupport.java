@@ -280,7 +280,12 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	if (parameters != null) {
 	    for (int i = 0; i < parameters.size(); i++) {
 		// The first parameter has index 1
-		ps.setObject(i + 1, parameters.get(i));
+                if (parameters.get(i) == null) {
+                    ps.setNull(i + 1, java.sql.Types.NULL);
+                }
+                else {
+                    ps.setObject(i + 1, parameters.get(i));
+                }
 	    }
 	}
     }
