@@ -317,7 +317,7 @@
 
   <tag>
     <name>remove</name>
-    <tag-class>org.apache.taglibs.standard.tag.el.core.RemoveTag</tag-class>
+    <tag-class>org.apache.taglibs.standard.tag.common.core.RemoveTag</tag-class>
     <body-content>empty</body-content>
     <description>
 	Removes a scoped variable (from a particular scope, if specified).

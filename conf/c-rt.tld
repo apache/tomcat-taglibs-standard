@@ -268,6 +268,25 @@
   </tag>
 
   <tag>
+    <name>remove</name>
+    <tag-class>org.apache.taglibs.standard.tag.common.core.RemoveTag</tag-class>
+    <body-content>empty</body-content>
+    <description>
+        Removes a scoped variable (from a particular scope, if specified).
+    </description>
+    <attribute>
+        <name>var</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>scope</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
     <name>url</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.core.UrlTag</tag-class>
     <body-content>JSP</body-content>
