@@ -73,6 +73,7 @@ import javax.servlet.jsp.jstl.sql.ColumnMetaData;
  * that don't make much sense in the context where this class is used.</p>
  *
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 
 public class ColumnMetaDataImpl implements ColumnMetaData {
@@ -122,6 +123,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
     /**
      * Indicates whether the column is automatically numbered, 
      * thus read-only.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isAutoIncrement() throws SQLException {
 	if (isAutoIncrementException != null) {
@@ -140,6 +145,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Indicates whether a column's case matters.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isCaseSensitive() throws SQLException {
 	if (isCaseSensitiveException != null) {
@@ -158,6 +167,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Indicates whether the column can be used in a where clause.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isSearchable() throws SQLException {
 	if (isSearchableException != null) {
@@ -176,6 +189,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Indicates whether the column is a cash value.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isCurrency() throws SQLException {
 	if (isCurrencyException != null) {
@@ -194,6 +211,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Indicates the nullability of values in the column.
+     *
+     * @return the nullability status of the given column
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int isNullable() throws SQLException {
 	if (isNullableException != null) {
@@ -212,6 +233,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Indicates whether values in the column are signed numbers.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isSigned() throws SQLException {
 	if (isSignedException != null) {
@@ -230,6 +255,11 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Indicates the column's normal maximum width in characters.
+     *
+     * @return the normal maximum number of characters allowed as
+     * the width of the designated column
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int getDisplaySize() throws SQLException {
 	if (displaySizeException != null) {
@@ -248,6 +278,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Gets the column's suggested title for use in printouts and displays.
+     *
+     * @return the column's suggested title
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getLabel() throws SQLException {
 	if (labelException != null) {
@@ -266,6 +300,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Get the designated column's name.
+     *
+     * @return the column name
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getName() throws SQLException {
 	if (nameException != null) {
@@ -284,6 +322,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Get the column's table's schema.
+     *
+     * @return the schema name or "" if not applicable
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getSchemaName() throws SQLException {
 	if (schemaNameException != null) {
@@ -302,6 +344,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Get the column's number of decimal digits.
+     *
+     * @return the column's number of decimal digits
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int getPrecision() throws SQLException {
 	if (precisionException != null) {
@@ -319,7 +365,12 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
     }
 
     /**
-     * Gets the column's number of digits to right of the decimal point.
+     * Gets the column's number of digits to the right of the decimal point.
+     *
+     * @return the column's number of digits to the right of the decimal
+     * point
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int getScale() throws SQLException {
 	if (scaleException != null) {
@@ -338,6 +389,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Gets the designated column's table name.
+     *
+     * @return the table name or "" if not applicable
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getTableName() throws SQLException {
 	if (tableNameException != null) {
@@ -356,6 +411,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Gets the column's table's catalog name.
+     *
+     * @return the catalog name or "" if not applicable
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getCatalogName() throws SQLException {
 	if (catalogNameException != null) {
@@ -375,8 +434,12 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
     /**
      * Retrieves the column's SQL type.
      *
-     *<p>Fix: maybe this method should return a String instead, with
-     * the name of the type based on the java.sql.Types statics names.
+     * <p>Fix: maybe this method should return a String instead, with
+     * the name of the type based on the java.sql.Types statics names.</p>
+     *
+     * @return the column's SQL type
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int getType() throws SQLException {
 	if (typeException != null) {
@@ -395,6 +458,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Retrieves the column's database-specific type name.
+     *
+     * @return the column's database-specific type name
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getTypeName() throws SQLException {
 	if (typeNameException != null) {
@@ -413,6 +480,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Indicates whether the column is definitely not writable.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isReadOnly() throws SQLException {
 	if (isReadOnlyException != null) {
@@ -431,6 +502,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Indicates whether it is possible for a write on the column to succeed.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isWritable() throws SQLException {
 	if (isWritableException != null) {
@@ -449,6 +524,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 
     /**
      * Indicates whether a write on the column will definitely succeed.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isDefinitelyWritable() throws SQLException {
 	if (isDefinitelyWritableException != null) {
@@ -471,6 +550,13 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
      * called to retrieve a value from the column. 
      * <code>ResultSet.getObject</code> may return a subclass of the class 
      * returned by this method.
+     *
+     * @return the fully-qualified name of the class in the Java
+     * programming language that would be used by the method
+     * <code>ResultSet.getObject</code> to retrieve the value in the
+     * specified column. This is the class name used for custom mapping.
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getClassName() throws SQLException {
 	if (classNameException != null) {

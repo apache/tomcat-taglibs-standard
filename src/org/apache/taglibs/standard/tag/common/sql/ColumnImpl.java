@@ -64,8 +64,8 @@ import javax.servlet.jsp.jstl.sql.*;
  * as the result of the &lt;Query&gt; action.</p>
  * 
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
-
 public class ColumnImpl extends ColumnMetaDataImpl implements Column {
     private Object value;
     private ColumnMetaData md;
@@ -76,7 +76,9 @@ public class ColumnImpl extends ColumnMetaDataImpl implements Column {
     }
 
     /**
-     * Returns the column value, or null.
+     * Returns the column value
+     *
+     * @return the column's value or <code>null</code>
      */
     public Object getValue() {
 	return value;
@@ -85,6 +87,10 @@ public class ColumnImpl extends ColumnMetaDataImpl implements Column {
     /**
      * Returns the default <code>String</code> representation of the
      * column's value.
+     *
+     * @return the default <code>String</code> representation of the
+     * column's value. If value is <code>null</code>, an empty
+     * <code>String</code> is returned
      */
     public String toString() {
 	String stringValue = null;
@@ -99,6 +105,8 @@ public class ColumnImpl extends ColumnMetaDataImpl implements Column {
 
     /**
      * Returns the ColumnMetaDataName
+     *
+     * @return the column's meta data name
      */
     public String getName() throws SQLException {
         return md.getName();
