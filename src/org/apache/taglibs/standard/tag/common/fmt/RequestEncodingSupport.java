@@ -79,6 +79,12 @@ public abstract class RequestEncodingSupport extends TagSupport {
 
 
     //*********************************************************************
+    // Private constants
+
+    private static final String DEFAULT_ENCODING = "ISO-8859-1";
+
+
+    //*********************************************************************
     // Protected state
 
     protected String value;                      // 'value' attribute
@@ -101,21 +107,23 @@ public abstract class RequestEncodingSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	if ((value == null)
-	      && (pageContext.getRequest().getCharacterEncoding() == null)) {
-	    /*
-	     * no charset specified in tag or defined in request Content-Type
-	     * header
-	     */
-	    value = (String) pageContext.findAttribute(REQUEST_CHAR_SET);
+	if (value == null) {
+	    // Use charset from request's Content-Type header
+	    value = pageContext.getRequest().getCharacterEncoding();
+	    if (value == null) {
+		// Use charset from scoped attribute
+		value = (String) pageContext.findAttribute(REQUEST_CHAR_SET);
+		if (value == null) {
+		    // Use default encoding
+		    value = DEFAULT_ENCODING;
+		}
+	    }
 	}
 
-	if (value != null) {
-	    try {
-		pageContext.getRequest().setCharacterEncoding(value);
-	    } catch (UnsupportedEncodingException uee) {
-		throw new JspTagException(uee.getMessage());
-	    }
+	try {
+	    pageContext.getRequest().setCharacterEncoding(value);
+	} catch (UnsupportedEncodingException uee) {
+	    throw new JspTagException(uee.getMessage());
 	}
 
 	return EVAL_PAGE;
