@@ -76,7 +76,6 @@ public class FormatDateTag extends FormatDateSupport {
     private String value_;                       // stores EL-based property
     private String pattern_;		         // stores EL-based property
     private String timeZone_;		         // stores EL-based property
-    private String parseLocale_;	         // stores EL-based property
 
 
     //*********************************************************************
@@ -131,11 +130,6 @@ public class FormatDateTag extends FormatDateSupport {
         this.timeZone_ = timeZone_;
     }
 
-    // for EL-based attribute
-    public void setParseLocale(String parseLocale_) {
-        this.parseLocale_ = parseLocale_;
-    }
-
 
     //*********************************************************************
     // Private (utility) methods
@@ -143,7 +137,7 @@ public class FormatDateTag extends FormatDateSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = pattern_ = timeZone_ = parseLocale_ = null;
+	value_ = pattern_ = timeZone_ = null;
     }
 
     // Evaluates expressions as necessary
@@ -165,11 +159,5 @@ public class FormatDateTag extends FormatDateSupport {
 	timeZone = ExpressionUtil.evalNotNull(
 	    "formatDate", "timeZone", timeZone_, Object.class, this,
 	    pageContext);
-
-	String pl = (String) ExpressionUtil.evalNotNull(
-	    "formatDate", "parseLocale", parseLocale_, String.class, this,
-	    pageContext);
-	if (pl != null)
-	    parseLocale = LocaleSupport.parseLocale(pl, null);
     }
 }

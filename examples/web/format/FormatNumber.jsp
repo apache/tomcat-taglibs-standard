@@ -42,16 +42,9 @@
   <fmt:parseNumber value="$cur" type="currency" integerOnly="true"/>
 
  <li> Format &quot;12345.67&quot; as German currency (given string is
-      parsed using default &quot;en&quot; locale before it is formatted):<br>
+      parsed using &quot;en&quot; locale before it is formatted):<br>
   <fmt:locale value="de-DE"/>
   <fmt:formatNumber value="12345.67" type="currency"/>
-
- <li> Format &quot;12345.67&quot; as German currency (given string is parsed
-      using &quot;de&quot; locale before it is formatted):<br>
-  <fmt:locale value="de-DE"/>
-  <fmt:formatNumber parseLocale="de" type="currency">
-   12345.67
-  </fmt:formatNumber>
  </ul>
 
 </body>

@@ -33,7 +33,6 @@
 	    messageArg:value
 	    formatNumber:value
 	    formatNumber:pattern
-	    formatNumber:parseLocale
             formatNumber:currencyCode
             formatNumber:currencySymbol
             formatNumber:groupingUsed
@@ -48,7 +47,6 @@
 	    formatDate:value
 	    formatDate:pattern
 	    formatDate:timeZone
-	    formatDate:parseLocale
 	    parseDate:value
 	    parseDate:pattern
 	    parseDate:timeZone
@@ -286,11 +284,6 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>parseLocale</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
         <name>currencyCode</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -417,11 +410,6 @@
     </attribute>
     <attribute>
         <name>timeZone</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>parseLocale</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>

@@ -75,7 +75,6 @@ public class FormatNumberTag extends FormatNumberSupport {
 
     private String value_;                       // stores EL-based property
     private String pattern_;		         // stores EL-based property
-    private String parseLocale_;	         // stores EL-based property
     private String currencyCode_;   	         // stores EL-based property
     private String currencySymbol_;   	         // stores EL-based property
     private String groupingUsed_;   	         // stores EL-based property
@@ -133,11 +132,6 @@ public class FormatNumberTag extends FormatNumberSupport {
     }
 
     // for EL-based attribute
-    public void setParseLocale(String parseLocale_) {
-        this.parseLocale_ = parseLocale_;
-    }
-
-    // for EL-based attribute
     public void setCurrencyCode(String currencyCode_) {
         this.currencyCode_ = currencyCode_;
     }
@@ -184,7 +178,7 @@ public class FormatNumberTag extends FormatNumberSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = pattern_ = parseLocale_ = null;
+	value_ = pattern_ = null;
 	currencyCode_ = currencySymbol_ = null;
 	groupingUsed_ = null;
 	maxIntegerDigits_ = minIntegerDigits_ = null;
@@ -206,21 +200,17 @@ public class FormatNumberTag extends FormatNumberSupport {
 	value = ExpressionUtil.evalNotNull(
 	    "formatNumber", "value", value_, Object.class, this, pageContext);
 
+	// pattern
 	pattern = (String) ExpressionUtil.evalNotNull(
 	    "formatNumber", "pattern", pattern_, String.class, this,
 	    pageContext);
 
-	// parseLocale
-	r = ExpressionUtil.evalNotNull(
-	    "formatNumber", "parseLocale", parseLocale_, String.class, this,
-	    pageContext);
-	if (r != null)
-	    parseLocale = LocaleSupport.parseLocale((String) r, null);
-
+	// currencyCode
 	currencyCode = (String) ExpressionUtil.evalNotNull(
 	    "formatNumber", "currencyCode", currencyCode_, String.class, this,
 	    pageContext);
 
+	// currencySymbol
 	currencySymbol = (String) ExpressionUtil.evalNotNull(
 	    "formatNumber", "currencySymbol", currencySymbol_, String.class,
 	    this, pageContext);

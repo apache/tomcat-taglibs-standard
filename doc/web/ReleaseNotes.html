@@ -168,6 +168,15 @@ Version 1.0 Release</b></dt>
  <li>Added javax.servlet.jsp.jstl.i18n.locale context configuration
      parameter, which allows application locale to be specified in
      deployment descriptor file.</li>
+ <li>Removed 'parseLocale' attribute from &lt;fmt:formatDate&gt; and
+     &lt;fmt:formatNumber&gt;. If the value to be formatted is given as a
+     String, it is now always parsed using the &quot;en&quot; locale.
+     If the String
+     is formatted with a different locale than &quot;en&quot;, it must first be
+     parsed to a java.util.Date or java.lang.Number with
+     &lt;fmt:parseDate&gt; or &lt;fmt:parseNumber&gt;, and the result can
+     then be used with &lt;fmt:formatDate&gt; or &lt;fmt:formatNumber&gt;,
+     respectively.</li>
 </ul>
 </dd>
 

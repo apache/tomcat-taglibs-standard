@@ -232,11 +232,6 @@
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
-        <name>parseLocale</name>
-        <required>false</required>
-        <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
         <name>currencyCode</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -363,11 +358,6 @@
     </attribute>
     <attribute>
         <name>timeZone</name>
-        <required>false</required>
-        <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>parseLocale</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>

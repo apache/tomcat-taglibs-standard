@@ -100,7 +100,6 @@ public abstract class FormatDateSupport extends TagSupport {
     protected Object value;                      // 'value' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Object timeZone;                   // 'timeZone' attribute
-    protected Locale parseLocale;                // 'parseLocale' attribute
 
 
     //*********************************************************************
@@ -128,7 +127,6 @@ public abstract class FormatDateSupport extends TagSupport {
 	type = DATE_TYPE;
 	dateStyle = timeStyle = DateFormat.DEFAULT;
 	scope = PageContext.PAGE_SCOPE;
-	parseLocale = null;
     }
 
 
@@ -171,19 +169,14 @@ public abstract class FormatDateSupport extends TagSupport {
 	 * If no date or time is given, the current date and time are used.
 	 * If the date and/or time is given as a string literal, it is first
 	 * parsed into an instance of java.util.Date according to the default
-	 * pattern of the locale given via the 'parseLocale' attribute. If this
-	 * attribute is missing, the default ("en") locale is used.
+	 * pattern of the "en" locale.
 	 */
 	if (value == null) {
 	    value = new Date();
 	} else if (value instanceof String) {
-	    DateFormat parser = null;
-	    if (parseLocale != null)
-		parser = DateFormat.getDateInstance(DateFormat.DEFAULT,
-						    parseLocale);
-	    else
-		parser = DateFormat.getDateInstance(DateFormat.DEFAULT,
-						    Locale.ENGLISH);
+	    DateFormat parser
+		= DateFormat.getDateInstance(DateFormat.DEFAULT,
+					     Locale.ENGLISH);
 	    try {
 		value = parser.parse((String) value);
 	    } catch (ParseException pe) {

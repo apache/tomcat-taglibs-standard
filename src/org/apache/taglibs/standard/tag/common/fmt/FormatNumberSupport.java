@@ -101,7 +101,6 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 
     protected Object value;                    // 'value' attribute
     protected String pattern;                  // 'pattern' attribute
-    protected Locale parseLocale;              // 'parseLocale' attribute
     protected String currencyCode;             // 'currencyCode' attribute
     protected String currencySymbol;           // 'currencySymbol' attribute
     protected boolean isGroupingUsed;          // 'groupingUsed' attribute
@@ -147,7 +146,6 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	groupingUsedSpecified = false;
 	maxIntegerDigitsSpecified = minIntegerDigitsSpecified = false;
 	maxFractionDigitsSpecified = minFractionDigitsSpecified = false;
-	parseLocale = null;
 	type = NUMBER_TYPE;
 	scope = PageContext.PAGE_SCOPE;
     }
@@ -194,16 +192,12 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 
 	/*
 	 * If 'value' is a String, it is first parsed into an instance of
-	 * java.lang.Number according to the default pattern of the locale
-	 * given via the 'parseLocale' attribute. If this attribute is missing,
-	 * the default ("en") locale is used.
+	 * java.lang.Number according to the default pattern of the "en"
+	 * locale.
 	 */
 	if (value instanceof String) {
-	    NumberFormat parser = null;
-	    if (parseLocale != null)
-		parser = NumberFormat.getNumberInstance(parseLocale);
-	    else
-		parser = NumberFormat.getNumberInstance(Locale.ENGLISH);
+	    NumberFormat parser
+		= NumberFormat.getNumberInstance(Locale.ENGLISH);
 	    try {
 		value = parser.parse((String) value);
 	    } catch (ParseException pe) {

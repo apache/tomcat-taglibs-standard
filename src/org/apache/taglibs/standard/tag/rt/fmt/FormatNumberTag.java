@@ -83,11 +83,6 @@ public class FormatNumberTag extends FormatNumberSupport {
     }
 
     // for tag attribute
-    public void setParseLocale(String parseLocale) throws JspTagException {
-        this.parseLocale = LocaleSupport.parseLocale(parseLocale, null);
-    }
-
-    // for tag attribute
     public void setCurrencyCode(String currencyCode) throws JspTagException {
         this.currencyCode = currencyCode;
     }
