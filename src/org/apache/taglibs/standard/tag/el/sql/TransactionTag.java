@@ -68,14 +68,14 @@ import org.apache.taglibs.standard.tag.common.sql.TransactionTagSupport;
 public class TransactionTag extends TransactionTagSupport {
     
     private String dataSourceEL;
-    private String transactionIsolationEL;
+    private String isolationEL;
 
     public void setDataSource(String dataSourceEL) {
 	this.dataSourceEL = dataSourceEL;
     }
 
-    public void setTransactionIsolation(String transactionIsolationEL) {
-	this.transactionIsolationEL = transactionIsolationEL;
+    public void setIsolation(String isolationEL) {
+	this.isolationEL = isolationEL;
     }
 
     public int doStartTag() throws JspException {
@@ -85,11 +85,11 @@ public class TransactionTag extends TransactionTagSupport {
 		    dataSourceEL, Object.class, this, pageContext);
 	}
 
-	if (transactionIsolationEL != null) {
-	    transactionIsolationEL = (String) 
-		ExpressionEvaluatorManager.evaluate("transactionIsolation", 
-		    transactionIsolationEL, String.class, this, pageContext);
-            super.setTransactionIsolation(transactionIsolationEL);
+	if (isolationEL != null) {
+	    isolationEL = (String) 
+		ExpressionEvaluatorManager.evaluate("isolation", 
+		    isolationEL, String.class, this, pageContext);
+            super.setIsolation(isolationEL);
 	}
 
 	return super.doStartTag();

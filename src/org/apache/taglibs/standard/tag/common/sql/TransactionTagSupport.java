@@ -82,7 +82,7 @@ public abstract class TransactionTagSupport extends TagSupport
 
     private static final int DEFAULT_ISOLATION = -1;
 
-    private int transactionIsolation = DEFAULT_ISOLATION;
+    private int isolation = DEFAULT_ISOLATION;
 
     /*
      * The following properties take expression values, so the
@@ -104,20 +104,20 @@ public abstract class TransactionTagSupport extends TagSupport
     /**
      * Setter method for the transaction isolation level.
      */
-    public void setTransactionIsolation(String transactionIsolation) 
+    public void setIsolation(String isolation) 
 	throws JspTagException {
 
-	if ("TRANSACTION_READ_COMMITTED".equals(transactionIsolation)) {
-	    this.transactionIsolation = Connection.TRANSACTION_READ_COMMITTED;
+	if ("TRANSACTION_READ_COMMITTED".equals(isolation)) {
+	    this.isolation = Connection.TRANSACTION_READ_COMMITTED;
 	}
-	if ("TRANSACTION_READ_UNCOMMITTED".equals(transactionIsolation)) {
-	    this.transactionIsolation = Connection.TRANSACTION_READ_UNCOMMITTED;
+	if ("TRANSACTION_READ_UNCOMMITTED".equals(isolation)) {
+	    this.isolation = Connection.TRANSACTION_READ_UNCOMMITTED;
 	}
-	if ("TRANSACTION_REPEATABLE_READ".equals(transactionIsolation)) {
-	    this.transactionIsolation = Connection.TRANSACTION_REPEATABLE_READ;
+	if ("TRANSACTION_REPEATABLE_READ".equals(isolation)) {
+	    this.isolation = Connection.TRANSACTION_REPEATABLE_READ;
 	}
-	if ("TRANSACTION_SERIALIZABLE".equals(transactionIsolation)) {
-	    this.transactionIsolation = Connection.TRANSACTION_SERIALIZABLE;
+	if ("TRANSACTION_SERIALIZABLE".equals(isolation)) {
+	    this.isolation = Connection.TRANSACTION_SERIALIZABLE;
 	}
 	else {
 	    throw new JspTagException(
@@ -151,9 +151,9 @@ public abstract class TransactionTagSupport extends TagSupport
 		throw new JspTagException(
                     Resources.getMessage("TRANSACTION_NO_SUPPORT"));
 	    }
-	    if (transactionIsolation != DEFAULT_ISOLATION &&
-		origIsolation != transactionIsolation) {
-		conn.setTransactionIsolation(transactionIsolation);
+	    if (isolation != DEFAULT_ISOLATION &&
+		origIsolation != isolation) {
+		conn.setTransactionIsolation(isolation);
 	    }
 	    conn.setAutoCommit(false);
 	}
@@ -198,8 +198,8 @@ public abstract class TransactionTagSupport extends TagSupport
     public void doFinally() {
 	if (conn != null) {
 	    try {
-		if (transactionIsolation != DEFAULT_ISOLATION &&
-		    origIsolation != transactionIsolation) {
+		if (isolation != DEFAULT_ISOLATION &&
+		    origIsolation != isolation) {
 		    conn.setTransactionIsolation(origIsolation);
 		}
 		conn.setAutoCommit(true);

@@ -64,6 +64,7 @@ import org.apache.taglibs.standard.tag.common.sql.TransactionTagSupport;
  * @author Hans Bergsten
  */
 public class TransactionTag extends TransactionTagSupport {
+    private String isolationRT;
     
     //*********************************************************************
     // Accessor methods
@@ -75,5 +76,17 @@ public class TransactionTag extends TransactionTagSupport {
      */
     public void setDataSource(Object dataSource) {
 	this.rawDataSource = dataSource;
+    }
+
+    /**
+     * Setter method for the Transaction Isolation level.
+     */
+    public void setIsolation(String isolation) {
+	this.isolationRT = isolation;
+    }
+
+    public int doStartTag() throws JspException {
+        super.setIsolation(isolationRT);
+        return super.doStartTag();
     }
 }
