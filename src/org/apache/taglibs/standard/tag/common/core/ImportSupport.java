@@ -463,7 +463,11 @@ public abstract class ImportSupport extends BodyTagSupport
      * Returns <tt>true</tt> if our current URL is absolute,
      * <tt>false</tt> otherwise.
      */
-    private boolean isAbsoluteUrl() {
+    private boolean isAbsoluteUrl() throws JspTagException {
+	// ensure we have something
+	if (url == null)
+	    throw new NullAttributeException("import", "url");
+
         return isAbsoluteUrl(url);
     }
 
@@ -476,6 +480,10 @@ public abstract class ImportSupport extends BodyTagSupport
      * <tt>false</tt> otherwise.
      */
     public static boolean isAbsoluteUrl(String url) {
+	// a null URL is not absolute, by our definition
+	if (url == null)
+	    return false;
+
 	// do a fast, simple check first
 	int colonPos;
 	if ((colonPos = url.indexOf(":")) == -1)
