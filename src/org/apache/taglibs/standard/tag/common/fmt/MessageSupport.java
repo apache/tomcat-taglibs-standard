@@ -195,8 +195,8 @@ public abstract class MessageSupport extends BodyTagSupport {
 						   locCtxt.getLocale());
 	    }
 	}
-
-	String message = UNDEFINED_KEY + keyInput + UNDEFINED_KEY;
+        
+ 	String message = UNDEFINED_KEY + keyInput + UNDEFINED_KEY;
 	if (locCtxt != null) {
 	    ResourceBundle bundle = locCtxt.getResourceBundle();
 	    if (bundle != null) {
@@ -208,10 +208,20 @@ public abstract class MessageSupport extends BodyTagSupport {
 		    // Perform parametric replacement if required
 		    if (!params.isEmpty()) {
 			Object[] messageArgs = params.toArray();
-			MessageFormat formatter = new MessageFormat("");
+			MessageFormat formatter = new MessageFormat(""); // empty pattern, default Locale
 			if (locCtxt.getLocale() != null) {
 			    formatter.setLocale(locCtxt.getLocale());
-			}
+			} else {
+                            // For consistency with the <fmt:formatXXX> actions,
+                            // we try to get a locale that matches the user's preferences
+                            // as well as the locales supported by 'date' and 'number'.
+                            //System.out.println("LOCALE-LESS LOCCTXT: GETTING FORMATTING LOCALE");
+                            Locale locale = SetLocaleSupport.getFormattingLocale(pageContext);
+                            //System.out.println("LOCALE: " + locale);
+                            if (locale != null) {
+                                formatter.setLocale(locale);
+                            }
+                        }
 			formatter.applyPattern(message);
 			message = formatter.format(messageArgs);
 		    }

@@ -56,6 +56,7 @@
 package org.apache.taglibs.standard.tag.common.fmt;
 
 import java.util.*;
+import java.text.*;
 import javax.servlet.ServletResponse;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
@@ -311,6 +312,68 @@ public abstract class SetLocaleSupport extends TagSupport {
 	    }
 	}
  	if (format && (match != null)) {
+	    setResponseLocale(pc, match);
+	}
+
+	return match;
+    }
+
+    /**
+     * Setup the available formatting locales that will be used
+     * by getFormattingLocale(PageContext).
+     */
+    static Locale[] availableFormattingLocales;
+    static {
+        Locale[] dateLocales = DateFormat.getAvailableLocales();
+        Locale[] numberLocales = NumberFormat.getAvailableLocales();
+        Vector vec = new Vector(dateLocales.length);
+        for (int i=0; i<dateLocales.length; i++) {
+            for (int j=0; j<numberLocales.length; j++) {
+                if (dateLocales[i].equals(numberLocales[j])) {
+                    vec.add(dateLocales[i]);
+                    break;
+                }
+            }
+        }
+        availableFormattingLocales = new Locale[vec.size()];
+        availableFormattingLocales = (Locale[])vec.toArray(availableFormattingLocales);
+        /*
+        for (int i=0; i<availableFormattingLocales.length; i++) {
+            System.out.println("AvailableLocale[" + i + "] " + availableFormattingLocales[i]);
+        }
+        */
+    }
+    
+    /*
+     * Returns the formatting locale to use when <fmt:message> is used
+     * with a locale-less localization context.
+     *
+     * @param pc The page context containing the formatting action
+     * @return the formatting locale to use
+     */
+    static Locale getFormattingLocale(PageContext pc) {
+	/*
+	 * Establish formatting locale by comparing the preferred locales
+	 * (in order of preference) against the available formatting
+	 * locales, and determining the best matching locale.
+	 */
+	Locale match = null;
+	Locale pref = getLocale(pc, Config.FMT_LOCALE);
+	if (pref != null) {
+	    // Preferred locale is application-based
+	    match = findFormattingMatch(pref, availableFormattingLocales);
+	} else {
+	    // Preferred locales are browser-based 
+	    match = findFormattingMatch(pc, availableFormattingLocales);
+	}
+	if (match == null) {
+	    //Use fallback locale.
+	    pref = getLocale(pc, Config.FMT_FALLBACK_LOCALE);
+	    if (pref != null) {
+		match = findFormattingMatch(pref, availableFormattingLocales);
+	    }
+	}
+ 	if (match != null) {
 	    setResponseLocale(pc, match);
 	}
 

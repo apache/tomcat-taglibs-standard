@@ -12,8 +12,10 @@
 
 <fmt:setLocale value="de"/>
 <fmt:setBundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="deBundle"/>
+
 <fmt:formatDate value="${now}" type="both" var="currentDateString"/>
 <fmt:parseDate value="${currentDateString}" type="both" var="currentDate"/>
+
 <ul>
  <li> Using single &lt;param&gt; with 'value' evaluating to String:<br>
   <fmt:message key="currentTime" bundle="${deBundle}">
@@ -38,6 +40,26 @@
     <fmt:param value="${arg}"/>
    </c:forEach>
   </fmt:message>
+</ul>
+
+<ul>
+ <fmt:setLocale value="es"/>
+ <fmt:setBundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="esBundle"/>
+ <li>Locale set to Spanish yields a locale-less localization context. Formatting still done
+     using the preferred locale:<br>
+  <fmt:message key="currentTime" bundle="${esBundle}">
+   <fmt:param value="${currentDate}"/>
+  </fmt:message>
+ </li>
+
+ <fmt:setLocale value="en"/>
+ <fmt:setBundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="enBundle"/>
+ <li>Locale set to English yields a locale-less localization context. Formatting still done
+     using the preferred locale:<br>
+  <fmt:message key="currentTime" bundle="${esBundle}">
+   <fmt:param value="${currentDate}"/>
+  </fmt:message>
+ </li>
 </ul>
 
 </body>
