@@ -71,22 +71,11 @@ import org.apache.taglibs.standard.resources.Resources;
 public class SetTag extends BodyTagSupport {
 
     //*********************************************************************
-    // Constants
-
-    /* We support these 'scopes'. */
-
-    private final String APPLICATION = "application";
-    private final String SESSION = "session";
-    private final String REQUEST = "request";
-    private final String PAGE = "page";
-
-    //*********************************************************************
     // Internal state
 
     private String value;                               // tag attribute
-    private String scope;				// tag attribute
+    private int scope;					// tag attribute
     private String var;					// tag attribute
-
 
     //*********************************************************************
     // Construction and initialization
@@ -103,7 +92,8 @@ public class SetTag extends BodyTagSupport {
 
     // resets local state
     private void init() {
-        value = scope = var = null;
+        value = var = null;
+	scope = PageContext.PAGE_SCOPE;
     }
 
     // Releases any resources we may have (or inherit)
@@ -126,8 +116,11 @@ public class SetTag extends BodyTagSupport {
             // ... evaluating our expression
             result = ExpressionEvaluatorManager.evaluate(
                 "value", value, Object.class, this, pageContext);
-	    if (result == null)
-		throw new NullAttributeException("set", "value");
+	    if (result == null) {
+		// throw new NullAttributeException("set", "value");
+		pageContext.removeAttribute(var, scope);
+		return EVAL_PAGE;
+	    }
 	} else {
 	    // ... retrieving and trimming our body
 	    if (bodyContent == null || bodyContent.getString() == null)
@@ -142,17 +135,7 @@ public class SetTag extends BodyTagSupport {
          * is made to store something in the session without any
 	 * HttpSession existing).
          */
-	if (scope == null || scope.equals(PAGE))
-	    pageContext.setAttribute(var, result, pageContext.PAGE_SCOPE);
-	else if (scope.equals(APPLICATION))
-	    pageContext.setAttribute(var, result, pageContext.APPLICATION_SCOPE);
-	else if (scope.equals(SESSION))
-	    pageContext.setAttribute(var, result, pageContext.SESSION_SCOPE);
-	else if (scope.equals(REQUEST))
-	    pageContext.setAttribute(var, result, pageContext.REQUEST_SCOPE);
-	else
-	    throw new JspTagException(
-		Resources.getMessage("SET_BAD_SCOPE", scope));
+	pageContext.setAttribute(var, result, scope);
 
 	return EVAL_PAGE;
     }
@@ -173,6 +156,6 @@ public class SetTag extends BodyTagSupport {
 
     // for tag attribute
     public void setScope(String scope) {
-        this.scope = scope;
+        this.scope = Util.getScope(scope);
     }
 }
