@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: Formatting Support -- Number, Currency, and Percent Example</title>
+  <title>JSTL: Formatting/I18N Support -- Number, Currency, and Percent Example</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Formatting Numbers, Currencies, and Percentages</h3>
@@ -20,6 +20,14 @@
  <li> Format as currency, parse, and print parsed result: 
   <fmt:formatNumber value="123456789" type="currency" var="cur"/>
   <fmt:parseNumber value="$cur" type="currency"/>
+
+ <li> Parse numeric string (using default &quot;en&quot; locale) and format as currency:
+  <fmt:locale value="de"/>
+  <fmt:formatNumber value="12345.67" type="currency"/>
+
+ <li> Parse numeric string (using 'parseLocale' locale) and format as currency:
+  <fmt:locale value="de"/>
+  <fmt:formatNumber value="12345.67" parseLocale="de" type="currency"/>
 </ul>
 
 </body>

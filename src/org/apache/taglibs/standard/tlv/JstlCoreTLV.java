@@ -79,6 +79,8 @@ import org.apache.taglibs.standard.resources.Resources;
  *      'value' is specified; it *must* have a body otherwise.)  For
  *      these purposes, "having a body" refers to non-whitespace
  *      content inside the tag.</li>
+ *   <li><message> with 'messageArgs' attribute must not have any <messageArg>
+ *      subtags as its direct children.</li>
  *   <li>Other minor constraints.</li>
  * </ul>
  * 
@@ -117,6 +119,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
     private final String PARAM = "param";
     private final String URL_ENCODE = "urlEncode";
     private final String EXPLANG = "expressionLanguage";
+    private final String MESSAGE = "message";
+    private final String MESSAGE_ARG = "messageArg";
     private final String JSP_TEXT = "jsp:text";
 
     // attribute names
@@ -124,6 +128,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
     private final String VALUE = "value";
     private final String DEFAULT = "default";
     private final String VAR_READER = "varReader";
+    private final String MESSAGE_ARGS = "messageArgs";
 
 
     //*********************************************************************
@@ -147,10 +152,11 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	private Stack expressionLanguage = new Stack();
 	private Stack importWithReaderDepths = new Stack();
 	private Stack importWithoutReaderDepths = new Stack();
+	private Stack messageDepths = new Stack();
+	private Stack messageHasMessageArgs = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
-	private boolean lastImportHadReader = false;
 
 	public Handler() {
 	    // "install" the default evaluator
@@ -162,6 +168,10 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	// process under the existing context (state), then modify it
 	public void startElement(
 	        String ns, String ln, String qn, Attributes a) {
+
+	    // substitute our own parsed 'ln' if it's not provided
+	    if (ln == null)
+		ln = getLocalPart(qn);
 
 	    // for simplicity, we can ignore <jsp:text> for our purposes
 	    // (don't bother distinguishing between it and its characters)
@@ -198,6 +208,11 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		}
 	    }
 
+            // validate attributes
+            if (!hasNoInvalidScope(a))
+                fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
+                    SCOPE, qn, a.getValue(SCOPE))); 
+
 	    // check invariants for <choose>
 	    if (chooseChild()) {
 		// ensure <choose> has the right children
@@ -219,9 +234,9 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    }
 
 	    // check invariants for <import>
-	    if (!importWithReaderDepths.empty()) {
-		// we're in an <import varReader="..."> tag, where
-		// <param> tags are illegal
+	    if (lastImportHadReader()) {
+		// we're immediately under an <import varReader="..."> tag,
+		// where <param> tags are illegal
 		if (isTag(qn, PARAM)) {
 		    fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
 			prefix, PARAM, IMPORT, VAR_READER));
@@ -232,7 +247,18 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		// <param> is allowed
 		if (!isTag(qn, PARAM))
 		    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
-			qn, prefix, IMPORT));
+			prefix, IMPORT, qn));
+	    }
+
+	    // check invariants for <message>
+	    if (isTag(qn, MESSAGE_ARG) && messageChild()
+		&& ((Boolean) messageHasMessageArgs.peek()).booleanValue()) {
+		/*
+		 * we're a <messageArg> tag and the direct child of
+		 * <message messageArgs="...">, which is illegal
+		 */
+		fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
+	            prefix, MESSAGE_ARG, MESSAGE, MESSAGE_ARGS));
 	    }
 
 	    // now, modify state
@@ -245,13 +271,19 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // if we're in an import, record relevant state
 	    if (isTag(qn, IMPORT)) {
-		if (hasAttribute(a, VAR_READER)) {
+		if (hasAttribute(a, VAR_READER))
 		    importWithReaderDepths.push(new Integer(depth));
-		    lastImportHadReader = true;
-		} else {
+		else
 		    importWithoutReaderDepths.push(new Integer(depth));
-		    lastImportHadReader = false;
-		}
+	    }
+
+	    // if we're in a <message>, record relevant state
+	    if (isTag(qn, MESSAGE)) {
+		messageDepths.push(new Integer(depth));
+		if (hasAttribute(a, MESSAGE_ARGS))
+		    messageHasMessageArgs.push(new Boolean(true));
+		else
+		    messageHasMessageArgs.push(new Boolean(false));
 	    }
 
 	    // set up a check against illegal attribute/body combinations
@@ -328,10 +360,17 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // update <import>-related state
 	    if (isTag(qn, IMPORT)) {
-		if (lastImportHadReader)
+		// pop from the appropriate "import" stack
+		if (lastImportHadReader())
 		    importWithReaderDepths.pop();
 		else
 		    importWithoutReaderDepths.pop();
+	    }
+
+	    // update <message>-related state
+	    if (isTag(qn, MESSAGE)) {
+		messageDepths.pop();
+		messageHasMessageArgs.pop();
 	    }
 
 	    // update language state
@@ -348,5 +387,25 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		&& (depth - 1) == ((Integer) chooseDepths.peek()).intValue());
 	}
 
+	// are we directly under a <message>
+	private boolean messageChild() {
+	    return (!messageDepths.empty()
+		&& (depth - 1) == ((Integer) messageDepths.peek()).intValue());
+	}
+
+	// returns the top int depth (peeked at) from a Stack of Integer
+	private int topDepth(Stack s) {
+	    if (s == null || s.empty())
+		return -1;
+	    else
+		return ((Integer) s.peek()).intValue();
+	}
+
+	// did the last <import> tag have a varReader attribute?
+	private boolean lastImportHadReader() {
+	    return (!importWithReaderDepths.empty()
+		&& (topDepth(importWithReaderDepths) >
+                    topDepth(importWithoutReaderDepths)));
+	}
     }
 }

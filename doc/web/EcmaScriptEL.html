@@ -1,0 +1,599 @@
+<html>
+<head>
+<title>EcmaScript Expression Language Support</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h1>EcmaScript as an Expression Language for JSTL</h1>
+<h2>Overview</h2>
+<p>EcmaScript is an object-based scripting language for client and server applications. 
+  EcmaScript is the standardized version of JavaScript and behaves the same way 
+  in all applications that support the standard. JavaScript implementations correspond 
+  to the <a href="http://www.ecma.ch/ecma1/stand/ecma-262.htm">ECMA-262</a> Language 
+  Specification standardized by the European standards body.</p>
+<p>Rhino 1.5, one of the supported JSTL EL's, implements JavaScript 1.5, which 
+  conforms to Edition 3 of the EcmaScript Standard. <a href="http://www.mozilla.org/rhino">Rhino</a> 
+  is an open source Java implementation of JavaScript. </p>
+<table border="1" cellpadding="5" align="center">
+  <tr> 
+    <th>Name</th>
+    <th>Links</th>
+    <th>Date</th>
+    <th>Description</th>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">ECMA-262</div>
+    </td>
+    <td> 
+      <div align="left"><a href="http://www.mozilla.org/js/language/E262.pdf">PDF</a></div>
+    </td>
+    <td> 
+      <div align="left">June 1997</div>
+    </td>
+    <td> 
+      <div align="left">The original ECMAScript standard.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">ECMA-262 Edition 2</div>
+    </td>
+    <td> 
+      <div align="left"><a href="http://www.mozilla.org/js/language/E262-2.pdf">PDF</a></div>
+    </td>
+    <td> 
+      <div align="left">August 1998 </div>
+    </td>
+    <td> 
+      <div align="left">The second revision of the ECMAScript standard; also ISO 
+        standard 16262.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">ECMA-262 Edition 3</div>
+    </td>
+    <td> 
+      <div align="left"><a href="http://www.mozilla.org/js/language/E262-3.pdf">PDF</a></div>
+    </td>
+    <td> 
+      <div align="left">December 1999</div>
+    </td>
+    <td> 
+      <div align="left">The third, and most recent, revision of the ECMAScript 
+        standard. Corresponds to JavaScript 1.5.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Proposed EcmaScript Edition 4</div>
+    </td>
+    <td> 
+      <div align="left"><a href="http://www.mozilla.org/js/language/es4/index.html">Home 
+        Page</a></div>
+    </td>
+    <td> 
+      <div align="left">?</div>
+    </td>
+    <td> 
+      <p align="left"><a href="http://www.mozilla.org/js/language/js20/index.html">JavaScript 
+        2.0</a> is the next version of the JavaScript language. It closely matches 
+        the ECMAScript Edition 4 standard under development. The intent is to 
+        make JavaScript 2.0 and ECMAScript Edition 4 be the same language.</p>
+    </td>
+  </tr>
+</table>
+<p>This document gives a brief overview of the main EcmaScript features a page 
+  author may be interested in. </p>
+<h2>Expression Support</h2>
+<p>An expression is any valid set of literals, variables, operators, and expressions 
+  that evaluates to a single value; the value can be a number, a string, a logical 
+  value, or an object.<br>
+</p>
+<p>EcmaScript has the following types of expressions: </p>
+<ul>
+  <li>Arithmetic: evaluates to a number</li>
+  <li>String: evaluates to a character string</li>
+  <li>Logical: evaluates to true or false </li>
+  <li>Object: evaluates to an object </li>
+</ul>
+<h2>Operator Support</h2>
+<p>The following operators should be of interest to a page author.<br>
+</p>
+<h3>Comparison operators</h3>
+<p>A comparison operator compares its operands and returns a logical value based 
+  on whether the comparison is true. The operands can be numerical, string, logical, 
+  or object values. Strings are compared based on standard lexicographical ordering, 
+  using Unicode values.</p>
+<p></p>
+<p></p>
+<p></p>
+<table border="1" align="center" cellpadding="5">
+  <tr> 
+    <th>Operator</th>
+    <th>Description</th>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Equal (==)</div>
+    </td>
+    <td> 
+      <div align="left">Returns true if the operands are equal.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Not equal (!=) </div>
+    </td>
+    <td> 
+      <div align="left">Returns true if the operands are not equal.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Strict equal (===)</div>
+    </td>
+    <td> 
+      <div align="left">Returns true if the operands are equal and of the same 
+        type.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Strict not equal (!==) </div>
+    </td>
+    <td> 
+      <div align="left">Returns true if the operands are not equal and/or not 
+        of the same type. </div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Greater than (&gt;)</div>
+    </td>
+    <td> 
+      <div align="left">Returns true if the left operand is greater than the right 
+        operand.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Greater than or equal (&gt;=)</div>
+    </td>
+    <td> 
+      <div align="left">Returns true if the left operand is greater than or equal 
+        to the right operand.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Less than (&lt;)</div>
+    </td>
+    <td> 
+      <div align="left">Returns true if the left operand is less than the right 
+        operand.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Less than or equal (&lt;=)</div>
+    </td>
+    <td> 
+      <div align="left">Returns true if the left operand is less than or equal 
+        to the right operand.</div>
+    </td>
+  </tr>
+</table>
+<h3>Arithmetic Operators</h3>
+<p>Arithmetic operators take numerical values (either literals or variables) as 
+  their operands and return a single numerical value. These operators work as 
+  they do in most other programming languages, except the / operator returns a 
+  floating-point division in EcmaScript, not a truncated division as it does in 
+  languages such as C or Java.</p>
+<table border="1" align="center" cellpadding="5">
+  <tr> 
+    <th>Operator</th>
+    <th>Description</th>
+  </tr>
+  <tr> 
+    <td> 
+      <p align="left">% (Modulus)</p>
+    </td>
+    <td> 
+      <div align="left">Binary operator. Returns the integer remainder of dividing 
+        the two operands.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">++ (Increment)</div>
+    </td>
+    <td> 
+      <div align="left">Unary operator. Adds one to its operand. Can be used as 
+        a prefix or postfix operator.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">-- (Decrement)</div>
+    </td>
+    <td> 
+      <div align="left">Unary operator. Subtracts one to its operand. Can be used 
+        as a prefix or postfix operator.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">- (Unary negation)</div>
+    </td>
+    <td> 
+      <div align="left">Unary operator. Returns the negation of its operand.</div>
+    </td>
+  </tr>
+</table>
+<h3>Logical Operators</h3>
+<p>Logical operators are typically used with Boolean (logical) values; when they 
+  are, they return a Boolean value. However, the &amp;&amp; and || operators return 
+  the value of one of the specified operands.</p>
+<table border="1" align="center" cellpadding="5">
+  <tr> 
+    <th>Operator</th>
+    <th>Usage</th>
+    <th>Description</th>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Logical AND</div>
+    </td>
+    <td> 
+      <div align="left">expr1 &amp;&amp; expr2 </div>
+    </td>
+    <td> 
+      <div align="left">Returns expr1 if it can be converted to false; otherwise, 
+        returns expr2. </div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Logical OR </div>
+    </td>
+    <td> 
+      <div align="left">expr1 || expr2 </div>
+    </td>
+    <td> 
+      <div align="left">Returns expr1 if it can be converted to true; otherwise, 
+        returns expr2. </div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">Logical NOT</div>
+    </td>
+    <td> 
+      <div align="left">!expr </div>
+    </td>
+    <td> 
+      <div align="left">Returns false if its single operand can be converted to 
+        true; otherwise, returns true. </div>
+    </td>
+  </tr>
+</table>
+<h3>String Operators</h3>
+<p>In addition to the comparison operators, which can be used on string values, 
+  the concatenation operator (+) concatenates two string values together, returning 
+  another string that is the union of the two operand strings. </p>
+<p></p>
+<h3>Special Operators</h3>
+<p>Some special operators of interest:</p>
+<table border="1" align="center" cellpadding="5">
+  <tr> 
+    <th>Operator</th>
+    <th>Usage</th>
+    <th>Description</th>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">conditional</div>
+    </td>
+    <td> 
+      <div align="left">condition ? val1 : val2</div>
+    </td>
+    <td> 
+      <div align="left">The conditional operator can have one of two values based 
+        on a condition. </div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="left">in</div>
+    </td>
+    <td> 
+      <div align="left">val in Object</div>
+    </td>
+    <td> 
+      <div align="left">The in operator returns true if the specified property 
+        is in the specified object.</div>
+    </td>
+  </tr>
+</table>
+<h2>Reserved Words</h2>
+<p>The reserved words in this list cannot be used as EcmaScript variables, functions, 
+  methods, or object names.</p>
+<table width="95%" border="1" height="298">
+  <tr> 
+    <td> 
+      <p align="center"></p>
+      <p align="center"></p>
+      <p align="center"> </p>
+      <p align="center"> abstract</p>
+    </td>
+    <td> 
+      <div align="center">else</div>
+    </td>
+    <td> 
+      <div align="center">instanceof</div>
+    </td>
+    <td> 
+      <div align="center">switch</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">boolean</div>
+    </td>
+    <td> 
+      <div align="center">enum</div>
+    </td>
+    <td> 
+      <div align="center">int</div>
+    </td>
+    <td> 
+      <div align="center">synchronized</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">break</div>
+    </td>
+    <td> 
+      <div align="center">export</div>
+    </td>
+    <td> 
+      <div align="center">interface</div>
+    </td>
+    <td> 
+      <div align="center">this</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">byte</div>
+    </td>
+    <td> 
+      <div align="center">extends</div>
+    </td>
+    <td> 
+      <div align="center">long</div>
+    </td>
+    <td> 
+      <div align="center">throw</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">case</div>
+    </td>
+    <td> 
+      <div align="center">false</div>
+    </td>
+    <td> 
+      <div align="center">native</div>
+    </td>
+    <td> 
+      <div align="center">throws</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">catch</div>
+    </td>
+    <td> 
+      <div align="center">final</div>
+    </td>
+    <td> 
+      <div align="center">new</div>
+    </td>
+    <td> 
+      <div align="center">transient</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">char</div>
+    </td>
+    <td> 
+      <div align="center">finally</div>
+    </td>
+    <td> 
+      <div align="center">null</div>
+    </td>
+    <td> 
+      <div align="center">true</div>
+    </td>
+  </tr>
+  <tr> 
+    <td height="20"> 
+      <div align="center">class</div>
+    </td>
+    <td height="20"> 
+      <div align="center">float</div>
+    </td>
+    <td height="20"> 
+      <div align="center">package</div>
+    </td>
+    <td height="20"> 
+      <div align="center">try</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">const</div>
+    </td>
+    <td> 
+      <div align="center">for</div>
+    </td>
+    <td> 
+      <div align="center">private</div>
+    </td>
+    <td> 
+      <div align="center">typeof</div>
+    </td>
+  </tr>
+  <tr> 
+    <td height="18"> 
+      <div align="center">continue</div>
+    </td>
+    <td height="18"> 
+      <div align="center">function</div>
+    </td>
+    <td height="18"> 
+      <div align="center">protected</div>
+    </td>
+    <td height="18"> 
+      <div align="center">var</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">debugger</div>
+    </td>
+    <td> 
+      <div align="center">goto</div>
+    </td>
+    <td> 
+      <div align="center">public</div>
+    </td>
+    <td> 
+      <div align="center">void</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">default</div>
+    </td>
+    <td> 
+      <div align="center">if</div>
+    </td>
+    <td> 
+      <div align="center">return</div>
+    </td>
+    <td> 
+      <div align="center">volatile</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">delete</div>
+    </td>
+    <td> 
+      <div align="center">implements</div>
+    </td>
+    <td> 
+      <div align="center">short</div>
+    </td>
+    <td> 
+      <div align="center">while</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">do</div>
+    </td>
+    <td> 
+      <div align="center">import</div>
+    </td>
+    <td> 
+      <div align="center">static</div>
+    </td>
+    <td> 
+      <div align="center">with</div>
+    </td>
+  </tr>
+  <tr> 
+    <td height="2"> 
+      <div align="center">double</div>
+    </td>
+    <td height="2"> 
+      <div align="center">in </div>
+    </td>
+    <td height="2"> 
+      <div align="center">super</div>
+    </td>
+    <td height="2"> 
+      <div align="center"></div>
+    </td>
+  </tr>
+</table>
+<h2>Type Conversion</h2>
+<p>Values passed from Java to JavaScript are converted as follows: </p>
+<table width="95%" border="1">
+  <tr> 
+    <th>Java Types</th>
+    <th>Converted JavaScript Types</th>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">byte, char, short, int, long, float, and double</div>
+    </td>
+    <td> 
+      <div align="center">JavaScript numbers. Instances of java.lang.Double and 
+        java.lang.Integer are converted to JavaScript objects, not to JavaScript 
+        numbers.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">boolean</div>
+    </td>
+    <td> 
+      <div align="center">JavaScript boolean</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">arrays</div>
+    </td>
+    <td> 
+      <div align="center">JavaScript pseudo-Array object</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">Java object of any other class</div>
+    </td>
+    <td> 
+      <div align="center">JavaScript wrapper</div>
+    </td>
+  </tr>
+</table>
+<h2>Expression Exceptions</h2>
+<p>When you are evaluating JavaScript code in Java, the following situations can 
+  cause run-time errors: </p>
+<ul>
+  <li>The JavaScript code is not evaluated, either due to a JavaScript compilation 
+    error or to some other error that occurred at run time. 
+    <p>The JavaScript interpreter generates an error message that is converted 
+      into an instance of JSException. </p>
+  </li>
+  <li>Java successfully evaluates the JavaScript code, but the JavaScript code 
+    executes an unhandled throw statement. 
+    <p>JavaScript throws an exception that is wrapped as an instance of JSException. 
+      Use the getWrappedException method of JSException to unwrap this exception 
+      in Java. </p>
+  </li>
+</ul>
+<p>&nbsp;</p>
+</body>
+</html>

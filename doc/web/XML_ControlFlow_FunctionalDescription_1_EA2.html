@@ -36,8 +36,7 @@
 </blockquote>
 <p>Optional attribute &quot;var&quot; makes it possible to save the current context 
   node of the iteration in a JSP &quot;page&quot; attribute. The exported object 
-  has nested visibility. It is illegal to specify any scope other than &quot;page&quot; 
-  for &quot;var&quot;.</p>
+  has nested visibility.</p>
 <h3>3. <tt>&lt;if></tt></h3>
 <p>The <tt>&lt;if></tt> action has a &quot;select&quot; attribute that specifies 
   an XPath expression. The expression is evaluated and the resulting object is 
@@ -92,7 +91,7 @@
   </tr>
   <tr> 
     <td width="55%"><code><b>&lt;forEach&gt;</b></code><br>
-      <b>&nbsp;select</b> var<br>
+      <b><code>&nbsp;select</code></b><code> var</code><br>
       <br>
       Evaluates the given XPath expression and iterates over the result, setting 
       the context node to each element in the iteration.</td>
