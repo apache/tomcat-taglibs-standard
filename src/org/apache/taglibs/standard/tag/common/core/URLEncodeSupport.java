@@ -137,6 +137,9 @@ public abstract class URLEncodeSupport extends BodyTagSupport
                 operand = bodyContent.getString().trim();
         }
 
+	// encode the input
+	String result = URLEncoder.encode(operand);
+
 	// add parameters
 	if (params != null) {
 	    // produce a StringBuffer containing all the parameters
@@ -149,16 +152,17 @@ public abstract class URLEncodeSupport extends BodyTagSupport
 		    paramString.append("&");
 	    }
 
+	    /*
+             * Note: This doesn't really make sense, but I think it's a
+             * spec issue.
+             */
 	    // append these parameters with a '?' or '&', as appropriate
             boolean firstParameter = operand.indexOf('?') == -1;
             if (firstParameter)
-		operand += "?" + paramString;
+		result += "?" + paramString;
             else
-		operand += "&" + paramString;
+		result += "&" + paramString;
 	}
-
-	// encode the input
-	String result = URLEncoder.encode(operand);
 
 	// store or print the output
 	if (var != null)

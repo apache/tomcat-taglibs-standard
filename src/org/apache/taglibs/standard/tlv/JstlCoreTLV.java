@@ -272,11 +272,6 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		    bodyIllegal = true;
 		else
 		    bodyNecessary = true;
-	    } else if (isTag(qn, URL_ENCODE)) {
-		if (hasAttribute(a, VALUE))
-		    bodyIllegal = true;
-		else
-		    bodyNecessary = true;
 	    }
 
 	    // record the most recent tag (for error reporting)

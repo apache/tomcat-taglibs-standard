@@ -100,7 +100,7 @@ public abstract class ParamSupport extends BodyTagSupport {
 	if (t == null)
 	    throw new JspTagException(
 		Resources.getMessage("PARAM_OUTSIDE_PARENT"));
-	ParamParent parent = (ImportSupport) t;
+	ParamParent parent = (ParamParent) t;
 	String value = this.value;
 	if (value == null) {
 	    if (bodyContent == null || bodyContent.getString() == null)
