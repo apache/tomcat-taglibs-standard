@@ -59,7 +59,6 @@ import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
-import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>A handler for &lt;formatDate&gt; that supports rtexprvalue-based
@@ -85,22 +84,12 @@ public class FormatDateTag extends FormatDateSupport {
 
     // 'dateStyle' attribute
     public void setDateStyle(String dateStyle) throws JspTagException {
-        this.dateStyle = Util.styleToInt(dateStyle);
-	if (this.dateStyle == -1) {
-	    throw new JspTagException(
-                Resources.getMessage("FORMAT_DATE_INVALID_DATE_STYLE", 
-				     dateStyle));
-	}
+        this.dateStyle = dateStyle;
     }
 
     // 'timeStyle' attribute
     public void setTimeStyle(String timeStyle) throws JspTagException {
-        this.timeStyle = Util.styleToInt(timeStyle);
-	if (this.timeStyle == -1) {
-	    throw new JspTagException(
-                Resources.getMessage("FORMAT_DATE_INVALID_TIME_STYLE", 
-				     timeStyle));
-	}
+        this.timeStyle = timeStyle;
     }
 
     // 'pattern' attribute

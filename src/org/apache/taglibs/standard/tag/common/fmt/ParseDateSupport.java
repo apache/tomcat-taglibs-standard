@@ -88,8 +88,8 @@ public abstract class ParseDateSupport extends BodyTagSupport {
     protected String pattern;                    // 'pattern' attribute
     protected Object timeZone;                   // 'timeZone' attribute
     protected Locale parseLocale;                // 'parseLocale' attribute
-    protected int dateStyle;                     // 'dateStyle' attribute
-    protected int timeStyle;                     // 'timeStyle' attribute
+    protected String dateStyle;                  // 'dateStyle' attribute
+    protected String timeStyle;                  // 'timeStyle' attribute
 
 
     //*********************************************************************
@@ -111,7 +111,6 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	value = pattern = var = null;
 	timeZone = null;
 	type = DATE;
-	dateStyle = timeStyle = DateFormat.DEFAULT;
 	scope = PageContext.PAGE_SCOPE;
 	parseLocale = null;
     }
@@ -216,12 +215,18 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	DateFormat parser = null;
 
 	if (DATE.equalsIgnoreCase(type)) {
-	    parser = DateFormat.getDateInstance(dateStyle, loc);
+	    parser = DateFormat.getDateInstance(
+	        Util.getStyle(dateStyle, "PARSE_DATE_INVALID_DATE_STYLE"),
+		loc);
 	} else if (TIME.equalsIgnoreCase(type)) {
-	    parser = DateFormat.getTimeInstance(timeStyle, loc);
+	    parser = DateFormat.getTimeInstance(
+	        Util.getStyle(timeStyle, "PARSE_DATE_INVALID_TIME_STYLE"),
+		loc);
 	} else if (DATETIME.equalsIgnoreCase(type)) {
-	    parser = DateFormat.getDateTimeInstance(dateStyle, timeStyle,
-						       loc);
+	    parser = DateFormat.getDateTimeInstance(
+	        Util.getStyle(dateStyle, "PARSE_DATE_INVALID_DATE_STYLE"),
+		Util.getStyle(timeStyle, "PARSE_DATE_INVALID_TIME_STYLE"),
+		loc);
 	} else {
 	    throw new JspException(
                     Resources.getMessage("PARSE_DATE_INVALID_TYPE", 

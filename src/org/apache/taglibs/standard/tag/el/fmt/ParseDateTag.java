@@ -60,7 +60,6 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
 import org.apache.taglibs.standard.tag.common.fmt.*;
-import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>A handler for &lt;parseDate&gt; that accepts attributes as Strings
@@ -185,30 +184,14 @@ public class ParseDateTag extends ParseDateSupport {
 	    "parseDate", "type", type_, String.class, this, pageContext);
 
 	// 'dateStyle' attribute
-	String styleStr = (String) ExpressionUtil.evalNotNull(
+	dateStyle = (String) ExpressionUtil.evalNotNull(
 	    "parseDate", "dateStyle", dateStyle_, String.class, this,
 	    pageContext);
-	if (styleStr != null) {
-	    dateStyle = Util.styleToInt(styleStr);
-	    if (dateStyle == -1) {
-		throw new JspException(
-                    Resources.getMessage("PARSE_DATE_INVALID_DATE_STYLE", 
-					 styleStr));
-	    }
-	}
 
 	// 'timeStyle' attribute
-	styleStr = (String) ExpressionUtil.evalNotNull(
+	timeStyle = (String) ExpressionUtil.evalNotNull(
 	    "parseDate", "timeStyle", timeStyle_, String.class, this,
 	    pageContext);
-	if (styleStr != null) {
-	    timeStyle = Util.styleToInt(styleStr);
-	    if (timeStyle == -1) {
-		throw new JspException(
-                    Resources.getMessage("PARSE_DATE_INVALID_TIME_STYLE", 
-					 styleStr));
-	    }
-	}
 
 	// 'pattern' attribute
 	pattern = (String) ExpressionUtil.evalNotNull(

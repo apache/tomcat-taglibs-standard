@@ -87,8 +87,8 @@ public abstract class FormatDateSupport extends BodyTagSupport {
     protected String type;                       // 'type' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Object timeZone;                   // 'timeZone' attribute
-    protected int dateStyle;                     // 'dateStyle' attribute
-    protected int timeStyle;                     // 'timeStyle' attribute
+    protected String dateStyle;                  // 'dateStyle' attribute
+    protected String timeStyle;                  // 'timeStyle' attribute
 
 
     //*********************************************************************
@@ -111,7 +111,6 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 	value = null;
 	timeZone = null;
 	type = DATE;
-	dateStyle = timeStyle = DateFormat.DEFAULT;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -224,12 +223,18 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 	DateFormat formatter = null;
 
 	if (DATE.equalsIgnoreCase(type)) {
-	    formatter = DateFormat.getDateInstance(dateStyle, loc);
+	    formatter = DateFormat.getDateInstance(
+	        Util.getStyle(dateStyle, "FORMAT_DATE_INVALID_DATE_STYLE"),
+		loc);
 	} else if (TIME.equalsIgnoreCase(type)) {
-	    formatter = DateFormat.getTimeInstance(timeStyle, loc);
+	    formatter = DateFormat.getTimeInstance(
+	        Util.getStyle(timeStyle, "FORMAT_DATE_INVALID_TIME_STYLE"),
+		loc);
 	} else if (DATETIME.equalsIgnoreCase(type)) {
-	    formatter = DateFormat.getDateTimeInstance(dateStyle, timeStyle,
-						       loc);
+	    formatter = DateFormat.getDateTimeInstance(
+	        Util.getStyle(dateStyle, "FORMAT_DATE_INVALID_DATE_STYLE"),
+		Util.getStyle(timeStyle, "FORMAT_DATE_INVALID_TIME_STYLE"),
+		loc);
 	} else {
 	    throw new JspException(
                     Resources.getMessage("FORMAT_DATE_INVALID_TYPE", 
