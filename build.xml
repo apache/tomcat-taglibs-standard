@@ -225,42 +225,42 @@
       <param name="prop" value="jdbc2_0-stdext.jar"/>
       <param name="task" value="copyIfPropSet"/>
       <param name="file" value="${jdbc2_0-stdext.jar}"/>
-      <param name="todir" value="${build.library}/lib"/>
+      <param name="todir" value="${build.library}/lib/old-dependencies"/>
     </antcall>
 
     <antcall target="processIfPropSet">
       <param name="prop" value="jaxp-api.jar"/>
       <param name="task" value="copyIfPropSet"/>
-      <param name="file" value="${jsp20.jar}"/>
-      <param name="todir" value="${build.library}/lib"/>
+      <param name="file" value="${jaxp-api.jar}"/>
+      <param name="todir" value="${build.library}/lib/old-dependencies"/>
     </antcall>
 
     <antcall target="processIfPropSet">
       <param name="prop" value="dom.jar"/>
       <param name="task" value="copyIfPropSet"/>
       <param name="file" value="${dom.jar}"/>
-      <param name="todir" value="${build.library}/lib"/>
+      <param name="todir" value="${build.library}/lib/old-dependencies"/>
     </antcall>
 
     <antcall target="processIfPropSet">
       <param name="prop" value="sax.jar"/>
       <param name="task" value="copyIfPropSet"/>
       <param name="file" value="${sax.jar}"/>
-      <param name="todir" value="${build.library}/lib"/>
+      <param name="todir" value="${build.library}/lib/old-dependencies"/>
     </antcall>
            
     <antcall target="processIfPropSet">
       <param name="prop" value="xalan.jar"/>
       <param name="task" value="copyIfPropSet"/>
       <param name="file" value="${xalan.jar}"/>
-      <param name="todir" value="${build.library}/lib"/>
+      <param name="todir" value="${build.library}/lib/old-dependencies"/>
     </antcall>
 
     <antcall target="processIfPropSet">
       <param name="prop" value="xercesImpl.jar"/>
       <param name="task" value="copyIfPropSet"/>
       <param name="file" value="${xercesImpl.jar}"/>
-      <param name="todir" value="${build.library}/lib"/>
+      <param name="todir" value="${build.library}/lib/old-dependencies"/>
     </antcall>
 
   </target>
@@ -319,7 +319,7 @@
 
     <!-- Copy the runtime jar files -->
     <copy todir="${dist.library}/lib">
-      <fileset dir="${build.library}/lib" includes="*.jar"/>
+      <fileset dir="${build.library}/lib" includes="**/*.jar"/>
     </copy>
 
     <!-- All TLDs are copied in the 'tld' dir of the distribution -->
