@@ -305,7 +305,9 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	TransactionTagSupport parent = (TransactionTagSupport) 
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
-            if (dataSource != null) {
+            ServletContext application = pageContext.getServletContext();
+            if (dataSource != null &&
+                application.getInitParameter(DATASOURCE) == null) {
                 throw new JspTagException(
                     Resources.getMessage("ERROR_NESTED_DATASOURCE"));
             }
