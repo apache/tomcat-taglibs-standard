@@ -214,7 +214,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
         /*
          * We shouldn't have a negative startRow or illegal maxrows
          */
-        if (startRow < 0) || (maxRows < -1) {
+        if ((startRow < 0) || (maxRows < -1)) {
             throw new JspException(
                 Resources.getMessage("PARAM_BAD_VALUE"));
         }

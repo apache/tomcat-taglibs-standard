@@ -58,6 +58,7 @@ import javax.sql.*;
 import javax.servlet.jsp.*;
 import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.sql.QueryTagSupport;
+import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * Subclass for the JSTL library with EL support.
@@ -139,19 +140,22 @@ public class QueryTag extends QueryTagSupport {
                 String.class, this, pageContext);
         }
 
-        if (startRowEL != null) {
-            tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
-                "startRow", startRowEL, Integer.class, this, pageContext);
-            if (tempInt != null)
-                startRow = ((Integer) tempInt).intValue();
-        }
+        try {
+            if (startRowEL != null) {
+                tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
+                    "startRow", startRowEL, Integer.class, this, pageContext);
+                if (tempInt != null)
+                    startRow = ((Integer) tempInt).intValue();
+            }
 
-        if (maxRowsEL != null) {
-            tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
-                "maxRows", maxRowsEL, Integer.class, this, pageContext);
-            if (tempInt != null)
-                maxRows = ((Integer) tempInt).intValue();
+            if (maxRowsEL != null) {
+                tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
+                    "maxRows", maxRowsEL, Integer.class, this, pageContext);
+                if (tempInt != null)
+                    maxRows = ((Integer) tempInt).intValue();
+            }
+        } catch (Exception ex) {
+            throw new JspException(Resources.getMessage("PARAM_BAD_VALUE"), ex);
         }
     }
-
 }
