@@ -152,3 +152,8 @@ Parses to: ${(- - not abc.def)}
 Attribute value: ${  a ["hello"]."12" [17.5] }
 Causes an error: Unable to parse custom action attribute "test" with value "${  a ["hello"]."12" [17.5] }": encountered ""12"", expected one of ""pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 
+# making sure unicode escapes are not recognized
+Attribute value: \u0040
+Parses to: \u0040
+Attribute value: "\u0040"
+Parses to: "\u0040"

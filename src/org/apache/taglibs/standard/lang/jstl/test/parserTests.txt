@@ -87,3 +87,6 @@ ${ --not abc.def }
 # array accessors of non-integer types
 ${  a ["hello"]."12" [17.5] }
 
+# making sure unicode escapes are not recognized
+\u0040
+"\u0040"

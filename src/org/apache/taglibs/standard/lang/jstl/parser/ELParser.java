@@ -790,7 +790,7 @@ public class ELParser implements ELParserConstants {
   }
 
   public ELParserTokenManager token_source;
-  JavaCharStream jj_input_stream;
+  SimpleCharStream jj_input_stream;
   public Token token, jj_nt;
   private int jj_ntk;
   private int jj_gen;
@@ -799,7 +799,7 @@ public class ELParser implements ELParserConstants {
   final private int[] jj_la1_1 = {0x0,0x0,0x0,0x100,0x80,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x1,0x3e,0xc,0x30,0x3e,0x41,0x41,0x0,0x1fe00,0x0,0x0,0x0,0x1fe00,0xfe00,};
 
   public ELParser(java.io.InputStream stream) {
-    jj_input_stream = new JavaCharStream(stream, 1, 1);
+    jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new ELParserTokenManager(jj_input_stream);
     token = new Token();
     jj_ntk = -1;
@@ -817,7 +817,7 @@ public class ELParser implements ELParserConstants {
   }
 
   public ELParser(java.io.Reader stream) {
-    jj_input_stream = new JavaCharStream(stream, 1, 1);
+    jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new ELParserTokenManager(jj_input_stream);
     token = new Token();
     jj_ntk = -1;

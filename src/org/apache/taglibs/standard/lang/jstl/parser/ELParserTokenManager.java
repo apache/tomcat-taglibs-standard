@@ -100,9 +100,6 @@ private final void jjCheckNAddStates(int start)
    jjCheckNAdd(jjnextStates[start + 1]);
 }
 static final long[] jjbitVec0 = {
-   0xfffffffffffffffeL, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
-};
-static final long[] jjbitVec2 = {
    0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
 };
 private final int jjMoveNfa_0(int startState, int curPos)
@@ -184,9 +181,6 @@ private final int jjMoveNfa_0(int startState, int curPos)
       }
       else
       {
-         int hiByte = (int)(curChar >> 8);
-         int i1 = hiByte >> 6;
-         long l1 = 1L << (hiByte & 077);
          int i2 = (curChar & 0xff) >> 6;
          long l2 = 1L << (curChar & 077);
          MatchLoop: do
@@ -196,7 +190,7 @@ private final int jjMoveNfa_0(int startState, int curPos)
                case 3:
                case 0:
                case 2:
-                  if (!jjCanMove_0(hiByte, i1, i2, l1, l2))
+                  if ((jjbitVec0[i2] & l2) == 0L)
                      break;
                   if (kind > 1)
                      kind = 1;
@@ -696,22 +690,22 @@ private final int jjMoveStringLiteralDfa10_1(long old0, long active0)
    }
    return jjStartNfa_1(9, active0);
 }
-static final long[] jjbitVec3 = {
+static final long[] jjbitVec1 = {
    0x1ff00000fffffffeL, 0xffffffffffffc000L, 0xffffffffL, 0x600000000000000L
 };
-static final long[] jjbitVec4 = {
+static final long[] jjbitVec3 = {
    0x0L, 0x0L, 0x0L, 0xff7fffffff7fffffL
 };
-static final long[] jjbitVec5 = {
+static final long[] jjbitVec4 = {
    0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
 };
-static final long[] jjbitVec6 = {
+static final long[] jjbitVec5 = {
    0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffL, 0x0L
 };
-static final long[] jjbitVec7 = {
+static final long[] jjbitVec6 = {
    0xffffffffffffffffL, 0xffffffffffffffffL, 0x0L, 0x0L
 };
-static final long[] jjbitVec8 = {
+static final long[] jjbitVec7 = {
    0x3fffffffffffL, 0x0L, 0x0L, 0x0L
 };
 private final int jjMoveNfa_1(int startState, int curPos)
@@ -1037,10 +1031,8 @@ private static final boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, lo
    switch(hiByte)
    {
       case 0:
-         return ((jjbitVec2[i2] & l2) != 0L);
+         return ((jjbitVec0[i2] & l2) != 0L);
       default : 
-         if ((jjbitVec0[i1] & l1) != 0L)
-            return true;
          return false;
    }
 }
@@ -1049,17 +1041,17 @@ private static final boolean jjCanMove_1(int hiByte, int i1, int i2, long l1, lo
    switch(hiByte)
    {
       case 0:
-         return ((jjbitVec4[i2] & l2) != 0L);
+         return ((jjbitVec3[i2] & l2) != 0L);
       case 48:
-         return ((jjbitVec5[i2] & l2) != 0L);
+         return ((jjbitVec4[i2] & l2) != 0L);
       case 49:
-         return ((jjbitVec6[i2] & l2) != 0L);
+         return ((jjbitVec5[i2] & l2) != 0L);
       case 51:
-         return ((jjbitVec7[i2] & l2) != 0L);
+         return ((jjbitVec6[i2] & l2) != 0L);
       case 61:
-         return ((jjbitVec8[i2] & l2) != 0L);
+         return ((jjbitVec7[i2] & l2) != 0L);
       default : 
-         if ((jjbitVec3[i1] & l1) != 0L)
+         if ((jjbitVec1[i1] & l1) != 0L)
             return true;
          return false;
    }
@@ -1088,22 +1080,22 @@ static final long[] jjtoToken = {
 static final long[] jjtoSkip = {
    0x78L, 
 };
-private JavaCharStream input_stream;
+private SimpleCharStream input_stream;
 private final int[] jjrounds = new int[35];
 private final int[] jjstateSet = new int[70];
 protected char curChar;
-public ELParserTokenManager(JavaCharStream stream)
+public ELParserTokenManager(SimpleCharStream stream)
 {
-   if (JavaCharStream.staticFlag)
+   if (SimpleCharStream.staticFlag)
       throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
    input_stream = stream;
 }
-public ELParserTokenManager(JavaCharStream stream, int lexState)
+public ELParserTokenManager(SimpleCharStream stream, int lexState)
 {
    this(stream);
    SwitchTo(lexState);
 }
-public void ReInit(JavaCharStream stream)
+public void ReInit(SimpleCharStream stream)
 {
    jjmatchedPos = jjnewStateCnt = 0;
    curLexState = defaultLexState;
@@ -1117,7 +1109,7 @@ private final void ReInitRounds()
    for (i = 35; i-- > 0;)
       jjrounds[i] = 0x80000000;
 }
-public void ReInit(JavaCharStream stream, int lexState)
+public void ReInit(SimpleCharStream stream, int lexState)
 {
    ReInit(stream);
    SwitchTo(lexState);
