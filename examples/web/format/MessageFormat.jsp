@@ -28,6 +28,11 @@
     <fmt:formatDate type="both"/>
    </fmt:messageArg>
   </fmt:messageFormat>
+
+ <li> Using 'messageArgs' attribute:<br>
+  <fmt:messageFormat messageArgs="$messageArgs">
+   Servlet container name/version: {0}
+  </fmt:messageFormat>
 </ul>
 
 </body>

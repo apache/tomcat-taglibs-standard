@@ -107,8 +107,8 @@ public abstract class MessageSupport extends BodyTagSupport {
     private void init() {
 	key = var = null;
 	bundle = null;
-	messageArgs = null;
 	scope = PageContext.PAGE_SCOPE;
+	messageArgs = null;
 	arguments.clear();
     }
 

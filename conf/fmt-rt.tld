@@ -182,6 +182,11 @@
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <name>messageArgs</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>var</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>

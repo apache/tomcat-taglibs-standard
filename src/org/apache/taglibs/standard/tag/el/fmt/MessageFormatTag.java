@@ -71,9 +71,16 @@ import org.apache.taglibs.standard.tag.common.fmt.*;
 public class MessageFormatTag extends MessageFormatSupport {
 
     //*********************************************************************
+    // Private constants
+
+    private static final Class OBJECT_ARRAY_CLASS = new Object[0].getClass();
+
+
+    //*********************************************************************
     // 'Private' state (implementation details)
 
-    private String value_;                         // stores EL-based property
+    private String value_;                       // stores EL-based property
+    private String messageArgs_;	         // stores EL-based property
 
 
     //*********************************************************************
@@ -118,6 +125,11 @@ public class MessageFormatTag extends MessageFormatSupport {
         this.value_ = value_;
     }
 
+    // for EL-based attribute
+    public void setMessageArgs(String messageArgs_) {
+        this.messageArgs_ = messageArgs_;
+    }
+
 
     //*********************************************************************
     // Private (utility) methods
@@ -125,7 +137,7 @@ public class MessageFormatTag extends MessageFormatSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = null;
+	value_ = messageArgs_ = null;
     }
 
     // Evaluates expressions as necessary
@@ -140,5 +152,9 @@ public class MessageFormatTag extends MessageFormatSupport {
 
 	value = (String) ExpressionUtil.evalNotNull(
 	    "message", "value", value_, String.class, this, pageContext);
+
+	messageArgs = (Object[]) ExpressionUtil.evalNotNull(
+	    "messageFormat", "messageArgs", messageArgs_, OBJECT_ARRAY_CLASS,
+	    this, pageContext);
     }
 }

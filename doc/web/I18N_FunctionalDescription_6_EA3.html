@@ -353,13 +353,16 @@ the servlet context, and an error message of the form <tt>"???&lt;key>???"</tt>
 the current <tt>JspWriter
 </tt>object.
 <p>If the message corresponding to the given key is <i>compound</i>, that
-is, contains one or more variables, it can be supplied with argument values
-for these variables by using the <tt>messageArgs</tt> attribute or one
-or more <tt>&lt;messageArg></tt> subtags (one for each argument value).
-This procedure is referred to as
-<i>parametric replacement.</i> If the
-message is compound, but no <tt>messageArgs</tt> attribute or <tt>&lt;messageArg></tt>
-subtags are given, the message is left unmodified. Specifying a <tt>&lt;message></tt>
+is, contains one or more variables, it may be supplied with argument values
+for these variables via the <tt>messageArgs</tt> attribute or one or more
+<tt>&lt;messageArg></tt> subtags (one for each argument value). This procedure
+is referred to as
+<i>parametric replacement.</i> Parametric replacement
+takes place in the order of the argument values given via the <tt>messageArgs</tt>
+attribute or the 
+<tt>&lt;messageArg></tt> subtags. If the message is compound,
+but neither a <tt>messageArgs</tt> attribute nor any <tt>&lt;messageArg></tt>
+subtags are specified, the message is left unmodified. Specifying a <tt>&lt;message></tt>
 tag with both a <tt>messageArgs</tt> attribute and one or more <tt>&lt;messageArg></tt>
 subtags causes a translation error.
 <p>If the parent <tt>&lt;bundle></tt> action specifies a <tt>prefix</tt>
@@ -381,13 +384,17 @@ The <tt>&lt;messageFormat> </tt>action performs parametric replacement
 on a given pattern string , using the runtime's default locale.
 <p>The pattern string may be specified via the <tt>value</tt> attribute;
 if missing, it is read from the tag's body content.
-<p>The argument values for parametric replacement must be supplied via
+<p>The argument values for parametric replacement may be supplied via the
+<tt>messageArgs</tt> attribute or one or more
 <tt>&lt;messageArg></tt>
-subtags. Each <tt>&lt;messageArg></tt> subtag replaces one parameter in
-the pattern. Parametric replacement takes place in the order of the
-<tt>&lt;messageArg></tt>
-subtags. If no <tt>&lt;messageArg></tt> subtag is given, the specified
-pattern is left unmodified.
+subtags (one for each parameter in the pattern). Parametric replacement
+takes place in the order of the argument values given via the <tt>messageArgs</tt>
+attribute or the 
+<tt>&lt;messageArg></tt> subtags. If neither a <tt>messageArgs</tt>
+attribute nor any <tt>&lt;messageArg></tt> subtags are specified, the given
+pattern is left unmodified. Specifying a <tt>&lt;messageFormat></tt> tag
+with both a <tt>messageArgs</tt> attribute and one or more <tt>&lt;messageArg></tt>
+subtags causes a translation error.
 <p>The result is output to the current <tt>JspWriter</tt> object, unless
 the <tt>var</tt> attribute is given, in which case it is stored in the
 named JSP attribute.
@@ -413,7 +420,7 @@ bundle="$i18n">...&lt;/fmt:message></tt>
 <br><tt>&nbsp;&nbsp;&nbsp; &lt;/c:forEach></tt>
 <h3>
 10. &lt;messageArg></h3>
-The <tt>&lt;messageArg></tt> action provides one argument (for parametric
+The <tt>&lt;messageArg></tt> action provides a single argument (for parametric
 replacement) to the compound message or pattern in its parent
 <tt>&lt;message></tt>
 or <tt>&lt;messageFormat></tt> action, respectively.
@@ -999,7 +1006,7 @@ or&nbsp; <tt>&lt;messageArg></tt> subtags.</td>
 
 <tr>
 <td WIDTH="318"><b><tt>&lt;messageFormat></tt></b>
-<br><tt><font color="#000000"><b>value</b> var scope</font></tt>
+<br><tt><font color="#000000"><b>value</b> messageArgs var scope</font></tt>
 <p>Performs parametric replacement on the pattern specified by the <tt>value</tt>
 attribute using the argument values supplied via <tt>&lt;messageArg></tt>
 subtags.</td>

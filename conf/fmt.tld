@@ -30,6 +30,7 @@
 	    message:bundle
 	    message:messageArgs
 	    messageFormat:value
+	    messageFormat:messageArgs
 	    messageArg:value
 	    formatNumber:value
 	    formatNumber:pattern
@@ -224,6 +225,11 @@
     </description>
     <attribute>
         <name>value</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>messageArgs</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>

@@ -76,4 +76,9 @@ public class MessageFormatTag extends MessageFormatSupport {
     public void setValue(String value) throws JspTagException {
         this.value = value;
     }
+
+    // for tag attribute
+    public void setMessageArgs(Object[] messageArgs) throws JspTagException {
+        this.messageArgs = messageArgs;
+    }
 }
