@@ -56,11 +56,19 @@
 package javax.servlet.jsp.jstl.sql;
 
 /**
- * <p>A class implementing this interface creates a cached version of 
- * a <code>ResultSet</code>. It's represented as a <code>Result</code> 
- * implementation, capable of returning an array of <code>Row</code> 
- * objects containing a <code>Column</code> instance for each column 
- * in the row.
+ * <p>This interface represents the result of a &lt;sql:query&gt;
+ * action. It provides access to the following information in the
+ * query result:</p>
+ *
+ * <ul>
+ * <li> result rows
+ * <li> number of rows in the result
+ * <li> result meta data
+ * <li> indication whether result returned is a complete set or
+ *      a subset limited by a maximum row setting
+ * </ul>
+ *
+ * @author Justyna Horwat
  *
  */
 public interface Result {
@@ -68,23 +76,29 @@ public interface Result {
     /**
      * Returns an array of Row objects.
      *
+     * @return the result rows as an array of <code>Row</code> objects
      */
     public Row[] getRows();
 
     /**
      * Returns the ResultMetaData object of the cached ResultSet
      *
+     * @return the <code>ResultMetaData> object of the result
      */
     public ResultMetaData getMetaData();
 
     /**
      * Returns the number of rows in the cached ResultSet
+     *
+     * @return the number of rows in the result
      */
     public int getSize();
 
     /**
      * Returns true of the query was limited by a maximum row setting
      *
+     * @return <tt>true</tt> if the query was limited by a maximum
+     * row setting
      */
     public boolean isLimitedByMaxRows();
 }

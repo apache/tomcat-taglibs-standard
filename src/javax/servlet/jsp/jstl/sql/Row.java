@@ -56,28 +56,35 @@
 package javax.servlet.jsp.jstl.sql;
 
 /**
+ * <p>This interface provides acces to the columns of a
+ * <code>Row</code></p>
  * 
- * <p>An implementation of this class encapsulates the columns 
- * for a given row. 
- *
+ * @author Justyna Horwat
  */
 public interface Row {
 
     /**
      * Returns the Object at the named column
      *
+     * @param name the name of the column
+     *
+     * @return the object for the named column
      */
     public Object get(String name);
 
     /**
      * Returns the Object at the given column index
      *
+     * @param index the index of the column
+     *
+     * @return the object for the given column index
      */
     public Object get(int index);
 
     /**
      * Returns an array Column objects
      *
+     * @return an array of the columns in the row
      */
     public Column[] getColumns();
 }

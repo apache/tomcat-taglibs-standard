@@ -56,27 +56,35 @@
 package javax.servlet.jsp.jstl.sql;
 
 /**
- * <p>A class implementing this interface encapsulates all 
- * the meta data for a result set. 
+ * <p>This interface represents the meta data of the result of a
+ * &lt;sql:query&gt; action</p>
  *
+ * @author Justyna Horwat
  */
 public interface ResultMetaData {
 
     /**
      * Returns the ColumnMetaData for the named column
      *
+     * @param name the name of the column
+     *
+     * @return the meta data of a column identified by name
      */
     public ColumnMetaData get(String name);
 
     /**
      * Returns the ColumnMetaData for the given column index
      *
+     * @param index the index of the column
+     *
+     * @return the meta data of a column identified by index
      */
     public ColumnMetaData get(int index);
 
     /**
      * Returns an array of ColumnMetaData objects
      *
+     * @return the meta data for all columns in the result
      */
     public ColumnMetaData[] getColumns();
 

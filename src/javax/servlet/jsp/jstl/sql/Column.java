@@ -56,23 +56,32 @@
 package javax.servlet.jsp.jstl.sql;
 
 /**
- * <p>A class implementing this interface encapsulates the value and all 
- * meta data for a column in a database query result. Instances of such
- * classes are returned as the result of the &lt;Query&gt; action.</p>
+ * <p>This interface provides access to a column's value and string
+ * representation, in addition to the column's meta data exposed by its
+ * <code>ColumnMetaData</code> superinterface</p>
+ *
+ * @see ColumnMetaData
+ *
+ * @author Justyna Horwat
  * 
  */
 
 public interface Column extends ColumnMetaData {
 
     /**
-     * Returns the column value, or null.
+     * Returns the column value
+     *
+     * @return the column's value or <code>null</code>
      */
     public Object getValue();
 
     /**
      * Returns the default <code>String</code> representation of the
-     * column's value. If the value is null, an empty String is
-     * is returned.
+     * column's value. 
+     *
+     * @return the default <code>String</code> representation of the
+     * column's value. If value is <code>null</code>, an empty 
+     * <code>String</code> is returned
      */
     public String toString();
 

@@ -58,118 +58,184 @@ package javax.servlet.jsp.jstl.sql;
 import java.sql.*;
 
 /**
- * <p>A class implementing this interface encapsulates the meta data for 
- * a column in a database query result. 
- * 
- * <p>Most methods may throw an SQLException. In this case, the exception 
- * instance may be the same instance as thrown by the corresponding
- * <code>java.sql.ResultSetMetaData</code> method when the Column instance
- * was created.</p>
+ * <p>This interface provides access to the meta data associated
+ * with a column</p>
  *
- * <p>Note! Currently this class contains methods corresponding to all
- * <code>ResultSetMetaData</code> methods. We may want to remove some of them
- * that don't make much sense in the context where this class is used.</p>
- *
+ * @author Justyna Horwat
  */
-
 public interface ColumnMetaData {
 
     /**
      * Get the designated column's name.
+     *
+     * @return the column name
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getName() throws SQLException;
 
     /**
      * Retrieves the column's SQL type.
      *
-     *<p>Fix: maybe this method should return a String instead, with
-     * the name of the type based on the java.sql.Types statics names.
+     * @return the column's SQL type
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int getType() throws SQLException;
 
     /**
      * Retrieves the column's database-specific type name.
+     *
+     * @return the column's database-specific type name
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getTypeName() throws SQLException;
 
     /**
      * Indicates whether the column is automatically numbered, 
      * thus read-only.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isAutoIncrement() throws SQLException;
 
     /**
      * Indicates whether a column's case matters.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isCaseSensitive() throws SQLException;
 
     /**
      * Indicates whether the column can be used in a where clause.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isSearchable() throws SQLException;
 
     /**
      * Indicates whether the column is a cash value.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isCurrency() throws SQLException;
 
     /**
      * Indicates the nullability of values in the column.
+     *
+     * @return the nullability status of the given column
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int isNullable() throws SQLException;
 
     /**
      * Indicates whether values in the column are signed numbers.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isSigned() throws SQLException;
 
     /**
      * Indicates the column's normal maximum width in characters.
+     *
+     * @return the normal maximum number of characters allowed as 
+     * the width of the designated column
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int getDisplaySize() throws SQLException;
 
     /**
      * Gets the column's suggested title for use in printouts and displays.
+     *
+     * @return the column's suggested title
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getLabel() throws SQLException;
 
     /**
      * Get the column's table's schema.
+     *
+     * @return the schema name or "" if not applicable
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getSchemaName() throws SQLException;
 
     /**
      * Get the column's number of decimal digits.
+     *
+     * @return the column's number of decimal digits
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int getPrecision() throws SQLException;
 
     /**
-     * Gets the column's number of digits to right of the decimal point.
+     * Gets the column's number of digits to the right of the decimal point.
+     *
+     * @return the column's number of digits to the right of the decimal
+     * point
+     *
+     * @throws SQLException if a database access error occurs
      */
     public int getScale() throws SQLException;
 
     /**
      * Gets the designated column's table name.
+     *
+     * @return the table name or "" if not applicable
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getTableName() throws SQLException;
 
     /**
      * Gets the column's table's catalog name.
+     *
+     * @return the catalog name or "" if not applicable
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getCatalogName() throws SQLException;
 
     /**
      * Indicates whether the column is definitely not writable.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isReadOnly() throws SQLException;
 
     /**
      * Indicates whether it is possible for a write on the column to succeed.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isWritable() throws SQLException;
 
     /**
      * Indicates whether a write on the column will definitely succeed.
+     *
+     * @return <tt>true</tt> if so; <tt>false</tt> otherwise
+     *
+     * @throws SQLException if a database access error occurs
      */
     public boolean isDefinitelyWritable() throws SQLException;
 
@@ -179,6 +245,13 @@ public interface ColumnMetaData {
      * called to retrieve a value from the column. 
      * <code>ResultSet.getObject</code> may return a subclass of the class 
      * returned by this method.
+     *
+     * @return the fully-qualified name of the class in the Java 
+     * programming language that would be used by the method 
+     * <code>ResultSet.getObject</code> to retrieve the value in the 
+     * specified column. This is the class name used for custom mapping.
+     *
+     * @throws SQLException if a database access error occurs
      */
     public String getClassName() throws SQLException;
 

@@ -56,15 +56,38 @@
 package javax.servlet.jsp.jstl.sql;
 
 /**
- * <p>A class implementing this interface exposes one method that
- * nested elements can use to add PreparedStatement parameters.
+ * <p>This interface allows tag handlers implementing it to receive
+ * values for parameter markers ("?") in their SQL statements.</p>
  *
+ * <p>This interface is implemented by both &lt;sql:query&gt; and
+ * &lt;sql:update&gt;. Its <code>addSQLParameter()</code> method
+ * is called by nested parameter actions (such as &lt;sql:param&gt;)
+ * to substitue <code>PreparedStatement<code> parameter values for
+ * "?" parameter markers in the SQL statement of the enclosing
+ * <code>SQLExecutionTag</code> action.</p>
+ *
+ * <p>The given parameter values are converted to their corresponding
+ * SQL type (following the rules in the JDBC specification) before
+ * they are sent to the database.</p>
+ *
+ * <p>Keeing track of the index of the parameter values being added
+ * is the responsibility of the tag handler implementing this
+ * interface</p>
+ *
+ * <p>The <code>SQLExcecutionTag</code> interface is exposed in order
+ * to support custom parameter actions which may retrieve their
+ * parameters from any source and process them before substituting
+ * them for a parameter marker in the sQL statement of the 
+ * enclosing <code>SQLExecutionTag</code> action</p>
+ *
+ * @author Justyna Horwat
  */
-
 public interface SQLExecutionTag {
 
     /**
      * Adds a PreparedStatement parameter value
+     *
+     * @param the PreparedStatement parameter value
      */
     public void addSQLParameter(Object value);
 }
