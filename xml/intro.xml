@@ -113,7 +113,7 @@
             doing releases of the taglib, a link can be made to each
             available release. -->
       <li>View the Standard 1.0 taglib documentation
-        <a href="standard/index.html">Standard 1.0 Documentation</a>
+        <a href="standard-1.0/index.html">Standard 1.0 Documentation</a>
       </li>
 
       <li>View the most recent, nightly build of the
@@ -155,7 +155,7 @@
     <p>Download the most recent, nightly snapshot:</p>
     <ul>
       <li>
-        <a href="http://jakarta.apache.org/builds/jakarta-taglibs/nightly/projects/standard/">
+        <a href="http://jakarta.apache.org/builds/jakarta-taglibs/nightly/projects/standard-1.0/">
         Standard Taglib nightly snapshot</a></li>
     </ul>
 
