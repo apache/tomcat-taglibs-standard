@@ -311,6 +311,11 @@ public abstract class ImportSupport extends BodyTagSupport
 		}
 	    }
 
+            if (c == null) {
+                throw new JspTagException(
+                    Resources.getMessage("IMPORT_REL_WITHOUT_DISPATCHER", context, targetUrl));
+            }
+
 	    // from this context, get a dispatcher
 	    RequestDispatcher rd = c.getRequestDispatcher(targetUrl);
 
