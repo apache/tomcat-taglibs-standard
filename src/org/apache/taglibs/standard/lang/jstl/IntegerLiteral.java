@@ -84,8 +84,7 @@ public class IntegerLiteral
    **/
   static Object getValueFromToken (String pToken)
   {
-    // return new Long (pToken);
-    return new Integer (pToken);
+    return new Long (pToken);
   }
 
   //-------------------------------------

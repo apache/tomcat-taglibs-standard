@@ -1520,7 +1520,7 @@ With type: java.lang.String
 
 Expression: ${ bean1a.map1 [14] }
 ExpectedType: class java.lang.Object
-Evaluates to: value2
+Evaluates to: value3
 With type: java.lang.String
 
 Expression: ${ bean1a.map1 [2 * 7] }
@@ -1636,7 +1636,7 @@ With type: java.lang.Boolean
 
 Expression: ${(3).class}
 ExpectedType: class java.lang.Object
-Evaluates to: class java.lang.Integer
+Evaluates to: class java.lang.Long
 With type: java.lang.Class
 
 Expression: ${(bean1a.map1)["key1"]}
@@ -1747,4 +1747,63 @@ Expression: ${ empty emptyTests.nonemptySet }
 ExpectedType: class java.lang.Object
 Evaluates to: false
 With type: java.lang.Boolean
+
+
+#######################################################
+# test String arithmetic
+
+Expression: ${ "6" / "3" }
+ExpectedType: class java.lang.Object
+Evaluates to: 2.0
+With type: java.lang.Double
+
+Expression: ${ 3 + "4" }
+ExpectedType: class java.lang.Object
+Evaluates to: 7
+With type: java.lang.Long
+
+Expression: ${ "4" + 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: 7
+With type: java.lang.Long
+
+Expression: ${ 3 + "4.5" }
+ExpectedType: class java.lang.Object
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ 3 + "4.5" }": An exception occured trying to convert String "4.5" to type "java.lang.Long"
+With type: javax.servlet.jsp.JspException
+
+Expression: ${ "4.5" + 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ "4.5" + 3 }": An exception occured trying to convert String "4.5" to type "java.lang.Long"
+With type: javax.servlet.jsp.JspException
+
+Expression: ${ 3.0 + 6.0}
+ExpectedType: class java.lang.Object
+Evaluates to: 9.0
+With type: java.lang.Double
+
+Expression: ${ 31121.0 * 61553.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1.915590913E9
+With type: java.lang.Double
+
+Expression: ${ 31121 * 61553 }
+ExpectedType: class java.lang.Object
+Evaluates to: 1915590913
+With type: java.lang.Long
+
+Expression: ${ 65536 * 65536 * 65536 * 32759 }
+ExpectedType: class java.lang.Object
+Evaluates to: 9220838762064379904
+With type: java.lang.Long
+
+Expression: ${ 9220838762064379904.0 - 9220838762064379900.0 }
+ExpectedType: class java.lang.Object
+Evaluates to: 0.0
+With type: java.lang.Double
+
+Expression: ${ 9220838762064379904 - 9220838762064379900 }
+ExpectedType: class java.lang.Object
+Evaluates to: 4
+With type: java.lang.Long
 

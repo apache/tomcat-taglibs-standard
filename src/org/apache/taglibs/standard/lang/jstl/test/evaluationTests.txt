@@ -780,3 +780,29 @@ ${ empty emptyTests.emptySet }
 java.lang.Object
 ${ empty emptyTests.nonemptySet }
 java.lang.Object
+
+#######################################################
+# test String arithmetic
+
+${ "6" / "3" }
+java.lang.Object
+${ 3 + "4" }
+java.lang.Object
+${ "4" + 3 }
+java.lang.Object
+${ 3 + "4.5" }
+java.lang.Object
+${ "4.5" + 3 }
+java.lang.Object
+${ 3.0 + 6.0}
+java.lang.Object
+${ 31121.0 * 61553.0 }
+java.lang.Object
+${ 31121 * 61553 }
+java.lang.Object
+${ 65536 * 65536 * 65536 * 32759 }
+java.lang.Object
+${ 9220838762064379904.0 - 9220838762064379900.0 }
+java.lang.Object
+${ 9220838762064379904 - 9220838762064379900 }
+java.lang.Object
