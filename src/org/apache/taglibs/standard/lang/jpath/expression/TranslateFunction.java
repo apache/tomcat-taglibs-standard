@@ -232,7 +232,7 @@ public class TranslateFunction extends SimpleNode {
                 result = result.replace(arg2.charAt(i), replacement);
             }
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return result;

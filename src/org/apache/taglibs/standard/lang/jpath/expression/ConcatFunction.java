@@ -214,7 +214,7 @@ public class ConcatFunction extends SimpleNode {
                         .evaluate(pageContext, icontext)));
             }
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return buff.toString();

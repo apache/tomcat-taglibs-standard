@@ -155,7 +155,7 @@ public abstract class UrlSupport extends BodyTagSupport
 	    try {
 	        pageContext.getOut().print(result);
 	    } catch (java.io.IOException ex) {
-		throw new JspTagException(ex.getMessage());
+		throw new JspTagException(ex.toString(), ex);
 	    }
 	}
 

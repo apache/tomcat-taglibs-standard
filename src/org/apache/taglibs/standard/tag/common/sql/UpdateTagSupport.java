@@ -269,7 +269,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
             } catch (Exception ex) {
                 throw new JspException(
                     Resources.getMessage("DATASOURCE_INVALID",
-					 ex.getMessage()));
+					 ex.toString()));
             }
 	}
 

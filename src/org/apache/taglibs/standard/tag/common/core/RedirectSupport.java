@@ -150,7 +150,7 @@ public abstract class RedirectSupport extends BodyTagSupport
 	try {
 	    response.sendRedirect(result);
 	} catch (java.io.IOException ex) {
-	    throw new JspTagException(ex.toString());
+	    throw new JspTagException(ex.toString(), ex);
 	}
 
 	return SKIP_PAGE;

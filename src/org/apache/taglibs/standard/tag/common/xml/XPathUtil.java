@@ -525,7 +525,7 @@ public class XPathUtil {
             return result.bool();
         } catch (TransformerException ex) {
             throw new JspTagException(
-                Resources.getMessage("XPATH_ERROR_XOBJECT", ex.getMessage()), ex);            
+                Resources.getMessage("XPATH_ERROR_XOBJECT", ex.toString()), ex);            
         }
     }
     
@@ -569,7 +569,7 @@ public class XPathUtil {
                 vector.add( resultObject );
                 return new JSTLNodeList ( vector );
             } catch ( TransformerException te ) {
-                throw new JspTagException ( te );
+                throw new JspTagException(te.toString(), te);
             }
         }
           
@@ -801,7 +801,7 @@ public class XPathUtil {
                 myvs.setGlobalVariable( i, variableValue );
 
             } catch ( TransformerException te ) {
-                throw new JspTagException( te ) ;
+                throw new JspTagException(te.toString(), te);
             } 
  
         }

@@ -101,7 +101,7 @@ public class SPathTag extends TagSupport {
 	pageContext.setAttribute(var, s);
 	return SKIP_BODY;
       } catch (ParseException ex) {
-	throw new JspTagException(ex.toString());
+	throw new JspTagException(ex.toString(), ex);
       }
     }
 

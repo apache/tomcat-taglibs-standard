@@ -236,7 +236,7 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	    try {
 		pageContext.getOut().print(formatted);
 	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
+		throw new JspTagException(ioe.toString(), ioe);
 	    }
 	}
 

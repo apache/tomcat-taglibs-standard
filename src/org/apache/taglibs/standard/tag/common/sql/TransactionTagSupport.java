@@ -155,7 +155,7 @@ public abstract class TransactionTagSupport extends TagSupport
 	} catch (SQLException e) {
 	    throw new JspTagException(
                 Resources.getMessage("ERROR_GET_CONNECTION",
-				     e.getMessage()));
+				     e.toString()), e);
 	} 
 
 	return EVAL_BODY_INCLUDE;
@@ -170,7 +170,7 @@ public abstract class TransactionTagSupport extends TagSupport
 	} catch (SQLException e) {
 	    throw new JspTagException(
                 Resources.getMessage("TRANSACTION_COMMIT_ERROR",
-				     e.getMessage()));
+				     e.toString()), e);
 	}
 	return EVAL_PAGE;
     }

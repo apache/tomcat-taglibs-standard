@@ -197,7 +197,7 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 	    try {
 		pageContext.getOut().print(parsed);
 	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
+		throw new JspTagException(ioe.toString(), ioe);
 	    }
 	}
 

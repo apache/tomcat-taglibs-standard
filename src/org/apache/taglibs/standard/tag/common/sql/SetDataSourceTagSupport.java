@@ -144,7 +144,7 @@ public class SetDataSourceTagSupport extends TagSupport {
             catch (Exception e) {
                 throw new JspTagException(
                     Resources.getMessage("DRIVER_INVALID_CLASS",
-					 e.getMessage()));
+					 e.toString()), e);
             }
             dsw.setJdbcURL(jdbcURL);
             dsw.setUserName(userName);

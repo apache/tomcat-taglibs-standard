@@ -134,7 +134,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 	    try {
 		pageContext.getOut().print(bodyContent.getString());
 	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
+		throw new JspTagException(ioe.toString(), ioe);
 	    }
 	}
 

@@ -218,7 +218,7 @@ public class FormatNumberFunction extends SimpleNode {
                 formatted = new String("NaN");
             }
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return formatted;

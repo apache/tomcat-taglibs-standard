@@ -135,7 +135,7 @@ public abstract class RequestEncodingSupport extends TagSupport {
 	    try {
 		pageContext.getRequest().setCharacterEncoding(charEncoding);
 	    } catch (UnsupportedEncodingException uee) {
-		throw new JspTagException(uee.getMessage());
+		throw new JspTagException(uee.toString(), uee);
 	    }
 	}
 

@@ -219,7 +219,7 @@ public class FormatDateFunction extends SimpleNode {
                 formatted = new String("");
             }
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return formatted;

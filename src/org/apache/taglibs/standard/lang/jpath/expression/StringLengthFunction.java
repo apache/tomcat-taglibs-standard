@@ -193,7 +193,7 @@ public class StringLengthFunction extends SimpleNode {
             result = Convert.toString(jjtGetChild(0).evaluate(pageContext,
                     icontext));
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return new Double(result.length());

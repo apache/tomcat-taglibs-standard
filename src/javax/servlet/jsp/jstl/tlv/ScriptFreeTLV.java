@@ -151,13 +151,13 @@ public class ScriptFreeTLV extends TagLibraryValidator {
       parser.parse(in, handler);
     }
     catch (ParserConfigurationException e) {
-      return vmFromString(e.getMessage());
+      return vmFromString(e.toString());
     }
     catch (SAXException e) {
-      return vmFromString(e.getMessage());
+      return vmFromString(e.toString());
     }
     catch (IOException e) {
-      return vmFromString(e.getMessage());
+      return vmFromString(e.toString());
     }
     finally {
       if (in != null) try { in.close(); } catch (IOException e) {}

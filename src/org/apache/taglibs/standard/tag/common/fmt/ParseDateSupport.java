@@ -219,7 +219,7 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	    try {
 		pageContext.getOut().print(parsed);
 	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
+		throw new JspTagException(ioe.toString(), ioe);
 	    }
 	}
 

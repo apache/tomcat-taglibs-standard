@@ -192,7 +192,7 @@ public class BooleanFunction extends SimpleNode {
             result = Convert.toBoolean(jjtGetChild(0).evaluate(pageContext,
                     icontext));
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return result;

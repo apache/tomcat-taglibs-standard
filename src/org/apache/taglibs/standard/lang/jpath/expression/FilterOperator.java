@@ -206,7 +206,7 @@ public class FilterOperator extends SimpleNode implements Introspectable {
                 result = leftSide;
             }
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return result;
@@ -248,7 +248,7 @@ public class FilterOperator extends SimpleNode implements Introspectable {
                 result = leftSide;
             }
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return result;
@@ -290,7 +290,7 @@ public class FilterOperator extends SimpleNode implements Introspectable {
                 result = leftSide;
             }
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return result;

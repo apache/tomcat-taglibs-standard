@@ -196,7 +196,7 @@ public abstract class FormatDateSupport extends TagSupport {
 	    try {
 		pageContext.getOut().print(formatted);
 	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
+		throw new JspTagException(ioe.toString(), ioe);
 	    }
 	}
 

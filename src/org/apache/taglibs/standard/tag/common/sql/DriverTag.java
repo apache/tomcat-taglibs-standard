@@ -132,7 +132,7 @@ public class DriverTag extends TagSupport {
 	}
 	catch (Exception e) {
 	    throw new JspTagException("Invalid driver class name: " +
-		e.getMessage());
+		e.toString(), e);
 	}
 	ds.setJdbcURL(getJdbcURL());
 	ds.setUserName(getUserName());

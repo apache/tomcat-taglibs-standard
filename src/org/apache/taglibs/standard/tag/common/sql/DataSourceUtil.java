@@ -164,7 +164,7 @@ public class DataSourceUtil {
             } catch (Exception ex) {
                 throw new JspTagException(
                     Resources.getMessage("DRIVER_INVALID_CLASS",
-					 ex.getMessage()));
+					 ex.toString()), ex);
             }
 	}
 

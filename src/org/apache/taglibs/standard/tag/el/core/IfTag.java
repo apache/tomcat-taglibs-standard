@@ -99,7 +99,7 @@ public class IfTag extends ConditionalTagSupport {
 	    else
 	        return (((Boolean) r).booleanValue());
         } catch (JspException ex) {
-	    throw new JspTagException(ex.toString());
+	    throw new JspTagException(ex.toString(), ex);
 	}
     }
 

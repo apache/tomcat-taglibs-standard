@@ -160,7 +160,7 @@ public abstract class ImportSupport extends BodyTagSupport
 	        pageContext.setAttribute(varReader, r);
 	    }
 	} catch (IOException ex) {
-	    throw new JspTagException(ex.toString());
+	    throw new JspTagException(ex.toString(), ex);
 	}
 
 	return EVAL_BODY_INCLUDE;
@@ -180,7 +180,7 @@ public abstract class ImportSupport extends BodyTagSupport
 	    }
 	    return EVAL_PAGE;
         } catch (IOException ex) {
-	    throw new JspTagException(ex.toString());
+	    throw new JspTagException(ex.toString(), ex);
         }
     }
 

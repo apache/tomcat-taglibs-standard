@@ -104,7 +104,7 @@ public abstract class ExprSupport extends TagSupport {
               pageContext, escapeXml, result);
 	    return SKIP_BODY;
         } catch (java.io.IOException ex) {
-	    throw new JspTagException(ex.toString());
+	    throw new JspTagException(ex.toString(), ex);
         }
     }
 

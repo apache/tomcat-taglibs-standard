@@ -231,7 +231,7 @@ public class EqualsOperator extends SimpleNode {
                         + "] cannot be compared");
             }
         } catch (ConversionException ce) {
-            throw new EvaluationException(this, ce.getMessage());
+            throw new EvaluationException(this, ce.toString());
         }
 
         return new Boolean(result);

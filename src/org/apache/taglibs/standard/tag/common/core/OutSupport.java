@@ -141,7 +141,7 @@ public class OutSupport extends BodyTagSupport {
 	    return SKIP_BODY;
 	}
       } catch (IOException ex) {
-	throw new JspException(ex.getMessage(), ex);
+	throw new JspException(ex.toString(), ex);
       }
     }
 
@@ -156,7 +156,7 @@ public class OutSupport extends BodyTagSupport {
             out(pageContext, escapeXml, bodyContent.getString().trim());
 	return EVAL_PAGE;
       } catch (IOException ex) {
-	throw new JspException(ex.getMessage(), ex);
+	throw new JspException(ex.toString(), ex);
       }
     }
 

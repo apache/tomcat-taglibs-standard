@@ -172,7 +172,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 	    try {
 		pageContext.getOut().print("??????");
 	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
+		throw new JspTagException(ioe.toString(), ioe);
 	    }
 	    return EVAL_PAGE;
 	}
@@ -237,7 +237,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 	    try {
 		pageContext.getOut().print(message);
 	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
+		throw new JspTagException(ioe.toString(), ioe);
 	    }
 	}
 

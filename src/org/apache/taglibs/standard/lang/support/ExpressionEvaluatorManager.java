@@ -153,17 +153,17 @@ public class ExpressionEvaluatorManager {
         } catch (ClassCastException ex) {
             // just to display a better error message
             throw new JspException("invalid ExpressionEvaluator: " +
-                ex.getMessage(), ex);
+                ex.toString(), ex);
         } catch (ClassNotFoundException ex) {
             throw new JspException("couldn't find ExpressionEvaluator: " +
-                ex.getMessage(), ex);
+                ex.toString(), ex);
         } catch (IllegalAccessException ex) {
             throw new JspException("couldn't access ExpressionEvaluator: " +
-                ex.getMessage(), ex);
+                ex.toString(), ex);
         } catch (InstantiationException ex) {
             throw new JspException(
                 "couldn't instantiate ExpressionEvaluator: " +
-                ex.getMessage(), ex);
+                ex.toString(), ex);
         }
     }
 

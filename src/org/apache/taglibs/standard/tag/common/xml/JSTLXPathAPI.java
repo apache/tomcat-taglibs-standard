@@ -248,7 +248,7 @@ public class JSTLXPathAPI extends XPathAPI {
             return list.nodeset();
         } catch (TransformerException ex) {
             throw new JspTagException(
-                Resources.getMessage("XPATH_ERROR_XOBJECT", ex.getMessage()), ex);            
+                Resources.getMessage("XPATH_ERROR_XOBJECT", ex.toString()), ex);            
         }
     }        
 
@@ -264,7 +264,7 @@ public class JSTLXPathAPI extends XPathAPI {
             return list.nodelist();
         } catch (TransformerException ex) {
             throw new JspTagException(
-                Resources.getMessage("XPATH_ERROR_XOBJECT", ex.getMessage()), ex);            
+                Resources.getMessage("XPATH_ERROR_XOBJECT", ex.toString()), ex);            
         }
     }        
     
@@ -317,10 +317,10 @@ public class JSTLXPathAPI extends XPathAPI {
             return xobj;
         } catch (TransformerException ex) {
             throw new JspTagException(
-                Resources.getMessage("XPATH_ERROR_EVALUATING_EXPR", str, ex.getMessage()), ex);            
+                Resources.getMessage("XPATH_ERROR_EVALUATING_EXPR", str, ex.toString()), ex);            
         } catch (IllegalArgumentException ex) {
             throw new JspTagException(
-                Resources.getMessage("XPATH_ILLEGAL_ARG_EVALUATING_EXPR", str, ex.getMessage()), ex);            
+                Resources.getMessage("XPATH_ILLEGAL_ARG_EVALUATING_EXPR", str, ex.toString()), ex);            
         }
     }
     
@@ -343,10 +343,10 @@ public class JSTLXPathAPI extends XPathAPI {
             return xpath.execute(xpathSupport, ctxtNode, prefixResolver);
         } catch (TransformerException ex) {
             throw new JspTagException(
-            Resources.getMessage("XPATH_ERROR_EVALUATING_EXPR", str, ex.getMessage()), ex);
+            Resources.getMessage("XPATH_ERROR_EVALUATING_EXPR", str, ex.toString()), ex);
         } catch (IllegalArgumentException ex) {
             throw new JspTagException(
-            Resources.getMessage("XPATH_ILLEGAL_ARG_EVALUATING_EXPR", str, ex.getMessage()), ex);
+            Resources.getMessage("XPATH_ILLEGAL_ARG_EVALUATING_EXPR", str, ex.toString()), ex);
         }
     } 
     
