@@ -248,9 +248,6 @@ public abstract class BundleSupport extends BodyTagSupport {
 		    // use resource bundle with fallback locale
 		    loc = LocaleSupport.parseLocale(fallback, null);
 		    ret = getBundle(basename, loc);
-		} else {
-		    // use resource bundle with runtime's default locale
-		    ret = getBundle(basename, Locale.getDefault());
 		}
 	    }
 	}

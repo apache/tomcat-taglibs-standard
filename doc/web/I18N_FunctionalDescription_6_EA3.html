@@ -103,32 +103,106 @@ as follows:
 the action checks if there is a matching locale for the resource bundle
 in question, by passing the resource bundle's base name and the client's
 requested locale to the <tt>java.util.ResourceBundle.getBundle()</tt> method.
-The returned locale may either match both the country and language of the
-requested locale (exact match), only its language, or neither. If there
-is an exact match, it is used, and no further client locales are checked
-(an exact match may exist only if the client's preferred locale specifies
-a country). Otherwise, the first match on language is used. If no such
-match exists, the fallback locale is used by searching the <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt>
-attribute in the page, request, session (if valid), and application scope(s)
-(in this order) (see Section 16: <i>Configuration parameters</i>). If this
-attribute does not exist, the default locale of the JSP container's Java
-runtime is used.
-<p>For example, if the client's preferred locales were <tt>ja</tt>, <tt>en-UK</tt>,
-<tt>en-US</tt>,
-<tt>en-CA</tt>,
-and f<tt>r </tt>(in this order), and the available ones (for the resource
-bundle in question) <tt>en</tt> and
-<tt>fr</tt>, the best match would be
-<tt>en</tt>;
+This method appends the name of the requested client locale to the given
+base name and searches for a resource bundle with that name. A resource
+bundle may be backed by a class or a properties file. If no resource bundle
+with that name exists (and the requested locale has both a language and
+a country component), the method appends just the requested locale's language
+name to the given base name and searches for a resource bundle with that
+name. If no resource bundle with that name exists, and the requested locale
+differs from the container's default locale, the method continues the search
+by appending the name of the container's default locale to the given base
+name. If no resource bundle with that name exists (and the container's
+default locale has both a language and a country component), the method
+appends just the language component of the container's default locale to
+the given base name. If there still is no match, the method searches for
+a resource bundle with just the given base name (without any locale name
+appended to it). If there still is no match, <tt>ResourceBundle.getBundle()
+</tt>raises a <tt>MissingResourceException</tt>, which is caught by the
+tag handler implementation and interpreted as if the resource bundle with
+the given base name does not exist for the requested client locale.
+<p>As a result of the search algorithm implemented by <tt>ResourceBundle.getBundle()</tt>,
+the locale of the resource bundle returned by <tt>ResourceBundle.getBundle()
+</tt>may either match both the country and language components of the requested
+locale ("exact match"), only its language ("language match"), or neither
+(depending on the container's default locale). Note that the locale of
+the returned resource bundle may not even have any language and country
+components. An exact match may exist only if the client's preferred locale
+specifies a country.
+<p>If there is an exact match, it is used, and no further client locales
+are checked. Otherwise, all remaining client locales are checked, and the
+first language match is used. If no such match exists, the fallback locale
+stored in the <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt> attribute,
+which is searched in the page, request, session (if valid), and application
+scope(s) (in this order), is used (see Section 16: Configuration parameters).
+If this attribute is not found, or there still is no match, an error message
+of the form <tt>"???&lt;key>???"</tt> (where
+<tt>&lt;key></tt> is the name
+of the message key to be looked up) is returned (see Section 8:&nbsp;&lt;message>).
+<p>The behavior is implementation-defined if the set of available resource
+bundles changes during execution of the page. Implementations may thus
+cache the best matching locale for a given resource bundle when one is
+found.
+<p>The following example assumes that a message key needs to be looked
+up in a resource bundle with base name "MyResources" which is available
+only in the US-English ("en-US") locale. Furthermore, it assumes that the
+client's only preferred locale is British-English ("en_UK"). Passing the
+requested base name ("MyResources") along with the preferred locale ("en-UK")
+to the <tt>ResourceBundle.getBundle()</tt> method will result in the following
+search order of resource bundles, assuming that the container's default
+locale is set to English ("en"):
+<p><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en_UK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(exact match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en_UK.properties&nbsp;&nbsp;
+(exact match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(no match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(no match)</tt>
+<p>Since <tt>MyResources_en_US&nbsp;</tt>is never searched in this example,
+an error message of the form <tt>"???&lt;key>???"</tt> (see above) is returned
+to the client.
+<p>With the container's default locale set to "en-US", the complete search
+order of <tt>ResourceBundle.getBundle()</tt> will be as follows:
+<p><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en_UK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(exact match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en_UK.properties&nbsp;&nbsp;
+(exact match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en_US&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en_US.properties&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(no match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(no match)</tt>
+<p>In this case, a language match with <tt>MyResources_en_US </tt>is found,
+which is returned. Since the client did not specify any additional preferred
+locales, the message key is looked up in this resource bundle.
+<p>If the client's preferred locales were "ja", "en-UK",
+"en-US",
+"en-CA",
+and "fr"<tt> </tt>(in this order), and the available ones (for the resource
+bundle in question) were "en" and
+"fr", the best match would be
+"en". Likewise,
 if the available ones were
-<tt>en</tt>,
-<tt>en-US</tt>, and
-<tt>fr</tt>,
-then the best match would be <tt>en-US</tt>.
-<p>&nbsp;The behavior is implementation-defined if the set of available
-resource bundles changes during execution of the page. Implementations
-may thus cache the best matching locale for a given resource bundle when
-one is found.
+"en",
+"en-US", and
+"fr", then the best match
+would be "en-US".
 <h5>
 2.1.2 Formatting locale</h5>
 This is the locale used by the <tt>&lt;formatNumber></tt>, <tt>&lt;parseNumber></tt>,
@@ -194,6 +268,8 @@ not enclosed within a <tt>&lt;bundle> </tt>action.</li>
 
 <br>&nbsp;
 <p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
 <p>After an action has called <tt>ServletResponse.setLocale()</tt>, it
 determines the character encoding associated with the locale (by calling
 <tt>ServletResponse.getCharacterEncoding()</tt>)
@@ -355,15 +431,15 @@ the current <tt>JspWriter
 <p>If the message corresponding to the given key is <i>compound</i>, that
 is, contains one or more variables, it may be supplied with argument values
 for these variables via the <tt>messageArgs</tt> attribute or one or more
-<tt>&lt;messageArg></tt> subtags (one for each argument value). This procedure
-is referred to as
-<i>parametric replacement.</i> Parametric replacement
-takes place in the order of the argument values given via the <tt>messageArgs</tt>
-attribute or the 
-<tt>&lt;messageArg></tt> subtags. If the message is compound,
-but neither a <tt>messageArgs</tt> attribute nor any <tt>&lt;messageArg></tt>
-subtags are specified, the message is left unmodified. Specifying a <tt>&lt;message></tt>
-tag with both a <tt>messageArgs</tt> attribute and one or more <tt>&lt;messageArg></tt>
+<tt>&lt;messageArg></tt>
+subtags (one for each argument value). This procedure is referred to as
+<i>parametric
+replacement.</i> Parametric replacement takes place in the order of the
+argument values given via the <tt>messageArgs</tt> attribute or the <tt>&lt;messageArg></tt>
+subtags. If the message is compound, but neither a <tt>messageArgs</tt>
+attribute nor any <tt>&lt;messageArg></tt> subtags are specified, the message
+is left unmodified. Specifying a <tt>&lt;message></tt> tag with both a
+<tt>messageArgs</tt> attribute and one or more <tt>&lt;messageArg></tt>
 subtags causes a translation error.
 <p>If the parent <tt>&lt;bundle></tt> action specifies a <tt>prefix</tt>
 attribute, its value is prepended to any key names to be looked up in that
@@ -385,12 +461,12 @@ on a given pattern string , using the runtime's default locale.
 <p>The pattern string may be specified via the <tt>value</tt> attribute;
 if missing, it is read from the tag's body content.
 <p>The argument values for parametric replacement may be supplied via the
-<tt>messageArgs</tt> attribute or one or more
-<tt>&lt;messageArg></tt>
-subtags (one for each parameter in the pattern). Parametric replacement
-takes place in the order of the argument values given via the <tt>messageArgs</tt>
-attribute or the 
-<tt>&lt;messageArg></tt> subtags. If neither a <tt>messageArgs</tt>
+<tt>messageArgs</tt>
+attribute or one or more
+<tt>&lt;messageArg></tt> subtags (one for each
+parameter in the pattern). Parametric replacement takes place in the order
+of the argument values given via the <tt>messageArgs</tt> attribute or
+the <tt>&lt;messageArg></tt> subtags. If neither a <tt>messageArgs</tt>
 attribute nor any <tt>&lt;messageArg></tt> subtags are specified, the given
 pattern is left unmodified. Specifying a <tt>&lt;messageFormat></tt> tag
 with both a <tt>messageArgs</tt> attribute and one or more <tt>&lt;messageArg></tt>
