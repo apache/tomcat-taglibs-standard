@@ -116,6 +116,7 @@ public class ParamTag extends ParamSupport {
     // for EL-based attribute
     public void setValue(String value_) {
         this.value_ = value_;
+	this.valueSpecified = true;
     }
 
 

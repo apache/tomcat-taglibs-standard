@@ -84,6 +84,7 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
     // Protected state
 
     protected String value;                      // 'value' attribute
+    protected boolean valueSpecified;	         // status
     protected String type;                       // 'type' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Locale parseLocale;                // 'parseLocale' attribute
@@ -108,6 +109,7 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 
     private void init() {
 	value = type = pattern = var = null;
+	valueSpecified = false;
 	parseLocale = null;
 	integerOnlySpecified = false;
 	scope = PageContext.PAGE_SCOPE;
@@ -130,16 +132,19 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
+	String input = null;
 
-	if (value == null) {
-	    BodyContent bc = null;
-	    String bcs = null;
-	    if (((bc = getBodyContent()) != null)
-		    && ((bcs = bc.getString()) != null)) {
-		value = bcs.trim();
-	    }
+        // determine the input by...
+	if (valueSpecified) {
+	    // ... reading 'value' attribute
+	    input = value;
+	} else {
+	    // ... retrieving and trimming our body
+	    if (bodyContent != null && bodyContent.getString() != null)
+	        input = bodyContent.getString().trim();
 	}
-	if ((value == null) || value.equals("")) {
+
+	if ((input == null) || input.equals("")) {
 	    if (var != null) {
 		pageContext.removeAttribute(var, scope);
 	    }
@@ -179,10 +184,10 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 	// Parse number
 	Number parsed = null;
 	try {
-	    parsed = parser.parse(value);
+	    parsed = parser.parse(input);
 	} catch (ParseException pe) {
 	    throw new JspException(
-	            Resources.getMessage("PARSE_NUMBER_PARSE_ERROR", value),
+	            Resources.getMessage("PARSE_NUMBER_PARSE_ERROR", input),
 		    pe);
 	}
 

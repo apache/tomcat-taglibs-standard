@@ -130,9 +130,9 @@ public abstract class BundleSupport extends BodyTagSupport {
     }
 
     public int doEndTag() throws JspException {
-	if (getBodyContent() != null) {
+	if (bodyContent != null) {
 	    try {
-		pageContext.getOut().print(getBodyContent().getString());
+		pageContext.getOut().print(bodyContent.getString());
 	    } catch (IOException ioe) {
 		throw new JspTagException(ioe.getMessage());
 	    }

@@ -124,6 +124,7 @@ public class MessageTag extends MessageSupport {
     // for EL-based attribute
     public void setKey(String key_) {
         this.key_ = key_;
+	this.keySpecified = true;
     }
 
     // for EL-based attribute

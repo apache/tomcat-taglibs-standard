@@ -85,6 +85,7 @@ public abstract class MessageSupport extends BodyTagSupport {
     // Protected state
 
     protected String key;                         // 'key' attribute
+    protected boolean keySpecified;	          // status
     protected LocalizationContext locCtxt;        // 'bundle' attribute
 
 
@@ -107,6 +108,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     private void init() {
 	key = var = null;
+	keySpecified = false;
 	locCtxt = null;
 	scope = PageContext.PAGE_SCOPE;
     }
@@ -147,21 +149,25 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 
-	if (key == null) {
-	    BodyContent bc = null;
-	    String bcs = null;
-	    if (((bc = getBodyContent()) != null)
-		    && ((bcs = bc.getString()) != null)) {
-		key = bcs.trim();
+        String keyInput = null;
+
+        // determine the message key by...
+        if (keySpecified) {
+	    // ... reading 'key' attribute
+	    keyInput = key;
+	} else {
+	    // ... retrieving and trimming our body
+	    if (bodyContent != null && bodyContent.getString() != null)
+	        keyInput = bodyContent.getString().trim();
+	}
+
+	if ((keyInput == null) || keyInput.equals("")) {
+	    try {
+		pageContext.getOut().print("??????");
+	    } catch (IOException ioe) {
+		throw new JspTagException(ioe.getMessage());
 	    }
-	    if ((key == null) || key.equals("")) {
-		try {
-		    pageContext.getOut().print("??????");
-		} catch (IOException ioe) {
-		    throw new JspTagException(ioe.getMessage());
-		}
-		return EVAL_PAGE;
-	    }
+	    return EVAL_PAGE;
 	}
 
 	String prefix = null;
@@ -183,15 +189,15 @@ public abstract class MessageSupport extends BodyTagSupport {
 	    }
 	}
 
-	String message = UNDEFINED_KEY + key + UNDEFINED_KEY;
+	String message = UNDEFINED_KEY + keyInput + UNDEFINED_KEY;
 	if (locCtxt != null) {
 	    ResourceBundle bundle = locCtxt.getResourceBundle();
 	    if (bundle != null) {
 		try {
 		    // prepend 'prefix' attribute from parent bundle
 		    if (prefix != null)
-			key = prefix + key;
-		    message = bundle.getString(key);
+			keyInput = prefix + keyInput;
+		    message = bundle.getString(keyInput);
 		    // Perform parametric replacement if required
 		    if (!params.isEmpty()) {
 			Object[] messageArgs = params.toArray();
@@ -203,7 +209,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 			message = formatter.format(messageArgs);
 		    }
 		} catch (MissingResourceException mre) {
-		    message = UNDEFINED_KEY + key + UNDEFINED_KEY;
+		    message = UNDEFINED_KEY + keyInput + UNDEFINED_KEY;
 		}
 	    }
 	}

@@ -87,6 +87,7 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
     // Protected state
 
     protected Object value;                    // 'value' attribute
+    protected boolean valueSpecified;	       // status
     protected String type;                     // 'type' attribute
     protected String pattern;                  // 'pattern' attribute
     protected String currencyCode;             // 'currencyCode' attribute
@@ -129,6 +130,7 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 
     private void init() {
 	value = type = null;
+	valueSpecified = false;
 	pattern = var = currencyCode = currencySymbol = null;
 	groupingUsedSpecified = false;
 	maxIntegerDigitsSpecified = minIntegerDigitsSpecified = false;
@@ -154,17 +156,19 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 	String formatted = null;
+        Object input = null;
 
-	if (value == null) {
-	    BodyContent bc = null;
-	    String bcs = null;
-	    if (((bc = getBodyContent()) != null)
-		    && ((bcs = bc.getString()) != null)) {
-		value = bcs.trim();
-	    }
+        // determine the input by...
+        if (valueSpecified) {
+	    // ... reading 'value' attribute
+	    input = value;
+	} else {
+	    // ... retrieving and trimming our body
+	    if (bodyContent != null && bodyContent.getString() != null)
+	        input = bodyContent.getString().trim();
 	}
 
-	if ((value == null) || value.equals("")) {
+	if ((input == null) || input.equals("")) {
 	    // do nothing
 	    return EVAL_PAGE;
 	}
@@ -173,16 +177,16 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	 * If 'value' is a String, it is first parsed into an instance of
 	 * java.lang.Number
 	 */
-	if (value instanceof String) {
+	if (input instanceof String) {
 	    try {
-		if (((String) value).indexOf('.') != -1) {
-		    value = Double.valueOf((String) value);
+		if (((String) input).indexOf('.') != -1) {
+		    input = Double.valueOf((String) input);
 		} else {
-		    value = Long.valueOf((String) value);
+		    input = Long.valueOf((String) input);
 		}
 	    } catch (NumberFormatException nfe) {
 		throw new JspException(
-                    Resources.getMessage("FORMAT_NUMBER_PARSE_ERROR", value),
+                    Resources.getMessage("FORMAT_NUMBER_PARSE_ERROR", input),
 		    nfe);
 	    }
 	}
@@ -215,10 +219,10 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 		}
 	    }
 	    configureFormatter(formatter);
-	    formatted = formatter.format(value);
+	    formatted = formatter.format(input);
 	} else {
 	    // no formatting locale available, use toString()
-	    formatted = value.toString();
+	    formatted = input.toString();
 	}
 
 	if (var != null) {

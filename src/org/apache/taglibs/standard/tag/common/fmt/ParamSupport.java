@@ -74,6 +74,7 @@ public abstract class ParamSupport extends BodyTagSupport {
     // Protected state
 
     protected Object value;                          // 'value' attribute
+    protected boolean valueSpecified;	             // status
 
 
     //*********************************************************************
@@ -86,6 +87,7 @@ public abstract class ParamSupport extends BodyTagSupport {
 
     private void init() {
 	value = null;
+	valueSpecified = false;
     }
 
 
@@ -106,11 +108,17 @@ public abstract class ParamSupport extends BodyTagSupport {
 	 * add it to enclosing <fmt:message> tag, even if it is null or equal
 	 * to "".
 	 */
-	if (value == null) {
-	    // TLV has already ensured that we have non-empty body in this case
-	    value = getBodyContent().getString().trim();
+	Object input = null;
+        // determine the input by...
+	if (valueSpecified) {
+	    // ... reading 'value' attribute
+	    input = value;
+	} else {
+	    // ... retrieving and trimming our body (TLV has ensured that it's
+	    // non-empty)
+	    input = bodyContent.getString().trim();
 	}
-	parent.addParam(value);
+	parent.addParam(input);
 
 	return EVAL_PAGE;
     }

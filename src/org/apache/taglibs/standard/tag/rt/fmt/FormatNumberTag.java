@@ -75,6 +75,7 @@ public class FormatNumberTag extends FormatNumberSupport {
     // 'value' attribute
     public void setValue(Object value) throws JspTagException {
         this.value = value;
+	this.valueSpecified = true;
     }
 
     // 'type' attribute

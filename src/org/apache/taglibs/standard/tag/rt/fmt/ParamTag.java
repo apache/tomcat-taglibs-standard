@@ -75,5 +75,6 @@ public class ParamTag extends ParamSupport {
     // for tag attribute
     public void setValue(Object value) throws JspTagException {
         this.value = value;
+	this.valueSpecified = true;
     }
 }

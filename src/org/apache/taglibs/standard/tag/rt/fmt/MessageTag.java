@@ -75,6 +75,7 @@ public class MessageTag extends MessageSupport {
     // for tag attribute
     public void setKey(String key) throws JspTagException {
         this.key = key;
+	this.keySpecified = true;
     }
 
     // for tag attribute

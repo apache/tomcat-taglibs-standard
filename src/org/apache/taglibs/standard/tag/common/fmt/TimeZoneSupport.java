@@ -128,7 +128,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 	try {
-	    pageContext.getOut().print(getBodyContent().getString());
+	    pageContext.getOut().print(bodyContent.getString());
 	} catch (IOException ioe) {
 	    throw new JspTagException(ioe.getMessage());
 	}

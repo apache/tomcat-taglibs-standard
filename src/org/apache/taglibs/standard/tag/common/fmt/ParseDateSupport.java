@@ -84,6 +84,7 @@ public abstract class ParseDateSupport extends BodyTagSupport {
     // Protected state
 
     protected String value;                      // 'value' attribute
+    protected boolean valueSpecified;	         // status
     protected String type;                       // 'type' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Object timeZone;                   // 'timeZone' attribute
@@ -110,6 +111,7 @@ public abstract class ParseDateSupport extends BodyTagSupport {
     private void init() {
 	type = dateStyle = timeStyle = null;
 	value = pattern = var = null;
+	valueSpecified = false;
 	timeZone = null;
 	scope = PageContext.PAGE_SCOPE;
 	parseLocale = null;
@@ -133,15 +135,19 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 
-	if (value == null) {
-	    BodyContent bc = null;
-	    String bcs = null;
-	    if (((bc = getBodyContent()) != null)
-		    && ((bcs = bc.getString()) != null)) {
-		value = bcs.trim();
-	    }
+        String input = null;
+
+        // determine the input by...
+        if (valueSpecified) {
+	    // ... reading 'value' attribute
+	    input = value;
+	} else {
+	    // ... retrieving and trimming our body
+	    if (bodyContent != null && bodyContent.getString() != null)
+	        input = bodyContent.getString().trim();
 	}
-	if ((value == null) || value.equals("")) {
+
+	if ((input == null) || input.equals("")) {
 	    if (var != null) {
 		pageContext.removeAttribute(var, scope);
 	    }
@@ -200,10 +206,10 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	// Parse date
 	Date parsed = null;
 	try {
-	    parsed = parser.parse(value);
+	    parsed = parser.parse(input);
 	} catch (ParseException pe) {
 	    throw new JspException(
-	            Resources.getMessage("PARSE_DATE_PARSE_ERROR", value),
+	            Resources.getMessage("PARSE_DATE_PARSE_ERROR", input),
 		    pe);
 	}
 

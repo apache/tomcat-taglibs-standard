@@ -75,6 +75,7 @@ public class ParseNumberTag extends ParseNumberSupport {
     // 'value' attribute
     public void setValue(String value) throws JspTagException {
         this.value = value;
+	this.valueSpecified = true;
     }
 
     // 'type' attribute

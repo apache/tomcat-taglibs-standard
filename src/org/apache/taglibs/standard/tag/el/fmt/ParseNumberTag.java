@@ -121,6 +121,7 @@ public class ParseNumberTag extends ParseNumberSupport {
     // for EL-based attribute
     public void setValue(String value_) {
         this.value_ = value_;
+	this.valueSpecified = true;
     }
 
     // for EL-based attribute
