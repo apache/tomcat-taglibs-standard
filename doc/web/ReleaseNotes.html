@@ -5,17 +5,32 @@
 </head>
 
 <body bgcolor="#FFFFFF">
-<h1>JSTL: Release Notes</h1>
+<h1>'Standard' taglib (JSTL RI): Release Notes</h1>
 
-<p><b>JSTL EA2 introduces a variety of new features, and it rounds out
-some of the support initially provided in EA1.  This document contains a
-running list of additions and changes.</b></p>
+<p><b>The JSTL 1.0 EA3 RI builds on the 1.0 EA2 release, which introduced a
+variety of new features and rounded out some of the support initially
+provided in 1.0 EA1.  This document contains a running list of additions and
+changes.</b></p>
 
 <hr />
 
 <dl>
+<dt><b>12 Dec 2001</b></dt>
+<dd>JSTL 1.0 EA3 RI, version 1.0, introduced.  Version includes the following
+changes and additions:
+<ul>
+ <li>Introduction of SQL tags ("sql:*" library).</li>
+ <li>A performance improvement to the XML "transform" tag.</li>
+ <li>Minor changes and bug fixes to the i18n and XML libraries.</li>
+ <li>Distribution JAR files are now 'standard.jar' (RI) and 'jstl.jar'
+     (API).</li>
+ <li>showSource.jsp no longer depends on raw file I/O (and so 
+     should work even when standard-examples is deployed as a WAR).</li> 
+</ul>
+</dd>
+
 <dt><b>21 Nov 2001</b></dt>
-<dd>JSTL EA2 RI, version 1.0, introduced.  Version includes the following
+<dd>JSTL 1.0 EA2 RI, version 1.0, introduced.  Version includes the following
 major changes and additions:
 <ul>
  <li>JSPTL has been renamed to JSTL.</li>
@@ -29,7 +44,7 @@ major changes and additions:
      "formatting."  'jx' and 'jr' are no longer used; they are replaced
      with shorter abbreviations for the common cases (e.g., 'c', 'x').
  <li>ECMAScript is now the default expression evaluator.  Since the
-     first release of EA1, new languages include JXPath and ECMAScript.</li>
+     first release of 1.0 EA1, new languages include JXPath and ECMAScript.</li>
  <li>The RI has been thoroughly repackaged; many classes have moved.</li>
  <li>The package name for the JSTL API is now javax.servlet.jsp.jstl
      and is subdivided into cohesive packages.  (The old package for the
@@ -41,15 +56,15 @@ major changes and additions:
 </dd>
 
 <dt><b>09 Oct 2001</b></dt>
-<dd>JSTL EA1 RI, version 1.2, introduced.  This version includes support
+<dd>JSTL 1.0 EA1 RI, version 1.2, introduced.  This version includes support
 for ECMAScript.</dd>
 
 <dt><b>23 Jul 2001</b></dt>
-<dd>JSTL EA1 RI, version 1.1, is released.  This version is compatible
+<dd>JSTL 1.0 EA1 RI, version 1.1, is released.  This version is compatible
 with Tomcat 4.0 B6 and Tomcat 4.0 release.</dd>
 
 <dt><b>10 Jul 2001</b></dt>
-<dd>JSTL EA1 RI first made available for download.</dd>
+<dd>JSTL 1.0 EA1 RI first made available for download.</dd>
 
 <dt><b>08 Jul 2001</b></dt>
 <dd>Initial version of JSTL RI contributed by JSR-052 Expert Group

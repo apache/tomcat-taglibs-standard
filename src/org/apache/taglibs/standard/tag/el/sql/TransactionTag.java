@@ -52,23 +52,46 @@
  * <http://www.apache.org/>.
  *
  */ 
+package org.apache.taglibs.standard.tag.el.sql;
 
-package org.apache.taglibs.standard.tei;
-
-import javax.servlet.jsp.tagext.*;
+import javax.sql.*;
+import javax.servlet.jsp.*;
+import org.apache.taglibs.standard.lang.support.*;
+import org.apache.taglibs.standard.tag.common.sql.TransactionTagSupport;
 
 /**
- * An implementation of TagExtraInfo that implements validation for
- * &lt;timeZone&gt; tag's attributes.
+ * Subclass for the JSTL library with EL support.
  *
- * @author Jan Luehe
+ * @author Hans Bergsten
+ * @author Justyna Horwat
  */
-public class TimeZoneTEI extends TagExtraInfo {
+public class TransactionTag extends TransactionTagSupport {
+    
+    private String dataSourceEL;
+    private String transactionIsolationEL;
 
-    /**
-     * Validates the <tt>scope</tt> attribute of the &lt;timeZone&gt; tag.
-     */
-    public boolean isValid(TagData data) {
-	return Util.isValidScope(data);
+    public void setDataSource(String dataSourceEL) {
+	this.dataSourceEL = dataSourceEL;
+    }
+
+    public void setTransactionIsolation(String transactionIsolationEL) {
+	this.transactionIsolationEL = transactionIsolationEL;
+    }
+
+    public int doStartTag() throws JspException {
+	if (dataSourceEL != null) {
+	    rawDataSource = (Object) 
+		ExpressionEvaluatorManager.evaluate("dataSource", 
+		    dataSourceEL, Object.class, this, pageContext);
+	}
+
+	if (transactionIsolationEL != null) {
+	    transactionIsolationEL = (String) 
+		ExpressionEvaluatorManager.evaluate("transactionIsolation", 
+		    transactionIsolationEL, String.class, this, pageContext);
+            super.setTransactionIsolation(transactionIsolationEL);
+	}
+
+	return super.doStartTag();
     }
 }

@@ -91,7 +91,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Jan Luehe
  */
 
-public class Locale {
+public class LocaleSupport {
 
     /** 
      * Retrieves the localized message corresponding to the given key. 

@@ -39,11 +39,11 @@ of possible alternative tags gets its body content evaluated. In the example
 below, the information displayed for a specific product depends on the
 verbosity level selected.
 <p><tt>&nbsp; &lt;choose></tt> <br>
-  <tt>&nbsp;&nbsp;&nbsp; &lt;when test="$verbosityLevel == 'short'></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;when test="$verbosityLevel == 'short'"></tt> <br>
   <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;c:expr value=&quot;$product.shortDescription&quot;/&gt;</tt> 
   <br>
   <tt>&nbsp;&nbsp;&nbsp; &lt;/when></tt> <br>
-  <tt>&nbsp;&nbsp;&nbsp; &lt;when test="$verbosityLevel == 'medium'></tt> <br>
+  <tt>&nbsp;&nbsp;&nbsp; &lt;when test="$verbosityLevel == 'medium'"></tt> <br>
   <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;c:expr value=&quot;$product.mediumDescription&quot;/&gt;</tt> 
   <br>
   <tt>&nbsp;&nbsp;&nbsp; &lt;/when></tt><br>

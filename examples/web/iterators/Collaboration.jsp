@@ -1,10 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/ea/core" %>
-<%@ taglib prefix="jr" uri="http://java.sun.com/jstl/ea/jr" %>
+<%@ taglib prefix="jr" uri="http://java.sun.com/jstl/ea/core-rt" %>
 <%@ taglib prefix="ex" uri="/jstl-examples-taglib" %>
 
 <html>
 <head>
-  <title>JSTL: Iterator Support -- Collaboration Example</title>
+  <title>JSTL: Iterator Support 2-- Collaboration Example</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Collaboration</h3>

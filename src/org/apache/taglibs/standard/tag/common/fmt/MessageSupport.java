@@ -82,15 +82,16 @@ public abstract class MessageSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected String key;                              // 'key' attribute
-    protected ResourceBundle bundle;                   // 'bundle' attribute
+    protected String key;                         // 'key' attribute
+    protected ResourceBundle bundle;              // 'bundle' attribute
+    protected Object[] messageArgs;               // 'messageArgs' attribute
 
 
     //*********************************************************************
     // Private state
 
-    private String var;                                // 'var' attribute
-    private int scope;                                 // 'scope' attribute
+    private String var;                           // 'var' attribute
+    private int scope;                            // 'scope' attribute
     private List arguments;
 
 
@@ -107,11 +108,12 @@ public abstract class MessageSupport extends BodyTagSupport {
 	key = var = null;
 	bundle = null;
 	scope = PageContext.PAGE_SCOPE;
+	messageArgs = null;
 	arguments.clear();
     }
 
 
-   //*********************************************************************
+    //*********************************************************************
     // Tag attributes known at translation time
 
     public void setVar(String var) {
@@ -140,8 +142,21 @@ public abstract class MessageSupport extends BodyTagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	String prefix = null;
+	if (key == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (key = bcs.trim()).equals(""))
+                throw new JspTagException(
+                    Resources.getMessage("MESSAGE_NO_KEY"));
+	} else {
+	    if (getBodyContent() != null) {
+		String bcs = getBodyContent().getString();
+		if ((bcs != null) && !bcs.trim().equals(""))
+		    throw new JspTagException(
+                        Resources.getMessage("MESSAGE_ILLEGAL_BODY_CONTENT"));
+	    }
+	}
 
+	String prefix = null;
 	if (bundle == null) {
 	    Tag t = findAncestorWithClass(this, BundleSupport.class);
 	    if (t != null) {
@@ -165,11 +180,14 @@ public abstract class MessageSupport extends BodyTagSupport {
 		if (prefix != null)
 		    key = prefix + key;
 		message = bundle.getString(key);
-		if (!arguments.isEmpty()) {
+		// Perform parametric replacement if required
+		if (!arguments.isEmpty())
+		    messageArgs = arguments.toArray();
+		if (messageArgs != null) {
 		    MessageFormat formatter = new MessageFormat("");
 		    formatter.setLocale(bundle.getLocale());
 		    formatter.applyPattern(message);
-		    message = formatter.format(arguments.toArray());
+		    message = formatter.format(messageArgs);
 		}
 	    } catch (MissingResourceException mre) {
 		ServletContext sc = pageContext.getServletContext();

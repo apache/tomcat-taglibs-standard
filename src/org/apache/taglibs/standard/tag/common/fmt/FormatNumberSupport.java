@@ -70,7 +70,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Jan Luehe
  */
 
-public abstract class FormatNumberSupport extends TagSupport {
+public abstract class FormatNumberSupport extends BodyTagSupport {
 
     //*********************************************************************
     // Public constants
@@ -93,6 +93,7 @@ public abstract class FormatNumberSupport extends TagSupport {
 
     protected Object value;                      // 'value' attribute
     protected String pattern;                    // 'pattern' attribute
+    protected Locale parseLocale;                // 'parseLocale' attribute
 
 
     //*********************************************************************
@@ -116,6 +117,7 @@ public abstract class FormatNumberSupport extends TagSupport {
 	value = null;
 	type = NUMBER_TYPE;
 	scope = PageContext.PAGE_SCOPE;
+	parseLocale = null;
     }
 
 
@@ -142,31 +144,52 @@ public abstract class FormatNumberSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	NumberFormat formatter = null;
-
-	Locale locale = LocaleSupport.getFormattingLocale(
-            pageContext,
-	    this,
-	    NumberFormat.getAvailableLocales());
+	if (value == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (value = bcs.trim()).equals(""))
+                throw new JspTagException(
+                    Resources.getMessage("FORMAT_NUMBER_NO_VALUE"));
+	}
 
 	/*
-	 * If the value given is a string literal, it is first parsed into an
-	 * instance of java.lang.Number according to the default pattern of
-	 * the page's locale.
+	 * If 'value' is neither a Number nor a String, it is converted to a
+	 * String. For example, this is necessary if 'value' is the result
+	 * of a database lookup, in which case it will be an instance of
+	 * org.apache.taglibs.standard.tag.common.sql.ColumnImpl.
+	 */
+	if (!(value instanceof Number) && !(value instanceof String)) {
+	    value = value.toString();
+	}
+	
+	/*
+	 * If 'value' is a String, it is first parsed into an instance of
+	 * java.lang.Number according to the default pattern of the locale
+	 * given via the 'parseLocale' attribute. If this attribute is missing,
+	 * the default ("en") locale is used.
 	 */
 	if (value instanceof String) {
-	    formatter = NumberFormat.getNumberInstance(locale);
+	    NumberFormat parser = null;
+	    if (parseLocale != null)
+		parser = NumberFormat.getNumberInstance(parseLocale);
+	    else
+		parser = NumberFormat.getNumberInstance(Locale.ENGLISH);
 	    try {
-		value = formatter.parse((String) value);
+		value = parser.parse((String) value);
 	    } catch (ParseException pe) {
 		throw new JspTagException(pe.getMessage());
 	    }
 	}
 
+	// Create number formatter using page's locale
+	NumberFormat formatter = null;
+	Locale locale = LocaleSupport.getFormattingLocale(
+            pageContext,
+	    this,
+	    true,
+	    NumberFormat.getAvailableLocales());
 	switch (type) {
 	case NUMBER_TYPE:
-	    if (formatter == null)
-		formatter = NumberFormat.getNumberInstance(locale);
+	    formatter = NumberFormat.getNumberInstance(locale);
 	    if (pattern != null) {
 		DecimalFormat df = (DecimalFormat) formatter;
 		df.applyPattern(pattern);

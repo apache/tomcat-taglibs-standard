@@ -75,6 +75,8 @@ public class ParseDateTag extends ParseDateSupport {
 
     private String value_;                       // stores EL-based property
     private String pattern_;		         // stores EL-based property
+    private String timeZone_;		         // stores EL-based property
+    private String parseLocale_;	         // stores EL-based property
 
 
     //*********************************************************************
@@ -124,6 +126,16 @@ public class ParseDateTag extends ParseDateSupport {
         this.pattern_ = pattern_;
     }
 
+    // for EL-based attribute
+    public void setTimeZone(String timeZone_) {
+        this.timeZone_ = timeZone_;
+    }
+
+    // for EL-based attribute
+    public void setParseLocale(String parseLocale_) {
+        this.parseLocale_ = parseLocale_;
+    }
+
 
     //*********************************************************************
     // Private (utility) methods
@@ -131,7 +143,7 @@ public class ParseDateTag extends ParseDateSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = pattern_ = null;
+	value_ = pattern_ = timeZone_ = parseLocale_ = null;
     }
 
     // Evaluates expressions as necessary
@@ -149,5 +161,15 @@ public class ParseDateTag extends ParseDateSupport {
 	pattern = (String) ExpressionUtil.evalNotNull(
 	    "parseDate", "pattern", pattern_, String.class, this,
 	    pageContext);
+
+	timeZone = ExpressionUtil.evalNotNull(
+	    "parseDate", "timeZone", timeZone_, Object.class, this,
+	    pageContext);
+
+	String pl = (String) ExpressionUtil.evalNotNull(
+	    "parseDate", "parseLocale", parseLocale_, String.class, this,
+	    pageContext);
+	if (pl != null)
+	    parseLocale = LocaleSupport.parseLocale(pl, null);
     }
 }

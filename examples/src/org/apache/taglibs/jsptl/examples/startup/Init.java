@@ -123,7 +123,23 @@ public class Init implements ServletContextListener {
         sce.getServletContext().setAttribute("stringArray", stringArray);
 
 	/**
-	 * Map (Properties)
+        * String-keyed Map
+        */
+        Hashtable stringMap = new Hashtable();
+        sce.getServletContext().setAttribute("stringMap", stringMap);
+        stringMap.put("one", "uno");
+        stringMap.put("two", "dos");
+        stringMap.put("three", "tres");
+        stringMap.put("four", "cuatro");
+        stringMap.put("five", "cinco");
+        stringMap.put("six", "seis");
+        stringMap.put("seven", "siete");
+        stringMap.put("eight", "ocho");
+        stringMap.put("nine", "nueve");
+        stringMap.put("ten", "diez");
+
+        /**
+         * Integer-keyed Map
 	 */
 	// we use a Hashtable so we can get an Enumeration easily, below
         Hashtable numberMap = new Hashtable();
@@ -143,7 +159,16 @@ public class Init implements ServletContextListener {
 	 * Enumeration
 	 */
 	Enumeration enum = numberMap.keys();
-        sce.getServletContext().setAttribute("enum", enum);
+	// don't use 'enum' for attribute name because it is a 
+	// reserved word in EcmaScript.
+        sce.getServletContext().setAttribute("enumeration", enum);
+
+	/**
+	 * Message arguments for parametric replacement
+	 */
+	Object[] messageArgs =
+	    new Object[] { sce.getServletContext().getServerInfo() };
+	sce.getServletContext().setAttribute("messageArgs", messageArgs);
     }
     
     //*********************************************************************

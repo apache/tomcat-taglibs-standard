@@ -288,8 +288,8 @@ modifies the absolute URL as follows:
         <font color="#000000"><b>name</b></font><font color="#CC0000"> </font><font color="#000000">value 
         encode</font></code></p>
       <p>Sub-element to specify request parameters for the enclosing &lt;import&gt;. 
-        If importing a resource using an absolute URL, the value of the parameter 
-        is automatically encoded.</p>
+        The name and value of the parameter are url encoded (unless encode is 
+        false). </p>
     </td>
     <td width="61%"> 
       <p><code>&lt;c:import url=&quot;/exec/register&quot;><br>
@@ -300,7 +300,7 @@ modifies the absolute URL as follows:
   <tr> 
     <td width="39%"> 
       <p><code><b>&lt;urlEncode&gt;</b><br>
-        <font color="#FF0000">value</font><font color="#CC0000"> </font><font color="#0000FF">var</font></code></p>
+        <font color="#000000"><b>value</b></font><font color="#CC0000"> </font><font color="#000000">var</font></code></p>
       <p>URL encoding.</p>
     </td>
     <td width="61%"> 
@@ -309,16 +309,27 @@ modifies the absolute URL as follows:
     </td>
   </tr>
 </table>
-<h3>6. Notes</h3>
+<h3>6. Networking Properties</h3>
+<p>If the web container executes behind a firewall, some absolute URL resources 
+  may be inaccessible. To provide access to these resources, the JVM of the container 
+  should be started with the proper networking properties (e.g. proxyHost, proxyPort). 
+  More details can be found in the Java 2 SDK, Standard Edition Documentation 
+  (Networking Features &#151; Networking Properties).</p>
+<h3>7. Notes</h3>
 <ul>
   <li> 
     <p>&lt;c:import&gt; tags are all independent from one another; they do not 
-      create an implicit session among themselves using cookies. 
+      create an implicit session among themselves using cookies.<br>
+      [This refers to absolute HTTP URLs in particular. &lt;c:import&gt; acts 
+      like a &quot;cookie-less&quot; browser in that it ignores cookies it receives 
+      from HTTP URLs and never sends any back. A user of &lt;c:import&gt; can't 
+      assume that successive accesses against the same application will support 
+      a cookie-based session for that application.]
   </li>
   <li>There is no way using the &lt;import&gt; tag to authenticate to a URL that 
     requires HTTP basic authentication.</li>
 </ul>
-<h3>7. Design decisions of interest</h3>
+<h3>8. Design decisions of interest</h3>
 <p>We know you'd eventually ask these questions. Here are the answers...</p>
 <p><b><a name="map"></a>Transparently map absolute URLs to relative ones when 
   possible? No.</b></p>

@@ -5,6 +5,7 @@
     <property file="../build.properties"/>
     <property file="../common.properties"/>
     <property name="js.jar"   value="lib/js.jar"/>
+    <property name="jdbc.jar"   value="lib/jdbc2_0-stdext.jar"/>
     <property name="jaxen-full.jar"   value="lib/jaxen-full.jar"/>
     <property name="saxpath.jar"      value="lib/saxpath.jar"/>
     <property name="crimson.jar"      value="lib/crimson.jar"/>
@@ -136,8 +137,8 @@
               tofile="${build.examples}/WEB-INF/scriptfree.tld"/>
     -->
     <!-- Copy the 'standard' jar files -->
-    <copy file="${dist.library}/jstl.jar"
-              tofile="${build.examples}/WEB-INF/lib/jstl.jar"/>
+    <copy file="${dist.library}/standard.jar"
+              tofile="${build.examples}/WEB-INF/lib/standard.jar"/>
     <javac srcdir="${examples.src}" destdir="${build.examples}/WEB-INF/classes"
         classpath="${servlet23.jar}:${build.library}"/>
   </target>
@@ -179,7 +180,7 @@
 -->
 
     <javac srcdir="${library.src}" destdir="${build.library}"
-           classpath="${servlet23.jar}:${jxpath.jar}:${js.jar}:${jaxen-full.jar}:${saxpath.jar}:${crimson.jar}:${xalan.jar}"
+           classpath="${servlet23.jar}:${jxpath.jar}:${js.jar}:${jdbc.jar}:${jaxen-full.jar}:${saxpath.jar}:${crimson.jar}:${xalan.jar}"
 	   debug="on"/>
   </target>
 
@@ -208,10 +209,10 @@
   <!-- Create the library distribution files -->
   <target name="library-dist" depends="library">
     <!-- Create the tag library jar -->
-    <jar jarfile="${dist.library}/jstl.jar"
+    <jar jarfile="${dist.library}/standard.jar"
          basedir="${build.library}"/>
     <!-- Create the 'standard' API jar -->
-    <jar jarfile="${dist.library}/jstl-api.jar"
+    <jar jarfile="${dist.library}/jstl.jar"
          basedir="${build.library}"
          includes="javax/**"/>
     <copy todir="${dist.dir}/${taglib.name}">

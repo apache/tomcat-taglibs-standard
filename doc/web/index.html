@@ -1,14 +1,15 @@
 <html>
 <head>
-<title>JSP Standard Tag Library</title>
+<title>standard - Reference Implementation of the JSP(tm) Standard Tag
+  Library</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 
 <body bgcolor="#FFFFFF">
-<h1>The JSP&#153; Standard Tag Library (JSTL)</h1>
-<h2>Release: Early Access 1 (EA2)</h2>
+<h1>RI for the JSP&#153; Standard Tag Library (JSTL)</h1>
+<h2>Release: 1.0 Early Access 3 (EA3)</h2>
 
-<p>Thanks for downloading the JSTL EA2 release. We hope you find the tags, documents, 
+<p>Thanks for downloading the JSTL 1.0 EA3 release. We hope you find the tags, documents, 
   and examples here of interest. We're curious to hear your feedback on this release, 
   which represents work in progress toward a standard JSP Tag Library. Please 
   contact us at</p>
@@ -22,34 +23,33 @@
 
 <h3>Documentation ('doc/web' directory)</h3>
 
-    
 <ul>
   <li><a href="GettingStarted.html">Getting Started</a>: A quick roadmap to help 
     you get started with this release.</li>
   <li><a href="Overview.html">Overview</a>: An overview of JSTL's design philosophy 
     and current syntax.</li>
-  <li><a href="ReleaseNotes.html">Release Notes</a>: Changes since EA1, and
-    other historical information.</li>
+  <li><a href="ReleaseNotes.html">Release Notes</a>: Changes since 1.0 EA1, and other 
+    historical information.</li>
   <li>Functional descriptions: Technical guides representing the design considerations 
     and functionality of JSTL's tag set. Note that these are not formal specifications, 
     just technical overviews of functionality and intent. 
     <ul>
       <li><a href="IteratorTag_FunctionalDescription_2_EAI.html"> Iteration</a></li>
-      <li><a href="Conditionals_FunctionalDescription_1_EA2.html"> Conditional 
+      <li><a href="Conditionals_FunctionalDescription_1_EA1.html"> Conditional 
         logic</a></li>
-      <li><a href="ExpressionLanguageSupport_FunctionalDescription_2_EA2.html"> 
+      <li><a href="ExpressionLanguageSupport_FunctionalDescription_2_EA1.html"> 
         Expression-language support</a></li>
-      <li><a href="ExpressionTags_FunctionalDescription_1_EA2.html"> Expression-language 
+      <li><a href="ExpressionTags_FunctionalDescription_1_EA1.html"> Expression-language 
         tags</a> 
         <ul>
-          <li>The <a href="spel"> Simplest Possible Expression Language (SPEL) 
-            </a> </li>
-          <li>EcmaScript examples: see the <a href="/jsptl-examples/ecmascript/index.html"> 
-            JSTL-examples/ecmascript</a> web application </li>
+          <li><a href="spel/index.html">The Simplest Possible Expression Language 
+            (SPEL) </a> </li>
+          <li><a href="EcmaScriptEL.html">EcmaScript as an Expression Language 
+            for JSTL</a></li>
         </ul>
       </li>
       <li><a href="IOT_Import_FunctionalDescription_5_EA2.html">Import tags</a></li>
-      <li>XML tags
+      <li>XML tags 
         <ul>
           <li><a href="XML_Core_FunctionalDescription_2_EA2.html">core</a></li>
           <li><a href="XML_ControlFlow_FunctionalDescription_1_EA2.html">control 
@@ -57,7 +57,10 @@
           <li><a href="XML_Transformation_FunctionalDescription_3_EA2.html">transformation</a></li>
         </ul>
       </li>
-      <li>I18N &amp; Formatting tags</li>
+      <li><a href="I18N_FunctionalDescription_6_EA3.html">I18N &amp; Formatting 
+        tags</a></li>
+      <li><a href="DB_FunctionalDescription_1_EA3.html">SQL (database access) 
+        tags</a></li>
     </ul>
   </li>
 </ul>
@@ -89,14 +92,17 @@
           .core    core library (common)
           .fmt     internationalization-capable formatting tags (common)
           .xml     XML manipulation library (common)
+	  .sql	   SQL library (common)
       .el          handlers specific to expression language (EL) evaluation
           .core    core library (EL)
           .fmt     internationalization-capable formatting tags (EL)
           .xml     XML manipulation library (EL)
+	  .sql	   SQL library (EL)
       .rt          handlers specific to rtexprvalue (rt) evaluation
           .core    core library (rt)
           .fmt     internationalization-capable formatting tags (rt)
           .xml     XML manipulation library (rt)
+	  .sql	   SQL library (rt)
    .tei         TagExtraInfo classes (common to both libraries)
    .tlv         TagLibraryValidator classes (and associated helpers)
    .lang        expression-language support and implementation

@@ -9,7 +9,9 @@
 
 <fmt:locale value="de"/>
 <fmt:bundle basename="org.apache.taglibs.standard.examples.i18n.Resources">
- <fmt:message key="greetingMorning"/>
+ <fmt:message>
+  greetingMorning
+ </fmt:message>
 </fmt:bundle>
 
 </body>

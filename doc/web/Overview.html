@@ -1,13 +1,13 @@
 <html>
 <head>
-<title>JSTL: Overview</title>
+<title>JSPTL: Overview</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000">
 <h1>Overview</h1>
 <p>This document provides a high level overview of the JSP&#153; Standard Tag 
-  Library (JSTL) as it stands for EA2 (Early Access release 2). If you have a 
+  Library (JSTL) as it stands for EA3 (Early Access release 3). If you have a 
   strong opinion on the topic &#151; positive (you really like it), or constructive 
   (we messed up some parts and you have some constructive comments for improvements) 
   &#151; we'll be happy to hear from you at <a href="mailto:jsr052-comments@sun.com">jsr052-comments@sun.com</a>. 
@@ -29,7 +29,7 @@
   pages without having to resort to the scripting language associated with their 
   JSP pages (usually the Java programming language). </p>
 <p>The base design philosophy in JSTL is therefore to provide page authors with 
-  a script free environment. EA2 defines the foundation elements to make this 
+  a script free environment. EA1 defines the foundation elements to make this 
   possible.</p>
 <h3>Multiple TLDs</h3>
 <p>A Tag Library is a collection of actions that encapsulate functionality to 
@@ -73,12 +73,12 @@
       <td><font face="Courier New, Courier, mono">&lt;fmt:<i>tagname</i> ...&gt;</font></td>
     </tr>
     <tr> 
-      <td>Database access</td>
-      <td>http://java.sun.com/jstl/ea/db</td>
+      <td>Database access (SQL)</td>
+      <td>http://java.sun.com/jstl/ea/sql</td>
       <td> 
-        <div align="center"><font face="Courier New, Courier, mono">db</font></div>
+        <div align="center"><font face="Courier New, Courier, mono">sql</font></div>
       </td>
-      <td><font face="Courier New, Courier, mono">&lt;db:<i>tagname</i> ...&gt;</font></td>
+      <td><font face="Courier New, Courier, mono">&lt;sql:<i>tagname</i> ...&gt;</font></td>
     </tr>
   </table>
 </div>
@@ -112,7 +112,7 @@
   EL once the JSTL spec is ready for Community Review.</p>
 <p>Early Access contains several candidate Expression Languages. One of them is 
   an implementation subset of ECMAScript (JavaScript) and is the one used by default. 
-  You can read an <a href="@@@">overview of the ECMAScript subset of interest 
+  Please check <a href="EcmaScriptEL.html">EcmaScript as an Expression Language 
   for JSTL</a>.</p>
 <h3>Tag Collaboration</h3>
 <p>Tags usually collaborate with their environment in implicit and/or explicit 
@@ -152,12 +152,12 @@
   of a tag; i.e. tags with lots of attributes that can do just about anything. 
   Rather, we privilege a larger number of tags with well focused behavior.</p>
 <hr noshade>
-<h2>JSTL EA2&#151; Quick Reference</h2>
+<h2>JSTL EA3&#151; Quick Reference</h2>
 <h2>Core Actions</h2>
 <table width="100%" border="1" cellpadding="5">
   <tr bgcolor="#000099"> 
     <td colspan="2"><b><font color="#FFFFFF" size="+1">Expression Language Support 
-      Tags (Core)</font></b></td>
+      Tags</font></b></td>
   </tr>
   <tr bgcolor="#FFFF66"> 
     <td width="31%"><b>Element</b></td>
@@ -172,7 +172,7 @@
       </p>
     </td>
     <td width="48%"> 
-      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;$customer.address.city&quot;&gt;<br>
+      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;$customer.address.city&quot;/&gt;<br>
         <br>
         &lt;c:set var=&quot;customerFmt&quot; scope=&quot;request&quot;&gt;<br>
         &nbsp;&nbsp;&lt;font color=red&gt;<br>
@@ -190,7 +190,7 @@
       <code><br>
       </code></td>
     <td width="48%"> 
-      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;$customer.address.city&quot;&gt;<br>
+      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;$customer.address.city&quot;/&gt;<br>
         <br>
         &lt;c:set var=&quot;customerFmt&quot; scope=&quot;request&quot;&gt;<br>
         &nbsp;&nbsp;&lt;font color=red&gt;<br>
@@ -216,7 +216,7 @@
 <table width="100%" border="1" cellpadding="5">
   <tr> 
     <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">Iterator 
-      Tags (core)</font></b></td>
+      Tags</font></b></td>
   </tr>
   <tr bgcolor="#FFFF66"> 
     <td width="31%"><b>Element</b></td>
@@ -283,7 +283,7 @@
 <table width="100%" border="1" cellpadding="5">
   <tr> 
     <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">Conditional 
-      Tags (core)</font></b></td>
+      Tags</font></b></td>
   </tr>
   <tr bgcolor="#FFFF66"> 
     <td width="31%"><b>Element</b></td>
@@ -343,7 +343,7 @@
 <table width="100%" border="1" cellpadding="5">
   <tr> 
     <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">Import 
-      Tags (core)</font></b></td>
+      Tags</font></b></td>
   </tr>
   <tr bgcolor="#FFFF66"> 
     <td width="39%"><b>Element</b></td>
@@ -374,8 +374,8 @@
         <font color="#000000"><b>name</b></font><font color="#CC0000"> </font><font color="#000000">value 
         encode</font></code></p>
       <p>Sub-element to specify request parameters for the enclosing &lt;import&gt;. 
-        If importing a resource using an absolute URL, the value of the parameter 
-        is automatically encoded.</p>
+        The name and value of the parameter are url encoded (unless encode is 
+        false). </p>
     </td>
     <td width="61%"> 
       <p><code>&lt;c:import url=&quot;/exec/register&quot;><br>
@@ -386,7 +386,7 @@
   <tr> 
     <td width="39%"> 
       <p><code><b>&lt;urlEncode&gt;</b><br>
-        <font color="#FF0000">value</font><font color="#CC0000"> </font><font color="#0000FF">var</font></code></p>
+        <font color="#000000"><b>value</b></font><font color="#CC0000"> </font><font color="#000000">var</font></code></p>
       <p>URL encoding.</p>
     </td>
     <td width="61%"> 
@@ -400,7 +400,7 @@
 <table border="1" cellpadding="5">
   <tr> 
     <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">XML Core 
-      Tags (xml)</font></b></td>
+      Tags</font></b></td>
   </tr>
   <tr bgcolor="#FFFF66"> 
     <td width="318"><b>Element</b></td>
@@ -408,11 +408,11 @@
   </tr>
   <tr> 
     <td width="318"><code><b>&lt;parse&gt;</b></code><br>
-      <code><font color="#FF0000"><b><font color="#000000">var</font></b></font> 
+      <code><font color="#FF0000"><font color="#000000">var</font></font> domVar 
       source filter</code><br>
       <br>
       Parses an XML and saves its internal representation into the JSP scoped 
-      attribute specified by &quot;var&quot;.</td>
+      attribute specified by &quot;var&quot; (or &quot;domVar&quot;).</td>
     <td width="392"> <code>&lt;c:import url=&quot;http://acme.com/athletes?country=ethiopia&quot; 
       var=&quot;xml&quot;/><br>
       &lt;x:parse source=&quot;$xml&quot; var=&quot;athletes&quot;/&gt; </code></td>
@@ -446,7 +446,7 @@
 <table border="1" cellpadding="5" width="100%">
   <tr> 
     <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">XML Control 
-      Flow Tags (xml)</font></b></td>
+      Flow Tags</font></b></td>
   </tr>
   <tr bgcolor="#FFFF66"> 
     <td width="55%"><b>Element</b></td>
@@ -454,7 +454,7 @@
   </tr>
   <tr> 
     <td width="55%"><code><b>&lt;forEach&gt;</b></code><br>
-      <b>&nbsp;select</b> var<br>
+      <b><code>&nbsp;select</code></b><code> var</code><br>
       <br>
       Evaluates the given XPath expression and iterates over the result, setting 
       the context node to each element in the iteration.</td>
@@ -505,7 +505,7 @@
 <table width="100%" border="1" cellpadding="5">
   <tr> 
     <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">XML Transformation 
-      Tags (xml)</font></b></td>
+      Tags</font></b></td>
   </tr>
   <tr bgcolor="#FFFF66"> 
     <td width="39%"><b>Element</b></td>
@@ -541,7 +541,7 @@
   <tr> 
     <td width="39%"> 
       <p><code><b>&lt;transformer&gt;</b><br>
-        <font color="#000000">xslt <b>var</b></font></code></p>
+        <font color="#000000"><b>var</b> xslt </font></code></p>
       <p>Creates a &quot;transformer&quot; object for more efficient transformations 
         that use the same XSLT stylesheet.</p>
     </td>
@@ -552,13 +552,256 @@
     </td>
   </tr>
 </table>
+<h2>I18N &amp; Formatting actions</h2>
+<table BORDER cellpadding=5 >
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF"><font size=+1>I18N 
+      Tags</font></font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td width="318"><b>Element</b></td>
+    <td width="392"><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;locale></tt></b> <br>
+      <tt><font color="#000000"><b>value </b>variant scope</font></tt> 
+      <p>Establishes the locale specified by the <tt>value</tt> attribute for 
+        the variant given by the <tt>variant</tt> attribute.
+    </td>
+    <td width="392"><tt>&lt;fmt:locale value="en-US" variant="UNIX"/></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;timeZone></tt></b> <br>
+      <tt><font color="#000000"><b>value </b>var scope</font></tt> 
+      <p>Establishes the time zone given by the <tt>value</tt> attribute.
+    </td>
+    <td width="392"><tt>&lt;fmt:timeZone value="America/Los_Angeles"></tt> <br>
+      <tt>&nbsp; &lt;fmt:formatDate type="time"/></tt> <br>
+      <tt>&lt;/fmt:timeZone></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;bundle></tt></b> <br>
+      <tt><font color="#000000"><b>basename </b>prefix var scope</font></tt> 
+      <p>Loads the resource bundle whose base name is specified by the <tt>basename</tt> 
+        attribute, and optionally exposes it in the named scoped attribute.
+    </td>
+    <td width="392"><tt>&lt;fmt:bundle basename="Greetings" var="greetingBundle"/></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;message></tt></b> <br>
+      <tt><font color="#000000"><b>key </b>bundle var scope</font></tt> 
+      <p>Fetches the localized message corresponding to the key specified by the 
+        <tt>key</tt> attribute from the resource bundle given by the <tt>bundle</tt> 
+        attribute, and performs parametric replacement on the retrieved message 
+        using the argument values supplied via <tt>&lt;messageArg></tt> subtags
+    </td>
+    <td width="392"><tt>&lt;fmt:message key="Welcome" bundle="$greetingBundle"/></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;messageFormat></tt></b> <br>
+      <tt><font color="#000000"><b>value</b> var scope</font></tt> 
+      <p>Performs parametric replacement on the pattern specified by the <tt>value</tt> 
+        attribute using the argument values supplied via <tt>&lt;messageArg></tt> 
+        subtags
+    </td>
+    <td width="392"><tt>&lt;fmt:messageFormat value="$priceMsg"></tt> <br>
+      <tt>&nbsp; &lt;fmt:messageArg value="$priceArg"/></tt> <br>
+      <tt>&lt;/fmt:messageFormat></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;messageArg></tt></b> <br>
+      <tt><font color="#000000">value</font></tt> 
+      <p>Supplies the argument specified by the <tt>value</tt> attribute&nbsp; 
+        (if present) or the tag body to its parent <tt>&lt;message></tt> action 
+        for parametric replacement
+    </td>
+    <td width="392"><tt>&lt;fmt:message key="Welcome" bundle="$greetingBundle">&nbsp;</tt> 
+      <br>
+      <tt>&nbsp; &lt;fmt:messageArg value="$dateArg"/></tt> <br>
+      <tt>&lt;/fmt:message></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;formatNumber></tt></b> <br>
+      <tt><font color="#000000"><b>value </b>type pattern var scope</font></tt> 
+      <p><font color="#000000">Formats the given numeric value as a number, currency, 
+        or percentage using the locale's predefined or the specified (customized) 
+        formatting pattern&nbsp;</font>
+    </td>
+    <td width="392"><tt>&lt;fmt:formatNumber value="9876543.21" type="currency"/></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;parseNumber></tt></b> <br>
+      <tt><font color="#000000"><b>value </b>type<b> </b>pattern var scope</font></tt> 
+      <p><font color="#000000">Parses the given numeric string using the locale's 
+        default or the specified (customized) formatting pattern</font>
+    </td>
+    <td width="392"><tt>&lt;fmt:parseNumber value="$num" var="parsed"/></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;formatDate></tt></b> <br>
+      <tt><font color="#000000"><b>value </b>type dateStyle timeStyle pattern 
+      timeZone var scope</font></tt> 
+      <p><font color="#000000">Formats the given date using the locale's predefined 
+        or the specified (customized) formatting pattern&nbsp;</font>
+    </td>
+    <td width="392"><tt>&lt;fmt:formatDate timeStyle="long" dateStyle="long"/></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;parseDate></tt></b> <br>
+      <tt><font color="#000000"><b>value</b> type pattern var scope</font></tt> 
+      <p><font color="#000000">Parses the given date string using the locale's 
+        default or the specified (customized) formatting pattern</font>
+    </td>
+    <td width="392"><tt>&lt;fmt:parseDate value="May 22, 2001 4:05:53 PM PDT" 
+      var="parsed"/></tt></td>
+  </tr>
+  <tr> 
+    <td width="318"><b><tt>&lt;exception></tt></b> <br>
+      <tt><font color="#000000">value bundle stackTrace</font></tt> 
+      <p><font color="#000000">Displays the exception given by the <tt>value</tt> 
+        attribute (or the error page's exception if no <tt>value</tt> attribute 
+        is given) in its localized form</font>
+    </td>
+    <td width="392"><tt>&lt;fmt:exception bundle="$errorMessages"/></tt></td>
+  </tr>
+</table>
+<h2>SQL actions</h2>
+<table border="1" cellpadding="5">
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">SQL Actions</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td><b>Action</b></td>
+    <td><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:query&gt;</b></code></p>
+      <p><code>&lt;sql:query var=<i>&quot;varName&quot;</i> <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sql=&quot;<i>sqlQuery</i>&quot;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[maxRows=&quot;<i>maxRows</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[startRow=&quot;<i>startRow</i>&quot;]/&gt;</code></p>
+      <p><code>&lt;sql:query var=<i>&quot;varName&quot;<br>
+        &nbsp;&nbsp;&nbsp; </i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[sql=&quot;<i>sqlQuery</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[maxRows=&quot;<i>maxRows</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[startRow=&quot;<i>startRow</i>&quot;]/&gt; 
+        </code><code><br>
+        &nbsp;&nbsp;... optional query statement ...<br>
+        &nbsp;&nbsp;... optional &lt;sql:param&gt; actions ...<br>
+        &lt;/sql:query&gt;</code></p>
+      <p>General purpose action for performing SQL queries on a database and gettting 
+        back a single result set containing rows of data.</p>
+    </td>
+    <td> 
+      <p><code>&lt;sql:query var=&quot;customers&quot;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        dataSource=&quot;$dataSource&quot;<i>&gt;<br>
+        </i>&nbsp;&nbsp; SELECT * FROM employees<br>
+        &nbsp; &nbsp;WHERE country = 'China'<br>
+        &nbsp;&nbsp;&nbsp;ORDER BY lastname<br>
+        &lt;/sql:query&gt;<i> </i></code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:update&gt;</b></code></p>
+      <p><code>&lt;sql:update var=<i>&quot;varName&quot;</i> <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sql=&quot;<i>sqlUpdate</i>&quot;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]/&gt;</code></p>
+      <p><code>&lt;sql:update var=<i>&quot;varName&quot;<br>
+        &nbsp;&nbsp;&nbsp; </i></code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[sql=&quot;<i>sqlUpdate</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]&gt;<br>
+        &nbsp;&nbsp;... optional query statement ...<br>
+        &nbsp;&nbsp;... optional &lt;sql:param&gt; actions ...<br>
+        &lt;/sql:update&gt;</code></p>
+      <p>General purpose action for &quot;updates&quot;; i.e. statements that 
+        update the database (insert, update, delete) and return nothing or a single 
+        integer. </p>
+    </td>
+    <td> 
+      <p><code>&lt;sql:update&gt;<br>
+        &nbsp;&nbsp;UPDATE account <br>
+        &nbsp;&nbsp;SET BALANCE = ?<br>
+        &nbsp; WHERE accountNo = ?<br>
+        </code><code>&nbsp;&nbsp;&lt;sql:param<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; value=&quot;$balance&quot;&gt;<br>
+        &nbsp;&nbsp;&lt;sql:param<br>
+        &nbsp;&nbsp;&nbsp; &nbsp;value=&quot;$accountNo&quot;&gt;<br>
+        &lt;/sql:update&gt;</code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:transaction&gt;<br>
+        </b></code><br>
+        <code>&lt;sql:transaction <br>
+        &nbsp;&nbsp; &nbsp;[dataSource=<i>dataSourceSpec</i>] <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;[transactionIsolation=<i>&quot;transactionIsolationLevel&quot;</i>]&gt;<br>
+        &nbsp;&nbsp;... &lt;sql:query&gt; and &lt;sql:update&gt; statements ...<br>
+        &lt;/sql:transaction&gt; </code></p>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:driver&gt;<br>
+        </b></code><br>
+        <code>&lt;sql:driver var=<i>&quot;varName&quot;</i><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[driver=&quot;<i>driverClassName</i>&quot;] 
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[url=&quot;<i>url</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[user=&quot;<i>user</i>&quot;] 
+        /&gt;</code><br>
+      </p>
+      <p>Facilitates the setup of a DataSource object around a JDBC driver for 
+        prototype/simple applications. </p>
+    </td>
+    <td>&nbsp; </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:param&gt;<br>
+        </b></code> </p>
+      <p><code>&lt;sql:param value=<i>&quot;parameterValue&quot;</i>/&gt;</code></p>
+      <p><code>&lt;sql:param&gt;<br>
+        &nbsp;&nbsp;... parameter value ...<br>
+        &lt;/sql:param&gt;</code><br>
+      </p>
+      <p>Subtag of SQLExecutionTag actions such as &lt;sql:query&gt; and &lt;sql:update&gt; 
+        to set the values of parameter markers ('?') specified in the SQL statement.</p>
+    </td>
+    <td>&nbsp; </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:query&gt; result related interfaces<br>
+        </b></code> </p>
+      <p><code>public interface Result<br>
+        </code><code> </code><code>public interface ResultMetaData<br>
+        </code><code>public interface Row</code><code><br>
+        public interface ColumnMetaData</code><code><br>
+        public </code><code>interface Column</code></p>
+    </td>
+    <td>&nbsp; </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>interface SQLExecutionTag</b></code> </p>
+      <p>Identifies a tag handler that can accept parameter values from nested 
+        tag handlers.</p>
+    </td>
+    <td>&nbsp; </td>
+  </tr>
+</table>
 <h2>Tag Library Validators</h2>
 <table width="100%" border="1" cellpadding="5">
   <tr bgcolor="#000099"> 
     <td colspan="2"><b><font color="#FFFFFF" size="+1">Tag Library Validators</font></b></td>
   </tr>
   <tr> 
-    <td colspan="2">EA2 comes with two TagLibraryValidators (TLVs), which are 
+    <td colspan="2">EA1 comes with two TagLibraryValidators (TLVs), which are 
       classes that ensure pages meet particular criteria before they can run.</td>
   <tr bgcolor="#FFFF66"> 
     <td width="31%"><b>Tag Library Validator</b></td>
@@ -610,7 +853,7 @@
         &nbsp;&nbsp;&nbsp; </code><code>javax.servlet.jstl.ExpressionEvaluatorClass<br>
         &nbsp;&nbsp;&lt;/param-name&gt;<br>
         &nbsp;&nbsp;&lt;param-value&gt;<br>
-        &nbsp;&nbsp;&nbsp; org.apache.taglibs.standard.lang.spel.Evaluator<br>
+        &nbsp;&nbsp;&nbsp; org.apache.taglibs.jstl.lang.spel.Evaluator<br>
         &nbsp;&nbsp;&lt;/param-value&gt;<br>
         &lt;/context-param&gt;</code></p>
     </td>

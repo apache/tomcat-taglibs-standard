@@ -87,7 +87,7 @@
   </tr>
   <tr>
     <td><c:expr value="$fullString"/></td>
-    <td><code>String.slice(<c:expr value="$two"/>, <jx:expr value="$five"/>)</code></td>
+    <td><code>String.slice(<c:expr value="$two"/>, <c:expr value="$five"/>)</code></td>
     <td><c:expr value="$fullString.slice(two, five)"/></td>
   </tr>
   <tr>
@@ -107,7 +107,7 @@
   </tr>
   <tr>
     <td><c:expr value="$fullString"/></td>
-    <td><code>String.substring(<c:expr value="$two"/>, <jx:expr value="$five"/>)</code></td>
+    <td><code>String.substring(<c:expr value="$two"/>, <c:expr value="$five"/>)</code></td>
     <td><c:expr value="$fullString.substring(two, five)"/></td>
   </tr>
   <tr>

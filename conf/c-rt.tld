@@ -94,6 +94,11 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <name>scope</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>varReader</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -264,6 +269,11 @@
     </description>
     <attribute>
         <name>var</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>scope</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
