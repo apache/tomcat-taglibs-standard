@@ -21,6 +21,49 @@ Release Notes
 
 <h2>Release History</h2>
 
+
+<dt><b>Current &#x2022; Changes since Standard 1.1.1 release</b></dt>
+<p>The latest implementation is available from the Nightly Builds.</p>
+  <dd>Bugs fixed since Standard 1.1.1 Taglib release:</dd>
+  <ul>
+  <blockquote>
+    <table width="95%" border="1">
+      <tr>
+        <th width="27%">
+          <div align="center">
+            Bug Id</div>
+        </th>
+        <th width="73%">Summary</th>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center">
+          <a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=30646">30646</a></div>
+        </td>
+        <td width="73%" height="15">
+          <p>Fixed implementation so that it compiles under J2SE 5.0. Changed the J2SE 5.0 reserved keyword "enum" to "enum_".</p> 
+          <p>NOTE: the JAXP 1.2 classes will need to be specified with J2SE 5.0 since the the 5.0 bundled JAXP 1.3 packages have been moved around and re-named.</p>
+        </td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center">
+          <a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=30647">30647</a></div>
+        </td>
+        <td width="73%" height="15">
+          <p>Followed the <a href="http://java.sun.com/blueprints/code/projectconventions.html">BluePrints Guidelines</a> for web application project structure. Most IDEs assume the BluePrints structure so abiding by these guidelines will help them integrate the examples.</p>
+          <p>The following changes were made to the examples directory structure:</p>
+          <ul>
+            <li>moved the examples deployment descriptor to the web/WEB-INF directory out from conf</li>
+            <li>moved the jstl-examples.tld to web/WEB-INF/tlds</li>
+            <li>updated build.xml to reflect new directory structure</li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </blockquote>
+  </ul>
+
 <dt><b>July 2004 &#x2022; Standard 1.1.1</b></dt>
 <p>The latest implementation is available from the Nightly Builds.</p>
   <dd>Bugs fixed since Standard 1.1.0 Taglib release:</dd>
