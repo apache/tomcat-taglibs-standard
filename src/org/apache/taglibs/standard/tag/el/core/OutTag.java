@@ -117,7 +117,7 @@ public class OutTag extends OutSupport {
         this.default_ = default_;
     }
 
-    public void setProperty(String escapeXml_) {
+    public void setEscapeXml(String escapeXml_) {
         this.escapeXml_ = escapeXml_;
     }
 
