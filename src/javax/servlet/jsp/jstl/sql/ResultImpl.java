@@ -168,7 +168,7 @@ public class ResultImpl implements Result {
      * @return the number of cached rows, or -1 if the Result could
      *    not be initialized due to SQLExceptions
      */
-    public int getRowsCount() {
+    public int getRowCount() {
 	if (rowMap == null) {
 	    return -1;
 	}

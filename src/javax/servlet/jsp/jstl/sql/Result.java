@@ -102,7 +102,7 @@ public interface Result {
      *
      * @return the number of rows in the result
      */
-    public int getRowsCount();
+    public int getRowCount();
 
     /**
      * Returns true of the query was limited by a maximum row setting
