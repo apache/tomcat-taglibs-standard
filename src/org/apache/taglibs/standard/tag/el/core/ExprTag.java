@@ -154,7 +154,7 @@ public class ExprTag extends BodyTagSupport {
 	    }
 	}
       } catch (IOException ex) {
-	throw new JspException(ex.getMessage());
+	throw new JspException(ex.getMessage(), ex);
       }
     }
 
@@ -172,7 +172,7 @@ public class ExprTag extends BodyTagSupport {
 	getBodyContent().writeOut(pageContext.getOut());
 	return EVAL_PAGE;
       } catch (IOException ex) {
-	throw new JspException(ex.getMessage());
+	throw new JspException(ex.getMessage(), ex);
       }
     }
 

@@ -126,7 +126,7 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
                 result = new Boolean(result.toString());
 
 	} catch (JavaScriptException jse) {
-	    throw new JspException(jse.getMessage());
+	    throw new JspException(jse.getMessage(), jse);
 	}
 
 	//System.out.println("RHINO result: " + result + ":");
