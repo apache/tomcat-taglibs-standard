@@ -1,0 +1,44 @@
+JSP Standard Tag Library (JSTL)
+Release: Beta 2
+
+Thanks for downloading the JSTL Beta 1 release.  We hope you find the tags,
+documents, and examples here of interest.  We're curious to hear your
+feedback on this release, which represents work in progress toward a
+standard JSP Tag Library.  Please contact us at
+
+	mailto:jsr052-comments@sun.com
+
+with any comments you might have.
+
+BINARY DISTRIBUTION
+
+This is the binary distribution of the Beta2 JSTL reference
+implementation.
+
+To use this distribution with your web applications, simply copy the JAR
+files in the 'lib' directory to your application's WEB-INF/lib directory.
+Then, import JSTL into your pages with the following directives:
+
+  CORE LIBRARY
+    EL:  <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+    RT:  <%@ taglib prefix="c_rt" uri="http://java.sun.com/jstl/core_rt" %>
+
+  XML LIBRARY
+    EL:  <%@ taglib prefix="x" uri="http://java.sun.com/jstl/xml" %>
+    RT:  <%@ taglib prefix="x_rt" uri="http://java.sun.com/jstl/xml_rt" %>
+
+  FMT LIBRARY 
+    EL:  <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+    RT:  <%@ taglib prefix="fmt_rt" uri="http://java.sun.com/jstl/fmt_rt" %>
+
+  SQL LIBRARY
+    EL:  <%@ taglib prefix="sql" uri="http://java.sun.com/jstl/sql" %>
+    RT:  <%@ taglib prefix="sql_rt" uri="http://java.sun.com/jstl/sql_rt" %>
+
+Please join the taglibs-user@jakarta.apache.org mailing list if you have
+general usage questions about JSTL.
+
+Enjoy!
+
+  -- Shawn Bayern <bayern@essentially.net>
+     on behalf of JSR-052 (JSTL) Expert Group
