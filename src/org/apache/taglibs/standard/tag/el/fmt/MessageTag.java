@@ -147,13 +147,13 @@ public class MessageTag extends MessageSupport {
          * propagate up.
          */
 
-	if (key_ != null) {
-	    key = (String) ExpressionEvaluatorManager.evaluate(
+	if (keySpecified) {
+	    keyAttrValue = (String) ExpressionEvaluatorManager.evaluate(
 	        "key", key_, String.class, this, pageContext);
 	}
 
-	if (bundle_ != null) {
-	    locCtxt = (LocalizationContext)
+	if (bundleSpecified) {
+	    bundleAttrValue = (LocalizationContext)
 		ExpressionEvaluatorManager.evaluate(
 	            "bundle", bundle_, LocalizationContext.class, this,
 		    pageContext);
