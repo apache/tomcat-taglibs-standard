@@ -81,5 +81,6 @@ public class MessageTag extends MessageSupport {
     // for tag attribute
     public void setBundle(LocalizationContext locCtxt) throws JspTagException {
         this.locCtxt = locCtxt;
+        this.bundleSpecified = true;
     }
 }

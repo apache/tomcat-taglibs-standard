@@ -87,6 +87,7 @@ public abstract class MessageSupport extends BodyTagSupport {
     protected String key;                         // 'key' attribute
     protected boolean keySpecified;	          // status
     protected LocalizationContext locCtxt;        // 'bundle' attribute
+    protected boolean bundleSpecified;   // 'bundle' attribute specified?
 
 
     //*********************************************************************
@@ -143,6 +144,12 @@ public abstract class MessageSupport extends BodyTagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
+        if (!bundleSpecified) {
+            // must reset the locCtxt to null so it can be reevaluated
+            // (necessary because the tag may be reused and localization
+            // context used for the tag may have changed).
+            locCtxt = null;
+        }
 	params.clear();
 	return EVAL_BODY_BUFFERED;
     }

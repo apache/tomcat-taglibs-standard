@@ -130,6 +130,7 @@ public class MessageTag extends MessageSupport {
     // for EL-based attribute
     public void setBundle(String bundle_) {
         this.bundle_ = bundle_;
+        this.bundleSpecified = true;
     }
 
 
@@ -162,6 +163,6 @@ public class MessageTag extends MessageSupport {
 		ExpressionEvaluatorManager.evaluate(
 	            "bundle", bundle_, LocalizationContext.class, this,
 		    pageContext);
-	}
+	} 
     }
 }
