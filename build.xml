@@ -2,6 +2,9 @@
 
     <!-- ******************** Adjustable Properties *********************** -->
 
+    <!-- Version Number -->
+    <property name="standard-version" value="1.0.3" />
+
     <!-- Now bundle with JAXP 1.2 -->
     <property name="isJaxp12" value="true" />
 
@@ -295,15 +298,37 @@
 
   <!-- Create the library distribution files -->
   <target name="library-dist" depends="library">
-   <mkdir dir="${dist.library}/lib"/>
-   <mkdir dir="${dist.library}/tld"/>
-   <jar jarfile="${dist.library}/lib/standard.jar"
+    <mkdir dir="${dist.library}/lib"/>
+    <mkdir dir="${dist.library}/tld"/>
+    <jar jarfile="${dist.library}/lib/standard.jar"
          basedir="${build.library}"
-         excludes="javax/**"/>
+         excludes="javax/**">
+      <manifest>
+        <attribute name="Specification-Title" value="JavaServer Pages Standard Tag Library (JSTL)"/>
+        <attribute name="Specification-Version" value="1.0"/>
+        <attribute name="Implementation-Title" value="jakarta-taglibs 'standard': an implementation of JSTL"/>
+        <attribute name="Implementation-Version" value="${standard-version}"/>
+        <attribute name="Implementation-Vendor" value="Apache Software Foundation"/>
+        <attribute name="Implementation-Vendor-Id" value="org.apache"/>
+        <attribute name="Extension-Name" value="org.apache.taglibs.standard"/>
+      </manifest>         
+    </jar>        
+
     <!-- Create the 'standard' API jar -->
     <jar jarfile="${dist.library}/lib/jstl.jar"
          basedir="${build.library}"
-         includes="javax/**"/>
+         includes="javax/**">
+      <manifest>
+        <attribute name="Specification-Title" value="JavaServer Pages Standard Tag Library (JSTL)"/>
+        <attribute name="Specification-Version" value="1.0"/>
+        <attribute name="Implementation-Title" value="JavaServer Pages Standard Tag Library API Reference Implementation"/>
+        <attribute name="Implementation-Version" value="${standard-version}"/>
+        <attribute name="Implementation-Vendor" value="Sun Microsystems, Inc."/>
+        <attribute name="Implementation-Vendor-Id" value="com.sun"/>
+        <attribute name="Extension-Name" value="javax.servlet.jsp.jstl"/>
+      </manifest>         
+    </jar>        
+
     <copy file="README.dist" tofile="${dist.dir}/${taglib.name}/README"/>
     <copy file="${jaxen-full.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${saxpath.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
