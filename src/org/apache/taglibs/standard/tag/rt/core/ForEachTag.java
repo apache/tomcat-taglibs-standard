@@ -98,8 +98,10 @@ public class ForEachTag
     }
 
     public void setItems(Object o) throws JspTagException {
+	// for null items, simulate an empty list
 	if (o == null)
-	    throw new NullAttributeException("forEach", "items");
-        rawItems = o;
+	    rawItems = new ArrayList();
+        else
+	    rawItems = o;
     }
 }

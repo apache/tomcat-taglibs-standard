@@ -99,16 +99,19 @@ public class ForTokensTag
 
     // stores the 'items' String we're passed
     public void setItems(String s) throws JspTagException {
-        if (s == null)
-            throw new NullAttributeException("forTokens", "items");
         items = s;
+	// use the empty string to indicate "no iteration"
+        if (s == null)
+	    items = "";
     }
 
     // stores the 'delims' String we're passed
     public void setDelims(String s) throws JspTagException {
-        if (s == null)
-            throw new NullAttributeException("forTokens", "delims");
         delims = s;
+	// use the empty string to cause monolithic tokenization
+        if (s == null)
+	    delims = "";
+            throw new NullAttributeException("forTokens", "delims");
     }
 
 }
