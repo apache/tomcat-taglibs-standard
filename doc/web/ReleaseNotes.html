@@ -24,6 +24,57 @@ implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0
 
 <h2>Release History</h2>
 
+<dt><b>Current &#x2022; Changes since Standard 1.0.5 Release</b></dt>
+<p>The latest implementation is available from the Nightly Builds.</p>
+  <dd>Bugs fixed since Standard 1.0.5 Taglib release:</dd>
+  <ul>
+  <blockquote>
+    <table width="95%" border="1">
+      <tr>
+        <th width="27%">
+          <div align="center">
+            Bug Id</div>
+        </th>
+        <th width="73%">Summary</th>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center">
+          <a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=16773">16773</a></div>
+        </td>
+        <td width="73%" height="15">Substituted static values where Boolean objects were created.</td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center">
+          <a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=25382">25382</a></div>
+        </td>
+        <td width="73%" height="15">Optimization of the xml escaping used by JSTL Functions and the out tag handlers.</td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center">
+          <a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=25967">25967</a></div>
+        </td>
+        <td width="73%" height="15">Removed synchronization on getEvaluatorByName() method. Now synchronizing on nameMap and allowing reads to occur without blocking. Should be a performance improvement.</td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center">
+          <a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=26614">26614</a></div>
+        </td>
+        <td width="73%" height="15">Remove quotes from prefix when throwing an exception</td>
+      </tr>
+    </table>
+  </blockquote>
+  </ul>
+    <blockquote>
+      <p>Other changes and additions:</p>
+      <ul>
+        <li>Updated licenses to the new Apache License, Version 2.0.
+      </ul>
+    </blockquote>
+
 <dt><b>January 2004 &#149; Standard 1.0.5</b></dt>
 <p><dd>Bugs fixed since Standard 1.0.4 Taglib release:</dd>
 <ul>
