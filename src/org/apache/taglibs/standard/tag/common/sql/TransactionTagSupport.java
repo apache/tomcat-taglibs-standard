@@ -78,59 +78,49 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class TransactionTagSupport extends TagSupport 
     implements TryCatchFinally {
 
-    private static final int DEFAULT_ISOLATION = -1;
+    //*********************************************************************
+    // Private constants
 
-    private int isolation = DEFAULT_ISOLATION;
+    private static final String TRANSACTION_READ_COMMITTED
+	= "read_committed";
+    private static final String TRANSACTION_READ_UNCOMMITTED
+	= "read_uncommitted";
+    private static final String TRANSACTION_REPEATABLE_READ
+	= "repeatable_read";
+    private static final String TRANSACTION_SERIALIZABLE
+	= "serializable";
 
-    /*
-     * The following properties take expression values, so the
-     * setter methods are implemented by the expression type
-     * specific subclasses.
-     */
+
+    //*********************************************************************
+    // Protected state
+
     protected Object rawDataSource;
     protected DataSource dataSource;
 
-    /*
-     * Instance variables that are not for attributes
-     */
-    private Connection conn;
-    private int origIsolation;
-    private DataSourceUtil dsUtil;
 
     //*********************************************************************
-    // Public utility methods
+    // Private state
 
-    /**
-     * Setter method for the transaction isolation level.
-     */
-    public void setIsolation(String isolation) 
-	throws JspTagException {
+    private Connection conn;
+    private DataSourceUtil dsUtil;
+    private int isolation;
+    private int origIsolation;
 
-	if ("TRANSACTION_READ_COMMITTED".equals(isolation)) {
-	    this.isolation = Connection.TRANSACTION_READ_COMMITTED;
-	}
-	if ("TRANSACTION_READ_UNCOMMITTED".equals(isolation)) {
-	    this.isolation = Connection.TRANSACTION_READ_UNCOMMITTED;
-	}
-	if ("TRANSACTION_REPEATABLE_READ".equals(isolation)) {
-	    this.isolation = Connection.TRANSACTION_REPEATABLE_READ;
-	}
-	if ("TRANSACTION_SERIALIZABLE".equals(isolation)) {
-	    this.isolation = Connection.TRANSACTION_SERIALIZABLE;
-	}
-	else {
-	    throw new JspTagException(
-                Resources.getMessage("TRANSACTION_INVALID_ISOLATION"));
-	}
+
+    //*********************************************************************
+    // Constructor and initialization
+
+    public TransactionTagSupport() {
+	super();
+	init();
     }
 
-    /**
-     * Called by nested parameter elements to get a reference to
-     * the Connection.
-     */
-    public Connection getSharedConnection() {
-	return conn;
+    private void init() {
+	conn = null;
+	dsUtil = null;
+	isolation = Connection.TRANSACTION_NONE;
     }
+
 
     //*********************************************************************
     // Tag logic
@@ -149,20 +139,20 @@ public abstract class TransactionTagSupport extends TagSupport
 
 	try {
 	    conn = getConnection();
-	    int origIsolation = conn.getTransactionIsolation();
+	    origIsolation = conn.getTransactionIsolation();
 	    if (origIsolation == Connection.TRANSACTION_NONE) {
 		throw new JspTagException(
                     Resources.getMessage("TRANSACTION_NO_SUPPORT"));
 	    }
-	    if (isolation != DEFAULT_ISOLATION &&
-		origIsolation != isolation) {
+	    if ((isolation != Connection.TRANSACTION_NONE)
+		    && (isolation != origIsolation)) {
 		conn.setTransactionIsolation(isolation);
 	    }
 	    conn.setAutoCommit(false);
-	}
-	catch (SQLException e) {
+	} catch (SQLException e) {
 	    throw new JspTagException(
-                Resources.getMessage("ERROR_GET_CONNECTION", e.getMessage()));
+                Resources.getMessage("ERROR_GET_CONNECTION",
+				     e.getMessage()));
 	} 
 
 	return EVAL_BODY_INCLUDE;
@@ -174,10 +164,10 @@ public abstract class TransactionTagSupport extends TagSupport
     public int doEndTag() throws JspException {
 	try {
 	    conn.commit();
-	}
-	catch (SQLException e) {
+	} catch (SQLException e) {
 	    throw new JspTagException(
-                Resources.getMessage("TRANSACTION_COMMIT_ERROR", e.getMessage()));
+                Resources.getMessage("TRANSACTION_COMMIT_ERROR",
+				     e.getMessage()));
 	}
 	return EVAL_PAGE;
     }
@@ -189,30 +179,69 @@ public abstract class TransactionTagSupport extends TagSupport
 	if (conn != null) {
 	    try {
 		conn.rollback();
+	    } catch (SQLException e) {
+		// Ignore to not hide orignal exception
 	    }
-	    catch (SQLException e) {} // Ignore to not hide orignal exception
 	}
 	throw t;
     }
 
     /**
-     * Restores the <code>Connection</code> to its initial state and closes 
-     * it.
+     * Restores the <code>Connection</code> to its initial state and
+     * closes it.
      */
     public void doFinally() {
 	if (conn != null) {
 	    try {
-		if (isolation != DEFAULT_ISOLATION &&
-		    origIsolation != isolation) {
+		if ((isolation != Connection.TRANSACTION_NONE)
+		        && (isolation != origIsolation)) {
 		    conn.setTransactionIsolation(origIsolation);
 		}
 		conn.setAutoCommit(true);
 		conn.close();
+	    } catch (SQLException e) {
+		// Not much we can do
 	    }
-	    catch (SQLException e) {} // Not much we can do
 	}
 	conn = null;
     }
+
+    // Releases any resources we may have (or inherit)
+    public void release() {
+	init();
+    }
+
+
+    //*********************************************************************
+    // Public utility methods
+
+    /**
+     * Setter method for the transaction isolation level.
+     */
+    public void setIsolation(String iso) throws JspTagException {
+
+	if (TRANSACTION_READ_COMMITTED.equals(iso)) {
+	    isolation = Connection.TRANSACTION_READ_COMMITTED;
+	} else if (TRANSACTION_READ_UNCOMMITTED.equals(iso)) {
+	    isolation = Connection.TRANSACTION_READ_UNCOMMITTED;
+	} else if (TRANSACTION_REPEATABLE_READ.equals(iso)) {
+	    isolation = Connection.TRANSACTION_REPEATABLE_READ;
+	} else if (TRANSACTION_SERIALIZABLE.equals(iso)) {
+	    isolation = Connection.TRANSACTION_SERIALIZABLE;
+	} else {
+	    throw new JspTagException(
+                Resources.getMessage("TRANSACTION_INVALID_ISOLATION"));
+	}
+    }
+
+    /**
+     * Called by nested parameter elements to get a reference to
+     * the Connection.
+     */
+    public Connection getSharedConnection() {
+	return conn;
+    }
+
 
     //*********************************************************************
     // Private utility methods
