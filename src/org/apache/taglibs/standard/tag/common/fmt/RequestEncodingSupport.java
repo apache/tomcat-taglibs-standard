@@ -67,6 +67,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * the request character encoding in JSTL 1.0.
  *
  * @author Jan Luehe
+ * @author Pierre Delisle
  */
 
 public abstract class RequestEncodingSupport extends TagSupport {
@@ -85,10 +86,16 @@ public abstract class RequestEncodingSupport extends TagSupport {
 
 
     //*********************************************************************
-    // Protected state
+    // Tag attributes
 
-    protected String value;                      // 'value' attribute
-  
+    protected String value;             // 'value' attribute
+    
+
+    //*********************************************************************
+    // Derived information
+    
+    protected String charEncoding;   // derived from 'value' attribute  
+    
 
     //*********************************************************************
     // Constructor and initialization
@@ -107,15 +114,16 @@ public abstract class RequestEncodingSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	if ((value == null)
-	        && (pageContext.getRequest().getCharacterEncoding() == null)) {
-	    // Use charset from session-scoped attribute
-	    value = (String)
+        charEncoding = value;
+	if ((charEncoding == null)
+	        && (pageContext.getRequest().getCharacterEncoding() == null)) { 
+            // Use charset from session-scoped attribute
+	    charEncoding = (String)
 		pageContext.getAttribute(REQUEST_CHAR_SET,
 					 PageContext.SESSION_SCOPE);
-	    if (value == null) {
+	    if (charEncoding == null) {
 		// Use default encoding
-		value = DEFAULT_ENCODING;
+		charEncoding = DEFAULT_ENCODING;
 	    }
 	}
 
@@ -123,9 +131,9 @@ public abstract class RequestEncodingSupport extends TagSupport {
 	 * If char encoding was already set in the request, we don't need to 
 	 * set it again.
 	 */
-	if (value != null) {
+	if (charEncoding != null) {
 	    try {
-		pageContext.getRequest().setCharacterEncoding(value);
+		pageContext.getRequest().setCharacterEncoding(charEncoding);
 	    } catch (UnsupportedEncodingException uee) {
 		throw new JspTagException(uee.getMessage());
 	    }
