@@ -146,10 +146,15 @@ public abstract class LocaleSupport extends TagSupport {
      * country components, and returns the corresponding
      * <tt>java.util.Locale</tt> object.
      *
-     * @param locale the locale string 
+     * If the given locale string is null or empty, the runtime's default
+     * locale is returned.
+     *
+     * @param locale the locale string to parse
      * @param variant the variant
      *
-     * @return the corresponding <tt>java.util.Locale</tt> object
+     * @return <tt>java.util.Locale</tt> object corresponding to the given
+     * locale string, or the runtime's default locale if the locale string is
+     * null or empty
      *
      * @throws IllegalArgumentException if the given locale does not have a
      * language component or has an empty country component
@@ -161,15 +166,20 @@ public abstract class LocaleSupport extends TagSupport {
 	String country = null;
 	int index = -1;
 
-	if (((index = locale.indexOf(HYPHEN)) > -1) ||
-	    ((index = locale.indexOf(UNDERSCORE)) > -1)) {
+	if ((locale == null) || locale.equals("")) {
+	    return Locale.getDefault();
+	}
+
+	if (((index = locale.indexOf(HYPHEN)) > -1)
+	        || ((index = locale.indexOf(UNDERSCORE)) > -1)) {
 	    language = locale.substring(0, index);
 	    country = locale.substring(index+1);
 	}
 
-	if ((language == null) || (language.length() == 0))
+	if ((language == null) || (language.length() == 0)) {
 	    throw new IllegalArgumentException(
 		Resources.getMessage("LOCALE_NO_LANGUAGE"));
+	}
 
 	if (country == null) {
 	    if (variant != null)
@@ -181,9 +191,10 @@ public abstract class LocaleSupport extends TagSupport {
 		ret = new Locale(language, country, variant);
 	    else
 		ret = new Locale(language, country);
-	} else
+	} else {
 	    throw new IllegalArgumentException(
 		Resources.getMessage("LOCALE_EMPTY_COUNTRY"));
+	}
 
 	return ret;
     }
@@ -350,10 +361,11 @@ public abstract class LocaleSupport extends TagSupport {
      * Returns the best match between the given preferred locale and the
      * given available locales.
      *
-     * The best match is given as the first available locale that either:
-     * - exactly matches the given preferred locale ("exact match"), or
-     * - does not have a country component and matches (just) the language 
-     *   component of the given preferred locale ("language match").
+     * The best match is given as the first available locale that exactly
+     * matches the given preferred locale ("exact match"). If no exact match
+     * exists, the best match is given as the first available locale that 
+     * matches the preferred locale's language component and does not have any
+     * country component ("language match").
      *
      * @param pref the preferred locale
      * @param avail the available formatting locales
@@ -373,8 +385,9 @@ public abstract class LocaleSupport extends TagSupport {
 		if (pref.getLanguage().equals(avail[i].getLanguage())
 		        && ("".equals(avail[i].getCountry()))) {
 		    // Language match
-		    match = avail[i];
-		    break;
+		    if (match == null) {
+			match = avail[i];
+		    }
 		}
 	    }
 	}

@@ -130,7 +130,11 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
-	timeZone = TimeZone.getTimeZone(value);
+	if ((value == null) || value.trim().equals("")) {
+	    timeZone = TimeZone.getTimeZone("GMT");
+	} else {
+	    timeZone = TimeZone.getTimeZone(value);
+	}
 	return EVAL_BODY_BUFFERED;
     }
 

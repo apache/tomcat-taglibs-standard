@@ -122,6 +122,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     private void init() {
 	basename = prefix = var = null;
+	bundle = null;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -154,7 +155,9 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
-	bundle = getBundle(pageContext, basename);
+	if ((basename != null) && !basename.equals("")) {
+	    bundle = getBundle(pageContext, basename);
+	}
 	return EVAL_BODY_BUFFERED;
     }
 

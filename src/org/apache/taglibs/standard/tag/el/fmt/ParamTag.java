@@ -58,7 +58,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
@@ -138,7 +138,9 @@ public class ParamTag extends ParamSupport {
          * propagate up.
          */
 
-	value = ExpressionUtil.evalNotNull(
-	    "param", "value", value_, Object.class, this, pageContext);
+	if (value_ != null) {
+	    value = ExpressionEvaluatorManager.evaluate(
+	        "value", value_, Object.class, this, pageContext);
+	}
     }
 }

@@ -10,8 +10,7 @@
 <ul>
  <li> Formatting current date as &quot;GMT&quot;:<br>
   <fmt:timeZone value="GMT">
-   <fmt:formatDate type="both" dateStyle="full" timeStyle="full">
-   </fmt:formatDate>
+   <fmt:formatDate type="both" dateStyle="full" timeStyle="full"/>
   </fmt:timeZone>
 
  <li> Formatting current date as &quot;GMT+1:00&quot;, and parsing

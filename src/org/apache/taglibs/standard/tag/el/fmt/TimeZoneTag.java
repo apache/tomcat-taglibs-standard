@@ -58,7 +58,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
@@ -137,8 +137,9 @@ public class TimeZoneTag extends TimeZoneSupport {
          * A ClassCastException here is truly unexpected, so we let it
          * propagate up.
          */
-
-	value = (String) ExpressionUtil.evalNotNull(
-	    "timeZone", "value", value_, String.class, this, pageContext);
+	
+	// 'value' attribute (mandatory)
+	value = (String) ExpressionEvaluatorManager.evaluate(
+	    "value", value_, String.class, this, pageContext);
     }
 }

@@ -108,9 +108,9 @@ public abstract class ParseDateSupport extends BodyTagSupport {
     }
 
     private void init() {
+	type = dateStyle = timeStyle = null;
 	value = pattern = var = null;
 	timeZone = null;
-	type = DATE;
 	scope = PageContext.PAGE_SCOPE;
 	parseLocale = null;
     }
@@ -132,11 +132,18 @@ public abstract class ParseDateSupport extends BodyTagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
+
 	if (value == null) {
-            String bcs = getBodyContent().getString();
-            if ((bcs == null) || (value = bcs.trim()).equals(""))
-                throw new JspTagException(
-                    Resources.getMessage("PARSE_DATE_NO_VALUE"));
+	    BodyContent bc = null;
+	    String bcs = null;
+	    if (((bc = getBodyContent()) != null)
+		    && ((bcs = bc.getString()) != null)) {
+		value = bcs.trim();
+	    }
+	    if ((value == null) || value.equals("")) {
+		pageContext.removeAttribute(var, scope);
+		return EVAL_PAGE;
+	    }
 	}
 
 	/*
@@ -165,6 +172,9 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 
 	// Set time zone
 	TimeZone tz = null;
+	if ((timeZone instanceof String) && ((String) timeZone).equals("")) {
+	    timeZone = null;
+	}
 	if (timeZone != null) {
 	    if (timeZone instanceof String) {
 		tz = TimeZone.getTimeZone((String) timeZone);
@@ -214,7 +224,7 @@ public abstract class ParseDateSupport extends BodyTagSupport {
     private DateFormat createParser(Locale loc) throws JspException {
 	DateFormat parser = null;
 
-	if (DATE.equalsIgnoreCase(type)) {
+	if ((type == null) || DATE.equalsIgnoreCase(type)) {
 	    parser = DateFormat.getDateInstance(
 	        Util.getStyle(dateStyle, "PARSE_DATE_INVALID_DATE_STYLE"),
 		loc);

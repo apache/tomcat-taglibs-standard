@@ -58,6 +58,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
@@ -155,7 +156,7 @@ public class ParseNumberTag extends ParseNumberSupport {
 
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
-	Object r = null;
+	Object obj = null;
 
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -166,31 +167,41 @@ public class ParseNumberTag extends ParseNumberSupport {
          */
 
 	// 'value' attribute
-	value = (String) ExpressionUtil.evalNotNull(
-	    "parseNumber", "value", value_, String.class, this, pageContext);
+	if (value_ != null) {
+	    value = (String) ExpressionEvaluatorManager.evaluate(
+	        "value", value_, String.class, this, pageContext);
+	}
 
 	// 'type' attribute
-	type = (String) ExpressionUtil.evalNotNull(
-	    "parseNumber", "type", type_, String.class, this, pageContext);
+	if (type_ != null) {
+	    type = (String) ExpressionEvaluatorManager.evaluate(
+	        "type", type_, String.class, this, pageContext);
+	}
 
 	// 'pattern' attribute
-	pattern = (String) ExpressionUtil.evalNotNull(
-	    "parseNumber", "pattern", pattern_, String.class, this,
-	    pageContext);
+	if (pattern_ != null) {
+	    pattern = (String) ExpressionEvaluatorManager.evaluate(
+	        "pattern", pattern_, String.class, this, pageContext);
+	}
 
 	// 'parseLocale' attribute
-	r = ExpressionUtil.evalNotNull(
-	    "parseNumber", "parseLocale", parseLocale_, String.class, this,
-	    pageContext);
-	if (r != null)
-	    parseLocale = LocaleSupport.parseLocale((String) r, null);
+	if (parseLocale_ != null) {
+	    obj = ExpressionUtil.evalNotNull(
+	        "parseNumber", "parseLocale", parseLocale_, String.class, this,
+		pageContext);
+	    if (obj != null) {
+		parseLocale = LocaleSupport.parseLocale((String) obj, null);
+	    }
+	}
 
 	// 'integerOnly' attribute
-	r = ExpressionUtil.evalNotNull(
-	    "parseNumber", "integerOnly", integerOnly_, Boolean.class, this,
-	    pageContext);
-	if (r != null)
-	    isIntegerOnly = ((Boolean) r).booleanValue();
+	if (integerOnly_ != null) {
+	    obj = ExpressionEvaluatorManager.evaluate(
+	        "integerOnly", integerOnly_, Boolean.class, this, pageContext);
+	    if (obj != null) {
+		isIntegerOnly = ((Boolean) obj).booleanValue();
+	    }
+	}
     }
 }
 

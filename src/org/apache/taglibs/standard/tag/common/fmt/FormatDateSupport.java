@@ -84,6 +84,7 @@ public abstract class FormatDateSupport extends BodyTagSupport {
     // Protected state
 
     protected Object value;                      // 'value' attribute
+    protected boolean valueSpecified;
     protected String type;                       // 'type' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Object timeZone;                   // 'timeZone' attribute
@@ -107,10 +108,11 @@ public abstract class FormatDateSupport extends BodyTagSupport {
     }
 
     private void init() {
+	type = dateStyle = timeStyle = null;
+	valueSpecified = false;
 	pattern = var = null;
 	value = null;
 	timeZone = null;
-	type = DATE;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -135,20 +137,21 @@ public abstract class FormatDateSupport extends BodyTagSupport {
      */
     public int doEndTag() throws JspException {
 
-	/*
-	 * If 'value' is null or equal to "", format the current date/time.
-	 * Note that this is the only action in which we need to check for an
-	 * empty body if 'value' is missing. For all other actions, the
-	 * TLV would have reported this as an error. However, with this action,
-	 * it is legal for 'value' to be missing and the body to be empty, in
-	 * which case the current date/time is formatted. 
-	 */
+	if (!valueSpecified && (getBodyContent() == null)) {
+	    // 'value' missing, use current date
+	    value = new Date();
+	} 
+
 	if (value == null) {
-            String bcs = null;
-	    if ((getBodyContent() == null)
-		    || ((bcs = getBodyContent().getString()) == null)
-		    || (value = bcs.trim()).equals("")) {
-		value = new Date();
+	    BodyContent bc = null;
+	    String bcs = null;
+	    if (((bc = getBodyContent()) != null)
+		    && ((bcs = bc.getString()) != null)) {
+		value = bcs.trim();
+	    }
+	    if ((value == null) || value.equals("")) {
+		// do nothing
+		return EVAL_PAGE;
 	    }
 	}
 
@@ -187,6 +190,9 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 
 	// Set time zone
 	TimeZone tz = null;
+	if ((timeZone instanceof String) && ((String) timeZone).equals("")) {
+	    timeZone = null;
+	}
 	if (timeZone != null) {
 	    if (timeZone instanceof String) {
 		tz = TimeZone.getTimeZone((String) timeZone);
@@ -229,7 +235,7 @@ public abstract class FormatDateSupport extends BodyTagSupport {
     private DateFormat createFormatter(Locale loc) throws JspException {
 	DateFormat formatter = null;
 
-	if (DATE.equalsIgnoreCase(type)) {
+	if ((type == null) || DATE.equalsIgnoreCase(type)) {
 	    formatter = DateFormat.getDateInstance(
 	        Util.getStyle(dateStyle, "FORMAT_DATE_INVALID_DATE_STYLE"),
 		loc);

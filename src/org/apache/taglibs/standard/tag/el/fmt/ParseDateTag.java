@@ -58,6 +58,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
@@ -176,38 +177,47 @@ public class ParseDateTag extends ParseDateSupport {
          */
 
 	// 'value' attribute
-	value = (String) ExpressionUtil.evalNotNull(
-	    "parseDate", "value", value_, String.class, this, pageContext);
+	if (value_ != null) {
+	    value = (String) ExpressionEvaluatorManager.evaluate(
+	        "value", value_, String.class, this, pageContext);
+	}
 
 	// 'type' attribute
-	type = (String) ExpressionUtil.evalNotNull(
-	    "parseDate", "type", type_, String.class, this, pageContext);
+	if (type_ != null) {
+	    type = (String) ExpressionEvaluatorManager.evaluate(
+	        "type", type_, String.class, this, pageContext);
+	}
 
 	// 'dateStyle' attribute
-	dateStyle = (String) ExpressionUtil.evalNotNull(
-	    "parseDate", "dateStyle", dateStyle_, String.class, this,
-	    pageContext);
+	if (dateStyle_ != null) {
+	    dateStyle = (String) ExpressionEvaluatorManager.evaluate(
+	        "dateStyle", dateStyle_, String.class, this, pageContext);
+	}
 
 	// 'timeStyle' attribute
-	timeStyle = (String) ExpressionUtil.evalNotNull(
-	    "parseDate", "timeStyle", timeStyle_, String.class, this,
-	    pageContext);
+	if (timeStyle_ != null) {
+	    timeStyle = (String) ExpressionEvaluatorManager.evaluate(
+	        "timeStyle", timeStyle_, String.class, this, pageContext);
+	}
 
 	// 'pattern' attribute
-	pattern = (String) ExpressionUtil.evalNotNull(
-	    "parseDate", "pattern", pattern_, String.class, this,
-	    pageContext);
+	if (pattern_ != null) {
+	    pattern = (String) ExpressionEvaluatorManager.evaluate(
+	        "pattern", pattern_, String.class, this, pageContext);
+	}
 
 	// 'timeZone' attribute
-	timeZone = ExpressionUtil.evalNotNull(
-	    "parseDate", "timeZone", timeZone_, Object.class, this,
-	    pageContext);
+	if (timeZone_ != null) {
+	    timeZone = ExpressionEvaluatorManager.evaluate(
+	        "timeZone", timeZone_, Object.class, this, pageContext);
+	}
 
-	// 'parseLocale' attribute
+	// 'parseLocale' attribute (if specified, must not be null)
 	String pl = (String) ExpressionUtil.evalNotNull(
 	    "parseDate", "parseLocale", parseLocale_, String.class, this,
 	    pageContext);
-	if (pl != null)
+	if (pl != null) {
 	    parseLocale = LocaleSupport.parseLocale(pl, null);
+	}
     }
 }

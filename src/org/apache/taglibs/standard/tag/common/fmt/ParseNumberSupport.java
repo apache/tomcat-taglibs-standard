@@ -107,10 +107,9 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
     }
 
     private void init() {
-	value = pattern = var = null;
+	value = type = pattern = var = null;
 	parseLocale = null;
 	integerOnlySpecified = false;
-	type = NUMBER;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -131,11 +130,18 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
+
 	if (value == null) {
-            String bcs = getBodyContent().getString();
-            if ((bcs == null) || (value = bcs.trim()).equals(""))
-                throw new JspTagException(
-                    Resources.getMessage("PARSE_NUMBER_NO_VALUE"));
+	    BodyContent bc = null;
+	    String bcs = null;
+	    if (((bc = getBodyContent()) != null)
+		    && ((bcs = bc.getString()) != null)) {
+		value = bcs.trim();
+	    }
+	    if ((value == null) || value.equals("")) {
+		pageContext.removeAttribute(var, scope);
+		return EVAL_PAGE;
+	    }
 	}
 
 	/*

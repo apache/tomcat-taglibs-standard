@@ -141,16 +141,18 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 	if (key == null) {
-            String bcs = getBodyContent().getString();
-            if ((bcs == null) || (key = bcs.trim()).equals(""))
-                throw new JspTagException(
-                    Resources.getMessage("MESSAGE_NO_KEY"));
-	} else {
-	    if (getBodyContent() != null) {
-		String bcs = getBodyContent().getString();
-		if ((bcs != null) && !bcs.trim().equals(""))
-		    throw new JspTagException(
-                        Resources.getMessage("MESSAGE_ILLEGAL_BODY_CONTENT"));
+	    BodyContent bc = null;
+	    String bcs = null;
+	    if (((bc = getBodyContent()) != null)
+		    && ((bcs = bc.getString()) != null)) {
+		key = bcs.trim();
+	    }
+	    if ((key == null) || key.equals("")) {
+		try {
+		    pageContext.getOut().print("??????");
+		} catch (IOException ioe) {
+		    throw new JspTagException(ioe.getMessage());
+		}
 	    }
 	}
 

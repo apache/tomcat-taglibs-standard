@@ -58,7 +58,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
@@ -150,10 +150,14 @@ public class MessageTag extends MessageSupport {
          * propagate up.
          */
 
-	key = (String) ExpressionUtil.evalNotNull(
-	    "message", "key", key_, String.class, this, pageContext);
-	bundle = (ResourceBundle) ExpressionUtil.evalNotNull(
-	    "message", "bundle", bundle_, ResourceBundle.class, this,
-	    pageContext);
+	if (key_ != null) {
+	    key = (String) ExpressionEvaluatorManager.evaluate(
+	        "key", key_, String.class, this, pageContext);
+	}
+
+	if (bundle_ != null) {
+	    bundle = (ResourceBundle) ExpressionEvaluatorManager.evaluate(
+	        "bundle", bundle_, ResourceBundle.class, this, pageContext);
+	}
     }
 }

@@ -58,7 +58,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
@@ -121,6 +121,7 @@ public class FormatDateTag extends FormatDateSupport {
     // for EL-based attribute
     public void setValue(String value_) {
         this.value_ = value_;
+	this.valueSpecified = true;
     }
 
     // for EL-based attribute
@@ -169,31 +170,39 @@ public class FormatDateTag extends FormatDateSupport {
          */
 
 	// 'value' attribute
-	value = ExpressionUtil.evalNotNull(
-	    "formatDate", "value", value_, Object.class, this, pageContext);
+	if (value_ != null) {
+	    value = ExpressionEvaluatorManager.evaluate(
+	        "value", value_, Object.class, this, pageContext);
+	}
 
 	// 'type' attribute
-	type = (String) ExpressionUtil.evalNotNull(
-	    "formatDate", "type", type_, String.class, this, pageContext);
+	if (type_ != null) {
+	    type = (String) ExpressionEvaluatorManager.evaluate(
+	        "type", type_, String.class, this, pageContext);
+	}
 
 	// 'dateStyle' attribute
-	dateStyle = (String) ExpressionUtil.evalNotNull(
-	    "formatDate", "dateStyle", dateStyle_, String.class, this,
-	    pageContext);
+	if (dateStyle_ != null) {
+	    dateStyle = (String) ExpressionEvaluatorManager.evaluate(
+	        "dateStyle", dateStyle_, String.class, this, pageContext);
+	}
 
 	// 'timeStyle' attribute
-	timeStyle = (String) ExpressionUtil.evalNotNull(
-	    "formatDate", "timeStyle", timeStyle_, String.class, this,
-	    pageContext);
+	if (timeStyle_ != null) {
+	    timeStyle = (String) ExpressionEvaluatorManager.evaluate(
+	        "timeStyle", timeStyle_, String.class, this, pageContext);
+	}
 
 	// 'pattern' attribute
-	pattern = (String) ExpressionUtil.evalNotNull(
-	    "formatDate", "pattern", pattern_, String.class, this,
-	    pageContext);
+	if (pattern_ != null) {
+	    pattern = (String) ExpressionEvaluatorManager.evaluate(
+	        "pattern", pattern_, String.class, this, pageContext);
+	}
 
 	// 'timeZone' attribute
-	timeZone = ExpressionUtil.evalNotNull(
-	    "formatDate", "timeZone", timeZone_, Object.class, this,
-	    pageContext);
+	if (timeZone_ != null) {
+	    timeZone = ExpressionEvaluatorManager.evaluate(
+	        "timeZone", timeZone_, Object.class, this, pageContext);
+	}
     }
 }

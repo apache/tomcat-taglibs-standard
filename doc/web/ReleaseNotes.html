@@ -146,6 +146,8 @@ Version 1.0 Release</b></dt>
 
 <dd>I18N-Capable Formatting Actions:
 <ul>
+ <li>Removed &lt;fmt:exception&gt; as well as
+     javax.servlet.jsp.jstl.fmt.LocalizableException.
  <li>&lt;fmt:message&gt;: Removed 'messageArgs' attribute.</li>
  <li>Removed &lt;fmt:messageFormat&gt;.</li>
  <li>Renamed &lt;fmt:messageArg&gt; to &lt;fmt:param&gt;.</li>
@@ -156,12 +158,6 @@ Version 1.0 Release</b></dt>
      javax.servlet.jsp.jstl.fmt.basename).</li>
  <li>Moved LocaleSupport class from org.apache.taglibs.standard.extra.i18n to
      javax.servlet.jsp.jstl.fmt.</li>
- <li>&lt;fmt:exception&gt;: Removed 'stackTrace' attribute, since stack traces
-     can not be localized.</li>
- <li>&lt;fmt:exception&gt;: Implementation now uses the Servlet spec attribute
-     name (javax.servlet.error.exception) of the request attribute storing the
-     exception of an error page if looking up the JSP spec attribute name 
-     (javax.servlet.jsp.jspException) has failed.</li>
  <li>&lt;fmt:formatNumber&gt;: Added 'currencyCode', 'currencySymbol',
      'groupingUsed', 'maxIntegerDigits', 'minIntegerDigits',
      'maxFractionDigits', 'minFractionDigits' attributes.</li>

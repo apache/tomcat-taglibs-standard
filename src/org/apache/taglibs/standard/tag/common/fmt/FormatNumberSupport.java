@@ -128,12 +128,11 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
     }
 
     private void init() {
-	value = null;
+	value = type = null;
 	pattern = var = currencyCode = currencySymbol = null;
 	groupingUsedSpecified = false;
 	maxIntegerDigitsSpecified = minIntegerDigitsSpecified = false;
 	maxFractionDigitsSpecified = minFractionDigitsSpecified = false;
-	type = NUMBER;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -155,19 +154,16 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 	if (value == null) {
-            String bcs = getBodyContent().getString();
-            if ((bcs == null) || (value = bcs.trim()).equals(""))
-                throw new JspTagException(
-                    Resources.getMessage("FORMAT_NUMBER_NO_VALUE"));
-	}
-
-	/*
-	 * XXX WORKAROUND FOR SPEL:
-	 * If 'value' is neither a Number nor a String, it is converted to a
-	 * String.
-	 */
-	if (!(value instanceof Number) && !(value instanceof String)) {
-	    value = value.toString();
+	    BodyContent bc = null;
+	    String bcs = null;
+	    if (((bc = getBodyContent()) != null)
+		    && ((bcs = bc.getString()) != null)) {
+		value = bcs.trim();
+	    }
+	    if ((value == null) || value.equals("")) {
+		// do nothing
+		return EVAL_PAGE;
+	    }
 	}
 
 	/*

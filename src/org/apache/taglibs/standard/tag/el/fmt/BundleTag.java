@@ -58,7 +58,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
@@ -144,9 +144,13 @@ public class BundleTag extends BundleSupport {
          * propagate up.
          */
 
-	basename = (String) ExpressionUtil.evalNotNull(
-	    "bundle", "basename", basename_, String.class, this, pageContext);
-	prefix = (String) ExpressionUtil.evalNotNull(
-	    "bundle", "prefix", prefix_, String.class, this, pageContext);
+	// 'basename' attribute (mandatory)
+	basename = (String) ExpressionEvaluatorManager.evaluate(
+	    "basename", basename_, String.class, this, pageContext);
+
+	if (prefix_ != null) {
+	    prefix = (String) ExpressionEvaluatorManager.evaluate(
+	        "prefix", prefix_, String.class, this, pageContext);
+	}
     }
 }

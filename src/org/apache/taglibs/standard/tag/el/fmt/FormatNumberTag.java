@@ -58,7 +58,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
@@ -193,7 +193,7 @@ public class FormatNumberTag extends FormatNumberSupport {
 
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
-	Object r = null;
+	Object obj = null;
 
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -204,62 +204,86 @@ public class FormatNumberTag extends FormatNumberSupport {
          */
 
 	// 'value' attribute
-	value = ExpressionUtil.evalNotNull(
-	    "formatNumber", "value", value_, Object.class, this, pageContext);
+	if (value_ != null) {
+	    value = ExpressionEvaluatorManager.evaluate(
+	        "value", value_, Object.class, this, pageContext);
+	}
 
 	// 'type' attribute
-	type = (String) ExpressionUtil.evalNotNull(
-	    "formatNumber", "type", type_, String.class, this, pageContext);
+	if (type_ != null) {
+	    type = (String) ExpressionEvaluatorManager.evaluate(
+	        "type", type_, String.class, this, pageContext);
+	}
 
 	// 'pattern' attribute
-	pattern = (String) ExpressionUtil.evalNotNull(
-	    "formatNumber", "pattern", pattern_, String.class, this,
-	    pageContext);
+	if (pattern_ != null) {
+	    pattern = (String) ExpressionEvaluatorManager.evaluate(
+	        "pattern", pattern_, String.class, this, pageContext);
+	}
 
 	// 'currencyCode' attribute
-	currencyCode = (String) ExpressionUtil.evalNotNull(
-	    "formatNumber", "currencyCode", currencyCode_, String.class, this,
-	    pageContext);
+	if (currencyCode_ != null) {
+	    currencyCode = (String) ExpressionEvaluatorManager.evaluate(
+	        "currencyCode", currencyCode_, String.class, this,
+		pageContext);
+	}
 
 	// 'currencySymbol' attribute
-	currencySymbol = (String) ExpressionUtil.evalNotNull(
-	    "formatNumber", "currencySymbol", currencySymbol_, String.class,
-	    this, pageContext);
+	if (currencySymbol_ != null) {
+	    currencySymbol = (String) ExpressionEvaluatorManager.evaluate(
+	        "currencySymbol", currencySymbol_, String.class, this,
+		pageContext);
+	}
 
 	// 'groupingUsed' attribute
-	r = ExpressionUtil.evalNotNull(
-	    "formatNumber", "groupingUsed", groupingUsed_, Boolean.class, this,
-	    pageContext);
-	if (r != null)
-	    isGroupingUsed = ((Boolean) r).booleanValue();
-	
+	if (groupingUsed_ != null) {
+	    obj = ExpressionEvaluatorManager.evaluate(
+	        "groupingUsed", groupingUsed_, Boolean.class, this,
+		pageContext);
+	    if (obj != null) {
+		isGroupingUsed = ((Boolean) obj).booleanValue();
+	    }
+	}
+
 	// 'maxIntegerDigits' attribute
-	r = ExpressionUtil.evalNotNull(
-	    "formatNumber", "maxIntegerDigits", maxIntegerDigits_,
-	    Integer.class, this, pageContext);
-	if (r != null)
-	    maxIntegerDigits = ((Integer) r).intValue();
+	if (maxIntegerDigits_ != null) {
+	    obj = ExpressionEvaluatorManager.evaluate(
+	        "maxIntegerDigits", maxIntegerDigits_, Integer.class, this,
+		pageContext);
+	    if (obj != null) {
+		maxIntegerDigits = ((Integer) obj).intValue();
+	    }
+	}
 
 	// 'minIntegerDigits' attribute	
-	r = ExpressionUtil.evalNotNull(
-	    "formatNumber", "minIntegerDigits", minIntegerDigits_,
-	    Integer.class, this, pageContext);
-	if (r != null)
-	    minIntegerDigits = ((Integer) r).intValue();
-	
+	if (minIntegerDigits_ != null) {
+	    obj = ExpressionEvaluatorManager.evaluate(
+	        "minIntegerDigits", minIntegerDigits_, Integer.class, this,
+		pageContext);
+	    if (obj != null) {
+		minIntegerDigits = ((Integer) obj).intValue();
+	    }
+	}
+
 	// 'maxFractionDigits' attribute
-	r = ExpressionUtil.evalNotNull(
-	    "formatNumber", "maxFractionDigits", maxFractionDigits_,
-	    Integer.class, this, pageContext);
-	if (r != null)
-	    maxFractionDigits = ((Integer) r).intValue();
-	
+	if (maxFractionDigits_ != null) {
+	    obj = ExpressionEvaluatorManager.evaluate(
+	        "maxFractionDigits", maxFractionDigits_, Integer.class, this,
+		pageContext);
+	    if (obj != null) {
+		maxFractionDigits = ((Integer) obj).intValue();
+	    }
+	}
+
 	// 'minFractionDigits' attribute
-	r = ExpressionUtil.evalNotNull(
-	    "formatNumber", "minFractionDigits", minFractionDigits_,
-	    Integer.class, this, pageContext);
-	if (r != null)
-	    minFractionDigits = ((Integer) r).intValue();
+	if (minFractionDigits_ != null) {
+	    obj = ExpressionEvaluatorManager.evaluate(
+	        "minFractionDigits", minFractionDigits_, Integer.class, this,
+		pageContext);
+	    if (obj != null) {
+		minFractionDigits = ((Integer) obj).intValue();
+	    }
+	}
     }
 }
 
