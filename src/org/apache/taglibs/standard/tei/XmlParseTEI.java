@@ -65,18 +65,12 @@ import javax.servlet.jsp.tagext.*;
  */
 public class XmlParseTEI extends TagExtraInfo {
 
-    final private static String XML_TEXT = "xmlText";
-    final private static String XML_URL = "xmlUrl";
     final private static String VAR = "var";
     final private static String VAR_DOM = "varDom";
     final private static String SCOPE = "scope";
     final private static String SCOPE_DOM = "scopeDom";
 
     public boolean isValid(TagData us) {
-	// must have no more than one of XML_TEXT and XML_URL ...
-	if (Util.isSpecified(us, XML_TEXT) && Util.isSpecified(us, XML_URL))
-	    return false;
-
 	// must have no more than one of VAR and VAR_DOM ...
 	if (Util.isSpecified(us, VAR) && Util.isSpecified(us, VAR_DOM))
 	    return false;

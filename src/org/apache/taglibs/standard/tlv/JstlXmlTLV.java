@@ -122,7 +122,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
     // attribute names
     private final String EVAL = "evaluator";
     private final String VALUE = "value";
-    private final String SOURCE = "source";
+    private final String SOURCE = "xml";
 
 
     //*********************************************************************
