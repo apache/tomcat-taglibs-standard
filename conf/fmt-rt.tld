@@ -46,7 +46,6 @@
   <tag>
     <name>locale</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.LocaleTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.LocaleTEI</tei-class>
     <body-content>EMPTY</body-content>
     <description>
         Establishes the locale to use for resource bundles and formatting
@@ -71,7 +70,6 @@
   <tag>
     <name>timeZone</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.TimeZoneTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.TimeZoneTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
         Establishes the time zone in which to represent a &lt;formatDate&gt;
@@ -97,7 +95,6 @@
   <tag>
     <name>bundle</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.BundleTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.BundleTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
         Loads a resource bundle containing localized messages
@@ -127,7 +124,6 @@
   <tag>
     <name>message</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.MessageTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.MessageTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
         Maps key to localized message and performs parametric replacement
@@ -157,7 +153,6 @@
   <tag>
     <name>messageFormat</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.MessageFormatTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.MessageFormatTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
         Performs parametric replacement on a given pattern string

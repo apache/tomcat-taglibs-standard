@@ -198,6 +198,11 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		}
 	    }
 
+            // validate attributes
+            if (!hasNoInvalidScope(a))
+                fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
+                    SCOPE, qn, a.getValue(SCOPE))); 
+
 	    // check invariants for <choose>
 	    if (chooseChild()) {
 		// ensure <choose> has the right children

@@ -57,13 +57,13 @@ package org.apache.taglibs.standard.tag.common.xml;
 
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.tag.common.core.Util;
 
 /**
  * <p>Tag handler for &lt;set&gt; in JSTL's XML library.</p>
  *
  * @author Shawn Bayern
  */
-
 public class SetTag extends TagSupport {
 
     //*********************************************************************
@@ -71,6 +71,7 @@ public class SetTag extends TagSupport {
 
     private String select;                    // tag attribute
     private String var;                       // tag attribute
+    private int scope;			      // processed tag attribute
 
     //*********************************************************************
     // Construction and initialization
@@ -87,7 +88,9 @@ public class SetTag extends TagSupport {
 
     // resets local state
     private void init() {
+	var = null;
 	select = null;
+        scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -123,5 +126,9 @@ public class SetTag extends TagSupport {
 
     public void setVar(String var) {
 	this.var = var;
+    }
+
+    public void setScope(String scope) {
+	this.scope = Util.getScope(scope);
     }
 }

@@ -58,7 +58,7 @@ package org.apache.taglibs.standard.tag.common.core;
 import javax.servlet.jsp.*;
 
 /**
- * <p>Utilities in support of (Body)TagSupport classes.</p>
+ * <p>Utilities in support of tag-handler classes.</p>
  *
  * @author Jan Luehe
  */

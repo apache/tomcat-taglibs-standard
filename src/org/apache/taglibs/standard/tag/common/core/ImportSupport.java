@@ -108,6 +108,7 @@ public abstract class ImportSupport extends BodyTagSupport
     // Private state (implementation details)
 
     private String var;                 // 'var' attribute
+    private int scope;			// processed 'scope' attribute
     private String varReader;           // 'varReader' attribute
     private Reader r;	 		// exposed reader, if relevant
     private Object oldVarReader;	// overwritten attribute
@@ -124,6 +125,7 @@ public abstract class ImportSupport extends BodyTagSupport
 
     private void init() {
 	url = var = varReader = context = charEncoding = urlWithParams = null;
+        scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -146,8 +148,9 @@ public abstract class ImportSupport extends BodyTagSupport
 	    // If we need to expose a Reader, we've got to do it right away
 	    if  (varReader != null) {
 	        r = acquireReader();
-	        Object oldVarReader = pageContext.getAttribute(varReader);
-	        pageContext.setAttribute(varReader, r);
+	        Object oldVarReader =
+		    pageContext.getAttribute(varReader, scope);
+	        pageContext.setAttribute(varReader, r, scope);
 	    }
 	} catch (IOException ex) {
 	    throw new JspTagException(ex.toString());
@@ -165,7 +168,7 @@ public abstract class ImportSupport extends BodyTagSupport
 	    if (varReader == null) {
 	        // ... store it in 'var', if available ...
 	        if (var != null)
-	            pageContext.setAttribute(var, acquireString());	
+	            pageContext.setAttribute(var, acquireString(), scope);
                 // ... or simply output it, if we have nowhere to expose it
 	        else
 	            pageContext.getOut().print(acquireString());
@@ -192,9 +195,9 @@ public abstract class ImportSupport extends BodyTagSupport
 	        if (r != null)
 		    r.close();
 	        if (oldVarReader != null)
-		    pageContext.setAttribute(varReader, oldVarReader);
+		    pageContext.setAttribute(varReader, oldVarReader, scope);
 		else
-		    pageContext.removeAttribute(varReader);
+		    pageContext.removeAttribute(varReader, scope);
 	    }
         } catch (IOException ex) {
 	    // ignore it; close() failed, but there's nothing more we can do
@@ -217,6 +220,11 @@ public abstract class ImportSupport extends BodyTagSupport
     public void setVarReader(String varReader) {
 	this.varReader = varReader;
     }
+
+    public void setScope(String scope) {
+	this.scope = Util.getScope(scope);
+    }
+
 
     //*********************************************************************
     // Collaboration with subtags

@@ -101,8 +101,10 @@ public class JstlXmlTLV extends JstlBaseTLV {
      *
      * Much of the code and structure is duplicated from JstlCoreTLV.
      * An effort has been made to re-use code where unambiguously useful.
-     * However, splitting logic among parent/child classes isn't the
-     * cleanest approach when writing a parser like the one we need.
+     * However, splitting logic among parent/child classes isn't
+     * necessarily the cleanest approach when writing a parser like the
+     * one we need.  I'd like to reorganize this somewhat, but it's not
+     * a priority.
      */
 
 
@@ -193,6 +195,11 @@ public class JstlXmlTLV extends JstlBaseTLV {
 		    }
 		}
 	    }
+
+            // validate attributes
+            if (!hasNoInvalidScope(a))
+                fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
+                    SCOPE, qn, a.getValue(SCOPE)));
 
 	    // check invariants for <choose>
 	    if (chooseChild()) {

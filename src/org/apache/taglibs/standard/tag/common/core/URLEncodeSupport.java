@@ -78,6 +78,7 @@ public abstract class URLEncodeSupport extends BodyTagSupport {
     // Private state
 
     private String var;                          // 'var' attribute
+    private int scope;				 // processed 'scope' attr
 
     //*********************************************************************
     // Constructor and initialization
@@ -89,6 +90,7 @@ public abstract class URLEncodeSupport extends BodyTagSupport {
 
     private void init() {
 	value = var = null;
+	scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -99,6 +101,9 @@ public abstract class URLEncodeSupport extends BodyTagSupport {
         this.var = var;
     }
 
+    public void setScope(String scope) {
+	this.scope = Util.getScope(scope);
+    }
 
     //*********************************************************************
     // Tag logic
@@ -121,7 +126,7 @@ public abstract class URLEncodeSupport extends BodyTagSupport {
 
 	// store or print the output
 	if (var != null)
-	    pageContext.setAttribute(var, result);
+	    pageContext.setAttribute(var, result, scope);
 	else {
 	    try {
 	        pageContext.getOut().print(result);

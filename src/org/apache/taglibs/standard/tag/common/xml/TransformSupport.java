@@ -63,6 +63,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import org.w3c.dom.*;
+import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
@@ -85,6 +86,7 @@ public abstract class TransformSupport extends BodyTagSupport {
     // Private state
 
     private String var;                            // 'var' attribute
+    private int scope;				   // processed 'scope' attr
     private Transformer t;			   // actual Transformer
     private TransformerFactory tf;		   // reusable factory
     private DocumentBuilder db;			   // reusable factory
@@ -105,6 +107,7 @@ public abstract class TransformSupport extends BodyTagSupport {
 	var = null;
 	result = null;
 	tf = null;
+        scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -164,7 +167,7 @@ public abstract class TransformSupport extends BodyTagSupport {
 	    Document d = db.newDocument();
 	    Result doc = new DOMResult(d);
 	    t.transform(xml, doc);
-	    pageContext.setAttribute(var, d);
+	    pageContext.setAttribute(var, d, scope);
 	} else {
 	    /*
 	     * We're going to output the text directly.  I'd love to
@@ -226,6 +229,10 @@ public abstract class TransformSupport extends BodyTagSupport {
 
     public void setVar(String var) {
 	this.var = var;
+    }
+
+    public void setScope(String scope) {
+        this.scope = Util.getScope(scope);
     }
 
 }
