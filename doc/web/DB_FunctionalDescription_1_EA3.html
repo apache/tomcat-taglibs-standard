@@ -1,0 +1,645 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>Database Tags -- Functional Description</title>
+<style media="screen" type="text/css"><!--
+.fixme { color: red }
+--></style>
+</head>
+<body bgcolor="#FFFFFF">
+<h3> 
+  <hr width="100%" noshade>
+</h3>
+<h2> SQL Actions &#151; Functional Description <br>
+</h2>
+<h2><tt>&lt;sql:query&gt;<br>
+  &lt;sql:update&gt;<br>
+  &lt;sql:transaction&gt;<br>
+  &lt;sql:param&gt;<br>
+  &lt;sql:driver&gt;<br>
+  </tt></h2>
+<h2><tt>interface SQLExecutionTag<br>
+  interface Result<br>
+  interface Row<br>
+  interface ResultMetaData<br>
+  interface ColumnMetaData<br>
+  interface Column</tt></h2>
+<hr width="100%" noshade>
+<h3>1. Introduction</h3>
+<p>Many dynamic web applications need to access relational databases for the dynamic 
+  aspects of their presentation layer. While it can be argued that database operations 
+  should be handled in the business logic of a web application designed with an 
+  MVC architecture, the fact of the matter is that real world applications will 
+  sometimes require this capability within the JSP pages for various reasons (e.g. 
+  prototyping/testing, small scale/simple applications, lack of developer resources, 
+  etc).</p>
+<p>With JSTL, we do not want to force a unique way to design web applications. 
+  Our goal is to provide the right set of common tools needed by page authors 
+  to be successful in their projects. A set of database tags has been clearly 
+  identified as one of these required common tools</p>
+<hr width="100%" noshade>
+<h3>2. Overview<br>
+</h3>
+<p>The JSTL database actions allow a page author to </p>
+<ul>
+  <li>perform database queries (select)</li>
+  <li>easily access query results</li>
+  <li>perform database updates (insert, update, delete)</li>
+  <li>group database operations within transactions</li>
+</ul>
+<p><b>DataSource</b></p>
+<p>Database actions operate on a DataSource. A DataSource is an object associated 
+  with the database to be accessed. It provides a factory for Connection objects. 
+  With the JSTL database tagset, a DataSource can be specified either as a javax.sql.DataSource 
+  object, or as a path to a JNDI resource (in containers that support it; i.e. 
+  J2EE containers, or others that support this specific mechanism for referencing 
+  resources.)</p>
+<p>There are many ways by which a page author can get access to a DataSource, 
+  namely: </p>
+<blockquote> 
+  <p>1. Transparent collaboration (implicit scoped attribute)</p>
+  <p>Initialization code in the application logic (e.g. application event listener, 
+    initialization servlet) can be used to set the default DataSource associated 
+    with a web application via the scoped attribute &quot;javax.servlet.jsp.jstl.DataSource&quot;. 
+    With this approach, an application with a single database makes the DataSource 
+    that is being used by the database actions totally transparent to the page 
+    author</p>
+  <p>2. Explicit collaboration via application logic</p>
+  <p>The controller code in an MVC-based application sets a JSP scoped attribute 
+    representing the DataSource. The attribute's name and scope are communicated 
+    to the page author who uses that information in the &quot;dataSource&quot; 
+    attribute of the database actions. For example:</p>
+  <blockquote> 
+    <p><code>&lt;sql:query dataSource=&quot;$dataSource&quot; ...&gt;</code></p>
+  </blockquote>
+  <p>3. Explicit collaboration via &lt;sql:driver&gt; action</p>
+  <p>If a DataSource cannot be set within the application logic (prototype/simple 
+    project with no developer at hand), the &lt;sql:driver&gt; action can be used 
+    as a simplified alternative for the creation of a DataSource object wrapped 
+    around a JDBC driver. For example:</p>
+  <blockquote> 
+    <p><code>&lt;sql:driver var=&quot;dataSource&quot; <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      driver=&quot;org.gjt.mm.mysql.Driver&quot; <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;url=&quot;//localHost/myDB&quot;&gt;</code><br>
+      <code>&lt;sql:query dataSource=&quot;$dataSource&quot; .../&gt;</code> 
+    </p>
+  </blockquote>
+</blockquote>
+<p><b>Querying a database</b></p>
+<p>The most common usage of the database actions is to query a database and display 
+  the results. In the example below, customers from China are selected from the 
+  &quot;customers&quot; table of the database, they are ordered by last name, 
+  and finally displayed in an HTML table.</p>
+<blockquote> 
+  <p><code>&lt;sql:query var=&quot;customers&quot; dataSource=&quot;$dataSource&quot;<i>&gt;<br>
+    </i>&nbsp;&nbsp; SELECT * FROM customers<br>
+    &nbsp; &nbsp;WHERE country = 'China'<br>
+    &nbsp;&nbsp;&nbsp;ORDER BY lastname<br>
+    &lt;/sql:query&gt;<i> </i></code></p>
+</blockquote>
+<blockquote> 
+  <p><code><font color="#666666">&lt;table&gt;</font><i><br>
+    </i>&lt;jc:forEach var=&quot;row&quot; items=&quot;$customers.rows&quot;&gt;<br>
+    &nbsp;&nbsp;<font color="#666666">&lt;tr&gt; </font><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<font color="#666666">&lt;td&gt;</font>&lt;jc:expr 
+    value=&quot;$row.lastName&quot;/&gt;<font color="#666666">&lt;/td&gt;</font><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<font color="#666666">&lt;td&gt;</font>&lt;jc:expr 
+    value=&quot;$row.firstName&quot;/&gt;<font color="#666666">&lt;/td&gt;</font><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<font color="#666666">&lt;td&gt;</font>&lt;jc:expr 
+    value=&quot;$row.address&quot;/&gt;<font color="#666666">&lt;/td&gt;</font> 
+    <br>
+    &nbsp;&nbsp;<font color="#666666">&lt;/tr&gt; </font><br>
+    &lt;/jc:forEach&gt;<br>
+    <font color="#666666">&lt;/table&gt;</font> </code></p>
+</blockquote>
+<p><b>Updating a database</b></p>
+<p>It is possible to update a database via the &lt;sql:update&gt; action. Updates 
+  to the database can be grouped within a &lt;sql:transaction&gt; action to ensure 
+  database integrity. For example, the following code transfers money between 
+  two accounts.</p>
+<blockquote> 
+  <p><code>&lt;sql:transaction dataSource=&quot;$dataSource&quot;&gt;<br>
+    &nbsp;&nbsp;&lt;sql:update&gt; <br>
+    &nbsp;&nbsp;&nbsp; UPDATE account <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;SET Balance = Balance - ?<br>
+    &nbsp; &nbsp;&nbsp;WHERE accountNo = ?<br>
+    </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:param value=&quot;$transferAmount&quot;&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:param value=&quot;$accountFrom&quot;&gt;<br>
+    &nbsp;&nbsp;&lt;/sql:update&gt;<br>
+    &nbsp;&nbsp;&lt;sql:update&gt; <br>
+    &nbsp;&nbsp;&nbsp; UPDATE account <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;SET Balance = Balance + ?<br>
+    &nbsp; &nbsp;&nbsp;WHERE accountNo = ?<br>
+    </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:param value=&quot;$transferAmount&quot;&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;sql:param value=&quot;$accountTo&quot;&gt;<br>
+    &nbsp;&nbsp;&lt;/sql:update&gt;<br>
+    &lt;/sql:transaction&gt; </code></p>
+</blockquote>
+<p><b>SQL Statement Parameters</b></p>
+<p>The JSTL database tagset also supports SQL statements that take parameters 
+  to supply values to be used in place of question mark placeholders (as seen 
+  in example above). This support is extensible via interface SQLExecutionTag 
+  so that custom &quot;parameter&quot; tags can be developed to easily set the 
+  value of statement parameters from any kind of input data.</p>
+<hr width="100%" noshade>
+<h3>3. Actions</h3>
+<h3>3.1 &lt;sql:query&gt;</h3>
+<h4>Synopsis</h4>
+<p>&lt;sql:query&gt; is the general purpose action for performing SQL queries 
+  on a database and gettting back a single result set containing rows of data.</p>
+<p>This action may or not have a body. If the action has no body, it is of the 
+  form:</p>
+<blockquote> 
+  <p><code>&lt;sql:query var=<i>&quot;varName&quot;</i> sql=&quot;<i>sqlQuery</i>&quot; 
+    [dataSource=<i>dataSourceSpec</i>]<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[maxRows=&quot;<i>maxRows</i>&quot;] 
+    [startRow=&quot;<i>startRow</i>&quot;] </code><code>/&gt;</code></p>
+  </blockquote>
+<p>If the action has a body, it is of the form:</p>
+<blockquote> 
+  <p><code>&lt;sql:query var=<i>&quot;varName&quot;</i> [sql=&quot;<i>sqlQuery</i>&quot;] 
+    [dataSource=<i>dataSourceSpec</i>]&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[maxRows=&quot;<i>maxRows</i>&quot;] 
+    [startRow=&quot;<i>startRow</i>&quot;</code><code>]&gt;<br>
+    </code><code>&nbsp;&nbsp;... optional query statement ...<br>
+    </code><code>&nbsp;&nbsp;... optional &lt;sql:param&gt; actions ...<br>
+    &lt;/sql:query&gt;</code></p>
+  <p>In the &quot;body&quot; form, the SQL query statement can be specified either 
+    via attribute &quot;sql&quot; or within the tag's body.</p>
+  </blockquote>
+<p><code>dataSourceSpec ::= javax.sql.DataSource object | &quot;jndiPathToDataSource&quot;</code><br>
+</p>
+<h4>Details</h4>
+<p>The results of the query are exposed via an object that implements the Result 
+  interface (see section 4.1) in the attribute named by &quot;var&quot;.</p>
+<p>For example:</p>
+<blockquote>
+  <p><code>&lt;sql:query var=&quot;customers&quot; dataSource=&quot;$dataSource&quot;<i>&gt;<br>
+    </i>&nbsp;&nbsp; SELECT * FROM employees<br>
+    &nbsp; &nbsp;WHERE country = 'China'<br>
+    &nbsp;&nbsp;&nbsp;ORDER BY lastname<br>
+    &lt;/sql:query&gt;<i> </i></code></p>
+</blockquote>
+<p>If the query produces no results, then an <i>empty</i> (i.e. size is 0) Result 
+  object is returned.</p>
+<p>The SQL query statement can be specified either via attribute &quot;sql&quot; 
+  or within the tag's body (mutually exclusive). Optional parameter markers (?) 
+  can be specified in the query statement as supported by JDBC. The values of 
+  these parameters are set via subtag &lt;sql:param&gt;. &lt;sql:query&gt; implements 
+  interface SQLExecutionTag (see section 4.2) to make this extensible to custom 
+  tags. </p>
+<p>The set of rows stored within the Result data structure can be limited by attribute 
+  &quot;maxRows&quot;. If unspecified, all rows resulting from the query are stored. 
+  Attribute &quot;startRow&quot; can be used to specify the starting row for the 
+  results. For example, if set at 10, this means that the first 9 rows will be 
+  skipped before the rows returned by the query are stored in the Result data 
+  structure (up to maxRows if applicable).</p>
+<p>These two attributes protect against &quot;runaway queries&quot;, allow efficient 
+  access to the top rows of large result sets, and also provide a poor-man's way 
+  of paging through a large set of results by bumping the startRow up by maxRows 
+  on each page.<br>
+  <br>
+  It is also possible to configure a default &quot;maxRows&quot; value that applies 
+  by default to all &lt;sql:query&gt; actions. This is done via context parameter 
+  &quot;javax.servlet.jsp.jstl.sql.maxRows&quot;. This global value for maxRows 
+  can be turned off by giving the maxRows attribute of an &lt;sql:query&gt; action 
+  the value -1.</p>
+<p>The tag retrieves and releases a Connection using the following algorithm: 
+</p>
+<ol>
+  <li>If the optional &quot;dataSource&quot; attribute is provided, then a connection 
+    is retrieved through getConnection() against this DataSource, and released 
+    by the tag handler before the tag completes its processing (result set is 
+    cached in the Result object). If the 'dataSource' attribute's value resolves 
+    to a String, after rtexpr/EL evaluation, this String is used as a JNDI path 
+    to a DataSource in containers that support it (i.e., J2EE containers, or others 
+    that support this specific mechanism for referencing resources.)</li>
+  <li>If &quot;dataSource&quot; is not present, but we are the child tag of a 
+    &lt;sql:transaction&gt; tag, retrieve a Connection from our parent and do 
+    nothing to release it. The connection is managed by the parent.</li>
+  <li>If neither (1) nor (2), then look for a DataSource named by scoped attribute 
+    &quot;javax.servlet.jsp.jstl.DataSource&quot;. Handling of the connection 
+    is then as described in 1.</li>
+</ol>
+<p>It is illegal for &lt;sql:query&gt; to specify a DataSource when nested within 
+  &lt;sql:transaction&gt; (throws JspTagException).</p>
+<h3>3.2 &lt;sql:update&gt;</h3>
+<h4>Synopsis</h4>
+<p>&lt;sql:update&gt; executes an SQL INSERT, UPDATE or DELETE statement. In addition, 
+  SQL statements that return nothing, such as SQL DDL statements, can be executed.</p>
+<p>This action may or not have a body. If the action has no body, it is of the 
+  form:</p>
+<blockquote> 
+  <p><code>&lt;sql:update sql=&quot;<i>sqlUpdate</i>&quot; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [var=<i>&quot;varName&quot;</i>] 
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]/&gt;</code></p>
+</blockquote>
+<p>If the action has a body, it is of the form:</p>
+<blockquote> 
+  <p><code>&lt;sql:update var=<i>&quot;varName&quot;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </i></code><code>[sql=&quot;<i>sqlUpdate</i>&quot;] 
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[dataSource=<i>dataSourceSpec</i>]&gt;<br>
+    &nbsp;&nbsp;... optional update statement ...<br>
+    &nbsp;&nbsp;... optional &lt;sql:param&gt; actions ...<br>
+    &lt;/sql:query&gt;</code></p>
+  <p>The SQL update statement can be specified either via attribute &quot;sql&quot; 
+    or within the tag's body.</p>
+</blockquote>
+<p><code>dataSourceSpec ::= javax.sql.DataSource object | <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  &quot;<i>jndiPathToDataSource</i>&quot;</code><br>
+</p>
+<h4>Details</h4>
+<p>The result of the database update is optionally exposed in the attribute named 
+  by &quot;var&quot;. This result is a java.lang.Integer object that tells how 
+  many rows were affected by the statement. The value 0 is returned if no rows 
+  were affected by INSERT, DELETE, or UPDATE, as well as for DDL statements that 
+  return nothing (e.g. CREATE TABLE). This is the same behavior as Statement.executeUpdate() 
+  in JDBC.</p>
+<p>For example:
+<blockquote>
+  <p><code>&lt;sql:update&gt;<br>
+    &nbsp;&nbsp; UPDATE account <br>
+    &nbsp;&nbsp;&nbsp;SET BALANCE = ?<br>
+    &nbsp; &nbsp;WHERE accountNo = ?<br>
+    </code><code>&nbsp;&nbsp;&lt;sql:param value=&quot;$balance&quot;&gt;<br>
+    &nbsp;&nbsp;&lt;sql:param value=&quot;$accountNo&quot;&gt;<br>
+    &lt;/sql:update&gt;</code></p>
+  </blockquote>
+<p>The tag acts identically to &lt;sql:query&gt; with respect to connection management, 
+  the &quot;sql&quot; and &quot;dataSource&quot; attributes, PreparedStatement 
+  lifecycle, etc.</p>
+<h3>3.3 &lt;sql:transaction&gt;</h3>
+<h4>Synopsis</h4>
+<p>&lt;sql:transaction&gt; serves to establish a transaction context for its &lt;sql:query&gt; 
+  and &lt;sql:update&gt; subtags. </p>
+<p><code>&lt;sql:transaction [dataSource=<i>dataSourceSpec</i>] <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  [transactionIsolation=<i>&quot;transactionIsolationLevel&quot;</i>]&gt;<br>
+  &nbsp;&nbsp;&nbsp;... &lt;sql:query&gt; and &lt;sql:update&gt; statements ...<br>
+  &lt;/sql:transaction&gt; </code></p>
+<p><code>dataSourceSpec ::= javax.sql.DataSource object | &quot;jndiPathToDataSource&quot;<br>
+  transactionIsolationLevel ::= &quot;none&quot; | &quot;read_committed&quot; 
+  | &quot;read_uncommitted&quot; | <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;repeatable_read&quot; 
+  | &quot;serializable&quot;</code><br>
+</p>
+<p>The transaction isolation levels are the same as the ones supported in JDBC 
+  by java.sql.Connection.<br>
+</p>
+<h4>Details</h4>
+Behavior is defined as follows: 
+<ul>
+  <li>in doStartTag(), call Connection.getTransactionIsolation(). 
+    <ul>
+      <li>If this equals TRANSACTION_NONE 
+        <ul>
+          <li>fail by throwing an exception.</li>
+        </ul>
+      </li>
+      <li>If this does not equal TRANSACTION_NONE 
+        <ul>
+          <li>call Connection.setAutoCommit(false).</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>If the &quot;transactionIsolation&quot; attribute is specified 
+    <ul>
+      <li>save current transaction isolation level and set the specified one for 
+        the connection.</li>
+    </ul>
+  </li>
+  <li>in doEndTag(), call Connection.commit()</li>
+  <li>in doCatch(), call Connection.rollback()</li>
+  <li>in doFinally() 
+    <ul>
+      <li>restore the transaction isolation level via Connection.setTransactionIsolation(), 
+        if one was saved </li>
+      <li>reset auto commit: Connection.setAutoCommit(true)</li>
+      <li>close the connection</li>
+    </ul>
+  </li>
+</ul>
+<p>Throughout the transaction, any SQLException that occurs is simply propagated.</p>
+<p>The same connection-management scheme as &lt;sql:query&gt; is used to acquire 
+  a Connection, except that the parent isn't checked for DataSource (&lt;sql:transaction&gt; 
+  tags cannot be nested as a means of propagating a Connection). It is iIllegal 
+  for nested &lt;sql:query&gt; and &lt;sql:update&gt; subtags to specify a DataSource.</p>
+<p>The behavior of the &lt;sql:transaction&gt; action is undefined if it executes 
+  in the context of a larger JTA user transaction.</p>
+<h3>3.4 &lt;sql:driver&gt;</h3>
+<h4>Synopsis</h4>
+<p>&lt;sql:driver&gt; facilitates the wrapping of a DataSource object around a 
+  JDBC driver for prototype/simple applications.</p>
+<p><code>&lt;sql:driver var=<i>&quot;varName&quot;</i><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[driver=&quot;<i>driverClassName</i>&quot;] 
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[url=&quot;<i>jdbcUrl</i>&quot;]<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[user=&quot;<i>userName</i>&quot;] 
+  /&gt;</code></p>
+<h4>Details<br>
+</h4>
+<p>The &lt;sql:driver&gt; action is <b> only intended for prototyping and simple 
+  applications</b>. An application's business logic (e.g. via a life cycle event 
+  listener or controller servlet) should normally be used to create a DataSource 
+  and make it available to the rest of the application.</p>
+<p>Four configuration parameters can be specified to create a DataSource object 
+  wrapped around a JDBC driver manager:</p>
+<ol>
+  <li>JDBC driver class name -- used to access a database of a specific type</li>
+  <li> JDBC URL to the database -- used to locate a specific database</li>
+  <li> user name -- identifies the user accessing the database</li>
+  <li> password -- the user's password</li>
+</ol>
+<p>All parameters, except for &quot;password&quot;, can be specified via an action 
+  attribute or a context init parameter (see below). Action attributes take precedence 
+  over context init parameters. The password configuration parameter can only 
+  be specified via a context init parameter to prevent situations where sensitive 
+  information would be hard coded in a JSP page.</p>
+<p>The context init parameters are:</p>
+<ul>
+  <li>javax.servlet.jsp.jstl.sql.driver</li>
+  <li> javax.servlet.jsp.jstl.sql.url</li>
+  <li> javax.servlet.jsp.jstl.sql.user</li>
+  <li> javax.servlet.jsp.jstl.sql.password</li>
+</ul>
+<p>For example, assuming a prototype web application whose database is accessible 
+  by anyone without any password:</p>
+<blockquote> 
+  <p><code>&lt;sql:driver var=&quot;dataSource&quot; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; driver=&quot;org.gjt.mm.mysql.Driver&quot; 
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; url=&quot;//localhost/appDB&quot;/&gt;</code></p>
+</blockquote>
+<h3>3.5 &lt;sql:param&gt;</h3>
+<h4>Synopsis</h4>
+<p>&lt;sql:param&gt; is used as a subtag of SQLExecutionTag actions such as &lt;sql:query&gt; 
+  and &lt;sql:update&gt; to set the values of parameter markers ('?') specified 
+  in the SQL statement.</p>
+<p>This action may or not have a body. If the action has no body, it is of the 
+  form:</p>
+<blockquote> 
+  <p><code>&lt;sql:param value=<i>&quot;parameterValue&quot;</i>/&gt;</code></p>
+</blockquote>
+<p>If the action has a body, it is of the form:</p>
+<blockquote> 
+  <p><code>&lt;sql:param&gt;<br>
+    &nbsp;&nbsp;... parameter value ...<br>
+    &lt;/sql:param&gt;</code></p>
+</blockquote>
+<h4>Details<br>
+</h4>
+<p> If tag body is used, it is first run through String.trim().</p>
+<p>With the value specified, &lt;sql:param&gt; locates its nearest SQLExecutionTag 
+  ancestor and calls SQLExecutionTag.addSQLParameter(value). The mapping from 
+  Java object types to SQL types is handled according to the JDBC specification 
+  (see method java.sql.PreparedStatement.setObject()).</p>
+<hr width="100%" noshade>
+<h3>4. Interfaces</h3>
+<h3>4.1 &lt;sql:query&gt; result related interfaces</h3>
+<blockquote> 
+  <p><code>public interface Result { <br>
+    &nbsp;&nbsp;public Row[] getRows(); &nbsp;</code><code><br>
+    </code><code>&nbsp;&nbsp;public ResultMetaData getmetaData(); </code><code><br>
+    &nbsp;&nbsp;public int getSize(); &nbsp;// number of rows in the Result<br>
+    &nbsp;&nbsp;public boolean isLimitedByMaxRows();</code><code><br>
+    }</code><code> </code><code> </code></p>
+  <p> <code>public interface ResultMetaData {<br>
+    &nbsp;&nbsp;public ColumnMetaData get(String name);<br>
+    &nbsp;&nbsp;public ColumnMetaData get(int index);<br>
+    &nbsp;&nbsp;public ColumnMetaData[] getColumns();<br>
+    &nbsp;&nbsp;// @@@ non-column meta data here as well<br>
+    }</code></p>
+  <p><code> public interface Row {<br>
+    &nbsp;&nbsp;public Column get(String name);<br>
+    &nbsp;&nbsp;public Column get(int index); <br>
+    &nbsp;&nbsp;public Column[] getColumns();<br>
+    }</code></p>
+  <p><code> public interface ColumnMetaData {<br>
+    &nbsp;&nbsp;public String getName();<br>
+    &nbsp;&nbsp;public int getType();<br>
+    &nbsp;&nbsp;public String getTypeName();<br>
+    &nbsp;&nbsp;... all other relevant <br>
+    &nbsp;&nbsp;... java.sql.ResultSetMetaData information<br>
+    } </code></p>
+  <p><code> public interface Column extends ColumnMetaData {<br>
+    &nbsp;&nbsp;public Object getValue();<br>
+    &nbsp;&nbsp;public String toString();</code><br>
+    } </p>
+  
+</blockquote>
+<p>One key incentive for defining new interfaces representing the result of a 
+  query is to allow simpler access to result data via the Expression Language. 
+  Here are some sample use cases:</p>
+<p>Use case 1: iteration (probably most common use case)</p>
+<blockquote> 
+  <p><code>&lt;c:forEach var=&quot;row&quot; items=&quot;$result.rows&quot;&gt;<br>
+    &nbsp;&nbsp;Price is: &lt;c:expr value=&quot;$row.get('price')&quot;/&gt;</code><code><br>
+    &nbsp;&nbsp;Quantity is: &lt;c:expr value=&quot;$row.columns[3]&quot;/&gt;<br>
+    &lt;/c:forEach&gt;</code></p>
+  </blockquote>
+<p>[Note: <code>$row.get('price')</code> could be replaced by <code>$row.price</code> 
+  if EL supports the mapping <code>$a.prop -&gt; a.get(&quot;prop&quot;)</code>]<br>
+  <br>
+  Use case 2: direct access from $result </p>
+<blockquote>
+  <p><code>Price is: $result.rows[24].price<br>
+    Price is: $result.rows[24].columns[3] </code></p>
+</blockquote>
+<p><br>
+  Use case 3: Putting it all together:</p>
+<blockquote> 
+  <p><code>&lt;table&gt;<br>
+    &nbsp;&nbsp;&lt;!-- header --&gt;<br>
+    &nbsp;&nbsp;&lt;tr&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- for each column in the result --&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;c:forEach var=&quot;metaData&quot; items=&quot;$result.metaData.columns&quot;&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- Column Name --&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;th&gt;$metaData.name&lt;/th&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:forEach&gt;<br>
+    &nbsp;&nbsp;&lt;/tr&gt;<br>
+    &nbsp;&nbsp;&lt;!-- for each row in the result --&gt;<br>
+    &nbsp;&nbsp;&lt;c:forEach var=&quot;row&quot; items=&quot;$result.rows&quot;&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- for each column in the row --&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;c:forEach var=&quot;column&quot; items=&quot;$row.columns&quot;&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;&lt;c:expr value=&quot;$column&quot;/&gt;&lt;/td&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/c:forEach&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;<br>
+    &nbsp;&nbsp;&lt;/c:forEach&gt;<br>
+    &lt;/table&gt;</code></p>
+</blockquote>
+<p>
+<h3>4.2 Interface SQLExecutionTag</h3>
+<p>The SQLExecutionTag interface identifies a tag handler that can accept parameter 
+  values from nested tag handlers.</p>
+<blockquote> 
+  <p><code>public interface SQLExecutionTag {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;public void addSQLParameter(Object value) throws SQLException;<br>
+    }</code></p>
+</blockquote>
+<p>This interface is implemented by both &lt;sql:query&gt; and &lt;sql:update&gt;. 
+  Action &lt;sql:param&gt; invokes method addSQLParameter() of the SQLExecutionTag 
+  interface to set parameter values. </p>
+<p>The parameter's index and semantic interpretation are both the responsibility 
+  of the tag handler; a typical implementation will keep an internal index and 
+  increment it once for each call. </p>
+<p>This interface is public to allow for custom actions that can facilitate the 
+  setting of statement parameters. For example, let's assume an end-user enters 
+  a date in three separate fields: year, month, and day. If the database table 
+  has a single column for the complete date, one could develop a &lt;foo:dateParam&gt; 
+  action to set the corresponding parameter as follows:</p>
+<blockquote>
+  <p> <code>&lt;foo:dateParam year=&quot;$year&quot; month=&quot;$month&quot; 
+    day=&quot;$day&quot; /&gt;</code></p>
+</blockquote>
+<p>Please note that the JSTL internationalization tags support the parsing of 
+  string representations of dates and numbers into their associated data type 
+  (java.util.Date and java.lang.Number respectively). For example:</p>
+<blockquote>
+  <p> <code>&lt;fmt:parseDate var=&quot;myDate&quot; value=&quot;$param:someDate 
+    /&gt;<br>
+    &lt;sql:param value=&quot;$myDate&quot; /&gt;</code></p>
+</blockquote>
+<p></p>
+<hr width="100%" noshade>
+<p></p>
+<h3>5. Summary</h3>
+<table border="1" cellpadding="5">
+  <tr> 
+    <td colspan="2" bgcolor="#000099"><b><font color="#FFFFFF" size="+1">SQL Actions</font></b></td>
+  </tr>
+  <tr bgcolor="#FFFF66"> 
+    <td><b>Action</b></td>
+    <td><b>Sample usage</b></td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:query&gt;</b></code></p>
+      <p><code>&lt;sql:query var=<i>&quot;varName&quot;</i> <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sql=&quot;<i>sqlQuery</i>&quot;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[maxRows=&quot;<i>maxRows</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[startRow=&quot;<i>startRow</i>&quot;]/&gt;</code></p>
+      <p><code>&lt;sql:query var=<i>&quot;varName&quot;<br>
+        &nbsp;&nbsp;&nbsp; </i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[sql=&quot;<i>sqlQuery</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[maxRows=&quot;<i>maxRows</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[startRow=&quot;<i>startRow</i>&quot;]/&gt; 
+        </code><code><br>
+        &nbsp;&nbsp;... optional query statement ...<br>
+        &nbsp;&nbsp;... optional &lt;sql:param&gt; actions ...<br>
+        &lt;/sql:query&gt;</code></p>
+      <p>General purpose action for performing SQL queries on a database and gettting 
+        back a single result set containing rows of data.</p>
+    </td>
+    <td> 
+      <p><code>&lt;sql:query var=&quot;customers&quot;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+        dataSource=&quot;$dataSource&quot;<i>&gt;<br>
+        </i>&nbsp;&nbsp; SELECT * FROM employees<br>
+        &nbsp; &nbsp;WHERE country = 'China'<br>
+        &nbsp;&nbsp;&nbsp;ORDER BY lastname<br>
+        &lt;/sql:query&gt;<i> </i></code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:update&gt;</b></code></p>
+      <p><code>&lt;sql:update var=<i>&quot;varName&quot;</i> <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sql=&quot;<i>sqlUpdate</i>&quot;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]/&gt;</code></p>
+      <p><code>&lt;sql:update var=<i>&quot;varName&quot;<br>
+        &nbsp;&nbsp;&nbsp; </i></code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[sql=&quot;<i>sqlUpdate</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]&gt;<br>
+        &nbsp;&nbsp;... optional query statement ...<br>
+        &nbsp;&nbsp;... optional &lt;sql:param&gt; actions ...<br>
+        &lt;/sql:update&gt;</code></p>
+      <p>General purpose action for &quot;updates&quot;; i.e. statements that 
+        update the database (insert, update, delete) and return nothing or a single 
+        integer. </p>
+    </td>
+    <td> 
+      <p><code>&lt;sql:update&gt;<br>
+        &nbsp;&nbsp;UPDATE account <br>
+        &nbsp;&nbsp;SET BALANCE = ?<br>
+        &nbsp; WHERE accountNo = ?<br>
+        </code><code>&nbsp;&nbsp;&lt;sql:param<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; value=&quot;$balance&quot;&gt;<br>
+        &nbsp;&nbsp;&lt;sql:param<br>
+        &nbsp;&nbsp;&nbsp; &nbsp;value=&quot;$accountNo&quot;&gt;<br>
+        &lt;/sql:update&gt;</code></p>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:transaction&gt;<br>
+        </b></code><br>
+        <code>&lt;sql:transaction <br>
+        &nbsp;&nbsp; &nbsp;[dataSource=<i>dataSourceSpec</i>] <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;[transactionIsolation=<i>&quot;transactionIsolationLevel&quot;</i>]&gt;<br>
+        &nbsp;&nbsp;... &lt;sql:query&gt; and &lt;sql:update&gt; statements ...<br>
+        &lt;/sql:transaction&gt; </code></p>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:driver&gt;<br>
+        </b></code><br>
+        <code>&lt;sql:driver var=<i>&quot;varName&quot;</i><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[driver=&quot;<i>driverClassName</i>&quot;] 
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[jdbcUrl=&quot;<i>jdbcUrl</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[userName=&quot;<i>userName</i>&quot;] 
+        /&gt;</code><br>
+      </p>
+      <p>Facilitates the setup of a DataSource object around a JDBC driver for 
+        prototype/simple applications. </p>
+    </td>
+    <td>&nbsp; </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:param&gt;<br>
+        </b></code> </p>
+      <p><code>&lt;sql:param value=<i>&quot;parameterValue&quot;</i>/&gt;</code></p>
+      <p><code>&lt;sql:param&gt;<br>
+        &nbsp;&nbsp;... parameter value ...<br>
+        &lt;/sql:param&gt;</code><br>
+      </p>
+      <p>Subtag of SQLExecutionTag actions such as &lt;sql:query&gt; and &lt;sql:update&gt; 
+        to set the values of parameter markers ('?') specified in the SQL statement.</p>
+    </td>
+    <td>&nbsp; </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>&lt;sql:query&gt; result related interfaces<br>
+        </b></code> </p>
+      <p><code>public interface Result<br>
+        </code><code> </code><code>public interface ResultMetaData<br>
+        </code><code>public interface Row</code><code><br>
+        public interface ColumnMetaData</code><code><br>
+        public </code><code>interface Column</code></p>
+      </td>
+    <td>&nbsp; </td>
+  </tr>
+  <tr> 
+    <td> 
+      <p><code><b>interface SQLExecutionTag</b></code> </p>
+      <p>Identifies a tag handler that can accept parameter values from nested 
+        tag handlers.</p>
+    </td>
+    <td>&nbsp; </td>
+  </tr>
+</table>
+</body>
+</html>

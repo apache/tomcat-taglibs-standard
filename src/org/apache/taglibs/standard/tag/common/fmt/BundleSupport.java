@@ -55,6 +55,7 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
+import java.io.IOException;
 import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.*;
@@ -75,21 +76,21 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Public constants
 
     public static final String DEFAULT_BASENAME =
-	"javax.servlet.jsp.jsptl.i18n.basename";
+	"javax.servlet.jsp.jstl.i18n.basename";
 
 
     //*********************************************************************
     // Package-scoped constants
 
     static final String DEFAULT_EXCEPTION_BASENAME =
-	"javax.servlet.jsp.jsptl.i18n.exception.basename";
+	"javax.servlet.jsp.jstl.i18n.exception.basename";
 
 
     //*********************************************************************
     // Private constants
 
     private static final String FALLBACK_LOCALE =
-	"javax.servlet.jsp.jsptl.i18n.fallbackLocale";
+	"javax.servlet.jsp.jstl.i18n.fallbackLocale";
 
 
     //*********************************************************************
@@ -161,7 +162,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     public int doStartTag() throws JspException {
 	bundle = getBundle(pageContext, basename);
-	return EVAL_BODY_INCLUDE;
+	return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
@@ -172,10 +173,16 @@ public abstract class BundleSupport extends BodyTagSupport {
 		pageContext.setAttribute(var, emptyResourceBundle, scope);
 	} else if (getBodyContent() == null) {
 	    /*
-	     * If no 'var' attribute and no body, we store our base name
-	     * in the javax.servlet.jsp.jsptl.i18n.basename scoped attribute
+	     * If no 'var' attribute and empty body, we store our base name
+	     * in the javax.servlet.jsp.jstl.i18n.basename scoped attribute
 	     */
 	    pageContext.setAttribute(DEFAULT_BASENAME, basename, scope);
+	} else {
+	    try {
+		pageContext.getOut().print(getBodyContent().getString());
+	    } catch (IOException ioe) {
+		throw new JspTagException(ioe.getMessage());
+	    }
 	}
 
 	return EVAL_PAGE;
@@ -196,7 +203,7 @@ public abstract class BundleSupport extends BodyTagSupport {
      * <p> The resource bundle's locale is determined as follows:
      *
      * <ul>
-     * <li> If the <tt>javax.servlet.jsp.jsptl.i18n.locale</tt> scoped 
+     * <li> If the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> scoped 
      * attribute exists, use the locale stored as its value.
      *
      * <li> Otherwise, compare the client's preferred locales (in order of
@@ -204,7 +211,7 @@ public abstract class BundleSupport extends BodyTagSupport {
      * use the best matching locale.
      *
      * <li> If no match is found, use the fallback locale given by the
-     * <tt>javax.servlet.jsp.jsptl.i18n.fallbackLocale</tt> scoped attribute,
+     * <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt> scoped attribute,
      * if it exists.
      *
      * <li> Otherwise, use the runtime's default locale.
@@ -222,31 +229,36 @@ public abstract class BundleSupport extends BodyTagSupport {
 	Locale loc = null;
 	ResourceBundle ret = null;
 	    
-	try {
-	    loc = (Locale)
-		pageContext.findAttribute(LocaleSupport.LOCALE_ATTRIBUTE);
-	    if (loc != null) {
-		ret = ResourceBundle.getBundle(basename, loc);
-	    } else {
-		// use best matching client locale
-		ret = getBestMatch(pageContext, basename);
-		if (ret == null) {
-		    // use fallback locale
-		    String fallback = (String)
-			pageContext.findAttribute(FALLBACK_LOCALE);
-		    if (fallback == null)
-			fallback = pageContext.getServletContext().
-			    getInitParameter(FALLBACK_LOCALE);
-		    if (fallback != null) {
-			loc = LocaleSupport.parseLocale(fallback, null);
-			ret = ResourceBundle.getBundle(basename, loc);
-		    } else {
-			// use runtime's default locale
-			ret = ResourceBundle.getBundle(basename);
-		    }
+	loc = (Locale)
+	    pageContext.findAttribute(LocaleSupport.LOCALE_ATTRIBUTE);
+	if (loc != null) {
+	    // use resource bundle with specified locale
+	    ret = getBundle(basename, loc);
+	} else {
+	    // use resource bundle with best matching locale
+	    ret = getBestMatch(pageContext, basename);
+	    if (ret == null) {
+		// no match available, check if fallback locale exists
+		String fallback = (String)
+		    pageContext.findAttribute(FALLBACK_LOCALE);
+		if (fallback == null)
+		    fallback = pageContext.getServletContext().
+			getInitParameter(FALLBACK_LOCALE);
+		if (fallback != null) {
+		    // use resource bundle with fallback locale
+		    loc = LocaleSupport.parseLocale(fallback, null);
+		    ret = getBundle(basename, loc);
+		} else {
+		    // use resource bundle with runtime's default locale
+		    ret = getBundle(basename, Locale.getDefault());
 		}
 	    }
-	} catch (MissingResourceException mre) {
+	}
+
+	if (ret != null) {
+	    // set response locale
+	    LocaleSupport.setResponseLocale(pageContext, ret.getLocale());
+	} else {
 	    ServletContext sc = pageContext.getServletContext();
 	    sc.log(Resources.getMessage("MISSING_RESOURCE_BUNDLE", basename));
 	}
@@ -291,7 +303,8 @@ public abstract class BundleSupport extends BodyTagSupport {
      *
      * <p> The best matching locale is a client's preferred locale that matches
      * both the language and country components of an available locale for the
-     * given base name. This is considered an exact match.
+     * given base name. This is considered an exact match. An exact match may
+     * exist only if the client's preferred locale specifies a country.
      *
      * <p> If no exact match exists, the first client locale that matches 
      * (just) the language component of an available locale is used.
@@ -303,15 +316,10 @@ public abstract class BundleSupport extends BodyTagSupport {
      * @param basename the resource bundle's base name
      *
      * @return the resource bundle with the given base name and best matching
-     * (browser-based) locale, or <tt>null</tt> if no match was found
-     *
-     * @throws MissingResourceException if no resource bundle with the given
-     * base name exists
+     * locale, or <tt>null</tt> if no match was found
      */
     private static ResourceBundle getBestMatch(PageContext pageContext,
-					       String basename)
-	throws MissingResourceException {
-	
+					       String basename) {
 	ResourceBundle ret = null;
 	
 	// Determine locale from client's browser settings.
@@ -319,13 +327,17 @@ public abstract class BundleSupport extends BodyTagSupport {
 	     enum.hasMoreElements(); ) {
 	    /*
 	     * If client request doesn't provide an Accept-Language header,
-	     * the returned Enumeration contains the runtime's default locale.
+	     * the returned locale Enumeration contains the runtime's default
+	     * locale, so it always contains at least one element.
 	     */
 	    Locale pref = (Locale) enum.nextElement();
-	    ResourceBundle bundle = ResourceBundle.getBundle(basename, pref);
+	    ResourceBundle bundle = getBundle(basename, pref);
+	    if (bundle == null)
+		continue;
 	    Locale avail = bundle.getLocale();
-	    if (avail.getLanguage().equals(pref.getLanguage())) {
-		if (avail.getCountry().equals(pref.getCountry())) {
+	    if (pref.getLanguage().equals(avail.getLanguage())) {
+		if (pref.getCountry().length() > 0
+		    && pref.getCountry().equals(avail.getCountry())) {
 		    // exact match
 		    ret = bundle;
 		    break;
@@ -335,6 +347,28 @@ public abstract class BundleSupport extends BodyTagSupport {
 		    }
 		}
 	    }
+	}
+
+	return ret;
+    }
+
+    /*
+     * Gets the resource bundle with the given base name and locale.
+     * 
+     * <p> This method simply calls
+     * <tt>java.util.ResourceBundle.getBundle()</tt> and catches the
+     * potential <tt>java.util.MissingResourceException</tt>.
+     *
+     * @param basename the resource bundle base name
+     * @param loc the requested locale
+     *
+     * @return the requested resource bundle, or <tt>null</tt> if not found
+     */
+    private static ResourceBundle getBundle(String basename, Locale loc) {
+	ResourceBundle ret = null;
+	try {
+	    ret = ResourceBundle.getBundle(basename, loc);
+	} catch (MissingResourceException mre) {
 	}
 
 	return ret;

@@ -1,22 +1,35 @@
 <!--
   Displays the content of the file specified in request
   parameter "filename".
+  <%-- Warning!  Can be used to retrieve the source code for
+       any file in the 'standard-examples' application.
+       It is not advisable to insert any sensitive code
+       (even as an experiment) into this application --%>
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/ea/core" %>
-<%@ taglib prefix="ex" uri="/jsptl-examples-taglib" %>
+<%@ taglib prefix="ex" uri="/jstl-examples-taglib" %>
+
+<%-- 
+  Let's get back the URL as a String so we can use it to
+  demonstrate "c:import"
+--%>
+<% pageContext.setAttribute("filepath",
+     application.
+       getResource(request.getParameter("filename")).toExternalForm()); %>
+<% pageContext.setAttribute("filename", request.getParameter("filename")); %>
+
 <html>
 <head>
-  <title>JSTL: Source code for <c:expr value="$param:filename"/></title>
+  <title>JSTL: Source code for <c:expr value="$filename"/></title>
 </head>
 <body bgcolor="#FFFFFF">
-<h3>Source code for:&nbsp; <c:expr value="$param:filename"/></h3>
+<h3>Source code for:&nbsp; <c:expr value="$filename"/></h3>
 
 <hr>
-<c:import varReader="reader" url="$param:filename">
-<%-- <ex:file id="reader" file="$param:filename"> --%>
+
+<c:import varReader="reader" url="$filepath">
   <ex:escapeHtml reader="$reader"/>
-<%-- </ex:file> --%>
 </c:import>
 <hr>
 </body>

@@ -19,7 +19,7 @@
     <th>Value</th>
     <th>Key</th>
   </tr>
-<c:forEach var="prop" items="$systemProperties" begin="1" end="5">
+<c:forEach var="prop" items="$numberMap" begin="1" end="5">
   <tr>
     <td>prop</td>
     <td><c:expr value="$prop.value"/></td>

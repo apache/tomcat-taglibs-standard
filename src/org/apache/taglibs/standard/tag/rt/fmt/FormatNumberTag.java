@@ -81,4 +81,9 @@ public class FormatNumberTag extends FormatNumberSupport {
     public void setPattern(String pattern) throws JspTagException {
         this.pattern = pattern;
     }
+
+    // for tag attribute
+    public void setParseLocale(String parseLocale) throws JspTagException {
+        this.parseLocale = LocaleSupport.parseLocale(parseLocale, null);
+    }
 }

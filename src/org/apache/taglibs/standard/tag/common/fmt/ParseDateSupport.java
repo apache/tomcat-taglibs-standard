@@ -77,12 +77,16 @@ public abstract class ParseDateSupport extends TagSupport {
 
     protected String value;                      // 'value' attribute
     protected String pattern;                    // 'pattern' attribute
+    protected TimeZone timeZone;                 // 'timeZone' attribute
+    protected Locale parseLocale;                // 'parseLocale' attribute
 
 
     //*********************************************************************
     // Private state
 
     private int type;                            // 'type' attribute
+    private int dateStyle;                       // 'dateStyle' attribute
+    private int timeStyle;                       // 'timeStyle' attribute
     private String var;                          // 'var' attribute
     private int scope;                           // 'scope' attribute
 
@@ -97,8 +101,11 @@ public abstract class ParseDateSupport extends TagSupport {
 
     private void init() {
 	value = pattern = var = null;
+	timeZone = null;
 	type = FormatDateSupport.DATE_TYPE;
+	dateStyle = timeStyle = DateFormat.DEFAULT;
 	scope = PageContext.PAGE_SCOPE;
+	parseLocale = null;
     }
 
 
@@ -110,6 +117,14 @@ public abstract class ParseDateSupport extends TagSupport {
 	    this.type = FormatDateSupport.TIME_TYPE;
 	else if (FormatDateSupport.DATETIME_STRING.equalsIgnoreCase(type))
 	    this.type = FormatDateSupport.DATETIME_TYPE;
+    }
+
+    public void setDateStyle(String dateStyle) {
+        this.dateStyle = FormatDateSupport.getStyle(dateStyle);
+    }
+
+    public void setTimeStyle(String timeStyle) {
+        this.timeStyle = FormatDateSupport.getStyle(timeStyle);
     }
 
     public void setVar(String var) {
@@ -127,25 +142,32 @@ public abstract class ParseDateSupport extends TagSupport {
     public int doEndTag() throws JspException {
 	DateFormat formatter = null;
 
-	Locale locale = LocaleSupport.getFormattingLocale(
-            pageContext,
-	    this,
-	    DateFormat.getAvailableLocales());
+	/*
+	 * Use parsing locale specified via the 'parseLocale' attribute.
+	 * If no such attribute, use page's locale.
+	 */
+	Locale locale = parseLocale;
+	if (locale == null)
+	    locale = LocaleSupport.getFormattingLocale(
+                pageContext,
+	        this,
+		false,
+	        DateFormat.getAvailableLocales());
 
 	switch (type) {
 	case FormatDateSupport.DATE_TYPE:
-	    formatter = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
+	    formatter = DateFormat.getDateInstance(dateStyle, locale);
 	    break;
 	case FormatDateSupport.TIME_TYPE:
-	    formatter = DateFormat.getTimeInstance(DateFormat.DEFAULT, locale);
+	    formatter = DateFormat.getTimeInstance(timeStyle, locale);
 	    break;
 	case FormatDateSupport.DATETIME_TYPE:
-	    formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT,
-						       DateFormat.DEFAULT,
+	    formatter = DateFormat.getDateTimeInstance(dateStyle, timeStyle,
 						       locale);
 	    break;
 	} // switch
 
+	// Apply pattern, if present
 	if (pattern != null) {
 	    try {
 		((SimpleDateFormat) formatter).applyPattern(pattern);
@@ -153,6 +175,12 @@ public abstract class ParseDateSupport extends TagSupport {
 		formatter = new SimpleDateFormat(pattern, locale);
 	    }
 	}
+
+	// Set time zone
+	if (timeZone == null)
+	    timeZone = TimeZoneSupport.getTimeZone(pageContext, this);
+	if (timeZone != null)
+	    formatter.setTimeZone(timeZone);
 
 	Date parsed = null;
 	try {

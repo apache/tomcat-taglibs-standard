@@ -60,6 +60,7 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
+import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
@@ -79,6 +80,7 @@ public abstract class TransformerSupport extends BodyTagSupport {
     // Private state
 
     private String var;                         // 'var' attribute
+    private int scope;				// processed 'scope' attribute
     private TransformerFactory tf;		// reusable TransformerFactory
 
 
@@ -94,6 +96,7 @@ public abstract class TransformerSupport extends BodyTagSupport {
 	xslt = null;
 	var = null;
 	tf = null;
+        scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -118,7 +121,7 @@ public abstract class TransformerSupport extends BodyTagSupport {
 	Transformer t = tf.newTransformer(s);
 
 	// expose the Transformer
-	pageContext.setAttribute(var, t);
+	pageContext.setAttribute(var, t, scope);
 
 	return EVAL_PAGE;
       } catch (TransformerConfigurationException ex) {
@@ -137,5 +140,9 @@ public abstract class TransformerSupport extends BodyTagSupport {
 
     public void setVar(String var) {
 	this.var = var;
+    }
+
+    public void setScope(String scope) {
+        this.scope = Util.getScope(scope);
     }
 }

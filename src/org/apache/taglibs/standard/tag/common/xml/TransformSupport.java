@@ -63,6 +63,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import org.w3c.dom.*;
+import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
@@ -85,6 +86,7 @@ public abstract class TransformSupport extends BodyTagSupport {
     // Private state
 
     private String var;                            // 'var' attribute
+    private int scope;				   // processed 'scope' attr
     private Transformer t;			   // actual Transformer
     private TransformerFactory tf;		   // reusable factory
     private DocumentBuilder db;			   // reusable factory
@@ -105,15 +107,19 @@ public abstract class TransformSupport extends BodyTagSupport {
 	var = null;
 	result = null;
 	tf = null;
+        scope = PageContext.PAGE_SCOPE;
     }
 
 
     //*********************************************************************
     // Tag logic
 
-    // parse 'source' or body, transform via 'xslt' or 'transformer',
-    // store as 'var' or 'result'
-    public int doEndTag() throws JspException {
+    public int doStartTag() throws JspException {
+      /*
+       * We can set up our Transformer here, so we do so, and we let
+       * it receive parameters directly from subtags (instead of
+       * caching them.
+       */
       try {
 
 	//************************************
@@ -122,6 +128,35 @@ public abstract class TransformSupport extends BodyTagSupport {
 	// set up the TransformerFactory if necessary
         if (tf == null)
             tf = TransformerFactory.newInstance();
+
+	//************************************
+	// Determine transformer
+
+	// we can assume only one of 'xslt' or 'transformer' is specified
+	if (transformer != null)
+	    t = transformer;
+	else {
+	    // assume 'xslt'
+	    if (xslt == null)
+		throw new JspTagException(
+		    Resources.getMessage("TRANSFORM_NO_TRANSFORMER"));
+	    t = tf.newTransformer(getSource(xslt));
+	}
+
+	return EVAL_BODY_BUFFERED;
+
+      } catch (TransformerConfigurationException ex) {
+	throw new JspTagException(ex.toString());
+      }
+    }
+
+    // parse 'source' or body, transform via 'xslt' or 'transformer',
+    // store as 'var' or 'result'
+    public int doEndTag() throws JspException {
+      try {
+
+	//************************************
+	// Initialize
 
 	// set up our DocumentBuilderFactory if necessary
 	if (db == null)
@@ -139,20 +174,6 @@ public abstract class TransformSupport extends BodyTagSupport {
 	Source xml = getSource(source);
 
 	//************************************
-	// Determine transformer
-
-	// we can assume only one of 'xslt' or 'transformer' is specified
-	if (transformer != null)
-	    t = transformer;
-	else {
-	    // assume 'xslt'
-	    if (xslt == null)
-		throw new JspTagException(
-		    Resources.getMessage("TRANSFORM_NO_TRANSFORMER"));
-	    t = tf.newTransformer(getSource(xslt));
-	}
-
-	//************************************
 	// Conduct the transformation
 
 	// we can assume at most one of 'var' or 'result' is specified
@@ -164,25 +185,30 @@ public abstract class TransformSupport extends BodyTagSupport {
 	    Document d = db.newDocument();
 	    Result doc = new DOMResult(d);
 	    t.transform(xml, doc);
-	    pageContext.setAttribute(var, d);
+	    pageContext.setAttribute(var, d, scope);
 	} else {
-	    /*
-	     * We're going to output the text directly.  I'd love to
-	     * construct a StreamResult directly from pageContext.getOut(),
-	     * but I can't trust the transformer not to flush our writer.
-	     */
-	    StringWriter bufferedResult = new StringWriter();
-	    Result page = new StreamResult(bufferedResult);
+	 ////
+         // Replaced in favor of the optimized method below, suggested
+         // by Bob Lee.
+	 //   /*
+	 //    * We're going to output the text directly.  I'd love to
+	 //    * construct a StreamResult directly from pageContext.getOut(),
+	 //    * but I can't trust the transformer not to flush our writer.
+	 //    */
+	 //   StringWriter bufferedResult = new StringWriter();
+	 //   Result page = new StreamResult(bufferedResult);
+	 //   t.transform(xml, page);
+	 //   pageContext.getOut().print(bufferedResult);
+
+	    Result page =
+		new StreamResult(new SafeWriter(pageContext.getOut()));
 	    t.transform(xml, page);
-	    pageContext.getOut().print(bufferedResult);
 	}
 
 	return EVAL_PAGE;
-      } catch (IOException ex) {
-	throw new JspTagException(ex.toString());
+         //   } catch (IOException ex) {
+	 //   throw new JspTagException(ex.toString());
       } catch (ParserConfigurationException ex) {
-	throw new JspTagException(ex.toString());
-      } catch (TransformerConfigurationException ex) {
 	throw new JspTagException(ex.toString());
       } catch (TransformerException ex) {
 	throw new JspTagException(ex.toString());
@@ -198,8 +224,8 @@ public abstract class TransformSupport extends BodyTagSupport {
     //*********************************************************************
     // Public methods for subtags
 
-    /** Sets a transformation parameter on our transformer. */
-    public void setParameter(String name, String value) {
+    /** Sets (adds) a transformation parameter on our transformer. */
+    public void addParameter(String name, Object value) {
 	t.setParameter(name, value);
     }
 
@@ -228,4 +254,26 @@ public abstract class TransformSupport extends BodyTagSupport {
 	this.var = var;
     }
 
+    public void setScope(String scope) {
+        this.scope = Util.getScope(scope);
+    }
+
+
+    //*********************************************************************
+    // Private utility class
+
+    /**
+     * A Writer based on a wrapped Writer but ignoring requests to
+     * close() and flush() it.  (Someone must have wrapped the
+     * toilet in my office similarly...)
+     */
+    private static class SafeWriter extends Writer {
+	private Writer w;
+	public SafeWriter(Writer w) { this.w = w; }
+	public void close() { }
+	public void flush() { }
+	public void write(char[] cbuf, int off, int len) throws IOException {
+	    w.write(cbuf, off, len);
+	}
+    }	
 }

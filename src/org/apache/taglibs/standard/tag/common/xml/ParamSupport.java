@@ -74,7 +74,7 @@ public abstract class ParamSupport extends BodyTagSupport {
     // Protected state
 
     protected String name;                       // 'name' attribute
-    protected String value;                      // 'value' attribute
+    protected Object value;                      // 'value' attribute
 
     //*********************************************************************
     // Constructor and initialization
@@ -85,7 +85,8 @@ public abstract class ParamSupport extends BodyTagSupport {
     }
 
     private void init() {
-	name = value = null;
+	name = null;
+	value = null;
     }
 
 
@@ -100,14 +101,14 @@ public abstract class ParamSupport extends BodyTagSupport {
 		Resources.getMessage("PARAM_OUTSIDE_TRANSFORM"));
 	TransformSupport parent = (TransformSupport) t;
 
-	String value = this.value;
+	Object value = this.value;
 	if (value == null) {
             String bcs = getBodyContent().getString();
             if (bcs == null || (value = bcs.trim()).equals(""))
                 throw new JspTagException(
                     Resources.getMessage("PARAM_NO_VALUE"));
 	}
-	parent.setParameter(name, value);
+	parent.addParameter(name, value);
 	return EVAL_PAGE;
     }
 

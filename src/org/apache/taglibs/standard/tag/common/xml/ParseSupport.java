@@ -66,6 +66,7 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
+import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
@@ -86,6 +87,7 @@ public abstract class ParseSupport extends BodyTagSupport {
 
     private String var;                            // 'var' attribute
     private String domVar;			   // 'domVar' attribute
+    private int scope;				   // processed 'scope' attr
 
     // state in support of XML parsing...
     private DocumentBuilderFactory dbf;
@@ -109,6 +111,7 @@ public abstract class ParseSupport extends BodyTagSupport {
 	db = null;
 	tf = null;
 	th = null;
+	scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -163,9 +166,9 @@ public abstract class ParseSupport extends BodyTagSupport {
 	}
 
 	// we've got a Document object; store it out as appropriate
-	pageContext.setAttribute(var, d);
+	pageContext.setAttribute(var, d, scope);
 	if (domVar != null)
-	    pageContext.setAttribute(domVar, d);
+	    pageContext.setAttribute(domVar, d, scope);
 
 	return EVAL_PAGE;
       } catch (SAXException ex) {
@@ -235,5 +238,9 @@ public abstract class ParseSupport extends BodyTagSupport {
 
     public void setDomVar(String domVar) {
 	this.domVar = domVar;
+    }
+
+    public void setScope(String scope) {
+	this.scope = Util.getScope(scope);
     }
 }
