@@ -9,7 +9,7 @@
 
 <fmt:locale value="it_IT"/>
 <fmt:bundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="itBundle" scope="page"/>
-<fmt:message key="greetingMorning" bundle="$itBundle"/>
+<fmt:message key="greetingMorning" bundle="${itBundle}"/>
 
 </body>
 </html>

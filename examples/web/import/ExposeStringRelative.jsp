@@ -9,7 +9,7 @@
 
 <c:import var="cnn" url="LocalSample.jsp"/>
 
-<c:expr value="$cnn"/>
+<c:expr value="${cnn}"/>
 
 </body>
 </html>

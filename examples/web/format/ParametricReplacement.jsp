@@ -11,29 +11,29 @@
 <fmt:locale value="de"/>
 <fmt:bundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="deBundle"/>
 <fmt:formatDate type="both" var="currentDateString"/>
-<fmt:parseDate value="$currentDateString" type="both" var="currentDate"/>
+<fmt:parseDate value="${currentDateString}" type="both" var="currentDate"/>
 <ul>
  <li> Using single &lt;param&gt; with 'value' evaluating to String:<br>
-  <fmt:message key="currentTime" bundle="$deBundle">
-   <fmt:param value="$currentDateString"/>
+  <fmt:message key="currentTime" bundle="${deBundle}">
+   <fmt:param value="${currentDateString}"/>
   </fmt:message>
  
  <li> Using single &lt;param&gt; with 'value' evaluating to <tt>java.util.Date</tt>:<br>
-  <fmt:message key="currentTime" bundle="$deBundle">
-   <fmt:param value="$currentDate"/>
+  <fmt:message key="currentTime" bundle="${deBundle}">
+   <fmt:param value="${currentDate}"/>
   </fmt:message>
 
  <li> Using single &lt;param&gt; with body:<br>
-  <fmt:message key="currentTime" bundle="$deBundle">
+  <fmt:message key="currentTime" bundle="${deBundle}">
    <fmt:param>
     <fmt:formatDate type="both"/>
    </fmt:param>
   </fmt:message>
 
  <li> Using multiple parameters:<br>
-  <fmt:message key="serverInfo" bundle="$deBundle">
-   <c:forEach var="arg" items="$serverInfoArgs">
-    <fmt:param value="$arg"/>
+  <fmt:message key="serverInfo" bundle="${deBundle}">
+   <c:forEach var="arg" items="${serverInfoArgs}">
+    <fmt:param value="${arg}"/>
    </c:forEach>
   </fmt:message>
 </ul>

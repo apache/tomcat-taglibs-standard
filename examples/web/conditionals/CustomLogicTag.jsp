@@ -12,25 +12,25 @@
 <h4>Customers living in the USA</h4>
 
 <h4>Simple Conditional Execution</h4>
-<c:forEach var="customer" items="$customers">
-  <ex:usCustomer customer="$customer">
-    <c:expr value="$customer"/><br>
+<c:forEach var="customer" items="${customers}">
+  <ex:usCustomer customer="${customer}">
+    <c:expr value="${customer}"/><br>
   </ex:usCustomer>
 </c:forEach>
 
 <h4>Mutually Exclusive Conditional Execution</h4>
 
-<c:forEach var="customer" items="$customers">
-  <ex:usCustomer customer="$customer" var="isUsCustomer"/>
+<c:forEach var="customer" items="${customers}">
+  <ex:usCustomer customer="${customer}" var="isUsCustomer"/>
   <c:choose>
-    <c:when test="$isUsCustomer">
+    <c:when test="${isUsCustomer}">
       <font color="blue">
     </c:when>
     <c:otherwise>
       <font color="green">	
     </c:otherwise>	
   </c:choose>
-  <c:expr value="$customer"/></font><br>
+  <c:expr value="${customer}"/></font><br>
 </c:forEach>
 </body>
 </html>

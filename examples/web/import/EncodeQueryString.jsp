@@ -12,7 +12,7 @@
 <c:urlEncode var="name" value="horwat"/>
 <c:urlEncode var="email" value="horwat@fakeaddress.com"/>
 
-<c:import url="$'LocalQueryString.jsp?name=' + name + '&email=' + email" />
+<c:import url="${'LocalQueryString.jsp?name=' + name + '&email=' + email}" />
 
 <hr />
 <c:urlEncode value="http://foo">

@@ -21,15 +21,15 @@
 
 <html>
 <head>
-  <title>JSTL: Source code for <c:expr value="$filename"/></title>
+  <title>JSTL: Source code for <c:expr value="${filename}"/></title>
 </head>
 <body bgcolor="#FFFFFF">
-<h3>Source code for:&nbsp; <c:expr value="$filename"/></h3>
+<h3>Source code for:&nbsp; <c:expr value="${filename}"/></h3>
 
 <hr>
 
-<c:import varReader="reader" url="$filepath">
-  <ex:escapeHtml reader="$reader"/>
+<c:import varReader="reader" url="${filepath}">
+  <ex:escapeHtml reader="${reader}"/>
 </c:import>
 <hr>
 </body>

@@ -11,7 +11,7 @@
     <td>Getting "name" query parameter:</td>
     <td>
       <div style="color: red">
-        <c:expr value="$param:name"/><br>
+        <c:expr value="${param:name}"/><br>
       </div>
     </td>
   </tr>
@@ -19,7 +19,7 @@
     <td>Getting "email" query parameter:</td>
     <td>
       <div style="color: red">
-        <c:expr value="$param:email"/>
+        <c:expr value="${param:email}"/>
       </div>
     </td>
   </tr>

@@ -9,19 +9,19 @@
 
 <h4>USA:blue Canada:red Others:green</h4>
 
-<c:forEach var="customer" items="$customers">
+<c:forEach var="customer" items="${customers}">
   <c:choose>
-    <c:when test="$customer.address.country == 'USA'">
+    <c:when test="${customer.address.country == 'USA'}">
       <font color="blue">
     </c:when>
-    <c:when test="$customer.address.country == 'Canada'">
+    <c:when test="${customer.address.country == 'Canada'}">
       <font color="red">
     </c:when>
     <c:otherwise>
       <font color="green">	
     </c:otherwise>	
   </c:choose>
-  <c:expr value="$customer"/></font><br>
+  <c:expr value="${customer}"/></font><br>
 </c:forEach>
 </body>
 </html>

@@ -7,9 +7,12 @@
 <body bgcolor="#FFFFFF">
 Assuming you have the "examples" webapp installed, here's a file from it...
 
+URL:<c:expr value="${_contextUrl}"/><br>
+Name:<c:expr value="${_contextName}"/>
+
 <blockquote>
  <pre>
-  <c:import url="$_contextUrl" context="$_contextName"/>
+  <c:import url="${_contextUrl}" context="${_contextName}"/>
  </pre>
 </blockquote>
 
