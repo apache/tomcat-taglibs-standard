@@ -69,8 +69,6 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Hans Bergsten
  */
 public class DataSourceWrapper implements DataSource {
-    private static Map loadedDrivers = new HashMap();
-
     private String driverClassName;
     private String jdbcURL;
     private String userName;
@@ -81,9 +79,7 @@ public class DataSourceWrapper implements DataSource {
 	       IllegalAccessException {
 
 	this.driverClassName = driverClassName;
-	if (!isDriverLoaded(driverClassName)) {
-	    Class.forName(driverClassName).newInstance();
-	}
+        Class.forName(driverClassName).newInstance();
     }
 
     public void setJdbcURL(String jdbcURL) {
@@ -150,16 +146,4 @@ public class DataSourceWrapper implements DataSource {
         throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
     }
 
-    /**
-     * Returns true if the specified driver class has already been
-     * loaded.
-     */
-    private boolean isDriverLoaded(String driverClassName) {
-	if (loadedDrivers.get(driverClassName) != null) {
-	    return true;
-	}
-	else {
-	    return false;
-	}
-    }
 }
