@@ -63,13 +63,16 @@ import java.util.SortedMap;
  * query result:</p>
  *
  * <ul>
- * <li> result rows
- * <li> result rows using an index
- * <li> number of rows in the result
- * <li> result meta data
- * <li> indication whether result returned is a complete set or
- *      a subset limited by a maximum row setting
+ * <li> The result rows (<tt>getRows()</tt> and <tt>getRowsByIndex()</tt>)
+ * <li> The column names (<tt>getColumnNames()</tt>)
+ * <li> The number of rows in the result (<tt>getRowCount()</tt>)
+ * <li> An indication whether the rows returned represent the complete result 
+ *      or just a subset that is limited by a maximum row setting
+ *      (<tt>isLimitedByMaxRows()</tt>)
  * </ul>
+ *
+ * <p>An implementation of the <tt>Result</tt> interface provides a
+ * <i>disconnected</i> view into the result of a query.
  *
  * @author Justyna Horwat
  *
@@ -77,26 +80,39 @@ import java.util.SortedMap;
 public interface Result {
 
     /**
-     * Returns an array of SortedMap objects. Column name is used as the key
-     * for the column value. SortedMap must use the CASE_INSENSITIVE_ORDER
-     * Comparator so that the key is the case insensitive representation
-     * of the column name.
+     * <p>Returns the result of the query as an array of <code>SortedMap</code> objects. 
+     * Each item of the array represents a specific row in the query result.</p>
      *
-     * @return the result rows as an array of <code>SortedMap</code> objects
+     * <p>A row is structured as a <code>SortedMap</code> object where the key is the column name, 
+     * and where the value is the value associated with the column identified by 
+     * the key. The column value is an Object of the Java type corresponding 
+     * to the mapping between column types and Java types defined by the JDBC 
+     * specification when the <code>ResultSet.getObject()</code> method is used.</p>
+     *
+     * <p>The <code>SortedMap</code> must use the <code>Comparator</code> 
+     * <code>java.util.String.CASE_INSENSITIVE_ORDER</code>. 
+     * This makes it possible to access the key as a case insensitive representation 
+     * of a column name. This method will therefore work regardless of the case of 
+     * the column name returned by the database.</p>
+     *
+     * @return The result rows as an array of <code>SortedMap</code> objects
      */
     public SortedMap[] getRows();
 
     /**
-     * Returns an array of Objects[]. The first index
-     * designates the Row, the second the Column. The array
-     * stores the value at the specified row and column.
+     * Returns the result of the query as an array of arrays. 
+     * The first array dimension represents a specific row in the query result. 
+     * The array elements for each row are Object instances of the Java type 
+     * corresponding to the mapping between column types and Java types defined 
+     * by the JDBC specification when the <code>ResultSet.getObject()</code> method is used.
      *
      * @return the result rows as an array of <code>Object[]</code> objects
      */
     public Object[][] getRowsByIndex();
 
     /**
-     * Returns an array of column names.
+     * Returns the names of the columns in the result. The order of the names in the array 
+     * matches the order in which columns are returned in method getRowsByIndex().
      *
      * @return the column names as an array of <code>String</code> objects
      */

@@ -59,9 +59,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * <p>This class represents the conversion of a ResultSet to
- * a Result object.</p>
- *
+ * <p>Supports the creation of a javax.servlet.jsp.jstl.sql.Result object 
+ * from a source java.sql.ResultSet object. A Result object makes it much 
+ * easier for page authors to access and manipulate the data resulting 
+ * from a SQL query.</p>
  *
  * @author Justyna Horwat
  *
@@ -70,11 +71,11 @@ public class ResultSupport {
 
 
     /**
-     * Returns an array of Row objects.
+     * Converts a <code>ResultSet</code> object to a <code>Result</code> object.
      *
-     * @param rs the ResultSet object
+     * @param rs the <code>ResultSet</code> object
      *
-     * @return the <code>Result</code> object of the result
+     * @return The <code>Result</code> object created from the <code>ResultSet</code>
      */
     public static Result toResult(ResultSet rs) {
         try {
@@ -85,12 +86,14 @@ public class ResultSupport {
     }
 
     /**
-     * Returns the Result object of the cached ResultSet limited by maxRows
+     * Converts <code>maxRows</code> of a <code>ResultSet</code> object to a 
+     * <code>Result</code> object.
      *
-     * @param rs the ResultSet object
-     * @param maxRows the maximum number of rows
+     * @param rs the <code>ResultSet</code> object
+     * @param maxRows the maximum number of rows to be cached into the <code>Result</code> object.
      *
-     * @return the <code>Result</code> object of the result limited by maxRows
+     * @return The <code>Result</code> object created from the <code>ResultSet</code>,
+     * limited by <code>maxRows</code>
      */
     public static Result toResult(ResultSet rs, int maxRows) {
         try {

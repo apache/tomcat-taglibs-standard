@@ -67,6 +67,13 @@ import org.xml.sax.helpers.*;
  * taglibs (in addition to itself) may be imported on a page where it's
  * used.</p>
  *
+ * <p>This TLV supports the following initialization parameter:</p>
+ * <ul>
+ * <li><b>permittedTaglibs</b>: A whitespace-separated list of URIs corresponding 
+ *   to tag libraries permitted to be imported on the page in addition to the tag 
+ *   library that references PermittedTaglibsTLV (which is allowed implicitly).
+ * </ul>
+ *
  * @author Shawn Bayern
  */
 public class PermittedTaglibsTLV extends TagLibraryValidator {

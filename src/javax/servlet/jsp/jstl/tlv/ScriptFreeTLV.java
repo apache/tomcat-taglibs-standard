@@ -70,7 +70,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
- * <p>A SAX-based TagLibraryValidator for enforcing restrictions against
+ * <p>A TagLibraryValidator for enforcing restrictions against
  * the use of JSP scripting elements.</p>
  * <p>This TLV supports four initialization parameters, for controlling
  * which of the four types of scripting elements are allowed or prohibited:</p>

@@ -62,7 +62,7 @@ package javax.servlet.jsp.jstl.sql;
  * <p>This interface is implemented by both &lt;sql:query&gt; and
  * &lt;sql:update&gt;. Its <code>addSQLParameter()</code> method
  * is called by nested parameter actions (such as &lt;sql:param&gt;)
- * to substitute <code>PreparedStatement<code> parameter values for
+ * to substitute <code>PreparedStatement</code> parameter values for
  * "?" parameter markers in the SQL statement of the enclosing
  * <code>SQLExecutionTag</code> action.</p>
  *
@@ -85,9 +85,14 @@ package javax.servlet.jsp.jstl.sql;
 public interface SQLExecutionTag {
 
     /**
-     * Adds a PreparedStatement parameter value
+     * Adds a PreparedStatement parameter value. 
+     * Must behave as if it calls <code>PreparedStatement.setObject(int, Object)</code>. 
+     * For each tag invocation, the integral index passed logically to <code>setObject()</code> 
+     * must begin with 1 and must be incremented by 1 for each subsequent invocation 
+     * of <code>addSQLParameter()</code>. The Object logically passed to <code>setObject()</code> must be the 
+     * unmodified object received in the value argument.
      *
-     * @param value the PreparedStatement parameter value
+     * @param value the <code>PreparedStatement</code> parameter value
      */
     public void addSQLParameter(Object value);
 }
