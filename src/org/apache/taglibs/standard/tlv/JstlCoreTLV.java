@@ -278,6 +278,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	public void characters(char[] ch, int start, int length) {
 
+	    bodyNecessary = false;		// body is no longer necessary!
+
 	    // ignore strings that are just whitespace
 	    String s = new String(ch, start, length).trim();
 	    if (s.equals(""))
@@ -286,7 +288,6 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    // check and update body-related constraints
 	    if (bodyIllegal)
 		fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
-	    bodyNecessary = false;		// body is no longer necessary!
 	    if (!urlTags.empty()
 		    && urlTags.peek().equals(IMPORT_WITHOUT_READER)) {
 		// we're in an <import> without a Reader; nothing but

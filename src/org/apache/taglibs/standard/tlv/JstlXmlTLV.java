@@ -257,6 +257,8 @@ public class JstlXmlTLV extends JstlBaseTLV {
 
 	public void characters(char[] ch, int start, int length) {
 
+	    bodyNecessary = false;		// body is no longer necessary!
+
 	    // ignore strings that are just whitespace
 	    String s = new String(ch, start, length).trim();
 	    if (s.equals(""))
@@ -265,7 +267,6 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	    // check and update body-related constraints
 	    if (bodyIllegal)
 		fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
-	    bodyNecessary = false;		// body is no longer necessary!
 
 	    // make sure <choose> has no non-whitespace text
 	    if (chooseChild()) {
