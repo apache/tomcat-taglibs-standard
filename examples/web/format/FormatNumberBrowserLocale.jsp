@@ -7,11 +7,9 @@
  </title>
 </head>
 <body bgcolor="#FFFFFF">
-<h3>Formatting numbers, currencies, and percentages using <tt>en-US</tt>
+<h3>Formatting numbers, currencies, and percentages using browser-based
     locale
 </h3>
-
-<fmt:setLocale value="en-US" />
 
 <ul>
  <li> Format &quot;123456789&quot; as number:<br>

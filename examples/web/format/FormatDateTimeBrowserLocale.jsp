@@ -6,10 +6,9 @@
   <title>JSTL: Formatting/I18N Support -- Date and Time Example</title>
 </head>
 <body bgcolor="#FFFFFF">
-<h3>Formatting dates and times using <tt>en-US</tt> locale</h3>
+<h3>Formatting dates and times using browser-based locale</h3>
 
 <jsp:useBean id="now" class="java.util.Date" />
-<fmt:setLocale value="en-US" />
 
 <ul>
  <li> Formatting current date as &quot;GMT&quot;:<br>
