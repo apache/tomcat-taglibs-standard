@@ -24,9 +24,8 @@
 
   <sql:update var="newTable" dataSource="$example">
     create table mytable (
-      nameid int not null,
-      name varchar(80) null,
-      constraint pk_mytable primary key (nameid)
+      nameid int primary key,
+      name varchar(80)
     )
   </sql:update>
 

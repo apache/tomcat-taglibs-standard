@@ -28,10 +28,14 @@
 </table>
 <!-- #BeginEditable "body" --> 
 <h1>SQL Tags Examples</h1>
-<p>Enter your Driver Name and DataBase URL name to test Database Tag Library. 
-  NOTE: You can access the tags directly at the bottom of the page to look at 
-  the source, but they will NOT run properly without the correct database driver 
-  and url.</p>
+<p>These examples create their own table for demonstration purposes.  Every database supports table creation in a slightly different way. For instance, different databases have different types and constraints. The simplest possible table was chosen, however it may still not be supported by your particular database. Check your database documentation or administrator if you have problems creating the table and modify the examples acordingly. Here is the table used in the examples:</p>
+<pre><code>
+    create table mytable (
+      nameid int primary key,
+      name varchar(80)
+    )
+</code></pre>
+<p>Enter your Driver Name and DataBase URL to test the Database Tag Library. NOTE: You will need to have the DataBase Driver classes available in your server's CLASSPATH at startup.</p>
 <form name="myform" action="session.jsp" method="get" >
   <table width="90%" border="0" cellspacing="0" cellpadding="0">
     <tr> 
@@ -51,6 +55,9 @@
     <input type="submit" name="Submit" value="Submit">
   </p>
 </form>
+<hr>
+<p>NOTE: You can access the tags directly here to look at the source. If you do not provide a valid Driver and URL using the above form the tags NOT run properly.</p>
+<%@ include file="links.html" %>
 <!-- #EndEditable --> 
 <hr noshade color="#000099">
 <table width="100%" border="0" cellpadding="5">
