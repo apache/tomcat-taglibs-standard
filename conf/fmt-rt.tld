@@ -34,25 +34,6 @@
   </tag>
 
   <tag>
-    <name>exception</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ExceptionTag</tag-class>
-    <body-content>EMPTY</body-content>
-    <description>
-        Prints the given exception in localized format
-    </description>
-    <attribute>
-        <name>value</name>
-        <required>false</required>
-        <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>bundle</name>
-        <required>false</required>
-        <rtexprvalue>true</rtexprvalue>
-    </attribute>
-  </tag>
-
-  <tag>
     <name>locale</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.LocaleTag</tag-class>
     <body-content>EMPTY</body-content>

@@ -191,29 +191,29 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Public utility methods
     
     /**
-     * Gets the resource bundle with the given base name.
+     * Gets the resource bundle with the given base name, whose locale is
+     * determined as follows:
      *
-     * <p> The resource bundle's locale is determined as follows:
+     * Check if a match exists between the ordered set of preferred
+     * locales and the available locales, for the given base name.
+     * The set of preferred locales consists of a single locale
+     * (if the <tt>javax.servlet.jsp.jstl.fmt.locale</tt> scoped attribute or
+     * context init parameter is present) or is equal to the client's preferred
+     * locales determined from the client's browser settings.
      *
-     * <ul>
-     * <li> If the <tt>javax.servlet.jsp.jstl.fmt.locale</tt> scoped 
-     * attribute exists, use the locale stored as its value.
-     *
-     * <li> Otherwise, compare the client's preferred locales (in order of
-     * preference) against the available locales for the given base name, and
-     * use the best matching locale.
-     *
-     * <li> If no match is found, use the fallback locale given by the
+     * <p> If no match was found in the previous step, check if a match
+     * exists between the fallback locale (given by the
      * <tt>javax.servlet.jsp.jstl.fmt.fallbackLocale</tt> scoped attribute
-     * or config parameter (if present).
-     * </ul>
+     * or context init parameter) and the available locales, for the given
+     * base name.
      *
-     * @param pageContext the page in which the resource bundle with the
+     * @param pageContext Page in which the resource bundle with the
      * given base name is requested
-     * @param basename the resource bundle's base name
+     * @param basename Resource bundle base name
      *
-     * @return the resource bundle with the given base name, or <tt>null</tt>
-     * if no such resource bundle exists
+     * @return Resource bundle with the given base name for which a match
+     * between the preferred (or fallback) and available locales exists, or
+     * <tt>null</tt> if no match was found
      */
     public static ResourceBundle getBundle(PageContext pageContext,
 					   String basename) {
@@ -222,18 +222,19 @@ public abstract class BundleSupport extends BodyTagSupport {
 	Locale pref = LocaleSupport.getLocale(pageContext,
 					      LocaleSupport.LOCALE);
 	if (pref != null) {
-	    // Use resource bundle with specified locale.
-	    ret = getBundle(basename, pref);
+	    // Preferred locale is application-based
+	    ret = findMatch(basename, pref);
 	} else {
-	    // use resource bundle with best matching locale
-	    ret = getBestLocaleMatch(pageContext, basename);
-	    if (ret == null) {
-		// no match available, use fallback locale (if present)
-		pref = LocaleSupport.getLocale(pageContext,
-					       LocaleSupport.FALLBACK_LOCALE);
-		if (pref != null) {
-		    ret = getBundle(basename, pref);
-		}
+	    // Preferred locales are browser-based
+	    ret = findMatch(pageContext, basename);
+	}
+
+	if (ret == null) {
+	    // no match found, use fallback locale (if present)
+	    pref = LocaleSupport.getLocale(pageContext,
+					   LocaleSupport.FALLBACK_LOCALE);
+	    if (pref != null) {
+		ret = findMatch(basename, pref);
 	    }
 	}
 
@@ -278,18 +279,9 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Private utility methods
     
     /*
-     * Returns the resource bundle with the best matching locale.
-     *
-     * Each of the client's preferred locales (in order of preference) is
-     * compared against the available locales (using the
-     * java.util.ResourceBundle method getBundle()), and the best matching
-     * locale is determined as the first available locale which either:
-     *
-     * - exactly matches a preferred locale
-     *   (using java.util.Locale.equals()), or
-     *
-     * - does not have a country component and matches (just) the language 
-     *   component of a preferred locale.
+     * Determines the client's preferred locales from the request, and compares
+     * each of the locales (in order of preference) against the available
+     * locales in order to determine the best matching locale.
      *
      * @param pageContext the page in which the resource bundle with the
      * given base name is requested
@@ -298,9 +290,9 @@ public abstract class BundleSupport extends BodyTagSupport {
      * @return the resource bundle with the given base name and best matching
      * locale, or <tt>null</tt> if no match was found
      */
-    private static ResourceBundle getBestLocaleMatch(PageContext pageContext,
-						     String basename) {
-	ResourceBundle ret = null;
+    private static ResourceBundle findMatch(PageContext pageContext,
+					    String basename) {
+	ResourceBundle match = null;
 	
 	// Determine locale from client's browser settings.
 	for (Enumeration enum = pageContext.getRequest().getLocales();
@@ -311,13 +303,13 @@ public abstract class BundleSupport extends BodyTagSupport {
 	     * locale, so it always contains at least one element.
 	     */
 	    Locale pref = (Locale) enum.nextElement();
-	    ret = getBundle(basename, pref);
-	    if (ret != null) {
+	    match = findMatch(basename, pref);
+	    if (match != null) {
 		break;
 	    }
 	}
 	
-	return ret;
+	return match;
     }
 
     /*
@@ -335,15 +327,15 @@ public abstract class BundleSupport extends BodyTagSupport {
      * language-match between the preferred locale and the locale of
      * the bundle returned by java.util.ResourceBundle.getBundle().
      */
-    private static ResourceBundle getBundle(String basename, Locale pref) {
-	ResourceBundle ret = null;
+    private static ResourceBundle findMatch(String basename, Locale pref) {
+	ResourceBundle match = null;
 
 	try {
 	    ResourceBundle bundle = ResourceBundle.getBundle(basename, pref);
 	    Locale avail = bundle.getLocale();
 	    if (pref.equals(avail)) {
 		// Exact match
-		ret = bundle;
+		match = bundle;
 	    } else {
 		if (pref.getLanguage().equals(avail.getLanguage())
 		    && ("".equals(avail.getCountry()))) {
@@ -362,12 +354,12 @@ public abstract class BundleSupport extends BodyTagSupport {
 		     * are not portable across different containers with
 		     * different default locales.
 		     */
-		    ret = bundle;
+		    match = bundle;
 		}
 	    }
 	} catch (MissingResourceException mre) {
 	}
 
-	return ret;
+	return match;
     }
 }

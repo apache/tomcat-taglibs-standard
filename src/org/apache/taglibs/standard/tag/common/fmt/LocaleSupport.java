@@ -218,32 +218,8 @@ public abstract class LocaleSupport extends TagSupport {
     }
  
     /*
-     * Determines the formatting locale to use with the given formatting
-     * action in the given page.
-     *
-     * <p> The formatting locale is determined as follows:
-     *
-     * <ul>
-     * <li> If the <tt>javax.servlet.jsp.jstl.fmt.locale</tt> scoped
-     * attribute or context configuration parameter exists, use its locale.
-     *
-     * <li> If the formatting action is enclosed within a <bundle> action, use
-     * the locale of the parent bundle.
-     *
-     * <li> If the <tt>javax.servlet.jsp.jstl.fmt.basename</tt> scoped
-     * attribute exists, retrieve the default base name from it and use the
-     * best matching locale for the resource bundle with this base name.
-     *
-     * <li> Compare the client's preferred locales (in order of preference)
-     * against the available formatting locales given in the
-     * <tt>avail</tt> parameter, and use the best matching locale.
-     *
-     * <li> If no match is found, use the fallback locale given by the
-     * <tt>javax.servlet.jsp.jstl.fmt.fallbackLocale</tt> scoped attribute
-     * or config parameter (if present).
-     *
-     * <li> If no match is found, use the runtime's default locale.
-     * </ul>
+     * Returns the formatting locale to use with the given formatting action
+     * in the given page.
      *
      * @param pageContext the page containing the formatting action
      * @param fromTag the formatting action
@@ -260,54 +236,49 @@ public abstract class LocaleSupport extends TagSupport {
 				      Tag fromTag,
 				      boolean format,
 				      Locale[] avail) {
-	Locale[] pref = null;
+	Locale match = null;
+	ResourceBundle bundle = null;
 
-	Locale ret = getLocale(pageContext, LOCALE);
-	if (ret == null) {
-	    Tag t = findAncestorWithClass(fromTag, BundleSupport.class);
-	    if (t != null) {
-		// use locale from parent <bundle> tag
-		BundleSupport parent = (BundleSupport) t;
-		ret = parent.getBundle().getLocale();
+	Tag parent = findAncestorWithClass(fromTag, BundleSupport.class);
+	if (parent != null) {
+	    // use locale from parent <fmt:bundle> tag
+	    match = ((BundleSupport) parent).getBundle().getLocale();
+	} else if ((bundle = BundleSupport.getDefaultBundle(
+	                            pageContext,
+				    BundleSupport.DEFAULT_BASENAME)) != null) {
+	    // Use locale associated with default bundle base name.
+	    match = bundle.getLocale();
+	} else {
+	    /*
+	     * Compare the preferred locales (in order of preference) against
+	     * the available formatting locales, and determine the best
+	     * matching locale.
+	     */
+	    Locale pref = getLocale(pageContext, LOCALE);
+	    if (pref != null) {
+		// Preferred locale is application-based
+		match = findFormattingMatch(pref, avail);
 	    } else {
-		ResourceBundle bundle = BundleSupport.getDefaultBundle(
-                    pageContext, BundleSupport.DEFAULT_BASENAME);
-		if (bundle != null) {
-		    // use locale from bundle with default base name
-		    ret = bundle.getLocale();
-		} else {
-		    // get best matching formatting locale
-		    pref = getRequestLocales(pageContext);
-		    ret = getBestMatch(pref, avail);
-		    if (ret == null) {
-			/*
-			 * No match available. Use fallback locale (if defined
-			 * and available).
-			 */
-			ret = getLocale(pageContext, FALLBACK_LOCALE);
-			if (ret != null) {
-			    pref = new Locale[1];
-			    pref[0] = ret;
-			}
-			if ((ret == null)
-			    || ((ret = getBestMatch(pref, avail)) == null)) {
-			    /*
-			     * No fallback locale defined, or specified
-			     * fallback locale not among the available locales.
-			     * Use runtime's default locale.
-			     */
-			    ret = Locale.getDefault();
-			}
-		    }
+		// Preferred locales are browser-based 
+		match = findFormattingMatch(pageContext, avail);
+	    }
+	    if (match == null) {
+		//Use fallback locale.
+		pref = getLocale(pageContext, FALLBACK_LOCALE);
+		if ((pref == null)
+		        || ((match = findFormattingMatch(pref,
+							 avail)) == null)) {
+		    // Use runtime's default locale.
+		    match = Locale.getDefault();
 		}
 	    }
 	}
-	
+
 	if (format) {
-	    LocaleSupport.setResponseLocale(pageContext, ret);
+	    LocaleSupport.setResponseLocale(pageContext, match);
 	}
 
-	return ret;
+	return match;
     }
 
     /*
@@ -344,76 +315,70 @@ public abstract class LocaleSupport extends TagSupport {
 
     //*********************************************************************
     // Private utility methods
-    
+
     /*
-     * Returns the best matching formatting locale.
+     * Determines the client's preferred locales from the request, and compares
+     * each of the locales (in order of preference) against the available
+     * locales in order to determine the best matching locale.
      *
-     * Each of the client's preferred locales (in order of preference) is
-     * compared against the available formatting locales, and the best matching
-     * locale is determined as the first available locale which either:
+     * @param pageContext Page containing the formatting action
+     * @param avail Available formatting locales
      *
-     * - exactly matches a preferred locale
-     *   (using java.util.Locale.equals()), or
+     * @return Best matching locale, or <tt>null</tt> if no match was found
+     */
+    private static Locale findFormattingMatch(PageContext pageContext,
+					      Locale[] avail) {
+	Locale match = null;
+
+	for (Enumeration enum = pageContext.getRequest().getLocales();
+	     enum.hasMoreElements(); ) {
+	    /*
+	     * If client request doesn't provide an Accept-Language header,
+	     * the returned locale Enumeration contains the runtime's default
+	     * locale, so it always contains at least one element.
+	     */
+	    match = findFormattingMatch((Locale) enum.nextElement(), avail);
+	    if (match != null) {
+		break;
+	    }
+	}
+	
+	return match;
+    }
+
+    /*
+     * Returns the best match between the given preferred locale and the
+     * given available locales.
      *
+     * The best match is given as the first available locale that either:
+     * - exactly matches the given preferred locale ("exact match"), or
      * - does not have a country component and matches (just) the language 
-     *   component of a preferred locale.
+     *   component of the given preferred locale ("language match").
      *
-     * @param pref the preferred locales
+     * @param pref the preferred locale
      * @param avail the available formatting locales
      *
-     * @return the best matching formatting locale, or <tt>null</tt> if no
-     * match was found
+     * @return Available locale that best matches the given preferred locale,
+     * or <tt>null</tt> if no match exists
      */
-    private static Locale getBestMatch(Locale[] pref, Locale[] avail) {
-	Locale ret = null;
+    private static Locale findFormattingMatch(Locale pref, Locale[] avail) {
+	Locale match = null;
 
-	boolean matchFound = false;
-	for (int i=0; (i<pref.length) && !matchFound; i++) {
-	    for (int j=0; j<avail.length; j++) {
-		if (pref[i].equals(avail[j])) {
-		    // Exact match
-		    ret = avail[j];
-		    matchFound = true;
+	for (int i=0; i<avail.length; i++) {
+	    if (pref.equals(avail[i])) {
+		// Exact match
+		match = avail[i];
+		break;
+	    } else {
+		if (pref.getLanguage().equals(avail[i].getLanguage())
+		        && ("".equals(avail[i].getCountry()))) {
+		    // Language match
+		    match = avail[i];
 		    break;
-		} else {
-		    if (pref[i].getLanguage().equals(avail[j].getLanguage())
-			&& (avail[j].getCountry() == null)) {
-			// Language match
-			ret = avail[j];
-			matchFound = true;
-			break;
-		    }
 		}
 	    }
 	}
 
-	return ret;
-    }
-
-    /*
-     * Returns the preferred locales from the request as an array.
-     *
-     * @param pageContext the page in which the preferred request locales need
-     * to be determined
-     *
-     * @return array of preferred request locales
-     */
-    private static Locale[] getRequestLocales(PageContext pageContext) {
-	Vector vec = new Vector();
-	for (Enumeration enum = pageContext.getRequest().getLocales();
-	     enum.hasMoreElements(); ) {
-	    vec.addElement((Locale) enum.nextElement());
-	}
-	
-	/*
-	 * The Enumeration returned by ServletRequest.getLocales() always
-	 * contains at least one element: the default locale for the server.
-	 */
-	Locale[] ret = new Locale[vec.size()];
-	for (int i=0; i<ret.length; i++) {
-	    ret[i] = (Locale) vec.elementAt(i);
-	}
-	    
-	return ret;
+	return match;
     }
 }

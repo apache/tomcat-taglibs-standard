@@ -92,7 +92,7 @@ public abstract class ParamSupport extends BodyTagSupport {
     //*********************************************************************
     // Tag logic
 
-    // Supply our value to our parent <message> tag
+    // Supply our value to our parent <fmt:message> tag
     public int doEndTag() throws JspException {
 	Tag parent = findAncestorWithClass(this, MessageSupport.class);
 	if (parent == null) {
@@ -100,14 +100,15 @@ public abstract class ParamSupport extends BodyTagSupport {
                             "PARAM_OUTSIDE_MESSAGE"));
 	}
 
-	// get argument from 'value' attribute or body, as appropriate
+	/*
+	 * Get argument from 'value' attribute or body, as appropriate, and
+	 * add it to enclosing <fmt:message> tag, even if it is null or equal
+	 * to "".
+	 */
 	if (value == null) {
-            String bcs = getBodyContent().getString();
-            if ((bcs == null) || (value = bcs.trim()).equals(""))
-                throw new JspTagException(
-                    Resources.getMessage("PARAM_NO_VALUE"));
+	    // TLV has already ensured that we have non-empty body in this case
+	    value = getBodyContent().getString().trim();
 	}
-
 	((MessageSupport) parent).addParam(value);
 
 	return EVAL_PAGE;

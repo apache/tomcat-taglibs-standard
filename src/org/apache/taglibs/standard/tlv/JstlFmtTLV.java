@@ -190,7 +190,17 @@ public class JstlFmtTLV extends JstlBaseTLV {
                 && !isTag(qn, LOCALE) && hasDanglingScope(a))
                 fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 
-	    // make sure <fmt:param> is nested inside <fmt:message>
+	    /*
+	     * Make sure <fmt:param> is nested inside <fmt:message>. Note that
+	     * <fmt:param> does not need to be a direct child of <fmt:message>.
+	     * Otherwise, the following would not work:
+	     *
+	     *  <fmt:message key="..." bundle="...">
+	     *   <c:forEach var="arg" items="...">
+	     *    <fmt:param value="${arg}"/>
+	     *   </c:forEach>
+	     *  </fmt:message>
+	     */
 	    if (isTag(qn, MESSAGE_PARAM) && messageDepths.empty()) {
 		fail(Resources.getMessage("PARAM_OUTSIDE_MESSAGE"));
 	    }
