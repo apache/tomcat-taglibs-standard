@@ -66,7 +66,7 @@ import org.apache.taglibs.standard.tag.common.core.*;
  * @author Shawn Bayern
  */
 
-public class URLEncodeTag extends URLEncodeSupport {
+public class UrlTag extends UrlSupport {
 
     //*********************************************************************
     // Accessor methods

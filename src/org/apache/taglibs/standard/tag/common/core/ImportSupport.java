@@ -299,11 +299,13 @@ public abstract class ImportSupport extends BodyTagSupport
 
             if (c == null) {
                 throw new JspTagException(
-                    Resources.getMessage("IMPORT_REL_WITHOUT_DISPATCHER", context, targetUrl));
+                    Resources.getMessage(
+                        "IMPORT_REL_WITHOUT_DISPATCHER", context, targetUrl));
             }
 
 	    // from this context, get a dispatcher
-	    RequestDispatcher rd = c.getRequestDispatcher(targetUrl);
+	    RequestDispatcher rd =
+                c.getRequestDispatcher(stripSession(targetUrl));
 
 	    // include the resource, using our custom wrapper
 	    ImportResponseWrapper irw = 
@@ -451,11 +453,31 @@ public abstract class ImportSupport extends BodyTagSupport
 	}
     }
 
+    //*********************************************************************
+    // Some private utility methods
+
+    /** Returns our URL (potentially with parameters) */
+    private String targetUrl() {
+	return ((urlWithParams != null) ? urlWithParams : url);
+    }
+
     /**
      * Returns <tt>true</tt> if our current URL is absolute,
      * <tt>false</tt> otherwise.
      */
     private boolean isAbsoluteUrl() {
+        return isAbsoluteUrl(url);
+    }
+
+
+    //*********************************************************************
+    // Public utility methods
+
+    /**
+     * Returns <tt>true</tt> if our current URL is absolute,
+     * <tt>false</tt> otherwise.
+     */
+    public static boolean isAbsoluteUrl(String url) {
 	// do a fast, simple check first
 	int colonPos;
 	if ((colonPos = url.indexOf(":")) == -1)
@@ -471,8 +493,21 @@ public abstract class ImportSupport extends BodyTagSupport
 	return true;
     }
 
-    /** Returns our URL (potentially with parameters) */
-    private String targetUrl() {
-	return ((urlWithParams != null) ? urlWithParams : url);
+    /**
+     * Strips a servlet session ID from <tt>url</tt>.  The session ID
+     * is encoded as a URL "path parameter" beginning with "jsessionid=".
+     * We thus remove anything we find between ";jsessionid=" (inclusive)
+     * and either EOS or a subsequent ';' (exclusive).
+     */
+    public static String stripSession(String url) {
+	StringBuffer u = new StringBuffer(url);
+        int sessionStart;
+        while ((sessionStart = u.toString().indexOf(";jsessionid=")) != -1) {
+            int sessionEnd = u.toString().indexOf(";", sessionStart + 1);
+            if (sessionEnd == -1)
+                sessionEnd = u.length();
+            u.delete(sessionStart, sessionEnd);
+        }
+        return u.toString();
     }
 }

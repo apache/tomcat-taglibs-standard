@@ -56,19 +56,21 @@
 package org.apache.taglibs.standard.tag.common.core;
 
 import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import java.net.URLEncoder;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * <p>Support for tag handlers for &lt;urlEncode&gt;, the URL parameter
- * encoding tag in JSTL 1.0.</p>
+ * <p>Support for tag handlers for &lt;url&gt;, the URL creation
+ * and rewriting tag in JSTL 1.0.</p>
  *
  * @author Shawn Bayern
  */
 
-public abstract class URLEncodeSupport extends BodyTagSupport
+public abstract class UrlSupport extends BodyTagSupport
     implements ParamParent {
 
     //*********************************************************************
@@ -86,7 +88,7 @@ public abstract class URLEncodeSupport extends BodyTagSupport
     //*********************************************************************
     // Constructor and initialization
 
-    public URLEncodeSupport() {
+    public UrlSupport() {
 	super();
 	init();
     }
@@ -109,6 +111,7 @@ public abstract class URLEncodeSupport extends BodyTagSupport
 	this.scope = Util.getScope(scope);
     }
 
+
     //*********************************************************************
     // Collaboration with subtags
 
@@ -116,6 +119,7 @@ public abstract class URLEncodeSupport extends BodyTagSupport
     public void addParameter(String name, String value) {
 	params.put(name, value);
     }
+
 
     //*********************************************************************
     // Tag logic
@@ -126,22 +130,13 @@ public abstract class URLEncodeSupport extends BodyTagSupport
 	return EVAL_BODY_BUFFERED;
     }
 
+
     // gets the right value, encodes it, and prints or stores it
     public int doEndTag() throws JspException {
-	String operand = value;
-	// get operand from 'value' attribute or our body, as appropriate
-        if (operand  == null) {
-            if (bodyContent == null || bodyContent.getString() == null)
-                operand = "";
-            else
-                operand = bodyContent.getString().trim();
-        }
+	String result;				// the eventual result
 
-	// encode the input
-	String result = URLEncoder.encode(operand);
-
-	// add parameters
-	if (params != null) {
+	// add (already encoded) parameters
+	if (params.size() > 0) {
 	    // produce a StringBuffer containing all the parameters
 	    StringBuffer paramString = new StringBuffer();
 	    Iterator i = params.entrySet().iterator();
@@ -152,16 +147,20 @@ public abstract class URLEncodeSupport extends BodyTagSupport
 		    paramString.append("&");
 	    }
 
-	    /*
-             * Note: This doesn't really make sense, but I think it's a
-             * spec issue.
-             */
 	    // append these parameters with a '?' or '&', as appropriate
-            boolean firstParameter = operand.indexOf('?') == -1;
+            boolean firstParameter = value.indexOf('?') == -1;
             if (firstParameter)
-		result += "?" + paramString;
+		result = value + "?" + paramString;
             else
-		result += "&" + paramString;
+		result = value + "&" + paramString;
+	} else
+	    result = value;
+
+	// if the URL is relative, rewrite it
+	if (!ImportSupport.isAbsoluteUrl(result)) {
+	    HttpServletResponse response =
+                ((HttpServletResponse) pageContext.getResponse());
+            result = response.encodeURL(result);
 	}
 
 	// store or print the output

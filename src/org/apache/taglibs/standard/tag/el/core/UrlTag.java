@@ -66,7 +66,7 @@ import org.apache.taglibs.standard.tag.common.core.*;
  * @author Shawn Bayern
  */
 
-public class URLEncodeTag extends URLEncodeSupport {
+public class UrlTag extends UrlSupport {
 
     //*********************************************************************
     // 'Private' state (implementation details)
@@ -82,7 +82,7 @@ public class URLEncodeTag extends URLEncodeSupport {
      * should not provide other constructors and are expected to call
      * the superclass constructor
      */
-    public URLEncodeTag() {
+    public UrlTag() {
         super();
         init();
     }
