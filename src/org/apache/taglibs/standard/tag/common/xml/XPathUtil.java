@@ -433,6 +433,13 @@ public class XPathUtil {
         }
         return null;
     }
+
+    private static Document getDocumentForNode(Node node) {
+        Document doc = getDummyDocumentWithoutRoot();
+        Node importedNode = doc.importNode(node, true);
+        doc.appendChild(importedNode);
+        return doc;
+    }
     
     // The following variable is used for holding the modified xpath string
     // when adapting parameter for Xalan XPath engine, where we need to have
@@ -675,10 +682,7 @@ public class XPathUtil {
                             if ( Class.forName("org.w3c.dom.Node").isInstance(
                                 jstlNodeList.elementAt(0) ) ) { 
                                 Node node = (Node)jstlNodeList.elementAt(0);
-                                Document doc = getDummyDocumentWithoutRoot();
-                                Node importedNode = doc.importNode( node, true);
-                                doc.appendChild (importedNode );
-                                boundDocument = doc;
+                                boundDocument = getDocumentForNode(node);
                                 if ( whetherOrigXPath ) {
                                     xpath="/*" + xpath;
                                 }
@@ -723,7 +727,10 @@ public class XPathUtil {
                         }
                     } else if ( Class.forName("org.w3c.dom.Node").isInstance(
                     varObject ) ) {
-                        boundDocument = (Node)varObject;
+                        boundDocument = getDocumentForNode((Node)varObject);
+                        if (whetherOrigXPath) {
+                            xpath = "/*" + xpath;
+                        }
                     } else {
                         boundDocument = getDummyDocument();
                         xpath = origXPath;
