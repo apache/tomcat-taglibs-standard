@@ -291,7 +291,8 @@ public abstract class BundleSupport extends BodyTagSupport {
      *
      * <p> The best matching locale is a client's preferred locale that matches
      * both the language and country components of an available locale for the
-     * given base name. This is considered an exact match.
+     * given base name. This is considered an exact match. An exact match may
+     * exist only if the client's preferred locale specifies a country.
      *
      * <p> If no exact match exists, the first client locale that matches 
      * (just) the language component of an available locale is used.
@@ -324,8 +325,9 @@ public abstract class BundleSupport extends BodyTagSupport {
 	    Locale pref = (Locale) enum.nextElement();
 	    ResourceBundle bundle = ResourceBundle.getBundle(basename, pref);
 	    Locale avail = bundle.getLocale();
-	    if (avail.getLanguage().equals(pref.getLanguage())) {
-		if (avail.getCountry().equals(pref.getCountry())) {
+	    if (pref.getLanguage().equals(avail.getLanguage())) {
+		if (pref.getCountry().length() > 0
+		    && pref.getCountry().equals(avail.getCountry())) {
 		    // exact match
 		    ret = bundle;
 		    break;

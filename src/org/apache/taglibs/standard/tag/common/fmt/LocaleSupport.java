@@ -253,7 +253,8 @@ public abstract class LocaleSupport extends TagSupport {
      *
      * <p> The best matching locale is a client's preferred locale that matches
      * both the language and country components of an available formatting
-     * locale. This is considered an exact match.
+     * locale. This is considered an exact match. An exact match may exist only
+     * if the client's preferred locale specifies a country.
      *
      * <p> If no exact match exists, the first client locale that matches 
      * (just) the language component of an available locale is chosen.
@@ -277,7 +278,8 @@ public abstract class LocaleSupport extends TagSupport {
 	    Locale pref = (Locale) enum.nextElement();
 	    for (int i=0; i<avail.length; i++) {
 		if (pref.getLanguage().equals(avail[i].getLanguage())) {
-		    if (pref.getCountry().equals(avail[i].getCountry())) {
+		    if (pref.getCountry().length() > 0
+			&& pref.getCountry().equals(avail[i].getCountry())) {
 			// exact match
 			ret = avail[i];
 			foundExactMatch = true;	
