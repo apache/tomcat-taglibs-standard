@@ -310,7 +310,7 @@
   </target>
 
   <!-- Create the entire set of distribution files -->
-  <target name="dist" depends="library-dist,examples-dist,documentation-dist,javadoc-dist"/>
+  <target name="dist" depends="library-dist,examples-dist,documentation-dist,javadoc-dist,jsp20el.dist"/>
 
 
 
