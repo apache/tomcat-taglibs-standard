@@ -140,19 +140,15 @@ public class FileTag extends TagSupport {
     // Tag's scific behavior methods
     
     public Reader getReaderFromFile(String name) throws JspException {
-        String absoluteFilePath = null;
-        try {
-            absoluteFilePath =
-            pageContext.getServletContext().getRealPath(name);
-            File file = new File(absoluteFilePath);
-            reader = new FileReader(file);
-            return reader;
-        } catch (IOException ex) {
-            throw new JspException(
-            "Could not access " + absoluteFilePath + ". "
-            + ex.getMessage(), ex);
+        InputStream in = pageContext.getServletContext().
+            getResourceAsStream(name);
+        if (in == null) {
+            throw new JspException("Could not access " + name);
         }
+
+        return new InputStreamReader(in);
     }
+
     
     //*********************************************************************
     // Utility methods
