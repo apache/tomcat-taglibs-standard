@@ -104,6 +104,18 @@ Version 1.0 Release</b></dt>
 
 <dd>SQL Actions:
 <ul>
+ <li>Changes since Beta 1:</li>
+ <ul>
+  <li>Improved exception messages for &lt;sql:query&gt; and &lt;sql:update&gt;</li>
+  <li>relative path used for DataSource JNDI resource path</li>
+  <li>&lt;sql:dateParam&gt; added handling java.util.Date param values</li>
+  <li>Result.getRowsCount() changed to Result.getRowCount()</li>
+  <li>ColumnMetaData removed</li>
+  <li>Result.getColumnNames() method added</li>
+  <li>Result.getRows() returns SortedMap with a case insensitive Comparator</li>
+ </ul>
+ <li>Changes since EA3:</li>
+ <ul>
  <li>Modified Result interface:</li>
   <ul>
    <li>getRows() returns a Map[] where rows[index].colName returns a column's value</li>
@@ -143,6 +155,7 @@ Version 1.0 Release</b></dt>
      'transactionIsolation' attribute.</li>
  <li>Clarified SQL documentation by including information on where to place
      drivers as well as the examples Table structure.</li>
+ </ul>
 </ul>
 </dd>
 
