@@ -281,13 +281,12 @@ public abstract class UpdateTagSupport extends BodyTagSupport
     {
 	if (parameters != null) {
 	    for (int i = 0; i < parameters.size(); i++) {
-		// The first parameter has index 1
-                if (parameters.get(i) != null) {
-                    ps.setObject(i + 1, parameters.get(i));
-                } else {
-                    ps.setNull(i + 1, java.sql.Types.NULL);
-                }
-
+                /* The first parameter has index 1.  If a null
+                 * is passed to setObject the parameter will be
+                 * set to JDBC null so an explicit call to
+                 * ps.setNull is not required.
+                 */
+                ps.setObject(i + 1, parameters.get(i));
 	    }
 	}
     }
