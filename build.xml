@@ -329,7 +329,8 @@
    <javadoc packagenames="javax.servlet.jsp.jstl.*"
             sourcepath="src"
             classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
-            destdir="${dist.library}/javadoc"/>
+            destdir="${dist.library}/javadoc"
+            bottom='&lt;font size="-1"&gt;Copyright 2003 Sun Microsystems, Inc. All Rights Reserved.&lt;/font&gt;'/>
   </target>
 
   <!-- Create the entire set of distribution files -->
