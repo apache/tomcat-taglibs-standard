@@ -63,13 +63,19 @@ import org.apache.taglibs.standard.tag.common.sql.TransactionTagSupport;
  * Subclass for the JSTL library with EL support.
  *
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 public class TransactionTag extends TransactionTagSupport {
     
     private String dataSourceEL;
+    private String transactionIsolationEL;
 
     public void setDataSource(String dataSourceEL) {
 	this.dataSourceEL = dataSourceEL;
+    }
+
+    public void setTransactionIsolation(String transactionIsolationEL) {
+	this.transactionIsolationEL = transactionIsolationEL;
     }
 
     public int doStartTag() throws JspException {
@@ -78,6 +84,14 @@ public class TransactionTag extends TransactionTagSupport {
 		ExpressionEvaluatorManager.evaluate("dataSource", 
 		    dataSourceEL, Object.class, this, pageContext);
 	}
+
+	if (transactionIsolationEL != null) {
+	    transactionIsolationEL = (String) 
+		ExpressionEvaluatorManager.evaluate("transactionIsolation", 
+		    transactionIsolationEL, String.class, this, pageContext);
+            super.setTransactionIsolation(transactionIsolationEL);
+	}
+
 	return super.doStartTag();
     }
 }
