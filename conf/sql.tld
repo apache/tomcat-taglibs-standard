@@ -60,7 +60,7 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>transactionIsolation</name>
+        <name>isolation</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
