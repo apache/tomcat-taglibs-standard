@@ -142,7 +142,7 @@ public class Config {
 	case PageContext.REQUEST_SCOPE:
 	    return pc.getAttribute(name + REQUEST_SCOPE_SUFFIX, scope);
 	case PageContext.SESSION_SCOPE:
-	    return pc.getAttribute(name + SESSION_SCOPE_SUFFIX, scope);
+	    return get(pc.getSession(), name);
 	case PageContext.APPLICATION_SCOPE:
 	    return pc.getAttribute(name + APPLICATION_SCOPE_SUFFIX, scope);
 	default:
@@ -180,10 +180,17 @@ public class Config {
      * @param name Configuration variable name
      *
      * @return The <tt>java.lang.Object</tt> associated with the configuration
-     * variable, or null if it is not defined.
+     * variable, or null if it is not defined, if session is null, or if the session
+     * is invalidated. 
      */
     public static Object get(HttpSession session, String name) {
-	return session.getAttribute(name + SESSION_SCOPE_SUFFIX);
+        Object ret = null;
+        if (session != null) {
+            try {
+                ret = session.getAttribute(name + SESSION_SCOPE_SUFFIX);
+            } catch (IllegalStateException ex) {} // when session is invalidated
+        }
+        return ret;
     }
 
     /**
