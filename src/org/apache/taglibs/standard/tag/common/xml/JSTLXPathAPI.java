@@ -57,6 +57,8 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
+import java.util.Vector;
+
 import javax.servlet.jsp.JspTagException;
 
 import javax.xml.transform.TransformerException;
@@ -321,4 +323,34 @@ public class JSTLXPathAPI extends XPathAPI {
                 Resources.getMessage("XPATH_ILLEGAL_ARG_EVALUATING_EXPR", str, ex.getMessage()), ex);            
         }
     }
+    
+    public static XObject eval(
+    Node contextNode, String str, PrefixResolver prefixResolver,
+    XPathContext xpathSupport, Vector varQNames) throws JspTagException {
+        //p("***************** eval ");
+        //p( "contextNode => " + contextNode );
+        //p( "XPath str => " + str );
+        //p( "PrefixResolver => " + prefixResolver );
+        //p( "XPath Context => " + xpathSupport );
+        //p( "Var QNames => " + varQNames );
+        //p( "Global Var Size => " + varQNames.size() );        
+        try {
+            XPath xpath = new XPath(str, null, prefixResolver, XPath.SELECT, null);            
+            xpath.fixupVariables( varQNames, varQNames.size());
+            // Execute the XPath, and have it return the result
+            int ctxtNode = xpathSupport.getDTMHandleFromNode(contextNode);            
+            // System.out.println("Context Node id ( after getDTMHandlerFromNode) => " + ctxtNode );            
+            return xpath.execute(xpathSupport, ctxtNode, prefixResolver);
+        } catch (TransformerException ex) {
+            throw new JspTagException(
+            Resources.getMessage("XPATH_ERROR_EVALUATING_EXPR", str, ex.getMessage()), ex);
+        } catch (IllegalArgumentException ex) {
+            throw new JspTagException(
+            Resources.getMessage("XPATH_ILLEGAL_ARG_EVALUATING_EXPR", str, ex.getMessage()), ex);
+        }
+    } 
+    
+    private static void p(String s) {
+        System.out.println("[JSTLXPathAPI] " + s);
+    }    
 }

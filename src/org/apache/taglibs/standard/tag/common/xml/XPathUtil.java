@@ -77,6 +77,8 @@ import org.apache.xml.utils.QName;
  * <p>Support for tag handlers that evaluate XPath expressions.</p>
  *
  * @author Shawn Bayern
+ * @author Ramesh Mandava ( ramesh.mandava@sun.com )
+ * @author Pierre Delisle ( pierre.delisle@sun.com )
  */
 // would ideally be a base class, but some of our user handlers already
 // have their own parents
@@ -93,6 +95,96 @@ public class XPathUtil {
         pageContext = pc;
     }    
     
+    int globalVarSize=0;
+    public Vector getVariableQNames ( ) {
+
+        globalVarSize = 0;
+        Vector variableVector = new Vector ( );
+        // Now construct attributes in different scopes
+        Enumeration enum = pageContext.getAttributeNamesInScope( 
+            PageContext.PAGE_SCOPE );
+        while ( enum.hasMoreElements() ) {
+            String varName = (String)enum.nextElement();
+            QName varQName = new QName ( PAGE_NS_URL, PAGE_P, varName); 
+            //Adding both namespace qualified QName and just localName
+            variableVector.addElement( varQName );
+            globalVarSize++;
+            
+            variableVector.addElement( new QName(null, varName ) );
+            globalVarSize++;
+        }
+        enum = pageContext.getAttributeNamesInScope( 
+            PageContext.REQUEST_SCOPE );
+        while ( enum.hasMoreElements() ) {
+            String varName = (String)enum.nextElement();
+            QName varQName = new QName ( REQUEST_NS_URL,REQUEST_P, varName); 
+            //Adding both namespace qualified QName and just localName
+            variableVector.addElement( varQName );
+            globalVarSize++;
+            variableVector.addElement( new QName(null, varName ) );
+            globalVarSize++;
+        }
+        enum = pageContext.getAttributeNamesInScope( 
+            PageContext.SESSION_SCOPE );
+        while ( enum.hasMoreElements() ) {
+            String varName = (String)enum.nextElement();
+            QName varQName = new QName ( SESSION_NS_URL, SESSION_P,varName); 
+            //Adding both namespace qualified QName and just localName
+            variableVector.addElement( varQName );
+            globalVarSize++;
+            variableVector.addElement( new QName(null, varName ) );
+            globalVarSize++;
+        }
+        enum = pageContext.getAttributeNamesInScope( 
+            PageContext.APPLICATION_SCOPE );
+        while ( enum.hasMoreElements() ) {
+            String varName = (String)enum.nextElement();
+            QName varQName = new QName ( APP_NS_URL, APP_P,varName ); 
+            //Adding both namespace qualified QName and just localName
+            variableVector.addElement( varQName );
+            globalVarSize++;
+            variableVector.addElement( new QName(null, varName ) );
+            globalVarSize++;
+        }
+        enum = pageContext.getRequest().getParameterNames();
+        while ( enum.hasMoreElements() ) {
+            String varName = (String)enum.nextElement();
+            QName varQName = new QName ( PARAM_NS_URL, PARAM_P,varName ); 
+            //Adding both namespace qualified QName and just localName
+            variableVector.addElement( varQName );
+            globalVarSize++;
+        }
+        enum = pageContext.getServletContext().getInitParameterNames();
+        while ( enum.hasMoreElements() ) {
+            String varName = (String)enum.nextElement();
+            QName varQName = new QName ( INITPARAM_NS_URL, INITPARAM_P,varName ); 
+            //Adding both namespace qualified QName and just localName
+            variableVector.addElement( varQName );
+            globalVarSize++;
+        }
+        enum = ((HttpServletRequest)pageContext.getRequest()).getHeaderNames();
+        while ( enum.hasMoreElements() ) {
+            String varName = (String)enum.nextElement();
+            QName varQName = new QName ( HEADER_NS_URL, HEADER_P,varName ); 
+            //Adding namespace qualified QName 
+            variableVector.addElement( varQName );
+            globalVarSize++;
+        }
+        Cookie[] c= ((HttpServletRequest)pageContext.getRequest()).getCookies();
+        if ( c!= null ) {
+	    for (int i = 0; i < c.length; i++) {
+	        String varName = c[i].getName();
+                QName varQName = new QName ( COOKIE_NS_URL, COOKIE_P,varName ); 
+                //Adding namespace qualified QName 
+                variableVector.addElement( varQName );
+                globalVarSize++;
+            }
+        }
+
+        return variableVector;
+        
+    }
+ 
     //*********************************************************************
     // Support for JSTL variable resolution
     
@@ -150,12 +242,69 @@ public class XPathUtil {
         org.apache.xml.utils.QName qname)
         throws javax.xml.transform.TransformerException, UnresolvableException
         {
+            //p( "***********************************getVariableOrParam begin****");
             String namespace = qname.getNamespaceURI();
             String prefix = qname.getPrefix();
             String localName = qname.getLocalName();
             
-            Object obj = getVariableValue(namespace, prefix, localName);
-            return new XObject(obj);
+            //p("namespace:prefix:localname=>"+ namespace
+            //     + ":" + prefix +":" + localName );
+            
+            try {
+                Object varObject = getVariableValue(namespace,prefix,localName);
+
+
+                //XObject varObject = myvs.getVariableOrParam( xpathSupport, varQName);
+                XObject newXObject = new XObject( varObject);
+
+                if ( Class.forName("org.w3c.dom.Document").isInstance( varObject) ) {
+
+                    NodeList nl= ((Document)varObject).getChildNodes();
+                    // To allow non-welformed document
+                    Vector nodeVector = new Vector();
+                    for ( int i=0; i<nl.getLength(); i++ ) {
+                        Node currNode = nl.item(i);
+                        if ( currNode.getNodeType() == Node.ELEMENT_NODE ) {
+                            nodeVector.addElement( currNode);
+                        }
+                    }
+                    JSTLNodeList jstlNodeList = new JSTLNodeList( nodeVector);
+                    newXObject = new XNodeSetForDOM( jstlNodeList, xctxt );
+                    
+                    return newXObject;
+                   
+                } 
+                if ( Class.forName(
+        "org.apache.taglibs.standard.tag.common.xml.JSTLNodeList").isInstance(
+                     varObject) ) {
+                    JSTLNodeList jstlNodeList = (JSTLNodeList)varObject;
+                    if  ( ( jstlNodeList.getLength() == 1 ) && 
+   (!Class.forName("org.w3c.dom.Node").isInstance( jstlNodeList.elementAt(0) ) ) ) { 
+                        varObject = jstlNodeList.elementAt(0);
+                        //Now we need to allow this primitive type to be coverted 
+                        // to type which Xalan XPath understands 
+                    } else {
+                        return new XNodeSetForDOM (  jstlNodeList ,xctxt );
+                    }
+                } 
+                if (Class.forName("org.w3c.dom.Node").isInstance( varObject)) {
+                    newXObject = new XNodeSetForDOM ( new JSTLNodeList( (Node)varObject ),xctxt );
+                } else if ( Class.forName("java.lang.String").isInstance( varObject)){
+                    newXObject = new XString ( (String)varObject );
+                } else if ( Class.forName("java.lang.Boolean").isInstance( varObject) ) {
+                    newXObject = new XBoolean ( (Boolean)varObject );
+                } else if ( Class.forName("java.lang.Number").isInstance( varObject) ) {
+                    newXObject = new XNumber ( (Number)varObject );
+                } 
+
+                return newXObject;
+               // myvs.setGlobalVariable( i, newXObject );
+            } catch ( ClassNotFoundException cnfe ) {
+                // This shouldn't happen (FIXME: LOG)
+                System.out.println("CLASS NOT FOUND EXCEPTION :" + cnfe );
+            } 
+            //System.out.println("*****getVariableOrParam returning *null*" );
+            return null ;
         }
         
         /**
@@ -168,9 +317,10 @@ public class XPathUtil {
         String localName) 
         throws UnresolvableException 
         {
-            //p("resolving: " + namespace + "/" + prefix + "/" + localName);
-            // I'd prefer to match on namespace, but this doesn't appear
-            // to work in Jaxen
+            // p("resolving: ns=" + namespace + " prefix=" + prefix + " localName=" + localName);
+            // We can match on namespace with Xalan but leaving as is
+            // [ I 'd prefer to match on namespace, but this doesn't appear
+            // to work in Jaxen]
             if (prefix == null || prefix.equals("")) {
                 return notNull(
                 pageContext.findAttribute(localName),
@@ -249,17 +399,17 @@ public class XPathUtil {
     
     private PageContext pageContext;
     private static HashMap exprCache;
-    private static JSTLPrefixResolver jstlPrefixResolver;
+    private static JSTLPrefixResolver jstlPrefixResolver = null;
     
     /** Initialize globally useful data. */
     private synchronized static void staticInit() {
         if (jstlPrefixResolver == null) {
             // register supported namespaces
             jstlPrefixResolver = new JSTLPrefixResolver();
-            jstlPrefixResolver.addNamespace("page", PAGE_NS_URL);
-            jstlPrefixResolver.addNamespace("request", REQUEST_NS_URL);
-            jstlPrefixResolver.addNamespace("session", SESSION_NS_URL);
-            jstlPrefixResolver.addNamespace("application", APP_NS_URL);
+            jstlPrefixResolver.addNamespace("pageScope", PAGE_NS_URL);
+            jstlPrefixResolver.addNamespace("requestScope", REQUEST_NS_URL);
+            jstlPrefixResolver.addNamespace("sessionScope", SESSION_NS_URL);
+            jstlPrefixResolver.addNamespace("applicationScope", APP_NS_URL);
             jstlPrefixResolver.addNamespace("param", PARAM_NS_URL);
             jstlPrefixResolver.addNamespace("initParam", INITPARAM_NS_URL);
             jstlPrefixResolver.addNamespace("header", HEADER_NS_URL);
@@ -283,7 +433,10 @@ public class XPathUtil {
                 dbf.setValidating( false );
             }
             db = dbf.newDocumentBuilder();
-            d = db.newDocument();
+
+            DOMImplementation dim = db.getDOMImplementation();
+            d = dim.createDocument("http://java.sun.com/jstl", "dummyroot", null); 
+            //d = db.newDocument();
             return d;
         } catch ( Exception e ) {
             e.printStackTrace();
@@ -304,22 +457,32 @@ public class XPathUtil {
      * Evaluate an XPath expression to a String value. 
      */
     public String valueOf(Node n, String xpath) throws JspTagException  {
-        //System.out.println("valueOf of XPathUtil = passed node: xpath => " +
-        //     n + " : " + xpath );        
+        //p("******** valueOf(" + n + ", " + xpath + ")");
         staticInit();
+        // @@@ but where do we set the Pag4eContext for the varaiblecontext?
         JstlVariableContext vs = new JstlVariableContext();
         XPathContext xpathSupport = new XPathContext();
         xpathSupport.setVarStack( vs);
+        
+        Vector varVector = fillVarStack(vs, xpathSupport);                
+        
         Node contextNode = adaptParamsForXalan( vs, n, xpath.trim() );
         
         xpath = modifiedXPath;
         
+        //p("******** valueOf: modified xpath: " + xpath);
+
         XObject result = JSTLXPathAPI.eval( contextNode, xpath,
-        jstlPrefixResolver,xpathSupport );
+        jstlPrefixResolver,xpathSupport, varVector);
+
+        
+        //p("******Result TYPE => " + result.getTypeString() );
         
         String resultString = result.str();
+        //p("******** valueOf: after eval: " + resultString);
         
         return resultString;
+    
     }    
 
     /** 
@@ -333,11 +496,13 @@ public class XPathUtil {
         XPathContext xpathSupport = new XPathContext();
         xpathSupport.setVarStack( vs);
         
+        Vector varVector = fillVarStack(vs, xpathSupport);        
+        
         Node contextNode = adaptParamsForXalan( vs, n, xpath.trim() );
         xpath = modifiedXPath;
         
         XObject result = JSTLXPathAPI.eval( contextNode, xpath,
-        jstlPrefixResolver, xpathSupport );
+        jstlPrefixResolver, xpathSupport, varVector);
         
         try {
             return result.bool();
@@ -357,22 +522,42 @@ public class XPathUtil {
         XPathContext xpathSupport = new XPathContext();
         xpathSupport.setVarStack( vs);
         
+        Vector varVector = fillVarStack(vs, xpathSupport);                
+
         Node contextNode = adaptParamsForXalan( vs, n, xpath.trim() );
         xpath = modifiedXPath;
         
-        
         XObject result = JSTLXPathAPI.eval( contextNode, xpath,
-        jstlPrefixResolver,xpathSupport );
-        
-        NodeList nl= JSTLXPathAPI.getNodeList(result);
-        // System.out.println("NodeList => " + nl );
-        Vector resultVect = new Vector();
-        for ( int i=0; i<nl.getLength(); i++ ) {
-            Node currNode = nl.item(i);
-            //printDetails ( currNode );
-            resultVect.add(i, nl.item(i) );
+        jstlPrefixResolver,xpathSupport, varVector);
+        try {
+            NodeList nl= JSTLXPathAPI.getNodeList(result);
+            return new JSTLNodeList( nl );
+        } catch ( JspTagException e ) {
+            try { 
+                //If result can't be converted to NodeList we receive exception
+                // In this case we may have single primitive value as the result
+                // Populating List with this value ( String, Boolean or Number )
+
+                //System.out.println("JSTLXPathAPI.getNodeList thrown exception:"+ e);
+                Vector vector = new Vector();
+                Object resultObject = null;
+                if ( result.getType()== XObject.CLASS_BOOLEAN ) {
+                    resultObject = new Boolean( result.bool());
+                } else if ( result.getType()== XObject.CLASS_NUMBER ) {
+                    resultObject = new Double( result.num());
+                } else if ( result.getType()== XObject.CLASS_STRING ) {
+                    resultObject = result.str();
+                }
+
+                vector.add( resultObject );
+                return new JSTLNodeList ( vector );
+            } catch ( TransformerException te ) {
+                throw new JspTagException ( te );
+            }
         }
-        return resultVect;
+          
+        
+       
     }
     
     /** 
@@ -380,7 +565,7 @@ public class XPathUtil {
      */
     public Node selectSingleNode(Node n, String xpath)
     throws JspTagException {
-        //System.out.println("selectSingleNode of XPathUtil = passed node:" +
+        //p("selectSingleNode of XPathUtil = passed node:" +
         //   "xpath => " + n + " : " + xpath );
         
         staticInit();
@@ -388,6 +573,8 @@ public class XPathUtil {
         XPathContext xpathSupport = new XPathContext();
         xpathSupport.setVarStack( vs);
         
+        Vector varVector = fillVarStack(vs, xpathSupport);                
+
         Node contextNode = adaptParamsForXalan( vs, n, xpath.trim() );
         xpath = modifiedXPath;
         
@@ -447,7 +634,6 @@ public class XPathUtil {
         modifiedXPath = xpath;
         String origXPath = xpath ;
         
-        
         // If contextNode is not null then  just pass the values to Xalan XPath
         if ( n != null ) {
             return n;
@@ -455,8 +641,11 @@ public class XPathUtil {
         
         if (  xpath.startsWith("$")  ) {
             // JSTL uses $scopePrefix:varLocalName/xpath expression
-            String varQName= xpath.substring( xpath.indexOf("$")+1,
-            xpath.indexOf("/") );
+
+            String varQName=  xpath.substring( xpath.indexOf("$")+1);
+            if ( varQName.indexOf("/") > 0 ) {
+                varQName = varQName.substring( 0, varQName.indexOf("/"));
+            }
             String varPrefix =  null;
             String varLocalName =  varQName;
             if ( varQName.indexOf( ":") >= 0 ) {
@@ -466,7 +655,10 @@ public class XPathUtil {
             
             if ( xpath.indexOf("/") > 0 ) {
                 xpath = xpath.substring( xpath.indexOf("/"));
+            } else  {
+                xpath = "/*";
             }
+           
             
             try {
                 Object varObject=jvc.getVariableValue( null,varPrefix,
@@ -476,41 +668,56 @@ public class XPathUtil {
                 
                 if ( Class.forName("org.w3c.dom.Document").isInstance(
                 varObject ) )  {
-                    boundDocument = (Document)varObject;
-                    //System.out.println("Document bound to " + varQName +
-                    // " => "+ boundDocument );
+                    //boundDocument = ((Document)varObject).getDocumentElement();
+                    boundDocument = ((Document)varObject);
                 } else {
                     
                     //System.out.println("Creating a Dummy document to pass " +
                     // " onto as context node " );
                     
-                    if ( Class.forName("java.util.Vector").isInstance(
+                    if ( Class.forName("org.apache.taglibs.standard.tag.common.xml.JSTLNodeList").isInstance(
                     varObject ) ) {
                         Document newDocument = getDummyDocument();
-                        Vector nodeVector = (Vector)varObject;
-                        for ( int i=0; i< nodeVector.size(); i++ ) {
-                            Node currNode = (Node)nodeVector.elementAt(i);
-                           /*
-                            System.out.println("Current Node => " + currNode );
-                            String namespaceURI = currNode.getNamespaceURI();
-                            String prefix = currNode.getPrefix();
-                            String localName = currNode.getLocalName();
-                            QName qname = new QName( namespaceURI, prefix,
-                                localName );
+
+                        JSTLNodeList jstlNodeList = (JSTLNodeList)varObject;
+                        if  ( ( jstlNodeList.getLength() == 1 ) && 
+   (!Class.forName("org.w3c.dom.Node").isInstance( jstlNodeList.elementAt(0) ) ) ) { 
+
+                            //Nodelist with primitive type
+                            Object myObject = jstlNodeList.elementAt(0);
+
+                            //p("Single Element of primitive type");
+                            //p("Type => " + myObject.getClass());
+
+                            xpath = myObject.toString();
+
+                            //p("String value ( xpathwould be this) => " + xpath);
+                            boundDocument = newDocument;
                             
-                            printDetails ( currNode );
-                            */
+                        } else {
+
+                            Element dummyroot = newDocument.getDocumentElement();
+                        for ( int i=0; i< jstlNodeList.getLength(); i++ ) {
+                            Node currNode = (Node)jstlNodeList.item(i);
                             
                             Node importedNode = newDocument.importNode(
                             currNode, true );
-                            newDocument.appendChild( importedNode );
+
+                            //printDetails ( newDocument);
+
+                            dummyroot.appendChild( importedNode );
+
+                            //p( "Details of the document After importing  " );
+                            //printDetails ( newDocument);
                         }
                         boundDocument = newDocument;
                         // printDetails ( boundDocument );
                         // Verify : As we are adding Document element we need to
                         // change the xpath expression. Hopefully this won't
                         // change the result
+
                         xpath = "/*" +  xpath;
+                        }
                     } else if ( Class.forName("org.w3c.dom.Node").isInstance(
                     varObject ) ) {
                         boundDocument = (Node)varObject;
@@ -522,15 +729,58 @@ public class XPathUtil {
                     
                 }
             } catch ( UnresolvableException ue ) {
+                // FIXME: LOG
                 System.out.println("Variable Unresolvable :" + ue.getMessage());
                 ue.printStackTrace();
             } catch ( ClassNotFoundException cnf ) {
                 // Will never happen
             }
+        } else { 
+            //System.out.println("Not encountered $ Creating a Dummydocument 2 "+
+             //   "pass onto as context node " );
+            boundDocument = getDummyDocument();
         }
+     
         modifiedXPath = xpath;
+        //System.out.println("Modified XPath::boundDocument =>" + modifiedXPath +
+        //    "::" + boundDocument );
+         
         return boundDocument;
     }
+    
+
+    //*********************************************************************
+    // 
+    
+    /**
+     ** @@@ why do we have to pass varVector in the varStack first, and then
+     * to XPath object?
+     */
+    private Vector fillVarStack(JstlVariableContext vs, XPathContext xpathSupport) 
+    throws JspTagException {
+        org.apache.xpath.VariableStack myvs = xpathSupport.getVarStack();
+        Vector varVector = getVariableQNames();
+        for ( int i=0; i<varVector.size(); i++ ) {
+          
+            QName varQName = (QName)varVector.elementAt(i);
+
+            try { 
+                XObject variableValue = vs.getVariableOrParam( xpathSupport, varQName );
+                //p("&&&&Variable set to => " + variableValue.toString() );
+                //p("&&&&Variable type => " + variableValue.getTypeString() );
+                myvs.setGlobalVariable( i, variableValue );
+
+            } catch ( TransformerException te ) {
+                throw new JspTagException( te ) ;
+            } 
+ 
+        }
+        return varVector;
+    }
+        
+    
+    
+    
     
     //*********************************************************************
     // Static support for context retrieval from parent <forEach> tag
@@ -552,7 +802,7 @@ public class XPathUtil {
         System.out.println("[XPathUtil] " + s);
     }
     
-    public void printDetails(Node n) {
+    public static void printDetails(Node n) {
         System.out.println("\n\nDetails of Node = > " + n ) ;
         System.out.println("Name:Type:Node Value = > " + n.getNodeName() +
         ":" + n.getNodeType() + ":" + n.getNodeValue()  ) ;
@@ -569,3 +819,59 @@ public class XPathUtil {
         }
     }    
 }
+
+class JSTLNodeList extends Vector implements NodeList   {
+    
+    Vector nodeVector;
+
+    public JSTLNodeList ( Vector nodeVector ) {
+        this.nodeVector = nodeVector;
+    }
+
+    public JSTLNodeList ( NodeList nl ) {
+        nodeVector = new Vector();
+        //System.out.println("[JSTLNodeList] nodelist details");
+        for ( int i=0; i<nl.getLength(); i++ ) {
+            Node currNode = nl.item(i);
+            //XPathUtil.printDetails ( currNode );
+            nodeVector.add(i, nl.item(i) );
+        }
+    }
+
+    public JSTLNodeList ( Node n ) {
+        nodeVector = new Vector();
+        nodeVector.addElement( n );
+    }
+        
+
+    public Node item ( int index ) {
+        return (Node)nodeVector.elementAt( index );
+    }
+
+    public Object elementAt ( int index ) {
+        return nodeVector.elementAt( index );
+    }
+
+    public Object get ( int index ) {
+        return nodeVector.get( index );
+    }
+
+    public int getLength (  ) {
+        return nodeVector.size( );
+    }
+
+    public int size (  ) {
+        //System.out.println("JSTL node list size => " + nodeVector.size() );
+        return nodeVector.size( );
+    }
+
+    // Can implement other Vector methods to redirect those methods to 
+    // the vector in the variable param. As we are not using them as part 
+    // of this implementation we are not doing that here. If this changes
+    // then we need to override those methods accordingly  
+
+}
+         
+
+
+
