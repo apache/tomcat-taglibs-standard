@@ -3,12 +3,14 @@
 
 <properties>
   <author>Shawn Bayern</author>
-  <title>The Jakarta-Taglibs Project: JSP Standard Tag Library (JSTL) RI</title>
+  <title>The Jakarta-Taglibs Project: 'Standard' taglib: JSP(tm) Standard Tag Library (JSTL) RI</title>
 </properties>
 
 <body>
 
-  <section name="JSP Standard Tag Library" href="Welcome">
+  <section name="'Standard' Taglib" href="Welcome">
+
+    <big><b>JSP(tm) Standard Tag Library reference implementation</b></big>
 
     <p>The <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 Expert Group</a>,
       operating under the Java Community Process, will be hosting the
@@ -34,7 +36,7 @@
 
   </section>
 
-  <section name="JSP Standard Tag Library News" href="News">
+  <section name="'Standard' Taglib News" href="News">
 
     <news>
       <newsitem date="11/21/2001">
