@@ -67,7 +67,7 @@ import org.apache.taglibs.standard.tag.common.sql.DateParamTagSupport;
 public class DateParamTag extends DateParamTagSupport {
     
     public void setValue(Date value) {
-	this.rawValue = value;
+	this.value = value;
     }
 
     public void setType(String type) {

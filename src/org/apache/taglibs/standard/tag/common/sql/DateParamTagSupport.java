@@ -72,9 +72,21 @@ import org.apache.taglibs.standard.resources.Resources;
  */
 
 public abstract class DateParamTagSupport extends BodyTagSupport {
-    protected java.util.Date value;
+
+    //*********************************************************************
+    // Private constants
+    
+    private static final String TIMESTAMP_TYPE = "timestamp";
+    private static final String TIME_TYPE = "time";
+    private static final String DATE_TYPE = "date";
+	
+
+    //*********************************************************************
+    // Protected state
+
     protected String type;
-    protected Object rawValue;
+    protected java.util.Date value;
+
 
     //*********************************************************************
     // Constructor
@@ -86,8 +98,9 @@ public abstract class DateParamTagSupport extends BodyTagSupport {
 
     private void init() {
         value = null;
-        type = "TIMESTAMP";
+        type = null;
     }
+
 
     //*********************************************************************
     // Tag logic
@@ -100,36 +113,35 @@ public abstract class DateParamTagSupport extends BodyTagSupport {
                 Resources.getMessage("SQL_PARAM_OUTSIDE_PARENT"));
 	}
 
-        if (rawValue != null) {
-            value = getConvertedValue();
+        if (value != null) {
+            convertValue();
         }
 
 	parent.addSQLParameter(value);
 	return EVAL_PAGE;
     }
 
+
     //*********************************************************************
     // Private utility methods
 
-    private java.util.Date getConvertedValue() {
-        if (type.equalsIgnoreCase("TIMESTAMP")) {
-            if (!(rawValue instanceof java.sql.Timestamp)) {
-                return new java.sql.Timestamp(
-                    ((java.util.Date)rawValue).getTime());
-            }
-        }
-        if (type.equalsIgnoreCase("TIME")) {
-            if (!(rawValue instanceof java.sql.Time)) {
-                return new java.sql.Time(
-                    ((java.util.Date)rawValue).getTime());
-            }
-        }
-        if (type.equalsIgnoreCase("DATE")) {
-            if (!(rawValue instanceof java.sql.Date)) {
-                return new java.sql.Date(
-                    ((java.util.Date)rawValue).getTime());
-            }
-        }
-        return (java.util.Date)rawValue;
+    private void convertValue() throws JspException {
+
+	if ((type == null) || (type.equalsIgnoreCase(TIMESTAMP_TYPE))) {
+	    if (!(value instanceof java.sql.Timestamp)) {
+		value = new java.sql.Timestamp(value.getTime());
+	    }
+	} else if (type.equalsIgnoreCase(TIME_TYPE)) {
+	    if (!(value instanceof java.sql.Time)) {
+		value = new java.sql.Time(value.getTime());
+	    }
+	} else if (type.equalsIgnoreCase(DATE_TYPE)) {
+	    if (!(value instanceof java.sql.Date)) {
+		value = new java.sql.Date(value.getTime());
+	    }
+	} else {
+	    throw new JspException(
+                Resources.getMessage("SQL_DATE_PARAM_INVALID_TYPE", type));
+	}
     }
 }

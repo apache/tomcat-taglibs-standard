@@ -54,6 +54,7 @@
  */ 
 package org.apache.taglibs.standard.tag.el.sql;
 
+import java.util.Date;
 import javax.servlet.jsp.*;
 import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.sql.DateParamTagSupport;
@@ -87,14 +88,13 @@ public class DateParamTag extends DateParamTagSupport {
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
 	if (valueEL != null) {
-	    rawValue = (Object) 
-		ExpressionEvaluatorManager.evaluate("value", valueEL, 
-		    Object.class, this, pageContext);
+	    value = (Date) ExpressionEvaluatorManager.evaluate(
+                "value", valueEL, Date.class, this, pageContext);
 	}
+
 	if (typeEL != null) {
-	    type = (String) 
-		ExpressionEvaluatorManager.evaluate("type", typeEL, 
-		    String.class, this, pageContext);
+	    type = (String) ExpressionEvaluatorManager.evaluate(
+                "type", typeEL, String.class, this, pageContext);
         }
     }
 
