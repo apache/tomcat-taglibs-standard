@@ -5,39 +5,39 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
     version="2.0">
     
+  <description>JSTL 1.1 XML library</description>
+  <display-name>JSTL XML</display-name>
   <tlib-version>1.1</tlib-version>
   <short-name>x</short-name>
   <uri>http://java.sun.com/jstl-el/xml</uri>
-  <display-name>JSTL XML</display-name>
-  <description>JSTL 1.1 XML library</description>
 
   <validator>
-    <validator-class>
-	org.apache.taglibs.standard.tlv.JstlXmlTLV
-    </validator-class>
     <description>
         Provides validation features for JSTL XML tags.
     </description>
+    <validator-class>
+	org.apache.taglibs.standard.tlv.JstlXmlTLV
+    </validator-class>
   </validator>
 
   <tag>
-    <name>choose</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.core.ChooseTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Simple conditional tag that establishes a context for
         mutually exclusive conditional operations, marked by
         &lt;when&gt; and &lt;otherwise&gt;
     </description>
+    <name>choose</name>
+    <tag-class>org.apache.taglibs.standard.tag.common.core.ChooseTag</tag-class>
+    <body-content>JSP</body-content>
   </tag>
 
   <tag>
-    <name>out</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.xml.ExprTag</tag-class>
-    <body-content>empty</body-content>
     <description>
 	Like &lt;%= ... &gt;, but for XPath expressions.
     </description>
+    <name>out</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.xml.ExprTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
         <name>select</name>
         <required>true</required>
@@ -51,13 +51,13 @@
   </tag>
 
   <tag>
-    <name>if</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.xml.IfTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         XML conditional tag, which evalutes its body if the
         supplied XPath expression evalutes to 'true' as a boolean
     </description>
+    <name>if</name>
+    <tag-class>org.apache.taglibs.standard.tag.common.xml.IfTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>select</name>
         <required>true</required>
@@ -76,12 +76,12 @@
   </tag>
 
   <tag>
-    <name>forEach</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.xml.ForEachTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
 	XML iteration tag.
     </description>
+    <name>forEach</name>
+    <tag-class>org.apache.taglibs.standard.tag.common.xml.ForEachTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
 	<name>var</name>
 	<required>false</required>
@@ -95,23 +95,23 @@
   </tag>
 
   <tag>
-    <name>otherwise</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.core.OtherwiseTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
 	Subtag of &lt;choose&gt; that follows &lt;when&gt; tags
 	and runs only if all of the prior conditions evaluated to
 	'false'
     </description>
+    <name>otherwise</name>
+    <tag-class>org.apache.taglibs.standard.tag.common.core.OtherwiseTag</tag-class>
+    <body-content>JSP</body-content>
   </tag>
 
   <tag>
-    <name>param</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.xml.ParamTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Adds a parameter to a containing 'transform' tag's Transformer
     </description>
+    <name>param</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.xml.ParamTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>name</name>
         <required>true</required>
@@ -125,13 +125,13 @@
   </tag>
 
   <tag>
+    <description>
+	Parses XML content from 'source' attribute or 'body'
+    </description>
     <name>parse</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.xml.ParseTag</tag-class>
     <tei-class>org.apache.taglibs.standard.tei.XmlParseTEI</tei-class>
     <body-content>JSP</body-content>
-    <description>
-	Parses XML content from 'source' attribute or 'body'
-    </description>
     <attribute>
         <name>var</name>
         <required>false</required>
@@ -170,12 +170,12 @@
   </tag>
 
   <tag>
-    <name>set</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.xml.SetTag</tag-class>
-    <body-content>empty</body-content>
     <description>
 	Saves the result of an XPath expression evaluation in a 'scope'
     </description>
+    <name>set</name>
+    <tag-class>org.apache.taglibs.standard.tag.common.xml.SetTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
         <name>var</name>
         <required>true</required>
@@ -194,14 +194,14 @@
   </tag>
 
   <tag>
-    <name>transform</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.xml.TransformTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.XmlTransformTEI</tei-class>
-    <body-content>JSP</body-content>
     <description>
 	Conducts a transformation given a source XML document
 	and an XSLT stylesheet
     </description>
+    <name>transform</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.xml.TransformTag</tag-class>
+    <tei-class>org.apache.taglibs.standard.tei.XmlTransformTEI</tei-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>var</name>
         <required>false</required>
@@ -240,13 +240,13 @@
   </tag>
 
   <tag>
-    <name>when</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.xml.WhenTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Subtag of &lt;choose&gt; that includes its body if its
         expression evalutes to 'true'
     </description>
+    <name>when</name>
+    <tag-class>org.apache.taglibs.standard.tag.common.xml.WhenTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>select</name>
         <required>true</required>

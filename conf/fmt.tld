@@ -5,28 +5,28 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
     version="2.0">
     
+  <description>JSTL 1.1 i18n-capable formatting library</description>
+  <display-name>JSTL fmt</display-name>
   <tlib-version>1.1</tlib-version>
   <short-name>fmt</short-name>
   <uri>http://java.sun.com/jstl-el/fmt</uri>
-  <display-name>JSTL fmt</display-name>
-  <description>JSTL 1.1 i18n-capable formatting library</description>
 
   <validator>
-    <validator-class>
-        org.apache.taglibs.standard.tlv.JstlFmtTLV
-    </validator-class>
     <description>
         Provides core validation features for JSTL tags.
     </description>
+    <validator-class>
+        org.apache.taglibs.standard.tlv.JstlFmtTLV
+    </validator-class>
   </validator>
 
   <tag>
-    <name>requestEncoding</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.RequestEncodingTag</tag-class>
-    <body-content>empty</body-content>
     <description>
         Sets the request character encoding
     </description>
+    <name>requestEncoding</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.RequestEncodingTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
         <name>value</name>
         <required>false</required>
@@ -35,12 +35,12 @@
   </tag>
 
   <tag>
-    <name>setLocale</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetLocaleTag</tag-class>
-    <body-content>empty</body-content>
     <description>
         Stores the given locale in the locale configuration variable
     </description>
+    <name>setLocale</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetLocaleTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
         <name>value</name>
         <required>true</required>
@@ -59,13 +59,13 @@
   </tag>
 
   <tag>
-    <name>timeZone</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.TimeZoneTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Specifies the time zone for any time formatting or parsing actions
         nested in its body
     </description>
+    <name>timeZone</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.TimeZoneTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>value</name>
         <required>true</required>
@@ -74,12 +74,12 @@
   </tag>
 
   <tag>
-    <name>setTimeZone</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetTimeZoneTag</tag-class>
-    <body-content>empty</body-content>
     <description>
         Stores the given time zone in the time zone configuration variable
     </description>
+    <name>setTimeZone</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetTimeZoneTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
         <name>value</name>
         <required>true</required>
@@ -98,12 +98,12 @@
   </tag>
 
   <tag>
-    <name>bundle</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.BundleTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Loads a resource bundle to be used by its tag body
     </description>
+    <name>bundle</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.BundleTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>basename</name>
         <required>true</required>
@@ -117,13 +117,13 @@
   </tag>
 
   <tag>
-    <name>setBundle</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetBundleTag</tag-class>
-    <body-content>empty</body-content>
     <description>
         Loads a resource bundle and stores it in the named scoped variable or
         the bundle configuration variable
     </description>
+    <name>setBundle</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetBundleTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
         <name>basename</name>
         <required>true</required>
@@ -142,12 +142,12 @@
   </tag>
 
   <tag>
-    <name>message</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.MessageTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Maps key to localized message and performs parametric replacement
     </description>
+    <name>message</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.MessageTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>key</name>
         <required>false</required>
@@ -171,13 +171,13 @@
   </tag>
 
   <tag>
-    <name>param</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParamTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Supplies an argument for parametric replacement to a containing
         &lt;message&gt; tag
     </description>
+    <name>param</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParamTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>value</name>
         <required>false</required>
@@ -186,12 +186,12 @@
   </tag>
 
   <tag>
-    <name>formatNumber</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.FormatNumberTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Formats a numeric value as a number, currency, or percentage
     </description>
+    <name>formatNumber</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.FormatNumberTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>value</name>
         <required>false</required>
@@ -255,12 +255,12 @@
   </tag>
 
   <tag>
-    <name>parseNumber</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParseNumberTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Parses the string representation of a number, currency, or percentage
     </description>
+    <name>parseNumber</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParseNumberTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>value</name>
         <required>false</required>
@@ -299,12 +299,12 @@
   </tag>
 
   <tag>
-    <name>formatDate</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.FormatDateTag</tag-class>
-    <body-content>empty</body-content>
     <description>
         Formats a date and/or time using the supplied styles and pattern
     </description>
+    <name>formatDate</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.FormatDateTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
         <name>value</name>
         <required>true</required>
@@ -348,12 +348,12 @@
   </tag>
 
   <tag>
-    <name>parseDate</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParseDateTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Parses the string representation of a date and/or time
     </description>
+    <name>parseDate</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParseDateTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>value</name>
         <required>false</required>

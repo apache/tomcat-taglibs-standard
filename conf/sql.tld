@@ -5,29 +5,29 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
     version="2.0">
     
+  <description>JSTL 1.1 sql library</description>
+  <display-name>JSTL sql</display-name>
   <tlib-version>1.1</tlib-version>
   <short-name>sql</short-name>
   <uri>http://java.sun.com/jstl-el/sql</uri>
-  <display-name>JSTL sql</display-name>
-  <description>JSTL 1.1 sql library</description>
 
   <validator>
-    <validator-class>
-        org.apache.taglibs.standard.tlv.JstlSqlTLV
-    </validator-class>
     <description>
         Provides core validation features for JSTL tags.
     </description>
+    <validator-class>
+        org.apache.taglibs.standard.tlv.JstlSqlTLV
+    </validator-class>
   </validator>
 
   <tag>
-    <name>transaction</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.sql.TransactionTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Provides nested database action elements with a shared Connection,
         set up to execute all statements as one transaction.
     </description>
+    <name>transaction</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.TransactionTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>dataSource</name>
         <required>false</required>
@@ -41,13 +41,13 @@
   </tag>
 
   <tag>
-    <name>query</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.sql.QueryTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Executes the SQL query defined in its body or through the
         sql attribute.
     </description>
+    <name>query</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.QueryTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>var</name>
         <required>true</required>
@@ -81,13 +81,13 @@
   </tag>
 
   <tag>
-    <name>update</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.sql.UpdateTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Executes the SQL update defined in its body or through the
         sql attribute.
     </description>
+    <name>update</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.UpdateTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>var</name>
         <required>false</required>
@@ -111,12 +111,12 @@
   </tag>
 
   <tag>
-    <name>param</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.sql.ParamTag</tag-class>
-    <body-content>JSP</body-content>
     <description>
         Sets a parameter in an SQL statement to the specified value.
     </description>
+    <name>param</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.ParamTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
         <name>value</name>
         <required>false</required>
@@ -125,12 +125,12 @@
   </tag>
 
   <tag>
-    <name>dateParam</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.sql.DateParamTag</tag-class>
-    <body-content>empty</body-content>
     <description>
         Sets a parameter in an SQL statement to the specified java.util.Date value.
     </description>
+    <name>dateParam</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.DateParamTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
         <name>value</name>
         <required>true</required>
@@ -144,12 +144,12 @@
   </tag>
 
   <tag>
-    <name>setDataSource</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.sql.SetDataSourceTag</tag-class>
-    <body-content>empty</body-content>
     <description>
         Creates a simple DataSource suitable only for prototyping.
     </description>
+    <name>setDataSource</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.SetDataSourceTag</tag-class>
+    <body-content>empty</body-content>
     <attribute>
         <name>var</name>
         <required>false</required>
