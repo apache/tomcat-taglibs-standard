@@ -38,7 +38,7 @@
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetLocaleTag</tag-class>
     <body-content>EMPTY</body-content>
     <description>
-        Establishes the locale to use for resource bundles and formatting
+        Stores the given locale in the locale configuration variable
     </description>
     <attribute>
         <name>value</name>
@@ -62,12 +62,26 @@
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.TimeZoneTag</tag-class>
     <body-content>JSP</body-content>
     <description>
-        Establishes the time zone in which to represent a &lt;formatDate&gt;
-        tag's time information
+        Specifies the time zone for any time formatting or parsing actions
+        nested in its body
     </description>
     <attribute>
         <name>value</name>
-        <required>true</required>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>setTimeZone</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetTimeZoneTag</tag-class>
+    <body-content>EMPTY</body-content>
+    <description>
+        Stores the given time zone in the time zone configuration variable
+    </description>
+    <attribute>
+        <name>value</name>
+        <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
@@ -91,7 +105,7 @@
     </description>
     <attribute>
         <name>basename</name>
-        <required>false</required>
+        <required>true</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
@@ -111,7 +125,7 @@
     </description>
     <attribute>
         <name>basename</name>
-        <required>false</required>
+        <required>true</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>

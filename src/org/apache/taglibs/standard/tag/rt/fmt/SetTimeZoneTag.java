@@ -53,89 +53,27 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.el.fmt;
+package org.apache.taglibs.standard.tag.rt.fmt;
 
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
- * <p>A handler for &lt;timeZone&gt; that accepts attributes as Strings
- * and evaluates them as expressions at runtime.</p>
+ * <p>A handler for &lt;timeZone&gt; that supports rtexprvalue-based
+ * attributes.</p>
  *
- * @author Shawn Bayern
  * @author Jan Luehe
  */
 
-public class TimeZoneTag extends TimeZoneSupport {
-
-    //*********************************************************************
-    // 'Private' state (implementation details)
-
-    private String value_;                    // stores EL-based property
-
-
-    //*********************************************************************
-    // Constructor
-
-    /**
-     * Constructs a new TimeZoneTag.  As with TagSupport, subclasses
-     * should not provide other constructors and are expected to call
-     * the superclass constructor
-     */
-    public TimeZoneTag() {
-        super();
-        init();
-    }
-
-
-    //*********************************************************************
-    // Tag logic
-
-    // evaluates expression and chains to parent
-    public int doStartTag() throws JspException {
-
-        // evaluate any expressions we were passed, once per invocation
-        evaluateExpressions();
-
-	// chain to the parent implementation
-	return super.doStartTag();
-    }
-
-    // Releases any resources we may have (or inherit)
-    public void release() {
-        super.release();
-        init();
-    }
-
+public class SetTimeZoneTag extends SetTimeZoneSupport {
 
     //*********************************************************************
     // Accessor methods
 
-    // for EL-based attribute
-    public void setValue(String value_) {
-        this.value_ = value_;
-    }
-
-
-    //*********************************************************************
-    // Private (utility) methods
-
-    // (re)initializes state (during release() or construction)
-    private void init() {
-        // null implies "no expression"
-	value_ = null;
-    }
-
-    // Evaluates expressions as necessary
-    private void evaluateExpressions() throws JspException {
-
-	// 'value' attribute (optional)
-	if (value_ != null) {
-	    value = (String) ExpressionEvaluatorManager.evaluate(
-	        "value", value_, String.class, this, pageContext);
-	}
+    // for tag attribute
+    public void setValue(String value) throws JspTagException {
+        this.value = value;
     }
 }

@@ -53,89 +53,84 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.el.fmt;
+package org.apache.taglibs.standard.tag.common.fmt;
 
 import java.util.*;
+import javax.servlet.ServletResponse;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.lang.support.*;
-import org.apache.taglibs.standard.tag.common.fmt.*;
+import javax.servlet.jsp.jstl.core.Config;
+import org.apache.taglibs.standard.tag.common.core.Util;
+import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * <p>A handler for &lt;timeZone&gt; that accepts attributes as Strings
- * and evaluates them as expressions at runtime.</p>
+ * Support for tag handlers for &lt;setTimeZone&gt;, the time zone setting tag
+ * in JSTL 1.0.
  *
- * @author Shawn Bayern
  * @author Jan Luehe
  */
 
-public class TimeZoneTag extends TimeZoneSupport {
+public abstract class SetTimeZoneSupport extends TagSupport {
+
+    
+    //*********************************************************************
+    // Protected state
+
+    protected String value;                      // 'value' attribute
+
 
     //*********************************************************************
-    // 'Private' state (implementation details)
+    // Private state
 
-    private String value_;                    // stores EL-based property
+    private String scope;                        // 'scope' attribute
+    private String var;                          // 'var' attribute
 
 
     //*********************************************************************
-    // Constructor
+    // Constructor and initialization
 
-    /**
-     * Constructs a new TimeZoneTag.  As with TagSupport, subclasses
-     * should not provide other constructors and are expected to call
-     * the superclass constructor
-     */
-    public TimeZoneTag() {
-        super();
-        init();
+    public SetTimeZoneSupport() {
+	super();
+	init();
+    }
+
+    private void init() {
+	value = null;
+	scope = "page";
+    }
+
+
+   //*********************************************************************
+    // Tag attributes known at translation time
+
+    public void setScope(String scope) {
+	this.scope = scope;
+    }
+
+    public void setVar(String var) {
+        this.var = var;
     }
 
 
     //*********************************************************************
     // Tag logic
 
-    // evaluates expression and chains to parent
-    public int doStartTag() throws JspException {
+    public int doEndTag() throws JspException {
+	TimeZone timeZone = null;
+	if ((value == null) || value.trim().equals("")) {
+	    timeZone = TimeZone.getTimeZone("GMT");
+	} else {
+	    timeZone = TimeZone.getTimeZone(value);
+	}
 
-        // evaluate any expressions we were passed, once per invocation
-        evaluateExpressions();
+	Config.set(pageContext, Config.FMT_TIMEZONE, timeZone,
+		   Util.getScope(scope));
 
-	// chain to the parent implementation
-	return super.doStartTag();
+	return EVAL_PAGE;
     }
 
     // Releases any resources we may have (or inherit)
     public void release() {
-        super.release();
-        init();
-    }
-
-
-    //*********************************************************************
-    // Accessor methods
-
-    // for EL-based attribute
-    public void setValue(String value_) {
-        this.value_ = value_;
-    }
-
-
-    //*********************************************************************
-    // Private (utility) methods
-
-    // (re)initializes state (during release() or construction)
-    private void init() {
-        // null implies "no expression"
-	value_ = null;
-    }
-
-    // Evaluates expressions as necessary
-    private void evaluateExpressions() throws JspException {
-
-	// 'value' attribute (optional)
-	if (value_ != null) {
-	    value = (String) ExpressionEvaluatorManager.evaluate(
-	        "value", value_, String.class, this, pageContext);
-	}
+	init();
     }
 }

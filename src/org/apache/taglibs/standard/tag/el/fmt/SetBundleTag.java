@@ -131,9 +131,9 @@ public class SetBundleTag extends SetBundleSupport {
 
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
-	if (basename_ != null) {
-	    basename = (String) ExpressionEvaluatorManager.evaluate(
-	        "basename", basename_, String.class, this, pageContext);
-	}
+
+	// 'basename' attribute (mandatory)
+	basename = (String) ExpressionEvaluatorManager.evaluate(
+	    "basename", basename_, String.class, this, pageContext);
     }
 }

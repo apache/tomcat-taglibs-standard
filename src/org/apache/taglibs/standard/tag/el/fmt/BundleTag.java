@@ -137,11 +137,12 @@ public class BundleTag extends BundleSupport {
 
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
-	if (basename_ != null) {
-	    basename = (String) ExpressionEvaluatorManager.evaluate(
-	        "basename", basename_, String.class, this, pageContext);
-	}
 
+	// 'basename' attribute (mandatory)
+	basename = (String) ExpressionEvaluatorManager.evaluate(
+	    "basename", basename_, String.class, this, pageContext);
+
+	// 'prefix' attribute (optional)
 	if (prefix_ != null) {
 	    prefix = (String) ExpressionEvaluatorManager.evaluate(
 	        "prefix", prefix_, String.class, this, pageContext);

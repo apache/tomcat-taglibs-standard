@@ -69,8 +69,6 @@ public class Config {
 	= "javax.servlet.jsp.jstl.fmt.locale";
     public static final String FMT_FALLBACKLOCALE
 	= "javax.servlet.jsp.jstl.fmt.fallbackLocale";
-    public static final String FMT_BASENAME
-	= "javax.servlet.jsp.jstl.fmt.basename";
     public static final String FMT_TIMEZONE
 	= "javax.servlet.jsp.jstl.fmt.timeZone";
     public static final String FMT_BUNDLE

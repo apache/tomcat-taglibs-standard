@@ -118,10 +118,6 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
-	if ((basename == null) || basename.equals("")) {
-	    basename = (String) Config.find(pageContext, Config.FMT_BASENAME);
-	}
-
 	if ((basename != null) && !basename.equals("")) {
 	    bundle = getBundle(pageContext, basename);
 	}

@@ -82,8 +82,6 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     //*********************************************************************
     // Private state
 
-    private String scope;                        // 'scope' attribute
-    private String var;                          // 'var' attribute
     private TimeZone timeZone;
 
 
@@ -96,20 +94,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     }
 
     private void init() {
-	value = var = null;
-	scope = "page";
-    }
-
-
-   //*********************************************************************
-    // Tag attributes known at translation time
-
-    public void setVar(String var) {
-        this.var = var;
-    }
-
-    public void setScope(String scope) {
-	this.scope = scope;
+	value = null;
     }
 
 
@@ -134,21 +119,10 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     }
 
     public int doEndTag() throws JspException {
-	if (var != null) {
-	    pageContext.setAttribute(var, timeZone, Util.getScope(scope));
-	} else if (getBodyContent() == null) {
-	    /*
-	     * If no 'var' attribute and empty body, we store our time zone
-	     * in the javax.servlet.jsp.jstl.fmt.timeZone scoped attribute
-	     */
-	    Config.set(pageContext, Config.FMT_TIMEZONE, timeZone,
-		       Util.getScope(scope));
-	} else {
-	    try {
-		pageContext.getOut().print(getBodyContent().getString());
-	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
-	    }
+	try {
+	    pageContext.getOut().print(getBodyContent().getString());
+	} catch (IOException ioe) {
+	    throw new JspTagException(ioe.getMessage());
 	}
 
 	return EVAL_PAGE;

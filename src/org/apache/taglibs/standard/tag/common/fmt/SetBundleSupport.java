@@ -129,10 +129,6 @@ public abstract class SetBundleSupport extends TagSupport {
     public int doEndTag() throws JspException {
 	ResourceBundle bundle = null;
 
-	if ((basename == null) || basename.equals("")) {
-	    basename = (String) Config.find(pageContext, Config.FMT_BASENAME);
-	}
-
 	if ((basename != null) && !basename.equals("")) {
 	    bundle = BundleSupport.getBundle(pageContext, basename);
 	}

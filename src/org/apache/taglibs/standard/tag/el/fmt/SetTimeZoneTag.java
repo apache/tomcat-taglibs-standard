@@ -62,14 +62,14 @@ import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
- * <p>A handler for &lt;timeZone&gt; that accepts attributes as Strings
+ * <p>A handler for &lt;setTimeZone&gt; that accepts attributes as Strings
  * and evaluates them as expressions at runtime.</p>
  *
  * @author Shawn Bayern
  * @author Jan Luehe
  */
 
-public class TimeZoneTag extends TimeZoneSupport {
+public class SetTimeZoneTag extends SetTimeZoneSupport {
 
     //*********************************************************************
     // 'Private' state (implementation details)
@@ -85,7 +85,7 @@ public class TimeZoneTag extends TimeZoneSupport {
      * should not provide other constructors and are expected to call
      * the superclass constructor
      */
-    public TimeZoneTag() {
+    public SetTimeZoneTag() {
         super();
         init();
     }
@@ -131,7 +131,7 @@ public class TimeZoneTag extends TimeZoneSupport {
 
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
-
+	
 	// 'value' attribute (optional)
 	if (value_ != null) {
 	    value = (String) ExpressionEvaluatorManager.evaluate(
