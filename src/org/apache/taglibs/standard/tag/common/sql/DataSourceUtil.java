@@ -106,8 +106,8 @@ public class DataSourceUtil {
         if (rawDataSource == null) {
             rawDataSource = Config.find(pageContext, Config.SQL_DATASOURCE);
             hasDataSourceAttribute = false;
-        }
-        else {
+	    return;
+        } else {
             hasDataSourceAttribute = true;
         }
 
@@ -125,7 +125,10 @@ public class DataSourceUtil {
             }
         } else if (rawDataSource instanceof DataSource) {
             dataSource = (DataSource) rawDataSource;
-        }
+        } else {
+	    throw new JspException(
+                Resources.getMessage("SQL_DATASOURCE_INVALID"));
+	}
     }
 
     /**
