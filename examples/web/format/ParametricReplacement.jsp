@@ -8,9 +8,11 @@
 <body bgcolor="#FFFFFF">
 <h3>Parametric Replacement</h3>
 
+<jsp:useBean id="now" class="java.util.Date" />
+
 <fmt:setLocale value="de"/>
 <fmt:setBundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="deBundle"/>
-<fmt:formatDate type="both" var="currentDateString"/>
+<fmt:formatDate value="${now}" type="both" var="currentDateString"/>
 <fmt:parseDate value="${currentDateString}" type="both" var="currentDate"/>
 <ul>
  <li> Using single &lt;param&gt; with 'value' evaluating to String:<br>
@@ -26,7 +28,7 @@
  <li> Using single &lt;param&gt; with body:<br>
   <fmt:message key="currentTime" bundle="${deBundle}">
    <fmt:param>
-    <fmt:formatDate type="both"/>
+    <fmt:formatDate value="${now}" type="both"/>
    </fmt:param>
   </fmt:message>
 
