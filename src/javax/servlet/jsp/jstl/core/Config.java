@@ -65,23 +65,49 @@ import javax.servlet.http.HttpSession;
  */
 public class Config {
 
-    /**
+    /*
      * I18N/Formatting actions related configuration data
+     */
+    
+    /**
+     * Name of configuration setting for application- (as opposed to browser-)
+     * based preferred locale
      */
     public static final String FMT_LOCALE
 	= "javax.servlet.jsp.jstl.fmt.locale";
+
+    /**
+     * Name of configuration setting for fallback locale
+     */
     public static final String FMT_FALLBACK_LOCALE
 	= "javax.servlet.jsp.jstl.fmt.fallbackLocale";
+
+    /**
+     * Name of configuration setting for i18n localization context
+     */
     public static final String FMT_LOCALIZATION_CONTEXT
 	= "javax.servlet.jsp.jstl.fmt.localizationContext";
+
+    /**
+     * Name of localization setting for time zone
+     */
     public static final String FMT_TIME_ZONE
 	= "javax.servlet.jsp.jstl.fmt.timeZone";
 
-    /**
+    /*
      * SQL actions related configuration data
+     */
+
+    /**
+     * Name of configuration setting for SQL data source
      */
     public static final String SQL_DATA_SOURCE
 	= "javax.servlet.jsp.jstl.sql.dataSource";
+
+    /**
+     * Name of configuration setting for maximum number of rows to be included
+     * in SQL query result
+     */
     public static final String SQL_MAX_ROWS
 	= "javax.servlet.jsp.jstl.sql.maxRows";
 	
