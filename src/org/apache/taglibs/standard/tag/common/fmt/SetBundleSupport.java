@@ -60,6 +60,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.jstl.core.Config;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -73,17 +74,6 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class SetBundleSupport extends TagSupport {
 
     
-    //*********************************************************************
-    // Package-scoped constants
-
-    private static final ResourceBundle EMPTY_BUNDLE =
-	new ListResourceBundle() {
-		public Object[][] getContents() {
-		    return new Object[][] { { "", "" } };
-		}
-	    };
-
-
     //*********************************************************************
     // Protected state
 
@@ -127,21 +117,17 @@ public abstract class SetBundleSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	ResourceBundle bundle = null;
+	LocalizationContext locCtxt = null;
 
 	if ((basename != null) && !basename.equals("")) {
-	    bundle = BundleSupport.getBundle(pageContext, basename);
-	}
-
-	if (bundle == null) {
-	    // storing "null" in a scoped variable would cause a NPE
-	    bundle = EMPTY_BUNDLE;
+	    locCtxt = BundleSupport.getLocalizationContext(pageContext,
+							   basename);
 	}
 
 	if (var != null) {
-	    pageContext.setAttribute(var, bundle, Util.getScope(scope));
+	    pageContext.setAttribute(var, locCtxt, Util.getScope(scope));
 	} else {
-	    Config.set(pageContext, Config.FMT_LOCALIZATIONCONTEXT, bundle,
+	    Config.set(pageContext, Config.FMT_LOCALIZATIONCONTEXT, locCtxt,
 		       Util.getScope(scope));
 	}
 

@@ -80,6 +80,14 @@ public class LocalizationContext {
     /**
      * Constructor.
      *
+     * Constructs empty LocalizationContext.
+     */
+    public LocalizationContext() {
+    }
+
+    /**
+     * Constructor.
+     *
      * @param bundle The resource bundle, or null if no resource bundle was
      * found
      * @param locale The locale that led to the resource bundle match, or null

@@ -62,6 +62,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.jstl.core.Config;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -84,7 +85,7 @@ public abstract class MessageSupport extends BodyTagSupport {
     // Protected state
 
     protected String key;                         // 'key' attribute
-    protected ResourceBundle bundle;              // 'bundle' attribute
+    protected LocalizationContext locCtxt;        // 'bundle' attribute
 
 
     //*********************************************************************
@@ -106,7 +107,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     private void init() {
 	key = var = null;
-	bundle = null;
+	locCtxt = null;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -163,23 +164,26 @@ public abstract class MessageSupport extends BodyTagSupport {
 	}
 
 	String prefix = null;
-	if (bundle == null) {
+	if (locCtxt == null) {
 	    Tag t = findAncestorWithClass(this, BundleSupport.class);
 	    if (t != null) {
 		// use resource bundle from parent <bundle> tag
 		BundleSupport parent = (BundleSupport) t;
-		bundle = parent.getBundle();
+		locCtxt = parent.getLocalizationContext();
 		prefix = parent.getPrefix();
 	    } else {
-		bundle = (ResourceBundle)
-		    Config.find(pageContext, Config.FMT_LOCALIZATIONCONTEXT);
+		locCtxt = BundleSupport.getLocalizationContext(pageContext);
 	    }
 	} else {
-	    SetLocaleSupport.setResponseLocale(pageContext,
-					       bundle.getLocale());
+	    if (locCtxt.getResourceBundle() != null) {
+		SetLocaleSupport.setResponseLocale(
+                                pageContext,
+				locCtxt.getResourceBundle().getLocale());
+	    }
 	}
 
 	String message = null;
+	ResourceBundle bundle = locCtxt.getResourceBundle();
 	if (bundle == null) {
 	    message = UNDEFINED_KEY + key + UNDEFINED_KEY;
 	} else {

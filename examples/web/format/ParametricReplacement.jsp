@@ -9,7 +9,7 @@
 <h3>Parametric Replacement</h3>
 
 <fmt:setLocale value="de"/>
-<fmt:bundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="deBundle"/>
+<fmt:setBundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="deBundle"/>
 <fmt:formatDate type="both" var="currentDateString"/>
 <fmt:parseDate value="${currentDateString}" type="both" var="currentDate"/>
 <ul>

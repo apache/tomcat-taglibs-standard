@@ -58,6 +58,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
@@ -156,8 +157,10 @@ public class MessageTag extends MessageSupport {
 	}
 
 	if (bundle_ != null) {
-	    bundle = (ResourceBundle) ExpressionEvaluatorManager.evaluate(
-	        "bundle", bundle_, ResourceBundle.class, this, pageContext);
+	    locCtxt = (LocalizationContext)
+		ExpressionEvaluatorManager.evaluate(
+	            "bundle", bundle_, LocalizationContext.class, this,
+		    pageContext);
 	}
     }
 }

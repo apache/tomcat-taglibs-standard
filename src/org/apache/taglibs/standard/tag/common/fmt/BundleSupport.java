@@ -61,6 +61,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.jstl.core.Config;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -85,7 +86,7 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Private state
 
     private Locale fallbackLocale;
-    private ResourceBundle bundle;
+    private LocalizationContext locCtxt;
 
 
     //*********************************************************************
@@ -98,15 +99,15 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     private void init() {
 	basename = prefix = null;
-	bundle = null;
+	locCtxt = null;
     }
 
     
     //*********************************************************************
     // Collaboration with subtags
 
-    public ResourceBundle getBundle() {
-	return bundle;
+    public LocalizationContext getLocalizationContext() {
+	return locCtxt;
     }
 
     public String getPrefix() {
@@ -119,7 +120,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     public int doStartTag() throws JspException {
 	if ((basename != null) && !basename.equals("")) {
-	    bundle = getBundle(pageContext, basename);
+	    locCtxt = getLocalizationContext(pageContext, basename);
 	}
 
 	return EVAL_BODY_BUFFERED;
@@ -143,7 +144,30 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     //*********************************************************************
     // Public utility methods
-    
+
+    /**
+     * Gets the default I18N localization context.
+     *
+     * @param pc Page in which to look up the default I18N localization context
+     */    
+    public static LocalizationContext getLocalizationContext(PageContext pc) {
+	LocalizationContext locCtxt = null;
+
+	Object obj = Config.find(pc, Config.FMT_LOCALIZATIONCONTEXT);
+	if (obj == null) {
+	    return null;
+	}
+
+	if (obj instanceof LocalizationContext) {
+	    locCtxt = (LocalizationContext) obj;
+	} else {
+	    // localization context is a bundle basename
+	    locCtxt = BundleSupport.getLocalizationContext(pc, (String) obj);
+	}
+
+	return locCtxt;
+    }
+
     /**
      * Gets the resource bundle with the given base name, whose locale is
      * determined as follows:
@@ -165,39 +189,50 @@ public abstract class BundleSupport extends BodyTagSupport {
      * given base name is requested
      * @param basename Resource bundle base name
      *
-     * @return Resource bundle with the given base name for which a match
-     * between the preferred (or fallback) and available locales exists, or
-     * <tt>null</tt> if no match was found
+     * @return Localization context containing the resource bundle with the
+     * given base name for which a match between the preferred (or fallback)
+     * and available locales exists, or empty localization context containing
+     * the null bundle if no resource bundle match was found
      */
-    public static ResourceBundle getBundle(PageContext pageContext,
-					   String basename) {
-	ResourceBundle ret = null;
-	    
-	Locale pref = SetLocaleSupport.getLocale(pageContext,
-						 Config.FMT_LOCALE);
+    public static LocalizationContext getLocalizationContext(PageContext pc,
+							     String basename) {
+	LocalizationContext locCtxt = null;
+	ResourceBundle bundle = null;
+
+	Locale pref = SetLocaleSupport.getLocale(pc, Config.FMT_LOCALE);
 	if (pref != null) {
 	    // Preferred locale is application-based
-	    ret = findMatch(basename, pref);
+	    bundle = findMatch(basename, pref);
+	    if (bundle != null) {
+		locCtxt = new LocalizationContext(bundle, pref);
+	    }
 	} else {
 	    // Preferred locales are browser-based
-	    ret = findMatch(pageContext, basename);
-	}
-
-	if (ret == null) {
-	    // no match found, use fallback locale (if present)
-	    pref = SetLocaleSupport.getLocale(pageContext,
-					      Config.FMT_FALLBACKLOCALE);
-	    if (pref != null) {
-		ret = findMatch(basename, pref);
-	    }
-	}
-
-	if (ret != null) {
-	    // set response locale
-	    SetLocaleSupport.setResponseLocale(pageContext, ret.getLocale());
+	    locCtxt = findMatch(pc, basename);
 	}
 	
-	return ret;
+	if (locCtxt == null) {
+	    // No match found using preferred locale(s), go try fallback locale
+	    pref = SetLocaleSupport.getLocale(pc, Config.FMT_FALLBACKLOCALE);
+	    if (pref != null) {
+		bundle = findMatch(basename, pref);
+		if (bundle != null) {
+		    locCtxt = new LocalizationContext(bundle, pref);
+		}
+	    }
+	}
+	
+	if (locCtxt == null) {
+	    locCtxt = new LocalizationContext();
+	}
+	 
+	bundle = locCtxt.getResourceBundle();
+	if (bundle != null) {
+	    // set response locale
+	    SetLocaleSupport.setResponseLocale(pc, bundle.getLocale());
+	}
+
+	return locCtxt;
     }
 
 
@@ -213,12 +248,13 @@ public abstract class BundleSupport extends BodyTagSupport {
      * given base name is requested
      * @param basename the resource bundle's base name
      *
-     * @return the resource bundle with the given base name and best matching
-     * locale, or <tt>null</tt> if no match was found
+     * @return the localization context containing the resource bundle with
+     * the given base name and best matching locale, or <tt>null</tt> if no
+     * resource bundle match was found
      */
-    private static ResourceBundle findMatch(PageContext pageContext,
-					    String basename) {
-	ResourceBundle match = null;
+    private static LocalizationContext findMatch(PageContext pageContext,
+						 String basename) {
+	LocalizationContext locCtxt = null;
 	
 	// Determine locale from client's browser settings.
 	for (Enumeration enum = pageContext.getRequest().getLocales();
@@ -229,13 +265,14 @@ public abstract class BundleSupport extends BodyTagSupport {
 	     * locale, so it always contains at least one element.
 	     */
 	    Locale pref = (Locale) enum.nextElement();
-	    match = findMatch(basename, pref);
+	    ResourceBundle match = findMatch(basename, pref);
 	    if (match != null) {
+		locCtxt = new LocalizationContext(match, pref);
 		break;
 	    }
 	}
 	
-	return match;
+	return locCtxt;
     }
 
     /*

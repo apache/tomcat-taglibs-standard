@@ -55,9 +55,9 @@
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
-import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
@@ -78,7 +78,7 @@ public class MessageTag extends MessageSupport {
     }
 
     // for tag attribute
-    public void setBundle(ResourceBundle bundle) throws JspTagException {
-        this.bundle = bundle;
+    public void setBundle(LocalizationContext locCtxt) throws JspTagException {
+        this.locCtxt = locCtxt;
     }
 }

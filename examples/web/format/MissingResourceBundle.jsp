@@ -14,7 +14,7 @@
   </fmt:bundle>
 
  <li> Explicit collaboration with &lt;bundle&gt; (via <tt>var</tt> attribute):<br>
-  <fmt:bundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="enBundle"/>
+  <fmt:setBundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="enBundle"/>
   <fmt:message key="greetingEvening" bundle="${enBundle}"/>
 </ul>
 

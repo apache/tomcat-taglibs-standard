@@ -60,6 +60,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.jstl.core.Config;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -259,43 +260,57 @@ public abstract class SetLocaleSupport extends TagSupport {
 				      boolean format,
 				      Locale[] avail) {
 	Locale match = null;
-	ResourceBundle bundle = null;
-
+	LocalizationContext locCtxt = null;
+	
+	// Get formatting locale from enclosing <fmt:bundle>
 	Tag parent = findAncestorWithClass(fromTag, BundleSupport.class);
 	if (parent != null) {
 	    // use locale from parent <fmt:bundle> tag
-	    match = ((BundleSupport) parent).getBundle().getLocale();
-	} else if ((bundle = (ResourceBundle)
-		    Config.find(pc, Config.FMT_LOCALIZATIONCONTEXT)) != null) {
-	    // Use locale associated with default bundle base name.
-	    match = bundle.getLocale();
-	} else {
-	    /*
-	     * Compare the preferred locales (in order of preference) against
-	     * the available formatting locales, and determine the best
-	     * matching locale.
-	     */
-	    Locale pref = getLocale(pc, Config.FMT_LOCALE);
-	    if (pref != null) {
-		// Preferred locale is application-based
-		match = findFormattingMatch(pref, avail);
-	    } else {
-		// Preferred locales are browser-based 
-		match = findFormattingMatch(pc, avail);
-	    }
-	    if (match == null) {
-		//Use fallback locale.
-		pref = getLocale(pc, Config.FMT_FALLBACKLOCALE);
-		if ((pref == null)
-		        || ((match = findFormattingMatch(pref,
-							 avail)) == null)) {
-		    // Use runtime's default locale.
-		    match = Locale.getDefault();
+	    locCtxt = ((BundleSupport) parent).getLocalizationContext();
+	    ResourceBundle bundle = locCtxt.getResourceBundle();
+	    if (bundle != null) {
+		if (format) {
+		    setResponseLocale(pc, bundle.getLocale());
 		}
+		return bundle.getLocale();
 	    }
 	}
 
-	if (format) {
+	// Get formatting locale from default I18N localization context
+	if ((locCtxt = BundleSupport.getLocalizationContext(pc)) != null) {
+	    ResourceBundle bundle = locCtxt.getResourceBundle();
+	    if (bundle != null) {
+		if (format) {
+		    setResponseLocale(pc, bundle.getLocale());
+		}
+		return bundle.getLocale();
+	    }
+	}
+
+	/*
+	 * Establish formatting locale by comparing the preferred locales
+	 * (in order of preference) against the available formatting
+	 * locales, and determining the best matching locale.
+	 */
+	Locale pref = getLocale(pc, Config.FMT_LOCALE);
+	if (pref != null) {
+	    // Preferred locale is application-based
+	    match = findFormattingMatch(pref, avail);
+	} else {
+	    // Preferred locales are browser-based 
+	    match = findFormattingMatch(pc, avail);
+	}
+	if (match == null) {
+	    //Use fallback locale.
+	    pref = getLocale(pc, Config.FMT_FALLBACKLOCALE);
+	    if ((pref == null)
+		|| ((match = findFormattingMatch(pref,
+						 avail)) == null)) {
+		// Use runtime's default locale.
+		match = Locale.getDefault();
+	    }
+	}
+ 	if (format) {
 	    setResponseLocale(pc, match);
 	}
 

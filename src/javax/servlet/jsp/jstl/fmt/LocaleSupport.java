@@ -167,20 +167,21 @@ public class LocaleSupport {
      * 
      * @return the localized message corresponding to the given key 
      */ 
-    public static String getLocalizedMessage(PageContext pageContext, 
+    public static String getLocalizedMessage(PageContext pc, 
                                              String key, 
                                              Object[] args, 
                                              String basename) {
-	ResourceBundle bundle = null;
+	LocalizationContext locCtxt = null;
 	String message = MessageSupport.UNDEFINED_KEY + key
 	    + MessageSupport.UNDEFINED_KEY;
 
 	if (basename != null) {
-	    bundle = BundleSupport.getBundle(pageContext, basename);
+	    locCtxt = BundleSupport.getLocalizationContext(pc, basename);
 	} else {
-	    bundle = (ResourceBundle)
-		Config.find(pageContext, Config.FMT_LOCALIZATIONCONTEXT);
+	    locCtxt = BundleSupport.getLocalizationContext(pc);
 	}
+
+	ResourceBundle bundle = locCtxt.getResourceBundle();
 	if (bundle != null) {
 	    try {
 		message = bundle.getString(key);
