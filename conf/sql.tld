@@ -136,7 +136,7 @@
   <tag>
     <name>param</name>
     <tag-class>org.apache.taglibs.standard.tag.el.sql.ParamTag</tag-class>
-    <body-content>empty</body-content>
+    <body-content>JSP</body-content>
     <description>
         Sets a parameter in an SQL statement to the specified value.
     </description>
