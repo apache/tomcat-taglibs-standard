@@ -147,6 +147,13 @@ public abstract class MessageSupport extends BodyTagSupport {
             if ((bcs == null) || (key = bcs.trim()).equals(""))
                 throw new JspTagException(
                     Resources.getMessage("MESSAGE_NO_KEY"));
+	} else {
+	    if (getBodyContent() != null) {
+		String bcs = getBodyContent().getString();
+		if ((bcs != null) && !bcs.trim().equals(""))
+		    throw new JspTagException(
+                        Resources.getMessage("MESSAGE_ILLEGAL_BODY_CONTENT"));
+	    }
 	}
 
 	String prefix = null;
