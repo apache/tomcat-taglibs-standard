@@ -198,15 +198,17 @@ public class ForTokensTag
         if (items_ != null) {
             items = (String) ExpressionEvaluatorManager.evaluate(
                 "items", items_, String.class, this, pageContext);
+	    // use the empty string to indicate "no iteration"
 	    if (items == null)
-		throw new NullAttributeException("forTokens", "items");
+		items = "";
 	}
 
         if (delims_ != null) {
             delims = (String) ExpressionEvaluatorManager.evaluate(
                 "delims", delims_, String.class, this, pageContext);
+	    // use the empty string to cause monolithic tokenization
 	    if (delims == null)
-		throw new NullAttributeException("forTokens", "delims");
+		delims = "";
 	}
     }
 }
