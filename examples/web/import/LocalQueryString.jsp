@@ -3,9 +3,6 @@
 <hr>
 <h3> This is the output of the imported file </h3>
 
-<c:outessionLanguage 
-  evaluator="org.apache.taglibs.standard.lang.spel.Evaluator"> 
-
 <table border="0">
   <tr>
     <td>Getting "name" query parameter:</td>
@@ -24,7 +21,5 @@
     </td>
   </tr>
 </table>
-
-</c:outessionLanguage>
 
 <hr>
