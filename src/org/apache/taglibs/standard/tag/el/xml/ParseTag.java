@@ -59,6 +59,7 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.xml.sax.XMLFilter;
 import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 import org.apache.taglibs.standard.tag.common.xml.*;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -153,7 +154,13 @@ public class ParseTag extends ParseSupport {
 	    "parse", "xmlText", xmlText_, Object.class, this, pageContext);
 	xmlUrl = (String) ExpressionUtil.evalNotNull(
 	    "parse", "xmlUrl", xmlUrl_, String.class, this, pageContext);
-	filter = (XMLFilter) ExpressionUtil.evalNotNull(
-	    "parse", "filter", filter_, XMLFilter.class, this, pageContext);
+
+	try {
+	    filter = (XMLFilter) ExpressionUtil.evalNotNull(
+	        "parse", "filter", filter_, XMLFilter.class, this, pageContext);
+	} catch (NullAttributeException ex) {
+	    // explicitly let 'filter' be null
+	    filter = null;
+	}
     }
 }
