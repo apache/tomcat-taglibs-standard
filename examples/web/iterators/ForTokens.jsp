@@ -12,14 +12,14 @@
 
 <c:forTokens var="token" items="bleu,blanc,rouge|vert,jaune|blanc,rouge"
               delims="|">
-  <c:expr value="${token}"/> &#149;
+  <c:out value="${token}"/> &#149;
 </c:forTokens>
 
 <h4>String with '|' and ',' delimiters</h4>
 
 <c:forTokens var="token" items="bleu,blanc,rouge|vert,jaune|blanc,rouge"
               delims="|,">
-  <c:expr value="${token}"/> &#149;
+  <c:out value="${token}"/> &#149;
 </c:forTokens>
 </body>
 </html>

@@ -31,8 +31,8 @@
   </tag>
 
   <tag>
-    <name>expr</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.xml.ExprTag</tag-class>
+    <name>out</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.xml.ExprTag</tag-class>
     <body-content>empty</body-content>
     <description>
 	Like &lt;%= ... &gt;, but for XPath expressions.
@@ -41,6 +41,11 @@
         <name>select</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>escapeXml</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
 

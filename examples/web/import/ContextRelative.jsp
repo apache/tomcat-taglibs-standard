@@ -7,8 +7,8 @@
 <body bgcolor="#FFFFFF">
 Assuming you have the "examples" webapp installed, here's a file from it...
 
-URL:<c:expr value="${_contextUrl}"/><br>
-Name:<c:expr value="${_contextName}"/>
+URL:<c:out value="${_contextUrl}"/><br>
+Name:<c:out value="${_contextName}"/>
 
 <blockquote>
  <pre>

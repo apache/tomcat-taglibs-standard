@@ -23,7 +23,7 @@
 </x:parse>
 
 <x:set var="d" select="$a//d"/>
-<x:expr select="$d/e"/>
+<x:out select="$d/e"/>
 
 <hr />
 

@@ -11,7 +11,7 @@
 (illegal)
 <%--
 <c:forEach var="i" end="10">
-  <c:expr value="${i}"/> &#149; 
+  <c:out value="${i}"/> &#149; 
 </c:forEach>
 --%>
 
@@ -19,24 +19,24 @@
 (illegal)
 <%--
 <c:forEach var="i" begin="10">
-  <c:expr value="${i}"/> &#149; 
+  <c:out value="${i}"/> &#149; 
 </c:forEach>
 --%>
 
 <h4>Iteration with only begin specified (with items): begin="2"</h4>
 
 <c:forEach var="i" items="${customers}" begin="2" varStatus="status">
-  index: <c:expr value="${status.index}"/> &#149; 
-  count: <c:expr value="${status.count}"/> &#149; 
-  item: <c:expr value="${i}"/><br>
+  index: <c:out value="${status.index}"/> &#149; 
+  count: <c:out value="${status.count}"/> &#149; 
+  item: <c:out value="${i}"/><br>
 </c:forEach>
 
 <h4>Iteration with only end specified (with items): end="1"</h4>
 
 <c:forEach var="i" items="${customers}" end="1" varStatus="status">
-  index: <c:expr value="${status.index}"/> &#149; 
-  count: <c:expr value="${status.count}"/> &#149; 
-  item: <c:expr value="${i}"/><br>
+  index: <c:out value="${status.index}"/> &#149; 
+  count: <c:out value="${status.count}"/> &#149; 
+  item: <c:out value="${i}"/><br>
 </c:forEach>
 </body>
 </html>

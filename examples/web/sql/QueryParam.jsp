@@ -55,8 +55,8 @@
 <table border="1">
   <c:forEach var="rows" items="$deejay.rows">
     <tr>
-      <td><c:expr value="$rows.get('nameid')"/></td>
-      <td><c:expr value="$rows.get('name')"/></td>
+      <td><c:out value="$rows.get('nameid')"/></td>
+      <td><c:out value="$rows.get('name')"/></td>
     </tr>
     </c:forEach>
 </table>

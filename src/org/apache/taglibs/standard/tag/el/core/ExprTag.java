@@ -64,7 +64,7 @@ import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * <p>A handler for the &lt;expr&gt; tag, which simply evalutes and
+ * <p>A handler for the &lt;our&gt; tag, which simply evalutes and
  * prints the result of the expression it's passed.  If the expression
  * fails to complete evaluation successfully because of a
  * javax.servlet.jsp.jstl.core.ExpressionException, or if the result is
@@ -86,7 +86,9 @@ public class ExprTag extends BodyTagSupport {
 
     private String value;                       // tag attribute
     private String def;				// tag attribute
+    private String escapeXml;			// tag attribute
     private boolean needBody;			// non-space body needed?
+    private boolean _escapeXml;                 // processed attribute
 
     //*********************************************************************
     // Construction and initialization
@@ -103,8 +105,9 @@ public class ExprTag extends BodyTagSupport {
 
     // resets local state
     private void init() {
-        value = def = null;
-	needBody = false;
+        value = def = escapeXml = null;
+        needBody = false;
+        _escapeXml = true;
     }
 
     // Releases any resources we may have (or inherit)
@@ -122,6 +125,13 @@ public class ExprTag extends BodyTagSupport {
       try {
 	Object result;
 
+        // process the 'escapeXml' attribute if it's been specified
+        if (escapeXml != null) {
+            _escapeXml = ((Boolean) ExpressionEvaluatorManager.evaluate(
+                "escapeXml", escapeXml, Boolean.class, this, pageContext))
+                .booleanValue();
+        }
+
 	// try to evaluate 'value'
 	try {
             result = ExpressionEvaluatorManager.evaluate(
@@ -132,7 +142,7 @@ public class ExprTag extends BodyTagSupport {
 
 	// print value if available; otherwise, try 'default'
 	if (result != null) {
-	    pageContext.getOut().print(result);
+            out(pageContext, _escapeXml, result.toString());
 	    return SKIP_BODY;
 	} else {
 	    // if we don't have a 'default' attribute, just go to the body
@@ -146,11 +156,11 @@ public class ExprTag extends BodyTagSupport {
 		"default", def, Object.class, this, pageContext);
 	    if (result != null) {
 		// good 'default'
-		pageContext.getOut().print(result);
+                out(pageContext, _escapeXml, result.toString());
 		return SKIP_BODY;
 	    } else {
 		// bad 'default'
-		throw new NullAttributeException("expr", "default");
+		throw new NullAttributeException("out", "default");
 	    }
 	}
       } catch (IOException ex) {
@@ -166,7 +176,7 @@ public class ExprTag extends BodyTagSupport {
 
 	// trim and print out the body
 	if (bodyContent != null && bodyContent.getString() != null)
-	    pageContext.getOut().print(bodyContent.getString().trim());
+            out(pageContext, _escapeXml, bodyContent.getString().trim());
 	return EVAL_PAGE;
       } catch (IOException ex) {
 	throw new JspException(ex.getMessage(), ex);
@@ -185,5 +195,51 @@ public class ExprTag extends BodyTagSupport {
     // for tag attribute
     public void setDefault(String def) {
         this.def = def;
+    }
+
+    // for tag attribute
+    public void setEscapeXml(String escapeXml) {
+        this.escapeXml = escapeXml;
+    }
+
+
+    //*********************************************************************
+    // Public utility methods
+
+    /**
+     * Outputs <tt>text</tt> to <tt>pageContext</tt>'s current JspWriter.
+     * If <tt>escapeXml</tt> is true, performs the following substring
+     * replacements (to facilitate output to XML/HTML pages):
+     *
+     *    & -> &amp;
+     *    < -> &lt;
+     *    > -> &gt;
+     *    " -> &#034;
+     *    ' -> &#039;
+     */
+    public static void out(PageContext pageContext,
+                           boolean escapeXml,
+                           String text) throws IOException {
+        JspWriter w = pageContext.getOut();
+	if (!escapeXml)
+            w.print(text);
+        else {
+            // avoid needless double-buffering (is this really more efficient?)
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
+                if (c == '&')
+                    w.print("&amp;");
+                else if (c == '<')
+                    w.print("&lt;");
+                else if (c == '>')
+                    w.print("&gt;");
+                else if (c == '"')
+                    w.print("&#034;");
+                else if (c == '\'')
+                    w.print("&#039;");
+                else
+                    w.print(c);
+            }
+        }
     }
 }

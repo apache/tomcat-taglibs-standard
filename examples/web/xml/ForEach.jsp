@@ -25,7 +25,7 @@
 </x:parse>
 
 <x:forEach select="$document//a">
-  -> <x:expr select="."/>
+  -> <x:out select="."/>
   <br />
 </x:forEach>
 

@@ -10,7 +10,7 @@
 <h4>Customer list</h4>
 
 <c:forEach var="customer" items="${customers}">
-  <c:expr value="${customer}"/><br>
+  <c:out value="${customer}"/><br>
 </c:forEach>
 </body>
 </html>

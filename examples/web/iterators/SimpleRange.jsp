@@ -10,7 +10,7 @@
 <h4>1 to 10</h4>
 
 <c:forEach var="i" begin="1" end="10">
-  <c:expr value="${i}"/> &#149;
+  <c:out value="${i}"/> &#149;
 </c:forEach>
 </body>
 </html>

@@ -31,7 +31,7 @@ Prints "header" as a header:<br />
 
 Prints "header" in normal size:<br />
 <x:transform xmlText="$xml" xsltText="$xsl" var="doc"/>
-<x:expr select="$doc//h1"/>
+<x:out select="$doc//h1"/>
 
 <%--
 <hr />

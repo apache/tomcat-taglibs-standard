@@ -83,9 +83,8 @@ public class ImplicitObjects
   // Constants
   //-------------------------------------
 
-  // FIXME - better attribute name
   static final String sAttributeName = 
-    "javax.servlet.http.jsp.jstl.ImplicitObjects";
+    "org.apache.taglibs.standard.ImplicitObjects";
 
   //-------------------------------------
   // Member variables

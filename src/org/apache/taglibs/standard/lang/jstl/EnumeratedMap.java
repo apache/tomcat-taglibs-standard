@@ -100,14 +100,12 @@ public abstract class EnumeratedMap
   //-------------------------------------
   public boolean containsValue (Object pValue)
   {
-    // FIXME - implement this more efficiently
     return getAsMap ().containsValue (pValue);
   }
 
   //-------------------------------------
   public Set entrySet ()
   {
-    // FIXME - implement this more efficiently
     return getAsMap ().entrySet ();
   }
 
@@ -126,7 +124,6 @@ public abstract class EnumeratedMap
   //-------------------------------------
   public Set keySet ()
   {
-    // FIXME - implement this more efficiently
     return getAsMap ().keySet ();
   }
 
@@ -151,14 +148,12 @@ public abstract class EnumeratedMap
   //-------------------------------------
   public int size ()
   {
-    // FIXME - implement this more efficiently
     return getAsMap ().size ();
   }
 
   //-------------------------------------
   public Collection values ()
   {
-    // FIXME - implement this more efficiently
     return getAsMap ().values ();
   }
 

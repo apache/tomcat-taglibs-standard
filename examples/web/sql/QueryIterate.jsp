@@ -51,8 +51,8 @@
 <table border="1">
   <c:forEach var="rows" items="$deejays.rows">
     <tr>
-      <td> id: <c:expr value="$rows.get('nameid')"/> </td>
-      <td> name: <c:expr value="$rows.get('name')"/> </td>
+      <td> id: <c:out value="$rows.get('nameid')"/> </td>
+      <td> name: <c:out value="$rows.get('name')"/> </td>
     </tr>
   </c:forEach>
 </table>
@@ -62,7 +62,7 @@
 <h2>Iterating on each Column getting the MetaData</h2>
 
 <c:forEach var="metaData" items="$deejays.metaData.columns">
-  metaData: <c:expr value="$metaData.name"/> <br>
+  metaData: <c:out value="$metaData.name"/> <br>
 </c:forEach>
 
 <hr>
@@ -73,7 +73,7 @@
   <c:forEach var="rows" items="$deejays.rows">
     <tr>
       <c:forEach var="column" items="$rows.columns">
-        <td><c:expr value="$column"/></td>
+        <td><c:out value="$column"/></td>
       </c:forEach>
     </tr>
   </c:forEach>
@@ -87,8 +87,8 @@
   <c:forEach var="rows" items="$deejays.rows">
       <c:forEach var="column" items="$rows.columns">
   <tr>
-        <td>Name: <c:expr value="$column.name"/></td>
-        <td>Value: <c:expr value="$column"/></td>
+        <td>Name: <c:out value="$column.name"/></td>
+        <td>Value: <c:out value="$column"/></td>
   </tr>
       </c:forEach>
   </c:forEach>
@@ -101,13 +101,13 @@
 <table border="1">
   <tr>
     <c:forEach var="metaData" items="$deejays.metaData.columns">
-      <th><c:expr value="$metaData.name"/> </th>
+      <th><c:out value="$metaData.name"/> </th>
     </c:forEach>
   </tr>
   <c:forEach var="rows" items="$deejays.rows">
     <tr>
       <c:forEach var="column" items="$rows.columns">
-        <td><c:expr value="$column"/></td>
+        <td><c:out value="$column"/></td>
       </c:forEach>
     </tr>
   </c:forEach>

@@ -105,7 +105,6 @@ PARSER_END(ELParser)
 | < MULTIPLY: "*" >
 | < DIVIDE: "/" | "div" >
 | < MODULUS: "%" | "mod" >
-/* | < INTEGER_DIVIDE: "idiv" > */
 | < NOT: "not" >
 | < AND: "and" >
 | < OR: "or" >
@@ -456,7 +455,6 @@ Expression MultiplyExpression () :
       <MULTIPLY> { operator = MultiplyOperator.SINGLETON; }
       | <DIVIDE> { operator = DivideOperator.SINGLETON; }
       | <MODULUS> { operator = ModulusOperator.SINGLETON; }
-      /* | <INTEGER_DIVIDE> { operator = IntegerDivideOperator.SINGLETON; }*/
       )
      expression = UnaryExpression ()
 

@@ -14,7 +14,7 @@
 <h4>Simple Conditional Execution</h4>
 <c:forEach var="customer" items="${customers}">
   <ex:usCustomer customer="${customer}">
-    <c:expr value="${customer}"/><br>
+    <c:out value="${customer}"/><br>
   </ex:usCustomer>
 </c:forEach>
 
@@ -30,7 +30,7 @@
       <font color="green">	
     </c:otherwise>	
   </c:choose>
-  <c:expr value="${customer}"/></font><br>
+  <c:out value="${customer}"/></font><br>
 </c:forEach>
 </body>
 </html>

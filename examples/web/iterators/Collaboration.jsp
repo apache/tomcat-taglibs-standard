@@ -23,7 +23,7 @@
 	    <td bgcolor="#99FFCC">
 	  </jr:otherwise>
     </jr:choose>
-    <c:expr value="${customer}"/></td>
+    <c:out value="${customer}"/></td>
   </tr>
 </c:forEach> 
 </table>
@@ -35,7 +35,7 @@
   <tr>
     <ex:odd><td bgcolor="#FFFF66"></ex:odd>
     <ex:even><td bgcolor="#99FFCC"></ex:even>
-    <c:expr value="${customer}"/></td>
+    <c:out value="${customer}"/></td>
   </tr>
 </c:forEach> 
 </table>

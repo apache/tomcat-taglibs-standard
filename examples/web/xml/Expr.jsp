@@ -20,8 +20,8 @@
   </a>
 </x:parse>
 
-<x:expr select="$a//c"/>
-<x:expr select="$a/a/d"/>
+<x:out select="$a//c"/>
+<x:out select="$a/a/d"/>
 
 <hr />
 

@@ -21,7 +21,7 @@
       <font color="red">
     </c:when>
   </c:choose>
-  <c:expr value="${customer}"/></font><br>
+  <c:out value="${customer}"/></font><br>
 </c:forEach>
 </body>
 </html>

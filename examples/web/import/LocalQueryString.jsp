@@ -3,7 +3,7 @@
 <hr>
 <h3> This is the output of the imported file </h3>
 
-<c:expressionLanguage 
+<c:outessionLanguage 
   evaluator="org.apache.taglibs.standard.lang.spel.Evaluator"> 
 
 <table border="0">
@@ -11,7 +11,7 @@
     <td>Getting "name" query parameter:</td>
     <td>
       <div style="color: red">
-        <c:expr value="${param:name}"/><br>
+        <c:out value="${param:name}"/><br>
       </div>
     </td>
   </tr>
@@ -19,12 +19,12 @@
     <td>Getting "email" query parameter:</td>
     <td>
       <div style="color: red">
-        <c:expr value="${param:email}"/>
+        <c:out value="${param:email}"/>
       </div>
     </td>
   </tr>
 </table>
 
-</c:expressionLanguage>
+</c:outessionLanguage>
 
 <hr>

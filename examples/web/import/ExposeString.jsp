@@ -12,7 +12,7 @@
 <h4>CNN's RSS XML feed:</h4>
 <blockquote>
  <pre>
-  <c:expr value="${cnn}"/>
+  <c:out value="${cnn}"/>
  </pre>
 </blockquote>
 

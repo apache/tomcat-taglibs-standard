@@ -8,9 +8,9 @@
 <h3>&lt;set&gt;</h3>
 
 <h4>Using "customerTable" application scope attribute defined in Set.jsp a first time</h4>
-<c:expr value="${customerTable}"/>
+<c:out value="${customerTable}"/>
 
 <h4>Using "customerTable" application scope attribute defined in Set.jsp a second time</h4>
-<c:expr value="${customerTable}"/>
+<c:out value="${customerTable}"/>
 </body>
 </html>

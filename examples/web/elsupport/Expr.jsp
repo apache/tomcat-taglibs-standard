@@ -10,12 +10,12 @@
 <table border="1">
   <c:forEach var="customer" items="${customers}">
     <tr>
-	  <td><c:expr value="${customer.lastName}"/></td>
-	  <td><c:expr value="${customer.phoneHome}" default="no home phone specified"/></td>
+	  <td><c:out value="${customer.lastName}"/></td>
+	  <td><c:out value="${customer.phoneHome}" default="no home phone specified"/></td>
 	  <td>
-	    <c:expr value="${customer.phoneCell}">
+	    <c:out value="${customer.phoneCell}">
 		  <font color="red">no cell phone specified</font>
-		</c:expr>
+		</c:out>
       </td>
 	</tr>
   </c:forEach>
