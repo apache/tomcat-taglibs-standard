@@ -65,7 +65,15 @@ import org.apache.taglibs.standard.tag.common.sql.TransactionTagSupport;
  */
 public class TransactionTag extends TransactionTagSupport {
     
-    public void setDataSource(DataSource dataSource) {
-	this.dataSource = dataSource;
+    //*********************************************************************
+    // Accessor methods
+
+
+    /**
+     * Setter method for the SQL DataSource. DataSource can be
+     * a String or a DataSource object.
+     */
+    public void setDataSource(Object dataSource) {
+	this.rawDataSource = dataSource;
     }
 }

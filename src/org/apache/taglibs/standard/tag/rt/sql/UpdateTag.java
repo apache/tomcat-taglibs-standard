@@ -65,9 +65,17 @@ import org.apache.taglibs.standard.tag.common.sql.UpdateTagSupport;
  * @author Hans Bergsten
  */
 public class UpdateTag extends UpdateTagSupport {
+
+    //*********************************************************************
+    // Accessor methods
+
     
-    public void setDataSource(DataSource dataSource) {
-	this.dataSource = dataSource;
+    /**
+     * Setter method for the SQL DataSource. DataSource can be
+     * a String or a DataSource object.
+     */
+    public void setDataSource(Object dataSource) {
+	this.rawDataSource = dataSource;
     }
 
     /**
