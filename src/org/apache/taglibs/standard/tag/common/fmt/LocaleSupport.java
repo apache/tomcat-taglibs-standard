@@ -135,6 +135,57 @@ public abstract class LocaleSupport extends TagSupport {
 
 
     //*********************************************************************
+    // Public utility methods
+
+    /**
+     * Parses the given locale string into its language and (optionally)
+     * country components, and returns the corresponding
+     * <tt>java.util.Locale</tt> object.
+     *
+     * @param locale the locale string 
+     * @param variant the variant
+     *
+     * @return the corresponding <tt>java.util.Locale</tt> object
+     *
+     * @throws IllegalArgumentException if the given locale does not have a
+     * language component or has an empty country component
+     */
+    public static Locale parseLocale(String locale, String variant) {
+
+	Locale ret = null;
+	String language = locale;
+	String country = null;
+	int index = -1;
+
+	if (((index = locale.indexOf(HYPHEN)) > -1) ||
+	    ((index = locale.indexOf(UNDERSCORE)) > -1)) {
+	    language = locale.substring(0, index);
+	    country = locale.substring(index+1);
+	}
+
+	if ((language == null) || (language.length() == 0))
+	    throw new IllegalArgumentException(
+		Resources.getMessage("LOCALE_NO_LANGUAGE"));
+
+	if (country == null) {
+	    if (variant != null)
+		ret = new Locale(language, "", variant);
+	    else
+		ret = new Locale(language, "");
+	} else if (country.length() > 0) {
+	    if (variant != null)
+		ret = new Locale(language, country, variant);
+	    else
+		ret = new Locale(language, country);
+	} else
+	    throw new IllegalArgumentException(
+		Resources.getMessage("LOCALE_EMPTY_COUNTRY"));
+
+	return ret;
+    }
+
+
+    //*********************************************************************
     // Package-scoped utility methods
 
     /*
@@ -193,53 +244,6 @@ public abstract class LocaleSupport extends TagSupport {
 	    }
 	}
 	
-	return ret;
-    }
-
-    /*
-     * Parses the given locale string into its language and (optionally)
-     * country components, and returns the corresponding
-     * <tt>java.util.Locale</tt> object.
-     *
-     * @param locale the locale string 
-     * @param variant the variant
-     *
-     * @return the corresponding <tt>java.util.Locale</tt> object
-     *
-     * @throws IllegalArgumentException if the given locale does not have a
-     * language component or has an empty country component
-     */
-    static Locale parseLocale(String locale, String variant) {
-
-	Locale ret = null;
-	String language = locale;
-	String country = null;
-	int index = -1;
-
-	if (((index = locale.indexOf(HYPHEN)) > -1) ||
-	    ((index = locale.indexOf(UNDERSCORE)) > -1)) {
-	    language = locale.substring(0, index);
-	    country = locale.substring(index+1);
-	}
-
-	if ((language == null) || (language.length() == 0))
-	    throw new IllegalArgumentException(
-		Resources.getMessage("LOCALE_NO_LANGUAGE"));
-
-	if (country == null) {
-	    if (variant != null)
-		ret = new Locale(language, "", variant);
-	    else
-		ret = new Locale(language, "");
-	} else if (country.length() > 0) {
-	    if (variant != null)
-		ret = new Locale(language, country, variant);
-	    else
-		ret = new Locale(language, country);
-	} else
-	    throw new IllegalArgumentException(
-		Resources.getMessage("LOCALE_EMPTY_COUNTRY"));
-
 	return ret;
     }
 

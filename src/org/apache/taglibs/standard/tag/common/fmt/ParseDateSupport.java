@@ -78,6 +78,7 @@ public abstract class ParseDateSupport extends TagSupport {
     protected String value;                      // 'value' attribute
     protected String pattern;                    // 'pattern' attribute
     protected TimeZone timeZone;                 // 'timeZone' attribute
+    protected Locale parseLocale;                // 'parseLocale' attribute
 
 
     //*********************************************************************
@@ -104,6 +105,7 @@ public abstract class ParseDateSupport extends TagSupport {
 	type = FormatDateSupport.DATE_TYPE;
 	dateStyle = timeStyle = DateFormat.DEFAULT;
 	scope = PageContext.PAGE_SCOPE;
+	parseLocale = null;
     }
 
 
@@ -140,10 +142,16 @@ public abstract class ParseDateSupport extends TagSupport {
     public int doEndTag() throws JspException {
 	DateFormat formatter = null;
 
-	Locale locale = LocaleSupport.getFormattingLocale(
-            pageContext,
-	    this,
-	    DateFormat.getAvailableLocales());
+	/*
+	 * Use parsing locale specified via the 'parseLocale' attribute.
+	 * If no such attribute, use page's locale.
+	 */
+	Locale locale = parseLocale;
+	if (locale == null)
+	    locale = LocaleSupport.getFormattingLocale(
+                pageContext,
+	        this,
+	        DateFormat.getAvailableLocales());
 
 	switch (type) {
 	case FormatDateSupport.DATE_TYPE:

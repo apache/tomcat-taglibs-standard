@@ -77,6 +77,7 @@ public abstract class ParseNumberSupport extends TagSupport {
 
     protected String value;                      // 'value' attribute
     protected String pattern;                    // 'pattern' attribute
+    protected Locale parseLocale;                // 'parseLocale' attribute
 
 
     //*********************************************************************
@@ -99,6 +100,7 @@ public abstract class ParseNumberSupport extends TagSupport {
 	value = pattern = var = null;
 	type = FormatNumberSupport.NUMBER_TYPE;
 	scope = PageContext.PAGE_SCOPE;
+	parseLocale = null;
     }
 
 
@@ -127,10 +129,16 @@ public abstract class ParseNumberSupport extends TagSupport {
     public int doEndTag() throws JspException {
 	NumberFormat formatter = null;
 
-	Locale locale = LocaleSupport.getFormattingLocale(
-            pageContext,
-	    this,
-	    NumberFormat.getAvailableLocales());
+	/*
+	 * Use parsing locale specified via the 'parseLocale' attribute.
+	 * If no such attribute, use page's locale.
+	 */
+	Locale locale = parseLocale;
+	if (locale == null)
+	    locale = LocaleSupport.getFormattingLocale(
+                pageContext,
+	        this,
+	        NumberFormat.getAvailableLocales());
 
 	switch (type) {
 	case FormatNumberSupport.NUMBER_TYPE:

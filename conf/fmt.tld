@@ -252,6 +252,11 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <name>parseLocale</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>var</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -283,6 +288,11 @@
     </attribute>
     <attribute>
         <name>pattern</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>parseLocale</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -337,6 +347,11 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <name>parseLocale</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>var</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -383,6 +398,11 @@
     </attribute>
     <attribute>
         <name>timeZone</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>parseLocale</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>

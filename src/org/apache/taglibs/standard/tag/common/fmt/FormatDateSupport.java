@@ -100,6 +100,7 @@ public abstract class FormatDateSupport extends TagSupport {
     protected Object value;                      // 'value' attribute
     protected String pattern;                    // 'pattern' attribute
     protected TimeZone timeZone;                 // 'timeZone' attribute
+    protected Locale parseLocale;                // 'parseLocale' attribute
 
 
     //*********************************************************************
@@ -127,6 +128,7 @@ public abstract class FormatDateSupport extends TagSupport {
 	type = DATE_TYPE;
 	dateStyle = timeStyle = DateFormat.DEFAULT;
 	scope = PageContext.PAGE_SCOPE;
+	parseLocale = null;
     }
 
 
@@ -164,34 +166,41 @@ public abstract class FormatDateSupport extends TagSupport {
      * Formats the given date and time.
      */
     public int doEndTag() throws JspException {
-	DateFormat formatter = null;
-
-	Locale locale = LocaleSupport.getFormattingLocale(
-            pageContext,
-	    this,
-	    DateFormat.getAvailableLocales());
 
 	/*
 	 * If no date or time is given, the current date and time are used.
 	 * If the date and/or time is given as a string literal, it is first
 	 * parsed into an instance of java.util.Date according to the default
-	 * pattern of the page's locale.
+	 * pattern of the locale given via the 'parseLocale' attribute. If this
+	 * attribute is missing, the default ("en") locale is used.
 	 */
 	if (value == null) {
 	    value = new Date();
 	} else if (value instanceof String) {
-	    formatter = DateFormat.getDateInstance(dateStyle, locale);
+	    DateFormat parser = null;
+	    if (parseLocale != null)
+		parser = DateFormat.getDateInstance(DateFormat.DEFAULT,
+						    parseLocale);
+	    else
+		parser = DateFormat.getDateInstance(
+                    DateFormat.DEFAULT,
+		    FormatNumberSupport.EN_LOCALE);
 	    try {
-		value = formatter.parse((String) value);
+		value = parser.parse((String) value);
 	    } catch (ParseException pe) {
 		throw new JspTagException(pe.getMessage());
 	    }
 	}
 
+	// Create date formatter using page's locale
+	DateFormat formatter = null;
+	Locale locale = LocaleSupport.getFormattingLocale(
+            pageContext,
+	    this,
+	    DateFormat.getAvailableLocales());
 	switch (type) {
 	case DATE_TYPE:
-	    if (formatter == null)
-		formatter = DateFormat.getDateInstance(dateStyle, locale);
+	    formatter = DateFormat.getDateInstance(dateStyle, locale);
 	    break;
 	case TIME_TYPE:
 	    formatter = DateFormat.getTimeInstance(timeStyle, locale);
