@@ -59,11 +59,8 @@ Since all of the dependencies in (2) are included in Sun's
 distribution of J2SE 1.4.2 (or higher), this is therefore the J2SE
 version of choice to compile and run the standard tag library.
 
-If you sill need the jar files for the dependencies listed in (2), they
-have been included in directory lib/old-dependencies of this distribution
-(sorry, the jars are not included in the CVS tree, just in the source and
-binary distributions). Instructions on where you can get these jar files 
-are also included below.
+If you still need the jar files for the dependencies listed in (2), 
+instructions on where you can get these jar files are included below.
 
 ---
 build.properties
