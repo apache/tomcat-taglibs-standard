@@ -19,7 +19,7 @@
 
 <p>You can group transactions together using the &lt;sql:transaction&gt; tag.</p>
 
-<h2>Dropping table and creating table using a transaction</h2>
+<h2>Creating table using a transaction</h2>
 
 <sql:transaction dataSource="${example}">
   <sql:update var="newTable">
@@ -30,7 +30,7 @@
   </sql:update>
 </sql:transaction>
 
-<p>DONE: Dropping table and creating table using a transaction</p>
+<p>DONE: Creating table using a transaction</p>
 
 <hr>
 

@@ -12,22 +12,18 @@
 <table border="1" bgcolor="#dddddd">
  <tr>
   <td>ABC</td>
-  <td><c:urlEncode value="abc"/></td>
+  <td><c:url value="abc"/></td>
  </tr>
  <tr>
   <td>123</td>
-  <td><c:urlEncode value="123"/></td>
+  <td><c:url value="123"/></td>
  </tr>
  <tr>
   <td>&</td>
-  <td><c:urlEncode value="&"/></td>
+  <td><c:url value="&"/></td>
  </tr>
  <tr>
   <td>JSTL is fun</td>
-  <td><c:urlEncode value="JSTL is fun"/></td>
- </tr>
- <tr>
-  <td>a=b</td>
-  <td><c:urlEncode>a=b</c:urlEncode></td>        <%-- bodies work too --%>
+  <td><c:url value="JSTL is fun"/></td>
  </tr>
 </table>

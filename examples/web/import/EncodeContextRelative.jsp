@@ -9,12 +9,12 @@
 
 <h4>&lt;urlEncode&gt;</h4>
 
-<c:urlEncode var="param1" value="${_paramValue1}"/>
-<c:urlEncode var="param2" value="${_paramValue2}"/>
-<c:urlEncode var="param3" value="${_paramValue3}"/>
-
+<c:url var="param1" value="${_paramValue1}"/>
+<c:url var="param2" value="${_paramValue2}"/>
+<c:url var="param3" value="${_paramValue3}"/>
+<c:out value="${_contextUrl}" />
 <c:import url="${_contextUrl}" context="${_contextName}">
     <c:param name="${_paramName1}" value="${param1}"/>
     <c:param name="${_paramName2}" value="${param2}"/>
     <c:param name="${_paramName3}" value="${param3}"/>
-</c:import>
+</c:import> 
