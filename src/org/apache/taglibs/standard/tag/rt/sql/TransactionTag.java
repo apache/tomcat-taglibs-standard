@@ -86,7 +86,8 @@ public class TransactionTag extends TransactionTagSupport {
     }
 
     public int doStartTag() throws JspException {
-        super.setIsolation(isolationRT);
+	if (isolationRT != null)
+          super.setIsolation(isolationRT);
         return super.doStartTag();
     }
 }
