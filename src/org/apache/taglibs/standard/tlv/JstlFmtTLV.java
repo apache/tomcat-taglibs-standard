@@ -110,6 +110,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
 
     // tag names
     private final String LOCALE = "locale";
+    private final String BUNDLE = "bundle";
     private final String MESSAGE = "message";
     private final String MESSAGE_PARAM = "param";
     private final String FORMAT_NUMBER = "formatNumber";
@@ -121,6 +122,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
     // attribute names
     private final String EVAL = "evaluator";
     private final String MESSAGE_KEY = "key";
+    private final String BUNDLE_PREFIX = "prefix";
     private final String VALUE = "value";
 
 
@@ -224,6 +226,8 @@ public class JstlFmtTLV extends JstlBaseTLV {
 		else
 		    bodyNecessary = true;
 	    } else if (isTag(qn, MESSAGE) && !hasAttribute(a, MESSAGE_KEY)) {
+		bodyNecessary = true;
+	    } else if (isTag(qn, BUNDLE) && hasAttribute(a, BUNDLE_PREFIX)) {
 		bodyNecessary = true;
 	    }
 
