@@ -191,8 +191,6 @@ public abstract class MessageSupport extends BodyTagSupport {
 		    message = formatter.format(messageArgs);
 		}
 	    } catch (MissingResourceException mre) {
-		ServletContext sc = pageContext.getServletContext();
-		sc.log(Resources.getMessage("UNDEFINED_KEY", key, bundle));
 		message = UNDEFINED_KEY + key + UNDEFINED_KEY;
 	    }
 	}

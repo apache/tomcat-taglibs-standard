@@ -241,9 +241,6 @@ public abstract class BundleSupport extends BodyTagSupport {
 	if (ret != null) {
 	    // set response locale
 	    LocaleSupport.setResponseLocale(pageContext, ret.getLocale());
-	} else {
-	    ServletContext sc = pageContext.getServletContext();
-	    sc.log(Resources.getMessage("MISSING_RESOURCE_BUNDLE", basename));
 	}
 	
 	return ret;

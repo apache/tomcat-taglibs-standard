@@ -204,8 +204,11 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	if (var != null) {
 	    pageContext.setAttribute(var, parsed, scope);	
 	} else {
+	    DateFormat formatter
+		= DateFormat.getDateInstance(DateFormat.DEFAULT,
+					     Locale.ENGLISH);
 	    try {
-		pageContext.getOut().print(parsed);
+		pageContext.getOut().print(formatter.format(parsed));
 	    } catch (IOException ioe) {
 		throw new JspTagException(ioe.getMessage());
 	    }
