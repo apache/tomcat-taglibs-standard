@@ -12,7 +12,7 @@
 
     <!-- Modify this context parameter to set a new class to be the default
          expression language for the application. -->
-    <!-- We use the default, which is now EcmaScript
+    <!-- We use the default EL defined in the JSTL specification
     <context-param>
         <param-name>javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass</param-name>
         <param-value>org.apache.taglibs.standard.lang.spel.Evaluator</param-value>

@@ -4,7 +4,6 @@
 
     <property file="../build.properties"/>
     <property file="../common.properties"/>
-    <property name="js.jar"   value="lib/js.jar"/>
     <property name="jaxen-full.jar"   value="lib/jaxen-full.jar"/>
     <property name="saxpath.jar"      value="lib/saxpath.jar"/>
     <!-- <property name="jdbc.jar"   value="lib/jdbc2_0-stdext.jar"/>-->
@@ -200,11 +199,11 @@
 -->
 
 <!--    <javac srcdir="${library.src}" destdir="${build.library}"
-           classpath="${servlet23.jar}:${jxpath.jar}:${js.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+           classpath="${servlet23.jar}:${jxpath.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
 	   debug="on"/>
 -->
       <javac srcdir="${library.src}" destdir="${build.library}"
-         classpath="${servlet23.jar}:${jxpath.jar}:${js.jar}:${jdbc2_0-stdext.jar}:${xalan.jar}:${crimson.jar}:${jaxen-full.jar}:${saxpath.jar}"
+         classpath="${servlet23.jar}:${jxpath.jar}:${jdbc2_0-stdext.jar}:${xalan.jar}:${crimson.jar}:${jaxen-full.jar}:${saxpath.jar}"
          debug="on"/>
 
   </target>
