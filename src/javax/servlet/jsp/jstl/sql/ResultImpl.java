@@ -105,7 +105,8 @@ public class ResultImpl implements Result {
             if ((maxRows < 0) || (beginRow < maxRows)) {
                 if (beginRow >= startRow) {
                     Object[] columns = new Object[noOfColumns];
-                    Map columnMap = new HashMap();
+                    SortedMap columnMap = new TreeMap(
+                        String.CASE_INSENSITIVE_ORDER);
 
 	            // JDBC uses 1 as the lowest index!
 	            for (int i = 1; i <= noOfColumns; i++) {
@@ -135,18 +136,21 @@ public class ResultImpl implements Result {
     }
 
     /**
-     * Returns an array of Map objects. The Map object key is
-     * the ColumnName and the value is the ColumnValue.
+     * Returns an array of SortedMap objects. The SortedMap
+     * object key is the ColumnName and the value is the ColumnValue.
+     * SortedMap was created using the CASE_INSENSITIVE_ORDER
+     * Comparator so the key is the case insensitive representation
+     * of the ColumnName.
      *
      * @return an array of Map, or null if there are no rows
      */
-    public Map[] getRows() {
+    public SortedMap[] getRows() {
         if (rowMap == null) {
             return null;
         }
 
-        //should just be able to return Map[] object
-        return (Map []) rowMap.toArray(new Map[0]);
+        //should just be able to return SortedMap[] object
+        return (SortedMap []) rowMap.toArray(new SortedMap[0]);
     }
 
 

@@ -55,7 +55,7 @@
 
 package javax.servlet.jsp.jstl.sql;
 
-import java.util.Map;
+import java.util.SortedMap;
 
 /**
  * <p>This interface represents the result of a &lt;sql:query&gt;
@@ -77,12 +77,14 @@ import java.util.Map;
 public interface Result {
 
     /**
-     * Returns an array of Map objects. Column name is used as the key
-     * for the column value.
+     * Returns an array of SortedMap objects. Column name is used as the key
+     * for the column value. SortedMap must use the CASE_INSENSITIVE_ORDER
+     * Comparator so that the key is the case insensitive representation
+     * of the column name.
      *
-     * @return the result rows as an array of <code>Map</code> objects
+     * @return the result rows as an array of <code>SortedMap</code> objects
      */
-    public Map[] getRows();
+    public SortedMap[] getRows();
 
     /**
      * Returns an array of Objects[]. The first index
