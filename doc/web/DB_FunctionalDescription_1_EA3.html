@@ -63,7 +63,7 @@
   <p>1. Transparent collaboration (implicit scoped attribute)</p>
   <p>Initialization code in the application logic (e.g. application event listener, 
     initialization servlet) can be used to set the default DataSource associated 
-    with a web application via the scoped attribute &quot;javax.servlet.jsp.jstl.DataSource&quot;. 
+    with a web application via the scoped attribute &quot;javax.servlet.jsp.jstl.sql.dataSource&quot;. 
     With this approach, an application with a single database makes the DataSource 
     that is being used by the database actions totally transparent to the page 
     author</p>
@@ -223,7 +223,7 @@
     &lt;sql:transaction&gt; tag, retrieve a Connection from our parent and do 
     nothing to release it. The connection is managed by the parent.</li>
   <li>If neither (1) nor (2), then look for a DataSource named by scoped attribute 
-    &quot;javax.servlet.jsp.jstl.DataSource&quot;. Handling of the connection 
+    &quot;javax.servlet.jsp.jstl.sql.dataSource&quot;. Handling of the connection 
     is then as described in 1.</li>
 </ol>
 <p>It is illegal for &lt;sql:query&gt; to specify a DataSource when nested within 
@@ -341,7 +341,7 @@ Behavior is defined as follows:
 <p><code>&lt;sql:driver var=<i>&quot;varName&quot;</i><br>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[driver=&quot;<i>driverClassName</i>&quot;] 
   <br>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[url=&quot;<i>jdbcUrl</i>&quot;]<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[url=&quot;<i>url</i>&quot;]<br>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[user=&quot;<i>userName</i>&quot;] 
   /&gt;</code></p>
 <h4>Details<br>
@@ -597,7 +597,7 @@ Behavior is defined as follows:
         <code>&lt;sql:driver var=<i>&quot;varName&quot;</i><br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[driver=&quot;<i>driverClassName</i>&quot;] 
         <br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[jdbcUrl=&quot;<i>jdbcUrl</i>&quot;]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[url=&quot;<i>url</i>&quot;]<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[userName=&quot;<i>userName</i>&quot;] 
         /&gt;</code><br>
       </p>

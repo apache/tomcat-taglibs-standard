@@ -26,7 +26,7 @@
         update:dataSource
         param:value
         driver:driver
-        driver:jdbcURL
+        driver:url
         driver:userName
         </param-value>
         <description>
@@ -58,6 +58,11 @@
     </description>
     <attribute>
         <name>dataSource</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>transactionIsolation</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -142,7 +147,7 @@
     </description>
     <attribute>
         <name>value</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
@@ -160,12 +165,17 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <name>scope</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>driver</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>jdbcURL</name>
+        <name>url</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>

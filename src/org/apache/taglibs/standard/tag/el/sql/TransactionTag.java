@@ -74,9 +74,9 @@ public class TransactionTag extends TransactionTagSupport {
 
     public int doStartTag() throws JspException {
 	if (dataSourceEL != null) {
-	    dataSource = (DataSource) 
+	    rawDataSource = (Object) 
 		ExpressionEvaluatorManager.evaluate("dataSource", 
-		    dataSourceEL, DataSource.class, this, pageContext);
+		    dataSourceEL, Object.class, this, pageContext);
 	}
 	return super.doStartTag();
     }

@@ -85,9 +85,9 @@ public class UpdateTag extends UpdateTagSupport {
 
     public int doStartTag() throws JspException {
 	if (dataSourceEL != null) {
-	    dataSource = (DataSource) 
+	    rawDataSource = (Object) 
 		ExpressionEvaluatorManager.evaluate("dataSource", 
-		    dataSourceEL, DataSource.class, this, pageContext);
+		    dataSourceEL, Object.class, this, pageContext);
 	}
 	if (sqlEL != null) {
 	    sql = (String) ExpressionEvaluatorManager.evaluate("sql", sqlEL, 

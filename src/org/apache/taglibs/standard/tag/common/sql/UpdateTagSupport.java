@@ -58,19 +58,27 @@ package org.apache.taglibs.standard.tag.common.sql;
 import java.sql.*;
 import java.util.*;
 import javax.sql.*;
+import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import javax.naming.InitialContext;
+import javax.naming.Context;
+import javax.naming.NamingException;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>Tag handler for &lt;Update&gt; in JSTL.  
  * 
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 
 public abstract class UpdateTagSupport extends BodyTagSupport 
     implements TryCatchFinally, SQLExecutionTag {
+
+    private static final String DATASOURCE =
+        "javax.servlet.jsp.jstl.sql.dataSource";
 
     private String var;
     private int scope = PageContext.PAGE_SCOPE;
@@ -80,6 +88,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      * setter methods are implemented by the expression type
      * specific subclasses.
      */
+    protected Object rawDataSource;
     protected DataSource dataSource;
     protected String sql;
 
@@ -144,6 +153,8 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      * getting the <code>Connection</code>
      */
     public int doStartTag() throws JspException {
+
+        setDataSource();
 	try {
 	    conn = getConnection();
 	}
@@ -165,7 +176,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      * from the <code>DataSource</code> specified by the
      * <code>dataSource</code> attribute, provided by a parent action
      * element, or is retrieved from a JSP scope  attribute
-     * named <code>javax.servlet.jsptl.DataSource</code>.
+     * named <code>javax.servlet.jsp.jstl.sql.dataSource</code>.
      */
     public int doEndTag() throws JspException {
 	/*
@@ -227,6 +238,29 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 
     //*********************************************************************
     // Private utility methods
+
+    private void setDataSource() throws JspException {
+
+        if (rawDataSource != null) {
+            // If the 'dataSource' attribute's value resolves to a String
+            // after rtexpr/EL evaluation, use the string as JNDI path to
+            // a DataSource
+            if (rawDataSource instanceof String) {
+                try {
+                    Context ctx = new InitialContext();
+                    dataSource = (DataSource) ctx.lookup((String)rawDataSource);
+                } catch (NamingException ex) {
+                    throw new JspTagException(ex.toString());
+                }
+            }
+            else dataSource = (DataSource) rawDataSource;
+        }
+        else {
+            ServletContext application = pageContext.getServletContext();
+            dataSource = (DataSource) pageContext.findAttribute(
+                application.getInitParameter(DATASOURCE));
+        }
+    }
 
     private Connection getConnection() throws SQLException {
 	// Fix: Add all other mechanisms

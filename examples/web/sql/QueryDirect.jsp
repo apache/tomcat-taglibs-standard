@@ -16,7 +16,7 @@
 <sql:driver
   var="example"
   driver="$myDbDriver"
-  jdbcURL="$myDbUrl"
+  url="$myDbUrl"
 />
 
 <sql:transaction dataSource="$example">

@@ -13,7 +13,7 @@
 &lt;sql:driver
   var="example"
   driver="RmiJdbc.RJDriver"
-  jdbcURL="jdbc:rmi://gibson:1099/jdbc:cloudscape:CloudscapeDB"
+  url="jdbc:rmi://localhost:1099/jdbc:cloudscape:CloudscapeDB;create=true"
 /&gt;
 </pre>
 </code>

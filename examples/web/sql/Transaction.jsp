@@ -14,7 +14,7 @@
 <sql:driver
   var="example"
   driver="$myDbDriver"
-  jdbcURL="$myDbUrl"
+  url="$myDbUrl"
 />
 
 <p>You can group transactions together using the &lt;sql:transaction&gt; tag.</p>

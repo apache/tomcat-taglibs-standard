@@ -63,6 +63,7 @@ import org.apache.taglibs.standard.tag.common.sql.QueryTagSupport;
  * Subclass for the JSTL library with EL support.
  *
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 public class QueryTag extends QueryTagSupport {
 
@@ -89,9 +90,9 @@ public class QueryTag extends QueryTagSupport {
 
     public int doStartTag() throws JspException {
 	if (dataSourceEL != null) {
-	    dataSource = (DataSource) 
+	    rawDataSource = (Object) 
 		ExpressionEvaluatorManager.evaluate("dataSource", 
-		    dataSourceEL, DataSource.class, this, pageContext);
+		    dataSourceEL, Object.class, this, pageContext);
 	}
 	if (sqlEL != null) {
 	    sql = (String) ExpressionEvaluatorManager.evaluate("sql", sqlEL, 

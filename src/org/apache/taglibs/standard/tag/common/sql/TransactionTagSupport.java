@@ -58,9 +58,13 @@ package org.apache.taglibs.standard.tag.common.sql;
 import java.sql.*;
 import java.util.*;
 import javax.sql.*;
+import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import javax.naming.InitialContext;
+import javax.naming.Context;
+import javax.naming.NamingException;
 import org.apache.taglibs.standard.resources.Resources;
 
 
@@ -73,6 +77,9 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class TransactionTagSupport extends TagSupport 
     implements TryCatchFinally {
 
+    private static final String DATASOURCE =
+        "javax.servlet.jsp.jstl.sql.dataSource";
+
     private static final int DEFAULT_ISOLATION = -1;
 
     private int transactionIsolation = DEFAULT_ISOLATION;
@@ -82,6 +89,7 @@ public abstract class TransactionTagSupport extends TagSupport
      * setter methods are implemented by the expression type
      * specific subclasses.
      */
+    protected Object rawDataSource;
     protected DataSource dataSource;
 
     /*
@@ -134,6 +142,8 @@ public abstract class TransactionTagSupport extends TagSupport
      * the transaction.
      */
     public int doStartTag() throws JspException {
+
+        setDataSource();
 	try {
 	    conn = getConnection();
 	    int origIsolation = conn.getTransactionIsolation();
@@ -202,6 +212,31 @@ public abstract class TransactionTagSupport extends TagSupport
 
     //*********************************************************************
     // Private utility methods
+
+    private void setDataSource() throws JspException {
+
+        if (rawDataSource != null) {
+            // If the 'dataSource' attribute's value resolves to a String
+            // after rtexpr/EL evaluation, use the string as JNDI path to
+            // a DataSource
+            if (rawDataSource instanceof String) {
+                try {
+                    Context ctx = new InitialContext();
+                    dataSource = (DataSource) ctx.lookup((String)rawDataSource);
+                } catch (NamingException ex) {
+                    throw new JspTagException(ex.toString());
+                }
+            }
+            else {
+                dataSource = (DataSource) rawDataSource;
+            }
+        }
+        else {
+            ServletContext application = pageContext.getServletContext();
+            dataSource = (DataSource) pageContext.findAttribute(
+                application.getInitParameter(DATASOURCE));
+        }
+    }
 
     private Connection getConnection() throws SQLException {
 	// Fix: Add all other mechanisms
