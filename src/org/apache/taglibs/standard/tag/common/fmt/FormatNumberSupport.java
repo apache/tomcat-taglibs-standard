@@ -74,32 +74,20 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class FormatNumberSupport extends BodyTagSupport {
 
     //*********************************************************************
-    // Public constants
-
-    public static final String NUMBER_STRING = "number";    
-    public static final String CURRENCY_STRING = "currency";
-    public static final String PERCENT_STRING = "percent";
-
-
-    //*********************************************************************
-    // Package-scoped constants
-
-    static final int NUMBER_TYPE = 0;
-    static final int CURRENCY_TYPE = 1;
-    static final int PERCENT_TYPE = 2;
-
-
-    //*********************************************************************
     // Private constants
 
     private static final Class[] GET_INSTANCE_PARAM_TYPES =
 	new Class[] { String.class };
+    private static final String NUMBER = "number";    
+    private static final String CURRENCY = "currency";
+    private static final String PERCENT = "percent";
 
 
     //*********************************************************************
     // Protected state
 
     protected Object value;                    // 'value' attribute
+    protected String type;                     // 'type' attribute
     protected String pattern;                  // 'pattern' attribute
     protected String currencyCode;             // 'currencyCode' attribute
     protected String currencySymbol;           // 'currencySymbol' attribute
@@ -118,7 +106,6 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
     //*********************************************************************
     // Private state
 
-    private int type;                          // 'type' attribute
     private String var;                        // 'var' attribute
     private int scope;                         // 'scope' attribute
     private static Class currencyClass;
@@ -146,20 +133,13 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	groupingUsedSpecified = false;
 	maxIntegerDigitsSpecified = minIntegerDigitsSpecified = false;
 	maxFractionDigitsSpecified = minFractionDigitsSpecified = false;
-	type = NUMBER_TYPE;
+	type = NUMBER;
 	scope = PageContext.PAGE_SCOPE;
     }
 
 
    //*********************************************************************
     // Tag attributes known at translation time
-
-    public void setType(String type) {
-	if (CURRENCY_STRING.equalsIgnoreCase(type))
-	    this.type = CURRENCY_TYPE;
-	else if (PERCENT_STRING.equalsIgnoreCase(type))
-	    this.type = PERCENT_TYPE;
-    }
 
     public void setVar(String var) {
         this.var = var;
@@ -205,39 +185,13 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	    }
 	}
 
-	// Create number formatter using page's locale
-	NumberFormat formatter = null;
+	// Create formatter 
 	Locale locale = LocaleSupport.getFormattingLocale(
             pageContext,
 	    this,
 	    true,
 	    NumberFormat.getAvailableLocales());
-	switch (type) {
-	case NUMBER_TYPE:
-	    formatter = NumberFormat.getNumberInstance(locale);
-	    if (pattern != null) {
-		/*
-		 * Let potential ClassCastException propagate up (will almost
-		 * never happen)
-		 */
-		DecimalFormat df = (DecimalFormat) formatter;
-		df.applyPattern(pattern);
-	    }
-	    break;
-	case CURRENCY_TYPE:
-	    formatter = NumberFormat.getCurrencyInstance(locale);
-	    if ((currencyCode != null) || (currencySymbol != null)) {
-		try {
-		    setCurrency(formatter);
-		} catch (Exception e) {
-		    throw new JspTagException(e.getMessage());
-		}
-	    }
-	    break;
-	case PERCENT_TYPE:
-	    formatter = NumberFormat.getPercentInstance(locale);
-	    break;
-	} // switch
+	NumberFormat formatter = createFormatter(locale);
 
 	// Configure the formatter
 	configureFormatter(formatter);
@@ -265,6 +219,38 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 
     //*********************************************************************
     // Private utility methods
+
+    private NumberFormat createFormatter(Locale loc) throws JspException {
+	NumberFormat formatter = null;
+	
+	if (NUMBER.equalsIgnoreCase(type)) {
+	    formatter = NumberFormat.getNumberInstance(loc);
+	    if (pattern != null) {
+		/*
+		 * Let potential ClassCastException propagate up (will almost
+		 * never happen)
+		 */
+		DecimalFormat df = (DecimalFormat) formatter;
+		df.applyPattern(pattern);
+	    }
+	} else if (CURRENCY.equalsIgnoreCase(type)) {
+	    formatter = NumberFormat.getCurrencyInstance(loc);
+	    if ((currencyCode != null) || (currencySymbol != null)) {
+		try {
+		    setCurrency(formatter);
+		} catch (Exception e) {
+		    throw new JspTagException(e.getMessage());
+		}
+	    }
+	} else if (PERCENT.equalsIgnoreCase(type)) {
+	    formatter = NumberFormat.getPercentInstance(loc);
+	} else {
+	    throw new JspException(
+	        Resources.getMessage("FORMAT_NUMBER_INVALID_TYPE", type));
+	}
+	
+	return formatter;
+    }
 
     private void configureFormatter(NumberFormat formatter) {
 	if (groupingUsedSpecified)

@@ -177,7 +177,6 @@
   <tag>
     <name>formatNumber</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.FormatNumberTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.FormatNumberTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
         Formats a numeric value as a number, currency, or percentage
@@ -190,7 +189,7 @@
     <attribute>
         <name>type</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>pattern</name>
@@ -247,7 +246,6 @@
   <tag>
     <name>parseNumber</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParseNumberTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.ParseNumberTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
         Parses the string representation of a number, currency, or percentage
@@ -260,7 +258,7 @@
     <attribute>
         <name>type</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>pattern</name>
@@ -292,7 +290,6 @@
   <tag>
     <name>formatDate</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.FormatDateTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.FormatDateTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
         Formats a date and/or time using the supplied styles and pattern
@@ -305,17 +302,17 @@
     <attribute>
         <name>type</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>dateStyle</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>timeStyle</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>pattern</name>
@@ -342,7 +339,6 @@
   <tag>
     <name>parseDate</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParseDateTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.ParseDateTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
         Parses the string representation of a date and/or time
@@ -355,17 +351,17 @@
     <attribute>
         <name>type</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>dateStyle</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>timeStyle</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>pattern</name>

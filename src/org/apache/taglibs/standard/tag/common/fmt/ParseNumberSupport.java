@@ -73,9 +73,18 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class ParseNumberSupport extends BodyTagSupport {
 
     //*********************************************************************
+    // Private constants
+
+    private static final String NUMBER = "number";    
+    private static final String CURRENCY = "currency";
+    private static final String PERCENT = "percent";
+
+
+    //*********************************************************************
     // Protected state
 
     protected String value;                      // 'value' attribute
+    protected String type;                       // 'type' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Locale parseLocale;                // 'parseLocale' attribute
     protected boolean isIntegerOnly;             // 'integerOnly' attribute
@@ -85,7 +94,6 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
     //*********************************************************************
     // Private state
 
-    private int type;                            // 'type' attribute
     private String var;                          // 'var' attribute
     private int scope;                           // 'scope' attribute
 
@@ -102,20 +110,13 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 	value = pattern = var = null;
 	parseLocale = null;
 	integerOnlySpecified = false;
-	type = FormatNumberSupport.NUMBER_TYPE;
+	type = NUMBER;
 	scope = PageContext.PAGE_SCOPE;
     }
 
 
    //*********************************************************************
     // Tag attributes known at translation time
-
-    public void setType(String type) {
-	if (FormatNumberSupport.CURRENCY_STRING.equalsIgnoreCase(type))
-	    this.type = FormatNumberSupport.CURRENCY_TYPE;
-	else if (FormatNumberSupport.PERCENT_STRING.equalsIgnoreCase(type))
-	    this.type = FormatNumberSupport.PERCENT_TYPE;
-    }
 
     public void setVar(String var) {
         this.var = var;
@@ -149,23 +150,8 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 		false,
 	        NumberFormat.getAvailableLocales());
 
-	// Get appropriate formatter instance
-	NumberFormat parser = null;
-	switch (type) {
-	case FormatNumberSupport.NUMBER_TYPE:
-	    parser = NumberFormat.getNumberInstance(locale);
-	    if (pattern != null) {
-		DecimalFormat df = (DecimalFormat) parser;
-		df.applyPattern(pattern);
-	    }
-	    break;
-	case FormatNumberSupport.CURRENCY_TYPE:
-	    parser = NumberFormat.getCurrencyInstance(locale);
-	    break;
-	case FormatNumberSupport.PERCENT_TYPE:
-	    parser = NumberFormat.getPercentInstance(locale);
-	    break;
-	} // switch
+	// Create parser
+	NumberFormat parser = createParser(locale);
 
 	// Configure parser
 	if (integerOnlySpecified)
@@ -195,5 +181,31 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
     // Releases any resources we may have (or inherit)
     public void release() {
 	init();
+    }
+
+
+    //*********************************************************************
+    // Private utility methods
+
+    private NumberFormat createParser(Locale loc) throws JspException {
+	NumberFormat parser = null;
+
+	if (NUMBER.equalsIgnoreCase(type)) {
+	    parser = NumberFormat.getNumberInstance(loc);
+	    if (pattern != null) {
+		DecimalFormat df = (DecimalFormat) parser;
+		df.applyPattern(pattern);
+	    }
+	} else if (CURRENCY.equalsIgnoreCase(type)) {
+	    parser = NumberFormat.getCurrencyInstance(loc);
+	} else if (PERCENT.equalsIgnoreCase(type)) {
+	    parser = NumberFormat.getPercentInstance(loc);
+	} else {
+	    throw new JspException(
+                    Resources.getMessage("PARSE_NUMBER_INVALID_TYPE", 
+					 type));
+	}
+
+	return parser;
     }
 }

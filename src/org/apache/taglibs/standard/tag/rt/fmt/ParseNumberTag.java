@@ -72,22 +72,27 @@ public class ParseNumberTag extends ParseNumberSupport {
     //*********************************************************************
     // Accessor methods
 
-    // for tag attribute
+    // 'value' attribute
     public void setValue(String value) throws JspTagException {
         this.value = value;
     }
 
-    // for tag attribute
+    // 'type' attribute
+    public void setType(String type) throws JspTagException {
+        this.type = type;
+    }
+
+    // 'pattern' attribute
     public void setPattern(String pattern) throws JspTagException {
         this.pattern = pattern;
     }
 
-    // for tag attribute
+    // 'parseLocale' attribute
     public void setParseLocale(String parseLocale) throws JspTagException {
         this.parseLocale = LocaleSupport.parseLocale(parseLocale, null);
     }
 
-    // for tag attribute
+    // 'integerOnly' attribute
     public void setIntegerOnly(boolean isIntegerOnly) throws JspTagException {
         this.isIntegerOnly = isIntegerOnly;
 	this.integerOnlySpecified = true;

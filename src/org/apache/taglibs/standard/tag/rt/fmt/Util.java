@@ -53,56 +53,44 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tei;
+package org.apache.taglibs.standard.tag.rt.fmt;
 
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.fmt.FormatNumberSupport;
+import java.text.DateFormat;
 
-/**
- * An implementation of TagExtraInfo that implements validation for
- * &lt;formatNumber&gt; tag's attributes.
- *
- * @author Jan Luehe
- */
-public class FormatNumberTEI extends TagExtraInfo {
+public class Util {
 
-    private static final String TYPE_ATTRIBUTE = "type";      
-    private static final String PATTERN_ATTRIBUTE = "pattern";
+    //*********************************************************************
+    // 'Private' constants
 
-    /**
-     * Validates the attributes of the &lt;formatNumber&gt; tag.
-     *
-     * <p> The following validation rules are enforced:
-     * 
-     * <ul>
-     * <li> The (case-insensitive) value of the <tt>type</tt> attribute must
-     * be equal to &quot;number&quot;, &quot;currency&quot;, or
-     * &quot;percent&quot;.
-     * <li> The <tt>pattern</tt> attribute may be used only when formatting
-     * numbers (that is, if the <tt>type</tt> attribute is missing or equal to
-     * &quot;number&quot;).
-     * </ul>
-     */
-    public boolean isValid(TagData data) {
-	return isValidFormatNumber(data);
-    }
+    private static final String DEFAULT = "default";
+    private static final String SHORT = "short";
+    private static final String MEDIUM = "medium";
+    private static final String LONG = "long";
+    private static final String FULL = "full";
+
+
+    //*********************************************************************
+    // 'Package-scoped' utility methods
 
     /*
-     * Returns true if the 'type' and 'pattern' attributes are valid.
+     * Converts the given string representation of a formatting style for
+     * dates and times to the corresponding java.util.DateFormat constant.
      */
-    static boolean isValidFormatNumber(TagData data) {
-        String type = data.getAttributeString(TYPE_ATTRIBUTE);
-	if (type != null) {
-	    if (!type.equals(FormatNumberSupport.NUMBER_STRING)
-		&& !type.equals(FormatNumberSupport.CURRENCY_STRING)
-		&& !type.equals(FormatNumberSupport.PERCENT_STRING))
-		return false;
-	    
-	    if (Util.isSpecified(data, PATTERN_ATTRIBUTE)
-		&& !type.equals(FormatNumberSupport.NUMBER_STRING))
-		return false;
+    static int styleToInt(String style) {
+	int ret = -1;
+
+	if (DEFAULT.equalsIgnoreCase(style)) {
+	    ret = DateFormat.DEFAULT;
+	} else if (SHORT.equalsIgnoreCase(style)) {
+	    ret = DateFormat.SHORT;
+	} else if (MEDIUM.equalsIgnoreCase(style)) {
+	    ret = DateFormat.MEDIUM;
+	} else if (LONG.equalsIgnoreCase(style)) {
+	    ret = DateFormat.LONG;
+	} else if (FULL.equalsIgnoreCase(style)) {
+	    ret = DateFormat.FULL;
 	}
 
-        return true;
+	return ret;
     }
 }

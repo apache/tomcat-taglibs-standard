@@ -60,6 +60,7 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
 import org.apache.taglibs.standard.tag.common.fmt.*;
+import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>A handler for &lt;parseDate&gt; that accepts attributes as Strings
@@ -74,6 +75,9 @@ public class ParseDateTag extends ParseDateSupport {
     // 'Private' state (implementation details)
 
     private String value_;                       // stores EL-based property
+    private String type_;                        // stores EL-based property
+    private String dateStyle_;		         // stores EL-based property
+    private String timeStyle_;		         // stores EL-based property
     private String pattern_;		         // stores EL-based property
     private String timeZone_;		         // stores EL-based property
     private String parseLocale_;	         // stores EL-based property
@@ -122,6 +126,21 @@ public class ParseDateTag extends ParseDateSupport {
     }
 
     // for EL-based attribute
+    public void setType(String type_) {
+        this.type_ = type_;
+    }
+
+    // for EL-based attribute
+    public void setDateStyle(String dateStyle_) {
+        this.dateStyle_ = dateStyle_;
+    }
+
+    // for EL-based attribute
+    public void setTimeStyle(String timeStyle_) {
+        this.timeStyle_ = timeStyle_;
+    }
+
+    // for EL-based attribute
     public void setPattern(String pattern_) {
         this.pattern_ = pattern_;
     }
@@ -143,7 +162,8 @@ public class ParseDateTag extends ParseDateSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = pattern_ = timeZone_ = parseLocale_ = null;
+	value_ = type_ = dateStyle_ = timeStyle_ = pattern_ = timeZone_ = null;
+	parseLocale_ = null;
     }
 
     // Evaluates expressions as necessary
@@ -156,16 +176,51 @@ public class ParseDateTag extends ParseDateSupport {
          * propagate up.
          */
 
+	// 'value' attribute
 	value = (String) ExpressionUtil.evalNotNull(
 	    "parseDate", "value", value_, String.class, this, pageContext);
+
+	// 'type' attribute
+	type = (String) ExpressionUtil.evalNotNull(
+	    "parseDate", "type", type_, String.class, this, pageContext);
+
+	// 'dateStyle' attribute
+	String styleStr = (String) ExpressionUtil.evalNotNull(
+	    "parseDate", "dateStyle", dateStyle_, String.class, this,
+	    pageContext);
+	if (styleStr != null) {
+	    dateStyle = Util.styleToInt(styleStr);
+	    if (dateStyle == -1) {
+		throw new JspException(
+                    Resources.getMessage("PARSE_DATE_INVALID_DATE_STYLE", 
+					 styleStr));
+	    }
+	}
+
+	// 'timeStyle' attribute
+	styleStr = (String) ExpressionUtil.evalNotNull(
+	    "parseDate", "timeStyle", timeStyle_, String.class, this,
+	    pageContext);
+	if (styleStr != null) {
+	    timeStyle = Util.styleToInt(styleStr);
+	    if (timeStyle == -1) {
+		throw new JspException(
+                    Resources.getMessage("PARSE_DATE_INVALID_TIME_STYLE", 
+					 styleStr));
+	    }
+	}
+
+	// 'pattern' attribute
 	pattern = (String) ExpressionUtil.evalNotNull(
 	    "parseDate", "pattern", pattern_, String.class, this,
 	    pageContext);
 
+	// 'timeZone' attribute
 	timeZone = ExpressionUtil.evalNotNull(
 	    "parseDate", "timeZone", timeZone_, Object.class, this,
 	    pageContext);
 
+	// 'parseLocale' attribute
 	String pl = (String) ExpressionUtil.evalNotNull(
 	    "parseDate", "parseLocale", parseLocale_, String.class, this,
 	    pageContext);

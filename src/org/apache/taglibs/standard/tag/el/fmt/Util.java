@@ -53,70 +53,44 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tei;
+package org.apache.taglibs.standard.tag.el.fmt;
 
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.fmt.FormatDateSupport;
+import java.text.DateFormat;
 
-/**
- * An implementation of TagExtraInfo that implements validation for
- * &lt;formatDate&gt; tag's attributes.
- *
- * @author Jan Luehe
- */
-public class FormatDateTEI extends TagExtraInfo {
+public class Util {
 
-    private static final String TYPE_ATTRIBUTE = "type";          
-    private static final String TIMESTYLE_ATTRIBUTE = "timeStyle";
-    private static final String DATESTYLE_ATTRIBUTE = "dateStyle";
+    //*********************************************************************
+    // 'Private' constants
 
-    /**
-     * Validates the attributes of the &lt;formatDate&gt; tag.
-     *
-     * <p> The following validation rules are enforced:
-     * 
-     * <ul>
-     * <li> The (case-insensitive) value of the <tt>type</tt> attribute must
-     * be equal to &quot;date&quot;, &quot;time&quot;, or &quot;both&quot;.
-     * <li> The (case-insensitive) value of the <tt>timeStyle</tt> and
-     * <tt>dateStyle</tt> attributes must be equal to &quot;default&quot;,
-     * &quot;short&quot;, &quot;medium&quot;, &quot;long&quot;, or
-     * &quot;full&quot;.
-     * </ul>
-     */
-    public boolean isValid(TagData data) {
-	if (!isValidType(data)
-	    || !isValidStyle(data.getAttributeString(TIMESTYLE_ATTRIBUTE))
-	    || !isValidStyle(data.getAttributeString(DATESTYLE_ATTRIBUTE)))
-	    return false;
-        return true;
-    }
+    private static final String DEFAULT = "default";
+    private static final String SHORT = "short";
+    private static final String MEDIUM = "medium";
+    private static final String LONG = "long";
+    private static final String FULL = "full";
+
+
+    //*********************************************************************
+    // 'Package-scoped' utility methods
 
     /*
-     * Returns true if the 'type' attribute is valid.
+     * Converts the given string representation of a formatting style for
+     * dates and times to the corresponding java.util.DateFormat constant.
      */
-    static boolean isValidType(TagData data) {
-	String type = data.getAttributeString(TYPE_ATTRIBUTE);
-	if ((type != null)
-	    && !type.equals(FormatDateSupport.DATE_STRING)
-	    && !type.equals(FormatDateSupport.TIME_STRING)
-	    && !type.equals(FormatDateSupport.DATETIME_STRING))
-	    return false;
-	return true;
-    }
+    static int styleToInt(String style) {
+	int ret = -1;
 
-    /*
-     * Returns true if the given 'timeStyle' or 'dateStyle' attribute is
-     * present.
-     */
-    private boolean isValidStyle(String style) {
-	if ((style != null)
-	    && !style.equals(FormatDateSupport.DEFAULT_STYLE)
-	    && !style.equals(FormatDateSupport.SHORT_STYLE)
-	    && !style.equals(FormatDateSupport.MEDIUM_STYLE)
-	    && !style.equals(FormatDateSupport.LONG_STYLE)
-	    && !style.equals(FormatDateSupport.FULL_STYLE))
-	    return false;
-	return true;
+	if (DEFAULT.equalsIgnoreCase(style)) {
+	    ret = DateFormat.DEFAULT;
+	} else if (SHORT.equalsIgnoreCase(style)) {
+	    ret = DateFormat.SHORT;
+	} else if (MEDIUM.equalsIgnoreCase(style)) {
+	    ret = DateFormat.MEDIUM;
+	} else if (LONG.equalsIgnoreCase(style)) {
+	    ret = DateFormat.LONG;
+	} else if (FULL.equalsIgnoreCase(style)) {
+	    ret = DateFormat.FULL;
+	}
+
+	return ret;
     }
 }

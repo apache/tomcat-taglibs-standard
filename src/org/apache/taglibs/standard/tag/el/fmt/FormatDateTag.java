@@ -60,6 +60,7 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
 import org.apache.taglibs.standard.tag.common.fmt.*;
+import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>A handler for &lt;formatDate&gt; that accepts attributes as Strings
@@ -74,6 +75,9 @@ public class FormatDateTag extends FormatDateSupport {
     // 'Private' state (implementation details)
 
     private String value_;                       // stores EL-based property
+    private String type_;                        // stores EL-based property
+    private String dateStyle_;		         // stores EL-based property
+    private String timeStyle_;		         // stores EL-based property
     private String pattern_;		         // stores EL-based property
     private String timeZone_;		         // stores EL-based property
 
@@ -121,6 +125,21 @@ public class FormatDateTag extends FormatDateSupport {
     }
 
     // for EL-based attribute
+    public void setType(String type_) {
+        this.type_ = type_;
+    }
+
+    // for EL-based attribute
+    public void setDateStyle(String dateStyle_) {
+        this.dateStyle_ = dateStyle_;
+    }
+
+    // for EL-based attribute
+    public void setTimeStyle(String timeStyle_) {
+        this.timeStyle_ = timeStyle_;
+    }
+
+    // for EL-based attribute
     public void setPattern(String pattern_) {
         this.pattern_ = pattern_;
     }
@@ -137,7 +156,7 @@ public class FormatDateTag extends FormatDateSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = pattern_ = timeZone_ = null;
+	value_ = type_ = dateStyle_ = timeStyle_ = pattern_ = timeZone_ = null;
     }
 
     // Evaluates expressions as necessary
@@ -150,12 +169,46 @@ public class FormatDateTag extends FormatDateSupport {
          * propagate up.
          */
 
+	// 'value' attribute
 	value = ExpressionUtil.evalNotNull(
 	    "formatDate", "value", value_, Object.class, this, pageContext);
+
+	// 'type' attribute
+	type = (String) ExpressionUtil.evalNotNull(
+	    "formatDate", "type", type_, String.class, this, pageContext);
+
+	// 'dateStyle' attribute
+	String styleStr = (String) ExpressionUtil.evalNotNull(
+	    "formatDate", "dateStyle", dateStyle_, String.class, this,
+	    pageContext);
+	if (styleStr != null) {
+	    dateStyle = Util.styleToInt(styleStr);
+	    if (dateStyle == -1) {
+		throw new JspException(
+                    Resources.getMessage("FORMAT_DATE_INVALID_DATE_STYLE", 
+					 styleStr));
+	    }
+	}
+
+	// 'timeStyle' attribute
+	styleStr = (String) ExpressionUtil.evalNotNull(
+	    "formatDate", "timeStyle", timeStyle_, String.class, this,
+	    pageContext);
+	if (styleStr != null) {
+	    timeStyle = Util.styleToInt(styleStr);
+	    if (timeStyle == -1) {
+		throw new JspException(
+                    Resources.getMessage("FORMAT_DATE_INVALID_TIME_STYLE", 
+					 styleStr));
+	    }
+	}
+
+	// 'pattern' attribute
 	pattern = (String) ExpressionUtil.evalNotNull(
 	    "formatDate", "pattern", pattern_, String.class, this,
 	    pageContext);
 
+	// 'timeZone' attribute
 	timeZone = ExpressionUtil.evalNotNull(
 	    "formatDate", "timeZone", timeZone_, Object.class, this,
 	    pageContext);

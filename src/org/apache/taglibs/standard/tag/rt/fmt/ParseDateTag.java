@@ -59,6 +59,7 @@ import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
+import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>A handler for &lt;parseDate&gt; that supports rtexprvalue-based
@@ -72,22 +73,47 @@ public class ParseDateTag extends ParseDateSupport {
     //*********************************************************************
     // Accessor methods
 
-    // for tag attribute
+    // 'value' attribute
     public void setValue(String value) throws JspTagException {
         this.value = value;
     }
 
-    // for tag attribute
+    // 'type' attribute
+    public void setType(String type) throws JspTagException {
+        this.type = type;
+    }
+
+    // 'dateStyle' attribute
+    public void setDateStyle(String dateStyle) throws JspTagException {
+        this.dateStyle = Util.styleToInt(dateStyle);
+	if (this.dateStyle == -1) {
+	    throw new JspTagException(
+                Resources.getMessage("PARSE_DATE_INVALID_DATE_STYLE", 
+				     dateStyle));
+	}
+    }
+
+    // 'timeStyle' attribute
+    public void setTimeStyle(String timeStyle) throws JspTagException {
+        this.timeStyle = Util.styleToInt(timeStyle);
+	if (this.timeStyle == -1) {
+	    throw new JspTagException(
+                Resources.getMessage("PARSE_DATE_INVALID_TIME_STYLE", 
+				     timeStyle));
+	}
+    }
+
+    // 'pattern' attribute
     public void setPattern(String pattern) throws JspTagException {
         this.pattern = pattern;
     }
 
-    // for tag attribute
+    // 'timeZone' attribute
     public void setTimeZone(Object timeZone) throws JspTagException {
         this.timeZone = timeZone;
     }
 
-    // for tag attribute
+    // 'parseLocale' attribute
     public void setParseLocale(String parseLocale) throws JspTagException {
         this.parseLocale = LocaleSupport.parseLocale(parseLocale, null);
     }

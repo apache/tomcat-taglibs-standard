@@ -74,6 +74,7 @@ public class ParseNumberTag extends ParseNumberSupport {
     // 'Private' state (implementation details)
 
     private String value_;                       // stores EL-based property
+    private String type_;                        // stores EL-based property
     private String pattern_;		         // stores EL-based property
     private String parseLocale_;	         // stores EL-based property
     private String integerOnly_;	         // stores EL-based property
@@ -122,6 +123,11 @@ public class ParseNumberTag extends ParseNumberSupport {
     }
 
     // for EL-based attribute
+    public void setType(String type_) {
+        this.type_ = type_;
+    }
+
+    // for EL-based attribute
     public void setPattern(String pattern_) {
         this.pattern_ = pattern_;
     }
@@ -144,7 +150,7 @@ public class ParseNumberTag extends ParseNumberSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = pattern_ = parseLocale_ = integerOnly_ = null;
+	value_ = type_ = pattern_ = parseLocale_ = integerOnly_ = null;
     }
 
     // Evaluates expressions as necessary
@@ -159,19 +165,27 @@ public class ParseNumberTag extends ParseNumberSupport {
          * propagate up.
          */
 
+	// 'value' attribute
 	value = (String) ExpressionUtil.evalNotNull(
 	    "parseNumber", "value", value_, String.class, this, pageContext);
 
+	// 'type' attribute
+	type = (String) ExpressionUtil.evalNotNull(
+	    "parseNumber", "type", type_, String.class, this, pageContext);
+
+	// 'pattern' attribute
 	pattern = (String) ExpressionUtil.evalNotNull(
 	    "parseNumber", "pattern", pattern_, String.class, this,
 	    pageContext);
 
+	// 'parseLocale' attribute
 	r = ExpressionUtil.evalNotNull(
 	    "parseNumber", "parseLocale", parseLocale_, String.class, this,
 	    pageContext);
 	if (r != null)
 	    parseLocale = LocaleSupport.parseLocale((String) r, null);
 
+	// 'integerOnly' attribute
 	r = ExpressionUtil.evalNotNull(
 	    "parseNumber", "integerOnly", integerOnly_, Boolean.class, this,
 	    pageContext);

@@ -73,20 +73,28 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class ParseDateSupport extends BodyTagSupport {
 
     //*********************************************************************
+    // Private constants
+
+    private static final String DATE = "date";
+    private static final String TIME = "time";
+    private static final String DATETIME = "both";
+
+
+    //*********************************************************************
     // Protected state
 
     protected String value;                      // 'value' attribute
+    protected String type;                       // 'type' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Object timeZone;                   // 'timeZone' attribute
     protected Locale parseLocale;                // 'parseLocale' attribute
+    protected int dateStyle;                     // 'dateStyle' attribute
+    protected int timeStyle;                     // 'timeStyle' attribute
 
 
     //*********************************************************************
     // Private state
 
-    private int type;                            // 'type' attribute
-    private int dateStyle;                       // 'dateStyle' attribute
-    private int timeStyle;                       // 'timeStyle' attribute
     private String var;                          // 'var' attribute
     private int scope;                           // 'scope' attribute
 
@@ -102,7 +110,7 @@ public abstract class ParseDateSupport extends BodyTagSupport {
     private void init() {
 	value = pattern = var = null;
 	timeZone = null;
-	type = FormatDateSupport.DATE_TYPE;
+	type = DATE;
 	dateStyle = timeStyle = DateFormat.DEFAULT;
 	scope = PageContext.PAGE_SCOPE;
 	parseLocale = null;
@@ -111,21 +119,6 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 
    //*********************************************************************
     // Tag attributes known at translation time
-
-    public void setType(String type) {
-	if (FormatDateSupport.TIME_STRING.equalsIgnoreCase(type))
-	    this.type = FormatDateSupport.TIME_TYPE;
-	else if (FormatDateSupport.DATETIME_STRING.equalsIgnoreCase(type))
-	    this.type = FormatDateSupport.DATETIME_TYPE;
-    }
-
-    public void setDateStyle(String dateStyle) {
-        this.dateStyle = FormatDateSupport.getStyle(dateStyle);
-    }
-
-    public void setTimeStyle(String timeStyle) {
-        this.timeStyle = FormatDateSupport.getStyle(timeStyle);
-    }
 
     public void setVar(String var) {
         this.var = var;
@@ -159,27 +152,15 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 		false,
 	        DateFormat.getAvailableLocales());
 
-	// Get appropriate formatter instance
-	DateFormat formatter = null;
-	switch (type) {
-	case FormatDateSupport.DATE_TYPE:
-	    formatter = DateFormat.getDateInstance(dateStyle, locale);
-	    break;
-	case FormatDateSupport.TIME_TYPE:
-	    formatter = DateFormat.getTimeInstance(timeStyle, locale);
-	    break;
-	case FormatDateSupport.DATETIME_TYPE:
-	    formatter = DateFormat.getDateTimeInstance(dateStyle, timeStyle,
-						       locale);
-	    break;
-	} // switch
+	// Create parser
+	DateFormat parser = createParser(locale);
 
 	// Apply pattern, if present
 	if (pattern != null) {
 	    try {
-		((SimpleDateFormat) formatter).applyPattern(pattern);
+		((SimpleDateFormat) parser).applyPattern(pattern);
 	    } catch (ClassCastException cce) {
-		formatter = new SimpleDateFormat(pattern, locale);
+		parser = new SimpleDateFormat(pattern, locale);
 	    }
 	}
 
@@ -198,13 +179,13 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	    tz = TimeZoneSupport.getTimeZone(pageContext, this);
 	}
 	if (tz != null) {
-	    formatter.setTimeZone(tz);
+	    parser.setTimeZone(tz);
 	}
 
 	// Parse date
 	Date parsed = null;
 	try {
-	    parsed = formatter.parse(value);
+	    parsed = parser.parse(value);
 	} catch (ParseException pe) {
 	    throw new JspTagException(pe.getMessage());
 	}
@@ -225,5 +206,28 @@ public abstract class ParseDateSupport extends BodyTagSupport {
     // Releases any resources we may have (or inherit)
     public void release() {
 	init();
+    }
+
+
+    //*********************************************************************
+    // Private utility methods
+
+    private DateFormat createParser(Locale loc) throws JspException {
+	DateFormat parser = null;
+
+	if (DATE.equalsIgnoreCase(type)) {
+	    parser = DateFormat.getDateInstance(dateStyle, loc);
+	} else if (TIME.equalsIgnoreCase(type)) {
+	    parser = DateFormat.getTimeInstance(timeStyle, loc);
+	} else if (DATETIME.equalsIgnoreCase(type)) {
+	    parser = DateFormat.getDateTimeInstance(dateStyle, timeStyle,
+						       loc);
+	} else {
+	    throw new JspException(
+                    Resources.getMessage("PARSE_DATE_INVALID_TYPE", 
+					 type));
+	}
+
+	return parser;
     }
 }

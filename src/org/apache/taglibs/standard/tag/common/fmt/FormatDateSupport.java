@@ -73,41 +73,27 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class FormatDateSupport extends BodyTagSupport {
 
     //*********************************************************************
-    // Public constants
+    // Private constants
 
-    public static final String DATE_STRING = "date";
-    public static final String TIME_STRING = "time";
-    public static final String DATETIME_STRING = "both";
+    private static final String DATE = "date";
+    private static final String TIME = "time";
+    private static final String DATETIME = "both";
 
-    public static final String DEFAULT_STYLE = "default";
-    public static final String SHORT_STYLE = "short";
-    public static final String MEDIUM_STYLE = "medium";
-    public static final String LONG_STYLE = "long";
-    public static final String FULL_STYLE = "full";
-
-
-    //*********************************************************************
-    // Package-scoped constants
-
-    static final int DATE_TYPE = 0;
-    static final int TIME_TYPE = 1;
-    static final int DATETIME_TYPE = 2;
-    
 
     //*********************************************************************
     // Protected state
 
     protected Object value;                      // 'value' attribute
+    protected String type;                       // 'type' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Object timeZone;                   // 'timeZone' attribute
+    protected int dateStyle;                     // 'dateStyle' attribute
+    protected int timeStyle;                     // 'timeStyle' attribute
 
 
     //*********************************************************************
     // Private state
 
-    private int type;                            // 'type' attribute
-    private int dateStyle;                       // 'dateStyle' attribute
-    private int timeStyle;                       // 'timeStyle' attribute
     private String var;                          // 'var' attribute
     private int scope;                           // 'scope' attribute
 
@@ -124,7 +110,7 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 	pattern = var = null;
 	value = null;
 	timeZone = null;
-	type = DATE_TYPE;
+	type = DATE;
 	dateStyle = timeStyle = DateFormat.DEFAULT;
 	scope = PageContext.PAGE_SCOPE;
     }
@@ -132,21 +118,6 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 
    //*********************************************************************
     // Tag attributes known at translation time
-
-    public void setType(String type) {
-	if (TIME_STRING.equalsIgnoreCase(type))
-	    this.type = TIME_TYPE;
-	else if (DATETIME_STRING.equalsIgnoreCase(type))
-	    this.type = DATETIME_TYPE;
-    }
-
-    public void setDateStyle(String dateStyle) {
-        this.dateStyle = getStyle(dateStyle);
-    }
-
-    public void setTimeStyle(String timeStyle) {
-        this.timeStyle = getStyle(timeStyle);
-    }
 
     public void setVar(String var) {
         this.var = var;
@@ -191,25 +162,13 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 	    }
 	}
 
-	// Create date formatter using page's locale
-	DateFormat formatter = null;
+	// Create formatter
 	Locale locale = LocaleSupport.getFormattingLocale(
             pageContext,
 	    this,
 	    true,
 	    DateFormat.getAvailableLocales());
-	switch (type) {
-	case DATE_TYPE:
-	    formatter = DateFormat.getDateInstance(dateStyle, locale);
-	    break;
-	case TIME_TYPE:
-	    formatter = DateFormat.getTimeInstance(timeStyle, locale);
-	    break;
-	case DATETIME_TYPE:
-	    formatter = DateFormat.getDateTimeInstance(dateStyle, timeStyle,
-						       locale);
-	    break;
-	} // switch
+	DateFormat formatter = createFormatter(locale);
 
 	// Apply pattern, if present
 	if (pattern != null) {
@@ -259,20 +218,24 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 
 
     //*********************************************************************
-    // Package-scoped utility methods
+    // Private utility methods
 
-    static int getStyle(String style) {
-	int ret = DateFormat.DEFAULT;
+    private DateFormat createFormatter(Locale loc) throws JspException {
+	DateFormat formatter = null;
 
-	if (SHORT_STYLE.equalsIgnoreCase(style))
-	    ret = DateFormat.SHORT;
-	else if (MEDIUM_STYLE.equalsIgnoreCase(style))
-	    ret = DateFormat.MEDIUM;
-	else if (LONG_STYLE.equalsIgnoreCase(style))
-	    ret = DateFormat.LONG;
-	else if (FULL_STYLE.equalsIgnoreCase(style))
-	    ret = DateFormat.FULL;
+	if (DATE.equalsIgnoreCase(type)) {
+	    formatter = DateFormat.getDateInstance(dateStyle, loc);
+	} else if (TIME.equalsIgnoreCase(type)) {
+	    formatter = DateFormat.getTimeInstance(timeStyle, loc);
+	} else if (DATETIME.equalsIgnoreCase(type)) {
+	    formatter = DateFormat.getDateTimeInstance(dateStyle, timeStyle,
+						       loc);
+	} else {
+	    throw new JspException(
+                    Resources.getMessage("FORMAT_DATE_INVALID_TYPE", 
+					 type));
+	}
 
-	return ret;
+	return formatter;
     }
 }

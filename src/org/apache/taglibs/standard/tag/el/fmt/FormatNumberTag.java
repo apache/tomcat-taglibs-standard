@@ -74,6 +74,7 @@ public class FormatNumberTag extends FormatNumberSupport {
     // 'Private' state (implementation details)
 
     private String value_;                       // stores EL-based property
+    private String type_;                        // stores EL-based property
     private String pattern_;		         // stores EL-based property
     private String currencyCode_;   	         // stores EL-based property
     private String currencySymbol_;   	         // stores EL-based property
@@ -124,6 +125,11 @@ public class FormatNumberTag extends FormatNumberSupport {
     // for EL-based attribute
     public void setValue(String value_) {
         this.value_ = value_;
+    }
+
+    // for EL-based attribute
+    public void setType(String type_) {
+        this.type_ = type_;
     }
 
     // for EL-based attribute
@@ -178,7 +184,7 @@ public class FormatNumberTag extends FormatNumberSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = pattern_ = null;
+	value_ = type_ = pattern_ = null;
 	currencyCode_ = currencySymbol_ = null;
 	groupingUsed_ = null;
 	maxIntegerDigits_ = minIntegerDigits_ = null;
@@ -197,53 +203,58 @@ public class FormatNumberTag extends FormatNumberSupport {
          * propagate up.
          */
 
+	// 'value' attribute
 	value = ExpressionUtil.evalNotNull(
 	    "formatNumber", "value", value_, Object.class, this, pageContext);
 
-	// pattern
+	// 'type' attribute
+	type = (String) ExpressionUtil.evalNotNull(
+	    "formatNumber", "type", type_, String.class, this, pageContext);
+
+	// 'pattern' attribute
 	pattern = (String) ExpressionUtil.evalNotNull(
 	    "formatNumber", "pattern", pattern_, String.class, this,
 	    pageContext);
 
-	// currencyCode
+	// 'currencyCode' attribute
 	currencyCode = (String) ExpressionUtil.evalNotNull(
 	    "formatNumber", "currencyCode", currencyCode_, String.class, this,
 	    pageContext);
 
-	// currencySymbol
+	// 'currencySymbol' attribute
 	currencySymbol = (String) ExpressionUtil.evalNotNull(
 	    "formatNumber", "currencySymbol", currencySymbol_, String.class,
 	    this, pageContext);
 
-	// groupingUsed
+	// 'groupingUsed' attribute
 	r = ExpressionUtil.evalNotNull(
 	    "formatNumber", "groupingUsed", groupingUsed_, Boolean.class, this,
 	    pageContext);
 	if (r != null)
 	    isGroupingUsed = ((Boolean) r).booleanValue();
 	
-	// maxIntegerDigits
+	// 'maxIntegerDigits' attribute
 	r = ExpressionUtil.evalNotNull(
 	    "formatNumber", "maxIntegerDigits", maxIntegerDigits_,
 	    Integer.class, this, pageContext);
 	if (r != null)
 	    maxIntegerDigits = ((Integer) r).intValue();
 
-	// minIntegerDigits	
+	// 'minIntegerDigits' attribute	
 	r = ExpressionUtil.evalNotNull(
 	    "formatNumber", "minIntegerDigits", minIntegerDigits_,
 	    Integer.class, this, pageContext);
 	if (r != null)
 	    minIntegerDigits = ((Integer) r).intValue();
 	
-	// maxFractionDigits
+	// 'maxFractionDigits' attribute
 	r = ExpressionUtil.evalNotNull(
 	    "formatNumber", "maxFractionDigits", maxFractionDigits_,
 	    Integer.class, this, pageContext);
 	if (r != null)
 	    maxFractionDigits = ((Integer) r).intValue();
 	
-	// minFractionDigits
+	// 'minFractionDigits' attribute
 	r = ExpressionUtil.evalNotNull(
 	    "formatNumber", "minFractionDigits", minFractionDigits_,
 	    Integer.class, this, pageContext);
