@@ -5,6 +5,7 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd"
     version="2.4">
 
+    <display-name>JSTL Examples</display-name>
     <description>
         Examples for the 'standard' taglib (JSTL)
     </description>
