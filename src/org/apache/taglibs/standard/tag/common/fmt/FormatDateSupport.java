@@ -149,10 +149,11 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 		    && ((bcs = bc.getString()) != null)) {
 		value = bcs.trim();
 	    }
-	    if ((value == null) || value.equals("")) {
-		// do nothing
-		return EVAL_PAGE;
-	    }
+	}
+
+	if ((value == null) || value.equals("")) {
+	    // do nothing
+	    return EVAL_PAGE;
 	}
 
 	/*
