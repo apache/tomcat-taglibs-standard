@@ -160,7 +160,7 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
 
 	    // parse the page
 	    SAXParserFactory f = SAXParserFactory.newInstance();
-	    f.setValidating(true);
+	    f.setValidating(false);
 	    SAXParser p = f.newSAXParser();
 	    p.parse(page.getInputStream(), h);
 
