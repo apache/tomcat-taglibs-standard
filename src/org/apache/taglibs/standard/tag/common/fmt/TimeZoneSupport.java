@@ -63,7 +63,7 @@ import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * Support for tag handlers for &lt;timezone&gt;, the timezone tag in
+ * Support for tag handlers for &lt;timeZone&gt;, the time zone tag in
  * JSTL 1.0.
  *
  * @author Jan Luehe
