@@ -430,7 +430,7 @@ public abstract class ImportSupport extends BodyTagSupport
 	 * 'charEncoding' attribute, or the tag's default encoding,
 	 * <b>if necessary</b>.
          */
-	// notsimpley toString() because we need to throw
+	// not simply toString() because we need to throw
 	// UnsupportedEncodingException
 	public String getString() throws UnsupportedEncodingException {
 	    if (isWriterUsed)
