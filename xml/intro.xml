@@ -17,9 +17,9 @@
       reference implementation of the JSP Standard Tag Library (JSTL) at
       Jakarta Taglibs.  JSTL is currently in the 
       <a href="http://jcp.org/procedures/jcp2/index.jsp#3.2">
-      Public Final Draft stage</a> of the Java Community Process.  The
-      <a href="http://jcp.org/aboutJava/communityprocess/review/jsr052">
-      JSTL Public Final Draftt</a> is now available.
+      Proposed Final Draft stage</a> of the Java Community Process.  The
+      <a href="http://jcp.org/aboutJava/communityprocess/first/jsr052">
+      JSTL Proposed Final Draft</a> is now available.
     </p>
 
     <p><b>NOTE:</b> JSTL requires a JSP container that supports
