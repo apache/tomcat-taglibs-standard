@@ -74,31 +74,24 @@ public class TransformTag extends TransformSupport {
     // Accessor methods
 
     // for tag attribute
-    public void setXmlText(Object xmlText) throws JspTagException {
-        this.xmlText = xmlText;
+    public void setXml(Object xml) throws JspTagException {
+        this.xml = xml;
     }
 
     // for tag attribute
-    public void setXmlUrl(String xmlUrl) throws JspTagException {
-        this.xmlUrl = xmlUrl;
+    public void setXmlSystemId(String xmlSystemId) throws JspTagException {
+        this.xmlSystemId = xmlSystemId;
     }
 
     // for tag attribute
-    public void setXsltText(Object xsltText) throws JspTagException {
-        this.xsltText = xsltText;
+    public void setXslt(Object xslt) throws JspTagException {
+        this.xslt = xslt;
     }
 
     // for tag attribute
-    public void setXsltUrl(String xsltUrl) throws JspTagException {
-        this.xsltUrl = xsltUrl;
+    public void setXsltSystemId(String xsltSystemId) throws JspTagException {
+        this.xsltSystemId = xsltSystemId;
     }
-
-    /* Removed for RI 0.5
-     // for tag attribute
-     public void setTransformer(Transformer transformer) throws JspTagException {
-         this.transformer = transformer;
-     }
-    */
 
     // for tag attribute
     public void setResult(Result result) throws JspTagException {

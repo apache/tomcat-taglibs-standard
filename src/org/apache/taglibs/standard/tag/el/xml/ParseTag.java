@@ -74,9 +74,9 @@ public class ParseTag extends ParseSupport {
     //*********************************************************************
     // 'Private' state (implementation details)
 
-    private String xmlText_;                    // stores EL-based property
-    private String xmlUrl_;                     // stores EL-based property
-    private String filter_;			// stores EL-based property
+    private String xml_;                    // stores EL-based property
+    private String systemId_;		    // stores EL-based property
+    private String filter_;		    // stores EL-based property
 
 
     //*********************************************************************
@@ -122,12 +122,12 @@ public class ParseTag extends ParseSupport {
         this.filter_ = filter_;
     }
 
-    public void setXmlText(String xmlText_) {
-        this.xmlText_ = xmlText_;
+    public void setXml(String xml_) {
+        this.xml_ = xml_;
     }
 
-    public void setXmlUrl(String xmlUrl_) {
-        this.xmlUrl_ = xmlUrl_;
+    public void setSystemId(String systemId_) {
+        this.systemId_ = systemId_;
     }
 
 
@@ -137,7 +137,7 @@ public class ParseTag extends ParseSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	filter_ = xmlText_ = xmlUrl_ = null;
+	filter_ = xml_ = systemId_ = null;
     }
 
     /* Evaluates expressions as necessary */
@@ -150,12 +150,10 @@ public class ParseTag extends ParseSupport {
          * propagate up.
          */
 
-	xmlText = ExpressionUtil.evalNotNull(
-	    "parse", "xmlText", xmlText_, Object.class, this, pageContext);
-	xmlUrl = (String) ExpressionUtil.evalNotNull(
-	    "parse", "xmlUrl", xmlUrl_, String.class, this, pageContext);
-	if (xmlUrl_ != null && (xmlUrl == null || xmlUrl.equals("")))
-	    throw new NullAttributeException("import", "xmlUrl");
+	xml = ExpressionUtil.evalNotNull(
+	    "parse", "xml", xml_, Object.class, this, pageContext);
+	systemId = (String) ExpressionUtil.evalNotNull(
+	    "parse", "systemId", systemId_, String.class, this, pageContext);
 
 	try {
 	    filter = (XMLFilter) ExpressionUtil.evalNotNull(

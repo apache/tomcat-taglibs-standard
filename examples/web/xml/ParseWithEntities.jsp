@@ -9,22 +9,19 @@
 <h3>Parse from Objects and URLs</h3>
 
 <c:set var="xmlText">
-  <a>
-   <b>
-    <c>
-     foo
-    </c>
-   </b>
-   <d>
-     bar
-   </d>
-  </a>
+<?xml version="1.0"?>
+
+<!DOCTYPE project [
+    <!ENTITY included SYSTEM "included.xml">
+]>
+<root>
+  &included;
+</root>
 </c:set>    
 
-<x:parse var="a" xml="${xmlText}" />
+<x:parse var="a" xml="${xmlText}" systemId="foo.xml"/>
 
-<x:out select="$a//c"/>
-<x:out select="$a/a/d"/>
+<x:out select="$a//*"/>
 
 </body>
 </html>

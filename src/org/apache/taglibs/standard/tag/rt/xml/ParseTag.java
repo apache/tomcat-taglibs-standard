@@ -73,12 +73,12 @@ public class ParseTag extends ParseSupport {
     // Accessor methods
 
     // for tag attribute
-    public void setXmlText(Object xml) throws JspTagException {
-        this.xmlText = xml;
+    public void setXml(Object xml) throws JspTagException {
+        this.xml = xml;
     }
 
-    public void setXmlUrl(String url) throws JspTagException {
-	this.xmlUrl = url;
+    public void setSystemId(String systemId) throws JspTagException {
+	this.systemId = systemId;
     }
 
     // for tag attribute

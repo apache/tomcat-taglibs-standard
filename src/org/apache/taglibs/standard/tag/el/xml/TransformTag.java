@@ -75,10 +75,10 @@ public class TransformTag extends TransformSupport {
     //*********************************************************************
     // 'Private' state (implementation details)
 
-    private String xmlText_;                    // stores EL-based property
-    private String xmlUrl_;                     // stores EL-based property
-    private String xsltText_;			// stores EL-based property
-    private String xsltUrl_;			// stores EL-based property
+    private String xml_;                        // stores EL-based property
+    private String xmlSystemId_;                // stores EL-based property
+    private String xslt_;			// stores EL-based property
+    private String xsltSystemId_;		// stores EL-based property
     private String result_;			// stores EL-based property
 
 
@@ -116,23 +116,23 @@ public class TransformTag extends TransformSupport {
     // Accessor methods
 
     // for EL-based attribute
-    public void setXmlText(String xmlText_) {
-        this.xmlText_ = xmlText_;
+    public void setXml(String xml_) {
+        this.xml_ = xml_;
     }
 
     // for EL-based attribute
-    public void setXmlUrl(String xmlUrl_) {
-        this.xmlUrl_ = xmlUrl_;
+    public void setXmlSystemId(String xmlSystemId_) {
+        this.xmlSystemId_ = xmlSystemId_;
     }
 
     // for EL-based attribute
-    public void setXsltText(String xsltText_) {
-        this.xsltText_ = xsltText_;
+    public void setXslt(String xslt_) {
+        this.xslt_ = xslt_;
     }
 
     // for EL-based attribute
-    public void setXsltUrl(String xsltUrl_) {
-        this.xsltUrl_ = xsltUrl_;
+    public void setXsltSystemId(String xsltSystemId_) {
+        this.xsltSystemId_ = xsltSystemId_;
     }
 
     /* Removed for RI 0.5 
@@ -154,7 +154,7 @@ public class TransformTag extends TransformSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	xmlText_ = xmlUrl = xsltText_ = xsltUrl_ = result_ = null;
+	xml_ = xmlSystemId = xslt_ = xsltSystemId_ = result_ = null;
     }
 
     /* Evaluates expressions as necessary */
@@ -167,24 +167,19 @@ public class TransformTag extends TransformSupport {
          * propagate up.
          */
 
-	xmlText = ExpressionUtil.evalNotNull(
-	    "transform", "xmlText", xmlText_, Object.class, this, pageContext);
-	xmlUrl = (String) ExpressionUtil.evalNotNull(
-	    "transform", "xmlUrl", xmlUrl_, String.class, this, pageContext);
-	xsltText= ExpressionUtil.evalNotNull(
-	    "transform", "xsltText", xsltText_, Object.class, this,
+	xml = ExpressionUtil.evalNotNull(
+	    "transform", "xml", xml_, Object.class, this, pageContext);
+	xmlSystemId = (String) ExpressionUtil.evalNotNull(
+	    "transform", "xmlSystemId", xmlSystemId_, String.class,
+            this, pageContext);
+	xslt= ExpressionUtil.evalNotNull(
+	    "transform", "xslt", xslt_, Object.class, this,
 	    pageContext);
-	xsltUrl = (String) ExpressionUtil.evalNotNull(
-	    "transform", "xsltUrl", xsltUrl_, String.class, this, pageContext);
-//	transformer = (Transformer) ExpressionUtil.evalNotNull(
-//	    "transform", "transformer", transformer_, Transformer.class,
-//	     this, pageContext);
+	xsltSystemId = (String) ExpressionUtil.evalNotNull(
+	    "transform", "xsltSystemId", xsltSystemId_, String.class,
+	    this, pageContext);
 	result = (Result) ExpressionUtil.evalNotNull(
 	    "transform", "result", result_, Result.class, this, pageContext);
 
-	if (xmlUrl_ != null && (xmlUrl == null || xmlUrl.equals("")))
-	    throw new NullAttributeException("transform", "xmlUrl");
-	if (xsltUrl_ != null && (xsltUrl == null || xsltUrl.equals("")))
-	    throw new NullAttributeException("transform", "xsltUrl");
     }
 }

@@ -56,6 +56,8 @@
 package org.apache.taglibs.standard.tag.common.xml;
 
 import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.xml.parsers.*;
@@ -66,6 +68,7 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
+import org.apache.taglibs.standard.tag.common.core.ImportSupport;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -79,8 +82,8 @@ public abstract class ParseSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected Object xmlText;                      // 'xmlText' attribute
-    protected String xmlUrl;                       // 'xmlUrl' attribute
+    protected Object xml;                          // 'xml' attribute
+    protected String systemId;                     // 'systemId' attribute
     protected XMLFilter filter;			   // 'filter' attribute
 
     //*********************************************************************
@@ -108,8 +111,8 @@ public abstract class ParseSupport extends BodyTagSupport {
 
     private void init() {
 	var = varDom = null;
-	xmlText = null;
-	xmlUrl = null;
+	xml = null;
+	systemId = null;
 	filter = null;
 	dbf = null;
 	db = null;
@@ -131,6 +134,7 @@ public abstract class ParseSupport extends BodyTagSupport {
         if (dbf == null) {
             dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
+            dbf.setValidating(false);
         }
         db = dbf.newDocumentBuilder();
 
@@ -147,25 +151,21 @@ public abstract class ParseSupport extends BodyTagSupport {
 
 	// produce a Document by parsing whatever the attributes tell us to use
 	Document d;
-	Object xmlText = this.xmlText;
-	if (xmlText == null && xmlUrl == null) {
-	    // if neither attribute was specified, use the body as 'xmlText'
+	Object xmlText = this.xml;
+	if (xmlText == null) {
+	    // if the attribute was specified, use the body as 'xml'
 	    if (bodyContent != null && bodyContent.getString() != null)
 		xmlText = bodyContent.getString().trim();
 	    else
 		xmlText = "";
 	}
-	if (xmlUrl != null)
-	    d = parseURLWithFilter(xmlUrl, filter);
-	else {
-	    if (xmlText instanceof String)
-		d = parseStringWithFilter((String) xmlText, filter);
-	    else if (xmlText instanceof Reader)
-		d = parseReaderWithFilter((Reader) xmlText, filter);
-	    else
-		throw new JspTagException(
-		    Resources.getMessage("PARSE_INVALID_SOURCE"));
-	}
+	if (xmlText instanceof String)
+	    d = parseStringWithFilter((String) xmlText, filter);
+	else if (xmlText instanceof Reader)
+	    d = parseReaderWithFilter((Reader) xmlText, filter);
+	else
+	    throw new JspTagException(
+	        Resources.getMessage("PARSE_INVALID_SOURCE"));
 
 	// we've got a Document object; store it out as appropriate
 	// (let any exclusivity or other constraints be enforced by TEI/TLV)
@@ -176,13 +176,13 @@ public abstract class ParseSupport extends BodyTagSupport {
 
 	return EVAL_PAGE;
       } catch (SAXException ex) {
-	throw new JspTagException(ex.toString());
+	throw new JspException(ex);
       } catch (IOException ex) {
-	throw new JspTagException(ex.toString());
+	throw new JspException(ex);
       } catch (ParserConfigurationException ex) {
-	throw new JspTagException(ex.toString());
+	throw new JspException(ex);
       } catch (TransformerConfigurationException ex) {
-	throw new JspTagException(ex.toString());
+	throw new JspException(ex);
       }
     }
 
@@ -205,6 +205,7 @@ public abstract class ParseSupport extends BodyTagSupport {
             // use TrAX to adapt SAX events to a Document object
             th.setResult(new DOMResult(o));
             XMLReader xr = XMLReaderFactory.createXMLReader();
+	    xr.setEntityResolver(new JstlEntityResolver(pageContext));
             //   (note that we overwrite the filter's parent.  this seems
             //    to be expected usage.  we could cache and reset the old
             //    parent, but you can't setParent(null), so this wouldn't
@@ -239,6 +240,9 @@ public abstract class ParseSupport extends BodyTagSupport {
     /** Parses the given InputSource into a Document. */
     private Document parseInputSource(InputSource s)
 	    throws SAXException, IOException {
+	db.setEntityResolver(new JstlEntityResolver(pageContext));
+	if (systemId != null)
+            s.setSystemId(systemId);
 	return db.parse(s);
     }
 
@@ -258,6 +262,48 @@ public abstract class ParseSupport extends BodyTagSupport {
 	return parseInputSource(new InputSource(url));
     }
 
+    //*********************************************************************
+    // JSTL-specific EntityResolver class
+
+    /** Lets us resolve relative external entities. */
+    public static class JstlEntityResolver implements EntityResolver {
+	private final PageContext ctx;
+        public JstlEntityResolver(PageContext ctx) {
+            this.ctx = ctx;
+        }
+        public InputSource resolveEntity(String publicId, String systemId)
+	        throws FileNotFoundException {
+	    // pass if we don't have a systemId
+	    if (systemId == null)
+		return null;
+
+	    // strip leading "file:" off URL if applicable
+	    if (systemId.startsWith("file:"))
+		systemId = systemId.substring(5);
+
+	    // we're only concerned with relative URLs
+	    if (ImportSupport.isAbsoluteUrl(systemId))
+		return null;
+
+	    // for relative URLs, load and wrap the resource.
+	    // don't bother checking for 'null' since we specifically want
+	    // the parser to fail if the resource doesn't exist
+	    InputStream s;
+	    if (systemId.startsWith("/")) {
+	        s = ctx.getServletContext().getResourceAsStream(systemId);
+	        if (s == null)
+		    throw new FileNotFoundException(systemId);
+	    } else {
+		String pagePath =
+		    ((HttpServletRequest) ctx.getRequest()).getServletPath();
+		String basePath =
+		    pagePath.substring(0, pagePath.lastIndexOf("/"));
+		s = ctx.getServletContext().getResourceAsStream(
+		      basePath + "/" + systemId);
+	    }
+	    return new InputSource(s);
+        }
+    }
 
     //*********************************************************************
     // Tag attributes

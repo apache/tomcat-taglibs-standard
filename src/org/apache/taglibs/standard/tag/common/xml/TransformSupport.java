@@ -57,13 +57,20 @@ package org.apache.taglibs.standard.tag.common.xml;
 
 import java.io.*;
 import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
+import javax.xml.transform.sax.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.XMLFilterImpl;
+import org.xml.sax.helpers.XMLReaderFactory;
 import org.w3c.dom.*;
+import org.apache.taglibs.standard.tag.common.core.ImportSupport;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -78,11 +85,11 @@ public abstract class TransformSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected Object xmlText;                       // 'xmlText' attribute
-    protected String xmlUrl;			    // 'xmlUrl' attribute
-    protected Object xsltText;			    // 'xsltText' attribute
-    protected String xsltUrl;			    // 'xsltUrl' attribute
-    protected Result result;			   // 'result' attribute
+    protected Object xml;                       // attribute
+    protected String xmlSystemId;		// attribute
+    protected Object xslt;			// attribute
+    protected String xsltSystemId;		// attribute
+    protected Result result;			// attribute
 
     //*********************************************************************
     // Private state
@@ -92,6 +99,7 @@ public abstract class TransformSupport extends BodyTagSupport {
     private Transformer t;			   // actual Transformer
     private TransformerFactory tf;		   // reusable factory
     private DocumentBuilder db;			   // reusable factory
+    private DocumentBuilderFactory dbf;		   // reusable factory
 
 
     //*********************************************************************
@@ -103,8 +111,8 @@ public abstract class TransformSupport extends BodyTagSupport {
     }
 
     private void init() {
-	xmlText = xsltText = null;
-	xmlUrl = xsltUrl = null;
+	xml = xslt = null;
+	xmlSystemId = xsltSystemId = null;
 	var = null;
 	result = null;
 	tf = null;
@@ -133,26 +141,31 @@ public abstract class TransformSupport extends BodyTagSupport {
 	//************************************
 	// Produce transformer
 
-	// we can assume exactly one of 'xsltText' or 'xsltUrl' is specified
 	Source s;
-	if (xsltUrl != null)
-	    s = getSource(xsltUrl, true);
-	else if (xsltText != null)
-	    s = getSource(xsltText, false);
-	else
+	if (xslt != null) {
+	    s = getSource(xslt, xsltSystemId);
+	} else {
 	    throw new JspTagException(
 	        Resources.getMessage("TRANSFORM_NO_TRANSFORMER"));
+        }
+	tf.setURIResolver(new JstlUriResolver(pageContext));
         t = tf.newTransformer(s);
 
 	return EVAL_BODY_BUFFERED;
 
+      } catch (SAXException ex) {
+	throw new JspException(ex);
+      } catch (ParserConfigurationException ex) {
+	throw new JspException(ex);
+      } catch (IOException ex) {
+	throw new JspException(ex);
       } catch (TransformerConfigurationException ex) {
-	throw new JspTagException(ex.toString());
+	throw new JspException(ex);
       }
     }
 
-    // parse 'xmlText', 'xmlUrl', or body, transform via our Transformer,
-    // and store as 'var' or 'result'
+    // parse 'xml' or body, transform via our Transformer,
+    // and store as 'var' or through 'result'
     public int doEndTag() throws JspException {
       try {
 
@@ -160,16 +173,18 @@ public abstract class TransformSupport extends BodyTagSupport {
 	// Initialize
 
 	// set up our DocumentBuilderFactory if necessary
-	if (db == null)
-	    db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+	if (dbf == null) {
+	    dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(true);
+            dbf.setValidating(false);
+	} if (db == null)
+	    db = dbf.newDocumentBuilder();
 
 	//************************************
 	// Determine source XML
 
 	// if we haven't gotten a source, use the body (which may be empty)
-	Object xml = xmlUrl;
-	if (xml == null)
-	    xml = xmlText;
+	Object xml = this.xml;
 	if (xml == null)				// still equal
 	    if (bodyContent != null && bodyContent.getString() != null)
 	        xml = bodyContent.getString().trim();
@@ -177,7 +192,7 @@ public abstract class TransformSupport extends BodyTagSupport {
 		xml = "";
 
 	// let the Source be with you
-	Source source = getSource(xml, xmlUrl != null);
+	Source source = getSource(xml, xmlSystemId);
 
 	//************************************
 	// Conduct the transformation
@@ -193,31 +208,20 @@ public abstract class TransformSupport extends BodyTagSupport {
 	    t.transform(source, doc);
 	    pageContext.setAttribute(var, d, scope);
 	} else {
-	 ////
-         // Replaced in favor of the optimized method below, suggested
-         // by Bob Lee.
-	 //   /*
-	 //    * We're going to output the text directly.  I'd love to
-	 //    * construct a StreamResult directly from pageContext.getOut(),
-	 //    * but I can't trust the transformer not to flush our writer.
-	 //    */
-	 //   StringWriter bufferedResult = new StringWriter();
-	 //   Result page = new StreamResult(bufferedResult);
-	 //   t.transform(xml, page);
-	 //   pageContext.getOut().print(bufferedResult);
-
 	    Result page =
 		new StreamResult(new SafeWriter(pageContext.getOut()));
 	    t.transform(source, page);
 	}
 
 	return EVAL_PAGE;
-         //   } catch (IOException ex) {
-	 //   throw new JspTagException(ex.toString());
+      } catch (SAXException ex) {
+	throw new JspException(ex);
       } catch (ParserConfigurationException ex) {
-	throw new JspTagException(ex.toString());
+	throw new JspException(ex);
+      } catch (IOException ex) {
+	throw new JspException(ex);
       } catch (TransformerException ex) {
-	throw new JspTagException(ex.toString());
+	throw new JspException(ex);
       }
     }
 
@@ -237,7 +241,7 @@ public abstract class TransformSupport extends BodyTagSupport {
 
 
     //*********************************************************************
-    // Utility methods for package
+    // Utility methods
 
     /**
      * Retrieves a Source from the given Object, whether it be a String,
@@ -245,37 +249,58 @@ public abstract class TransformSupport extends BodyTagSupport {
      * If 'url' is true, then we must be passed a String and will interpret
      * it as a URL.  A null input always results in a null output.
      */
-    static Source getSource(Object o, boolean url) {
-	if (o == null) {
+    private Source getSource(Object o, String systemId)
+	    throws SAXException, ParserConfigurationException, IOException {
+	if (o == null)
 	    return null;
-	}
-
-	if (url) {
-	    return new StreamSource((String) o);
-	} else {
-          if (o instanceof Source) {
-	      return (Source) o;
-          } else if (o instanceof String) {
-	      Reader s = new StringReader((String) o);
-	      return new StreamSource(s);
-          } else if (o instanceof Reader) {
-	      return new StreamSource((Reader) o);
-          } else if (o instanceof Node) {
-	      return new DOMSource((Node) o);
-          } else if (o instanceof List) {
-	      // support 1-item List because our XPath processor outputs them	
-	      List l = (List) o;
-	      if (l.size() == 1) {
-	          return getSource(l.get(0), false);		// unwrap List
-	      } else {
-	          throw new IllegalArgumentException(
-                    Resources.getMessage("TRANSFORM_SOURCE_INVALID_LIST"));
-	      }
-          } else {
-	      throw new IllegalArgumentException(
-		  Resources.getMessage("TRANSFORM_SOURCE_UNRECOGNIZED")
-		  + o.getClass());
-	  }
+        else if (o instanceof Source) {
+	    return (Source) o;
+        } else if (o instanceof String) {
+	    // if we've got a string, chain to Reader below
+	    return getSource(new StringReader((String) o), systemId);
+        } else if (o instanceof Reader) {
+	    // Without a systemId, or with an absolute one, we can
+	    // read the input through SAX.  If our systemId relative,
+	    // however, JAXP seems to effectively require us to go through DOM.
+	    // (TrAX resolves our relative URLs to full paths before
+            // passing them to our resolver.)  This is silly, but what can
+            // you do?  If this is a bug and not a feature of the TrAX
+            // implementation, we can remove the DOM logic below, later.
+	    if (systemId == null || ImportSupport.isAbsoluteUrl(systemId)) {
+	        // explicitly go through SAX to maintain
+	        // control over how relative external entities resolve
+	        XMLReader xr = XMLReaderFactory.createXMLReader();
+                xr.setEntityResolver(
+                    new ParseSupport.JstlEntityResolver(pageContext));
+	        InputSource s = new InputSource((Reader) o);
+	        if (systemId != null)
+                    s.setSystemId(systemId);
+	        Source result = new SAXSource(xr, s);
+	        return result;
+	    } else {
+		// go through DOM to maintain full control over entities
+		InputSource s = new InputSource((Reader) o);
+		s.setSystemId(systemId);
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		db.setEntityResolver(
+		    new ParseSupport.JstlEntityResolver(pageContext));
+		return new DOMSource(db.parse(s));
+	    }
+        } else if (o instanceof Node) {
+	    return new DOMSource((Node) o);
+        } else if (o instanceof List) {
+	    // support 1-item List because our XPath processor outputs them	
+	    List l = (List) o;
+	    if (l.size() == 1) {
+	        return getSource(l.get(0), systemId);		// unwrap List
+	    } else {
+	        throw new IllegalArgumentException(
+                  Resources.getMessage("TRANSFORM_SOURCE_INVALID_LIST"));
+	    }
+        } else {
+	    throw new IllegalArgumentException(
+	       Resources.getMessage("TRANSFORM_SOURCE_UNRECOGNIZED")
+	         + o.getClass());
 	}
     }
 
@@ -293,7 +318,7 @@ public abstract class TransformSupport extends BodyTagSupport {
 
 
     //*********************************************************************
-    // Private utility class
+    // Private utility classes
 
     /**
      * A Writer based on a wrapped Writer but ignoring requests to
@@ -309,4 +334,44 @@ public abstract class TransformSupport extends BodyTagSupport {
 	    w.write(cbuf, off, len);
 	}
     }	
+
+    //*********************************************************************
+    // JSTL-specific URIResolver class
+
+    /** Lets us resolve relative external entities. */
+    private static class JstlUriResolver implements URIResolver {
+        private final PageContext ctx;
+        public JstlUriResolver(PageContext ctx) {
+            this.ctx = ctx;
+        }
+        public Source resolve(String href, String base)
+	        throws TransformerException {
+            // pass if we don't have a systemId
+            if (href == null)
+                return null;
+
+            // we're only concerned with relative URLs
+            if (ImportSupport.isAbsoluteUrl(href))
+                return null;
+
+            // for relative URLs, load and wrap the resource.
+            // don't bother checking for 'null' since we specifically want
+            // the parser to fail if the resource doesn't exist
+            InputStream s;
+            if (href.startsWith("/")) {
+                s = ctx.getServletContext().getResourceAsStream(href);
+                if (s == null)
+                    throw new TransformerException(href);
+            } else {
+                String pagePath =
+                    ((HttpServletRequest) ctx.getRequest()).getServletPath();
+                String basePath =
+                    pagePath.substring(0, pagePath.lastIndexOf("/"));
+                s = ctx.getServletContext().getResourceAsStream(
+                      basePath + "/" + href);
+            }
+            return new StreamSource(s);
+        }
+    }
+
 }

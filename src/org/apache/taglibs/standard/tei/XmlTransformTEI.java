@@ -65,25 +65,13 @@ import javax.servlet.jsp.tagext.*;
  */
 public class XmlTransformTEI extends TagExtraInfo {
 
-    final private static String XML_TEXT = "xmlText";
-    final private static String XML_URL = "xmlUrl";
-    final private static String XSLT_TEXT = "xsltText";
-    final private static String XSLT_URL = "xsltUrl";
+    final private static String XSLT = "xslt";
     final private static String RESULT = "result";
     final private static String VAR = "var";
 
     public boolean isValid(TagData us) {
-	// disallow both XML_TEXT and XML_URL
-	if (Util.isSpecified(us, XML_TEXT) && Util.isSpecified(us, XML_URL))
-	    return false;
-
-	// disallow both XSLT_TEXT and XSLT_URL ...
-	if (Util.isSpecified(us, XSLT_TEXT) && Util.isSpecified(us, XSLT_URL))
-	    return false;
-
-	// ... but require at least one of XSLT_TEXT or XSLT_URL
-	if (!(Util.isSpecified(us, XSLT_TEXT)
-		|| Util.isSpecified(us, XSLT_URL)))
+	// require XSLT
+	if (!Util.isSpecified(us, XSLT))
 	    return false;
 
 	// disallow both VAR and RESULT

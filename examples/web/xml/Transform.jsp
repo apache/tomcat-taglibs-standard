@@ -25,43 +25,27 @@
 </c:set>
 
 Prints "header" as a header:<br />
-<x:transform xmlText="${xml}" xsltText="${xsl}"/>
+<x:transform xml="${xml}" xslt="${xsl}"/>
 
 <hr />
 
 Prints "header" in normal size:<br />
-<x:transform xmlText="${xml}" xsltText="${xsl}" var="doc"/>
+<x:transform xml="${xml}" xslt="${xsl}" var="doc"/>
 <x:out select="$doc//h1"/>
 
 <hr size="5" />
 
-<h3>Transformations using URLs</h3>
-
-<c:set var="xslt">
-  <?xml version="1.0"?>
-  <xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-
-  <xsl:template match="text()">
-    <p><xsl:value-of select="."/></p>
-  </xsl:template>
-
-  </xsl:stylesheet>
-</c:set>
-
-<x:transform xsltText="${xslt}" xmlUrl="http://www.cnn.com/cnn.rss" />
-
 <hr />
 <h3>Transformations using output from XPath expressions</h3>
 
-<x:parse var="xml" xmlText="${xml}" />
+<x:parse var="xml" xml="${xml}" />
 <x:set var="miniDoc" select="$xml//b" />
-<x:transform xsltText="${xslt}" xmlText="${miniDoc}" />
+<x:transform xslt="${xsl}" xml="${miniDoc}" />
 <hr />
 
 <h3>Inline transformations</h3>
 
-<x:transform xsltText="${xslt}">
+<x:transform xslt="${xsl}">
   <a>
    <b>
     <c>Paragraph one!</c>
