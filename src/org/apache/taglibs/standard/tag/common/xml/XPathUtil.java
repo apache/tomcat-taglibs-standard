@@ -1,7 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999 The Apache Software Foundation.  All rights 
+ * Copyright (c) 1999 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -9,7 +9,7 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in
@@ -17,15 +17,15 @@
  *    distribution.
  *
  * 3. The end-user documentation included with the redistribution, if
- *    any, must include the following acknowlegement:  
- *       "This product includes software developed by the 
+ *    any, must include the following acknowlegement:
+ *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowlegement may appear in the software itself,
  *    if and wherever such third-party acknowlegements normally appear.
  *
  * 4. The names "The Jakarta Project", "Tomcat", and "Apache Software
  *    Foundation" must not be used to endorse or promote products derived
- *    from this software without prior written permission. For written 
+ *    from this software without prior written permission. For written
  *    permission, please contact apache@apache.org.
  *
  * 5. Products derived from this software may not be called "Apache"
@@ -51,7 +51,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.xml;
 
@@ -200,6 +200,7 @@ public class XPathUtil {
     private static SimpleNamespaceContext nc;
     private static FunctionContext fc;
     private static DocumentNavigator dn;
+    private static HashMap exprCache;
 
     /** Initialize globally useful data. */
     private synchronized static void staticInit() {
@@ -221,11 +222,14 @@ public class XPathUtil {
 
 	    // set up the global DocumentNavigator
 	    dn = DocumentNavigator.getInstance();
+
+            // create a HashMap to cache the expressions
+            exprCache = new HashMap();
 	}
     }
 
     /**
-     * Returns a String given an XPath expression and a single context 
+     * Returns a String given an XPath expression and a single context
      * Node.
      */
     public String valueOf(Node n, String xpath) throws SAXPathException {
@@ -239,14 +243,14 @@ public class XPathUtil {
     public boolean booleanValueOf(Node n, String xpath)
 	    throws SAXPathException {
 	staticInit();
-	XPath xp = new DOMXPath(xpath);
+	XPath xp = parse(xpath);
 	return xp.booleanValueOf(getLocalContext(n));
     }
 
     /** Evalutes an XPath expression to a List of nodes. */
     public List selectNodes(Node n, String xpath) throws SAXPathException {
 	staticInit();
-	XPath xp = new DOMXPath(xpath);
+	XPath xp = parse(xpath);
 	return xp.selectNodes(getLocalContext(n));
     }
 
@@ -254,7 +258,7 @@ public class XPathUtil {
     public Node selectSingleNode(Node n, String xpath)
 	    throws SAXPathException {
 	staticInit();
-	XPath xp = new DOMXPath(xpath);
+	XPath xp = parse(xpath);
 	return (Node) xp.selectSingleNode(getLocalContext(n));
     }
 
@@ -270,11 +274,25 @@ public class XPathUtil {
 	return c;
     }
 
+    /**
+     * Retrieves a parsed version of the textual XPath expression.
+     * The parsed version is retrieved from our static cache if we've
+     * seen it previously.
+     */
+    private XPath parse(String xpath) throws SAXPathException {
+        XPath cached = (XPath) exprCache.get(xpath);
+        if (cached == null) {
+          cached = new DOMXPath(xpath);
+          exprCache.put(xpath, cached);
+	}
+        return cached;
+    }
+
     //*********************************************************************
     // Static support for context retrieval from parent <forEach> tag
 
     public static Node getContext(Tag t) throws JspTagException {
-	ForEachTag xt = 
+	ForEachTag xt =
 	    (ForEachTag) TagSupport.findAncestorWithClass(
 		t, ForEachTag.class);
 	if (xt == null)
