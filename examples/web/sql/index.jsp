@@ -1,12 +1,12 @@
-<html>
-<!-- #BeginTemplate "/Templates/ExamplesTemplate.dwt" --> 
+<html><!-- #BeginTemplate "/Templates/ExamplesTemplate.dwt" -->
 <head>
 <!-- #BeginEditable "doctitle" --> 
 <title>Untitled Document</title>
-<!-- #EndEditable --> 
+<!-- #EndEditable -->
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="../global.css" type="text/css">
 </head>
+
 <body bgcolor="#FFFFFF" text="#000000">
 <table width="100%" border="0" cellpadding="5">
   <tr> 
@@ -17,11 +17,13 @@
   </tr>
   <tr> 
     <td bgcolor="#CCCCFF"><font size="-1">Examples &nbsp;&nbsp;&nbsp;&nbsp;<a href="../index.html">Introduction</a> 
-      &#149; <a href="../elsupport/index.html">General Purpose</a> &#149; <a href="../conditionals/index.html">Conditionals</a> 
-      &#149; <a href="../iterators/index.html">Iterators</a> &#149; <a href="../import/index.jsp">Import</a> 
-      &#149; <a href="../format/index.html">I18N & Formatting</a> &#149; <a href="../xml/index.html">XML</a> 
-      &#149; <a href="index.jsp">SQL</a> &#149; <a href="../tlv/index.html">TLV</a> 
-      &#149; <a href="../misc/index.html"></a><a href="../misc/index.html">Misc.</a></font></td>
+      &#149; <a href="../elsupport/index.html">General Purpose</a> 
+      &#149; <a href="../conditionals/index.html">Conditionals</a> 
+      &#149; <a href="../iterators/index.html">Iterators</a> &#149; 
+      <a href="../import/index.jsp">Import</a> &#149; <a href="../format/index.html">I18N 
+      & Formatting</a> &#149; <a href="../xml/index.html">XML</a> 
+      &#149; <a href="index.jsp">SQL</a> &#149; <a href="../functions/index.html">Functions</a> 
+      &#149; <a href="../tlv/index.html">TLV</a> &#149; <a href="../functions/index.html"></a><a href="../misc/index.html">Misc.</a></font></td>
   </tr>
 </table>
 <!-- #BeginEditable "body" --> 
@@ -84,7 +86,7 @@
 <p>NOTE: You can access the tags directly here to look at the source. If you do 
   not provide a valid Driver and URL using the above form the tags NOT run properly.</p>
 <%@ include file="links.html" %>
-<!-- #EndEditable --> 
+<!-- #EndEditable -->
 <hr noshade color="#000099">
 <table width="100%" border="0" cellpadding="5">
   <tr> 
@@ -95,5 +97,4 @@
   </tr>
 </table>
 </body>
-<!-- #EndTemplate -->
-</html>
+<!-- #EndTemplate --></html>
