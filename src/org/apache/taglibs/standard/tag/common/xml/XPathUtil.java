@@ -155,8 +155,9 @@ public class XPathUtil {
 
 	private Object notNull(Object o, String prefix, String localName)
 	        throws UnresolvableException {
-	    if (o == null)
-		throw new UnresolvableException("$" + prefix + ":" + localName);
+            if (o == null) {
+                throw new UnresolvableException("$" + (prefix==null?"":prefix+":") + localName);
+            }
 	    return o;
 	}
     }
