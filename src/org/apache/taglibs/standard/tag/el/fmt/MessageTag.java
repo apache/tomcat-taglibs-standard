@@ -72,12 +72,6 @@ import org.apache.taglibs.standard.tag.common.fmt.*;
 public class MessageTag extends MessageSupport {
 
     //*********************************************************************
-    // Private constants
-
-    private static final Class OBJECT_ARRAY_CLASS = new Object[0].getClass();
-
-
-    //*********************************************************************
     // Private state (implementation details)
 
     private String key_;                         // stores EL-based property
