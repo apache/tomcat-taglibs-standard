@@ -212,10 +212,11 @@ public abstract class QueryTagSupport extends BodyTagSupport
                 Resources.getMessage("SQL_NO_STATEMENT"));
 	}
         /*
-         * We shouldn't have a negative startRow
+         * We shouldn't have a negative startRow or illegal maxrows
          */
-        if (startRow < 0) {
-            startRow = 0;
+        if (startRow < 0) || (maxRows < -1) {
+            throw new JspException(
+                Resources.getMessage("PARAM_BAD_VALUE"));
         }
 
 	Result result = null;
