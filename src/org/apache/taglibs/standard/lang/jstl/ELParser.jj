@@ -98,12 +98,14 @@ PARSER_END(ELParser)
 | < GT2: "gt" >
 | < LT1: "<" >
 | < LT2: "lt" >
-| < EQ: "==" >
+| < EQ1: "==" >
+| < EQ2: "eq" >
 | < LE1: "<=" >
 | < LE2: "le" >
 | < GE1: ">=" >
 | < GE2: "ge" >
-| < NE: "!=" >
+| < NE1: "!=" >
+| < NE2: "ne" >
 | < LPAREN: "(" >
 | < RPAREN: ")" >
 | < LBRACKET: "[" >
@@ -340,8 +342,8 @@ Expression EqualityExpression () :
 
     (
      (
-      <EQ> { operator = EqualsOperator.SINGLETON; }
-      | <NE> { operator = NotEqualsOperator.SINGLETON; }
+      (<EQ1> | <EQ2>) { operator = EqualsOperator.SINGLETON; }
+      | (<NE1> | <NE2>) { operator = NotEqualsOperator.SINGLETON; }
       )
      expression = RelationalExpression ()
 

@@ -157,3 +157,30 @@ Attribute value: \u0040
 Parses to: \u0040
 Attribute value: "\u0040"
 Parses to: "\u0040"
+
+# relational operators
+Attribute value: ${ a > b }
+Parses to: ${(a > b)}
+Attribute value: ${ a gt b }
+Parses to: ${(a > b)}
+Attribute value: ${ a < b }
+Parses to: ${(a < b)}
+Attribute value: ${ a lt b }
+Parses to: ${(a < b)}
+Attribute value: ${ a >= b }
+Parses to: ${(a >= b)}
+Attribute value: ${ a ge b }
+Parses to: ${(a >= b)}
+Attribute value: ${ a <= b }
+Parses to: ${(a <= b)}
+Attribute value: ${ a le b }
+Parses to: ${(a <= b)}
+Attribute value: ${ a == b }
+Parses to: ${(a == b)}
+Attribute value: ${ a eq b }
+Parses to: ${(a == b)}
+Attribute value: ${ a != b }
+Parses to: ${(a != b)}
+Attribute value: ${ a ne b }
+Parses to: ${(a != b)}
+

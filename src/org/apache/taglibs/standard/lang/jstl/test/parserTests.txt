@@ -90,3 +90,18 @@ ${  a ["hello"]."12" [17.5] }
 # making sure unicode escapes are not recognized
 \u0040
 "\u0040"
+
+# relational operators
+${ a > b }
+${ a gt b }
+${ a < b }
+${ a lt b }
+${ a >= b }
+${ a ge b }
+${ a <= b }
+${ a le b }
+${ a == b }
+${ a eq b }
+${ a != b }
+${ a ne b }
+

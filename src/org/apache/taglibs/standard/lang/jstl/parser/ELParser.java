@@ -185,8 +185,10 @@ public class ELParser implements ELParserConstants {
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case EQ:
-      case NE:
+      case EQ1:
+      case EQ2:
+      case NE1:
+      case NE2:
         ;
         break;
       default:
@@ -194,16 +196,40 @@ public class ELParser implements ELParserConstants {
         break label_4;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case EQ:
-        jj_consume_token(EQ);
-             operator = EqualsOperator.SINGLETON;
+      case EQ1:
+      case EQ2:
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case EQ1:
+          jj_consume_token(EQ1);
+          break;
+        case EQ2:
+          jj_consume_token(EQ2);
+          break;
+        default:
+          jj_la1[6] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+                        operator = EqualsOperator.SINGLETON;
         break;
-      case NE:
-        jj_consume_token(NE);
-               operator = NotEqualsOperator.SINGLETON;
+      case NE1:
+      case NE2:
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case NE1:
+          jj_consume_token(NE1);
+          break;
+        case NE2:
+          jj_consume_token(NE2);
+          break;
+        default:
+          jj_la1[7] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+                          operator = NotEqualsOperator.SINGLETON;
         break;
       default:
-        jj_la1[6] = jj_gen;
+        jj_la1[8] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -247,7 +273,7 @@ public class ELParser implements ELParserConstants {
         ;
         break;
       default:
-        jj_la1[7] = jj_gen;
+        jj_la1[9] = jj_gen;
         break label_5;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -261,7 +287,7 @@ public class ELParser implements ELParserConstants {
           jj_consume_token(LT2);
           break;
         default:
-          jj_la1[8] = jj_gen;
+          jj_la1[10] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -277,7 +303,7 @@ public class ELParser implements ELParserConstants {
           jj_consume_token(GT2);
           break;
         default:
-          jj_la1[9] = jj_gen;
+          jj_la1[11] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -293,7 +319,7 @@ public class ELParser implements ELParserConstants {
           jj_consume_token(GE2);
           break;
         default:
-          jj_la1[10] = jj_gen;
+          jj_la1[12] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -309,14 +335,14 @@ public class ELParser implements ELParserConstants {
           jj_consume_token(LE2);
           break;
         default:
-          jj_la1[11] = jj_gen;
+          jj_la1[13] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
                           operator = LessThanOrEqualsOperator.SINGLETON;
         break;
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[14] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -354,7 +380,7 @@ public class ELParser implements ELParserConstants {
         ;
         break;
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[15] = jj_gen;
         break label_6;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -367,7 +393,7 @@ public class ELParser implements ELParserConstants {
                   operator = MinusOperator.SINGLETON;
         break;
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[16] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -408,7 +434,7 @@ public class ELParser implements ELParserConstants {
         ;
         break;
       default:
-        jj_la1[15] = jj_gen;
+        jj_la1[17] = jj_gen;
         break label_7;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -426,7 +452,7 @@ public class ELParser implements ELParserConstants {
           jj_consume_token(DIVIDE2);
           break;
         default:
-          jj_la1[16] = jj_gen;
+          jj_la1[18] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -442,14 +468,14 @@ public class ELParser implements ELParserConstants {
           jj_consume_token(MODULUS2);
           break;
         default:
-          jj_la1[17] = jj_gen;
+          jj_la1[19] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
                                     operator = ModulusOperator.SINGLETON;
         break;
       default:
-        jj_la1[18] = jj_gen;
+        jj_la1[20] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -485,7 +511,7 @@ public class ELParser implements ELParserConstants {
         ;
         break;
       default:
-        jj_la1[19] = jj_gen;
+        jj_la1[21] = jj_gen;
         break label_8;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -498,7 +524,7 @@ public class ELParser implements ELParserConstants {
                 operator = UnaryMinusOperator.SINGLETON;
         break;
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[22] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -540,7 +566,7 @@ public class ELParser implements ELParserConstants {
         ;
         break;
       default:
-        jj_la1[21] = jj_gen;
+        jj_la1[23] = jj_gen;
         break label_9;
       }
       suffix = ValueSuffix();
@@ -591,7 +617,7 @@ public class ELParser implements ELParserConstants {
       ret = ImplicitObject();
       break;
     default:
-      jj_la1[22] = jj_gen;
+      jj_la1[24] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -616,7 +642,7 @@ public class ELParser implements ELParserConstants {
       suffix = ArraySuffix();
       break;
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[25] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -662,7 +688,7 @@ public class ELParser implements ELParserConstants {
       ret = NullLiteral();
       break;
     default:
-      jj_la1[24] = jj_gen;
+      jj_la1[26] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -681,7 +707,7 @@ public class ELParser implements ELParserConstants {
               {if (true) return BooleanLiteral.FALSE;}
       break;
     default:
-      jj_la1[25] = jj_gen;
+      jj_la1[27] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -743,7 +769,7 @@ public class ELParser implements ELParserConstants {
       t = jj_consume_token(PARAMS);
       break;
     default:
-      jj_la1[26] = jj_gen;
+      jj_la1[28] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -782,7 +808,7 @@ public class ELParser implements ELParserConstants {
                {if (true) return ImplicitObject.PARAMS;}
       break;
     default:
-      jj_la1[27] = jj_gen;
+      jj_la1[29] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -794,9 +820,9 @@ public class ELParser implements ELParserConstants {
   public Token token, jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[28];
-  final private int[] jj_la1_0 = {0x6,0x6,0x6,0x0,0x0,0x4200000,0x4200000,0x3de0000,0x180000,0x60000,0x3000000,0xc00000,0x3de0000,0x80000000,0x80000000,0x0,0x0,0x0,0x0,0x0,0x0,0x20010000,0x8007580,0x20010000,0x7580,0x3000,0x0,0x0,};
-  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x100,0x80,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x1,0x3e,0xc,0x30,0x3e,0x41,0x41,0x0,0x1fe00,0x0,0x0,0x0,0x1fe00,0xfe00,};
+  final private int[] jj_la1 = new int[30];
+  final private int[] jj_la1_0 = {0x6,0x6,0x6,0x0,0x0,0x18600000,0x600000,0x18000000,0x18600000,0x79e0000,0x180000,0x60000,0x6000000,0x1800000,0x79e0000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80010000,0x20007580,0x80010000,0x7580,0x3000,0x0,0x0,};
+  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x400,0x200,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6,0x6,0xf8,0x30,0xc0,0xf8,0x104,0x104,0x0,0x7f800,0x0,0x0,0x0,0x7f800,0x3f800,};
 
   public ELParser(java.io.InputStream stream) {
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
@@ -804,7 +830,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   public void ReInit(java.io.InputStream stream) {
@@ -813,7 +839,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   public ELParser(java.io.Reader stream) {
@@ -822,7 +848,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   public void ReInit(java.io.Reader stream) {
@@ -831,7 +857,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   public ELParser(ELParserTokenManager tm) {
@@ -839,7 +865,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   public void ReInit(ELParserTokenManager tm) {
@@ -847,7 +873,7 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   final private Token jj_consume_token(int kind) throws ParseException {
@@ -894,15 +920,15 @@ public class ELParser implements ELParserConstants {
 
   final public ParseException generateParseException() {
     jj_expentries.removeAllElements();
-    boolean[] la1tokens = new boolean[53];
-    for (int i = 0; i < 53; i++) {
+    boolean[] la1tokens = new boolean[55];
+    for (int i = 0; i < 55; i++) {
       la1tokens[i] = false;
     }
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 28; i++) {
+    for (int i = 0; i < 30; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -914,7 +940,7 @@ public class ELParser implements ELParserConstants {
         }
       }
     }
-    for (int i = 0; i < 53; i++) {
+    for (int i = 0; i < 55; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

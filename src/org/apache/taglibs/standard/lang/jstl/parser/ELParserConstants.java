@@ -20,38 +20,40 @@ public interface ELParserConstants {
   int GT2 = 18;
   int LT1 = 19;
   int LT2 = 20;
-  int EQ = 21;
-  int LE1 = 22;
-  int LE2 = 23;
-  int GE1 = 24;
-  int GE2 = 25;
-  int NE = 26;
-  int LPAREN = 27;
-  int RPAREN = 28;
-  int LBRACKET = 29;
-  int RBRACKET = 30;
-  int PLUS = 31;
-  int MINUS = 32;
-  int MULTIPLY = 33;
-  int DIVIDE1 = 34;
-  int DIVIDE2 = 35;
-  int MODULUS1 = 36;
-  int MODULUS2 = 37;
-  int NOT = 38;
-  int AND = 39;
-  int OR = 40;
-  int PAGE_CONTEXT = 41;
-  int PAGE = 42;
-  int REQUEST = 43;
-  int SESSION = 44;
-  int APPLICATION = 45;
-  int PARAM = 46;
-  int PARAMS = 47;
-  int IDENTIFIER = 48;
-  int IMPL_OBJ_START = 49;
-  int LETTER = 50;
-  int DIGIT = 51;
-  int ILLEGAL_CHARACTER = 52;
+  int EQ1 = 21;
+  int EQ2 = 22;
+  int LE1 = 23;
+  int LE2 = 24;
+  int GE1 = 25;
+  int GE2 = 26;
+  int NE1 = 27;
+  int NE2 = 28;
+  int LPAREN = 29;
+  int RPAREN = 30;
+  int LBRACKET = 31;
+  int RBRACKET = 32;
+  int PLUS = 33;
+  int MINUS = 34;
+  int MULTIPLY = 35;
+  int DIVIDE1 = 36;
+  int DIVIDE2 = 37;
+  int MODULUS1 = 38;
+  int MODULUS2 = 39;
+  int NOT = 40;
+  int AND = 41;
+  int OR = 42;
+  int PAGE_CONTEXT = 43;
+  int PAGE = 44;
+  int REQUEST = 45;
+  int SESSION = 46;
+  int APPLICATION = 47;
+  int PARAM = 48;
+  int PARAMS = 49;
+  int IDENTIFIER = 50;
+  int IMPL_OBJ_START = 51;
+  int LETTER = 52;
+  int DIGIT = 53;
+  int ILLEGAL_CHARACTER = 54;
 
   int DEFAULT = 0;
   int IN_EXPRESSION = 1;
@@ -79,11 +81,13 @@ public interface ELParserConstants {
     "\"<\"",
     "\"lt\"",
     "\"==\"",
+    "\"eq\"",
     "\"<=\"",
     "\"le\"",
     "\">=\"",
     "\"ge\"",
     "\"!=\"",
+    "\"ne\"",
     "\"(\"",
     "\")\"",
     "\"[\"",
