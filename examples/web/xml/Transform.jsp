@@ -25,12 +25,12 @@
 </c:set>
 
 Prints "header" as a header:<br />
-<x:transform xml="${xml}" xslt="${xsl}"/>
+<x:transform doc="${xml}" xslt="${xsl}"/>
 
 <hr />
 
 Prints "header" in normal size:<br />
-<x:transform xml="${xml}" xslt="${xsl}" var="doc"/>
+<x:transform doc="${xml}" xslt="${xsl}" var="doc"/>
 <x:out select="$doc//h1"/>
 
 <hr size="5" />
@@ -38,9 +38,9 @@ Prints "header" in normal size:<br />
 <hr />
 <h3>Transformations using output from XPath expressions</h3>
 
-<x:parse var="xml" xml="${xml}" />
+<x:parse var="xml" doc="${xml}" />
 <x:set var="miniDoc" select="$xml//b" />
-<x:transform xslt="${xsl}" xml="${miniDoc}" />
+<x:transform xslt="${xsl}" doc="${miniDoc}" />
 <hr />
 
 <h3>Inline transformations</h3>

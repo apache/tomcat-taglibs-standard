@@ -158,6 +158,11 @@
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <name>doc</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>systemId</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -223,7 +228,17 @@
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <name>doc</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>xmlSystemId</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>docSystemId</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>

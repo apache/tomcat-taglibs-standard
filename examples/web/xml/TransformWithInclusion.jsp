@@ -29,4 +29,4 @@
   </xsl:stylesheet>
 </c:set>
 
-<x:transform xml="${xml}" xmlSystemId="foo.xml" xslt="${xsl}"/>
+<x:transform doc="${xml}" docSystemId="foo.xml" xslt="${xsl}"/>

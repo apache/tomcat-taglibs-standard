@@ -19,7 +19,7 @@
 </root>
 </c:set>    
 
-<x:parse var="a" xml="${xmlText}" systemId="foo.xml"/>
+<x:parse var="a" doc="${xmlText}" systemId="foo.xml"/>
 
 <x:out select="$a//*"/>
 

@@ -73,13 +73,25 @@ public class TransformTag extends TransformSupport {
     //*********************************************************************
     // Accessor methods
 
+    // Deprecated as of JSTL 1.1
     // for tag attribute
     public void setXml(Object xml) throws JspTagException {
         this.xml = xml;
     }
 
+    // 'doc' replaces 'xml' as of JSTL 1.1
+    public void setDoc(Object xml) throws JspTagException {
+        this.xml = xml;
+    }
+
+    // Deprecated as of JSTL 1.1
     // for tag attribute
     public void setXmlSystemId(String xmlSystemId) throws JspTagException {
+        this.xmlSystemId = xmlSystemId;
+    }
+
+    // 'docSystemId' replaces 'xmlSystemId' as of JSTL 1.1
+    public void setDocSystemId(String xmlSystemId) throws JspTagException {
         this.xmlSystemId = xmlSystemId;
     }
 

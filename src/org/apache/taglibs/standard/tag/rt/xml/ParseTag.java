@@ -72,9 +72,15 @@ public class ParseTag extends ParseSupport {
     //*********************************************************************
     // Accessor methods
 
+    // Deprecated as of JSTL 1.1
     // for tag attribute
     public void setXml(Object xml) throws JspTagException {
         this.xml = xml;
+    }
+
+    // 'doc' replaces 'xml' as of JSTL 1.1
+    public void setDoc(String xml_) {
+        this.xml = xml_;
     }
 
     public void setSystemId(String systemId) throws JspTagException {

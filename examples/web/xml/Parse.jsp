@@ -21,7 +21,7 @@
   </a>
 </c:set>    
 
-<x:parse var="a" xml="${xmlText}" />
+<x:parse var="a" doc="${xmlText}" />
 
 <x:out select="$a//c"/>
 <x:out select="$a/a/d"/>

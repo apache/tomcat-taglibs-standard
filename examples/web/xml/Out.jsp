@@ -12,7 +12,7 @@
 
 <c:import var="docString" url="games.xml"/>
 
-<x:parse var="doc" xml="${docString}"/>
+<x:parse var="doc" doc="${docString}"/>
 
 <table border=1>
   <tr>
