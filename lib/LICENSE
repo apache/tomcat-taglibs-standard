@@ -2,7 +2,7 @@ Some files in this directory are not the intellectual property of
 the Apache Software Foundation.  They are redistributed under the following
 licenses:
 
-JAR file    Filename containing license information
+JAR file         Filename containing license information
 ---------------------------------------------------
-jaxen.jar   LICENSE-JAXEN
-js.jar      LICENSE-RHINO
+jaxen-full.jar   LICENSE-JAXEN
+saxpath.jar      LICENSE-SAXPATH
