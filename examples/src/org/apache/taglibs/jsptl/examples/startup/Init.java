@@ -123,7 +123,23 @@ public class Init implements ServletContextListener {
         sce.getServletContext().setAttribute("stringArray", stringArray);
 
 	/**
-	 * Map (Properties)
+        * String-keyed Map
+        */
+        Hashtable stringMap = new Hashtable();
+        sce.getServletContext().setAttribute("stringMap", stringMap);
+        stringMap.put("one", "uno");
+        stringMap.put("two", "dos");
+        stringMap.put("three", "tres");
+        stringMap.put("four", "cuatro");
+        stringMap.put("five", "cinco");
+        stringMap.put("six", "seis");
+        stringMap.put("seven", "siete");
+        stringMap.put("eight", "ocho");
+        stringMap.put("nine", "nueve");
+        stringMap.put("ten", "diez");
+
+        /**
+         * Integer-keyed Map
 	 */
 	// we use a Hashtable so we can get an Enumeration easily, below
         Hashtable numberMap = new Hashtable();

@@ -58,15 +58,20 @@ package org.apache.taglibs.standard.lang.javascript;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*; 
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 import java.lang.Boolean;
 
+import org.apache.taglibs.standard.lang.javascript.adapter.NativeJavaList;
+import org.apache.taglibs.standard.lang.javascript.adapter.NativeJavaMap;
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluator;
 import org.apache.taglibs.standard.lang.spel.Evaluator;
 import org.mozilla.javascript.*;
 
 
 
-public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
+public class JavascriptExpressionEvaluator
+    implements ExpressionEvaluator, WrapHandler {
 
     /** 
      * Translation time validation of an expression. 
@@ -93,21 +98,27 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
         Object result = null;
         Evaluator evalLiteral = new Evaluator();
 
-	// Creates and enters a Context. Context stores information
-	// about the execution environment of a script
-	Context cx = Context.enter();
+        // Creates and enters a Context. Context stores information
+        // about the execution environment of a script
+        Context cx = Context.enter();
+        cx.setWrapHandler(this);
 
-	// Initialize standard objects
-	Scriptable scope = cx.initStandardObjects(null);
+        // Initialize standard objects
+        Scriptable scope = cx.initStandardObjects(null);
+
 
         // Put PageContext attributes/parameters in Rhino Scope
-        putAttributesInScope(scope, cx, pageContext, PageContext.APPLICATION_SCOPE);
-        putAttributesInScope(scope, cx, pageContext, PageContext.SESSION_SCOPE);
-        putAttributesInScope(scope, cx, pageContext, PageContext.REQUEST_SCOPE);
-        putAttributesInScope(scope, cx, pageContext, PageContext.PAGE_SCOPE);
+        putAttributesInScope(scope, cx, pageContext,
+                             PageContext.APPLICATION_SCOPE);
+        putAttributesInScope(scope, cx, pageContext,
+                             PageContext.SESSION_SCOPE);
+        putAttributesInScope(scope, cx, pageContext,
+                             PageContext.REQUEST_SCOPE);
+        putAttributesInScope(scope, cx, pageContext,
+                             PageContext.PAGE_SCOPE);
+        putParametersInScope(scope, cx, pageContext);
 
-
-	// Evaluate string
+        // Evaluate string
         try {
             // skip $, use the SPEL evaluate literal method 'cuz why reinvent the wheel?
             if (expression.startsWith("$")) {
@@ -120,10 +131,13 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
             if (result instanceof Wrapper)
                 result = ((Wrapper) result).unwrap();
 
-            if (result instanceof NativeString)
+            if (result instanceof NativeString) {
                 result = result.toString();
-            if (result instanceof NativeBoolean)
+            } else if (result instanceof NativeBoolean) {
                 result = new Boolean(result.toString());
+            } else if (result instanceof Undefined) {
+                result = null;
+            }
 
 	} catch (JavaScriptException jse) {
 	    throw new JspException(jse.getMessage(), jse);
@@ -142,12 +156,39 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
     }
 
     /**
+     * Implementation of the org.mozilla.javascript.WrapHandler interface.
+     * This method overrides the default wrapping of native Java objects in
+     * JavaScript objects to provide custom adapters for Lists and Maps.
+     * When this method returns <code>null</code>, Rhino will use the default
+     * wrapping.
+     *
+     * @see org.mozilla.javascript#wrap(Scriptable,Object,Class)
+     */
+    public Object wrap(Scriptable scope,
+                       Object obj,
+                       Class staticType) {
+        if (obj == null) {
+            return null;
+        }
+
+        if (obj instanceof List) {
+           return new NativeJavaList(scope, (List)obj);
+        } else if (obj instanceof Map) {
+            return new NativeJavaMap(scope, (Map)obj);
+        }
+
+        return null;
+    }
+
+
+
+    /**
      * put PageContext attributes into Rhino scope
      */
-    void putAttributesInScope(Scriptable rhinoScope, 
-                              Context rhinoContext, 
-                              PageContext pageContext, 
-                              int scope) {
+    private void putAttributesInScope(Scriptable rhinoScope, 
+                                      Context rhinoContext, 
+                                      PageContext pageContext, 
+                                      int scope) {
         Enumeration attributes = null;
         Object value = null;
         String attribute = null;
@@ -167,18 +208,14 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
     /**
      * put PageContext parameters into Rhino scope
      */
-    void putParametersInScope(Scriptable rhinoScope, 
-                              Context rhinoContext, 
-                              PageContext pageContext) {
+    private void putParametersInScope(Scriptable rhinoScope, 
+                                      Context rhinoContext, 
+                                      PageContext pageContext) {
         Enumeration attributes = null;
         Object value = null;
         String attribute = null;
         
-        attributes = (pageContext.getRequest()).getParameterNames();
-        while (attributes !=null && attributes.hasMoreElements()) {
-            attribute = (String)attributes.nextElement();
-            value = (pageContext.getRequest()).getParameter(attribute);
-            rhinoScope.put(attribute, rhinoScope, rhinoContext.toObject(value, rhinoScope));
-        }
+        Map params = pageContext.getRequest().getParameterMap();
+        rhinoScope.put("params", rhinoScope, params);
     }
 }
