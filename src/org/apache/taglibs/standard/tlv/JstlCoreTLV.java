@@ -1,7 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999-2003 The Apache Software Foundation.  All rights 
+ * Copyright (c) 1999-2004 The Apache Software Foundation.  All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -128,6 +128,14 @@ public class JstlCoreTLV extends JstlBaseTLV {
     // alternative identifiers for tags
     private final String IMPORT_WITH_READER = "import varReader=''";
     private final String IMPORT_WITHOUT_READER = "import var=''";
+
+
+    //*********************************************************************
+    // set its type and delegate validation to super-class
+    public  ValidationMessage[] validate(
+	    String prefix, String uri, PageData page) {
+	return super.validate( TYPE_CORE, prefix, uri, page );
+    }
 
 
     //*********************************************************************
