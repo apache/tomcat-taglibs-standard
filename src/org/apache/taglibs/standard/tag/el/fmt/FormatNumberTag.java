@@ -172,7 +172,7 @@ public class FormatNumberTag extends FormatNumberSupport {
     }
 
     // for EL-based attribute
-    public void minFractionDigits(String minFractionDigits_) {
+    public void setMinFractionDigits(String minFractionDigits_) {
         this.minFractionDigits_ = minFractionDigits_;
 	this.minFractionDigitsSpecified = true;
     }
