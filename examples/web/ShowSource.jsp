@@ -14,9 +14,10 @@
 
 <hr>
 
-<% pageContext.setAttribute("filename",
+<% pageContext.setAttribute("filepath",
      "file:" + application.getRealPath(request.getParameter("filename"))); %>
-<c:import varReader="reader" url="$filename">
+<%-- <c:expr value="$filepath"/> --%>
+<c:import varReader="reader" url="$filepath">
 <%-- <ex:file id="reader" file="$param:filename"> --%>
   <ex:escapeHtml reader="$reader"/>
 <%-- </ex:file> --%>
