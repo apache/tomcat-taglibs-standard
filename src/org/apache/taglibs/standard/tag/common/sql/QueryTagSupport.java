@@ -209,15 +209,23 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	 * value for isLimitedByMaxRows(); there's no way to check
 	 * if it was from the ResultSet.
           */
+	PreparedStatement ps = null;
 	try {
-	    PreparedStatement ps = conn.prepareStatement(sqlStatement);
+	    ps = conn.prepareStatement(sqlStatement);
 	    setParameters(ps, parameters);
 	    ResultSet rs = ps.executeQuery();
 	    result = new ResultImpl(rs, startRow, maxRows);
-            ps.close();
 	}
 	catch (Throwable e) {
 	    throw new JspException(sqlStatement + ": " + e.getMessage(), e);
+	} finally {
+	    if (ps != null) {
+		try {
+		    ps.close();
+		} catch (SQLException sqe) {
+		    throw new JspException(sqe.getMessage(), sqe);
+		}
+	    }
 	}
 	pageContext.setAttribute(var, result, scope);
 	return EVAL_PAGE;

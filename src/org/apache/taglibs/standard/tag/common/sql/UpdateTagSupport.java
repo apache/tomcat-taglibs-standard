@@ -151,14 +151,22 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	}
 
 	int result = 0;
+	PreparedStatement ps = null;
 	try {
-	    PreparedStatement ps = conn.prepareStatement(sqlStatement);
+	    ps = conn.prepareStatement(sqlStatement);
 	    setParameters(ps, parameters);
 	    result = ps.executeUpdate();
-            ps.close();
 	}
 	catch (Throwable e) {
 	    throw new JspException(sqlStatement + ": " + e.getMessage(), e);
+	} finally {
+	    if (ps != null) {
+		try {
+		    ps.close();
+		} catch (SQLException sqe) {
+		    throw new JspException(sqe.getMessage(), sqe);
+		}
+	    }
 	}
 	if (var != null)
 	    pageContext.setAttribute(var, new Integer(result), scope);
