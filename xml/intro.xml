@@ -22,7 +22,7 @@
       the Java Servlet 2.3 and JavaServer Pages 1.2 specifications.
       Jakarta <a href="http://jakarta.apache.org/tomcat/">
       Tomcat 4</a> supports the new specifications. The Standard 1.0 taglib
-      has been tested with Tomcat 4.0.3 and Tomcat 4.0.4B2.
+      has been tested with Tomcat 4.0.4.
     </p>
 
   </section>
@@ -31,7 +31,7 @@
 
     <news>
       <newsitem date="6/21/2002">
-	Standard Taglib, final release 1.0, was posted.  This distribution
+	Standard Taglib, final release 1.0, is now available for <a href="/builds/jakarta-taglibs/releases/standard/">download</a>.  This distribution
         contains the same JSTL implementation as was included in Sun's Web
         Services Developer Pack, version 1.0.
       </newsitem>
@@ -100,11 +100,12 @@
        look at the following documentation:</p>
   
     <ul>
-      <li>Using the Jakarta-Taglibs
-        <a href="http://jakarta.apache.org/taglibs/binarydist.html">
+	<li><a href="http://jakarta.apache.org/taglibs/binarydist.html">
+	Using the Jakarta-Taglibs
         Binary Distribution</a></li>
-      <li>Using the Jakarta-Taglibs
+      <li>
         <a href="http://jakarta.apache.org/taglibs/sourcedist.html">
+        Using the Jakarta-Taglibs
         Source Distribution</a></li>
     </ul>
   
