@@ -83,7 +83,7 @@ public class Functions {
     public static boolean endsWith(String input, String substring) {
         if (input == null) input = "";
         if (substring == null) substring = "";
-        int index = input.indexOf(substring);
+        int index = input.lastIndexOf(substring);
         if (index == -1) return false;
         if (index == 0 && substring.length() == 0) return true;
         return (index == input.length() - substring.length());
@@ -216,7 +216,7 @@ public class Functions {
             count = Array.getLength(obj);
             return count;
         } catch (IllegalArgumentException ex) {}
-        throw new JspTagException(Resources.getMessage("FOREACH_BAD_ITEMS"));        
+        throw new JspTagException(Resources.getMessage("PARAM_BAD_VALUE"));        
     }      
 
     public static String join(String[] array, String separator) {
