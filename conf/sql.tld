@@ -12,7 +12,7 @@
 
   <validator>
     <validator-class>
-	org.apache.taglibs.standard.tlv.JstlCoreTLV
+	org.apache.taglibs.standard.tlv.JstlSqlTLV
     </validator-class>
     <init-param>
         <param-name>expressionAttributes</param-name>
