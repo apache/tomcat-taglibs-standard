@@ -245,6 +245,8 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 					 type));
 	}
 
+	parser.setLenient(false);
+
 	return parser;
     }
 }

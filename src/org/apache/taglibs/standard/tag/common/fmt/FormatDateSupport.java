@@ -164,6 +164,7 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 	    DateFormat parser
 		= DateFormat.getDateInstance(DateFormat.DEFAULT,
 					     Locale.ENGLISH);
+	    parser.setLenient(false);
 	    try {
 		value = parser.parse((String) value);
 	    } catch (ParseException pe) {
