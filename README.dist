@@ -37,6 +37,38 @@ Then, import JSTL into your pages with the following directives:
     EL:  <%@ taglib prefix="sql" uri="http://java.sun.com/jstl/sql" %>
     RT:  <%@ taglib prefix="sql_rt" uri="http://java.sun.com/jstl/sql_rt" %>
 
+COMPATIBILITY
+
+The 1.0 version of the Standard Taglib has been tested under Tomcat 4.0.4
+and should work in any compliant JSP 1.2 container.  To use this
+distribution on earlier versions of Tomcat (such as 4.0.3), however, you
+may need to work around a container bug that prevents JAXP 1.2 classes
+from loading successfully.
+
+To do this, you should to replace the JAXP 1.2 JAR files included with
+this distribution (in the 'lib' directory) with older XML-related JAR
+files. To obtain these older, unsupported libraries, you can download the
+file named
+
+	jakarta-taglibs-standard-oldxml-compat.tar.gz
+
+or
+
+	jakarta-taglibs-standard-oldxml-compat.zip
+
+from the same directory from which you downloaded this distribution
+(http://jakarta.apache.org/builds/jakarta-taglibs/releases/standard/).
+Once you have obtained these files, install them (crimson.jar and
+xalan.jar) into your WEB-INF/lib directory in place of the following files
+from this distribution:  jaxp-api.jar, dom.jar, sax.jar, xercesImpl.jar,
+and the newer xalan.jar.
+
+Note that upgrading to Tomcat 4.0.4 is recommended and that we provide
+these older libraries as a temporary convenience for those who have not
+yet upgraded.
+
+COMMENTS AND QUESTIONS
+
 Please join the taglibs-user@jakarta.apache.org mailing list if you have
 general usage questions about JSTL.
 

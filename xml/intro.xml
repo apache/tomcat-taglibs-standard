@@ -30,10 +30,16 @@
   <section name="'Standard' Taglib News" href="News">
 
     <news>
+      <newsitem date="6/21/2002">
+	Standard Taglib, final release 1.0, was posted.  This distribution
+        contains the same JSTL implementation as was included in Sun's Web
+        Services Developer Pack, version 1.0.
+      </newsitem>
       <newsitem date="6/17/2002">
 	Standard Taglib, RC1, was posted.  This release contains the same
         JSTL implementation as was included in Sun's Web Services Developer
-        Pack, version 1.0.
+        Pack, version 1.0, except that it is bunlded with different XML
+	support libraries.
       </newsitem>
       <newsitem date="4/19/2002">
 	Standard 1.0 Beta 2 was posted, and the

@@ -4,6 +4,9 @@
 
     <!-- ******************** Adjustable Properties *********************** -->
 
+    <!-- Now bundle with JAXP 1.2 -->
+    <property name="isJaxp12" value="true" />
+
     <property file="../build.properties"/>
     <property file="../common.properties"/>
     <property name="jaxen-full.jar"   value="lib/jaxen-full.jar"/>
