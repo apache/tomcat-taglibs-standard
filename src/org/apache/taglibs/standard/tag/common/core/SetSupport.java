@@ -141,12 +141,13 @@ public class SetSupport extends BodyTagSupport {
 	     * HttpSession existing).
              */
 	    if (result != null) {
+	        pageContext.setAttribute(var, result, scope);
+	    } else {
 		if (scopeSpecified)
-	            pageContext.setAttribute(var, result, scope);
+		    pageContext.removeAttribute(var, scope);
 		else
 		    pageContext.removeAttribute(var);
-	    } else
-		pageContext.removeAttribute(var);
+	    }
 
 	} else if (target != null) {
 
