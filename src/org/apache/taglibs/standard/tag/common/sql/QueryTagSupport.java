@@ -294,11 +294,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
             else dataSource = (DataSource) rawDataSource;
         }
         else {
-            ServletContext application = pageContext.getServletContext();
-            if (application.getInitParameter(DATASOURCE) != null) {
-                dataSource = (DataSource) pageContext.findAttribute(
-                    application.getInitParameter(DATASOURCE));
-            }
+            dataSource = (DataSource) pageContext.findAttribute(DATASOURCE);
         }
     }
 

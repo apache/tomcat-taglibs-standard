@@ -235,6 +235,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	isPartOfTransaction = false;
 	conn = null;
         dataSource = null;
+        bodyContent = null;
     }
 
     //*********************************************************************
@@ -257,11 +258,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
             else dataSource = (DataSource) rawDataSource;
         }
         else {
-            ServletContext application = pageContext.getServletContext();
-            if (application.getInitParameter(DATASOURCE) != null) {
-                dataSource = (DataSource) pageContext.findAttribute(
-                    application.getInitParameter(DATASOURCE));
-            }
+            dataSource = (DataSource) pageContext.findAttribute(DATASOURCE);
         }
     }
 

@@ -232,9 +232,7 @@ public abstract class TransactionTagSupport extends TagSupport
             }
         }
         else {
-            ServletContext application = pageContext.getServletContext();
-            dataSource = (DataSource) pageContext.findAttribute(
-                application.getInitParameter(DATASOURCE));
+            dataSource = (DataSource) pageContext.findAttribute(DATASOURCE);
         }
     }
 
