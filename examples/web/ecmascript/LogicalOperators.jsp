@@ -22,7 +22,7 @@
     <th>Result</th>
   </tr>
   <tr>
-    <td><code><c:expr value="$a"/> && <jx:expr value="$b"/></code></td>
+    <td><code><c:expr value="$a"/> && <c:expr value="$b"/></code></td>
     <td><c:expr value="$a && b"/></td>
   </tr>
 </table>
@@ -34,7 +34,7 @@
     <th>Result</th>
   </tr>
   <tr>
-    <td><code><c:expr value="$a"/> || <jx:expr value="$b"/> </code></td>
+    <td><code><c:expr value="$a"/> || <c:expr value="$b"/> </code></td>
     <td><c:expr value="$a || b"/></td>
   </tr>
 </table>

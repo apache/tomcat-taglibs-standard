@@ -33,15 +33,15 @@
     <td><c:expr value="$false ? ifResult : elseResult"/></td>
   </tr>
   <tr>
-    <td><code>&lt;c:if test="$true == true"&gt; IF result &lt;/jx:if&gt; </code></td>
+    <td><code>&lt;c:if test="$true == true"&gt; IF result &lt;/c:if&gt; </code></td>
     <td><c:if test="$true == true"> IF result</c:if> </td>
   </tr>
   <tr>
-    <td><code>&lt;c:if test="$false == true"&gt; IF result &lt;/jx:if&gt; </code></td>
+    <td><code>&lt;c:if test="$false == true"&gt; IF result &lt;/c:if&gt; </code></td>
     <td><c:if test="$false == true"> IF result </c:if> </td>
   </tr>
   <tr>
-    <td><code>&lt;c:if test="$myDate.year == 101"&gt; 1900 + 101 = 2001 &lt;/jx:if&gt; </code></td>
+    <td><code>&lt;c:if test="$myDate.year == 101"&gt; 1900 + 101 = 2001 &lt;/c:if&gt; </code></td>
     <td><c:if test="$myDate.year == 101"> 1900 + 101 = 2001</c:if> </td>
   </tr>
 </table>
