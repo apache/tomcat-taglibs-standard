@@ -6,7 +6,7 @@
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>x_rt</short-name>
-  <uri>http://java.sun.com/jstl/xml-rt</uri>
+  <uri>http://java.sun.com/jstl/xml_rt</uri>
   <display-name>JSTL XML RT</display-name>
   <description>JSTL 1.0 XML library</description>
 
@@ -152,12 +152,12 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>xmlText</name>
+        <name>xml</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
-        <name>xmlUrl</name>
+        <name>systemId</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
@@ -217,22 +217,22 @@
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
-        <name>xmlText</name>
+        <name>xml</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
-        <name>xmlUrl</name>
+        <name>xmlSystemId</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
-	<name>xsltText</name>
+	<name>xslt</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
-	<name>xsltUrl</name>
+	<name>xsltSystemId</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>

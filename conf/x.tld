@@ -18,13 +18,13 @@
 	<param-name>expressionAttributes</param-name>
 	<param-value>
 	    out:escapeXml
-	    parse:xmlText
-	    parse:xmlUrl
+	    parse:xml
+	    parse:systemId
 	    parse:filter
-	    transform:xmlText
-	    transform:xmlUrl
-	    transform:xsltText
-	    transform:xsltUrl
+	    transform:xml
+	    transform:xmlSystemId
+	    transform:xslt
+	    transform:xsltSystemId
 	    transform:result
 	</param-value>
 	<description>
@@ -172,12 +172,12 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>xmlText</name>
+        <name>xml</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>xmlUrl</name>
+        <name>systemId</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -237,22 +237,22 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>xmlText</name>
+        <name>xml</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>xmlUrl</name>
+        <name>xmlSystemId</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-	<name>xsltText</name>
+	<name>xslt</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-	<name>xsltUrl</name>
+	<name>xsltSystemId</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
