@@ -121,6 +121,12 @@ public class ParserTest
 	pOut.println (str);
       }
       else {
+	// For testing non-ASCII values, the string @@non-ascii gets
+	// converted internally to '\u1111'
+	if ("@@non-ascii".equals (str)) {
+	  str = "\u1111";
+	}
+
 	pOut.println ("Attribute value: " + str);
 	try {
 	  String result = Evaluator.parseAndRender (str);

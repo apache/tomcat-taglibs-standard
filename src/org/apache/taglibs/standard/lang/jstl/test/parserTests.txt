@@ -122,3 +122,7 @@ ${ empty 0}
 ${ not empty 0}
 ${ not empty empty 0}
 ${ empty }
+
+# non-ascii input - the parser automatically translates the @@non-ascii
+# into a UNICODE string with value \u1111
+@@non-ascii
