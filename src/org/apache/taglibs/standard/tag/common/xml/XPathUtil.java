@@ -169,7 +169,7 @@ public class XPathUtil {
             nc.addNamespace("page", PAGE_NS_URL);
             nc.addNamespace("request", REQUEST_NS_URL);
             nc.addNamespace("session", SESSION_NS_URL);
-            nc.addNamespace("app", APP_NS_URL);
+            nc.addNamespace("application", APP_NS_URL);
             nc.addNamespace("param", PARAM_NS_URL);
             nc.addNamespace("initParam", INITPARAM_NS_URL);
             nc.addNamespace("header", HEADER_NS_URL);
