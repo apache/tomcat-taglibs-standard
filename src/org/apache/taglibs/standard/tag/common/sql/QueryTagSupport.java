@@ -116,7 +116,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 
     private void init() {
         scope = PageContext.PAGE_SCOPE;
-        startRow = 1;
+        startRow = 0;
 
         try {
             maxRows = Integer.parseInt(
@@ -282,6 +282,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	parameters = null;
 	isPartOfTransaction = false;
 	conn = null;
+        dataSource = null;
     }
 
     //*********************************************************************
@@ -305,18 +306,24 @@ public abstract class QueryTagSupport extends BodyTagSupport
         }
         else {
             ServletContext application = pageContext.getServletContext();
-            dataSource = (DataSource) pageContext.findAttribute(
-                application.getInitParameter(DATASOURCE));
+            if (application.getInitParameter(DATASOURCE) != null) {
+                dataSource = (DataSource) pageContext.findAttribute(
+                    application.getInitParameter(DATASOURCE));
+            }
         }
     }
 
 
-    private Connection getConnection() throws SQLException {
+    private Connection getConnection() throws JspException, SQLException {
 	// Fix: Add all other mechanisms
 	Connection conn = null;
 	TransactionTagSupport parent = (TransactionTagSupport) 
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
+            if (dataSource != null) {
+                throw new JspTagException(
+                    Resources.getMessage("ERROR_NESTED_DATASOURCE"));
+            }
 	    conn = parent.getSharedConnection();
             isPartOfTransaction = true;
 	}

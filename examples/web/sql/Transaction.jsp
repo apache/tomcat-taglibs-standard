@@ -22,7 +22,7 @@
 <h2>Dropping table and creating table using a transaction</h2>
 
 <sql:transaction dataSource="$example">
-  <sql:update var="newTable" dataSource="$example">
+  <sql:update var="newTable">
     create table mytable (
       nameid int primary key,
       name varchar(80)
@@ -37,13 +37,13 @@
 <h2>Populating table in one transaction</h2>
 
 <sql:transaction dataSource="$example">
-  <sql:update var="updateCount" dataSource="$example">
+  <sql:update var="updateCount">
     INSERT INTO mytable VALUES (1,'Paul Oakenfold')
   </sql:update>
-  <sql:update var="updateCount" dataSource="$example">
+  <sql:update var="updateCount">
     INSERT INTO mytable VALUES (2,'Timo Maas')
   </sql:update>
-  <sql:update var="updateCount" dataSource="$example">
+  <sql:update var="updateCount">
     INSERT INTO mytable VALUES (3,'Paul van Dyk')
   </sql:update>
 </sql:transaction>

@@ -80,18 +80,18 @@ public class RowImpl implements Row {
     }
 
     /**
-     * Returns the Column object for the named column
+     * Returns the Object value for the named column
      *
      * @param name the name of the column
      * @exception if a database error occurs
      *
-     * @return the Column object of the named column
+     * @return the Object at the named column
      */
-    public Column get(String name) {
+    public Object get(String name) {
 	for (int i=0; i < columns.length; i++) {
             try {
 	        if (name.equalsIgnoreCase(columns[i].getName())) {
-	            return columns[i];
+	            return columns[i].getValue();
                 }
             } catch (SQLException ex) {
                 // can't get the column
@@ -101,15 +101,15 @@ public class RowImpl implements Row {
     }
 
     /**
-     * Returns the Column for the given column index
+     * Returns the Object value for the given column index
      *
      * @param index the index of the column
      *
-     * @return the Column object of the indexed column
+     * @return the Object at the indexed column
      */
-    public Column get(int index) {
+    public Object get(int index) {
         if ((index >= 0) && (index < columns.length)) {
-	    return columns[index];
+	    return columns[index].getValue();
         }
         return null;
     }

@@ -24,31 +24,31 @@
 
 <sql:transaction dataSource="$example">
 
-  <sql:update var="newTable" dataSource="$example">
+  <sql:update var="newTable">
     create table mytable (
       nameid int primary key,
       name varchar(80)
     )
   </sql:update>
 
-  <sql:update var="updateCount" dataSource="$example">
+  <sql:update var="updateCount">
     INSERT INTO mytable VALUES (1,'Paul Oakenfold')
   </sql:update>
 
-  <sql:update var="updateCount" dataSource="$example">
+  <sql:update var="updateCount">
     INSERT INTO mytable VALUES (?,'Timo Maas')
       <sql:param value="2"/>
   </sql:update>
 
-  <sql:update var="updateCount" dataSource="$example">
+  <sql:update var="updateCount">
     INSERT INTO mytable VALUES (?,?)
       <sql:param value="3"/>
       <sql:param value="$newName"/>
   </sql:update>
 
-<sql:query var="deejay" dataSource="$example">
-  SELECT * FROM mytable
-</sql:query>
+  <sql:query var="deejay">
+    SELECT * FROM mytable
+  </sql:query>
 
 </sql:transaction>
 

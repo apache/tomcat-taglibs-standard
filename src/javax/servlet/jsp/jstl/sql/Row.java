@@ -64,16 +64,16 @@ package javax.servlet.jsp.jstl.sql;
 public interface Row {
 
     /**
-     * Returns the Column object for the named column
+     * Returns the Object at the named column
      *
      */
-    public Column get(String name);
+    public Object get(String name);
 
     /**
-     * Returns the Column for the given column index
+     * Returns the Object at the given column index
      *
      */
-    public Column get(int index);
+    public Object get(int index);
 
     /**
      * Returns an array Column objects
