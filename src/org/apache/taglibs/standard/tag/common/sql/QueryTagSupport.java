@@ -62,6 +62,8 @@ import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.resources.Resources;
+
 
 /**
  * <p>Tag handler for &lt;Query&gt; in JSTL.  
@@ -192,8 +194,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    conn = getConnection();
 	}
 	catch (SQLException e) {
-	    throw new JspTagException("Error getting connection: " +
-		e.getMessage());
+	    throw new JspTagException(
+                Resources.getMessage("ERROR_GET_CONNECTION", e.getMessage()));
 	}
 	return EVAL_BODY_BUFFERED;
     }
@@ -224,7 +226,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    sqlStatement = bodyContent.getString();
 	}
 	if (sqlStatement == null || sqlStatement.trim().length() == 0) {
-	    throw new JspTagException("No SQL statement specified");
+	    throw new JspTagException(
+                Resources.getMessage("SQL_NO_STATEMENT"));
 	}
 
 	Result result = null;
@@ -238,8 +241,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    result = new ResultImpl(rs, startRow, (maxRows > 0));
 	}
 	catch (SQLException e) {
-	    throw new JspTagException("Error processing SQL: " +
-		e.getMessage());
+	    throw new JspTagException(
+                Resources.getMessage("SQL_PROCESS_ERROR", e.getMessage()));
 	}
 	pageContext.setAttribute(var, result, scope);
 	return SKIP_BODY;

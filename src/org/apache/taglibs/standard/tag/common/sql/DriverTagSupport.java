@@ -60,6 +60,8 @@ import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.resources.Resources;
+
 
 /**
  * <p>Tag handler for &lt;Driver&gt; in JSTL, used to create
@@ -120,8 +122,8 @@ public class DriverTagSupport extends TagSupport {
 	ds.setDriverClassName(getDriverClassName());
 	}
 	catch (Exception e) {
-	    throw new JspTagException("Invalid driver class name: " +
-		e.getMessage());
+	    throw new JspTagException(
+                Resources.getMessage("DRIVER_INVALID_CLASS", e.getMessage()));
 	}
 	ds.setJdbcURL(getJdbcURL());
 	ds.setUserName(getUserName());

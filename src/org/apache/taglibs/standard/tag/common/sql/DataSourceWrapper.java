@@ -59,6 +59,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 import javax.sql.*;
+import org.apache.taglibs.standard.resources.Resources;
+
 
 /**
  * <p>A simple <code>DataSource</code> wrapper for the standard
@@ -117,35 +119,35 @@ public class DataSourceWrapper implements DataSource {
      */
     public Connection getConnection(String username, String password) 
             throws SQLException {
-        throw new SQLException("Not supported");
+        throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
     }
     
     /**
      * Always throws a SQLException. Not supported.
      */
     public int getLoginTimeout() throws SQLException {
-        throw new SQLException("Not supported");
+        throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
     }
     
     /**
      * Always throws a SQLException. Not supported.
      */
     public PrintWriter getLogWriter() throws SQLException {
-        throw new SQLException("Not supported");
+        throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
     }
     
     /**
      * Always throws a SQLException. Not supported.
      */
     public void setLoginTimeout(int seconds) throws SQLException {
-        throw new SQLException("Not supported");
+        throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
     }
     
     /**
      * Always throws a SQLException. Not supported.
      */
     public synchronized void setLogWriter(PrintWriter out) throws SQLException {
-        throw new SQLException("Not supported");
+        throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
     }
 
     /**

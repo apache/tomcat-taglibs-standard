@@ -58,6 +58,8 @@ import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.resources.Resources;
+
 
 /**
  * <p>Tag handler for &lt;Param&gt; in JSTL, used to set
@@ -76,7 +78,8 @@ public abstract class ParamTagSupport extends BodyTagSupport {
 	SQLExecutionTag parent = (SQLExecutionTag) 
 	    findAncestorWithClass(this, SQLExecutionTag.class);
 	if (parent == null) {
-	    throw new JspTagException("'sqlValue' used in the wrong context");
+	    throw new JspTagException(
+                Resources.getMessage("PARAM_SQLVALUE_CONTEXT"));
 	}
 
 	Object paramValue = null;
@@ -90,7 +93,8 @@ public abstract class ParamTagSupport extends BodyTagSupport {
 	    }
 	}
 	if (paramValue == null) {
-	    throw new JspTagException("No value specified");
+	    throw new JspTagException(
+               Resources.getMessage("PARAM_NO_VALUE"));
 	}
 	parent.addSQLParameter(paramValue);
 	return EVAL_PAGE;

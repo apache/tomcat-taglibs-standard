@@ -61,6 +61,8 @@ import javax.sql.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.resources.Resources;
+
 
 /**
  * <p>Tag handler for &lt;Transaction&gt; in JSTL.  
@@ -110,7 +112,8 @@ public abstract class TransactionTagSupport extends TagSupport
 	    this.transactionIsolation = Connection.TRANSACTION_SERIALIZABLE;
 	}
 	else {
-	    throw new JspTagException("Invalid transaction isolation");
+	    throw new JspTagException(
+                Resources.getMessage("TRANSACTION_INVALID_ISOLATION"));
 	}
     }
 
@@ -135,7 +138,8 @@ public abstract class TransactionTagSupport extends TagSupport
 	    conn = getConnection();
 	    int origIsolation = conn.getTransactionIsolation();
 	    if (origIsolation == Connection.TRANSACTION_NONE) {
-		throw new JspTagException("The DataSource does not support transactions");
+		throw new JspTagException(
+                    Resources.getMessage("TRANSACTION_NO_SUPPORT"));
 	    }
 	    if (transactionIsolation != DEFAULT_ISOLATION &&
 		origIsolation != transactionIsolation) {
@@ -144,8 +148,8 @@ public abstract class TransactionTagSupport extends TagSupport
 	    conn.setAutoCommit(false);
 	}
 	catch (SQLException e) {
-	    throw new JspTagException("Error getting connection: " +
-		e.getMessage());
+	    throw new JspTagException(
+                Resources.getMessage("ERROR_GET_CONNECTION", e.getMessage()));
 	}
 	return EVAL_BODY_INCLUDE;
     }
@@ -158,8 +162,8 @@ public abstract class TransactionTagSupport extends TagSupport
 	    conn.commit();
 	}
 	catch (SQLException e) {
-	    throw new JspTagException("Error committing transaction: " +
-		e.getMessage());
+	    throw new JspTagException(
+                Resources.getMessage("TRANSACTION_COMMIT_ERROR", e.getMessage()));
 	}
 	return EVAL_PAGE;
     }
