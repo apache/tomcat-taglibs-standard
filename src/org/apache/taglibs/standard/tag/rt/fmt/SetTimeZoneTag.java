@@ -61,7 +61,7 @@ import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
- * <p>A handler for &lt;timeZone&gt; that supports rtexprvalue-based
+ * <p>A handler for &lt;setTimeZone&gt; that supports rtexprvalue-based
  * attributes.</p>
  *
  * @author Jan Luehe
@@ -73,7 +73,7 @@ public class SetTimeZoneTag extends SetTimeZoneSupport {
     // Accessor methods
 
     // for tag attribute
-    public void setValue(String value) throws JspTagException {
+    public void setValue(Object value) throws JspTagException {
         this.value = value;
     }
 }

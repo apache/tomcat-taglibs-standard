@@ -76,7 +76,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected String value;                      // 'value' attribute
+    protected Object value;                      // 'value' attribute
   
 
     //*********************************************************************
@@ -110,11 +110,19 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
-	if ((value == null) || value.trim().equals("")) {
+
+	if (value == null) {
 	    timeZone = TimeZone.getTimeZone("GMT");
+	} else if (value instanceof String) {
+	    if (((String) value).trim().equals("")) {
+		timeZone = TimeZone.getTimeZone("GMT");
+	    } else {
+		timeZone = TimeZone.getTimeZone((String) value);
+	    }
 	} else {
-	    timeZone = TimeZone.getTimeZone(value);
+	    timeZone = (TimeZone) value;
 	}
+
 	return EVAL_BODY_BUFFERED;
     }
 

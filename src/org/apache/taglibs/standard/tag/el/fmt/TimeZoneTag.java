@@ -134,8 +134,8 @@ public class TimeZoneTag extends TimeZoneSupport {
 
 	// 'value' attribute (optional)
 	if (value_ != null) {
-	    value = (String) ExpressionEvaluatorManager.evaluate(
-	        "value", value_, String.class, this, pageContext);
+	    value = ExpressionEvaluatorManager.evaluate(
+	        "value", value_, Object.class, this, pageContext);
 	}
     }
 }
