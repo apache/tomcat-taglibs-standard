@@ -113,7 +113,11 @@ public class SetDataSourceTagSupport extends TagSupport {
         else {
             ds = new DataSourceWrapper();
             try {
-            ds.setDriverClassName(getDriverClassName());
+                String className = getDriverClassName();
+                // set driver class iff provided by the tag
+                if (className != null) {
+                    ds.setDriverClassName(getDriverClassName());
+                }
             }
             catch (Exception e) {
                 throw new JspTagException(
