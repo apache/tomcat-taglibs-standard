@@ -194,7 +194,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	    // check invariants for <choose>
 	    if (chooseChild()) {
 		// ensure <choose> has the right children
-		if(!isTag(qn, WHEN) && !isTag(qn, OTHERWISE)) {
+		if(!isXmlTag(ns, ln, WHEN) && !isXmlTag(ns, ln, OTHERWISE)) {
 		    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
 			prefix, CHOOSE, qn));
 		}
@@ -204,7 +204,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
 		   fail(Resources.getMessage("TLV_ILLEGAL_ORDER",
 			qn, prefix, OTHERWISE, CHOOSE));
 		}
-		if (isTag(qn, OTHERWISE)) {
+		if (isXmlTag(ns, ln, OTHERWISE)) {
 		    chooseHasOtherwise.pop();
 		    chooseHasOtherwise.push(new Boolean(true));
 		}
@@ -215,7 +215,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	    if (!transformWithSource.empty() &&
 		    topDepth(transformWithSource) == (depth - 1)) {
 		// only allow <param>
-		if (!isTag(qn, PARAM))
+		if (!isXmlTag(ns, ln, PARAM))
 		    fail(Resources.getMessage("TLV_ILLEGAL_BODY",
 			prefix + ":" + TRANSFORM));
 
@@ -226,7 +226,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	    // now, modify state
 
 	    // we're a choose, so record new choose-specific state
-	    if (isTag(qn, CHOOSE)) {
+	    if (isXmlTag(ns, ln, CHOOSE)) {
 		chooseDepths.push(new Integer(depth));
 		chooseHasOtherwise.push(new Boolean(false));
 	    }
@@ -234,15 +234,15 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	    // set up a check against illegal attribute/body combinations
 	    bodyIllegal = false;
 	    bodyNecessary = false;
-	    if (isTag(qn, PARSE)) {
+	    if (isXmlTag(ns, ln, PARSE)) {
 		if (hasAttribute(a, SOURCE))
 		    bodyIllegal = true;
-	    } else if (isTag(qn, PARAM)) {
+	    } else if (isXmlTag(ns, ln, PARAM)) {
 		if (hasAttribute(a, VALUE))
 		    bodyIllegal = true;
 		else
 		    bodyNecessary = true;
-	    } else if (isTag(qn, TRANSFORM)) {
+	    } else if (isXmlTag(ns, ln, TRANSFORM)) {
 		if (hasAttribute(a, SOURCE))
 		    transformWithSource.push(new Integer(depth));
 	    }
@@ -298,7 +298,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	    bodyIllegal = false;	// reset: we've left the tag
 
 	    // update <choose>-related state
-	    if (isTag(qn, CHOOSE)) {
+	    if (isXmlTag(ns, ln, CHOOSE)) {
 		chooseDepths.pop();
 		chooseHasOtherwise.pop();
 	    }

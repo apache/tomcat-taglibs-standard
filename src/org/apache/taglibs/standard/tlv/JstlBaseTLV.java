@@ -101,6 +101,16 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     protected static final String SESSION_SCOPE = "session";  
     protected static final String APPLICATION_SCOPE = "application";
 
+    // Relevant URIs
+    protected final String JSP = "http://java.sun.com/JSP/Page";   
+    private final String CORE_EL = "http://java.sun.com/jstl/core";
+    private final String FMT_EL = "http://java.sun.com/jstl/fmt";
+    private final String SQL_EL = "http://java.sun.com/jstl/sql";
+    private final String XML_EL = "http://java.sun.com/jstl/xml";
+    private final String CORE_RT = "http://java.sun.com/jstl/core_rt";
+    private final String FMT_RT = "http://java.sun.com/jstl/fmt_rt";
+    private final String SQL_RT = "http://java.sun.com/jstl/sql_rt";
+    private final String XML_RT = "http://java.sun.com/jstl/xml_rt";
 
     //*********************************************************************
     // Validation and configuration state (protected)
@@ -161,6 +171,7 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
 	    // parse the page
 	    SAXParserFactory f = SAXParserFactory.newInstance();
 	    f.setValidating(false);
+	    f.setNamespaceAware(true);
 	    SAXParser p = f.newSAXParser();
 	    p.parse(page.getInputStream(), h);
 
@@ -204,9 +215,41 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
 		+ response;
     }
 
-    // utility method to help us match elements in our tagset
-    protected boolean isTag(String qn, String unqualifiedName) {
-        return (qn.equals(prefix + ":" + unqualifiedName));
+    // utility methods to help us match elements in our tagset
+    protected boolean isTag(String tagUri,
+			    String tagLn,
+			    String matchUri,
+			    String matchLn) {
+	if (tagUri == null
+	        || tagLn == null
+		|| matchUri == null
+		|| matchLn == null)
+	    return false;
+        return (tagUri.equals(matchUri) && tagLn.equals(matchLn));
+    }
+
+    protected boolean isJspTag(String tagUri, String tagLn, String target) {
+        return isTag(tagUri, tagLn, JSP, target);
+    }
+
+    protected boolean isCoreTag(String tagUri, String tagLn, String target) {
+        return (isTag(tagUri, tagLn, CORE_EL, target)
+	     || isTag(tagUri, tagLn, CORE_RT, target));
+    }
+
+    protected boolean isFmtTag(String tagUri, String tagLn, String target) {
+        return (isTag(tagUri, tagLn, FMT_EL, target) 
+	     || isTag(tagUri, tagLn, FMT_RT, target));
+    }
+
+    protected boolean isSqlTag(String tagUri, String tagLn, String target) {
+        return (isTag(tagUri, tagLn, SQL_EL, target) 
+	     || isTag(tagUri, tagLn, SQL_RT, target));
+    }
+
+    protected boolean isXmlTag(String tagUri, String tagLn, String target) {
+        return (isTag(tagUri, tagLn, XML_EL, target)
+	     || isTag(tagUri, tagLn, XML_RT, target));
     }
 
     // utility method to determine if an attribute exists

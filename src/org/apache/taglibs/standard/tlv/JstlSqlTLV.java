@@ -170,21 +170,21 @@ public class JstlSqlTLV extends JstlBaseTLV {
              *   </c:forEach>
              *  </sql:query>
              */
-            if ( (isTag(qn, PARAM) || isTag(qn, DATEPARAM)) 
+            if ( (isSqlTag(ns, ln, PARAM) || isSqlTag(ns, ln, DATEPARAM)) 
                 && (queryDepths.empty() && updateDepths.empty()) ) {
                 fail(Resources.getMessage("SQL_PARAM_OUTSIDE_PARENT"));
             }
 
             // If we're in a <query>, record relevant state
-            if (isTag(qn, QUERY)) {
+            if (isSqlTag(ns, ln, QUERY)) {
                 queryDepths.push(new Integer(depth));
             }
             // If we're in a <update>, record relevant state
-            if (isTag(qn, UPDATE)) {
+            if (isSqlTag(ns, ln, UPDATE)) {
                 updateDepths.push(new Integer(depth));
             }
             // If we're in a <transaction>, record relevant state
-            if (isTag(qn, TRANSACTION)) {
+            if (isSqlTag(ns, ln, TRANSACTION)) {
                 transactionDepths.push(new Integer(depth));
             }
 
@@ -192,7 +192,7 @@ public class JstlSqlTLV extends JstlBaseTLV {
 	    bodyIllegal = false;
 	    bodyNecessary = false;
 
-            if (isTag(qn, QUERY) || isTag(qn, UPDATE)) {
+            if (isSqlTag(ns, ln, QUERY) || isSqlTag(ns, ln, UPDATE)) {
                 if (!hasAttribute(a, SQL)) {
                     bodyNecessary = true;
                 }
@@ -201,7 +201,7 @@ public class JstlSqlTLV extends JstlBaseTLV {
                 }
             }
 
-            if (isTag(qn, DATEPARAM)) {
+            if (isSqlTag(ns, ln, DATEPARAM)) {
                 bodyIllegal = true;
             }
 
@@ -240,15 +240,15 @@ public class JstlSqlTLV extends JstlBaseTLV {
 	    bodyIllegal = false;	// reset: we've left the tag
 
             // update <query>-related state
-            if (isTag(qn, QUERY)) {
+            if (isSqlTag(ns, ln, QUERY)) {
                 queryDepths.pop();
             }
             // update <update>-related state
-            if (isTag(qn, UPDATE)) {
+            if (isSqlTag(ns, ln, UPDATE)) {
                 updateDepths.pop();
             }
             // update <update>-related state
-            if (isTag(qn, TRANSACTION)) {
+            if (isSqlTag(ns, ln, TRANSACTION)) {
                 transactionDepths.pop();
             }
 

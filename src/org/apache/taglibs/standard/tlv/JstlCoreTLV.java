@@ -118,7 +118,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
     private final String PARAM = "param";
     private final String URL_ENCODE = "urlEncode";
     // private final String EXPLANG = "expressionLanguage";
-    private final String JSP_TEXT = "jsp:text";
+    private final String TEXT = "text";
 
     // attribute names
     private final String EVAL = "evaluator";
@@ -129,6 +129,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
     // alternative identifiers for tags
     private final String IMPORT_WITH_READER = "import varReader=''";
     private final String IMPORT_WITHOUT_READER = "import var=''";
+
 
     //*********************************************************************
     // Contract fulfillment
@@ -163,7 +164,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // for simplicity, we can ignore <jsp:text> for our purposes
 	    // (don't bother distinguishing between it and its characters)
-	    if (qn.equals(JSP_TEXT))
+	    if (isJspTag(ns, ln, TEXT))
 		return;
 
 	    // check body-related constraint
@@ -198,7 +199,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    // check invariants for <choose>
 	    if (chooseChild()) {
 		// ensure <choose> has the right children
-		if(!isTag(qn, WHEN) && !isTag(qn, OTHERWISE)) {
+		if(!isCoreTag(ns, ln, WHEN) && !isCoreTag(ns, ln, OTHERWISE)) {
 		    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
 			prefix, CHOOSE, qn));
 		}
@@ -208,7 +209,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		   fail(Resources.getMessage("TLV_ILLEGAL_ORDER",
 			qn, prefix, OTHERWISE, CHOOSE));
 		}
-		if (isTag(qn, OTHERWISE)) {
+		if (isCoreTag(ns, ln, OTHERWISE)) {
 		    chooseHasOtherwise.pop();
 		    chooseHasOtherwise.push(new Boolean(true));
 		}
@@ -216,7 +217,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    }
 
 	    // check constraints for <param> vis-a-vis URL-related tags
-	    if (isTag(qn, PARAM)) {
+	    if (isCoreTag(ns, ln, PARAM)) {
 		// no <param> outside URL tags.
 		if (urlTags.empty() || urlTags.peek().equals(PARAM))
 		    fail(Resources.getMessage("TLV_ILLEGAL_ORPHAN", PARAM));
@@ -237,31 +238,31 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    // now, modify state
 
 	    // we're a choose, so record new choose-specific state
-	    if (isTag(qn, CHOOSE)) {
+	    if (isCoreTag(ns, ln, CHOOSE)) {
 		chooseDepths.push(new Integer(depth));
 		chooseHasOtherwise.push(new Boolean(false));
 	    }
 
 	    // if we're introducing a URL-related tag, record it
-	    if (isTag(qn, IMPORT)) {
+	    if (isCoreTag(ns, ln, IMPORT)) {
 		if (hasAttribute(a, VAR_READER))
 		    urlTags.push(IMPORT_WITH_READER);
 		else
 		    urlTags.push(IMPORT_WITHOUT_READER);
-	    } else if (isTag(qn, PARAM))
+	    } else if (isCoreTag(ns, ln, PARAM))
 		urlTags.push(PARAM);
-	    else if (isTag(qn, REDIRECT))
+	    else if (isCoreTag(ns, ln, REDIRECT))
 		urlTags.push(REDIRECT);
-	    else if (isTag(qn, URL))
+	    else if (isCoreTag(ns, ln, URL))
 		urlTags.push(URL);
 
 	    // set up a check against illegal attribute/body combinations
 	    bodyIllegal = false;
 	    bodyNecessary = false;
-	    if (isTag(qn, EXPR)) {
+	    if (isCoreTag(ns, ln, EXPR)) {
 		if (hasAttribute(a, DEFAULT))
 		    bodyIllegal = true;
-	    } else if (isTag(qn, SET)) {
+	    } else if (isCoreTag(ns, ln, SET)) {
 		if (hasAttribute(a, VALUE))
 		    bodyIllegal = true;
 		// else
@@ -270,7 +271,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // record the most recent tag (for error reporting)
 	    lastElementName = qn;
-	    lastElementId = a.getValue("http://java.sun.com/JSP/Page", "id");
+	    lastElementId = a.getValue(JSP, "id");
 
 	    // we're a new element, so increase depth
 	    depth++;
@@ -309,7 +310,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	public void endElement(String ns, String ln, String qn) {
 
 	    // consistently, we ignore JSP_TEXT
-	    if (qn.equals(JSP_TEXT))
+	    if (isJspTag(ns, ln, TEXT))
 		return;
 
 	    // handle body-related invariant
@@ -319,14 +320,16 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    bodyIllegal = false;	// reset: we've left the tag
 
 	    // update <choose>-related state
-	    if (isTag(qn, CHOOSE)) {
+	    if (isCoreTag(ns, ln, CHOOSE)) {
 		chooseDepths.pop();
 		chooseHasOtherwise.pop();
 	    }
 
 	    // update state related to URL tags
-	    if (isTag(qn, IMPORT) || isTag(qn, PARAM) || isTag(qn, REDIRECT)
-		    || isTag(qn, URL))
+	    if (isCoreTag(ns, ln, IMPORT)
+                    || isCoreTag(ns, ln, PARAM)
+		    || isCoreTag(ns, ln, REDIRECT)
+		    || isCoreTag(ns, ln, URL))
 		urlTags.pop();
 
 	    // update our depth

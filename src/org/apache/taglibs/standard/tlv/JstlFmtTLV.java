@@ -77,6 +77,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * </ul>
  * 
  * @author Shawn Bayern
+ * @author Jan Luehe
  */
 public class JstlFmtTLV extends JstlBaseTLV {
 
@@ -187,32 +188,34 @@ public class JstlFmtTLV extends JstlBaseTLV {
                 fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
                     SCOPE, qn, a.getValue(SCOPE)));
             if (qn.startsWith(prefix + ":")
-                && !isTag(qn, SETLOCALE) 
-		&& !isTag(qn, BUNDLE)
-		&& !isTag(qn, TIMEZONE)
+                && !isFmtTag(ns, ln, SETLOCALE) 
+		&& !isFmtTag(ns, ln, BUNDLE)
+		&& !isFmtTag(ns, ln, TIMEZONE)
                 && hasDanglingScope(a))
                 fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 
 	    // set up a check against illegal attribute/body combinations
 	    bodyIllegal = false;
 	    bodyNecessary = false;
-	    if (isTag(qn, MESSAGE_PARAM)
-		    || isTag(qn, FORMAT_NUMBER)
-		    || isTag(qn, PARSE_NUMBER)
-		    || isTag(qn, PARSE_DATE)) {
+	    if (isFmtTag(ns, ln, MESSAGE_PARAM)
+		    || isFmtTag(ns, ln, FORMAT_NUMBER)
+		    || isFmtTag(ns, ln, PARSE_NUMBER)
+		    || isFmtTag(ns, ln,  PARSE_DATE)) {
 		if (hasAttribute(a, VALUE))
 		    bodyIllegal = true;
 		else
 		    bodyNecessary = true;
-	    } else if (isTag(qn, MESSAGE) && !hasAttribute(a, MESSAGE_KEY)) {
+	    } else if (isFmtTag(ns, ln, MESSAGE)
+		    && !hasAttribute(a, MESSAGE_KEY)) {
 		bodyNecessary = true;
-	    } else if (isTag(qn, BUNDLE) && hasAttribute(a, BUNDLE_PREFIX)) {
+	    } else if (isFmtTag(ns, ln, BUNDLE)
+		    && hasAttribute(a, BUNDLE_PREFIX)) {
 		bodyNecessary = true;
 	    }
 
 	    // record the most recent tag (for error reporting)
 	    lastElementName = qn;
-            lastElementId = a.getValue("http://java.sun.com/JSP/Page", "id");
+            lastElementId = a.getValue(JSP, "id");
 	}
 
 	public void characters(char[] ch, int start, int length) {
