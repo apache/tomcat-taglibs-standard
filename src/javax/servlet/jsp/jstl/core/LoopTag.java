@@ -58,14 +58,14 @@ package javax.servlet.jsp.jstl.core;
 import javax.servlet.jsp.tagext.Tag;
 
 /**
- * <p>JSTL 1.0 allows developers to write custom iteration tags by
- * implementing the LoopTag interface.  (This is not to be confused
- * with javax.servlet.jsp.tagext.IterationTag as defined in JSP 1.2.)
+ * <p>JSTL allows developers to write custom iteration tags by
+ * implementing the LoopTag interface.  This is not to be confused
+ * with <tt>javax.servlet.jsp.tagext.IterationTag</tt> as defined in JSP 1.2.
  * LoopTag establishes a mechanism for iteration tags to be recognized
- * and for type-safe communication with custom subtags.
+ * and for type-safe implicit collaboration with custom subtags.
  * 
  * <p>In most cases, it will not be necessary to implement this interface
- * manually, for a base support class (LoopTagSupport) is provided
+ * manually, for a base support class (<tt>LoopTagSupport</tt>) is provided
  * to facilitate implementation.</p>
  *
  * @author Shawn Bayern
@@ -87,7 +87,7 @@ public interface LoopTag extends Tag {
      * Retrieves a 'status' object to provide information about the
      * current round of the iteration.
      *
-     * @return the LoopTagStatus for the current LoopTag
+     * @return The LoopTagStatus for the current <tt>LoopTag</tt>.
      */
     public LoopTagStatus getLoopStatus();
 }
