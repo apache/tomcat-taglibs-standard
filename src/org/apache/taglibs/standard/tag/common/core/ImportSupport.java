@@ -146,6 +146,10 @@ public abstract class ImportSupport extends BodyTagSupport
 	urlWithParams = null;
 	params = new ParamSupport.ParamManager();
 
+	// check the URL
+	if (url == null || url.equals(""))
+	    throw new NullAttributeException("import", "url");
+
 	// Record whether our URL is absolute or relative
 	isAbsoluteUrl = isAbsoluteUrl();
 
@@ -464,10 +468,6 @@ public abstract class ImportSupport extends BodyTagSupport
      * <tt>false</tt> otherwise.
      */
     private boolean isAbsoluteUrl() throws JspTagException {
-	// ensure we have something
-	if (url == null)
-	    throw new NullAttributeException("import", "url");
-
         return isAbsoluteUrl(url);
     }
 
