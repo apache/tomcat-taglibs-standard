@@ -13,11 +13,11 @@
 <h3>Source code for:&nbsp; <c:expr value="$param:filename"/></h3>
 
 <hr>
-<c:import varReader="reader" url="$param:filename">
-<%-- <ex:file id="reader" file="$param:filename"> --%>
+<%-- <c:import varReader="reader" url="$param:filename"> --%>
+<ex:file id="reader" file="$param:filename">
   <ex:escapeHtml reader="$reader"/>
-<%-- </ex:file> --%>
-</c:import>
+</ex:file>
+<%-- </c:import> --%>
 <hr>
 </body>
 </html>
