@@ -209,7 +209,9 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 		try {
 		    setCurrency(formatter);
 		} catch (Exception e) {
-		    throw new JspTagException(e.getMessage());
+		    throw new JspException(
+                        Resources.getMessage("FORMAT_NUMBER_CURRENCY_ERROR"),
+			e);
 		}
 	    }
 	    configureFormatter(formatter);

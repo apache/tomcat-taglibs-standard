@@ -306,7 +306,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	        conn = dataSource.getConnection();
             } catch (Exception ex) {
                 throw new JspException(
-                    Resources.getMessage("DATASOURCE_INVALID"));
+                    Resources.getMessage("DATASOURCE_INVALID", 
+                                         ex.getMessage()));
             }
 	}
 
