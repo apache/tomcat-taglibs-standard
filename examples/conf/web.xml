@@ -54,6 +54,16 @@
     </taglib>
 
     <taglib>
+        <taglib-uri>http://java.sun.com/jstl/ea/sql</taglib-uri>
+        <taglib-location>/WEB-INF/sql.tld</taglib-location>
+    </taglib>
+
+    <taglib>
+        <taglib-uri>http://java.sun.com/jstl/ea/sql-rt</taglib-uri>
+        <taglib-location>/WEB-INF/sql-rt.tld</taglib-location>
+    </taglib>
+
+    <taglib>
         <taglib-uri>/jstl-examples-taglib</taglib-uri>
         <taglib-location>/WEB-INF/jstl-examples.tld</taglib-location>
     </taglib>

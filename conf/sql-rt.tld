@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib
+  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+  "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+<taglib>
+  <tlib-version>1.0 EA3</tlib-version>
+  <jsp-version>1.2</jsp-version>
+  <short-name>sql-rt</short-name>
+  <uri>http://java.sun.com/jstl/ea/sql-rt</uri>
+  <display-name>JSTL sql RT</display-name>
+  <description>JSTL 1.0 sql library</description>
+
+  <validator>
+    <validator-class>
+        org.apache.taglibs.standard.tlv.JstlCoreTLV
+    </validator-class>
+    <description>
+        Provides core validation features for JSTL tags.
+    </description>
+  </validator>
+
+  <tag>
+    <name>transaction</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.TransactionTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+        Provides nested database action elements with a shared Connection,
+        set up to execute all statements as one transaction.
+    </description>
+    <attribute>
+        <name>dataSource</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>query</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.QueryTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+        Executes the SQL query defined in its body or through the
+        sql attribute.
+    </description>
+    <attribute>
+        <name>var</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>scope</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>sql</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>dataSource</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>startRow</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>maxRows</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>update</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.UpdateTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+        Executes the SQL update defined in its body or through the
+        sql attribute.
+    </description>
+    <attribute>
+        <name>var</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>scope</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>sql</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>dataSource</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>parameter</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.ParamTag</tag-class>
+    <body-content>empty</body-content>
+    <description>
+        Sets a parameter in an SQL statement to the specified value.
+    </description>
+    <attribute>
+        <name>value</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>driver</name>
+    <tag-class>org.apache.taglibs.standard.tag.common.sql.DriverTag</tag-class>
+    <body-content>empty</body-content>
+    <description>
+        Creates a simple DataSource suitable only for prototyping.
+    </description>
+    <attribute>
+        <name>var</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>driverClassName</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>jdbcURL</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>userName</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
+</taglib>
