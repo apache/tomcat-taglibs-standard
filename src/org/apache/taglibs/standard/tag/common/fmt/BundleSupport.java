@@ -133,10 +133,12 @@ public abstract class BundleSupport extends BodyTagSupport {
     }
 
     public int doEndTag() throws JspException {
-	try {
-	    pageContext.getOut().print(getBodyContent().getString());
-	} catch (IOException ioe) {
-	    throw new JspTagException(ioe.getMessage());
+	if (getBodyContent() != null) {
+	    try {
+		pageContext.getOut().print(getBodyContent().getString());
+	    } catch (IOException ioe) {
+		throw new JspTagException(ioe.getMessage());
+	    }
 	}
 
 	return EVAL_PAGE;
