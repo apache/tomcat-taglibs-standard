@@ -222,12 +222,18 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    throw new JspTagException(
                 Resources.getMessage("SQL_NO_STATEMENT"));
 	}
+        /*
+         * We shouldn't have a negative startRow
+         */
+        if (startRow < 0) {
+            startRow = 0;
+        }
 
 	Result result = null;
 	try {
 	    PreparedStatement ps = conn.prepareStatement(sqlStatement);
             if (maxRows > 0 ) {
-	        ps.setMaxRows(maxRows);
+	        ps.setMaxRows(startRow + maxRows);
             }
 	    setParameters(ps, parameters);
 	    ResultSet rs = ps.executeQuery();

@@ -93,6 +93,12 @@ public class ResultImpl implements Result {
 
 	int noOfColumns = rsmd.getColumnCount();
         int beginRow = 0;
+        /*
+         * Shift maximum rows depending on starting point
+         */
+        if ((maxRows > 0) && (startRow > 0)) {
+            maxRows = maxRows + startRow;
+        }
 
 	while (rs.next()) {
             if ((maxRows < 0) || (beginRow < maxRows)) {
