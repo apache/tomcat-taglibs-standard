@@ -112,7 +112,8 @@ public abstract class ImportSupport extends BodyTagSupport
     private String varReader;           // 'varReader' attribute
     private Reader r;	 		// exposed reader, if relevant
     private boolean isAbsoluteUrl;	// is our URL absolute?
-    private String urlWithParams;	// URL with <param>-added text
+    private ParamSupport.ParamManager params;    // parameters
+    private String urlWithParams;	// URL with parameters, if applicable
 
     //*********************************************************************
     // Constructor and initialization
@@ -124,6 +125,7 @@ public abstract class ImportSupport extends BodyTagSupport
 
     private void init() {
 	url = var = varReader = context = charEncoding = urlWithParams = null;
+	params = null;
         scope = PageContext.PAGE_SCOPE;
     }
 
@@ -148,6 +150,9 @@ public abstract class ImportSupport extends BodyTagSupport
 	    if  (varReader != null) {
 	        r = acquireReader();
 	        pageContext.setAttribute(varReader, r);
+	    } else {
+		// otherwise, we might have parameters
+		params = new ParamSupport.ParamManager();
 	    }
 	} catch (IOException ex) {
 	    throw new JspTagException(ex.toString());
@@ -225,17 +230,7 @@ public abstract class ImportSupport extends BodyTagSupport
 
     // inherit Javadoc
     public void addParameter(String name, String value) {
-	// copy base url since we don't want to modify it
-	// (it might be an attribute)
-	if (urlWithParams == null)
-	    urlWithParams = url;
-
-	// append a '?' or '&' as appropriate, followed by name=value
-	boolean firstParameter = urlWithParams.indexOf('?') == -1;
-	if (firstParameter)
-	    urlWithParams += "?" + name + "=" + value;
-	else
-	    urlWithParams += "&" + name + "=" + value;
+	params.addParameter(name, value);
     }
 
     //*********************************************************************
@@ -458,7 +453,9 @@ public abstract class ImportSupport extends BodyTagSupport
 
     /** Returns our URL (potentially with parameters) */
     private String targetUrl() {
-	return ((urlWithParams != null) ? urlWithParams : url);
+	if (urlWithParams == null)
+	    urlWithParams = params.aggregateParams(url);
+	return urlWithParams;
     }
 
     /**

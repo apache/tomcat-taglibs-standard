@@ -55,6 +55,7 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
+import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import java.net.URLEncoder;
@@ -99,12 +100,18 @@ public abstract class ParamSupport extends BodyTagSupport {
     //*********************************************************************
     // Tag logic
 
-    // simply send our name and value to our parent <import> tag
+    // simply send our name and value to our appropriate ancestor
     public int doEndTag() throws JspException {
 	Tag t = findAncestorWithClass(this, ParamParent.class);
 	if (t == null)
 	    throw new JspTagException(
 		Resources.getMessage("PARAM_OUTSIDE_PARENT"));
+
+	// take no action for null or empty names
+	if (name == null && name.equals(""))
+	    return EVAL_PAGE;
+
+	// send the parameter to the appropriate ancestor
 	ParamParent parent = (ParamParent) t;
 	String value = this.value;
 	if (value == null) {
@@ -124,5 +131,80 @@ public abstract class ParamSupport extends BodyTagSupport {
     // Releases any resources we may have (or inherit)
     public void release() {
 	init();
+    }
+
+    //*********************************************************************
+    // Support for parameter management
+
+    /** 
+     * Provides support for aggregating query parameters in URLs.
+     * Specifically, accepts a series of parameters, ensuring that
+     *  - newer parameters will precede older ones in the output URL
+     *  - all supplied parameters precede those in the input URL
+     */
+    public static class ParamManager {
+
+        //*********************************
+        // Private state
+
+	private List names = new LinkedList();
+        private List values = new LinkedList();
+	private boolean done = false;
+        
+	//*********************************
+        // Public interface
+
+	/** Adds a new parameter to the list. */
+        public void addParameter(String name, String value) {
+	    if (done)
+		throw new IllegalStateException();
+	    if (name != null) {
+	        names.add(name);
+	        if (value != null)
+		    values.add(value);
+	        else
+		    values.add("");
+	    }
+	}
+
+	/**
+         * Produces a new URL with the stored parameters, in the appropriate
+         * order.
+         */
+	public String aggregateParams(String url) {
+	    /* 
+             * Since for efficiency we're destructive to the param lists,
+             * we don't want to run multiple times.
+             */
+	    if (done)
+		throw new IllegalStateException();
+	    done = true;
+
+	    // reverse the order of our two lists
+	    Collections.reverse(this.names);
+	    Collections.reverse(this.values);
+
+	    // build a string from the parameter list 
+	    StringBuffer newParams = new StringBuffer();
+	    for (int i = 0; i < names.size(); i++) {
+		newParams.append(names.get(i) + "=" + values.get(i));
+		if (i < (names.size() - 1))
+		    newParams.append("&");
+	    }
+
+	    // insert these parameters into the URL as appropriate
+	    if (newParams.length() > 0) {
+	        int questionMark = url.indexOf('?');
+	        if (questionMark == -1) {
+		    return (url + "?" + newParams);
+	        } else {
+		    StringBuffer workingUrl = new StringBuffer(url);
+		    workingUrl.insert(questionMark + 1, (newParams + "&"));
+		    return workingUrl.toString();
+	        }
+	    } else {
+		return url;
+	    }
+	}
     }
 }

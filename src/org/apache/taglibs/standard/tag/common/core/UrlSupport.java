@@ -83,7 +83,7 @@ public abstract class UrlSupport extends BodyTagSupport
 
     private String var;                          // 'var' attribute
     private int scope;				 // processed 'scope' attr
-    private Map params;				 // added parameters
+    private ParamSupport.ParamManager params;	 // added parameters
 
     //*********************************************************************
     // Constructor and initialization
@@ -117,7 +117,7 @@ public abstract class UrlSupport extends BodyTagSupport
 
     // inherit Javadoc
     public void addParameter(String name, String value) {
-	params.put(name, value);
+	params.addParameter(name, value);
     }
 
 
@@ -126,7 +126,7 @@ public abstract class UrlSupport extends BodyTagSupport
 
     // resets any parameters that might be sent
     public int doStartTag() throws JspException {
-	params = new HashMap();
+	params = new ParamSupport.ParamManager();
 	return EVAL_BODY_BUFFERED;
     }
 
@@ -136,25 +136,7 @@ public abstract class UrlSupport extends BodyTagSupport
 	String result;				// the eventual result
 
 	// add (already encoded) parameters
-	if (params.size() > 0) {
-	    // produce a StringBuffer containing all the parameters
-	    StringBuffer paramString = new StringBuffer();
-	    Iterator i = params.entrySet().iterator();
-	    while (i.hasNext()) {
-		Map.Entry e = (Map.Entry) i.next();
-		paramString.append(e.getKey() + "=" + e.getValue());
-		if (i.hasNext())
-		    paramString.append("&");
-	    }
-
-	    // append these parameters with a '?' or '&', as appropriate
-            boolean firstParameter = value.indexOf('?') == -1;
-            if (firstParameter)
-		result = value + "?" + paramString;
-            else
-		result = value + "&" + paramString;
-	} else
-	    result = value;
+	result = params.aggregateParams(value);
 
 	// if the URL is relative, rewrite it
 	if (!ImportSupport.isAbsoluteUrl(result)) {
