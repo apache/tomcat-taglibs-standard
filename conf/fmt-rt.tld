@@ -20,6 +20,20 @@
   </validator>
 
   <tag>
+    <name>requestEncoding</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.RequestEncodingTag</tag-class>
+    <body-content>EMPTY</body-content>
+    <description>
+        Sets the request character encoding
+    </description>
+    <attribute>
+        <name>value</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
     <name>exception</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ExceptionTag</tag-class>
     <body-content>EMPTY</body-content>
