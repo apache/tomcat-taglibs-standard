@@ -33,6 +33,18 @@ Attribute value: test$$${ 34 }
 Parses to: test$$${34}
 Attribute value: test$$${ 34 }$$
 Parses to: test$$${34}$$
+Attribute value: test$${ 34 }
+Parses to: test$${34}
+Attribute value: $${ 34 }
+Parses to: $${34}
+Attribute value: $$
+Parses to: $$
+Attribute value: test$$
+Parses to: test$$
+Attribute value: test$$test
+Parses to: test$$test
+Attribute value: ${ 34 }$${ 34 }
+Parses to: ${34}$${34}
 
 # literals
 Attribute value: ${1}

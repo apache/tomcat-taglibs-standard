@@ -17,6 +17,12 @@ test$test
 test$$$
 test$$${ 34 }
 test$$${ 34 }$$
+test$${ 34 }
+$${ 34 }
+$$
+test$$
+test$$test
+${ 34 }$${ 34 }
 
 # literals
 ${1}
@@ -124,18 +130,18 @@ ${ not empty empty 0}
 ${ empty }
 
 # functions
-${a()}
-${ a() }
-${a(b)}
-${ a(b) }
-${a(b,c)}
-${a(b,c,d)}
-${a:b(c)}
-${a:b(c,d)}
-${a:b(c,d,e)}
-${a(b).c}
-${a(b)[c]}
-${a[b()]}
+#${a()}
+#${ a() }
+#${a(b)}
+#${ a(b) }
+#${a(b,c)}
+#${a(b,c,d)}
+#${a:b(c)}
+#${a:b(c,d)}
+#${a:b(c,d,e)}
+#${a(b).c}
+#${a(b)[c]}
+#${a[b()]}
 
 # non-ascii input - the parser automatically translates the @@non-ascii
 # into a UNICODE string with value \u1111

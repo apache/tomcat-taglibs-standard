@@ -52,7 +52,7 @@ PARSER_END(ELParser)
 <DEFAULT> TOKEN:
 {
   < NON_EXPRESSION_TEXT:
-    (( ~["$"] | ("$" ~["{"]) )+) | "$"
+    (~["$"])+ | ("$" (~["{", "$"])+) | "$"
   >
 |
   < START_EXPRESSION: "${" > : IN_EXPRESSION
