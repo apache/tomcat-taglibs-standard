@@ -111,8 +111,8 @@ public class SetDataSourceTag extends SetDataSourceTagSupport {
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
         if (dataSourceEL != null) {
-                dataSource = (Object) ExpressionEvaluatorManager.evaluate
-                ("dataSource", dataSourceEL, String.class, this, pageContext);
+                dataSource = ExpressionEvaluatorManager.evaluate
+                ("dataSource", dataSourceEL, Object.class, this, pageContext);
         }
 
         if (driverClassNameEL != null) {
