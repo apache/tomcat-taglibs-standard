@@ -88,7 +88,7 @@ public class ForEachTag extends LoopTagSupport {
         try {
             XPathUtil xu = new XPathUtil(pageContext);
             nodes = xu.selectNodes(XPathUtil.getContext(this), select);
-        } catch (org.saxpath.SAXPathException ex) {
+        } catch (javax.xml.transform.TransformerException ex) {
             throw new JspTagException(ex.toString());
         }
     }

@@ -91,7 +91,7 @@ public class IfTag extends ConditionalTagSupport {
        try {
             XPathUtil xu = new XPathUtil(pageContext);
             return (xu.booleanValueOf(XPathUtil.getContext(this), select));
-        } catch (org.saxpath.SAXPathException ex) {
+        } catch (javax.xml.transform.TransformerException ex) {
             throw new JspTagException(ex.toString());
         }
     }
