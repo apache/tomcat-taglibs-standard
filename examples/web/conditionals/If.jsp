@@ -14,6 +14,6 @@
   <c:if test="$customer.address.country == 'USA'">
     <c:expr value="$customer"/><br>
   </c:if>
-</c:forEach> 
+</c:forEach>
 </body>
 </html>
