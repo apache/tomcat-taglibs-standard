@@ -2,7 +2,7 @@
 Standard Tag Library 1.1 -- BINARY DISTRIBUTION
 ---------------------------------------------------------------------------
 Thanks for downloading this release of the Standard tag library, 
-an implementation of of the JavaServer Pages(tm)(JSP) 
+an implementation of the JavaServer Pages(tm)(JSP) 
 Standard Tag Library (JSTL).
 
 JSTL is an effort of the Java Community Process (JCP) and
@@ -37,9 +37,10 @@ to all web-applications by your container, or individually within the
 WEB-INF/lib directory of your web-application.
 
 For convenience, these jar files have been included in directory 
-lib/old-dependencies of this distribution. If you would like to download
-these jar files yourself (if you built the binary distribution from the
-CVS source tree), instructions on where you can get them are included below.
+lib/old-dependencies of this distribution (assuming the build process
+of this distribution included them). If you would like to download
+these jar files yourself, instructions on where you can get them are 
+included below.
 
 ---
 JAXP 1.2
@@ -90,12 +91,17 @@ as the java platform under which you run your JSP container provides
 all the dependencies mentioned above (see Library Dependencies). 
 This is the case if using Sun's distribution of J2SE 1.4.2 (and higher).
 
+If not all dependencies are provided by your runtime, then they must 
+be made available to the web application as explained in section
+"Library Dependencies".
+
 ---------------------------------------------------------------------------
 USING THE STANDARD TAG LIBRARY
 
 To use this distribution with your own web applications, simply copy the JAR
 files in the 'lib' directory (jstl.jar and standard.jar) to your application's 
-WEB-INF/lib directory. Then, import JSTL into your pages with the 
+WEB-INF/lib directory (add the other dependencies as well if your runtime
+does not already provide them). Then, import JSTL into your pages with the 
 following directives:
 
   CORE LIBRARY
