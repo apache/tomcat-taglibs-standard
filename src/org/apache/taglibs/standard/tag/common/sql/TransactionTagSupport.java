@@ -95,7 +95,6 @@ public abstract class TransactionTagSupport extends TagSupport
     // Protected state
 
     protected Object rawDataSource;
-    protected DataSource dataSource;
     protected boolean dataSourceSpecified;
 
 
@@ -117,7 +116,6 @@ public abstract class TransactionTagSupport extends TagSupport
 
     private void init() {
 	conn = null;
-	dataSource = null;
 	dataSourceSpecified = false;
 	rawDataSource = null;
 	isolation = Connection.TRANSACTION_NONE;
@@ -139,10 +137,11 @@ public abstract class TransactionTagSupport extends TagSupport
                 Resources.getMessage("SQL_DATASOURCE_NULL"));
 	}
 
-        dataSource = DataSourceUtil.getDataSource(rawDataSource, pageContext);
+        DataSource dataSource = DataSourceUtil.getDataSource(rawDataSource,
+							     pageContext);
 
 	try {
-	    conn = getConnection();
+	    conn = dataSource.getConnection();
 	    origIsolation = conn.getTransactionIsolation();
 	    if (origIsolation == Connection.TRANSACTION_NONE) {
 		throw new JspTagException(
@@ -244,14 +243,5 @@ public abstract class TransactionTagSupport extends TagSupport
      */
     public Connection getSharedConnection() {
 	return conn;
-    }
-
-
-    //*********************************************************************
-    // Private utility methods
-
-    private Connection getConnection() throws SQLException {
-	// Fix: Add all other mechanisms
-	return dataSource.getConnection();
     }
 }
