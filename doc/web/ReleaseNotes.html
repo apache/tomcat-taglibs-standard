@@ -128,6 +128,11 @@ Version 1.0 Release</b></dt>
 
 <dd>I18N-Capable Formatting Actions:
 <ul>
+ <li>&lt;fmt:message&gt;: Removed 'messageArgs' attribute.</li>
+ <li>Removed &lt;fmt:messageFormat&gt;.</li>
+ <li>Renamed &lt;fmt:messageArg&gt; to &lt;fmt:param&gt;.</li>
+ <li>'dateStyle' and 'timeStyle' are now defined to be dynamic in
+     &lt;fmt:formatDate&gt; and &lt;fmt:parseDate&gt;.</li>
  <li>Renamed 'i18n' to 'fmt' in all scoped attribute and config parameter
      names (for example, javax.servlet.jsp.jstl.i18n.basename now is
      javax.servlet.jsp.jstl.fmt.basename).</li>
@@ -152,16 +157,12 @@ Version 1.0 Release</b></dt>
      ignored, whereas in the formatting case, it is used only as a last
      resort.</li>
  <li>Made 'key' optional in &lt;fmt:message&gt;, and 'value' optional in
-     &lt;fmt:messageFormat&gt;, &lt;fmt:formatNumber&gt;,
-     &lt;fmt:parseNumber&gt;, and &lt;fmt:parseDate&gt; (already used to be
-     optional in &lt;fmt:messageArg&gt;). If missing, it is read from the
-     tag's body content.</li>
- <li>&lt;fmt:messageFormat&gt;: Added 'messageArgs' attribute.</li>
+     &lt;fmt:formatNumber&gt;, &lt;fmt:parseNumber&gt;, and
+     &lt;fmt:parseDate&gt; (already used to be optional in &lt;fmt:param&gt;).
+     If missing, it is read from the tag's body content.</li>
  <li>&lt;fmt:message&gt;: Implemented constraint that if 'key' attribute is
      present and action has body, its body content must be empty after
      trimming.</li>
- <li>&lt;fmt:messageFormat&gt;: If 'value' attribute is present and action
-     has body, its body content must be empty after trimming.</li>
  <li>&lt;fmt:formatDate&gt; and &lt;fmt:parseDate&gt; now support both
      java.lang.String and java.util.TimeZone values specified via the
      'timeZone' attribute.</li>
@@ -170,15 +171,14 @@ Version 1.0 Release</b></dt>
      deployment descriptor file.</li>
  <li>Removed 'parseLocale' attribute from &lt;fmt:formatDate&gt; and
      &lt;fmt:formatNumber&gt;. If the value to be formatted is given as a
-     String, it is now always parsed using the &quot;en&quot; locale.
-     If the String
-     is formatted with a different locale than &quot;en&quot;, it must first be
-     parsed to a java.util.Date or java.lang.Number with
-     &lt;fmt:parseDate&gt; or &lt;fmt:parseNumber&gt;, and the result can
+     String, it is now always parsed using the default pattern of the
+     &quot;en&quot; locale. If the String is formatted with a different
+     pattern, it must first be parsed to a java.util.Date or java.lang.Number
+     with &lt;fmt:parseDate&gt; or &lt;fmt:parseNumber&gt;, and the result can
      then be used with &lt;fmt:formatDate&gt; or &lt;fmt:formatNumber&gt;,
      respectively.</li>
- <li>Allow &lt;fmt:formatDate&gt; to have a body. If its 'value' attribute is
-     missing, and its body content is empty after trimming,
+ <li>&lt;fmt:formatDate&gt; now is defined to have a body. If its 'value'
+     attribute is missing, and its body content is empty after trimming,
      &lt;fmt:formatDate&gt; formats the current time and date.</li>
 </ul>
 </dd>
