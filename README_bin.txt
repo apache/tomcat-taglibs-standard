@@ -85,6 +85,11 @@ designed to work out of the box in order to help you learn JSTL:
    standard-doc.war                Documentation
    standard-examples.war           Simple examples of JSTL tags
 
+Note that 'standard-examples.war' will work out-of-the-box as long 
+as the java platform under which you run your JSP container provides
+all the dependencies mentioned above (see Library Dependencies). 
+This is the case if using Sun's distribution of J2SE 1.4.2 (and higher).
+
 ---------------------------------------------------------------------------
 USING THE STANDARD TAG LIBRARY
 
