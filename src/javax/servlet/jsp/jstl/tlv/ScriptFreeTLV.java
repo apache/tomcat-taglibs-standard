@@ -135,7 +135,7 @@ public class ScriptFreeTLV extends TagLibraryValidator {
    * custom tag library being validated.
    * @param page a wrapper around the XML representation of the page
    * being validated.
-   * @returns null, if the page is valid; otherwise, a ValidationMessage[]
+   * @return null, if the page is valid; otherwise, a ValidationMessage[]
    * containing one or more messages indicating why the page is not valid.
    */
   public ValidationMessage[] validate

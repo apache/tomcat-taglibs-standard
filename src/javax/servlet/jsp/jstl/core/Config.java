@@ -248,7 +248,7 @@ public class Config {
      * @param request Request object in which the configuration variable is to
      * be set
      * @param name Configuration variable name
-     * @paran value Configuration variable value
+     * @param value Configuration variable value
      */
     public static void set(ServletRequest request, String name, Object value) {
 	request.setAttribute(name + REQUEST_SCOPE_SUFFIX, value);
