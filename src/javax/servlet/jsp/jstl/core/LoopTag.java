@@ -89,5 +89,5 @@ public interface LoopTag extends Tag {
      *
      * @return the LoopTagStatus for the current LoopTag
      */
-    public LoopTagStatus getIteratorStatus();
+    public LoopTagStatus getLoopStatus();
 }

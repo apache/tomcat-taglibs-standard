@@ -157,7 +157,7 @@ public abstract class LoopTagSupport
      * Our 'internal index' begins at 0 and increases by 'step' each
      * round; this is arbitrary, but it seemed a simple way of keeping
      * track of the information we need.  To avoid computing
-     * getIteratorStatus().getCount() by dividing index / step, we keep
+     * getLoopStatus().getCount() by dividing index / step, we keep
      * a separate 'count' and increment it by 1 each round (as a minor
      * performance improvement).
      */
@@ -363,7 +363,7 @@ public abstract class LoopTagSupport
      * implementation of subclasses that are happy with reasonable default
      * behavior.)
      */
-    public LoopTagStatus getIteratorStatus() {
+    public LoopTagStatus getLoopStatus() {
 
         // local implementation with reasonable default behavior
         class Status implements LoopTagStatus {
@@ -379,7 +379,7 @@ public abstract class LoopTagSupport
                  * Access the item through getCurrent() instead of just
                  * returning the item our containing class stores.  This
                  * should allow a subclass of LoopTagSupport to override
-                 * getCurrent() without having to rewrite getIteratorStatus() too.
+                 * getCurrent() without having to rewrite getLoopStatus() too.
                  */
                 return (LoopTagSupport.this.getCurrent());
             }
@@ -544,9 +544,9 @@ public abstract class LoopTagSupport
          * Also, just to be defensive, we handle the case of a null
          * 'status' object as well.
          *
-         * We call getCurrent() and getIteratorStatus() (instead of just using
+         * We call getCurrent() and getLoopStatus() (instead of just using
          * 'item' and 'status') to bridge to subclasses correctly.
-         * A subclass can override getCurrent() or getIteratorStatus() but still
+         * A subclass can override getCurrent() or getLoopStatus() but still
          * depend on our doStartTag() and doAfterBody(), which call this
          * method (exposeVariables()), to expose 'item' and 'status'
          * correctly.
@@ -559,10 +559,10 @@ public abstract class LoopTagSupport
                 pageContext.setAttribute(itemId, getCurrent());
         }
         if (statusId != null) {
-            if (getIteratorStatus() == null)
+            if (getLoopStatus() == null)
                 pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
             else
-                pageContext.setAttribute(statusId, getIteratorStatus());
+                pageContext.setAttribute(statusId, getLoopStatus());
         }
 
     }
