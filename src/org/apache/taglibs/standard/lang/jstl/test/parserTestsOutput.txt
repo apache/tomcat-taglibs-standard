@@ -27,6 +27,12 @@ Attribute value: $test
 Parses to: $test
 Attribute value: test$test
 Parses to: test$test
+Attribute value: test$$$
+Parses to: test$$$
+Attribute value: test$$${ 34 }
+Parses to: test$$${34}
+Attribute value: test$$${ 34 }$$
+Parses to: test$$${34}$$
 
 # literals
 Attribute value: ${1}
