@@ -119,13 +119,9 @@ public class OutSupport extends BodyTagSupport {
     // evaluates 'value' and determines if the body should be evaluted
     public int doStartTag() throws JspException {
       try {
-	Object result;
-
-	result = value;
-
 	// print value if available; otherwise, try 'default'
-	if (result != null) {
-            out(pageContext, escapeXml, result.toString());
+	if (value != null) {
+            out(pageContext, escapeXml, value.toString());
 	    return SKIP_BODY;
 	} else {
 	    // if we don't have a 'default' attribute, just go to the body

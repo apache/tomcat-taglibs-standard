@@ -133,16 +133,20 @@ public class OutTag extends OutSupport {
 
     /* Evaluates expressions as necessary */
     private void evaluateExpressions() throws JspException {
-	value = null;
 	try {
 	    value = ExpressionUtil.evalNotNull(
 	        "out", "value", value_, Object.class, this, pageContext);
-	} catch (Exception ex) {
-	    // explicitly allow 'null' for value and mask other errors per spec
+	} catch (NullAttributeException ex) {
+	    // explicitly allow 'null' for value
 	    value = null;
 	}
-	def = (String) ExpressionUtil.evalNotNull(
-	    "out", "default", default_, String.class, this, pageContext);
+	try { 
+	    def = (String) ExpressionUtil.evalNotNull(
+	        "out", "default", default_, String.class, this, pageContext);
+	} catch (NullAttributeException ex) {
+	    // explicitly allow 'null' for def
+	    def = null;
+	}
 	escapeXml = true;
 	Boolean escape = ((Boolean) ExpressionUtil.evalNotNull(
 	    "out", "escapeXml", escapeXml_, Boolean.class, this, pageContext));
