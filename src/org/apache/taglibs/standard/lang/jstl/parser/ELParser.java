@@ -500,15 +500,17 @@ public class ELParser implements ELParserConstants {
       ret = Expression();
       jj_consume_token(RPAREN);
       break;
+    case IDENTIFIER:
+      ret = NamedValue();
+      break;
+    case PAGE_CONTEXT:
     case PAGE:
     case REQUEST:
     case SESSION:
     case APPLICATION:
-    case HEADER:
     case PARAM:
-    case PARAMVALUES:
-    case IDENTIFIER:
-      ret = NamedValue();
+    case PARAMS:
+      ret = ImplicitObject();
       break;
     default:
       jj_la1[16] = jj_gen;
@@ -521,59 +523,8 @@ public class ELParser implements ELParserConstants {
 
   final public NamedValue NamedValue() throws ParseException {
   Token t;
-  String val;
-  Scope scope = null;
-    if (jj_2_1(2)) {
-      scope = Scope();
-      jj_consume_token(COLON);
-    } else {
-      ;
-    }
-    val = Identifier();
-      if (scope == null) {
-        {if (true) return new NamedValue (val);}
-      }
-      else {
-        {if (true) return new NamedValue (scope, val);}
-      }
-    throw new Error("Missing return statement in function");
-  }
-
-  final public Scope Scope() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case PAGE:
-      jj_consume_token(PAGE);
-           {if (true) return PageScope.SINGLETON;}
-      break;
-    case REQUEST:
-      jj_consume_token(REQUEST);
-                {if (true) return RequestScope.SINGLETON;}
-      break;
-    case SESSION:
-      jj_consume_token(SESSION);
-                {if (true) return SessionScope.SINGLETON;}
-      break;
-    case APPLICATION:
-      jj_consume_token(APPLICATION);
-                    {if (true) return ApplicationScope.SINGLETON;}
-      break;
-    case HEADER:
-      jj_consume_token(HEADER);
-               {if (true) return HeaderScope.SINGLETON;}
-      break;
-    case PARAM:
-      jj_consume_token(PARAM);
-              {if (true) return ParamScope.SINGLETON;}
-      break;
-    case PARAMVALUES:
-      jj_consume_token(PARAMVALUES);
-                    {if (true) return ParamvaluesScope.SINGLETON;}
-      break;
-    default:
-      jj_la1[17] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
+    t = jj_consume_token(IDENTIFIER);
+                     {if (true) return new NamedValue (t.image);}
     throw new Error("Missing return statement in function");
   }
 
@@ -587,7 +538,7 @@ public class ELParser implements ELParserConstants {
       suffix = ArraySuffix();
       break;
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[17] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -600,13 +551,13 @@ public class ELParser implements ELParserConstants {
   String property;
     jj_consume_token(DOT);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case PAGE_CONTEXT:
     case PAGE:
     case REQUEST:
     case SESSION:
     case APPLICATION:
-    case HEADER:
     case PARAM:
-    case PARAMVALUES:
+    case PARAMS:
     case IDENTIFIER:
       property = Identifier();
       break;
@@ -615,7 +566,7 @@ public class ELParser implements ELParserConstants {
          property = StringLiteral.getValueFromToken (t.image);
       break;
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[18] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -652,7 +603,7 @@ public class ELParser implements ELParserConstants {
       ret = NullLiteral();
       break;
     default:
-      jj_la1[20] = jj_gen;
+      jj_la1[19] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -671,7 +622,7 @@ public class ELParser implements ELParserConstants {
               {if (true) return BooleanLiteral.FALSE;}
       break;
     default:
-      jj_la1[21] = jj_gen;
+      jj_la1[20] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -711,6 +662,9 @@ public class ELParser implements ELParserConstants {
     case IDENTIFIER:
       t = jj_consume_token(IDENTIFIER);
       break;
+    case PAGE_CONTEXT:
+      t = jj_consume_token(PAGE_CONTEXT);
+      break;
     case PAGE:
       t = jj_consume_token(PAGE);
       break;
@@ -723,17 +677,14 @@ public class ELParser implements ELParserConstants {
     case APPLICATION:
       t = jj_consume_token(APPLICATION);
       break;
-    case HEADER:
-      t = jj_consume_token(HEADER);
-      break;
     case PARAM:
       t = jj_consume_token(PARAM);
       break;
-    case PARAMVALUES:
-      t = jj_consume_token(PARAMVALUES);
+    case PARAMS:
+      t = jj_consume_token(PARAMS);
       break;
     default:
-      jj_la1[22] = jj_gen;
+      jj_la1[21] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -741,104 +692,52 @@ public class ELParser implements ELParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final private boolean jj_2_1(int xla) {
-    jj_la = xla; jj_lastpos = jj_scanpos = token;
-    boolean retval = !jj_3_1();
-    jj_save(0, xla);
-    return retval;
-  }
-
-  final private boolean jj_3R_17() {
-    if (jj_scan_token(PARAMVALUES)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_16() {
-    if (jj_scan_token(PARAM)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3_1() {
-    if (jj_3R_10()) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    if (jj_scan_token(COLON)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_15() {
-    if (jj_scan_token(HEADER)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_14() {
-    if (jj_scan_token(APPLICATION)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_13() {
-    if (jj_scan_token(SESSION)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_12() {
-    if (jj_scan_token(REQUEST)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_10() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_11()) {
-    jj_scanpos = xsp;
-    if (jj_3R_12()) {
-    jj_scanpos = xsp;
-    if (jj_3R_13()) {
-    jj_scanpos = xsp;
-    if (jj_3R_14()) {
-    jj_scanpos = xsp;
-    if (jj_3R_15()) {
-    jj_scanpos = xsp;
-    if (jj_3R_16()) {
-    jj_scanpos = xsp;
-    if (jj_3R_17()) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    } else if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    } else if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    } else if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    } else if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    } else if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    } else if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_11() {
-    if (jj_scan_token(PAGE)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
+  final public ImplicitObject ImplicitObject() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case PAGE_CONTEXT:
+      jj_consume_token(PAGE_CONTEXT);
+                   {if (true) return ImplicitObject.PAGE_CONTEXT;}
+      break;
+    case PAGE:
+      jj_consume_token(PAGE);
+             {if (true) return ImplicitObject.PAGE;}
+      break;
+    case REQUEST:
+      jj_consume_token(REQUEST);
+                {if (true) return ImplicitObject.REQUEST;}
+      break;
+    case SESSION:
+      jj_consume_token(SESSION);
+                {if (true) return ImplicitObject.SESSION;}
+      break;
+    case APPLICATION:
+      jj_consume_token(APPLICATION);
+                    {if (true) return ImplicitObject.APPLICATION;}
+      break;
+    case PARAM:
+      jj_consume_token(PARAM);
+              {if (true) return ImplicitObject.PARAM;}
+      break;
+    case PARAMS:
+      jj_consume_token(PARAMS);
+               {if (true) return ImplicitObject.PARAMS;}
+      break;
+    default:
+      jj_la1[22] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
   }
 
   public ELParserTokenManager token_source;
   JavaCharStream jj_input_stream;
   public Token token, jj_nt;
   private int jj_ntk;
-  private Token jj_scanpos, jj_lastpos;
-  private int jj_la;
-  public boolean lookingAhead = false;
-  private boolean jj_semLA;
   private int jj_gen;
   final private int[] jj_la1 = new int[23];
-  final private int[] jj_la1_0 = {0x6,0x6,0x6,0x0,0x0,0x480000,0x480000,0x360000,0x360000,0x18000000,0x18000000,0xe0000000,0xe0000000,0x10000000,0x10000000,0x2010000,0x803d80,0x0,0x2010000,0x400,0x3d80,0x1800,0x0,};
-  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x4,0x2,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x1,0x0,0x7f8,0x3f8,0x0,0x7f8,0x0,0x0,0x7f8,};
-  final private JJCalls[] jj_2_rtns = new JJCalls[1];
-  private boolean jj_rescan = false;
-  private int jj_gc = 0;
+  final private int[] jj_la1_0 = {0x6,0x6,0x6,0x0,0x0,0x480000,0x480000,0x360000,0x360000,0x18000000,0x18000000,0xe0000000,0xe0000000,0x10000000,0x10000000,0x2010000,0x803d80,0x2010000,0x400,0x3d80,0x1800,0x0,0x0,};
+  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x4,0x2,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x1,0x0,0x7f8,0x0,0x7f8,0x0,0x0,0x7f8,0x3f8,};
 
   public ELParser(java.io.InputStream stream) {
     jj_input_stream = new JavaCharStream(stream, 1, 1);
@@ -847,7 +746,6 @@ public class ELParser implements ELParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 23; i++) jj_la1[i] = -1;
-    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public void ReInit(java.io.InputStream stream) {
@@ -857,7 +755,6 @@ public class ELParser implements ELParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 23; i++) jj_la1[i] = -1;
-    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public ELParser(java.io.Reader stream) {
@@ -867,7 +764,6 @@ public class ELParser implements ELParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 23; i++) jj_la1[i] = -1;
-    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public void ReInit(java.io.Reader stream) {
@@ -877,7 +773,6 @@ public class ELParser implements ELParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 23; i++) jj_la1[i] = -1;
-    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public ELParser(ELParserTokenManager tm) {
@@ -886,7 +781,6 @@ public class ELParser implements ELParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 23; i++) jj_la1[i] = -1;
-    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public void ReInit(ELParserTokenManager tm) {
@@ -895,7 +789,6 @@ public class ELParser implements ELParserConstants {
     jj_ntk = -1;
     jj_gen = 0;
     for (int i = 0; i < 23; i++) jj_la1[i] = -1;
-    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   final private Token jj_consume_token(int kind) throws ParseException {
@@ -905,40 +798,11 @@ public class ELParser implements ELParserConstants {
     jj_ntk = -1;
     if (token.kind == kind) {
       jj_gen++;
-      if (++jj_gc > 100) {
-        jj_gc = 0;
-        for (int i = 0; i < jj_2_rtns.length; i++) {
-          JJCalls c = jj_2_rtns[i];
-          while (c != null) {
-            if (c.gen < jj_gen) c.first = null;
-            c = c.next;
-          }
-        }
-      }
       return token;
     }
     token = oldToken;
     jj_kind = kind;
     throw generateParseException();
-  }
-
-  final private boolean jj_scan_token(int kind) {
-    if (jj_scanpos == jj_lastpos) {
-      jj_la--;
-      if (jj_scanpos.next == null) {
-        jj_lastpos = jj_scanpos = jj_scanpos.next = token_source.getNextToken();
-      } else {
-        jj_lastpos = jj_scanpos = jj_scanpos.next;
-      }
-    } else {
-      jj_scanpos = jj_scanpos.next;
-    }
-    if (jj_rescan) {
-      int i = 0; Token tok = token;
-      while (tok != null && tok != jj_scanpos) { i++; tok = tok.next; }
-      if (tok != null) jj_add_error_token(kind, i);
-    }
-    return (jj_scanpos.kind != kind);
   }
 
   final public Token getNextToken() {
@@ -950,7 +814,7 @@ public class ELParser implements ELParserConstants {
   }
 
   final public Token getToken(int index) {
-    Token t = lookingAhead ? jj_scanpos : token;
+    Token t = token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
       else t = t.next = token_source.getNextToken();
@@ -968,36 +832,6 @@ public class ELParser implements ELParserConstants {
   private java.util.Vector jj_expentries = new java.util.Vector();
   private int[] jj_expentry;
   private int jj_kind = -1;
-  private int[] jj_lasttokens = new int[100];
-  private int jj_endpos;
-
-  private void jj_add_error_token(int kind, int pos) {
-    if (pos >= 100) return;
-    if (pos == jj_endpos + 1) {
-      jj_lasttokens[jj_endpos++] = kind;
-    } else if (jj_endpos != 0) {
-      jj_expentry = new int[jj_endpos];
-      for (int i = 0; i < jj_endpos; i++) {
-        jj_expentry[i] = jj_lasttokens[i];
-      }
-      boolean exists = false;
-      for (java.util.Enumeration enum = jj_expentries.elements(); enum.hasMoreElements();) {
-        int[] oldentry = (int[])(enum.nextElement());
-        if (oldentry.length == jj_expentry.length) {
-          exists = true;
-          for (int i = 0; i < jj_expentry.length; i++) {
-            if (oldentry[i] != jj_expentry[i]) {
-              exists = false;
-              break;
-            }
-          }
-          if (exists) break;
-        }
-      }
-      if (!exists) jj_expentries.addElement(jj_expentry);
-      if (pos != 0) jj_lasttokens[(jj_endpos = pos) - 1] = kind;
-    }
-  }
 
   final public ParseException generateParseException() {
     jj_expentries.removeAllElements();
@@ -1028,9 +862,6 @@ public class ELParser implements ELParserConstants {
         jj_expentries.addElement(jj_expentry);
       }
     }
-    jj_endpos = 0;
-    jj_rescan_token();
-    jj_add_error_token(0, 0);
     int[][] exptokseq = new int[jj_expentries.size()][];
     for (int i = 0; i < jj_expentries.size(); i++) {
       exptokseq[i] = (int[])jj_expentries.elementAt(i);
@@ -1042,39 +873,6 @@ public class ELParser implements ELParserConstants {
   }
 
   final public void disable_tracing() {
-  }
-
-  final private void jj_rescan_token() {
-    jj_rescan = true;
-    for (int i = 0; i < 1; i++) {
-      JJCalls p = jj_2_rtns[i];
-      do {
-        if (p.gen > jj_gen) {
-          jj_la = p.arg; jj_lastpos = jj_scanpos = p.first;
-          switch (i) {
-            case 0: jj_3_1(); break;
-          }
-        }
-        p = p.next;
-      } while (p != null);
-    }
-    jj_rescan = false;
-  }
-
-  final private void jj_save(int index, int xla) {
-    JJCalls p = jj_2_rtns[index];
-    while (p.gen > jj_gen) {
-      if (p.next == null) { p = p.next = new JJCalls(); break; }
-      p = p.next;
-    }
-    p.gen = jj_gen + xla - jj_la; p.first = token; p.arg = xla;
-  }
-
-  static final class JJCalls {
-    int gen;
-    Token first;
-    int arg;
-    JJCalls next;
   }
 
 }

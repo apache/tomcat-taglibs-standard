@@ -34,13 +34,13 @@ public interface ELParserConstants {
   int NOT = 32;
   int AND = 33;
   int OR = 34;
-  int PAGE = 35;
-  int REQUEST = 36;
-  int SESSION = 37;
-  int APPLICATION = 38;
-  int HEADER = 39;
+  int PAGE_CONTEXT = 35;
+  int PAGE = 36;
+  int REQUEST = 37;
+  int SESSION = 38;
+  int APPLICATION = 39;
   int PARAM = 40;
-  int PARAMVALUES = 41;
+  int PARAMS = 41;
   int IDENTIFIER = 42;
   int IMPL_OBJ_START = 43;
   int LETTER = 44;
@@ -85,13 +85,13 @@ public interface ELParserConstants {
     "\"not\"",
     "\"and\"",
     "\"or\"",
+    "\"pageContext\"",
     "\"page\"",
     "\"request\"",
     "\"session\"",
     "\"application\"",
-    "\"header\"",
     "\"param\"",
-    "\"paramvalues\"",
+    "\"params\"",
     "<IDENTIFIER>",
     "\"#\"",
     "<LETTER>",

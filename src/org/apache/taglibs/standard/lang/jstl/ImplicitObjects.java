@@ -87,22 +87,17 @@ public class ImplicitObjects
   static final String sAttributeName = 
     "javax.servlet.http.jsp.jstl.ImplicitObjects";
 
-  static final String sImplicitObjectNames =
-    "#pagectx, #attrs, #params, #paramvalues, #headers, #headervalues, #initparams, #locales, #cookies, #now";
-
   //-------------------------------------
   // Member variables
   //-------------------------------------
 
   PageContext mContext;
-  Attributes mAttrs;
+  Map mPage;
+  Map mRequest;
+  Map mSession;
+  Map mApplication;
+  Map mParam;
   Map mParams;
-  Map mParamvalues;
-  Map mHeaders;
-  Map mHeadervalues;
-  Map mInitparams;
-  List mLocales;
-  Map mCookies;
 
   //-------------------------------------
   /**
@@ -117,29 +112,11 @@ public class ImplicitObjects
   //-------------------------------------
   /**
    *
-   * Returns true if the given name is a possible implicit object
+   * Finds the ImplicitObjects associated with the PageContext,
+   * creating it if it doesn't yet exist.
    **/
-  public static boolean isPossibleImplicitObject (String pName)
+  public static ImplicitObjects getImplicitObjects (PageContext pContext)
   {
-    return
-      pName != null &&
-      pName.length () >= 1 &&
-      pName.charAt (0) == '#';
-  }
-
-  //-------------------------------------
-  /**
-   *
-   * Returns the implicit object with the given name.  All of the
-   * implicit objects are stored in an ImplicitObjects, which is
-   * itself cached as a page-scoped attribute.
-   **/
-  public static Object getImplicitObject (String pName,
-					  PageContext pContext,
-					  Logger pLogger)
-    throws ELException
-  {
-    // Get the implicit objects from the PageContext
     ImplicitObjects objs = 
       (ImplicitObjects)
       pContext.getAttribute (sAttributeName,
@@ -150,82 +127,87 @@ public class ImplicitObjects
 			     objs,
 			     PageContext.PAGE_SCOPE);
     }
-
-    return objs.implicitObject (pName, pLogger);
+    return objs;
   }
 
   //-------------------------------------
   /**
    *
-   * Returns the object with the given implicit object name
+   * Returns the Map that "wraps" page-scoped attributes
    **/
-  public Object implicitObject (String pName,
-				Logger pLogger)
-    throws ELException
+  public Map getPageScopeMap ()
   {
-    if ("#pagectx".equals (pName)) {
-      return mContext;
+    if (mPage == null) {
+      mPage = createPageScopeMap (mContext);
     }
-    else if ("#attrs".equals (pName)) {
-      if (mAttrs == null) {
-	mAttrs = new Attributes (mContext);
-      }
-      return mAttrs;
+    return mPage;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the Map that "wraps" request-scoped attributes
+   **/
+  public Map getRequestScopeMap ()
+  {
+    if (mRequest == null) {
+      mRequest = createRequestScopeMap (mContext);
     }
-    else if ("#params".equals (pName)) {
-      if (mParams == null) {
-	mParams = getParamsMap (mContext);
-      }
-      return mParams;
+    return mRequest;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the Map that "wraps" session-scoped attributes
+   **/
+  public Map getSessionScopeMap ()
+  {
+    if (mSession == null) {
+      mSession = createSessionScopeMap (mContext);
     }
-    else if ("#paramvalues".equals (pName)) {
-      if (mParamvalues == null) {
-	mParamvalues = getParamvaluesMap (mContext);
-      }
-      return mParamvalues;
+    return mSession;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the Map that "wraps" application-scoped attributes
+   **/
+  public Map getApplicationScopeMap ()
+  {
+    if (mApplication == null) {
+      mApplication = createApplicationScopeMap (mContext);
     }
-    else if ("#headers".equals (pName)) {
-      if (mHeaders == null) {
-	mHeaders = getHeadersMap (mContext);
-      }
-      return mHeaders;
+    return mApplication;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the Map that maps parameter name to a single parameter
+   * values.
+   **/
+  public Map getParamMap ()
+  {
+    if (mParam == null) {
+      mParam = createParamMap (mContext);
     }
-    else if ("#headervalues".equals (pName)) {
-      if (mHeadervalues == null) {
-	mHeadervalues = getHeadervaluesMap (mContext);
-      }
-      return mHeadervalues;
+    return mParam;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the Map that maps parameter name to an array of parameter
+   * values.
+   **/
+  public Map getParamsMap ()
+  {
+    if (mParams == null) {
+      mParams = createParamsMap (mContext);
     }
-    else if ("#initparams".equals (pName)) {
-      if (mInitparams == null) {
-	mInitparams = getInitparamsMap (mContext);
-      }
-      return mInitparams;
-    }
-    else if ("#locales".equals (pName)) {
-      if (mLocales == null) {
-	mLocales = getLocalesList (mContext);
-      }
-      return mLocales;
-    }
-    else if ("#cookies".equals (pName)) {
-      if (mCookies == null) {
-	mCookies = getCookiesMap (mContext);
-      }
-      return mCookies;
-    }
-    else if ("#now".equals (pName)) {
-      return new Date ();
-    }
-    else {
-      if (pLogger.isLoggingError ()) {
-	pLogger.logError
-	  (Constants.BAD_IMPLICIT_OBJECT,
-	   pName,
-	   sImplicitObjectNames);
-      }
-      return null;
-    }
+    return mParams;
   }
 
   //-------------------------------------
@@ -233,9 +215,9 @@ public class ImplicitObjects
   //-------------------------------------
   /**
    *
-   * Returns the Map that "wraps" page-scoped attributes
+   * Creates the Map that "wraps" page-scoped attributes
    **/
-  public static Map getPageScopeMap (PageContext pContext)
+  public static Map createPageScopeMap (PageContext pContext)
   {
     final PageContext context = pContext;
     return new EnumeratedMap ()
@@ -268,9 +250,9 @@ public class ImplicitObjects
   //-------------------------------------
   /**
    *
-   * Returns the Map that "wraps" request-scoped attributes
+   * Creates the Map that "wraps" request-scoped attributes
    **/
-  public static Map getRequestScopeMap (PageContext pContext)
+  public static Map createRequestScopeMap (PageContext pContext)
   {
     final PageContext context = pContext;
     return new EnumeratedMap ()
@@ -303,9 +285,9 @@ public class ImplicitObjects
   //-------------------------------------
   /**
    *
-   * Returns the Map that "wraps" session-scoped attributes
+   * Creates the Map that "wraps" session-scoped attributes
    **/
-  public static Map getSessionScopeMap (PageContext pContext)
+  public static Map createSessionScopeMap (PageContext pContext)
   {
     final PageContext context = pContext;
     return new EnumeratedMap ()
@@ -338,9 +320,9 @@ public class ImplicitObjects
   //-------------------------------------
   /**
    *
-   * Returns the Map that "wraps" application-scoped attributes
+   * Creates the Map that "wraps" application-scoped attributes
    **/
-  public static Map getApplicationScopeMap (PageContext pContext)
+  public static Map createApplicationScopeMap (PageContext pContext)
   {
     final PageContext context = pContext;
     return new EnumeratedMap ()
@@ -373,10 +355,10 @@ public class ImplicitObjects
   //-------------------------------------
   /**
    *
-   * Returns the Map that maps parameter name to single parameter
+   * Creates the Map that maps parameter name to single parameter
    * value.
    **/
-  public static Map getParamsMap (PageContext pContext)
+  public static Map createParamMap (PageContext pContext)
   {
     final HttpServletRequest request =
       (HttpServletRequest) pContext.getRequest ();
@@ -407,10 +389,10 @@ public class ImplicitObjects
   //-------------------------------------
   /**
    *
-   * Returns the Map that maps parameter name to an array of parameter
+   * Creates the Map that maps parameter name to an array of parameter
    * values.
    **/
-  public static Map getParamvaluesMap (PageContext pContext)
+  public static Map createParamsMap (PageContext pContext)
   {
     final HttpServletRequest request =
       (HttpServletRequest) pContext.getRequest ();
@@ -436,149 +418,6 @@ public class ImplicitObjects
 	  return false;
 	}
       };
-  }
-
-  //-------------------------------------
-  /**
-   *
-   * Returns the Map that maps header name to single header
-   * value.
-   **/
-  public static Map getHeadersMap (PageContext pContext)
-  {
-    final HttpServletRequest request =
-      (HttpServletRequest) pContext.getRequest ();
-    return new EnumeratedMap ()
-      {
-	public Enumeration enumerateKeys () 
-	{
-	  return request.getHeaderNames ();
-	}
-
-	public Object getValue (Object pKey) 
-	{
-	  if (pKey instanceof String) {
-	    return request.getHeader ((String) pKey);
-	  }
-	  else {
-	    return null;
-	  }
-	}
-
-	public boolean isMutable ()
-	{
-	  return false;
-	}
-      };
-  }
-
-  //-------------------------------------
-  /**
-   *
-   * Returns the Map that maps header name to an array of header
-   * values.
-   **/
-  public static Map getHeadervaluesMap (PageContext pContext)
-  {
-    final HttpServletRequest request =
-      (HttpServletRequest) pContext.getRequest ();
-    return new EnumeratedMap ()
-      {
-	public Enumeration enumerateKeys () 
-	{
-	  return request.getHeaderNames ();
-	}
-
-	public Object getValue (Object pKey) 
-	{
-	  if (pKey instanceof String) {
-	    List l = new ArrayList ();
-	    for (Enumeration e = request.getHeaders ((String) pKey);
-		 e.hasMoreElements (); ) {
-	      l.add (e.nextElement ());
-	    }
-	    return (String []) l.toArray (new String [l.size ()]);
-	  }
-	  else {
-	    return null;
-	  }
-	}
-
-	public boolean isMutable ()
-	{
-	  return false;
-	}
-      };
-  }
-
-  //-------------------------------------
-  /**
-   *
-   * Returns the Map that ServletContext init parameter name to init
-   * parameter value.
-   **/
-  public static Map getInitparamsMap (PageContext pContext)
-  {
-    final ServletContext context = pContext.getServletContext ();
-    return new EnumeratedMap ()
-      {
-	public Enumeration enumerateKeys () 
-	{
-	  return context.getInitParameterNames ();
-	}
-
-	public Object getValue (Object pKey) 
-	{
-	  if (pKey instanceof String) {
-	    return context.getInitParameter ((String) pKey);
-	  }
-	  else {
-	    return null;
-	  }
-	}
-
-	public boolean isMutable ()
-	{
-	  return false;
-	}
-      };
-  }
-
-  //-------------------------------------
-  /**
-   *
-   * Returns the List of Locales acceptable to the client, in
-   * decreasing order of preference.
-   **/
-  public static List getLocalesList (PageContext pContext)
-  {
-    ArrayList ret = new ArrayList ();
-    for (Enumeration e = pContext.getRequest ().getLocales ();
-	 e.hasMoreElements (); ) {
-      ret.add (e.nextElement ());
-    }
-    return Collections.unmodifiableList (ret);
-  }
-
-  //-------------------------------------
-  /**
-   *
-   * Returns the Map of Cookies, mapping Cookie name to Cookie.  Note
-   * that multiple Cookies may have the same name - in such a case, it
-   * is undefined which Cookie will appear in the Map
-   **/
-  public static Map getCookiesMap (PageContext pContext)
-  {
-    Map ret = new HashMap ();
-    Cookie [] cookies = 
-      ((HttpServletRequest) (pContext.getRequest ())).getCookies ();
-    if (cookies != null) {
-      for (int i = 0; i < cookies.length; i++) {
-	Cookie cookie = cookies [i];
-	ret.put (cookie.getName (), cookie);
-      }
-    }
-    return ret;
   }
 
   //-------------------------------------

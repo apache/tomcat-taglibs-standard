@@ -77,15 +77,6 @@ public class NamedValue
   //-------------------------------------
   // Properties
   //-------------------------------------
-  // property scope
-
-  Scope mScope;
-  public Scope getScope ()
-  { return mScope; }
-  public void setScope (Scope pScope)
-  { mScope = pScope; }
-
-  //-------------------------------------
   // property name
 
   String mName;
@@ -103,18 +94,6 @@ public class NamedValue
   }
 
   //-------------------------------------
-  /**
-   *
-   * Constructor
-   **/
-  public NamedValue (Scope pScope,
-		     String pName)
-  {
-    mScope = pScope;
-    mName = pName;
-  }
-
-  //-------------------------------------
   // Expression methods
   //-------------------------------------
   /**
@@ -123,15 +102,7 @@ public class NamedValue
    **/
   public String getExpressionString ()
   {
-    if (mScope == null) {
-      return StringLiteral.toIdentifierToken (mName);
-    }
-    else {
-      return
-	mScope.getScopeString () +
-	":" +
-	StringLiteral.toIdentifierToken (mName);
-    }
+    return StringLiteral.toIdentifierToken (mName);
   }
 
   //-------------------------------------
@@ -143,30 +114,17 @@ public class NamedValue
 			  Logger pLogger)
     throws JspException
   {
-    // If there is a scope, evaluate it in that scope
-    if (mScope != null) {
-      return mScope.evaluate (mName, pContext, pLogger);
+    Object ret = pContext.findAttribute (mName);
+    if (ret == null) {
+      if (pLogger.isLoggingWarning ()) {
+	pLogger.logWarning
+	  (Constants.NAMED_VALUE_NOT_FOUND,
+	   mName);
+      }
+      return null;
     }
-
-    // See if it's an implicit object
-    else if (ImplicitObjects.isPossibleImplicitObject (mName)) {
-      return ImplicitObjects.getImplicitObject (mName, pContext, pLogger);
-    }
-
-    // Otherwise, look up as an attribute in all scopes
     else {
-      Object ret = pContext.findAttribute (mName);
-      if (ret == null) {
-	if (pLogger.isLoggingWarning ()) {
-	  pLogger.logWarning
-	    (Constants.NAMED_VALUE_NOT_FOUND,
-	     mName);
-	}
-	return null;
-      }
-      else {
-	return ret;
-      }
+      return ret;
     }
   }
 

@@ -109,13 +109,13 @@ PARSER_END(ELParser)
 | < NOT: "not" >
 | < AND: "and" >
 | < OR: "or" >
+| < PAGE_CONTEXT: "pageContext" >
 | < PAGE: "page" >
 | < REQUEST: "request" >
 | < SESSION: "session" >
 | < APPLICATION: "application" >
-| < HEADER: "header" >
 | < PARAM: "param" >
-| < PARAMVALUES: "paramvalues" >
+| < PARAMS: "params" >
 
 /* Identifiers */
 
@@ -568,6 +568,7 @@ Expression ValuePrefix () :
    ret = Literal ()
    | <LPAREN> ret = Expression () <RPAREN>
    | ret = NamedValue ()
+   | ret = ImplicitObject ()
    )
     { return ret; }
 }
@@ -576,37 +577,9 @@ Expression ValuePrefix () :
 NamedValue NamedValue () :
 {
   Token t;
-  String val;
-  Scope scope = null;
 }
 {
-  (
-   (LOOKAHEAD (2) scope = Scope () <COLON>) ?
-   val = Identifier ()
-   )
-
-    {
-      if (scope == null) {
-	return new NamedValue (val);
-      }
-      else {
-	return new NamedValue (scope, val);
-      }
-    }
-}
-
-
-Scope Scope () :
-{
-}
-{
-  <PAGE> { return PageScope.SINGLETON; }
-  | <REQUEST> { return RequestScope.SINGLETON; }
-  | <SESSION> { return SessionScope.SINGLETON; }
-  | <APPLICATION> { return ApplicationScope.SINGLETON; }
-  | <HEADER> { return HeaderScope.SINGLETON; }
-  | <PARAM> { return ParamScope.SINGLETON; }
-  | <PARAMVALUES> { return ParamvaluesScope.SINGLETON; }
+  t = <IDENTIFIER> { return new NamedValue (t.image); }
 }
 
 
@@ -729,15 +702,27 @@ String Identifier () :
 {
   (
    t = <IDENTIFIER>
+   | t = <PAGE_CONTEXT>
    | t = <PAGE>
    | t = <REQUEST>
    | t = <SESSION>
    | t = <APPLICATION>
-   | t = <HEADER>
    | t = <PARAM>
-   | t = <PARAMVALUES>
+   | t = <PARAMS>
    )
     { return t.image; }
 }
 
 
+ImplicitObject ImplicitObject () :
+{
+}
+{
+  <PAGE_CONTEXT> { return ImplicitObject.PAGE_CONTEXT; }
+  | <PAGE> { return ImplicitObject.PAGE; }
+  | <REQUEST> { return ImplicitObject.REQUEST; }
+  | <SESSION> { return ImplicitObject.SESSION; }
+  | <APPLICATION> { return ImplicitObject.APPLICATION; }
+  | <PARAM> { return ImplicitObject.PARAM; }
+  | <PARAMS> { return ImplicitObject.PARAMS; }
+}

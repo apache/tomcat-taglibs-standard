@@ -748,8 +748,8 @@ public class Coercions
       return PrimitiveObjects.getInteger (0);
     }
 
-    else if (isFloatingPointType (pLeft.getClass ()) ||
-	     isFloatingPointType (pRight.getClass ())) {
+    else if (isFloatingPointType (pLeft) ||
+	     isFloatingPointType (pRight)) {
       double left =
 	coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
 	doubleValue ();
@@ -760,8 +760,8 @@ public class Coercions
 	PrimitiveObjects.getDouble (pOperator.apply (left, right, pLogger));
     }
 
-    else if (isIntegerType (pLeft.getClass ()) ||
-	     isIntegerType (pRight.getClass ())) {
+    else if (isIntegerType (pLeft) ||
+	     isIntegerType (pRight)) {
       long left =
 	coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
 	longValue ();
@@ -777,8 +777,8 @@ public class Coercions
 	pLogger.logError
 	  (Constants.ARITH_OP_BAD_TYPE,
 	   pOperator.getOperatorSymbol (),
-	   pLeft.getClass ().getName (),
-	   pRight.getClass ().getName ());
+	   pLeft == null ? "null" : pLeft.getClass ().getName (),
+	   pRight == null ? "null" : pRight.getClass ().getName ());
       }
       return PrimitiveObjects.getInteger (0);
     }
@@ -797,8 +797,8 @@ public class Coercions
      Logger pLogger)
     throws ELException
   {
-    if (isFloatingPointType (pLeft.getClass ()) ||
-	isFloatingPointType (pRight.getClass ())) {
+    if (isFloatingPointType (pLeft) ||
+	isFloatingPointType (pRight)) {
       double left =
 	coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
 	doubleValue ();
@@ -809,8 +809,8 @@ public class Coercions
 	PrimitiveObjects.getBoolean (pOperator.apply (left, right, pLogger));
     }
 
-    else if (isIntegerType (pLeft.getClass ()) ||
-	     isIntegerType (pRight.getClass ())) {
+    else if (isIntegerType (pLeft) ||
+	     isIntegerType (pRight)) {
       long left =
 	coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
 	longValue ();
@@ -903,8 +903,8 @@ public class Coercions
       return PrimitiveObjects.getBoolean (pOperator.apply (false, pLogger));
     }
 
-    else if (isFloatingPointType (pLeft.getClass ()) ||
-	     isFloatingPointType (pRight.getClass ())) {
+    else if (isFloatingPointType (pLeft) ||
+	     isFloatingPointType (pRight)) {
       double left =
 	coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
 	doubleValue ();
@@ -916,8 +916,8 @@ public class Coercions
 	(pOperator.apply (left == right, pLogger));
     }
 
-    else if (isIntegerType (pLeft.getClass ()) ||
-	     isIntegerType (pRight.getClass ())) {
+    else if (isIntegerType (pLeft) ||
+	     isIntegerType (pRight)) {
       long left =
 	coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
 	longValue ();
@@ -970,6 +970,18 @@ public class Coercions
   //-------------------------------------
   /**
    *
+   * Returns true if the given Object is of a floating point type
+   **/
+  public static boolean isFloatingPointType (Object pObject)
+  {
+    return 
+      pObject != null &&
+      isFloatingPointType (pObject.getClass ());
+  }
+
+  //-------------------------------------
+  /**
+   *
    * Returns true if the given class is of a floating point type
    **/
   public static boolean isFloatingPointType (Class pClass)
@@ -984,9 +996,21 @@ public class Coercions
   //-------------------------------------
   /**
    *
+   * Returns true if the given Object is of an integer type
+   **/
+  public static boolean isIntegerType (Object pObject)
+  {
+    return 
+      pObject != null &&
+      isIntegerType (pObject.getClass ());
+  }
+
+  //-------------------------------------
+  /**
+   *
    * Returns true if the given class is of an integer type
    **/
-  static boolean isIntegerType (Class pClass)
+  public static boolean isIntegerType (Class pClass)
   {
     return
       pClass == Byte.class ||
