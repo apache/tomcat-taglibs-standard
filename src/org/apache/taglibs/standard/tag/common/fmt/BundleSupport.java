@@ -58,6 +58,7 @@ package org.apache.taglibs.standard.tag.common.fmt;
 import java.io.IOException;
 import java.util.*;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.jstl.core.Config;
@@ -278,13 +279,9 @@ public abstract class BundleSupport extends BodyTagSupport {
 	LocalizationContext locCtxt = null;
 	
 	// Determine locale from client's browser settings.
-	for (Enumeration enum = pageContext.getRequest().getLocales();
+        
+	for (Enumeration enum = Util.getRequestLocales((HttpServletRequest)pageContext.getRequest());
 	     enum.hasMoreElements(); ) {
-	    /*
-	     * If client request doesn't provide an Accept-Language header,
-	     * the returned locale Enumeration contains the runtime's default
-	     * locale, so it always contains at least one element.
-	     */
 	    Locale pref = (Locale) enum.nextElement();
 	    ResourceBundle match = findMatch(basename, pref);
 	    if (match != null) {
@@ -292,7 +289,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 		break;
 	    }
 	}
-	
+        	
 	return locCtxt;
     }
 

@@ -58,6 +58,7 @@ package org.apache.taglibs.standard.tag.common.fmt;
 import java.util.*;
 import java.text.*;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.jstl.core.Config;
@@ -432,15 +433,10 @@ public abstract class SetLocaleSupport extends TagSupport {
     private static Locale findFormattingMatch(PageContext pageContext,
 					      Locale[] avail) {
 	Locale match = null;
-
-	for (Enumeration enum = pageContext.getRequest().getLocales();
+	for (Enumeration enum = Util.getRequestLocales((HttpServletRequest)pageContext.getRequest());
 	     enum.hasMoreElements(); ) {
-	    /*
-	     * If client request doesn't provide an Accept-Language header,
-	     * the returned locale Enumeration contains the runtime's default
-	     * locale, so it always contains at least one element.
-	     */
-	    match = findFormattingMatch((Locale) enum.nextElement(), avail);
+            Locale locale = (Locale)enum.nextElement();
+	    match = findFormattingMatch(locale, avail);
 	    if (match != null) {
 		break;
 	    }

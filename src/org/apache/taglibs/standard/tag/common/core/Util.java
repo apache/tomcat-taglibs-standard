@@ -57,9 +57,11 @@ package org.apache.taglibs.standard.tag.common.core;
 
 import java.io.*;
 import java.text.DateFormat;
+import java.util.Enumeration;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -273,4 +275,28 @@ public class Util {
 	}
 	return false;
     }    
+    
+    /**
+     * HttpServletRequest.getLocales() returns the server's default locale 
+     * if the request did not specify a preferred language.
+     * We do not want this behavior, because it prevents us from using
+     * the fallback locale. 
+     * We therefore need to return an empty Enumeration if no preferred 
+     * locale has been specified. This way, the logic for the fallback 
+     * locale will be able to kick in.
+     */
+    public static Enumeration getRequestLocales(HttpServletRequest request) {        
+        Enumeration values = request.getHeaders("accept-language");
+        if (values.hasMoreElements()) {
+            // At least one "accept-language". Simply return
+            // the enumeration returned by request.getLocales().
+            // System.out.println("At least one accept-language");
+            return request.getLocales();
+        } else {
+            // No header for "accept-language". Simply return
+            // the empty enumeration.
+            // System.out.println("No accept-language");
+            return values;
+        }
+    }
 }
