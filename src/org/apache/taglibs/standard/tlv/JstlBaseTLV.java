@@ -200,7 +200,7 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
 	if (response == null)
 	    return response;
 	else
-	    return "&lt;" + elem + "&gt; / attribute = '" + att + "': "
+	    return "tag = '" + elem + "' / attribute = '" + att + "': "
 		+ response;
     }
 
