@@ -79,9 +79,9 @@ public class Version
   {
     return getProduct() + " " +
            getMajorVersionNum() + "." + getReleaseVersionNum()+ "." +
+           getMaintenanceVersionNum() +
            ((getDevelopmentVersionNum() > 0) ? 
-               ("D" + getDevelopmentVersionNum()) : 
-               ("" + getMaintenanceVersionNum()));
+               ("_D" + getDevelopmentVersionNum()) : "");
   }
 
   /**
