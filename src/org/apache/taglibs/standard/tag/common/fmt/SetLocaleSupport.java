@@ -258,32 +258,32 @@ public abstract class SetLocaleSupport extends TagSupport {
 				      Tag fromTag,
 				      boolean format,
 				      Locale[] avail) {
+
 	LocalizationContext locCtxt = null;
 	
 	// Get formatting locale from enclosing <fmt:bundle>
 	Tag parent = findAncestorWithClass(fromTag, BundleSupport.class);
 	if (parent != null) {
-	    // use locale from parent <fmt:bundle> tag
-	    if ((locCtxt = ((BundleSupport) parent).getLocalizationContext())
-		                                                != null) {
-		ResourceBundle bundle = locCtxt.getResourceBundle();
-		if (bundle != null) {
-		    if (format) {
-			setResponseLocale(pc, bundle.getLocale());
-		    }
-		    return bundle.getLocale();
+	    /*
+	     * use locale from localization context established by parent
+	     * <fmt:bundle> action, unless that locale is null
+	     */
+	    locCtxt = ((BundleSupport) parent).getLocalizationContext();
+	    if (locCtxt.getLocale() != null) {
+		if (format) {
+		    setResponseLocale(pc, locCtxt.getLocale());
 		}
+		return locCtxt.getLocale();
 	    }
 	}
 
-	// Get formatting locale from default I18N localization context
+	// Use locale from default I18N localization context, unless it is null
 	if ((locCtxt = BundleSupport.getLocalizationContext(pc)) != null) {
-	    ResourceBundle bundle = locCtxt.getResourceBundle();
-	    if (bundle != null) {
+	    if (locCtxt.getLocale() != null) {
 		if (format) {
-		    setResponseLocale(pc, bundle.getLocale());
+		    setResponseLocale(pc, locCtxt.getLocale());
 		}
-		return bundle.getLocale();
+		return locCtxt.getLocale();
 	    }
 	}
 

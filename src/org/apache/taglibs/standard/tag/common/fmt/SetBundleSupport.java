@@ -117,17 +117,8 @@ public abstract class SetBundleSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	LocalizationContext locCtxt = null;
-
-	if ((basename != null) && !basename.equals("")) {
-	    locCtxt = BundleSupport.getLocalizationContext(pageContext,
-							   basename);
-	}
-
-	if (locCtxt == null) {
-	    // create empty localization context
-	    locCtxt = new LocalizationContext();
-	}
+	LocalizationContext locCtxt =
+	    BundleSupport.getLocalizationContext(pageContext, basename);
 
 	if (var != null) {
 	    pageContext.setAttribute(var, locCtxt, scope);

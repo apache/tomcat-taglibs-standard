@@ -188,7 +188,9 @@ public class LocaleSupport {
 		    message = bundle.getString(key);
 		    if (args != null) {
 			MessageFormat formatter = new MessageFormat("");
-			formatter.setLocale(bundle.getLocale());
+			if (locCtxt.getLocale() != null) {
+			    formatter.setLocale(locCtxt.getLocale());
+			}
 			formatter.applyPattern(message);
 			message = formatter.format(args);
 		    }

@@ -147,9 +147,6 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 
-	String message = null;
-	ResourceBundle bundle = null;
-
 	if (key == null) {
 	    BodyContent bc = null;
 	    String bcs = null;
@@ -179,34 +176,35 @@ public abstract class MessageSupport extends BodyTagSupport {
 		locCtxt = BundleSupport.getLocalizationContext(pageContext);
 	    }
 	} else {
-	    if (locCtxt.getResourceBundle() != null) {
-		SetLocaleSupport.setResponseLocale(
-                                pageContext,
-				locCtxt.getResourceBundle().getLocale());
+	    // localization context taken from 'bundle' attribute
+	    if (locCtxt.getLocale() != null) {
+		SetLocaleSupport.setResponseLocale(pageContext,
+						   locCtxt.getLocale());
 	    }
 	}
 
+	String message = UNDEFINED_KEY + key + UNDEFINED_KEY;
 	if (locCtxt != null) {
-	    bundle = locCtxt.getResourceBundle();
-	}
-	if (bundle == null) {
-	    message = UNDEFINED_KEY + key + UNDEFINED_KEY;
-	} else {
-	    try {
-		// prepend 'prefix' attribute from parent bundle
-		if (prefix != null)
-		    key = prefix + key;
-		message = bundle.getString(key);
-		// Perform parametric replacement if required
-		if (!params.isEmpty()) {
-		    Object[] messageArgs = params.toArray();
-		    MessageFormat formatter = new MessageFormat("");
-		    formatter.setLocale(bundle.getLocale());
-		    formatter.applyPattern(message);
-		    message = formatter.format(messageArgs);
+	    ResourceBundle bundle = locCtxt.getResourceBundle();
+	    if (bundle != null) {
+		try {
+		    // prepend 'prefix' attribute from parent bundle
+		    if (prefix != null)
+			key = prefix + key;
+		    message = bundle.getString(key);
+		    // Perform parametric replacement if required
+		    if (!params.isEmpty()) {
+			Object[] messageArgs = params.toArray();
+			MessageFormat formatter = new MessageFormat("");
+			if (locCtxt.getLocale() != null) {
+			    formatter.setLocale(locCtxt.getLocale());
+			}
+			formatter.applyPattern(message);
+			message = formatter.format(messageArgs);
+		    }
+		} catch (MissingResourceException mre) {
+		    message = UNDEFINED_KEY + key + UNDEFINED_KEY;
 		}
-	    } catch (MissingResourceException mre) {
-		message = UNDEFINED_KEY + key + UNDEFINED_KEY;
 	    }
 	}
 

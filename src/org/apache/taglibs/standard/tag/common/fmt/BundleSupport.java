@@ -125,10 +125,7 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
-	if ((basename != null) && !basename.equals("")) {
-	    locCtxt = getLocalizationContext(pageContext, basename);
-	}
-
+	locCtxt = getLocalizationContext(pageContext, basename);
 	return EVAL_BODY_BUFFERED;
     }
 
@@ -183,29 +180,31 @@ public abstract class BundleSupport extends BodyTagSupport {
      * Check if a match exists between the ordered set of preferred
      * locales and the available locales, for the given base name.
      * The set of preferred locales consists of a single locale
-     * (if the <tt>javax.servlet.jsp.jstl.fmt.locale</tt> scoped attribute or
-     * context init parameter is present) or is equal to the client's preferred
-     * locales determined from the client's browser settings.
+     * (if the <tt>javax.servlet.jsp.jstl.fmt.locale</tt> configuration
+     * setting is present) or is equal to the client's preferred locales
+     * determined from the client's browser settings.
      *
      * <p> If no match was found in the previous step, check if a match
      * exists between the fallback locale (given by the
-     * <tt>javax.servlet.jsp.jstl.fmt.fallbackLocale</tt> scoped attribute
-     * or context init parameter) and the available locales, for the given
-     * base name.
+     * <tt>javax.servlet.jsp.jstl.fmt.fallbackLocale</tt> configuration
+     * setting) and the available locales, for the given base name.
      *
      * @param pageContext Page in which the resource bundle with the
      * given base name is requested
      * @param basename Resource bundle base name
      *
      * @return Localization context containing the resource bundle with the
-     * given base name for which a match between the preferred (or fallback)
-     * and available locales exists, or null if no resource bundle match was
-     * found
+     * given base name and the locale that led to the resource bundle match,
+     * or the empty localization context if no resource bundle match was found
      */
     public static LocalizationContext getLocalizationContext(PageContext pc,
 							     String basename) {
 	LocalizationContext locCtxt = null;
 	ResourceBundle bundle = null;
+
+	if ((basename == null) || basename.equals("")) {
+	    return new LocalizationContext();
+	}
 
 	// Try preferred locales
 	Locale pref = SetLocaleSupport.getLocale(pc, Config.FMT_LOCALE);
@@ -244,11 +243,13 @@ public abstract class BundleSupport extends BodyTagSupport {
 	}
 		 
 	if (locCtxt != null) {
-	    bundle = locCtxt.getResourceBundle();
-	    if (bundle != null) {
-		// set response locale
-		SetLocaleSupport.setResponseLocale(pc, bundle.getLocale());
+	    // set response locale
+	    if (locCtxt.getLocale() != null) {
+		SetLocaleSupport.setResponseLocale(pc, locCtxt.getLocale());
 	    }
+	} else {
+	    // create empty localization context
+	    locCtxt = new LocalizationContext();
 	}
 
 	return locCtxt;
