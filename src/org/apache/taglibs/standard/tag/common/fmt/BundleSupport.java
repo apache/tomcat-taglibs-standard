@@ -233,7 +233,8 @@ public abstract class BundleSupport extends BodyTagSupport {
 	if (locCtxt == null) {
 	    // try using the root resource bundle with the given basename
 	    try {
-		bundle = ResourceBundle.getBundle(basename, EMPTY_LOCALE);
+		bundle = ResourceBundle.getBundle(basename, EMPTY_LOCALE,
+						  Thread.currentThread().getContextClassLoader());
 		if (bundle != null) {
 		    locCtxt = new LocalizationContext(bundle, null);
 		}
@@ -314,7 +315,9 @@ public abstract class BundleSupport extends BodyTagSupport {
 	ResourceBundle match = null;
 
 	try {
-	    ResourceBundle bundle = ResourceBundle.getBundle(basename, pref);
+	    ResourceBundle bundle =
+		ResourceBundle.getBundle(basename, pref,
+					 Thread.currentThread().getContextClassLoader());
 	    Locale avail = bundle.getLocale();
 	    if (pref.equals(avail)) {
 		// Exact match
