@@ -320,7 +320,11 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	if (parameters != null) {
 	    for (int i = 0; i < parameters.size(); i++) {
 		// The first parameter has index 1
-		ps.setObject(i + 1, parameters.get(i));
+                if (parameters.get(i) != null) {
+		    ps.setObject(i + 1, parameters.get(i));
+                } else {
+                    ps.setNull(i + 1, java.sql.Types.NULL);
+                }
 	    }
 	}
     }
