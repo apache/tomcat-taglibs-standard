@@ -37,6 +37,11 @@
   <section name="'Standard' Taglib News" href="News">
 
     <news>
+      <newsitem date="01/30/2004">
+       Standard Taglib version 1.0.5 - another bugfix release - is now
+       available from the <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
+       Apache Jakarta Project Mirrors</a>.
+      </newsitem>
       <newsitem date="09/25/2003">
        Standard Taglib version 1.0.4 - another bugfix release - is now
        available from the <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
