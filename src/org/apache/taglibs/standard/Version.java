@@ -103,7 +103,7 @@ public class Version
    */
   public static int getMaintenanceVersionNum()
   {
-    return 5;
+    return 6;
   }
 
   /**
