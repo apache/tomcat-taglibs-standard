@@ -30,27 +30,29 @@ public interface ELParserConstants {
   int NE2 = 28;
   int LPAREN = 29;
   int RPAREN = 30;
-  int LBRACKET = 31;
-  int RBRACKET = 32;
-  int PLUS = 33;
-  int MINUS = 34;
-  int MULTIPLY = 35;
-  int DIVIDE1 = 36;
-  int DIVIDE2 = 37;
-  int MODULUS1 = 38;
-  int MODULUS2 = 39;
-  int NOT1 = 40;
-  int NOT2 = 41;
-  int AND1 = 42;
-  int AND2 = 43;
-  int OR1 = 44;
-  int OR2 = 45;
-  int EMPTY = 46;
-  int IDENTIFIER = 47;
-  int IMPL_OBJ_START = 48;
-  int LETTER = 49;
-  int DIGIT = 50;
-  int ILLEGAL_CHARACTER = 51;
+  int COMMA = 31;
+  int COLON = 32;
+  int LBRACKET = 33;
+  int RBRACKET = 34;
+  int PLUS = 35;
+  int MINUS = 36;
+  int MULTIPLY = 37;
+  int DIVIDE1 = 38;
+  int DIVIDE2 = 39;
+  int MODULUS1 = 40;
+  int MODULUS2 = 41;
+  int NOT1 = 42;
+  int NOT2 = 43;
+  int AND1 = 44;
+  int AND2 = 45;
+  int OR1 = 46;
+  int OR2 = 47;
+  int EMPTY = 48;
+  int IDENTIFIER = 49;
+  int IMPL_OBJ_START = 50;
+  int LETTER = 51;
+  int DIGIT = 52;
+  int ILLEGAL_CHARACTER = 53;
 
   int DEFAULT = 0;
   int IN_EXPRESSION = 1;
@@ -87,6 +89,8 @@ public interface ELParserConstants {
     "\"ne\"",
     "\"(\"",
     "\")\"",
+    "\",\"",
+    "\":\"",
     "\"[\"",
     "\"]\"",
     "\"+\"",

@@ -55,6 +55,7 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
+import java.util.Map;
 import java.text.MessageFormat;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -127,14 +128,18 @@ public class Evaluator
 			  String pAttributeValue,
 			  Class pExpectedType,
 			  Tag pTag,
-			  PageContext pPageContext)
+			  PageContext pPageContext,
+			  Map functions,
+			  String defaultPrefix)
     throws JspException
   {
     try {
       return sEvaluator.evaluate
 	(pAttributeValue,
 	 pPageContext,
-	 pExpectedType);
+	 pExpectedType,
+	 functions,
+	 defaultPrefix);
     }
     catch (ELException exc) {
       throw new JspException
@@ -147,6 +152,24 @@ public class Evaluator
 	  }));
     }
   }
+
+  /** Conduit to old-style call for convenience. */
+  public Object evaluate (String pAttributeName,
+			  String pAttributeValue,
+			  Class pExpectedType,
+			  Tag pTag,
+			  PageContext pPageContext)
+    throws JspException
+  {
+    return evaluate(pAttributeName,
+		   pAttributeValue,
+		   pExpectedType,
+		   pTag,
+		   pPageContext,
+		   null,
+		   null);
+  }
+
 
   //-------------------------------------
   // Testing methods

@@ -55,6 +55,8 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
+import java.util.Map;
+
 /**
  *
  * <p>Represents an expression String consisting of a mixture of
@@ -96,6 +98,8 @@ public class ExpressionString
    **/
   public String evaluate (Object pContext,
 			  VariableResolver pResolver,
+			  Map functions,
+			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
@@ -107,7 +111,11 @@ public class ExpressionString
       }
       else if (elem instanceof Expression) {
 	Object val = 
-	  ((Expression) elem).evaluate (pContext, pResolver, pLogger);
+	  ((Expression) elem).evaluate (pContext,
+					pResolver,
+					functions,
+					defaultPrefix,
+					pLogger);
 	if (val != null) {
 	  buf.append (val.toString ());
 	}

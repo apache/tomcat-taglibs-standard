@@ -53,41 +53,58 @@
  *
  */ 
 
-package org.apache.taglibs.standard.lang.jstl;
+package org.apache.taglibs.standard.lang.jstl.test;
 
-import java.util.Map;
+import java.util.*;
+import org.apache.taglibs.standard.lang.jstl.*;
 
 /**
  *
- * <p>Represents an element that can appear as a suffix in a complex
- * value, such as a property or index operator, or a function call.
+ * <p>This class contains some test functions.</p>
  * 
- * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
+ * @author Shawn Bayern
+ */
 
-public abstract class ValueSuffix
-{
-  //-------------------------------------
-  /**
-   *
-   * Returns the expression in the expression language syntax
-   **/
-  public abstract String getExpressionString ();
+public class StaticFunctionTests {
 
-  //-------------------------------------
-  /**
-   *
-   * Evaluates the expression in the given context, operating on the
-   * given value.
-   **/
-  public abstract Object evaluate (Object pValue,
-				   Object pContext,
-				   VariableResolver pResolver,
-				   Map functions,
-				   String defaultPrefix,
-				   Logger pLogger)
-    throws ELException;
+  public static void main(String args[]) throws Exception {
+    Map m = getSampleMethodMap();
+    Evaluator e = new Evaluator();
+    Object o;
+    o = e.evaluate("", "4", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${4}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${2+2}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${foo:add(2, 3)}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${foo:multiply(2, 3)}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${add(2, 3)}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${multiply(2, 3)}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${add(2, 3) + 5}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+  }
 
-  //-------------------------------------
+  public static int add(int a, int b) {
+    return a + b;
+  }
+
+  public static int multiply(int a, int b) {
+    return a * b;
+  }
+
+  public static Map getSampleMethodMap() throws Exception {
+    Map m = new HashMap();
+    Class c = StaticFunctionTests.class;
+    m.put("foo:add",
+     c.getMethod("add", new Class[] { Integer.TYPE, Integer.TYPE }));
+    m.put("foo:multiply",
+     c.getMethod("multiply", new Class[] { Integer.TYPE, Integer.TYPE }));
+    return m;
+  }
+
 }

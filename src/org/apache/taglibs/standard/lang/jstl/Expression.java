@@ -55,6 +55,8 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
+import java.util.Map;
+
 /**
  *
  * <p>The abstract class from which all expression types
@@ -84,6 +86,8 @@ public abstract class Expression
    **/
   public abstract Object evaluate (Object pContext,
 				   VariableResolver pResolver,
+				   Map functions,
+				   String defaultPrefix,
 				   Logger pLogger)
     throws ELException;
 

@@ -56,6 +56,7 @@
 package org.apache.taglibs.standard.lang.jstl;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -146,10 +147,13 @@ public class UnaryOperatorExpression
    **/
   public Object evaluate (Object pContext,
 			  VariableResolver pResolver,
+			  Map functions,
+			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
-    Object value = mExpression.evaluate (pContext, pResolver, pLogger);
+    Object value = mExpression.evaluate (pContext, pResolver, functions,
+					 defaultPrefix, pLogger);
     if (mOperator != null) {
       value = mOperator.apply (value, pContext, pLogger);
     }

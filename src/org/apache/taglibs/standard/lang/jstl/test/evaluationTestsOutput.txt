@@ -1056,7 +1056,7 @@ With type: java.lang.Short
 
 Expression: ${null}
 ExpectedType: char
-Evaluates to:  
+Evaluates to: 
 With type: java.lang.Character
 
 Expression: ${null}
@@ -1096,7 +1096,7 @@ With type: java.lang.Short
 
 Expression: ${null}
 ExpectedType: class java.lang.Character
-Evaluates to:  
+Evaluates to: 
 With type: java.lang.Character
 
 Expression: ${null}

@@ -20,6 +20,13 @@ import org.apache.taglibs.standard.lang.jstl.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Generated EL parser.
+ * 
+ * @author Nathan Abramson
+ * @author Shawn Bayern
+ */
+
 public class ELParser {
 
   public static void main(String args[]) 
@@ -109,6 +116,8 @@ PARSER_END(ELParser)
 | < NE2: "ne" >
 | < LPAREN: "(" >
 | < RPAREN: ")" >
+| < COMMA: "," >
+| < COLON: ":" >
 | < LBRACKET: "[" >
 | < RBRACKET: "]" >
 | < PLUS: "+" >
@@ -569,7 +578,6 @@ Expression Value () :
 
 
 /**
- *
  * This is an element that can start a value
  **/
 Expression ValuePrefix () :
@@ -580,6 +588,7 @@ Expression ValuePrefix () :
   (
    ret = Literal ()
    | <LPAREN> ret = Expression () <RPAREN>
+   | LOOKAHEAD(QualifiedName() <LPAREN>) ret = FunctionInvocation ()
    | ret = NamedValue ()
    )
     { return ret; }
@@ -592,6 +601,42 @@ NamedValue NamedValue () :
 }
 {
   t = <IDENTIFIER> { return new NamedValue (t.image); }
+}
+
+
+FunctionInvocation FunctionInvocation () :
+{
+  String qualifiedName;
+  List argumentList = new ArrayList();
+  Expression exp;
+}
+{
+  (
+   qualifiedName = QualifiedName()
+   <LPAREN>
+    (
+      (
+        exp = Expression ()
+        {
+          argumentList.add(exp);
+        }
+      )
+      (
+        <COMMA>
+        exp = Expression ()
+        {
+          argumentList.add(exp);
+        }
+      )*
+    )?
+   <RPAREN>
+  )
+  {
+    String allowed = System.getProperty("javax.servlet.jsp.functions.allowed");
+    if (allowed == null || !allowed.equalsIgnoreCase("true"))
+      throw new ParseException("EL functions are not supported.");
+    return new FunctionInvocation(qualifiedName, argumentList);
+  }
 }
 
 
@@ -712,4 +757,25 @@ String Identifier () :
    t = <IDENTIFIER>
    )
     { return t.image; }
+}
+
+String QualifiedName () :
+{
+  String prefix = null, localPart = null;
+}
+{
+  (
+    (
+      LOOKAHEAD(Identifier() <COLON>)
+      prefix = Identifier ()
+      <COLON>
+    )?
+    localPart = Identifier ()
+  )
+  {
+    if (prefix == null)
+      return localPart;
+    else
+     return prefix + ":" + localPart;
+  }
 }

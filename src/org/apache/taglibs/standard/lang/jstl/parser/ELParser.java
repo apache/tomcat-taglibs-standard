@@ -5,6 +5,13 @@ import org.apache.taglibs.standard.lang.jstl.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Generated EL parser.
+ * 
+ * @author Nathan Abramson
+ * @author Shawn Bayern
+ */
+
 public class ELParser implements ELParserConstants {
 
   public static void main(String args[])
@@ -627,7 +634,6 @@ public class ELParser implements ELParserConstants {
   }
 
 /**
- *
  * This is an element that can start a value
  **/
   final public Expression ValuePrefix() throws ParseException {
@@ -646,13 +652,21 @@ public class ELParser implements ELParserConstants {
       ret = Expression();
       jj_consume_token(RPAREN);
       break;
-    case IDENTIFIER:
-      ret = NamedValue();
-      break;
     default:
       jj_la1[27] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
+      if (jj_2_1(2147483647)) {
+        ret = FunctionInvocation();
+      } else {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case IDENTIFIER:
+          ret = NamedValue();
+          break;
+        default:
+          jj_la1[28] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+      }
     }
       {if (true) return ret;}
     throw new Error("Missing return statement in function");
@@ -662,6 +676,54 @@ public class ELParser implements ELParserConstants {
   Token t;
     t = jj_consume_token(IDENTIFIER);
                      {if (true) return new NamedValue (t.image);}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public FunctionInvocation FunctionInvocation() throws ParseException {
+  String qualifiedName;
+  List argumentList = new ArrayList();
+  Expression exp;
+    qualifiedName = QualifiedName();
+    jj_consume_token(LPAREN);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case INTEGER_LITERAL:
+    case FLOATING_POINT_LITERAL:
+    case STRING_LITERAL:
+    case TRUE:
+    case FALSE:
+    case NULL:
+    case LPAREN:
+    case MINUS:
+    case NOT1:
+    case NOT2:
+    case EMPTY:
+    case IDENTIFIER:
+      exp = Expression();
+          argumentList.add(exp);
+      label_10:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case COMMA:
+          ;
+          break;
+        default:
+          jj_la1[29] = jj_gen;
+          break label_10;
+        }
+        jj_consume_token(COMMA);
+        exp = Expression();
+          argumentList.add(exp);
+      }
+      break;
+    default:
+      jj_la1[30] = jj_gen;
+      ;
+    }
+    jj_consume_token(RPAREN);
+    String allowed = System.getProperty("javax.servlet.jsp.functions.allowed");
+    if (allowed == null || !allowed.equalsIgnoreCase("true"))
+      {if (true) throw new ParseException("EL functions are not supported.");}
+    {if (true) return new FunctionInvocation(qualifiedName, argumentList);}
     throw new Error("Missing return statement in function");
   }
 
@@ -675,7 +737,7 @@ public class ELParser implements ELParserConstants {
       suffix = ArraySuffix();
       break;
     default:
-      jj_la1[28] = jj_gen;
+      jj_la1[31] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -721,7 +783,7 @@ public class ELParser implements ELParserConstants {
       ret = NullLiteral();
       break;
     default:
-      jj_la1[29] = jj_gen;
+      jj_la1[32] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -740,7 +802,7 @@ public class ELParser implements ELParserConstants {
               {if (true) return BooleanLiteral.FALSE;}
       break;
     default:
-      jj_la1[30] = jj_gen;
+      jj_la1[33] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -781,14 +843,91 @@ public class ELParser implements ELParserConstants {
     throw new Error("Missing return statement in function");
   }
 
+  final public String QualifiedName() throws ParseException {
+  String prefix = null, localPart = null;
+    if (jj_2_2(2147483647)) {
+      prefix = Identifier();
+      jj_consume_token(COLON);
+    } else {
+      ;
+    }
+    localPart = Identifier();
+    if (prefix == null)
+      {if (true) return localPart;}
+    else
+     {if (true) return prefix + ":" + localPart;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final private boolean jj_2_1(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    boolean retval = !jj_3_1();
+    jj_save(0, xla);
+    return retval;
+  }
+
+  final private boolean jj_2_2(int xla) {
+    jj_la = xla; jj_lastpos = jj_scanpos = token;
+    boolean retval = !jj_3_2();
+    jj_save(1, xla);
+    return retval;
+  }
+
+  final private boolean jj_3R_13() {
+    if (jj_3R_12()) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    if (jj_scan_token(COLON)) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    return false;
+  }
+
+  final private boolean jj_3_2() {
+    if (jj_3R_12()) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    if (jj_scan_token(COLON)) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    return false;
+  }
+
+  final private boolean jj_3_1() {
+    if (jj_3R_11()) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    if (jj_scan_token(LPAREN)) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    return false;
+  }
+
+  final private boolean jj_3R_12() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    return false;
+  }
+
+  final private boolean jj_3R_11() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_13()) jj_scanpos = xsp;
+    else if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    if (jj_3R_12()) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    return false;
+  }
+
   public ELParserTokenManager token_source;
   SimpleCharStream jj_input_stream;
   public Token token, jj_nt;
   private int jj_ntk;
+  private Token jj_scanpos, jj_lastpos;
+  private int jj_la;
+  public boolean lookingAhead = false;
+  private boolean jj_semLA;
   private int jj_gen;
-  final private int[] jj_la1 = new int[31];
-  final private int[] jj_la1_0 = {0x6,0x6,0x6,0x0,0x0,0x0,0x0,0x18600000,0x600000,0x18000000,0x18600000,0x79e0000,0x180000,0x60000,0x6000000,0x1800000,0x79e0000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80010000,0x20007580,0x80010000,0x7580,0x3000,};
-  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x3000,0x3000,0xc00,0xc00,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6,0x6,0xf8,0x30,0xc0,0xf8,0x4304,0x300,0x4304,0x0,0x8000,0x0,0x0,0x0,};
+  final private int[] jj_la1 = new int[34];
+  final private int[] jj_la1_0 = {0x6,0x6,0x6,0x0,0x0,0x0,0x0,0x18600000,0x600000,0x18000000,0x18600000,0x79e0000,0x180000,0x60000,0x6000000,0x1800000,0x79e0000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x10000,0x20007580,0x0,0x80000000,0x20007580,0x10000,0x7580,0x3000,};
+  final private int[] jj_la1_1 = {0x0,0x0,0x0,0xc000,0xc000,0x3000,0x3000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x18,0x18,0x3e0,0xc0,0x300,0x3e0,0x10c10,0xc00,0x10c10,0x2,0x0,0x20000,0x0,0x30c10,0x2,0x0,0x0,};
+  final private JJCalls[] jj_2_rtns = new JJCalls[2];
+  private boolean jj_rescan = false;
+  private int jj_gc = 0;
 
   public ELParser(java.io.InputStream stream) {
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
@@ -796,7 +935,8 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public void ReInit(java.io.InputStream stream) {
@@ -805,7 +945,8 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public ELParser(java.io.Reader stream) {
@@ -814,7 +955,8 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public void ReInit(java.io.Reader stream) {
@@ -823,7 +965,8 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public ELParser(ELParserTokenManager tm) {
@@ -831,7 +974,8 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   public void ReInit(ELParserTokenManager tm) {
@@ -839,7 +983,8 @@ public class ELParser implements ELParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 31; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   final private Token jj_consume_token(int kind) throws ParseException {
@@ -849,11 +994,40 @@ public class ELParser implements ELParserConstants {
     jj_ntk = -1;
     if (token.kind == kind) {
       jj_gen++;
+      if (++jj_gc > 100) {
+        jj_gc = 0;
+        for (int i = 0; i < jj_2_rtns.length; i++) {
+          JJCalls c = jj_2_rtns[i];
+          while (c != null) {
+            if (c.gen < jj_gen) c.first = null;
+            c = c.next;
+          }
+        }
+      }
       return token;
     }
     token = oldToken;
     jj_kind = kind;
     throw generateParseException();
+  }
+
+  final private boolean jj_scan_token(int kind) {
+    if (jj_scanpos == jj_lastpos) {
+      jj_la--;
+      if (jj_scanpos.next == null) {
+        jj_lastpos = jj_scanpos = jj_scanpos.next = token_source.getNextToken();
+      } else {
+        jj_lastpos = jj_scanpos = jj_scanpos.next;
+      }
+    } else {
+      jj_scanpos = jj_scanpos.next;
+    }
+    if (jj_rescan) {
+      int i = 0; Token tok = token;
+      while (tok != null && tok != jj_scanpos) { i++; tok = tok.next; }
+      if (tok != null) jj_add_error_token(kind, i);
+    }
+    return (jj_scanpos.kind != kind);
   }
 
   final public Token getNextToken() {
@@ -865,7 +1039,7 @@ public class ELParser implements ELParserConstants {
   }
 
   final public Token getToken(int index) {
-    Token t = token;
+    Token t = lookingAhead ? jj_scanpos : token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
       else t = t.next = token_source.getNextToken();
@@ -883,18 +1057,48 @@ public class ELParser implements ELParserConstants {
   private java.util.Vector jj_expentries = new java.util.Vector();
   private int[] jj_expentry;
   private int jj_kind = -1;
+  private int[] jj_lasttokens = new int[100];
+  private int jj_endpos;
+
+  private void jj_add_error_token(int kind, int pos) {
+    if (pos >= 100) return;
+    if (pos == jj_endpos + 1) {
+      jj_lasttokens[jj_endpos++] = kind;
+    } else if (jj_endpos != 0) {
+      jj_expentry = new int[jj_endpos];
+      for (int i = 0; i < jj_endpos; i++) {
+        jj_expentry[i] = jj_lasttokens[i];
+      }
+      boolean exists = false;
+      for (java.util.Enumeration enum = jj_expentries.elements(); enum.hasMoreElements();) {
+        int[] oldentry = (int[])(enum.nextElement());
+        if (oldentry.length == jj_expentry.length) {
+          exists = true;
+          for (int i = 0; i < jj_expentry.length; i++) {
+            if (oldentry[i] != jj_expentry[i]) {
+              exists = false;
+              break;
+            }
+          }
+          if (exists) break;
+        }
+      }
+      if (!exists) jj_expentries.addElement(jj_expentry);
+      if (pos != 0) jj_lasttokens[(jj_endpos = pos) - 1] = kind;
+    }
+  }
 
   final public ParseException generateParseException() {
     jj_expentries.removeAllElements();
-    boolean[] la1tokens = new boolean[52];
-    for (int i = 0; i < 52; i++) {
+    boolean[] la1tokens = new boolean[54];
+    for (int i = 0; i < 54; i++) {
       la1tokens[i] = false;
     }
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 31; i++) {
+    for (int i = 0; i < 34; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -906,13 +1110,16 @@ public class ELParser implements ELParserConstants {
         }
       }
     }
-    for (int i = 0; i < 52; i++) {
+    for (int i = 0; i < 54; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
         jj_expentries.addElement(jj_expentry);
       }
     }
+    jj_endpos = 0;
+    jj_rescan_token();
+    jj_add_error_token(0, 0);
     int[][] exptokseq = new int[jj_expentries.size()][];
     for (int i = 0; i < jj_expentries.size(); i++) {
       exptokseq[i] = (int[])jj_expentries.elementAt(i);
@@ -924,6 +1131,40 @@ public class ELParser implements ELParserConstants {
   }
 
   final public void disable_tracing() {
+  }
+
+  final private void jj_rescan_token() {
+    jj_rescan = true;
+    for (int i = 0; i < 2; i++) {
+      JJCalls p = jj_2_rtns[i];
+      do {
+        if (p.gen > jj_gen) {
+          jj_la = p.arg; jj_lastpos = jj_scanpos = p.first;
+          switch (i) {
+            case 0: jj_3_1(); break;
+            case 1: jj_3_2(); break;
+          }
+        }
+        p = p.next;
+      } while (p != null);
+    }
+    jj_rescan = false;
+  }
+
+  final private void jj_save(int index, int xla) {
+    JJCalls p = jj_2_rtns[index];
+    while (p.gen > jj_gen) {
+      if (p.next == null) { p = p.next = new JJCalls(); break; }
+      p = p.next;
+    }
+    p.gen = jj_gen + xla - jj_la; p.first = token; p.arg = xla;
+  }
+
+  static final class JJCalls {
+    int gen;
+    Token first;
+    int arg;
+    JJCalls next;
   }
 
 }

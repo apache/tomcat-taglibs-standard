@@ -142,10 +142,13 @@ public class ArraySuffix
    **/
   Object evaluateIndex (Object pContext,
 			VariableResolver pResolver,
+			Map functions,
+			String defaultPrefix,
 			Logger pLogger)
     throws ELException
   {
-    return mIndex.evaluate (pContext, pResolver, pLogger);
+    return mIndex.evaluate (pContext, pResolver, functions, defaultPrefix,
+			    pLogger);
   }
 
   //-------------------------------------
@@ -179,6 +182,8 @@ public class ArraySuffix
   public Object evaluate (Object pValue,
 			  Object pContext,
 			  VariableResolver pResolver,
+			  Map functions,
+			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
@@ -198,7 +203,8 @@ public class ArraySuffix
     }
 
     // Evaluate the index
-    else if ((indexVal = evaluateIndex (pContext, pResolver, pLogger)) == 
+    else if ((indexVal = evaluateIndex (pContext, pResolver,
+					functions, defaultPrefix, pLogger)) == 
 	     null) {
       if (pLogger.isLoggingWarning ()) {
 	pLogger.logWarning

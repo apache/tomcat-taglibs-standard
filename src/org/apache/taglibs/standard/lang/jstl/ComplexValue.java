@@ -56,6 +56,7 @@
 package org.apache.taglibs.standard.lang.jstl;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -130,15 +131,19 @@ public class ComplexValue
    **/
   public Object evaluate (Object pContext,
 			  VariableResolver pResolver,
+			  Map functions,
+			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
-    Object ret = mPrefix.evaluate (pContext, pResolver, pLogger);
+    Object ret = mPrefix.evaluate (pContext, pResolver, functions,
+				   defaultPrefix, pLogger);
 
     // Apply the suffixes
     for (int i = 0; mSuffixes != null && i < mSuffixes.size (); i++) {
       ValueSuffix suffix = (ValueSuffix) mSuffixes.get (i);
-      ret = suffix.evaluate (ret, pContext, pResolver, pLogger);
+      ret = suffix.evaluate (ret, pContext, pResolver, functions,
+			     defaultPrefix, pLogger);
     }
 
     return ret;

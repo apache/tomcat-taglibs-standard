@@ -55,6 +55,8 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
+import java.util.Map;
+
 /**
  *
  * <p>Represents a name that can be used as the first element of a
@@ -109,6 +111,8 @@ public class NamedValue
    **/
   public Object evaluate (Object pContext,
 			  VariableResolver pResolver,
+			  Map functions,
+			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {

@@ -55,6 +55,8 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
+import java.util.Map;
+
 /**
  *
  * <p>An expression representing a literal value
@@ -96,6 +98,8 @@ public abstract class Literal
    **/
   public Object evaluate (Object pContext,
 			  VariableResolver pResolver,
+			  Map functions,
+			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {

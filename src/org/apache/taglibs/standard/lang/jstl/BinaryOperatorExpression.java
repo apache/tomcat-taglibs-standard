@@ -56,6 +56,7 @@
 package org.apache.taglibs.standard.lang.jstl;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -143,10 +144,13 @@ public class BinaryOperatorExpression
    **/
   public Object evaluate (Object pContext,
 			  VariableResolver pResolver,
+			  Map functions,
+			  String defaultPrefix,
 			  Logger pLogger)
     throws ELException
   {
-    Object value = mExpression.evaluate (pContext, pResolver, pLogger);
+    Object value = mExpression.evaluate (pContext, pResolver, functions,
+					 defaultPrefix, pLogger);
     for (int i = 0; i < mOperators.size (); i++) {
       BinaryOperator operator = (BinaryOperator) mOperators.get (i);
 
@@ -158,7 +162,9 @@ public class BinaryOperatorExpression
 
       if (operator.shouldEvaluate (value)) {
 	Expression expression = (Expression) mExpressions.get (i);
-	Object nextValue = expression.evaluate (pContext, pResolver, pLogger);
+	Object nextValue = expression.evaluate (pContext, pResolver,
+						functions, defaultPrefix,
+						pLogger);
 
 	value = operator.apply (value, nextValue, pContext, pLogger);
       }

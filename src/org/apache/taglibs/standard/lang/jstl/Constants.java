@@ -64,6 +64,8 @@ import java.util.MissingResourceException;
  * messsage strings read from the resource file.
  *
  * @author Nathan Abramson - Art Technology Group
+ * @author Shawn Bayern
+ *
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  **/
 
@@ -192,6 +194,16 @@ public class Constants
 
   public static final String ATTRIBUTE_PARSE_EXCEPTION =
     getStringResource ("ATTRIBUTE_PARSE_EXCEPTION");
+
+  public static final String UNKNOWN_FUNCTION =
+    getStringResource ("UNKNOWN_FUNCTION");
+
+  public static final String INAPPROPRIATE_FUNCTION_ARG_COUNT =
+    getStringResource ("INAPPROPRIATE_FUNCTION_ARG_COUNT");
+
+  public static final String FUNCTION_INVOCATION_ERROR =
+    getStringResource ("FUNCTION_INVOCATION_ERROR");
+
 
   //-------------------------------------
   // Getting resources

@@ -192,12 +192,16 @@ public class ELEvaluator
    **/
   public Object evaluate (String pExpressionString,
 			  Object pContext,
-			  Class pExpectedType)
+			  Class pExpectedType,
+			  Map functions,
+			  String defaultPrefix)
     throws ELException
   {
     return evaluate (pExpressionString,
 		     pContext,
 		     pExpectedType,
+		     functions,
+		     defaultPrefix,
 		     sLogger);
   }
 
@@ -209,6 +213,8 @@ public class ELEvaluator
   Object evaluate (String pExpressionString,
 		   Object pContext,
 		   Class pExpectedType,
+		   Map functions,
+		   String defaultPrefix,
 		   Logger pLogger)
     throws ELException
   {
@@ -235,6 +241,8 @@ public class ELEvaluator
       Object value = 
 	((Expression) parsedValue).evaluate (pContext,
 					     mResolver,
+					     functions,
+					     defaultPrefix,
 					     pLogger);
       return convertToExpectedType (value, 
 				    pExpectedType,
@@ -246,6 +254,8 @@ public class ELEvaluator
       String strValue = 
 	((ExpressionString) parsedValue).evaluate (pContext, 
 						   mResolver,
+						   functions,
+						   defaultPrefix,
 						   pLogger);
       return convertToExpectedType (strValue,
 				    pExpectedType,
@@ -383,6 +393,10 @@ public class ELEvaluator
     StringBuffer expectedBuf = new StringBuffer ();
     int maxSize = 0;
     boolean printedOne = false;
+
+    if (pExc.expectedTokenSequences == null)
+      return pExc.toString();
+
     for (int i = 0; i < pExc.expectedTokenSequences.length; i++) {
       if (maxSize < pExc.expectedTokenSequences [i].length) {
         maxSize = pExc.expectedTokenSequences [i].length;
