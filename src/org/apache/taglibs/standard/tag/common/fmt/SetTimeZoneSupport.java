@@ -82,7 +82,7 @@ public abstract class SetTimeZoneSupport extends TagSupport {
     //*********************************************************************
     // Private state
 
-    private String scope;                        // 'scope' attribute
+    private int scope;                           // 'scope' attribute
     private String var;                          // 'var' attribute
 
 
@@ -97,7 +97,7 @@ public abstract class SetTimeZoneSupport extends TagSupport {
     // resets local state
     private void init() {
 	value = var = null;
-	scope = "page";
+	scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -105,7 +105,7 @@ public abstract class SetTimeZoneSupport extends TagSupport {
     // Tag attributes known at translation time
 
     public void setScope(String scope) {
-	this.scope = scope;
+	this.scope = Util.getScope(scope);
     }
 
     public void setVar(String var) {
@@ -132,10 +132,9 @@ public abstract class SetTimeZoneSupport extends TagSupport {
 	}
 
 	if (var != null) {
-	    pageContext.setAttribute(var, timeZone, Util.getScope(scope));
+	    pageContext.setAttribute(var, timeZone, scope);
 	} else {
-	    Config.set(pageContext, Config.FMT_TIMEZONE, timeZone,
-		       Util.getScope(scope));
+	    Config.set(pageContext, Config.FMT_TIMEZONE, timeZone, scope);
 	}
 
 	return EVAL_PAGE;

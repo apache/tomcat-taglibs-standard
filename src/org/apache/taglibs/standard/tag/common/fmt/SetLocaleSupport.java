@@ -91,7 +91,7 @@ public abstract class SetLocaleSupport extends TagSupport {
     //*********************************************************************
     // Private state
 
-    private String scope;                        // 'scope' attribute
+    private int scope;                           // 'scope' attribute
 
 
     //*********************************************************************
@@ -104,7 +104,7 @@ public abstract class SetLocaleSupport extends TagSupport {
 
     private void init() {
 	value = variant = null;
-	scope = "page";
+	scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -112,7 +112,7 @@ public abstract class SetLocaleSupport extends TagSupport {
     // Tag attributes known at translation time
 
     public void setScope(String scope) {
-	this.scope = scope;
+	this.scope = Util.getScope(scope);
     }
 
 
@@ -134,8 +134,7 @@ public abstract class SetLocaleSupport extends TagSupport {
 	    locale = (Locale) value;
 	}
 
-	Config.set(pageContext, Config.FMT_LOCALE, locale,
-		   Util.getScope(scope));
+	Config.set(pageContext, Config.FMT_LOCALE, locale, scope);
 	setResponseLocale(pageContext, locale);
 
 	return EVAL_PAGE;

@@ -83,7 +83,7 @@ public abstract class SetBundleSupport extends TagSupport {
     //*********************************************************************
     // Private state
 
-    private String scope;                       // 'scope' attribute
+    private int scope;                          // 'scope' attribute
     private String var;                         // 'var' attribute
 
 
@@ -97,7 +97,7 @@ public abstract class SetBundleSupport extends TagSupport {
 
     private void init() {
 	basename = null;
-	scope = "page";
+	scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -109,7 +109,7 @@ public abstract class SetBundleSupport extends TagSupport {
     }
 
     public void setScope(String scope) {
-	this.scope = scope;
+	this.scope = Util.getScope(scope);
     }
 
 
@@ -130,10 +130,10 @@ public abstract class SetBundleSupport extends TagSupport {
 	}
 
 	if (var != null) {
-	    pageContext.setAttribute(var, locCtxt, Util.getScope(scope));
+	    pageContext.setAttribute(var, locCtxt, scope);
 	} else {
 	    Config.set(pageContext, Config.FMT_LOCALIZATIONCONTEXT, locCtxt,
-		       Util.getScope(scope));
+		       scope);
 	}
 
 	return EVAL_PAGE;
