@@ -53,7 +53,7 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.el.core;
+package org.apache.taglibs.standard.tag.common.core;
 
 import java.io.*;
 import javax.servlet.jsp.*;
@@ -64,7 +64,7 @@ import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * <p>A handler for the &lt;our&gt; tag, which simply evalutes and
+ * <p>Support for handlers of the &lt;out&gt; tag, which simply evalutes and
  * prints the result of the expression it's passed.  If the expression
  * fails to complete evaluation successfully because of a
  * javax.servlet.jsp.jstl.core.ExpressionException, or if the result is
@@ -74,7 +74,7 @@ import org.apache.taglibs.standard.resources.Resources;
  *
  * @author Shawn Bayern
  */
-public class ExprTag extends BodyTagSupport {
+public class OutSupport extends BodyTagSupport {
 
     /*
      * (One almost wishes XML and JSP could support "anonymous tags,"
@@ -84,11 +84,10 @@ public class ExprTag extends BodyTagSupport {
     //*********************************************************************
     // Internal state
 
-    private String value;                       // tag attribute
-    private String def;				// tag attribute
-    private String escapeXml;			// tag attribute
+    protected String value ;                    // tag attribute
+    protected String def;			// tag attribute
+    protected boolean escapeXml;		// tag attribute
     private boolean needBody;			// non-space body needed?
-    private boolean _escapeXml;                 // processed attribute
 
     //*********************************************************************
     // Construction and initialization
@@ -98,16 +97,16 @@ public class ExprTag extends BodyTagSupport {
      * not provide other constructors and are expected to call the
      * superclass constructor.
      */
-    public ExprTag() {
+    public OutSupport() {
         super();
         init();
     }
 
     // resets local state
     private void init() {
-        value = def = escapeXml = null;
-        needBody = false;
-        _escapeXml = true;
+        value = def = null;
+        escapeXml = false;
+	needBody = false;
     }
 
     // Releases any resources we may have (or inherit)
@@ -125,24 +124,11 @@ public class ExprTag extends BodyTagSupport {
       try {
 	Object result;
 
-        // process the 'escapeXml' attribute if it's been specified
-        if (escapeXml != null) {
-            _escapeXml = ((Boolean) ExpressionEvaluatorManager.evaluate(
-                "escapeXml", escapeXml, Boolean.class, this, pageContext))
-                .booleanValue();
-        }
-
-	// try to evaluate 'value'
-	try {
-            result = ExpressionEvaluatorManager.evaluate(
-                "value", value, Object.class, this, pageContext);
-	} catch (ExpressionException ex) {
-	    result = null;	// expression-specific error; no result
-	}
+	result = value;
 
 	// print value if available; otherwise, try 'default'
 	if (result != null) {
-            out(pageContext, _escapeXml, result.toString());
+            out(pageContext, escapeXml, result.toString());
 	    return SKIP_BODY;
 	} else {
 	    // if we don't have a 'default' attribute, just go to the body
@@ -151,12 +137,10 @@ public class ExprTag extends BodyTagSupport {
 		return EVAL_BODY_BUFFERED;
 	    }
 
-	    // if we do have 'default', try to evaluate it
-	    result = ExpressionEvaluatorManager.evaluate(
-		"default", def, Object.class, this, pageContext);
+	    // if we do have 'default', try it
 	    if (result != null) {
 		// good 'default'
-                out(pageContext, _escapeXml, result.toString());
+                out(pageContext, escapeXml, result.toString());
 		return SKIP_BODY;
 	    } else {
 		// bad 'default'
@@ -176,30 +160,11 @@ public class ExprTag extends BodyTagSupport {
 
 	// trim and print out the body
 	if (bodyContent != null && bodyContent.getString() != null)
-            out(pageContext, _escapeXml, bodyContent.getString().trim());
+            out(pageContext, escapeXml, bodyContent.getString().trim());
 	return EVAL_PAGE;
       } catch (IOException ex) {
 	throw new JspException(ex.getMessage(), ex);
       }
-    }
-
-
-    //*********************************************************************
-    // Accessor methods
-
-    // for tag attribute
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    // for tag attribute
-    public void setDefault(String def) {
-        this.def = def;
-    }
-
-    // for tag attribute
-    public void setEscapeXml(String escapeXml) {
-        this.escapeXml = escapeXml;
     }
 
 

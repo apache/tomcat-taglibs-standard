@@ -60,7 +60,7 @@ import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.core.*;
 
 /**
- * <p>A handler for &lt;sett&gt;, which redirects the browser to a
+ * <p>A handler for &lt;set&gt;, which redirects the browser to a
  * new URL.
  *
  * @author Shawn Bayern

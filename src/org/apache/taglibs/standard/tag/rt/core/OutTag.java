@@ -53,74 +53,35 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.common.xml;
+package org.apache.taglibs.standard.tag.rt.core;
 
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.tag.common.core.*;
 
 /**
- * <p>Tag handler for &lt;expr&gt; in JSTL's XML library.</p>
+ * <p>Tag handler for &lt;out&gt; in JSTL's rtexprvalue library.</p>
  *
  * @author Shawn Bayern
  */
 
-public abstract class ExprSupport extends TagSupport {
+public class OutTag extends OutSupport {
 
     //*********************************************************************
-    // Internal state
-
-    private String select;                       // tag attribute
-    protected boolean escapeXml;		 // tag attribute
-
-    //*********************************************************************
-    // Construction and initialization
-
-    /**
-     * Constructs a new handler.  As with TagSupport, subclasses should
-     * not provide other constructors and are expected to call the
-     * superclass constructor.
-     */
-    public ExprSupport() {
-        super();
-        init();
+    // Accessors
+       
+    // for tag attribute
+    public void setValue(String value) {
+        this.value = value;
     }
-
-    // resets local state
-    private void init() {
-	select = null;
-        escapeXml = true;
+      
+    // for tag attribute
+    public void setDefault(String def) {
+        this.def = def;
     }
-
-
-    //*********************************************************************
-    // Tag logic
-
-    // applies XPath expression from 'select' and prints the result
-    public int doStartTag() throws JspException {
-        try {
-	    XPathUtil xu = new XPathUtil(pageContext);
-	    String result = xu.valueOf(XPathUtil.getContext(this), select);
-	    org.apache.taglibs.standard.tag.common.core.OutSupport.out(
-              pageContext, escapeXml, result);
-	    return SKIP_BODY;
-        } catch (java.io.IOException ex) {
-	    throw new JspTagException(ex.toString());
-        } catch (org.saxpath.SAXPathException ex) {
-	    throw new JspTagException(ex.toString());
-        }
-    }
-
-    // Releases any resources we may have (or inherit)
-    public void release() {
-        super.release();
-        init();
-    }
-
-
-    //*********************************************************************
-    // Attribute accessors
-
-    public void setSelect(String select) {
-	this.select = select;
+        
+    // for tag attribute
+    public void setEscapeXml(boolean escapeXml) {
+        this.escapeXml = escapeXml;
     }
 }

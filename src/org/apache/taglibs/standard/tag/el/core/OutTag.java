@@ -53,62 +53,51 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.common.xml;
+package org.apache.taglibs.standard.tag.el.core;
 
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.tag.common.core.*;
 
 /**
- * <p>Tag handler for &lt;expr&gt; in JSTL's XML library.</p>
+ * <p>A handler for &lt;out&gt;, which redirects the browser to a
+ * new URL.
  *
  * @author Shawn Bayern
  */
 
-public abstract class ExprSupport extends TagSupport {
+public class OutTag extends OutSupport {
 
     //*********************************************************************
-    // Internal state
+    // 'Private' state (implementation details)
 
-    private String select;                       // tag attribute
-    protected boolean escapeXml;		 // tag attribute
+    private String value_;			// stores EL-based property
+    private String default_;			// stores EL-based property
+    private String escapeXml_;			// stores EL-based property
+
 
     //*********************************************************************
-    // Construction and initialization
+    // Constructor
 
-    /**
-     * Constructs a new handler.  As with TagSupport, subclasses should
-     * not provide other constructors and are expected to call the
-     * superclass constructor.
-     */
-    public ExprSupport() {
+    public OutTag() {
         super();
         init();
-    }
-
-    // resets local state
-    private void init() {
-	select = null;
-        escapeXml = true;
     }
 
 
     //*********************************************************************
     // Tag logic
 
-    // applies XPath expression from 'select' and prints the result
+    // evaluates expression and chains to parent
     public int doStartTag() throws JspException {
-        try {
-	    XPathUtil xu = new XPathUtil(pageContext);
-	    String result = xu.valueOf(XPathUtil.getContext(this), select);
-	    org.apache.taglibs.standard.tag.common.core.OutSupport.out(
-              pageContext, escapeXml, result);
-	    return SKIP_BODY;
-        } catch (java.io.IOException ex) {
-	    throw new JspTagException(ex.toString());
-        } catch (org.saxpath.SAXPathException ex) {
-	    throw new JspTagException(ex.toString());
-        }
+
+        // evaluate any expressions we were passed, once per invocation
+        evaluateExpressions();
+
+	// chain to the parent implementation
+	return super.doStartTag();
     }
+
 
     // Releases any resources we may have (or inherit)
     public void release() {
@@ -118,9 +107,48 @@ public abstract class ExprSupport extends TagSupport {
 
 
     //*********************************************************************
-    // Attribute accessors
+    // Accessor methods
 
-    public void setSelect(String select) {
-	this.select = select;
+    public void setValue(String value_) {
+        this.value_ = value_;
+    }
+
+    public void setDefault(String default_) {
+        this.default_ = default_;
+    }
+
+    public void setProperty(String escapeXml_) {
+        this.escapeXml_ = escapeXml_;
+    }
+
+
+    //*********************************************************************
+    // Private (utility) methods
+
+    // (re)initializes state (during release() or construction)
+    private void init() {
+        // null implies "no expression"
+	value_ = default_ = escapeXml_ = null;
+    }
+
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        /* 
+         * Note: we don't check for type mismatches here; we assume
+         * the expression evaluator will return the expected type
+         * (by virtue of knowledge we give it about what that type is).
+         * A ClassCastException here is truly unexpected, so we let it
+         * propagate up.
+         */
+
+	value = (String) ExpressionUtil.evalNotNull(
+	    "out", "value", value_, String.class, this, pageContext);
+	def = (String) ExpressionUtil.evalNotNull(
+	    "out", "default", default_, String.class, this, pageContext);
+	escapeXml = true;
+	Boolean escape = ((Boolean) ExpressionUtil.evalNotNull(
+	    "out", "escapeXml", escapeXml_, Boolean.class, this, pageContext));
+	if (escape != null)
+	    escapeXml = escape.booleanValue();
     }
 }

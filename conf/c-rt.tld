@@ -209,6 +209,31 @@
   </tag>
 
   <tag>
+    <name>out</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.core.OutTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+        Like &lt;%= ... &gt;, but for expressions.
+    </description> 
+    <attribute>
+        <name>value</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>default</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>escapeXml</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+
+  <tag>
     <name>otherwise</name>
     <tag-class>org.apache.taglibs.standard.tag.common.core.OtherwiseTag</tag-class>
     <body-content>JSP</body-content>
