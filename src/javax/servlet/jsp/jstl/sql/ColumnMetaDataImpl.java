@@ -53,7 +53,7 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.common.sql;
+package javax.servlet.jsp.jstl.sql;
 
 import java.sql.*;
 import javax.servlet.jsp.jstl.sql.ColumnMetaData;
