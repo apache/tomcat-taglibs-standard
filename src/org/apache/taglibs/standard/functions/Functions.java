@@ -124,7 +124,7 @@ public class Functions {
     
     public static String substring(String input, int beginIndex, int endIndex) {
         if (input == null) input = "";
-        if (beginIndex >= input.length()) beginIndex = input.length() - 1;
+        if (beginIndex >= input.length()) return "";
         if (beginIndex < 0) beginIndex = 0;
         if (endIndex < 0 || endIndex > input.length()) endIndex = input.length();
         if (endIndex < beginIndex) return "";
@@ -206,12 +206,7 @@ public class Functions {
         
         if (delimiters == null) delimiters = "";
 
-        StringTokenizer tok;
-        if (delimiters.length() == 0) {
-            tok = new StringTokenizer(input);
-        } else {        
-            tok = new StringTokenizer(input, delimiters);
-        }
+        StringTokenizer tok = new StringTokenizer(input, delimiters);
         int count = tok.countTokens();
         array = new String[count];
         int i = 0;
