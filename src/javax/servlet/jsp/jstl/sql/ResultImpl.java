@@ -59,9 +59,9 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * <p>This class creates a cached version of a <code>ResultSet</code>.
- * It's represented as a <code>Result</code> implementation, capable of 
- * returing an array of <code>Row</code> objects containing a <code>Column</code> 
+ * <p>This class creates a cached version of a <tt>ResultSet</tt>.
+ * It's represented as a <tt>Result</tt> implementation, capable of 
+ * returing an array of <tt>Row</tt> objects containing a <tt>Column</tt> 
  * instance for each column in the row. 
  *
  * @author Hans Bergsten
@@ -78,60 +78,55 @@ public class ResultImpl implements Result {
      * This constructor reads the ResultSet and saves a cached
      * copy.
      *
-     * @param rs an open <code>ResultSet</code>, positioned before the 
-     *   first row
+     * @param rs an open <tt>ResultSet</tt>, positioned before the first
+     * row
      * @param startRow, beginning row to be cached
      * @param maxRows, query maximum rows limit
      * @exception if a database error occurs
      */
-    public ResultImpl(ResultSet rs, int startRow, int maxRows) throws SQLException {
-	rowMap = new ArrayList();
-	rowByIndex = new ArrayList();
+    public ResultImpl(ResultSet rs, int startRow, int maxRows)
+        throws SQLException 
+    {
+        rowMap = new ArrayList();
+        rowByIndex = new ArrayList();
 
-	ResultSetMetaData rsmd = rs.getMetaData();
-	int noOfColumns = rsmd.getColumnCount();
-        int beginRow = 0;
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int noOfColumns = rsmd.getColumnCount();
 
+        // Create the column name array
         columnNames = new String[noOfColumns];
-
-        /*
-         * Shift maximum rows depending on starting point
-         */
-        if ((maxRows > 0) && (startRow > 0)) {
-            maxRows = maxRows + startRow;
+        for (int i = 1; i <= noOfColumns; i++) {
+            columnNames[i-1] = rsmd.getColumnName(i);
         }
 
-	while (rs.next()) {
-            if ((maxRows < 0) || (beginRow < maxRows)) {
-                if (beginRow >= startRow) {
-                    Object[] columns = new Object[noOfColumns];
-                    SortedMap columnMap = new TreeMap(
-                        String.CASE_INSENSITIVE_ORDER);
+        // Throw away all rows upto startRow
+        for (int i = 0; i < startRow; i++) {
+            rs.next();
+        }
 
-	            // JDBC uses 1 as the lowest index!
-	            for (int i = 1; i <= noOfColumns; i++) {
-		        Object value =  rs.getObject(i);
-		        if (rs.wasNull()) {
-		            value = null;
-		        }
-                        // 0-based indexing to be consistent w/JSTL 
-                        if (columnNames[i-1] == null) {
-                            columnNames[i-1] = rsmd.getColumnName(i);
-                        }
-                        columns[i-1] = value;
-                        columnMap.put(columnNames[i-1], value);
-	            }
-                rowMap.add(columnMap);
-                rowByIndex.add(columns);
-                }
-            beginRow++;
+        // Process the remaining rows upto maxRows
+        int processedRows = 0;
+        while (rs.next()) {
+            if ((maxRows != -1) && (processedRows == maxRows)) {
+                isLimited = true; 
+                break;
             }
-	}
+            Object[] columns = new Object[noOfColumns];
+            SortedMap columnMap = 
+                new TreeMap(String.CASE_INSENSITIVE_ORDER);
 
-        if (maxRows > 0) { 
-            isLimited = true; 
-        } else { 
-            isLimited = false; 
+            // JDBC uses 1 as the lowest index!
+            for (int i = 1; i <= noOfColumns; i++) {
+                Object value =  rs.getObject(i);
+                if (rs.wasNull()) {
+                    value = null;
+                }
+                columns[i-1] = value;
+                columnMap.put(columnNames[i-1], value);
+            }
+            rowMap.add(columnMap);
+            rowByIndex.add(columns);
+            processedRows++;
         }
     }
 
@@ -188,10 +183,10 @@ public class ResultImpl implements Result {
      *    not be initialized due to SQLExceptions
      */
     public int getRowCount() {
-	if (rowMap == null) {
-	    return -1;
-	}
-	return rowMap.size();
+        if (rowMap == null) {
+            return -1;
+        }
+        return rowMap.size();
     }
 
     /**

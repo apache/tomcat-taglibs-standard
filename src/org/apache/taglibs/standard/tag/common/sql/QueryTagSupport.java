@@ -234,11 +234,15 @@ public abstract class QueryTagSupport extends BodyTagSupport
         }
 
 	Result result = null;
+	/* 
+	 * Note! We must not use the setMaxRows() method on the
+	 * the statement to limit the number of rows, since the
+	 * Result factory must be able to figure out the correct
+	 * value for isLimitedByMaxRows(); there's no way to check
+	 * if it was from the ResultSet.
+          */
 	try {
 	    PreparedStatement ps = conn.prepareStatement(sqlStatement);
-            if (maxRows > 0 ) {
-	        ps.setMaxRows(startRow + maxRows);
-            }
 	    setParameters(ps, parameters);
 	    ResultSet rs = ps.executeQuery();
 	    result = new ResultImpl(rs, startRow, maxRows);
