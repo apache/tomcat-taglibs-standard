@@ -363,7 +363,7 @@ public abstract class ImportSupport extends BodyTagSupport
 		// before returning
 		if (uc instanceof HttpURLConnection) {
 		    int status = ((HttpURLConnection) uc).getResponseCode();
-		    if (status != 200)
+		    if (status < 200 || status > 299)
 			throw new JspTagException(status + " " + target);
 		}
 
