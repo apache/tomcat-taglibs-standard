@@ -143,7 +143,9 @@ public class Init implements ServletContextListener {
 	 * Enumeration
 	 */
 	Enumeration enum = numberMap.keys();
-        sce.getServletContext().setAttribute("enum", enum);
+	// don't use 'enum' for attribute name because it is a 
+	// reserved word in EcmaScript.
+        sce.getServletContext().setAttribute("enumeration", enum);
     }
     
     //*********************************************************************
