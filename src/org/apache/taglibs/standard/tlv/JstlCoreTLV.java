@@ -171,7 +171,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		// mark <choose> for the first the first <when>
 		if (isCoreTag(ns, ln, WHEN)) {
 		    chooseHasWhen.pop();
-		    chooseHasWhen.push(new Boolean(true));
+		    chooseHasWhen.push(Boolean.TRUE);
 		}
 
 		// ensure <choose> has the right children
@@ -187,7 +187,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		}
 		if (isCoreTag(ns, ln, OTHERWISE)) {
 		    chooseHasOtherwise.pop();
-		    chooseHasOtherwise.push(new Boolean(true));
+		    chooseHasOtherwise.push(Boolean.TRUE);
 		}
 
 	    }
@@ -216,8 +216,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    // we're a choose, so record new choose-specific state
 	    if (isCoreTag(ns, ln, CHOOSE)) {
 		chooseDepths.push(new Integer(depth));
-		chooseHasWhen.push(new Boolean(false));
-		chooseHasOtherwise.push(new Boolean(false));
+		chooseHasWhen.push(Boolean.FALSE);
+		chooseHasOtherwise.push(Boolean.FALSE);
 	    }
 
 	    // if we're introducing a URL-related tag, record it

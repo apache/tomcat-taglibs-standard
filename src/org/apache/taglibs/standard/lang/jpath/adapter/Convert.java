@@ -90,7 +90,7 @@ public class Convert {
         Boolean converted;
         o = performBasicConversions(o);
         if (o == null) {
-            converted = new Boolean(false);
+            converted = Boolean.FALSE;
         } else if (o instanceof Boolean) {
             converted = toBoolean((Boolean)o);
         } else if (o instanceof Double) {
@@ -116,11 +116,11 @@ public class Convert {
     private static Boolean toBoolean(Double d) throws ConversionException {
         Boolean converted;
         if (d == null) {
-            converted = new Boolean(false);
+            converted = Boolean.FALSE;
         } else if (!d.isNaN() && d.doubleValue() != 0 && d.doubleValue() != -0) {
-            converted = new Boolean(true);
+            converted = Boolean.TRUE;
         } else {
-            converted = new Boolean(false);
+            converted = Boolean.FALSE;
         }
         return converted;
     }
@@ -128,11 +128,11 @@ public class Convert {
     private static Boolean toBoolean(String s) throws ConversionException {
         Boolean converted;
         if (s == null) {
-            converted = new Boolean(false);
+            converted = Boolean.FALSE;
         } else if (s.length() != 0) {
-            converted = new Boolean(true);
+            converted = Boolean.TRUE;
         } else {
-            converted = new Boolean(false);
+            converted = Boolean.FALSE;
         }
         return converted;
     }
@@ -146,14 +146,14 @@ public class Convert {
     private static Boolean toBoolean(JSPList list) throws ConversionException {
         Boolean converted;
         if (list == null || !list.hasNext()) {
-            converted = new Boolean(false);
+            converted = Boolean.FALSE;
         } else {
             if (list.getPosition() != 0) {
                 throw new ConversionException("cannot convert a list to "
                         + "a Boolean if the list is not at the starting "
                         + "position" );
             }
-            converted = new Boolean(true);
+            converted = Boolean.TRUE;
         }
         return converted;
     }

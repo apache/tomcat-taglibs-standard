@@ -166,7 +166,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
                 // mark <choose> for the first the first <when>
                 if (isXmlTag(ns, ln, WHEN)) {
                     chooseHasWhen.pop();
-                    chooseHasWhen.push(new Boolean(true));
+                    chooseHasWhen.push(Boolean.TRUE);
                 }
 
 		// ensure <choose> has the right children
@@ -182,7 +182,7 @@ public class JstlXmlTLV extends JstlBaseTLV {
 		}
 		if (isXmlTag(ns, ln, OTHERWISE)) {
 		    chooseHasOtherwise.pop();
-		    chooseHasOtherwise.push(new Boolean(true));
+		    chooseHasOtherwise.push(Boolean.TRUE);
 		}
 
 	    }
@@ -204,8 +204,8 @@ public class JstlXmlTLV extends JstlBaseTLV {
 	    // we're a choose, so record new choose-specific state
 	    if (isXmlTag(ns, ln, CHOOSE)) {
 		chooseDepths.push(new Integer(depth));
-                chooseHasWhen.push(new Boolean(false));
-		chooseHasOtherwise.push(new Boolean(false));
+                chooseHasWhen.push(Boolean.FALSE);
+		chooseHasOtherwise.push(Boolean.FALSE);
 	    }
 
 	    // set up a check against illegal attribute/body combinations
