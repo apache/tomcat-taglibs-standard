@@ -137,8 +137,8 @@
               tofile="${build.examples}/WEB-INF/scriptfree.tld"/>
     -->
     <!-- Copy the 'standard' jar files -->
-    <copy file="${dist.library}/jstl.jar"
-              tofile="${build.examples}/WEB-INF/lib/jstl.jar"/>
+    <copy file="${dist.library}/standard.jar"
+              tofile="${build.examples}/WEB-INF/lib/standard.jar"/>
     <javac srcdir="${examples.src}" destdir="${build.examples}/WEB-INF/classes"
         classpath="${servlet23.jar}:${build.library}"/>
   </target>
@@ -209,10 +209,10 @@
   <!-- Create the library distribution files -->
   <target name="library-dist" depends="library">
     <!-- Create the tag library jar -->
-    <jar jarfile="${dist.library}/jstl.jar"
+    <jar jarfile="${dist.library}/standard.jar"
          basedir="${build.library}"/>
     <!-- Create the 'standard' API jar -->
-    <jar jarfile="${dist.library}/jstl-api.jar"
+    <jar jarfile="${dist.library}/jstl.jar"
          basedir="${build.library}"
          includes="javax/**"/>
     <copy todir="${dist.dir}/${taglib.name}">
