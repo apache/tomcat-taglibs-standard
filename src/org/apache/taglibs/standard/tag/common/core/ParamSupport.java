@@ -57,10 +57,13 @@ package org.apache.taglibs.standard.tag.common.core;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.io.*;
+
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import java.net.URLEncoder;
+
 import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.tag.common.core.Util;
 
 /**
  * <p>Support for tag handlers for &lt;param&gt;, the URL parameter
@@ -71,12 +74,6 @@ import org.apache.taglibs.standard.resources.Resources;
  */
 
 public abstract class ParamSupport extends BodyTagSupport {
-
-    //*********************************************************************
-    // Private constants
-
-    private static final Class[] URL_ENCODER_PARAM_TYPES =
-	new Class[] { String.class, String.class };
 
     //*********************************************************************
     // Protected state
@@ -92,25 +89,7 @@ public abstract class ParamSupport extends BodyTagSupport {
     protected boolean encode = true;
 
     //*********************************************************************
-    // Private state
-
-    private static Method encodeMethod1_4 = null;
-
-    //*********************************************************************
     // Constructor and initialization
-
-    // URLEncoder.encode(String) has been deprecated in J2SE 1.4. 
-    // Take advantage of the new method URLEncoder.encode(String, enc)
-    // if J2SE 1.4 is used.
-    static {
-	try {
-	    Class urlEncoderClass = Class.forName("java.net.URLEncoder");
-	    encodeMethod1_4 = 
-                urlEncoderClass.getMethod(
-                    "encode",
-		    new Class[] {String.class, String.class});
-        } catch (Exception ex) {} // encodeMethod1_4 will be null if exception
-    }
 
     public ParamSupport() {
 	super();
@@ -120,7 +99,6 @@ public abstract class ParamSupport extends BodyTagSupport {
     private void init() {
 	name = value = null;
     }
-
 
     //*********************************************************************
     // Tag logic
@@ -145,29 +123,14 @@ public abstract class ParamSupport extends BodyTagSupport {
 	    else
 		value = bodyContent.getString().trim();
 	}
-	if (encode) {
-            if (encodeMethod1_4 != null) {
-	        Object[] methodArgsName = new Object[2];
-	        methodArgsName[0] = name;
-	        methodArgsName[1] = pageContext.getResponse().getCharacterEncoding();
-	        Object[] methodArgsValue = new Object[2];
-	        methodArgsValue[0] = value;
-	        methodArgsValue[1] = pageContext.getResponse().getCharacterEncoding();
-	        
-                try {
-                    parent.addParameter(
-                    (String)encodeMethod1_4.invoke(null, methodArgsName),
-                    (String)encodeMethod1_4.invoke(null, methodArgsValue));  
-                } catch (Exception ex) {
-                    throw new JspException("System error invoking URLEncoder.encode() by reflection.", ex);
-                }
-            } else {
-                // must use J2SE 1.3 version
-	        parent.addParameter(
-		    URLEncoder.encode(name), URLEncoder.encode(value));
-            }
-	} else {
-	    parent.addParameter(name, value);
+        if (encode) {
+            // FIXME: revert to java.net.URLEncoder.encode(s, enc) once
+            // we have a dependency on J2SE 1.4+.
+            String enc = pageContext.getResponse().getCharacterEncoding();
+            parent.addParameter(
+            Util.URLEncode(name, enc), Util.URLEncode(value, enc));
+        } else {
+            parent.addParameter(name, value);
         }
 	return EVAL_PAGE;
     }
