@@ -6,14 +6,14 @@
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>scriptfree</short-name>
-  <uri>http://jakarta.apache.org/taglibs/jsptl/scriptfree</uri>
+  <uri>http://jakarta.apache.org/taglibs/standard/scriptfree</uri>
   <description>
     Validates JSP pages to prohibit use of scripting elements.
   </description>
 
   <validator>
     <validator-class>
-	org.apache.taglibs.standard.tlv.ScriptFreeTLV
+	javax.servlet.jsp.jstl.tlv.ScriptFreeTLV
     </validator-class>
     <init-param>
       <param-name>allowDeclarations</param-name>

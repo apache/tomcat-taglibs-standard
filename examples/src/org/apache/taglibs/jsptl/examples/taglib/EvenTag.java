@@ -71,10 +71,10 @@ public class EvenTag extends TagSupport {
     // TagSupport methods
     
     public int doStartTag() throws JspException {
-        IteratorTag iteratorTag = (IteratorTag)findAncestorWithClass(
-        this, IteratorTag.class);
+        LoopTag iteratorTag = (LoopTag)findAncestorWithClass(
+        this, LoopTag.class);
         if (iteratorTag == null) {
-            throw new JspTagException("<even> must be nested within an IteratorTag");
+            throw new JspTagException("<even> must be nested within a LoopTag");
         }
         
         int count = iteratorTag.getIteratorStatus().getCount();

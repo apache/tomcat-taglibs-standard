@@ -79,15 +79,17 @@ public abstract class ParseSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected Object source;                       // 'source' attribute
+    protected Object xmlText;                      // 'xmlText' attribute
+    protected String xmlUrl;                       // 'xmlUrl' attribute
     protected XMLFilter filter;			   // 'filter' attribute
 
     //*********************************************************************
     // Private state
 
     private String var;                            // 'var' attribute
-    private String domVar;			   // 'domVar' attribute
+    private String varDom;			   // 'varDom' attribute
     private int scope;				   // processed 'scope' attr
+    private int scopeDom;			   // processed 'scopeDom' attr
 
     // state in support of XML parsing...
     private DocumentBuilderFactory dbf;
@@ -105,13 +107,16 @@ public abstract class ParseSupport extends BodyTagSupport {
     }
 
     private void init() {
-	source = var = null;
+	var = varDom = null;
+	xmlText = null;
+	xmlUrl = null;
 	filter = null;
 	dbf = null;
 	db = null;
 	tf = null;
 	th = null;
 	scope = PageContext.PAGE_SCOPE;
+	scopeDom = PageContext.PAGE_SCOPE;
     }
 
 
@@ -140,35 +145,34 @@ public abstract class ParseSupport extends BodyTagSupport {
             th = stf.newTransformerHandler();
 	}
 
-	// if we haven't gotten a source, use the body (which may be empty)
-	Object source = this.source;
-	if (source == null)
-	    source = bodyContent.getString();
-
-	// now, parse the document into 'd'
+	// produce a Document by parsing whatever the attributes tell us to use
 	Document d;
-	if (filter == null) {
-	    if (source instanceof Reader)
-	        d = parseReader((Reader)source);
-	    else if (source instanceof String)
-		d = parseString((String)source);
+	Object xmlText = this.xmlText;
+	if (xmlText == null && xmlUrl == null) {
+	    // if neither attribute was specified, use the body as 'xmlText'
+	    if (bodyContent != null && bodyContent.getString() != null)
+		xmlText = bodyContent.getString().trim();
 	    else
-		throw new JspTagException(
-		    Resources.getMessage("PARSE_INVALID_SOURCE"));
-	} else {
-	    if (source instanceof Reader)
-		d = parseReaderWithFilter((Reader)source, filter);
-	    else if (source instanceof String)
-		d = parseStringWithFilter((String)source, filter);
+		xmlText = "";
+	}
+	if (xmlUrl != null)
+	    d = parseURLWithFilter(xmlUrl, filter);
+	else {
+	    if (xmlText instanceof String)
+		d = parseStringWithFilter((String) xmlText, filter);
+	    else if (xmlText instanceof Reader)
+		d = parseReaderWithFilter((Reader) xmlText, filter);
 	    else
 		throw new JspTagException(
 		    Resources.getMessage("PARSE_INVALID_SOURCE"));
 	}
 
 	// we've got a Document object; store it out as appropriate
-	pageContext.setAttribute(var, d, scope);
-	if (domVar != null)
-	    pageContext.setAttribute(domVar, d, scope);
+	// (let any exclusivity or other constraints be enforced by TEI/TLV)
+	if (var != null)
+	    pageContext.setAttribute(var, d, scope);
+	if (varDom != null)
+	    pageContext.setAttribute(varDom, d, scopeDom);
 
 	return EVAL_PAGE;
       } catch (SAXException ex) {
@@ -191,9 +195,56 @@ public abstract class ParseSupport extends BodyTagSupport {
     //*********************************************************************
     // Private utility methods
 
+    /** Parses the given InputSource after, applying the given XMLFilter. */
+    private Document parseInputSourceWithFilter(InputSource s, XMLFilter f)
+            throws SAXException, IOException {
+	if (f != null) {
+            // prepare an output Document
+            Document o = db.newDocument();
+
+            // use TrAX to adapt SAX events to a Document object
+            th.setResult(new DOMResult(o));
+            XMLReader xr = XMLReaderFactory.createXMLReader();
+            //   (note that we overwrite the filter's parent.  this seems
+            //    to be expected usage.  we could cache and reset the old
+            //    parent, but you can't setParent(null), so this wouldn't
+            //    be perfect.)
+            f.setParent(xr);
+            f.setContentHandler(th);
+            f.parse(s);
+            return o;
+	} else
+	    return parseInputSource(s);	
+    }
+
+    /** Parses the given Reader after applying the given XMLFilter. */
+    private Document parseReaderWithFilter(Reader r, XMLFilter f)
+            throws SAXException, IOException {
+	return parseInputSourceWithFilter(new InputSource(r), f);
+    }
+
+    /** Parses the given String after applying the given XMLFilter. */
+    private Document parseStringWithFilter(String s, XMLFilter f)
+            throws SAXException, IOException {
+        StringReader r = new StringReader(s);
+        return parseReaderWithFilter(r, f);
+    }
+
+    /** Parses the given Reader after applying the given XMLFilter. */
+    private Document parseURLWithFilter(String url, XMLFilter f)
+            throws SAXException, IOException {
+	return parseInputSourceWithFilter(new InputSource(url), f);
+    }
+
+    /** Parses the given InputSource into a Document. */
+    private Document parseInputSource(InputSource s)
+	    throws SAXException, IOException {
+	return db.parse(s);
+    }
+
     /** Parses the given Reader into a Document. */
     private Document parseReader(Reader r) throws SAXException, IOException {
-        return db.parse(new InputSource(r));
+        return parseInputSource(new InputSource(r));
     }
 
     /** Parses the given String into a Document. */
@@ -202,30 +253,9 @@ public abstract class ParseSupport extends BodyTagSupport {
         return parseReader(r);
     }
 
-    /** Parses the given Reader after applying the given XMLFilter. */
-    private Document parseReaderWithFilter(Reader r, XMLFilter f)
-            throws SAXException, IOException {
-        // prepare an output Document
-        Document o = db.newDocument();
-
-        // use TrAX to adapt SAX events to a Document object
-        th.setResult(new DOMResult(o));
-        XMLReader xr = XMLReaderFactory.createXMLReader();
-        //   (note that we overwrite the filter's parent.  this seems
-        //    to be expected usage.  we could cache and reset the old
-        //    parent, but you can't setParent(null), so this wouldn't
-        //    be perfect.)
-        f.setParent(xr);
-        f.setContentHandler(th);
-        f.parse(new InputSource(r));
-        return o;
-    }
-
-    /** Parses the given String after applying the given XMLFilter. */
-    private Document parseStringWithFilter(String s, XMLFilter f)
-            throws SAXException, IOException {
-        StringReader r = new StringReader(s);
-        return parseReaderWithFilter(r, f);
+    /** Parses the URL (passed as a String) into a Document. */
+    private Document parseURL(String url) throws SAXException, IOException {
+	return parseInputSource(new InputSource(url));
     }
 
 
@@ -236,11 +266,15 @@ public abstract class ParseSupport extends BodyTagSupport {
 	this.var = var;
     }
 
-    public void setDomVar(String domVar) {
-	this.domVar = domVar;
+    public void setVarDom(String varDom) {
+	this.varDom = varDom;
     }
 
     public void setScope(String scope) {
 	this.scope = Util.getScope(scope);
+    }
+
+    public void setScopeDom(String scopeDom) {
+	this.scopeDom = Util.getScope(scopeDom);
     }
 }

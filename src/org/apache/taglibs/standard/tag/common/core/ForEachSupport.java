@@ -60,12 +60,12 @@ import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import java.sql.ResultSet;
-import javax.servlet.jsp.jstl.core.IteratorTagSupport;
+import javax.servlet.jsp.jstl.core.LoopTagSupport;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>Support for tag handlers for &lt;forEach&gt;, the core iteration
- * tag in JSTL 1.0.  This class extends IteratorTagSupport and provides
+ * tag in JSTL 1.0.  This class extends LoopTagSupport and provides
  * ForEach-specific functionality.  The rtexprvalue library and the
  * expression-evaluating library each have handlers that extend this
  * class.</p>
@@ -73,14 +73,14 @@ import org.apache.taglibs.standard.resources.Resources;
  * <p>Localized here is the logic for handling the veritable smorgasbord
  * of types supported by &lt;forEach&gt;, including arrays,
  * Collections, and others.  To see how the actual iteration is controlled,
- * review the javax.servlet.jsp.jstl.core.IteratorTagSupport class instead.
+ * review the javax.servlet.jsp.jstl.core.LoopTagSupport class instead.
  * </p>
  *
- * @see javax.servlet.jsp.jstl.core.IteratorTagSupport
+ * @see javax.servlet.jsp.jstl.core.LoopTagSupport
  * @author Shawn Bayern
  */
 
-public abstract class ForEachSupport extends IteratorTagSupport {
+public abstract class ForEachSupport extends LoopTagSupport {
 
     //*********************************************************************
     // Implementation overview
@@ -90,7 +90,7 @@ public abstract class ForEachSupport extends IteratorTagSupport {
      * to support the various types that the <forEach> tag handles.  The
      * class is organized around the private ForEachIterator interface,
      * which serves as the basis for relaying information to the iteration
-     * implementation we inherit from IteratorTagSupport.
+     * implementation we inherit from LoopTagSupport.
      *
      * We expect to receive our 'items' from one of our subclasses
      * (presumably from the rtexprvalue or expression-evaluating libraries).
@@ -98,7 +98,7 @@ public abstract class ForEachSupport extends IteratorTagSupport {
      * iteration indices, in line with the spec draft.  From doStartTag(),
      * we analyze and 'digest' the data we're passed.  Then, we simply
      * relay items as necessary to the iteration implementation that
-     * we inherit from IteratorTagSupport.
+     * we inherit from LoopTagSupport.
      */
 
 
@@ -155,6 +155,8 @@ public abstract class ForEachSupport extends IteratorTagSupport {
     //*********************************************************************
     // Iteration control methods (based on processed 'items' object)
 
+    // (We inherit semantics and Javadoc from LoopTagSupport.)
+
     protected boolean hasNext() throws JspTagException {
         return items.hasNext();
     }
@@ -163,23 +165,7 @@ public abstract class ForEachSupport extends IteratorTagSupport {
         return items.next();
     }
 
-
-    //*********************************************************************
-    // Tag logic and lifecycle management
-
-    // Releases any resources we may have (or inherit)
-    public void release() {
-        super.release();
-        items = null;
-        rawItems = null;
-    }
-
-    /*
-     * Produces and stores an appropriate ForEachIterator and performs
-     * some custom checks, then defers to the parent's implementation.
-     */
-    public int doStartTag() throws JspException {
-
+    protected void prepare() throws JspTagException {
         // produce the right sort of ForEachIterator
         if (rawItems != null) {
             // extract an iterator over the 'items' we've got
@@ -193,9 +179,17 @@ public abstract class ForEachSupport extends IteratorTagSupport {
         if (rawItems instanceof ResultSet && step != 1)
             throw new JspTagException(
 		Resources.getMessage("FOREACH_STEP_NO_RESULTSET"));
+    }
 
-        // now we're ready...
-        return super.doStartTag();
+
+    //*********************************************************************
+    // Tag logic and lifecycle management
+
+    // Releases any resources we may have (or inherit)
+    public void release() {
+        super.release();
+        items = null;
+        rawItems = null;
     }
 
 

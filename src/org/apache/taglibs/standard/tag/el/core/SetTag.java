@@ -130,10 +130,10 @@ public class SetTag extends BodyTagSupport {
 		throw new NullAttributeException("set", "value");
 	} else {
 	    // ... retrieving and trimming our body
-	    String bcs = getBodyContent().getString();
-	    if (bcs == null || (result = bcs.trim()).equals(""))
-		throw new JspTagException(
-		    Resources.getMessage("SET_NO_VALUE"));
+	    if (bodyContent == null || bodyContent.getString() == null)
+		result = "";
+	    else
+		result = bodyContent.getString().trim();
 	}
 
 	/*

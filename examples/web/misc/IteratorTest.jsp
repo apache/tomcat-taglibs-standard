@@ -25,7 +25,7 @@
 
 <h4>Iteration with only begin specified (with items): begin="2"</h4>
 
-<c:forEach var="i" items="$customers" begin="2" status="status">
+<c:forEach var="i" items="$customers" begin="2" varStatus="status">
   index: <c:expr value="$status.index"/> &#149; 
   count: <c:expr value="$status.count"/> &#149; 
   item: <c:expr value="$i"/><br>
@@ -33,7 +33,7 @@
 
 <h4>Iteration with only end specified (with items): end="1"</h4>
 
-<c:forEach var="i" items="$customers" end="1" status="status">
+<c:forEach var="i" items="$customers" end="1" varStatus="status">
   index: <c:expr value="$status.index"/> &#149; 
   count: <c:expr value="$status.count"/> &#149; 
   item: <c:expr value="$i"/><br>

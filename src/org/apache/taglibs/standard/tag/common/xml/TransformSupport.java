@@ -56,6 +56,7 @@
 package org.apache.taglibs.standard.tag.common.xml;
 
 import java.io.*;
+import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.xml.parsers.*;
@@ -77,9 +78,10 @@ public abstract class TransformSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected Object source;                       // 'source' attribute
-    protected Object xslt;			   // 'xslt attribute
-    protected Transformer transformer;		   // 'transformer' attribute
+    protected Object xmlText;                       // 'xmlText' attribute
+    protected String xmlUrl;			    // 'xmlUrl' attribute
+    protected Object xsltText;			    // 'xsltText' attribute
+    protected String xsltUrl;			    // 'xsltUrl' attribute
     protected Result result;			   // 'result' attribute
 
     //*********************************************************************
@@ -101,9 +103,8 @@ public abstract class TransformSupport extends BodyTagSupport {
     }
 
     private void init() {
-	source = null;
-	xslt = null;
-	transformer = null;
+	xmlText = xsltText = null;
+	xmlUrl = xsltUrl = null;
 	var = null;
 	result = null;
 	tf = null;
@@ -130,18 +131,18 @@ public abstract class TransformSupport extends BodyTagSupport {
             tf = TransformerFactory.newInstance();
 
 	//************************************
-	// Determine transformer
+	// Produce transformer
 
-	// we can assume only one of 'xslt' or 'transformer' is specified
-	if (transformer != null)
-	    t = transformer;
-	else {
-	    // assume 'xslt'
-	    if (xslt == null)
-		throw new JspTagException(
-		    Resources.getMessage("TRANSFORM_NO_TRANSFORMER"));
-	    t = tf.newTransformer(getSource(xslt));
-	}
+	// we can assume exactly one of 'xsltText' or 'xsltUrl' is specified
+	Source s;
+	if (xsltUrl != null)
+	    s = getSource(xsltUrl, true);
+	else if (xsltText != null)
+	    s = getSource(xsltText, false);
+	else
+	    throw new JspTagException(
+	        Resources.getMessage("TRANSFORM_NO_TRANSFORMER"));
+        t = tf.newTransformer(s);
 
 	return EVAL_BODY_BUFFERED;
 
@@ -150,8 +151,8 @@ public abstract class TransformSupport extends BodyTagSupport {
       }
     }
 
-    // parse 'source' or body, transform via 'xslt' or 'transformer',
-    // store as 'var' or 'result'
+    // parse 'xmlText', 'xmlUrl', or body, transform via our Transformer,
+    // and store as 'var' or 'result'
     public int doEndTag() throws JspException {
       try {
 
@@ -166,12 +167,17 @@ public abstract class TransformSupport extends BodyTagSupport {
 	// Determine source XML
 
 	// if we haven't gotten a source, use the body (which may be empty)
-	Object source = this.source;
-	if (source == null)
-	    source = bodyContent.getString();
+	Object xml = xmlUrl;
+	if (xml == null)
+	    xml = xmlText;
+	if (xml == null)				// still equal
+	    if (bodyContent != null && bodyContent.getString() != null)
+	        xml = bodyContent.getString().trim();
+	    else
+		xml = "";
 
 	// let the Source be with you
-	Source xml = getSource(source);
+	Source source = getSource(xml, xmlUrl != null);
 
 	//************************************
 	// Conduct the transformation
@@ -179,12 +185,12 @@ public abstract class TransformSupport extends BodyTagSupport {
 	// we can assume at most one of 'var' or 'result' is specified
 	if (result != null)
 	    // we can write directly to the Result
-	    t.transform(xml, result);
+	    t.transform(source, result);
 	else if (var != null) {
 	    // we need a Document
 	    Document d = db.newDocument();
 	    Result doc = new DOMResult(d);
-	    t.transform(xml, doc);
+	    t.transform(source, doc);
 	    pageContext.setAttribute(var, d, scope);
 	} else {
 	 ////
@@ -202,7 +208,7 @@ public abstract class TransformSupport extends BodyTagSupport {
 
 	    Result page =
 		new StreamResult(new SafeWriter(pageContext.getOut()));
-	    t.transform(xml, page);
+	    t.transform(source, page);
 	}
 
 	return EVAL_PAGE;
@@ -231,19 +237,46 @@ public abstract class TransformSupport extends BodyTagSupport {
 
 
     //*********************************************************************
-    // Public utility methods
+    // Utility methods for package
 
     /**
      * Retrieves a Source from the given Object, whether it be a String,
-     * Reader, or Source (the latter of which simply results in an identity).
-     * A null input results in a null output.
+     * Reader, Node, or other supported types (even a Source already).
+     * If 'url' is true, then we must be passed a String and will interpret
+     * it as a URL.  A null input always results in a null output.
      */
-    public static Source getSource(Object o) {
-	if (o == null || o instanceof Source)
+    static Source getSource(Object o, boolean url) {
+	if (o == null) {
 	    return null;
-	if (o instanceof String)
-	    o = new StringReader((String)o);
-	return new StreamSource((Reader)o);
+	}
+
+	if (url) {
+	    return new StreamSource((String) o);
+	} else {
+          if (o instanceof Source) {
+	      return (Source) o;
+          } else if (o instanceof String) {
+	      Reader s = new StringReader((String) o);
+	      return new StreamSource(s);
+          } else if (o instanceof Reader) {
+	      return new StreamSource((Reader) o);
+          } else if (o instanceof Node) {
+	      return new DOMSource((Node) o);
+          } else if (o instanceof List) {
+	      // support 1-item List because our XPath processor outputs them	
+	      List l = (List) o;
+	      if (l.size() == 1) {
+	          return getSource(l.get(0), false);		// unwrap List
+	      } else {
+	          throw new IllegalArgumentException(
+                    Resources.getMessage("TRANSFORM_SOURCE_INVALID_LIST"));
+	      }
+          } else {
+	      throw new IllegalArgumentException(
+		  Resources.getMessage("TRANSFORM_SOURCE_UNRECOGNIZED")
+		  + o.getClass());
+	  }
+	}
     }
 
 

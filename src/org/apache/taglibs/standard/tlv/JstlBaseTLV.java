@@ -92,6 +92,7 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     private final String EXP_ATT_PARAM = "expressionAttributes";
 
     // attributes
+    protected static final String VAR = "var";
     protected static final String SCOPE = "scope";  
 
     //scopes
@@ -238,6 +239,11 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
 	    return false;
 
         return true;
+    }
+
+    // returns true if the 'scope' attribute is present without 'var'
+    protected boolean hasDanglingScope(Attributes a) {
+	return (a.getValue(SCOPE) != null && a.getValue(VAR) == null);
     }
 
     // retrieves the local part of a QName

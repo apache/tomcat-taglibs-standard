@@ -80,7 +80,7 @@ import javax.servlet.jsp.tagext.*;
  *       of subset parameters for sensibility)
  *  <li> item retrieval (getCurrent())
  *  <li> status retrieval (LoopTagStatus)
- *  <li> exposing attributes (set by 'var' and 'status' attributes)
+ *  <li> exposing attributes (set by 'var' and 'varStatus' attributes)
  * </ul>
  *
  * <p>In providing support for these tasks, LoopTagSupport contains
@@ -114,11 +114,6 @@ public abstract class LoopTagSupport
      * is in the doStartTag() method of an EL-aware subclass.)
      */
 
-    /*-- No labels in EA2
-    ** 'label' attribute *
-    protected String label;
-    --*/
-
     /** Starting index ('begin' attribute) */
     protected int begin;
 
@@ -142,7 +137,7 @@ public abstract class LoopTagSupport
     protected boolean stepSpecified;
 
     /** Attribute-exposing control */
-    protected String itemId, statusId /*, itemType */;
+    protected String itemId, statusId;
 
 
     //*********************************************************************
@@ -166,12 +161,13 @@ public abstract class LoopTagSupport
      * a separate 'count' and increment it by 1 each round (as a minor
      * performance improvement).
      */
-    private LoopTagStatus status;           // our LoopTagStatus
+    private LoopTagStatus status;               // our LoopTagStatus
     private Object item;                        // the current item
     private int index;                          // the current internal index
     private int count;                          // the iteration count
     private boolean last;                       // current round == last one?
-
+    private Object oldItem, oldStatus;		// variables we overwrite
+    private int oldItemScope, oldStatusScope;	// scopes of these variables
 
     //*********************************************************************
     // Constructor
@@ -222,7 +218,7 @@ public abstract class LoopTagSupport
      *
      * @return <tt>true</tt> if there is at least one more item to iterate
      *         over, <tt>false</tt> otherwise
-     * @exception javax.servlet.jspTagException
+     * @exception javax.servlet.JspTagException
      * @see #next
      */
     protected abstract boolean hasNext() throws JspTagException;
@@ -233,7 +229,7 @@ public abstract class LoopTagSupport
      * Subclasses can assume that prepare() will be called once for
      * each invocation of doStartTag() in the superclass.</p>
      *
-     * @exception javax.servlet.jspTagException
+     * @exception javax.servlet.JspTagException
      */
     protected abstract void prepare() throws JspTagException;
 
@@ -247,7 +243,7 @@ public abstract class LoopTagSupport
         init();
     }
 
-    /* Begins iterating by processing the first item. */
+    // Begins iterating by processing the first item.
     public int doStartTag() throws JspException {
 
         // make sure 'begin' isn't greater than 'end'
@@ -258,6 +254,35 @@ public abstract class LoopTagSupport
         index = 0;
         count = 1;
         last = false;
+
+	// save old 'items' and 'status' if applicable
+	/* (Note that we are somewhat anal-retentive and record the
+         * scope of the variable we overwrite.  If the container attribute
+         * truly implements scoped attributes as a single namespace,
+	 * this may become important.  Ultimately, either findAttribute()
+	 * will stop at 'page' and this won't make a different, or it
+	 * will stop at something OTHER than 'page'.  If we find a variable
+         * outside page scope, we know that there was no variable of the
+         * same name WITHIN page scope, because of findAttribute()'s
+         * semantics.  Therefore, if we save this attribute, we know we're
+         * not missing anything in 'page'.  Thus, we are prepared for a
+         * container that overwrites a 'session'-scoped attribute on a
+         * call to setAttribute() to establish a 'page'-scoped attribute -- 
+         * which I believe is a legal implementation of setAttribute().
+         * If a user sets a session-scoped variable of the same name as
+         * itemId or statusId within her <c:forEach> loop, however, this
+         * could lead to some pretty unusual behavior.  I have opted to
+         * stick with section JSP2.8.2 of the JSP spec instead of to
+         * assume a page author will ignore this section.)
+         */
+	if (itemId != null) {
+	    oldItem = pageContext.findAttribute(itemId);
+	    oldItemScope = pageContext.getAttributesScope(itemId);
+	}
+	if (statusId != null) {
+	    oldStatus = pageContext.findAttribute(statusId);
+	    oldStatusScope = pageContext.getAttributesScope(statusId);
+	}
 
         // let the subclass conduct any necessary preparation
         prepare();
@@ -322,12 +347,8 @@ public abstract class LoopTagSupport
      */
     public void doFinally() {
 	/*
-	 * This always gets called, which introduces a minor danger:
-	 * we might destroy attributes we *didn't* set if an exception
-	 * stops us before we set those attributes.  However, since our
-	 * setting of those attributes is destructive anyway (with respect
-	 * to attributes previously stored under the names we're directed
-	 * to use), this doesn't seem like a problem.
+	 * Make sure to un-expose variables, restoring them to their
+	 * prior values, if applicable.
          */
 	unExposeVariables();
     }
@@ -416,11 +437,6 @@ public abstract class LoopTagSupport
             public int getStep() {
                 return (step);
             }
-	    /*-- No labels in EA2
-            public String getLabel() {
-                return (label);
-            }
-	    --*/
         }
 
         /*
@@ -445,64 +461,16 @@ public abstract class LoopTagSupport
      * two incompatible setters, which is illegal for a JavaBean.
      */
 
-    /*-- No labels in EA2
-    // for tag attribute
-    public void setLabel(String label) {
-        this.label = label;
-    }
-    --*/
- 
     // for tag attribute
     public void setVar(String id) {
         this.itemId = id;
     }
 
-    /* NO LONGER NEEDED
     // for tag attribute
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
-    }
-    */
-
-    // for tag attribute
-    public void setStatus(String statusId) {
+    public void setVarStatus(String statusId) {
         this.statusId = statusId;
     }
 
-    //*********************************************************************
-    // Public static (utility) methods
-
-    /*-- No labels in EA2
-    **
-     * Locates the nearest ancestor LoopTag with the given label,
-     * starting at the Tag given as the 'base'.  If label is null, simply
-     * locates the nearest LoopTag ancestor to 'base'.
-     *
-     * @param  base   the Tag at which to start the search (that is, the
-     *                Tag whose ancestors to search)
-     * @param  label  the label to search for, or 'null' if any LoopTag
-     *                is suitable
-     *
-     * @return the LoopTag found, or 'null' if no matching LoopTag
-     * was found
-     *
-    public static LoopTag findIteratorAncestorWithLabel(
-            Tag base, String label) {
-
-        // find the first LoopTag ancestor
-        LoopTag it =
-            (LoopTag) findAncestorWithClass(base, LoopTag.class);
-
-        // if we want a specific label, search for it up the tree
-        while (it != null && label != null
-                && !label.equals(it.getIteratorStatus().getLabel())) {
-            it = (LoopTag) findAncestorWithClass(it, LoopTag.class);
-        }
-
-        // return what we've got (which might be null)
-        return it;
-    }
-    --*/
 
     //*********************************************************************
     // Protected utility methods
@@ -513,7 +481,7 @@ public abstract class LoopTagSupport
      * -- e.g., if you set them through an expression language.
      */
 
-    /*
+    /**
      * Ensures the "begin" property is sensible, throwing an exception
      * expected to propagate up if it isn't
      */
@@ -522,7 +490,7 @@ public abstract class LoopTagSupport
             throw new JspTagException("'begin' < 0");
     }
 
-    /*
+    /**
      * Ensures the "end" property is sensible, throwing an exception
      * expected to propagate up if it isn't
      */
@@ -531,7 +499,7 @@ public abstract class LoopTagSupport
             throw new JspTagException("'end' < 0");
     }
 
-    /*
+    /**
      * Ensures the "step" property is sensible, throwing an exception
      * expected to propagate up if it isn't
      */
@@ -544,7 +512,7 @@ public abstract class LoopTagSupport
     //*********************************************************************
     // Private utility methods
 
-    // (re)initializes state (during release() or construction)
+    /** (Re)initializes state (during release() or construction) */
     private void init() {
         // defaults for internal bookkeeping
         index = 0;              // internal index always starts at 0
@@ -555,17 +523,20 @@ public abstract class LoopTagSupport
         beginSpecified = false; // not specified until it's specified :-)
         endSpecified = false;   // (as above)
         stepSpecified = false;  // (as above)
+	oldItem = null;		// no page-variable saved
+	oldStatus = null;	// no page-variable saved
+	oldItemScope = 0;	// no page-variable saved
+	oldStatusScope = 0;	// no page-variable saved
 
         // defaults for interface with page author
         begin = 0;              // when not specified, 'begin' is 0 by spec.
         end = -1;               // when not specified, 'end' is not used
         step = 1;               // when not specified, 'step' is 1
         itemId = null;          // when not specified, no variable exported
-        // itemType = null;        // when not specified, no variable exported
         statusId = null;        // when not specified, no variable exported
     }
 
-    // sets 'last' appropriately
+    /** Sets 'last' appropriately. */
     private void calibrateLast() throws JspTagException {
         /*
          * the current round is the last one if (a) there are no remaining
@@ -575,7 +546,7 @@ public abstract class LoopTagSupport
             (end != -1 && (begin + index + step > end));
     }
 
-    /*
+    /**
      * Exposes attributes (formerly scripting variables, but no longer!)
      * if appropriate.  Note that we don't really care, here, whether they're
      * scripting variables or not.
@@ -585,7 +556,7 @@ public abstract class LoopTagSupport
         /*
          * We need to support null items returned from next(); we
          * do this simply by passing such non-items through to the
-         * scripting variable as 'null' (which we ensure by calling
+         * scoped variable as effectively 'null' (that is, by calling
          * removeAttribute()).
          *
          * Also, just to be defensive, we handle the case of a null
@@ -614,15 +585,26 @@ public abstract class LoopTagSupport
 
     }
 
-    // removes page attributes if appropriate
+    /**
+     * Removes page attributes that we have exposed and, if applicable,
+     * restores them to their prior values (and scopes).
+     */
     private void unExposeVariables() {
-	if (itemId != null)
-	    pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
-	if (statusId != null)
-	    pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
+	if (itemId != null) {
+	    if (oldItem == null)
+	        pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
+	    else
+		pageContext.setAttribute(itemId, oldItem, oldItemScope);
+	}
+	if (statusId != null) {
+	    if (oldStatus == null)
+		pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
+	    else
+		pageContext.setAttribute(statusId, oldStatus, oldStatusScope);
+	}
     }
 
-    /*
+    /**
      * Cycles through and discards up to 'n' items from the iteration.
      * We only know "up to 'n'", not "exactly n," since we stop cycling
      * if hasNext() returns false or if we hit the 'end' of the iteration.
@@ -648,7 +630,7 @@ public abstract class LoopTagSupport
         index = oldIndex;
     }
 
-    /*
+    /**
      * Discards items ignoring subsetting rules.  Useful for discarding
      * items from the beginning (i.e., to implement 'begin') where we
      * don't want factor in the 'begin' value already.
@@ -658,7 +640,7 @@ public abstract class LoopTagSupport
 	    next();
     }
 
-    /*
+    /**
      * Returns true if the iteration has past the 'end' index (with
      * respect to subsetting), false otherwise.  ('end' must be set
      * for atEnd() to return true; if 'end' is not set, atEnd()

@@ -60,7 +60,7 @@ import org.apache.commons.jxpath.servlet.JXPathServletContexts;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.lang.support.*;
-import javax.servlet.jsp.jstl.core.IteratorTag;
+import javax.servlet.jsp.jstl.core.LoopTag;
 import java.util.*;
 
 /**
@@ -102,7 +102,7 @@ public class JXPathExpressionEvaluator implements ExpressionEvaluator {
             JXPathContext context =
 		JXPathServletContexts.getPageContext(pageContext);
             Object result = null;
-            if ((tag instanceof IteratorTag) && attributeName.equals("items")) {
+            if ((tag instanceof LoopTag) && attributeName.equals("items")) {
                 List list = context.eval(expression);
                 if (list.size() == 1)
                     if (list.get(0) instanceof Map)

@@ -191,14 +191,4 @@ public interface LoopTagStatus {
      */
     public int getStep();
 
-/*-- No labels in EA2
-    **
-     * Returns the label of the associated tag.  This label identifies
-     * this tag (against other LoopTags in a nested chain) primarily
-     * for the benefit of subtags.
-     *
-     * @return the label of the associated tag
-     *
-    public String getLabel();
-*/
 }

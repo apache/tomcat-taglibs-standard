@@ -103,11 +103,11 @@ public abstract class ParamSupport extends BodyTagSupport {
 
 	Object value = this.value;
 	if (value == null) {
-            String bcs = getBodyContent().getString();
-            if (bcs == null || (value = bcs.trim()).equals(""))
-                throw new JspTagException(
-                    Resources.getMessage("PARAM_NO_VALUE"));
-	}
+            if (bodyContent == null || bodyContent.getString() == null)
+                value = "";
+            else
+                value = bodyContent.getString().trim();
+        }
 	parent.addParameter(name, value);
 	return EVAL_PAGE;
     }

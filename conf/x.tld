@@ -17,13 +17,14 @@
     <init-param>
 	<param-name>expressionAttributes</param-name>
 	<param-value>
-	    parse:source
+	    parse:xmlText
+	    parse:xmlUrl
 	    parse:filter
-	    transform:source
-	    transform:xslt
-	    transform:transformer
+	    transform:xmlText
+	    transform:xmlUrl
+	    transform:xsltText
+	    transform:xsltUrl
 	    transform:result
-	    transformer:xslt
 	</param-value>
 	<description>
 	    Whitespace-separated list of colon-separated token pairs
@@ -82,6 +83,16 @@
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+        <name>var</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>scope</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -136,17 +147,18 @@
   <tag>
     <name>parse</name>
     <tag-class>org.apache.taglibs.standard.tag.el.xml.ParseTag</tag-class>
+    <tei-class>org.apache.taglibs.standard.tei.XmlParseTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
 	Parses XML content from 'source' attribute or 'body'
     </description>
     <attribute>
         <name>var</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>domVar</name>
+        <name>varDom</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -156,7 +168,17 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>source</name>
+        <name>scopeDom</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>xmlText</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>xmlUrl</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -170,7 +192,7 @@
   <tag>
     <name>set</name>
     <tag-class>org.apache.taglibs.standard.tag.common.xml.SetTag</tag-class>
-    <body-content>JSP</body-content>
+    <body-content>empty</body-content>
     <description>
 	Saves the result of an XPath expression evaluation in a 'scope'
     </description>
@@ -194,11 +216,11 @@
   <tag>
     <name>transform</name>
     <tag-class>org.apache.taglibs.standard.tag.el.xml.TransformTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.TransformTEI</tei-class>
+    <tei-class>org.apache.taglibs.standard.tei.XmlTransformTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
 	Conducts a transformation given a source XML document
-	and an XSLT stylesheet (or Transformer object)
+	and an XSLT stylesheet
     </description>
     <attribute>
         <name>var</name>
@@ -216,41 +238,22 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>source</name>
+        <name>xmlText</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-	<name>xslt</name>
+        <name>xmlUrl</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>transformer</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-  </tag>
-
-  <tag>
-    <name>transformer</name>
-    <tag-class>org.apache.taglibs.standard.tag.el.xml.TransformerTag</tag-class>
-    <body-content>JSP</body-content>
-    <description>
-	Exposes a Transformer object
-    </description>
-    <attribute>
-        <name>var</name>
-        <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>scope</name>
+	<name>xsltText</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-	<name>xslt</name>
+	<name>xsltUrl</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>

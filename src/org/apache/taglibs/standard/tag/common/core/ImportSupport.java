@@ -73,7 +73,7 @@ import org.apache.taglibs.standard.resources.Resources;
  */
 
 public abstract class ImportSupport extends BodyTagSupport 
-        implements TryCatchFinally {
+        implements TryCatchFinally, ParamParent {
 
     //*********************************************************************
     // Public constants
@@ -229,15 +229,7 @@ public abstract class ImportSupport extends BodyTagSupport
     //*********************************************************************
     // Collaboration with subtags
 
-    /**
-     * Adds a parameter to this tag's URL.  The intent is that the
-     * &lt;param&gt; subtag will call this to register URL parameters.
-     * Assumes that 'name' and 'value' are appropriately encoded and do
-     * not contain any meaningful metacharacters; in order words, escaping
-     * is the responsibility of the caller.
-     *
-     * @see ParamSupport
-     */
+    // inherit Javadoc
     public void addParameter(String name, String value) {
 	// copy base url since we don't want to modify it
 	// (it might be an attribute)

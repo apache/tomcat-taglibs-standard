@@ -73,7 +73,8 @@ public class ParseTag extends ParseSupport {
     //*********************************************************************
     // 'Private' state (implementation details)
 
-    private String source_;                     // stores EL-based property
+    private String xmlText_;                    // stores EL-based property
+    private String xmlUrl_;                     // stores EL-based property
     private String filter_;			// stores EL-based property
 
 
@@ -120,8 +121,12 @@ public class ParseTag extends ParseSupport {
         this.filter_ = filter_;
     }
 
-    public void setSource(String source_) {
-        this.source_ = source_;
+    public void setXmlText(String xmlText_) {
+        this.xmlText_ = xmlText_;
+    }
+
+    public void setXmlUrl(String xmlUrl_) {
+        this.xmlUrl_ = xmlUrl_;
     }
 
 
@@ -131,7 +136,7 @@ public class ParseTag extends ParseSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	source_ = filter_ = null;
+	filter_ = xmlText_ = xmlUrl_ = null;
     }
 
     /* Evaluates expressions as necessary */
@@ -144,8 +149,10 @@ public class ParseTag extends ParseSupport {
          * propagate up.
          */
 
-	source = ExpressionUtil.evalNotNull(
-	    "parse", "source", source_, Object.class, this, pageContext);
+	xmlText = ExpressionUtil.evalNotNull(
+	    "parse", "xmlText", xmlText_, Object.class, this, pageContext);
+	xmlUrl = (String) ExpressionUtil.evalNotNull(
+	    "parse", "xmlUrl", xmlUrl_, String.class, this, pageContext);
 	filter = (XMLFilter) ExpressionUtil.evalNotNull(
 	    "parse", "filter", filter_, XMLFilter.class, this, pageContext);
     }

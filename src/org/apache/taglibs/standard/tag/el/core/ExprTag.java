@@ -164,12 +164,9 @@ public class ExprTag extends BodyTagSupport {
 	if (!needBody)
 	    return EVAL_PAGE;		// nothing more to do
 
-	// verify and print out the body
-        String bcs = getBodyContent().getString();
-        if (bcs == null || bcs.trim().equals(""))
-            throw new JspTagException(
-		Resources.getMessage("EXPR_BAD_VALUE", value));
-	getBodyContent().writeOut(pageContext.getOut());
+	// trim and print out the body
+	if (bodyContent != null && bodyContent.getString() != null)
+	    pageContext.getOut().print(bodyContent.getString().trim());
 	return EVAL_PAGE;
       } catch (IOException ex) {
 	throw new JspException(ex.getMessage(), ex);

@@ -205,6 +205,8 @@ public class JstlXmlTLV extends JstlBaseTLV {
             if (!hasNoInvalidScope(a))
                 fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
                     SCOPE, qn, a.getValue(SCOPE)));
+            if (hasDanglingScope(a))
+                fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 
 	    // check invariants for <choose>
 	    if (chooseChild()) {

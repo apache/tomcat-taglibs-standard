@@ -87,7 +87,7 @@ public class IfTag extends ConditionalTagSupport {
     //*********************************************************************
     // Supplied conditional logic
 
-    protected boolean condition() throws JspException {
+    protected boolean condition() throws JspTagException {
        try {
             XPathUtil xu = new XPathUtil(pageContext);
             return (xu.booleanValueOf(XPathUtil.getContext(this), select));

@@ -31,7 +31,7 @@
     <th>Array Value</th>
     <th>List Value</th>
   </tr>
-  <c:forEach var="i" begin="0" end="3" status="status">
+  <c:forEach var="i" begin="0" end="3" varStatus="status">
     <tr>
       <%-- demonstrating how to use expression to get index --%>
       <td><c:expr value="$i"/></td>

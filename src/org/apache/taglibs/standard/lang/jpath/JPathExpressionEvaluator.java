@@ -60,7 +60,7 @@ import org.apache.taglibs.standard.lang.jpath.expression.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*; 
 import org.apache.taglibs.standard.lang.support.*;
-import javax.servlet.jsp.jstl.core.IteratorTag;
+import javax.servlet.jsp.jstl.core.LoopTag;
 
 
 public class JPathExpressionEvaluator implements ExpressionEvaluator {
@@ -101,7 +101,7 @@ public class JPathExpressionEvaluator implements ExpressionEvaluator {
         Object result = null;
         IterationContext icontext = null;
 
-        IteratorTag parent = (IteratorTag) TagSupport.findAncestorWithClass(tag, IteratorTag.class);
+        LoopTag parent = (LoopTag) TagSupport.findAncestorWithClass(tag, LoopTag.class);
         if (parent == null) {
             icontext = null;
         } else {

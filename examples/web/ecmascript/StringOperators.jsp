@@ -20,7 +20,7 @@
     <th>Name</th>
     <th>Value</th>
   </tr>
-  <c:forEach var="i" begin="0" end="5" status="status">
+  <c:forEach var="i" begin="0" end="5" varStatus="status">
     <c:declare id="status" type="javax.servlet.jsp.jstl.core.IteratorTagStatus"/>
     <tr>
       <td>strArray[<c:expr value="$i"/>]</td>

@@ -55,7 +55,7 @@
 
 package org.apache.taglibs.standard.tag.el.core;
 
-import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
 import org.apache.taglibs.standard.tag.common.core.*;
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
@@ -90,13 +90,17 @@ public class IfTag extends ConditionalTagSupport {
     //*********************************************************************
     // Supplied conditional logic
 
-    protected boolean condition() throws JspException {
-        Object r = ExpressionEvaluatorManager.evaluate(
+    protected boolean condition() throws JspTagException {
+	try {
+            Object r = ExpressionEvaluatorManager.evaluate(
                 "test", test, Boolean.class, this, pageContext);
-       if (r == null)
-            throw new NullAttributeException("if", "test");
-	else
-	    return (((Boolean) r).booleanValue());
+            if (r == null)
+                throw new NullAttributeException("if", "test");
+	    else
+	        return (((Boolean) r).booleanValue());
+        } catch (JspException ex) {
+	    throw new JspTagException(ex.toString());
+	}
     }
 
 

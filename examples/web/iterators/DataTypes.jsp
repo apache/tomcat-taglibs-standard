@@ -28,7 +28,7 @@
 <h4>Properties (Map)</h4>
 
 <c:forEach var="prop" items="$numberMap" begin="1" end="5">
-  <c:expr value="$prop.key"/> = <jx:expr value="$prop.value"/><br>
+  <c:expr value="$prop.key"/> = <c:expr value="$prop.value"/><br>
 </c:forEach>
 
 <h4>String (Comma Separated Values)</h4>

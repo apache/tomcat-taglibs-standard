@@ -31,7 +31,11 @@
 	    forTokens:begin
 	    forTokens:end
 	    forTokens:step
+	    param:encode
+	    param:name
+	    param:value
 	    set:value
+	    urlEncode:value
 	    when:test
 	</param-value>
 	<description>
@@ -62,29 +66,6 @@
         mutually exclusive conditional operations, marked by
         &lt;when&gt; and &lt;otherwise&gt;
     </description>
-  </tag>
-
-  <tag>
-    <name>declare</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.core.DeclareTag</tag-class>
-    <tei-class>org.apache.taglibs.standard.tei.DeclareTEI</tei-class>
-    <body-content>empty</body-content>
-    <description>
-	Declares an scripting variable, initially defined by an
-	existing scoped attribute of the same name.  The type of the
-	variable defaults to java.lang.Object but can be modified
-	by using the 'type' attribute.
-    </description>
-    <attribute>
-        <name>id</name>
-        <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>type</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
   </tag>
 
   <tag>
@@ -141,6 +122,11 @@
     </attribute>
     <attribute>
         <name>var</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>scope</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -216,20 +202,13 @@
 	<required>false</required>
 	<rtexprvalue>false</rtexprvalue>
     </attribute>
-    <!-- No label in EA2
-    <attribute>
-	<name>label</name>
-	<required>false</required>
-	<rtexprvalue>false</rtexprvalue>
-    </attribute>
-    -->
     <attribute>
 	<name>var</name>
 	<required>false</required>
 	<rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-	<name>status</name>
+	<name>varStatus</name>
 	<required>false</required>
 	<rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -267,20 +246,13 @@
 	<required>false</required>
 	<rtexprvalue>false</rtexprvalue>
     </attribute>
-    <!-- No label in EA2
-    <attribute>
-	<name>label</name>
-	<required>false</required>
-	<rtexprvalue>false</rtexprvalue>
-    </attribute>
-    -->
     <attribute>
 	<name>var</name>
 	<required>false</required>
 	<rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-	<name>status</name>
+	<name>varStatus</name>
 	<required>false</required>
 	<rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -311,7 +283,7 @@
     </attribute>
     <attribute>
         <name>value</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>

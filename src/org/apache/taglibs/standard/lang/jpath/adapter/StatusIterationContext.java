@@ -56,13 +56,13 @@
 package org.apache.taglibs.standard.lang.jpath.adapter;
 
 import org.apache.taglibs.standard.lang.jpath.expression.*;
-import javax.servlet.jsp.jstl.core.IteratorTagStatus;
+import javax.servlet.jsp.jstl.core.LoopTagStatus;
 import javax.servlet.jsp.*;
 import java.util.*;
 
 public class StatusIterationContext implements IterationContext {
-    private IteratorTagStatus status;
-    public StatusIterationContext(IteratorTagStatus status) {
+    private LoopTagStatus status;
+    public StatusIterationContext(LoopTagStatus status) {
         this.status = status;
     }
     public Object getCurrent() {

@@ -55,6 +55,7 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
+import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import java.net.URLEncoder;
@@ -67,7 +68,8 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Shawn Bayern
  */
 
-public abstract class URLEncodeSupport extends BodyTagSupport {
+public abstract class URLEncodeSupport extends BodyTagSupport
+    implements ParamParent {
 
     //*********************************************************************
     // Protected state
@@ -79,6 +81,7 @@ public abstract class URLEncodeSupport extends BodyTagSupport {
 
     private String var;                          // 'var' attribute
     private int scope;				 // processed 'scope' attr
+    private Map params;				 // added parameters
 
     //*********************************************************************
     // Constructor and initialization
@@ -90,6 +93,7 @@ public abstract class URLEncodeSupport extends BodyTagSupport {
 
     private void init() {
 	value = var = null;
+	params = null;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -106,19 +110,51 @@ public abstract class URLEncodeSupport extends BodyTagSupport {
     }
 
     //*********************************************************************
+    // Collaboration with subtags
+
+    // inherit Javadoc
+    public void addParameter(String name, String value) {
+	params.put(name, value);
+    }
+
+    //*********************************************************************
     // Tag logic
+
+    // resets any parameters that might be sent
+    public int doStartTag() throws JspException {
+	params = new HashMap();
+	return EVAL_BODY_BUFFERED;
+    }
 
     // gets the right value, encodes it, and prints or stores it
     public int doEndTag() throws JspException {
-	String operand = null;
+	String operand = value;
 	// get operand from 'value' attribute or our body, as appropriate
-        if (value != null)
-	    operand = value;
-	else {
-	    String bcs = getBodyContent().getString();
-	    if (bcs == null || (operand = bcs.trim()).equals(""))
-		throw new JspTagException(
-		    Resources.getMessage("URLENCODE_NO_VALUE"));
+        if (operand  == null) {
+            if (bodyContent == null || bodyContent.getString() == null)
+                operand = "";
+            else
+                operand = bodyContent.getString().trim();
+        }
+
+	// add parameters
+	if (params != null) {
+	    // produce a StringBuffer containing all the parameters
+	    StringBuffer paramString = new StringBuffer();
+	    Iterator i = params.entrySet().iterator();
+	    while (i.hasNext()) {
+		Map.Entry e = (Map.Entry) i.next();
+		paramString.append(e.getKey() + "=" + e.getValue());
+		if (i.hasNext())
+		    paramString.append("&");
+	    }
+
+	    // append these parameters with a '?' or '&', as appropriate
+            boolean firstParameter = operand.indexOf('?') == -1;
+            if (firstParameter)
+		operand += "?" + paramString;
+            else
+		operand += "&" + paramString;
 	}
 
 	// encode the input

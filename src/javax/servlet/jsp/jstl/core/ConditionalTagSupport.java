@@ -93,7 +93,7 @@ public abstract class ConditionalTagSupport
      * @return a boolean representing the result of arbitrary logic
      *         that will be used to drive a tag's behavior
      */
-    protected abstract boolean condition() throws JspException;
+    protected abstract boolean condition() throws JspTagException;
 
 
     //*********************************************************************
@@ -140,6 +140,7 @@ public abstract class ConditionalTagSupport
 
     private boolean result;             // the saved result of condition()
     private String var;			// scoped attribute name
+    private int scope;			// scoped attribute scope
 
 
     //*********************************************************************
@@ -150,6 +151,17 @@ public abstract class ConditionalTagSupport
 	this.var = var;
     }
 
+    // for tag attribute
+    public void setScope(String scope) {
+	if (scope.equalsIgnoreCase("request"))
+	    this.scope = PageContext.REQUEST_SCOPE;
+	else if (scope.equalsIgnoreCase("session"))
+	    this.scope = PageContext.SESSION_SCOPE;
+	else if (scope.equalsIgnoreCase("application"))
+	    this.scope = PageContext.APPLICATION_SCOPE;
+	// TODO: Add error handling?  Needs direction from spec.
+    }
+
 
     //*********************************************************************
     // Utility methods
@@ -157,12 +169,13 @@ public abstract class ConditionalTagSupport
     // expose attributes if we have a non-null 'var'
     private void exposeVariables() {
         if (var != null)
-            pageContext.setAttribute(var, new Boolean(result));
+            pageContext.setAttribute(var, new Boolean(result), scope);
     }
 
     // initializes internal state
     private void init() {
         result = false;                 // not really necessary
 	var = null;
+	scope = PageContext.PAGE_SCOPE;
     }
 }

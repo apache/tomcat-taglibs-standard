@@ -53,7 +53,7 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tlv;
+package javax.servlet.jsp.jstl.tlv;
 
 import javax.servlet.jsp.tagext.TagLibraryValidator;
 import javax.servlet.jsp.tagext.PageData;
@@ -89,7 +89,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * indicating all forms of scripting elements are to be prohibited.</p>
  * 
  * @author <a href="mailto:mak@taglib.com">Mark A. Kolb</a>
- * @author Shawn Bayern
+ * @author Shawn Bayern (minor changes)
  */
 public class ScriptFreeTLV extends TagLibraryValidator {
   private boolean allowDeclarations = false;
@@ -108,6 +108,7 @@ public class ScriptFreeTLV extends TagLibraryValidator {
     factory.setValidating(false);
     factory.setNamespaceAware(true);
   }
+
   /**
    * Sets the values of the initialization parameters, as supplied in the TLD.
    * @param initParms a mapping from the names of the initialization parameters
@@ -150,13 +151,13 @@ public class ScriptFreeTLV extends TagLibraryValidator {
       parser.parse(in, handler);
     }
     catch (ParserConfigurationException e) {
-      return JstlBaseTLV.vmFromString(e.getMessage());
+      return vmFromString(e.getMessage());
     }
     catch (SAXException e) {
-      return JstlBaseTLV.vmFromString(e.getMessage());
+      return vmFromString(e.getMessage());
     }
     catch (IOException e) {
-      return JstlBaseTLV.vmFromString(e.getMessage());
+      return vmFromString(e.getMessage());
     }
     finally {
       if (in != null) try { in.close(); } catch (IOException e) {}
@@ -200,6 +201,7 @@ public class ScriptFreeTLV extends TagLibraryValidator {
 	++expressionCount;
       if (! allowRTExpressions) countRTExpressions(atts);
     }
+
     /**
      * Auxiliary method for checking attribute values to see if
      * are specified via request-time attribute values.
@@ -215,6 +217,7 @@ public class ScriptFreeTLV extends TagLibraryValidator {
 	  ++rtExpressionCount;
       }
     }
+
     /**
      * Constructs a String reporting the number(s) of prohibited
      * scripting elements that were detected, if any.
@@ -259,10 +262,19 @@ public class ScriptFreeTLV extends TagLibraryValidator {
 	  if (rtExpressionCount > 1) results.append('s');
 	}
 	results.append(".");
-	return JstlBaseTLV.vmFromString(results.toString());
+	return vmFromString(results.toString());
       } else {
 	return null;
       }
     }
   }
+
+
+  // constructs a ValidationMessage[] from a single String and no ID
+  private static ValidationMessage[] vmFromString(String message) {
+    return new ValidationMessage[] {
+      new ValidationMessage(null, message)
+    };
+  }
+
 }

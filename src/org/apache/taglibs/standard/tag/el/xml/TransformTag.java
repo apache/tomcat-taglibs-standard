@@ -74,9 +74,10 @@ public class TransformTag extends TransformSupport {
     //*********************************************************************
     // 'Private' state (implementation details)
 
-    private String source_;                     // stores EL-based property
-    private String xslt_;			// stores EL-based property
-    private String transformer_;		// stores EL-based property
+    private String xmlText_;                    // stores EL-based property
+    private String xmlUrl_;                     // stores EL-based property
+    private String xsltText_;			// stores EL-based property
+    private String xsltUrl_;			// stores EL-based property
     private String result_;			// stores EL-based property
 
 
@@ -114,19 +115,31 @@ public class TransformTag extends TransformSupport {
     // Accessor methods
 
     // for EL-based attribute
-    public void setSource(String source_) {
-        this.source_ = source_;
+    public void setXmlText(String xmlText_) {
+        this.xmlText_ = xmlText_;
     }
 
     // for EL-based attribute
-    public void setXslt(String xslt_) {
-        this.xslt_ = xslt_;
+    public void setXmlUrl(String xmlUrl_) {
+        this.xmlUrl_ = xmlUrl_;
     }
 
     // for EL-based attribute
-    public void setTransformer(String transformer_) {
-        this.transformer_ = transformer_;
+    public void setXsltText(String xsltText_) {
+        this.xsltText_ = xsltText_;
     }
+
+    // for EL-based attribute
+    public void setXsltUrl(String xsltUrl_) {
+        this.xsltUrl_ = xsltUrl_;
+    }
+
+    /* Removed for RI 0.5 
+     // for EL-based attribute
+     public void setTransformer(String transformer_) {
+         this.transformer_ = transformer_;
+     }
+    */
 
     // for EL-based attribute
     public void setResult(String result_) {
@@ -140,7 +153,7 @@ public class TransformTag extends TransformSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	source_ = xslt_ = transformer_ = result_ = null;
+	xmlText_ = xmlUrl = xsltText_ = xsltUrl_ = result_ = null;
     }
 
     /* Evaluates expressions as necessary */
@@ -153,13 +166,18 @@ public class TransformTag extends TransformSupport {
          * propagate up.
          */
 
-	source = ExpressionUtil.evalNotNull(
-	    "transform", "source", source_, Object.class, this, pageContext);
-	xslt = ExpressionUtil.evalNotNull(
-	    "transform", "xslt", xslt_, Object.class, this, pageContext);
-	transformer = (Transformer) ExpressionUtil.evalNotNull(
-	    "transform", "transformer", transformer_, Transformer.class,
-	     this, pageContext);
+	xmlText = ExpressionUtil.evalNotNull(
+	    "transform", "xmlText", xmlText_, Object.class, this, pageContext);
+	xmlUrl = (String) ExpressionUtil.evalNotNull(
+	    "transform", "xmlUrl", xmlUrl_, String.class, this, pageContext);
+	xsltText= ExpressionUtil.evalNotNull(
+	    "transform", "xsltText", xsltText_, Object.class, this,
+	    pageContext);
+	xsltUrl = (String) ExpressionUtil.evalNotNull(
+	    "transform", "xsltUrl", xsltUrl_, String.class, this, pageContext);
+//	transformer = (Transformer) ExpressionUtil.evalNotNull(
+//	    "transform", "transformer", transformer_, Transformer.class,
+//	     this, pageContext);
 	result = (Result) ExpressionUtil.evalNotNull(
 	    "transform", "result", result_, Result.class, this, pageContext);
     }

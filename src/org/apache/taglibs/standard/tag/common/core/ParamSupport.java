@@ -64,11 +64,11 @@ import org.apache.taglibs.standard.resources.Resources;
  * <p>Support for tag handlers for &lt;param&gt;, the URL parameter
  * subtag for &lt;import&gt; in JSTL 1.0.</p>
  *
- * @see ImportSupport
+ * @see ParamParent, ImportSupport, URLEncodeSupport
  * @author Shawn Bayern
  */
 
-public abstract class ParamSupport extends TagSupport {
+public abstract class ParamSupport extends BodyTagSupport {
 
     //*********************************************************************
     // Protected state
@@ -95,18 +95,25 @@ public abstract class ParamSupport extends TagSupport {
     // Tag logic
 
     // simply send our name and value to our parent <import> tag
-    public int doStartTag() throws JspException {
-	Tag t = findAncestorWithClass(this, ImportSupport.class);
+    public int doEndTag() throws JspException {
+	Tag t = findAncestorWithClass(this, ParamParent.class);
 	if (t == null)
 	    throw new JspTagException(
-		Resources.getMessage("PARAM_OUTSIDE_IMPORT"));
-	ImportSupport parent = (ImportSupport) t;
+		Resources.getMessage("PARAM_OUTSIDE_PARENT"));
+	ParamParent parent = (ImportSupport) t;
+	String value = this.value;
+	if (value == null) {
+	    if (bodyContent == null || bodyContent.getString() == null)
+		value = "";
+	    else
+		value = bodyContent.getString().trim();
+	}
 	if (encode) {
 	    parent.addParameter(
 		URLEncoder.encode(name), URLEncoder.encode(value));
 	} else
 	    parent.addParameter(name, value);
-	return SKIP_BODY;
+	return EVAL_PAGE;
     }
 
     // Releases any resources we may have (or inherit)

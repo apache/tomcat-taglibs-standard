@@ -59,20 +59,20 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import javax.servlet.jsp.jstl.core.IteratorTagSupport;
+import javax.servlet.jsp.jstl.core.LoopTagSupport;
 
 /**
  * <p>Support for tag handlers for &lt;forTokens&gt;, the tokenizing
- * iteration tag in JSTL 1.0.  This class extends IteratorTagSupport and
+ * iteration tag in JSTL 1.0.  This class extends LoopTagSupport and
  * provides ForTokens-specific functionality.  The rtexprvalue and
  * expression-evaluating libraries each have handlers that extend this
  * class.</p>
  *
- * @see javax.servlet.jsp.jstl.core.IteratorTagSupport
+ * @see javax.servlet.jsp.jstl.core.LoopTagSupport
  * @author Shawn Bayern
  */
 
-public abstract class ForTokensSupport extends IteratorTagSupport {
+public abstract class ForTokensSupport extends LoopTagSupport {
 
     //*********************************************************************
     // Implementation overview
@@ -97,7 +97,14 @@ public abstract class ForTokensSupport extends IteratorTagSupport {
     //*********************************************************************
     // Iteration control methods
 
-    /* These just use the StringTokenizer we've created. */
+    /*
+     * These just create and use a StringTokenizer.
+     * We inherit semantics and Javadoc from LoopTagSupport.
+     */
+
+    protected void prepare() throws JspTagException {
+      st = new StringTokenizer(items, delims);
+    }
 
     protected boolean hasNext() throws JspTagException {
         return st.hasMoreElements();
@@ -109,13 +116,8 @@ public abstract class ForTokensSupport extends IteratorTagSupport {
 
 
     //*********************************************************************
-    // Tag logic
+    // Tag logic and lifecycle management
 
-    // constructs our StringTokenizer and then defers to parent
-    public int doStartTag() throws JspException {
-        st = new StringTokenizer(items, delims);
-        return super.doStartTag();
-    }
 
     // Releases any resources we may have (or inherit)
     public void release() {

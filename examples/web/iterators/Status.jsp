@@ -17,7 +17,7 @@
     <th>first?</th>
     <th>last?</th>
   </tr>
-  <c:forEach var="customer" items="$customers" status="status">
+  <c:forEach var="customer" items="$customers" varStatus="status">
     <tr>
       <td><c:expr value="$status.index"/></td>
       <td><c:expr value="$status.count"/></td>
@@ -36,7 +36,7 @@
 <p>
 
 <h4>Iteration using range attributes</h4>
-<c:forEach var="i" begin="100" end="200" step="5" status="status">
+<c:forEach var="i" begin="100" end="200" step="5" varStatus="status">
   <c:if test="$status.first">
     begin:<c:expr value="$status.begin">begin</c:expr> &nbsp; &nbsp; 
       end:<c:expr value="$status.end">end</c:expr> &nbsp; &nbsp; 

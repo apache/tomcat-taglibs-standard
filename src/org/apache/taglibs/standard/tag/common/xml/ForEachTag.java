@@ -59,47 +59,31 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import javax.servlet.jsp.jstl.core.IteratorTagSupport;
+import javax.servlet.jsp.jstl.core.LoopTagSupport;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>Support for the XML library's &lt;forEach&gt; tag.</p>
  *
- * @see javax.servlet.jsp.jstl.core.IteratorTagSupport
+ * @see javax.servlet.jsp.jstl.core.LoopTagSupport
  * @author Shawn Bayern
  */
-public class ForEachTag extends IteratorTagSupport {
+public class ForEachTag extends LoopTagSupport {
 
     //*********************************************************************
     // Private state
 
     private String select;				// tag attribute
     private List nodes;					// XPath result
-    private int nodesIndex;
+    private int nodesIndex;				// current index
+    private org.w3c.dom.Node current;			// current node
 
     //*********************************************************************
     // Iteration control methods
 
-    protected boolean hasNext() throws JspTagException {
-        return (nodesIndex < nodes.size());
-    }
+    // (We inherit semantics and Javadoc from LoopTagSupport.) 
 
-    protected Object next() throws JspTagException {
-        return (nodes.get(nodesIndex));
-    }
-
-
-    //*********************************************************************
-    // Tag logic
-
-    // Releases any resources we may have (or inherit)
-    public void release() {
-	init();
-        super.release();
-    }
-
-    // Establishes list of context nodes over which to iterate
-    public int doStartTag() throws JspException {
+    protected void prepare() throws JspTagException {
 	nodesIndex = 0;
         try {
             XPathUtil xu = new XPathUtil(pageContext);
@@ -107,16 +91,31 @@ public class ForEachTag extends IteratorTagSupport {
         } catch (org.saxpath.SAXPathException ex) {
             throw new JspTagException(ex.toString());
         }
-
-	// now we're ready
-	return super.doStartTag();
     }
 
-    // Increments internal counter
-    public int doAfterBody() throws JspException {
-	nodesIndex++;			// insert ourselves & increment counter
-	return super.doAfterBody();	// chain to parent
+    protected boolean hasNext() throws JspTagException {
+        return (nodesIndex < nodes.size());
     }
+
+    protected Object next() throws JspTagException {
+	Object o = nodes.get(nodesIndex++);
+	if (!(o instanceof org.w3c.dom.Node))
+	    throw new JspTagException(
+		Resources.getMessage("FOREACH_NOT_NODESET"));
+	current = (org.w3c.dom.Node) o;
+        return current;
+    }
+
+
+    //*********************************************************************
+    // Tag logic and lifecycle management
+
+    // Releases any resources we may have (or inherit)
+    public void release() {
+	init();
+        super.release();
+    }
+
 
     //*********************************************************************
     // Attribute accessors
@@ -131,10 +130,8 @@ public class ForEachTag extends IteratorTagSupport {
 
     /* Retrieves the current context. */
     public org.w3c.dom.Node getContext() throws JspTagException {
-	// in this implementation, it's safe just to call next() to get
-	// the current node.  This method's just here for abstraction
-	// and casting.
-	return ((org.w3c.dom.Node) next());
+	// expose the current node as the context
+        return current;
     }
 
 
@@ -145,6 +142,7 @@ public class ForEachTag extends IteratorTagSupport {
 	select = null;
 	nodes = null;
 	nodesIndex = 0;
+	current = null;
     }	
 }
 

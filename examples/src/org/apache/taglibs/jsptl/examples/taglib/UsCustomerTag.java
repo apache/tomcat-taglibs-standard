@@ -100,14 +100,18 @@ public class UsCustomerTag extends ConditionalTagSupport {
     //*********************************************************************
     // ConditionalTagSupport methods
     
-    protected boolean condition() throws JspException {
-        Customer customerObj = (Customer)eval("customer", customer, Customer.class);
-        if (customerObj == null) {
-            throw new NullAttributeException("usCustomer", "test");
-        } else {
-            System.out.println("country: " + customerObj.getAddress().getCountry());
-            return (customerObj.getAddress().getCountry().equalsIgnoreCase("USA"));
-        }
+    protected boolean condition() throws JspTagException {
+	try {
+         Customer customerObj = (Customer)eval("customer", customer, Customer.class);
+         if (customerObj == null) {
+             throw new NullAttributeException("usCustomer", "test");
+         } else {
+             System.out.println("country: " + customerObj.getAddress().getCountry());
+             return (customerObj.getAddress().getCountry().equalsIgnoreCase("USA"));
+         }
+        } catch (JspException ex) {
+	 throw new JspTagException(ex.toString());
+	}
     }
     
     //*********************************************************************

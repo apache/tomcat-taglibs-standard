@@ -58,7 +58,7 @@ package org.apache.taglibs.standard.tag.el.core;
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import javax.servlet.jsp.jstl.core.IteratorTag;
+import javax.servlet.jsp.jstl.core.LoopTag;
 import org.apache.taglibs.standard.tag.common.core.*;
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 
@@ -70,7 +70,7 @@ import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
  */
 public class ForTokensTag
     extends ForTokensSupport
-    implements IteratorTag, IterationTag
+    implements LoopTag, IterationTag
 {
 
     //*********************************************************************
@@ -86,11 +86,6 @@ public class ForTokensTag
     //*********************************************************************
     // Constructor
 
-    /**
-     * Constructs a new IteratorTagSupport.  As with TagSupport, subclasses
-     * should not provide other constructors and are expected to call
-     * the superclass constructor
-     */
     public ForTokensTag() {
         super();
         init();

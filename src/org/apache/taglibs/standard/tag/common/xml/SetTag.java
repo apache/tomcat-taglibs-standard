@@ -55,6 +55,7 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
+import java.util.List;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.core.Util;
@@ -100,10 +101,22 @@ public class SetTag extends TagSupport {
     // applies XPath expression from 'select' and stores the result in 'var'
     public int doStartTag() throws JspException {
         try {
+	    // process the query
 	    XPathUtil xu = new XPathUtil(pageContext);
-	    Object result = 
+	    List result = 
 		xu.selectNodes(XPathUtil.getContext(this), select);
-	    pageContext.setAttribute(var, result);
+	    Object ret = result;
+
+	    // unwrap primitive types if that's what we received
+	    if (result.size() == 1) {
+	        Object o = result.get(0);
+	        if (o instanceof String || o instanceof Boolean
+	                || o instanceof Number)
+		    ret = o;
+	    }
+
+	    // expose the final result
+	    pageContext.setAttribute(var, ret, scope);
 	    return SKIP_BODY;
         } catch (org.saxpath.SAXPathException ex) {
 	    throw new JspTagException(ex.toString());

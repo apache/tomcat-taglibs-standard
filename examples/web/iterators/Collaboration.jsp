@@ -12,9 +12,9 @@
 <h4>Without custom tags</h4>
 
 <table>
-<c:forEach var="customer" items="$customers" status="status">
+<c:forEach var="customer" items="$customers" varStatus="status">
   <tr>
-    <c:declare id="status" type="javax.servlet.jsp.jstl.core.IteratorTagStatus"/>
+    <jsp:useBean type="javax.servlet.jsp.jstl.core.LoopTagStatus" id="status"/>
     <jr:choose>
       <jr:when test="<%= status.getCount() % 2 == 1 %>">
 	    <td bgcolor="#FFFF66">

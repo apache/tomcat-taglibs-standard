@@ -59,25 +59,31 @@ import javax.servlet.jsp.tagext.*;
 
 /**
  * <p>An implementation of TagExtraInfo that implements validation for
- * ForEachTag's attributes</p>
+ * &lt;x:transform&gt;'s attributes</p>
  *
  * @author Shawn Bayern
  */
 public class XmlTransformTEI extends TagExtraInfo {
 
+    final private static String XML_TEXT = "xmlText";
+    final private static String XML_URL = "xmlUrl";
+    final private static String XSLT_TEXT = "xsltText";
+    final private static String XSLT_URL = "xsltUrl";
     final private static String RESULT = "result";
-    final private static String TRANSFORMER = "transformer";
     final private static String VAR = "var";
-    final private static String XSLT = "xslt";
 
-    /*
-     * Currently implements the following rules:
-     * 
-     * - If 'items' is not specified, 'begin' and 'end' must be
-     */
     public boolean isValid(TagData us) {
-	// disallow both XSLT and TRANSFORMER
-	if (Util.isSpecified(us, XSLT) && Util.isSpecified(us, TRANSFORMER))
+	// disallow both XML_TEXT and XML_URL
+	if (Util.isSpecified(us, XML_TEXT) && Util.isSpecified(us, XML_URL))
+	    return false;
+
+	// disallow both XSLT_TEXT and XSLT_URL ...
+	if (Util.isSpecified(us, XSLT_TEXT) && Util.isSpecified(us, XSLT_URL))
+	    return false;
+
+	// ... but require at least one of XSLT_TEXT or XSLT_URL
+	if (!(Util.isSpecified(us, XSLT_TEXT)
+		|| Util.isSpecified(us, XSLT_URL)))
 	    return false;
 
 	// disallow both VAR and RESULT
