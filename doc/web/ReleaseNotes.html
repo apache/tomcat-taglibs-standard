@@ -9,21 +9,57 @@
 <h1>
 Standard: An Implementation of the JSP&#153; Standard Tag Library (JSTL)<br>
 <p>
-Version: 1.1.0-B1<br>
+Version: 1.1.0<br>
 Release Notes
 </h1>
 </center>
 
-<p>The Standard 1.1.0-B1 release is an 
-implementation of the <a href="http://java.sun.com/products/jstl">JSTL 1.1 Specification</a>.
-Given that JSTL 1.1 has a dependency on JSP 2.0, an official release of
-JSTL 1.1 will happen once the Final Release of the JSP 2.0 specification is
-published.</p>
+<p>The Standard 1.1.0 release is an implementation of the <a href="http://java.sun.com/products/jstl">JSTL 1.1 Specification</a>.</p>
 
 <p>The Standard Taglib, which is hosted at Apache, is used as the source repository for the <a href="http://java.sun.com/products/jstl">JSTL reference implementation</a> supplied by Sun Microsystems, Inc.</p>
 <hr/>
 
 <h2>Release History</h2>
+
+<dt><b>December 2003 &#149; Standard 1.1.0</b></dt>
+<p>
+This is a complete implementation of the JSTL 1.1 Maintenance Release.
+<p>
+<dd>Bugs fixed since Standard 1.1.0-B1 Taglib release:</dd>
+<ul>
+  <blockquote>
+    <table width="95%" border="1">
+      <tr>
+        <th width="27%">
+          <div align="center">Bug Id</div>
+        </th>
+        <th width="73%">Summary</th>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=15703">15703</a></div>
+        </td>
+        <td width="73%" height="15">Illegal scope attribute without var in "fmt:setLocale" tag</td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=24892">24892</a></div>
+        </td>
+        <td width="73%" height="15">ResultImpl should implement java.io.Serializable</td>
+      </tr>
+    </table>
+  </blockquote>
+</ul>
+
+<blockquote> 
+  <p>Other changes and additions:</p>
+  <ul>
+    <li>Regarding bug #24892, it's important to note that relying on the serializability of Result objects might not be portable across different implementations of the JSTL spec
+  </ul>
+</blockquote>
+
 
 <dt><b>September 2003 &#149; Standard 1.1.0-B1</b></dt>
 <p>
@@ -146,6 +182,10 @@ Type conversion rules now properly applied when setting a bean property using
     <li>Our dependency on jaxen and saxpath has been removed by switching
         our XPath support to Xalan.</li>
     <li>Added attribute descriptions in the TLDs.</li>
+    <li>javax.servlet.jsp.jstl.sql.ResultImpl now implements java.io.Serializable,
+and insert a comment in the Release Notes stating that relying on the
+serializability of Result objects might not be portable across
+different implementations of the JSTL spec
   </ul>
 </blockquote>
 
