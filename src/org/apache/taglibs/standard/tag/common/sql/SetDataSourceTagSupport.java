@@ -66,16 +66,17 @@ import org.apache.taglibs.standard.resources.Resources;
 
 
 /**
- * <p>Tag handler for &lt;Driver&gt; in JSTL, used to create
+ * <p>Tag handler for &lt;SetDataSource&gt; in JSTL, used to create
  * a simple DataSource for prototyping.</p>
  * 
  * @author Hans Bergsten
  * @author Justyna Horwat
  */
-public class DriverTagSupport extends TagSupport {
+public class SetDataSourceTagSupport extends TagSupport {
 
-    protected String driverClassName;
+    protected Object dataSource;
     protected String jdbcURL;
+    protected String driverClassName;
     protected String userName;
     protected String password;
 
@@ -102,18 +103,32 @@ public class DriverTagSupport extends TagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
-	DataSourceWrapper ds = new DataSourceWrapper();
-	try {
-	ds.setDriverClassName(getDriverClassName());
-	}
-	catch (Exception e) {
-	    throw new JspTagException(
-                Resources.getMessage("DRIVER_INVALID_CLASS", e.getMessage()));
-	}
-	ds.setJdbcURL(getJdbcURL());
-	ds.setUserName(getUserName());
-	ds.setPassword(getPassword());
-	pageContext.setAttribute(var, ds, scope);
+        DataSourceWrapper ds;
+
+        if (dataSource != null) {
+            DataSourceUtil dsUtil = new DataSourceUtil(dataSource, pageContext);
+            ds = (DataSourceWrapper) dsUtil.getDataSource();
+        }
+        else {
+            ds = new DataSourceWrapper();
+            try {
+            ds.setDriverClassName(getDriverClassName());
+            }
+            catch (Exception e) {
+                throw new JspTagException(
+                    Resources.getMessage("DRIVER_INVALID_CLASS", e.getMessage()));
+            }
+            ds.setJdbcURL(getJdbcURL());
+            ds.setUserName(getUserName());
+            ds.setPassword(getPassword());
+        }
+
+        if (var != null) {
+	    pageContext.setAttribute(var, ds, scope);
+        }
+        else {
+            pageContext.setAttribute(Config.SQL_DATASOURCE, ds, scope);
+        }
 	return SKIP_BODY;
     }
 

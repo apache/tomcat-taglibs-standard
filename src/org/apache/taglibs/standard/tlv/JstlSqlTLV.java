@@ -77,6 +77,7 @@ public class JstlSqlTLV extends JstlBaseTLV {
     // Constants
 
     // tag names
+    private final String SETDATASOURCE = "setDataSource";
     private final String QUERY = "query";
     private final String UPDATE = "update";
     private final String TRANSACTION = "transaction";

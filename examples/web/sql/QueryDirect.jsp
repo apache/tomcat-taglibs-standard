@@ -11,9 +11,9 @@
 <p>This example demonstrates how the row and columns can be directly accessed using various direct mechanisms.<p>
 
 
-<!-- NOTE: the sql:setDriver tag is for prototyping and simple applications. You should really use a DataSource object instead --!>
+<!-- NOTE: the sql:setDataSource tag is for prototyping and simple applications. You should really use a DataSource object instead --!>
 
-<sql:setDriver
+<sql:setDataSource
   var="example"
   driver="${myDbDriver}"
   url="${myDbUrl}"

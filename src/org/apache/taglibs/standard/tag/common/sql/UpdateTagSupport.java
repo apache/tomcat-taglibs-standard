@@ -97,7 +97,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
     private Connection conn;
     private List parameters;
     private boolean isPartOfTransaction;
-    private boolean hasDataSourceAttribute;
+    private DataSourceUtil dsUtil;
 
     //*********************************************************************
     // Accessor methods
@@ -143,7 +143,11 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      */
     public int doStartTag() throws JspException {
 
-        setDataSource();
+        dsUtil = new DataSourceUtil();
+        dsUtil.setDataSource(rawDataSource, pageContext);
+
+        dataSource = dsUtil.getDataSource();
+
 	try {
 	    conn = getConnection();
 	}
@@ -224,37 +228,10 @@ public abstract class UpdateTagSupport extends BodyTagSupport
         dataSource = null;
         bodyContent = null;
         rawDataSource = null;
-        hasDataSourceAttribute = false;
     }
 
     //*********************************************************************
     // Private utility methods
-
-    private void setDataSource() throws JspException {
-
-        if (rawDataSource == null) {
-            rawDataSource = Config.find(pageContext, Config.SQL_DATASOURCE);
-        }
-        else {
-            hasDataSourceAttribute = true;
-        }
-
-
-        // If the 'dataSource' attribute's value resolves to a String
-        // after rtexpr/EL evaluation, use the string as JNDI path to
-        // a DataSource
-        if (rawDataSource instanceof String) {
-            try {
-                Context ctx = new InitialContext();
-                // relative to standard JNDI root for J2EE app
-                Context envCtx = (Context) ctx.lookup("java:comp/env");
-                dataSource = (DataSource) envCtx.lookup((String)rawDataSource);
-            } catch (NamingException ex) {
-                throw new JspException(ex.toString(), ex);
-            }
-        }
-        else dataSource = (DataSource) rawDataSource;
-    }
 
     private Connection getConnection() throws JspException, SQLException {
 	// Fix: Add all other mechanisms
@@ -262,7 +239,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	TransactionTagSupport parent = (TransactionTagSupport) 
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
-            if (hasDataSourceAttribute) {
+            if (dsUtil.hasDataSourceAttribute()) {
                 throw new JspTagException(
                     Resources.getMessage("ERROR_NESTED_DATASOURCE"));
             }
@@ -270,7 +247,12 @@ public abstract class UpdateTagSupport extends BodyTagSupport
             isPartOfTransaction = true;
 	}
 	else {
-	    conn = dataSource.getConnection();
+            try {
+                conn = dataSource.getConnection();
+            } catch (Exception ex) {
+                throw new JspException(
+                    Resources.getMessage("DATASOURCE_INVALID"));
+            }
 	}
 	return conn;
     }

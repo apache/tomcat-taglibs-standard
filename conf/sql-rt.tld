@@ -143,8 +143,8 @@
   </tag>
 
   <tag>
-    <name>setDriver</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.sql.DriverTag</tag-class>
+    <name>setDataSource</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.sql.SetDataSourceTag</tag-class>
     <body-content>empty</body-content>
     <description>
         Creates a simple DataSource suitable only for prototyping.

@@ -53,77 +53,38 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.el.sql;
+package org.apache.taglibs.standard.tag.rt.sql;
 
-import javax.servlet.jsp.*;
-import org.apache.taglibs.standard.lang.support.*;
-import org.apache.taglibs.standard.tag.common.sql.DriverTagSupport;
+import org.apache.taglibs.standard.tag.common.sql.SetDataSourceTagSupport;
 
 /**
  * <p>Tag handler for &lt;Driver&gt; in JSTL, used to create
  * a simple DataSource for prototyping.</p>
  * 
  */
-public class DriverTag extends DriverTagSupport {
-
-    private String driverClassNameEL;
-    private String jdbcURLEL;
-    private String userNameEL;
-    private String passwordEL;
+public class SetDataSourceTag extends SetDataSourceTagSupport {
 
     //*********************************************************************
     // Accessor methods
 
-    public void setDriver(String driverClassNameEL) {
-	this.driverClassNameEL = driverClassNameEL;
+    public void setDataSource(Object dataSource) {
+	this.dataSource = dataSource;
     }
 
-    public void setUrl(String jdbcURLEL) {
-	this.jdbcURLEL = jdbcURLEL;
+    public void setDriver(String driverClassName) {
+	this.driverClassName = driverClassName;
     }
 
-    public void setUser(String userNameEL) {
-	this.userNameEL = userNameEL;
+    public void setUrl(String jdbcURL) {
+	this.jdbcURL = jdbcURL;
     }
 
-    public void setPassword(String passwordEL) {
-	this.passwordEL = passwordEL;
+    public void setUser(String userName) {
+	this.userName = userName;
     }
 
-    //*********************************************************************
-    // Tag logic
-
-    public int doStartTag() throws JspException {
-        evaluateExpressions();
-
-        return super.doStartTag();
-    }
-
-
-    //*********************************************************************
-    // Private utility methods
-
-    // Evaluates expressions as necessary
-    private void evaluateExpressions() throws JspException {
-        if (driverClassNameEL != null) {
-                driverClassName = (String) ExpressionEvaluatorManager.evaluate
-                ("driver", driverClassNameEL, String.class, this, pageContext);
-        }
-
-        if (jdbcURLEL != null) {
-                jdbcURL = (String) ExpressionEvaluatorManager.evaluate
-                ("url", jdbcURLEL, String.class, this, pageContext);
-        }
-
-        if (userNameEL != null) {
-                userName = (String) ExpressionEvaluatorManager.evaluate
-                ("user", userNameEL, String.class, this, pageContext);
-        }
-
-        if (passwordEL != null) {
-                password = (String) ExpressionEvaluatorManager.evaluate
-                ("password", passwordEL, String.class, this, pageContext);
-        }
+    public void setPassword(String password) {
+	this.password = password;
     }
 
 }

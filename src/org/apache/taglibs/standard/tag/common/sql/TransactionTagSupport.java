@@ -95,6 +95,7 @@ public abstract class TransactionTagSupport extends TagSupport
      */
     private Connection conn;
     private int origIsolation;
+    private DataSourceUtil dsUtil;
 
     //*********************************************************************
     // Public utility methods
@@ -141,7 +142,11 @@ public abstract class TransactionTagSupport extends TagSupport
      */
     public int doStartTag() throws JspException {
 
-        setDataSource();
+        dsUtil = new DataSourceUtil();
+        dsUtil.setDataSource(rawDataSource, pageContext);
+
+        dataSource = dsUtil.getDataSource();
+
 	try {
 	    conn = getConnection();
 	    int origIsolation = conn.getTransactionIsolation();
@@ -158,7 +163,8 @@ public abstract class TransactionTagSupport extends TagSupport
 	catch (SQLException e) {
 	    throw new JspTagException(
                 Resources.getMessage("ERROR_GET_CONNECTION", e.getMessage()));
-	}
+	} 
+
 	return EVAL_BODY_INCLUDE;
     }
 
@@ -210,30 +216,6 @@ public abstract class TransactionTagSupport extends TagSupport
 
     //*********************************************************************
     // Private utility methods
-
-    private void setDataSource() throws JspException {
-
-        if (rawDataSource == null) {
-            rawDataSource = Config.find(pageContext, Config.SQL_DATASOURCE);
-        }
-
-        // If the 'dataSource' attribute's value resolves to a String
-        // after rtexpr/EL evaluation, use the string as JNDI path to
-        // a DataSource
-        if (rawDataSource instanceof String) {
-            try {
-                Context ctx = new InitialContext();
-                // relative to standard JNDI root for J2EE app
-                Context envCtx = (Context) ctx.lookup("java:comp/env");
-                dataSource = (DataSource) envCtx.lookup((String)rawDataSource);
-            } catch (NamingException ex) {
-                throw new JspTagException(ex.toString());
-            }
-        }
-        else {
-            dataSource = (DataSource) rawDataSource;
-        }
-    }
 
     private Connection getConnection() throws SQLException {
 	// Fix: Add all other mechanisms
