@@ -360,7 +360,7 @@ public class XPathUtil {
         private Object notNull(Object o, String prefix, String localName)
         throws UnresolvableException {
             if (o == null) {
-                throw new UnresolvableException("$" + (prefix==null?"":"prefix"+":") + localName);
+                throw new UnresolvableException("$" + (prefix==null?"":prefix+":") + localName);
             }
             //p("resolved to: " + o);
             return o;
