@@ -113,6 +113,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
     // Constants
 
     // tag names
+    private final String LOCALE = "locale";
     private final String MESSAGE = "message";
     private final String MESSAGE_ARG = "messageArg";
     private final String MESSAGE_FORMAT = "messageFormat";
@@ -208,7 +209,8 @@ public class JstlFmtTLV extends JstlBaseTLV {
             if (qn.startsWith(prefix + ":") && !hasNoInvalidScope(a))
                 fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
                     SCOPE, qn, a.getValue(SCOPE)));
-            if (qn.startsWith(prefix + ":") && hasDanglingScope(a))
+            if (qn.startsWith(prefix + ":")
+                && !isTag(qn, LOCALE) && hasDanglingScope(a))
                 fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 
 	    // check invariants for <message> and <messageFormat>
