@@ -60,6 +60,7 @@ import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.jstl.core.Config;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -71,12 +72,6 @@ import org.apache.taglibs.standard.resources.Resources;
  */
 
 public abstract class BundleSupport extends BodyTagSupport {
-
-    //*********************************************************************
-    // Private constants
-
-    private static final String DEFAULT_BASE =
-	"javax.servlet.jsp.jstl.fmt.basename";
 
 
     //*********************************************************************
@@ -167,8 +162,8 @@ public abstract class BundleSupport extends BodyTagSupport {
 	     * If no 'var' attribute and empty body, we store our base name
 	     * in the javax.servlet.jsp.jstl.fmt.basename scoped attribute
 	     */
-	    pageContext.setAttribute(DEFAULT_BASE + "." + scope, basename,
-				     Util.getScope(scope));
+	    Config.set(pageContext, Config.FMT_BUNDLE, bundle,
+		       Util.getScope(scope));
 	} else {
 	    try {
 		pageContext.getOut().print(getBodyContent().getString());
@@ -219,7 +214,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 	ResourceBundle ret = null;
 	    
 	Locale pref = LocaleSupport.getLocale(pageContext,
-					      LocaleSupport.LOCALE, true);
+					      Config.FMT_LOCALE);
 	if (pref != null) {
 	    // Preferred locale is application-based
 	    ret = findMatch(basename, pref);
@@ -231,8 +226,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 	if (ret == null) {
 	    // no match found, use fallback locale (if present)
 	    pref = LocaleSupport.getLocale(pageContext,
-					   LocaleSupport.FALLBACK_LOCALE,
-					   false);
+					   Config.FMT_FALLBACKLOCALE);
 	    if (pref != null) {
 		ret = findMatch(basename, pref);
 	    }
@@ -261,13 +255,7 @@ public abstract class BundleSupport extends BodyTagSupport {
     public static ResourceBundle getDefaultBundle(PageContext pc) {
 	ResourceBundle ret = null;
 
-	String def = (String) Util.findAttribute(pc, DEFAULT_BASE);
-	if (def == null) {
-	    def = (String) pc.findAttribute(DEFAULT_BASE);
-	}
-	if (def == null) {
-	    def = pc.getServletContext().getInitParameter(DEFAULT_BASE);
-	}
+	String def = (String) Config.find(pc, Config.FMT_BASENAME);
 	if (def != null) {
 	    ret = getBundle(pc, def);
 	}

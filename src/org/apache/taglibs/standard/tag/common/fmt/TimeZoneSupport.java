@@ -59,6 +59,7 @@ import java.io.IOException;
 import java.util.TimeZone;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.jstl.core.Config;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -70,12 +71,6 @@ import org.apache.taglibs.standard.resources.Resources;
  */
 
 public abstract class TimeZoneSupport extends BodyTagSupport {
-
-    //*********************************************************************
-    // Private Constants
-
-    private static final String TIMEZONE
-	= "javax.servlet.jsp.jstl.fmt.timeZone";
 
 
     //*********************************************************************
@@ -146,8 +141,8 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 	     * If no 'var' attribute and empty body, we store our time zone
 	     * in the javax.servlet.jsp.jstl.fmt.timeZone scoped attribute
 	     */
-	    pageContext.setAttribute(TIMEZONE + "." + scope, timeZone,
-				     Util.getScope(scope));
+	    Config.set(pageContext, Config.FMT_TIMEZONE, timeZone,
+		       Util.getScope(scope));
 	} else {
 	    try {
 		pageContext.getOut().print(getBodyContent().getString());
@@ -188,27 +183,25 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
      * @return the time zone
      */
     static TimeZone getTimeZone(PageContext pc, Tag fromTag) {
-	TimeZone ret = null;
+	TimeZone tz = null;
 
 	Tag t = findAncestorWithClass(fromTag, TimeZoneSupport.class);
 	if (t != null) {
 	    // use time zone from parent <timeZone> tag
 	    TimeZoneSupport parent = (TimeZoneSupport) t;
-	    ret = parent.getTimeZone();
+	    tz = parent.getTimeZone();
 	} else {
-	    // get time zone from scoped attribute
-	    ret = (TimeZone) Util.findAttribute(pc, TIMEZONE);
-	    if (ret == null) {
-		String tz = (String) pc.findAttribute(TIMEZONE);
-		if (tz == null) {
-		    tz = pc.getServletContext().getInitParameter(TIMEZONE);
-		}
-		if (tz != null) {
-		    ret = TimeZone.getTimeZone(tz);
+	    // get time zone from config variable or context init param
+	    Object obj = Config.find(pc, Config.FMT_TIMEZONE);
+	    if (obj != null) {
+		if (obj instanceof TimeZone) {
+		    tz = (TimeZone) obj;
+		} else {
+		    tz = TimeZone.getTimeZone((String) obj);
 		}
 	    }
 	}
 
-	return ret;
+	return tz;
     }
 }

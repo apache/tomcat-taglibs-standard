@@ -59,6 +59,7 @@ import java.util.*;
 import javax.servlet.ServletResponse;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.jstl.core.Config;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -70,13 +71,6 @@ import org.apache.taglibs.standard.resources.Resources;
  */
 
 public abstract class LocaleSupport extends TagSupport {
-
-    //*********************************************************************
-    // Package-scoped constants
-
-    static final String LOCALE = "javax.servlet.jsp.jstl.fmt.locale";
-    static final String FALLBACK_LOCALE =
-	"javax.servlet.jsp.jstl.fmt.fallbackLocale";
 
     
     //*********************************************************************
@@ -131,8 +125,8 @@ public abstract class LocaleSupport extends TagSupport {
 	} else {
 	    locale = parseLocale(value, variant);
 	}
-	pageContext.setAttribute(LOCALE + "." + scope, locale,
-				 Util.getScope(scope));
+	Config.set(pageContext, Config.FMT_LOCALE, locale,
+		   Util.getScope(scope));
 	setResponseLocale(pageContext, locale);
 
 	return EVAL_PAGE;
@@ -272,7 +266,7 @@ public abstract class LocaleSupport extends TagSupport {
 	     * the available formatting locales, and determine the best
 	     * matching locale.
 	     */
-	    Locale pref = getLocale(pc, LOCALE, true);
+	    Locale pref = getLocale(pc, Config.FMT_LOCALE);
 	    if (pref != null) {
 		// Preferred locale is application-based
 		match = findFormattingMatch(pref, avail);
@@ -282,7 +276,7 @@ public abstract class LocaleSupport extends TagSupport {
 	    }
 	    if (match == null) {
 		//Use fallback locale.
-		pref = getLocale(pc, FALLBACK_LOCALE, false);
+		pref = getLocale(pc, Config.FMT_FALLBACKLOCALE);
 		if ((pref == null)
 		        || ((match = findFormattingMatch(pref,
 							 avail)) == null)) {
@@ -312,37 +306,24 @@ public abstract class LocaleSupport extends TagSupport {
      * attribute or context configuration parameter
      * @param name the name of the scoped attribute or context configuration
      * parameter
-     * @param extend <tt>true</tt> if the given attribute name should be
-     * searched in each scope with the scope's name appended to it, prior to
-     * being searched in all scopes using the PageContext method
-     * findAttribute()
      *
      * @return the locale specified by the named scoped attribute or context
      * configuration parameter, or <tt>null</tt> if no scoped attribute or
      * configuration parameter with the given name exists
      */
-    static Locale getLocale(PageContext pageContext, String name,
-			    boolean extend) {
-	String loc = null;
-	Locale ret = null;
+    static Locale getLocale(PageContext pageContext, String name) {
+	Locale loc = null;
 
-	if (extend) {
-	    ret = (Locale) Util.findAttribute(pageContext, name);
-	}
-	if (ret == null) {
-	    loc = (String) pageContext.findAttribute(name);
-	    if (loc != null) {
-		ret = parseLocale(loc);
-	    }
-	}
-	if (ret == null) {
-	    loc = pageContext.getServletContext().getInitParameter(name);
-	    if (loc != null) {
-		ret = parseLocale(loc);
+	Object obj = Config.find(pageContext, name);
+	if (obj != null) {
+	    if (obj instanceof Locale) {
+		loc = (Locale) obj;
+	    } else {
+		loc = parseLocale((String) obj);
 	    }
 	}
 
-	return ret;
+	return loc;
     }
 
 
