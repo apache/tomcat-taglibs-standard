@@ -151,7 +151,7 @@ public class Evaluator
 	    "" + pAttributeValue,
 	    exc.getMessage(),
 	    exc.getRootCause()
-	  }));
+	  }), exc.getRootCause());
     }
   }
 
