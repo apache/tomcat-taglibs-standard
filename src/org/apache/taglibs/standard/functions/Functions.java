@@ -204,11 +204,11 @@ public class Functions {
             return count;
         }            
         if (obj instanceof Enumeration) {
-            Enumeration enum = (Enumeration)obj;
+            Enumeration enum_ = (Enumeration)obj;
             count = 0;
-            while (enum.hasMoreElements()) {
+            while (enum_.hasMoreElements()) {
                 count++;
-                enum.nextElement();
+                enum_.nextElement();
             }
             return count;
         }

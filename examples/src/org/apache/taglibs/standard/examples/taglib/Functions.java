@@ -49,9 +49,9 @@ public class Functions {
             return "FIXME";
         }            
         if (obj instanceof Enumeration) {
-            Enumeration enum = (Enumeration)obj;
-            while (enum.hasMoreElements()) {
-                enum.nextElement();
+            Enumeration enum_ = (Enumeration)obj;
+            while (enum_.hasMoreElements()) {
+                enum_.nextElement();
             }
             return "FIXME";
         }

@@ -980,13 +980,13 @@ public class ImplicitObjects
 
 	    List l = new ArrayList ();
 
-	    Enumeration enum = request.getHeaders ((String) pKey);
+	    Enumeration enum_ = request.getHeaders ((String) pKey);
 
-	    if (enum != null) {
+	    if (enum_ != null) {
 
-	      while (enum.hasMoreElements ()) {
+	      while (enum_.hasMoreElements ()) {
 
-		l.add (enum.nextElement ());
+		l.add (enum_.nextElement ());
 
 	      }
 

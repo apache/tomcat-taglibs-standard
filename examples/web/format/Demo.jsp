@@ -56,9 +56,9 @@ Application based locale: <%=Config.find(pageContext, Config.FMT_LOCALE)%><br>
 
 Browser-Based locales: 
 <% 
-  Enumeration enum = request.getLocales();
-  while (enum.hasMoreElements()) {
-    Locale locale = (Locale)enum.nextElement();
+  Enumeration enum_ = request.getLocales();
+  while (enum_.hasMoreElements()) {
+    Locale locale = (Locale)enum_.nextElement();
     out.print(locale);
     out.print(" ");
   }

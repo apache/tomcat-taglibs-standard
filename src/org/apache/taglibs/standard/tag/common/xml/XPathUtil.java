@@ -74,10 +74,10 @@ public class XPathUtil {
         globalVarSize = 0;
         Vector variableVector = new Vector ( );
         // Now construct attributes in different scopes
-        Enumeration enum = pageContext.getAttributeNamesInScope( 
+        Enumeration enum_ = pageContext.getAttributeNamesInScope( 
             PageContext.PAGE_SCOPE );
-        while ( enum.hasMoreElements() ) {
-            String varName = (String)enum.nextElement();
+        while ( enum_.hasMoreElements() ) {
+            String varName = (String)enum_.nextElement();
             QName varQName = new QName ( PAGE_NS_URL, PAGE_P, varName); 
             //Adding both namespace qualified QName and just localName
             variableVector.addElement( varQName );
@@ -86,10 +86,10 @@ public class XPathUtil {
             variableVector.addElement( new QName(null, varName ) );
             globalVarSize++;
         }
-        enum = pageContext.getAttributeNamesInScope( 
+        enum_ = pageContext.getAttributeNamesInScope( 
             PageContext.REQUEST_SCOPE );
-        while ( enum.hasMoreElements() ) {
-            String varName = (String)enum.nextElement();
+        while ( enum_.hasMoreElements() ) {
+            String varName = (String)enum_.nextElement();
             QName varQName = new QName ( REQUEST_NS_URL,REQUEST_P, varName); 
             //Adding both namespace qualified QName and just localName
             variableVector.addElement( varQName );
@@ -97,10 +97,10 @@ public class XPathUtil {
             variableVector.addElement( new QName(null, varName ) );
             globalVarSize++;
         }
-        enum = pageContext.getAttributeNamesInScope( 
+        enum_ = pageContext.getAttributeNamesInScope( 
             PageContext.SESSION_SCOPE );
-        while ( enum.hasMoreElements() ) {
-            String varName = (String)enum.nextElement();
+        while ( enum_.hasMoreElements() ) {
+            String varName = (String)enum_.nextElement();
             QName varQName = new QName ( SESSION_NS_URL, SESSION_P,varName); 
             //Adding both namespace qualified QName and just localName
             variableVector.addElement( varQName );
@@ -108,10 +108,10 @@ public class XPathUtil {
             variableVector.addElement( new QName(null, varName ) );
             globalVarSize++;
         }
-        enum = pageContext.getAttributeNamesInScope( 
+        enum_ = pageContext.getAttributeNamesInScope( 
             PageContext.APPLICATION_SCOPE );
-        while ( enum.hasMoreElements() ) {
-            String varName = (String)enum.nextElement();
+        while ( enum_.hasMoreElements() ) {
+            String varName = (String)enum_.nextElement();
             QName varQName = new QName ( APP_NS_URL, APP_P,varName ); 
             //Adding both namespace qualified QName and just localName
             variableVector.addElement( varQName );
@@ -119,25 +119,25 @@ public class XPathUtil {
             variableVector.addElement( new QName(null, varName ) );
             globalVarSize++;
         }
-        enum = pageContext.getRequest().getParameterNames();
-        while ( enum.hasMoreElements() ) {
-            String varName = (String)enum.nextElement();
+        enum_ = pageContext.getRequest().getParameterNames();
+        while ( enum_.hasMoreElements() ) {
+            String varName = (String)enum_.nextElement();
             QName varQName = new QName ( PARAM_NS_URL, PARAM_P,varName ); 
             //Adding both namespace qualified QName and just localName
             variableVector.addElement( varQName );
             globalVarSize++;
         }
-        enum = pageContext.getServletContext().getInitParameterNames();
-        while ( enum.hasMoreElements() ) {
-            String varName = (String)enum.nextElement();
+        enum_ = pageContext.getServletContext().getInitParameterNames();
+        while ( enum_.hasMoreElements() ) {
+            String varName = (String)enum_.nextElement();
             QName varQName = new QName ( INITPARAM_NS_URL, INITPARAM_P,varName ); 
             //Adding both namespace qualified QName and just localName
             variableVector.addElement( varQName );
             globalVarSize++;
         }
-        enum = ((HttpServletRequest)pageContext.getRequest()).getHeaderNames();
-        while ( enum.hasMoreElements() ) {
-            String varName = (String)enum.nextElement();
+        enum_ = ((HttpServletRequest)pageContext.getRequest()).getHeaderNames();
+        while ( enum_.hasMoreElements() ) {
+            String varName = (String)enum_.nextElement();
             QName varQName = new QName ( HEADER_NS_URL, HEADER_P,varName ); 
             //Adding namespace qualified QName 
             variableVector.addElement( varQName );
