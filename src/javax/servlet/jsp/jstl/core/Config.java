@@ -61,7 +61,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.http.HttpSession;
 
 /**
- * Class supporting access to configuration data.
+ * Class supporting access to configuration settings.
  */
 public class Config {
 
@@ -142,7 +142,7 @@ public class Config {
 	case PageContext.REQUEST_SCOPE:
 	    return pc.getAttribute(name + REQUEST_SCOPE_SUFFIX, scope);
 	case PageContext.SESSION_SCOPE:
-	    return pc.getAttribute(name + SESSION_SCOPE_SUFFIX, scope);
+	    return get(pc.getSession(), name + SESSION_SCOPE_SUFFIX);
 	case PageContext.APPLICATION_SCOPE:
 	    return pc.getAttribute(name + APPLICATION_SCOPE_SUFFIX, scope);
 	default:
@@ -173,17 +173,24 @@ public class Config {
      *
      * <p> The lookup of configuration variables is performed as if each scope
      * had its own name space, that is, the same configuration variable name
-     * in one scope does not replace one stored in a different scope.
+     * in one scope does not replace one stored in a different scope.</p>
      *
      * @param session Session object in which the configuration variable is to
      * be looked up
      * @param name Configuration variable name
      *
      * @return The <tt>java.lang.Object</tt> associated with the configuration
-     * variable, or null if it is not defined.
+     * variable, or null if it is not defined, if session is null, or if the session
+     * is invalidated. 
      */
     public static Object get(HttpSession session, String name) {
-	return session.getAttribute(name + SESSION_SCOPE_SUFFIX);
+        Object ret = null;
+        if (session != null) {
+            try {
+                ret = session.getAttribute(name + SESSION_SCOPE_SUFFIX);
+            } catch (IllegalStateException ex) {} // when session is invalidated
+        }
+        return ret;
     }
 
     /**
