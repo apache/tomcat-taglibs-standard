@@ -101,7 +101,7 @@ public class DataSourceUtil {
             char nextChar = params.charAt(index);
             if (TOKEN.indexOf(nextChar) != -1) {
                 if (escCount == 0) {
-                    paramString[aryCount] = params.substring(begin,index);
+                    paramString[aryCount] = params.substring(begin,index).trim();
                     begin = index + 1;
                     if (++aryCount > 4) {
                         throw new JspTagException(
@@ -116,7 +116,7 @@ public class DataSourceUtil {
                 escCount = 0;
             }
         }
-        paramString[aryCount] = params.substring(begin);
+        paramString[aryCount] = params.substring(begin).trim();
 
 	// use the JDBC URL from the parameter string
         dataSource.setJdbcURL(paramString[0]);
