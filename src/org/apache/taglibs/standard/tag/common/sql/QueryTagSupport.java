@@ -189,8 +189,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    conn = getConnection();
 	}
 	catch (SQLException e) {
-	    throw new JspTagException(
-                Resources.getMessage("ERROR_GET_CONNECTION", e.getMessage()));
+	    throw new JspException(sql + ": " + e.getMessage(), e);
 	}
 	return EVAL_BODY_BUFFERED;
     }
@@ -242,8 +241,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    result = new ResultImpl(rs, startRow, maxRows);
 	}
 	catch (SQLException e) {
-	    throw new JspTagException(
-                Resources.getMessage("SQL_PROCESS_ERROR", e.getMessage()));
+	    throw new JspException(sqlStatement + ": " + e.getMessage(), e);
 	}
 	pageContext.setAttribute(var, result, scope);
 	return EVAL_PAGE;
@@ -291,7 +289,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
                     Context ctx = new InitialContext();
                     dataSource = (DataSource) ctx.lookup((String)rawDataSource);
                 } catch (NamingException ex) {
-                    throw new JspTagException(ex.toString());
+                    throw new JspException(ex.toString(), ex);
                 }
             }
             else dataSource = (DataSource) rawDataSource;
