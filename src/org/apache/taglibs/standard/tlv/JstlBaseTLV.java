@@ -205,7 +205,13 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
 		|| matchUri == null
 		|| matchLn == null)
 	    return false;
-        return (tagUri.equals(matchUri) && tagLn.equals(matchLn));
+        // match beginning of URI since some suffix *_rt tags can
+        // be nested in EL enabled tags as defined by the spec
+        if (tagUri.length() > matchUri.length()) {
+            return (tagUri.startsWith(matchUri) && tagLn.equals(matchLn));
+        } else {
+            return (matchUri.startsWith(tagUri) && tagLn.equals(matchLn));
+        }
     }
 
     protected boolean isJspTag(String tagUri, String tagLn, String target) {
