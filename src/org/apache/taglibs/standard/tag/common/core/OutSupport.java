@@ -118,6 +118,9 @@ public class OutSupport extends BodyTagSupport {
 
     // evaluates 'value' and determines if the body should be evaluted
     public int doStartTag() throws JspException {
+
+      needBody = false;			// reset state related to 'default'
+
       try {
 	// print value if available; otherwise, try 'default'
 	if (value != null) {
