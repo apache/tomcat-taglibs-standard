@@ -303,8 +303,7 @@
       <fileset dir="${doc.src}/web">
         <include name="**/*.html"/>
       </fileset>
-    </copy>
-    
+    </copy>    
   </target>
   
   <!-- =================================================================== -->
@@ -370,6 +369,7 @@
            style="${taglibs.xsl}">
       <param name="prefix" expression="../../"/>
     </style>
+    <copy file="${build.doc}/intro.html" todir="${build.doc}"/>
   </target>    
   
   <!-- =================================================================== -->
