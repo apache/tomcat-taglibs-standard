@@ -112,8 +112,8 @@ public class JstlFmtTLV extends JstlBaseTLV {
     // tag names
     private final String SETLOCALE = "setLocale";
     private final String SETBUNDLE = "setBundle";
+    private final String SETTIMEZONE = "setTimeZone";
     private final String BUNDLE = "bundle";
-    private final String TIMEZONE = "timeZone";
     private final String MESSAGE = "message";
     private final String MESSAGE_PARAM = "param";
     private final String FORMAT_NUMBER = "formatNumber";
@@ -193,7 +193,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
             if (qn.startsWith(prefix + ":")
                 && !isFmtTag(ns, ln, SETLOCALE) 
 		&& !isFmtTag(ns, ln, SETBUNDLE)
-		&& !isFmtTag(ns, ln, TIMEZONE)
+		&& !isFmtTag(ns, ln, SETTIMEZONE)
                 && hasDanglingScope(a))
                 fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 
