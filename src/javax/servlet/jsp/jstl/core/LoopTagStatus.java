@@ -62,7 +62,7 @@ package javax.servlet.jsp.jstl.core;
  * convenience methods to determine whether or not the current round is
  * either the first or last in the iteration.  It also lets authors
  * use the status object to obtain information about the iteration range,
- * step, label, and current object.</p>
+ * step, and current object.</p>
  *
  * <p>Environments that require more status can extend this interface.</p>
  *
