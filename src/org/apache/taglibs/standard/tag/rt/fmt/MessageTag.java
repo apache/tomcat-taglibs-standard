@@ -81,4 +81,9 @@ public class MessageTag extends MessageSupport {
     public void setBundle(ResourceBundle bundle) throws JspTagException {
         this.bundle = bundle;
     }
+
+    // for tag attribute
+    public void setMessageArgs(Object[] messageArgs) throws JspTagException {
+        this.messageArgs = messageArgs;
+    }
 }

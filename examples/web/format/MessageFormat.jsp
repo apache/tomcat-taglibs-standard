@@ -22,13 +22,12 @@
   </fmt:messageFormat>
 
  <li> Using &lt;messageArg&gt; body:<br>
-  <fmt:messageFormat value="Current time: {0{">
+  <fmt:messageFormat value="Current time: {0}">
    <fmt:messageArg>
     <fmt:formatDate type="both"/>
    </fmt:messageArg>
   </fmt:messageFormat>
 </ul>
 
-</ul>
 </body>
 </html>

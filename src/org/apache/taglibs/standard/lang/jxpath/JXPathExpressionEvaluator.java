@@ -116,7 +116,7 @@ public class JXPathExpressionEvaluator implements ExpressionEvaluator {
         }
         catch (Exception ex) {
             // ex.printStackTrace();
-            throw new JspException(ex.getMessage());
+            throw new JspException(ex.getMessage(), ex);
         }
     }
 }

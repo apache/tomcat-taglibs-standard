@@ -53,22 +53,31 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tei;
-
-import javax.servlet.jsp.tagext.*;
+package javax.servlet.jsp.jstl.sql;
 
 /**
- * An implementation of TagExtraInfo that implements validation for
- * &lt;locale&gt; tag's attributes.
+ * <p>A class implementing this interface encapsulates all 
+ * the meta data for a result set. 
  *
- * @author Jan Luehe
  */
-public class LocaleTEI extends TagExtraInfo {
+public interface ResultMetaData {
 
     /**
-     * Validates the <tt>scope</tt> attribute of the &lt;locale&gt; tag.
+     * Returns the ColumnMetaData for the named column
+     *
      */
-    public boolean isValid(TagData data) {
-	return Util.isValidScope(data);
-    }
+    public ColumnMetaData get(String name);
+
+    /**
+     * Returns the ColumnMetaData for the given column index
+     *
+     */
+    public ColumnMetaData get(int index);
+
+    /**
+     * Returns an array of ColumnMetaData objects
+     *
+     */
+    public ColumnMetaData[] getColumns();
+
 }

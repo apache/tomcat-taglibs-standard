@@ -74,18 +74,12 @@
     <tag-class>org.apache.taglibs.standard.tag.common.xml.IfTag</tag-class>
     <body-content>JSP</body-content>
     <description>
-        Simple conditional tag, which evalutes its body if the
-        supplied condition is true and optionally exposes a Boolean
-        scripting variable representing the evaluation of this condition
+      XML conditional tag, which evalutes its body if the
+      supplied XPath expression evalutes to 'true' as a boolean
     </description>
     <attribute>
         <name>select</name>
         <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>var</name>
-        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
@@ -144,7 +138,7 @@
     <tag-class>org.apache.taglibs.standard.tag.el.xml.ParseTag</tag-class>
     <body-content>JSP</body-content>
     <description>
-	Parses XML content from 'source' attribute or 'body'; exposes as 'var'.
+	Parses XML content from 'source' attribute or 'body'
     </description>
     <attribute>
         <name>var</name>
@@ -153,6 +147,11 @@
     </attribute>
     <attribute>
         <name>domVar</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>scope</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -173,7 +172,7 @@
     <tag-class>org.apache.taglibs.standard.tag.common.xml.SetTag</tag-class>
     <body-content>JSP</body-content>
     <description>
-	Sets the result of an XPath expression evaluation in a 'scope'
+	Saves the result of an XPath expression evaluation in a 'scope'
     </description>
     <attribute>
         <name>var</name>
@@ -185,13 +184,11 @@
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
-    <!--
     <attribute>
         <name>scope</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
-    -->
   </tag>
 
   <tag>
@@ -205,6 +202,11 @@
     </description>
     <attribute>
         <name>var</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>scope</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -243,6 +245,11 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <name>scope</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
 	<name>xslt</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -255,7 +262,7 @@
     <body-content>JSP</body-content>
     <description>
         Subtag of &lt;choose&gt; that includes its body if its
-        condition evalutes to 'true'
+        expression evalutes to 'true'
     </description>
     <attribute>
         <name>select</name>

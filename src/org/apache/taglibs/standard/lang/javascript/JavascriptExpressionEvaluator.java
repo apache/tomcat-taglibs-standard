@@ -58,6 +58,7 @@ package org.apache.taglibs.standard.lang.javascript;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*; 
 import java.util.Enumeration;
+import java.lang.Boolean;
 
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluator;
 import org.apache.taglibs.standard.lang.spel.Evaluator;
@@ -100,11 +101,10 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
 	Scriptable scope = cx.initStandardObjects(null);
 
         // Put PageContext attributes/parameters in Rhino Scope
-        putAttributesInScope(scope, cx, pageContext, PageContext.PAGE_SCOPE);
-        putAttributesInScope(scope, cx, pageContext, PageContext.REQUEST_SCOPE);
-        putAttributesInScope(scope, cx, pageContext, PageContext.SESSION_SCOPE);
         putAttributesInScope(scope, cx, pageContext, PageContext.APPLICATION_SCOPE);
-        putParametersInScope(scope, cx, pageContext);
+        putAttributesInScope(scope, cx, pageContext, PageContext.SESSION_SCOPE);
+        putAttributesInScope(scope, cx, pageContext, PageContext.REQUEST_SCOPE);
+        putAttributesInScope(scope, cx, pageContext, PageContext.PAGE_SCOPE);
 
 
 	// Evaluate string
@@ -122,9 +122,11 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
 
             if (result instanceof NativeString)
                 result = result.toString();
+            if (result instanceof NativeBoolean)
+                result = new Boolean(result.toString());
 
 	} catch (JavaScriptException jse) {
-	    throw new JspException(jse.getMessage());
+	    throw new JspException(jse.getMessage(), jse);
 	}
 
 	//System.out.println("RHINO result: " + result + ":");

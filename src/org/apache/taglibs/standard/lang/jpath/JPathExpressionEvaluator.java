@@ -116,9 +116,9 @@ public class JPathExpressionEvaluator implements ExpressionEvaluator {
 	    } else
 	      result = new String(expression);			// lit.
         } catch (ParseException e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e.getMessage(), e);
         } catch (EvaluationException e) {
-            throw new JspException(e.getMessage());
+            throw new JspException(e.getMessage(), e);
         }
         if (result != null && !expectedType.isInstance(result)) {
             throw new JspException("The tag expected an object of type ["

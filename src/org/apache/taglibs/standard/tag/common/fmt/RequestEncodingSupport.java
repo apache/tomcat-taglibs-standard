@@ -53,22 +53,76 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tei;
+package org.apache.taglibs.standard.tag.common.fmt;
 
+import java.io.*;
+import java.util.TimeZone;
+import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.tag.common.core.Util;
+import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * An implementation of TagExtraInfo that implements validation for
- * &lt;messageFormat&gt; tag's attributes.
+ * Support for tag handlers for &lt;requestEncoding&gt;, the tag for setting
+ * the request character encoding in JSTL 1.0.
  *
  * @author Jan Luehe
  */
-public class MessageFormatTEI extends TagExtraInfo {
 
-    /**
-     * Validates the <tt>scope</tt> attribute of the &lt;messageFormat&gt; tag.
-     */
-    public boolean isValid(TagData data) {
-	return Util.isValidScope(data);
+public abstract class RequestEncodingSupport extends TagSupport {
+
+    //*********************************************************************
+    // Package-scoped constants
+
+    static final String REQUEST_CHAR_SET =
+	"javax.servlet.jsp.jstl.i18n.request.charset";
+
+
+    //*********************************************************************
+    // Protected state
+
+    protected String value;                      // 'value' attribute
+  
+
+    //*********************************************************************
+    // Constructor and initialization
+
+    public RequestEncodingSupport() {
+	super();
+	init();
+    }
+
+    private void init() {
+	value = null;
+    }
+
+
+    //*********************************************************************
+    // Tag logic
+
+    public int doEndTag() throws JspException {
+	if ((value == null)
+	      && (pageContext.getRequest().getCharacterEncoding() == null)) {
+	    /*
+	     * no charset specified in tag or defined in request Content-Type
+	     * header
+	     */
+	    value = (String) pageContext.findAttribute(REQUEST_CHAR_SET);
+	}
+
+	if (value != null) {
+	    try {
+		pageContext.getRequest().setCharacterEncoding(value);
+	    } catch (UnsupportedEncodingException uee) {
+		throw new JspTagException(uee.getMessage());
+	    }
+	}
+
+	return EVAL_PAGE;
+    }
+
+    // Releases any resources we may have (or inherit)
+    public void release() {
+	init();
     }
 }

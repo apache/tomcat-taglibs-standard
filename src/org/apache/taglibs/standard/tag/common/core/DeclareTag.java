@@ -53,22 +53,25 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tei;
+package org.apache.taglibs.standard.tag.common.core;
 
+import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 
 /**
- * An implementation of TagExtraInfo that implements validation for
- * &lt;bundle&gt; tag's attributes.
- *
- * @author Jan Luehe
+ * <p>Tag handler for &lt;declaregt; in JSTL.  This tag handler is
+ * essentially a runtime no-op as far as tag logic is concerned; the
+ * only important functionality of the tag is to expose a scripting
+ * variable for an existing scoped attribute.</p>
+ * 
+ * @author Shawn Bayern
  */
-public class BundleTEI extends TagExtraInfo {
 
-    /**
-     * Validates the <tt>scope</tt> attribute of the &lt;bundle&gt; tag.
+public class DeclareTag extends TagSupport {
+
+    /*
+     * We're not identical to TagSupport only because we need to
+     * accept an additional "type" attribute.
      */
-    public boolean isValid(TagData data) {
-	return Util.isValidScope(data);
-    }
+    public void setType(String x) { }
 }
