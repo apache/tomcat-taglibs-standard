@@ -188,7 +188,7 @@ ue.
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>driver</name>
+        <name>dataSource</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
