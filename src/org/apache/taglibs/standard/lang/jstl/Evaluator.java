@@ -60,14 +60,16 @@ import java.beans.PropertyEditorManager;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
-import org.apache.taglibs.standard.lang.jstl.parser.ParseException;
 import org.apache.taglibs.standard.lang.jstl.parser.ELParser;
+import org.apache.taglibs.standard.lang.jstl.parser.ParseException;
+import org.apache.taglibs.standard.lang.jstl.parser.Token;
 import org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError;
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluator;
 
@@ -130,14 +132,16 @@ public class Evaluator
    *
    * Evaluates the given attribute value
    **/
-  public Object evaluate (String pAttributeValue,
+  public Object evaluate (String pAttributeName,
+			  String pAttributeValue,
 			  PageContext pPageContext,
 			  Class pExpectedType)
     throws JspException
   {
     Logger logger = new Logger (pPageContext);
 
-    return evaluate (pAttributeValue,
+    return evaluate (pAttributeName,
+		     pAttributeValue,
 		     pPageContext,
 		     pExpectedType,
 		     logger);
@@ -148,7 +152,8 @@ public class Evaluator
    *
    * Evaluates the given attribute value
    **/
-  public Object evaluate (String pAttributeValue,
+  public Object evaluate (String pAttributeName,
+			  String pAttributeValue,
 			  PageContext pPageContext,
 			  Class pExpectedType,
 			  Logger pLogger)
@@ -161,7 +166,8 @@ public class Evaluator
     }
 
     // Get the parsed version of the attribute value
-    Object parsedValue = getOrParseAttributeValue (pAttributeValue);
+    Object parsedValue = getOrParseAttributeValue (pAttributeName,
+						   pAttributeValue);
 
     // Evaluate differently based on the parsed type
     if (parsedValue instanceof String) {
@@ -204,7 +210,8 @@ public class Evaluator
    * the value.  Returns either a String, Expression, or
    * AttributeValue.
    **/
-  public static Object getOrParseAttributeValue (String pAttributeValue)
+  public static Object getOrParseAttributeValue (String pAttributeName,
+						 String pAttributeValue)
     throws JspException
   {
     // See if it's an empty String
@@ -224,14 +231,17 @@ public class Evaluator
 	mCachedAttributeValues.put (pAttributeValue, ret);
       }
       catch (ParseException exc) {
-	throw new ELException
-	  (Constants.PARSE_EXCEPTION,
-	   exc);
+	throw new ELException 
+	  (formatParseException (pAttributeName,
+				 pAttributeValue,
+				 exc));
       }
       catch (TokenMgrError exc) {
-	throw new ELException
-	  (Constants.PARSE_EXCEPTION,
-	   exc);
+	// Note - this should never be reached, since the parser is
+	// constructed to tokenize any input (illegal inputs get
+	// parsed to <BADLY_ESCAPED_STRING_LITERAL> or
+	// <ILLEGAL_CHARACTER>
+	throw new ELException (exc.getMessage ());
       }
     }
     return ret;
@@ -317,7 +327,8 @@ public class Evaluator
     }
     else {
       try {
-	getOrParseAttributeValue (pAttributeValue);
+	getOrParseAttributeValue (pAttributeName,
+				  pAttributeValue);
 	return null;
       }
       catch (JspException exc) {
@@ -338,7 +349,110 @@ public class Evaluator
 			  PageContext pPageContext)
     throws JspException
   {
-    return evaluate (pAttributeValue, pPageContext, pExpectedType);
+    return evaluate (pAttributeName,
+		     pAttributeValue,
+		     pPageContext,
+		     pExpectedType);
+  }
+
+  //-------------------------------------
+  // Formatting ParseException
+  //-------------------------------------
+  /**
+   *
+   * Formats a ParseException into an error message suitable for
+   * displaying on a web page
+   **/
+  static String formatParseException (String pAttributeName,
+				      String pAttributeValue,
+				      ParseException pExc)
+  {
+    // Generate the String of expected tokens
+    StringBuffer expectedBuf = new StringBuffer ();
+    int maxSize = 0;
+    boolean printedOne = false;
+    for (int i = 0; i < pExc.expectedTokenSequences.length; i++) {
+      if (maxSize < pExc.expectedTokenSequences [i].length) {
+        maxSize = pExc.expectedTokenSequences [i].length;
+      }
+      for (int j = 0; j < pExc.expectedTokenSequences [i].length; j++) {
+	if (printedOne) {
+	  expectedBuf.append (", ");
+	}
+        expectedBuf.append 
+	  (pExc.tokenImage [pExc.expectedTokenSequences [i] [j]]);
+	printedOne = true;
+      }
+    }
+    String expected = expectedBuf.toString ();
+
+    // Generate the String of encountered tokens
+    StringBuffer encounteredBuf = new StringBuffer ();
+    Token tok = pExc.currentToken.next;
+    for (int i = 0; i < maxSize; i++) {
+      if (i != 0) encounteredBuf.append (" ");
+      if (tok.kind == 0) {
+        encounteredBuf.append (pExc.tokenImage [0]);
+        break;
+      }
+      encounteredBuf.append (addEscapes (tok.image));
+      tok = tok.next; 
+    }
+    String encountered = encounteredBuf.toString ();
+
+    // Format the error message
+    return MessageFormat.format
+      (Constants.PARSE_EXCEPTION,
+       new Object [] {
+	 expected,
+	 encountered,
+	 "" + pAttributeName,
+	 "" + pAttributeValue,
+       });
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Used to convert raw characters to their escaped version when
+   * these raw version cannot be used as part of an ASCII string
+   * literal.
+   **/
+  static String addEscapes (String str)
+  {
+    StringBuffer retval = new StringBuffer ();
+    char ch;
+    for (int i = 0; i < str.length (); i++) {
+      switch (str.charAt (i)) {
+	case 0 :
+	  continue;
+	case '\b':
+	  retval.append ("\\b");
+	  continue;
+	case '\t':
+	  retval.append ("\\t");
+	  continue;
+	case '\n':
+	  retval.append ("\\n");
+	  continue;
+	case '\f':
+	  retval.append ("\\f");
+	  continue;
+	case '\r':
+	  retval.append ("\\r");
+	  continue;
+	default:
+	  if ((ch = str.charAt (i)) < 0x20 || ch > 0x7e) {
+	    String s = "0000" + Integer.toString (ch, 16);
+	    retval.append ("\\u" + s.substring (s.length () - 4, s.length ()));
+	  }
+	  else {
+	    retval.append (ch);
+	  }
+	  continue;
+        }
+    }
+    return retval.toString ();
   }
 
   //-------------------------------------
@@ -352,7 +466,7 @@ public class Evaluator
   public static String parseAndRender (String pAttributeValue)
     throws JspException
   {
-    Object val = getOrParseAttributeValue (pAttributeValue);
+    Object val = getOrParseAttributeValue ("test", pAttributeValue);
     if (val instanceof String) {
       return (String) val;
     }

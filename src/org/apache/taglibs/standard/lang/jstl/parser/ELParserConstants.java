@@ -10,41 +10,48 @@ public interface ELParserConstants {
   int FLOATING_POINT_LITERAL = 8;
   int EXPONENT = 9;
   int STRING_LITERAL = 10;
-  int TRUE = 11;
-  int FALSE = 12;
-  int NULL = 13;
-  int END_EXPRESSION = 14;
-  int COLON = 15;
+  int BADLY_ESCAPED_STRING_LITERAL = 11;
+  int TRUE = 12;
+  int FALSE = 13;
+  int NULL = 14;
+  int END_EXPRESSION = 15;
   int DOT = 16;
-  int GT = 17;
-  int LT = 18;
-  int EQ = 19;
-  int LE = 20;
-  int GE = 21;
-  int NE = 22;
-  int LPAREN = 23;
-  int RPAREN = 24;
-  int LBRACKET = 25;
-  int RBRACKET = 26;
-  int PLUS = 27;
-  int MINUS = 28;
-  int MULTIPLY = 29;
-  int DIVIDE = 30;
-  int MODULUS = 31;
-  int NOT = 32;
-  int AND = 33;
-  int OR = 34;
-  int PAGE_CONTEXT = 35;
-  int PAGE = 36;
-  int REQUEST = 37;
-  int SESSION = 38;
-  int APPLICATION = 39;
-  int PARAM = 40;
-  int PARAMS = 41;
-  int IDENTIFIER = 42;
-  int IMPL_OBJ_START = 43;
-  int LETTER = 44;
-  int DIGIT = 45;
+  int GT1 = 17;
+  int GT2 = 18;
+  int LT1 = 19;
+  int LT2 = 20;
+  int EQ = 21;
+  int LE1 = 22;
+  int LE2 = 23;
+  int GE1 = 24;
+  int GE2 = 25;
+  int NE = 26;
+  int LPAREN = 27;
+  int RPAREN = 28;
+  int LBRACKET = 29;
+  int RBRACKET = 30;
+  int PLUS = 31;
+  int MINUS = 32;
+  int MULTIPLY = 33;
+  int DIVIDE1 = 34;
+  int DIVIDE2 = 35;
+  int MODULUS1 = 36;
+  int MODULUS2 = 37;
+  int NOT = 38;
+  int AND = 39;
+  int OR = 40;
+  int PAGE_CONTEXT = 41;
+  int PAGE = 42;
+  int REQUEST = 43;
+  int SESSION = 44;
+  int APPLICATION = 45;
+  int PARAM = 46;
+  int PARAMS = 47;
+  int IDENTIFIER = 48;
+  int IMPL_OBJ_START = 49;
+  int LETTER = 50;
+  int DIGIT = 51;
+  int ILLEGAL_CHARACTER = 52;
 
   int DEFAULT = 0;
   int IN_EXPRESSION = 1;
@@ -61,17 +68,21 @@ public interface ELParserConstants {
     "<FLOATING_POINT_LITERAL>",
     "<EXPONENT>",
     "<STRING_LITERAL>",
+    "<BADLY_ESCAPED_STRING_LITERAL>",
     "\"true\"",
     "\"false\"",
     "\"null\"",
     "\"}\"",
-    "\":\"",
     "\".\"",
-    "<GT>",
-    "<LT>",
+    "\">\"",
+    "\"gt\"",
+    "\"<\"",
+    "\"lt\"",
     "\"==\"",
-    "<LE>",
-    "<GE>",
+    "\"<=\"",
+    "\"le\"",
+    "\">=\"",
+    "\"ge\"",
     "\"!=\"",
     "\"(\"",
     "\")\"",
@@ -80,8 +91,10 @@ public interface ELParserConstants {
     "\"+\"",
     "\"-\"",
     "\"*\"",
-    "<DIVIDE>",
-    "<MODULUS>",
+    "\"/\"",
+    "\"div\"",
+    "\"%\"",
+    "\"mod\"",
     "\"not\"",
     "\"and\"",
     "\"or\"",
@@ -96,6 +109,7 @@ public interface ELParserConstants {
     "\"#\"",
     "<LETTER>",
     "<DIGIT>",
+    "<ILLEGAL_CHARACTER>",
   };
 
 }

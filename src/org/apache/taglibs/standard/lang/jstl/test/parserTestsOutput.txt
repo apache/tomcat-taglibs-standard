@@ -4,19 +4,7 @@ Parses to: abc
 Attribute value: ${ 3}
 Parses to: ${3}
 Attribute value: a${
-Causes an error: Unable to parse the expression: org.apache.taglibs.standard.lang.jstl.parser.ParseException: Encountered "<EOF>" at line 1, column 3.
-Was expecting one of:
-    <INTEGER_LITERAL> ...
-    <FLOATING_POINT_LITERAL> ...
-    <STRING_LITERAL> ...
-    "true" ...
-    "false" ...
-    "null" ...
-    "(" ...
-    "-" ...
-    "not" ...
-    <IDENTIFIER> ...
-    
+Causes an error: Unable to parse custom action attribute "test" with value "a${": encountered "<EOF>", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 Attribute value: a${ 5 }
 Parses to: a${5}
 Attribute value: ${ 3 }b
@@ -30,7 +18,7 @@ Parses to: abc ${1} ${2} def
 Attribute value: ${1}
 Parses to: ${1}
 Attribute value: ${-12}
-Parses to: ${-12}
+Parses to: ${(- 12)}
 Attribute value: ${true}
 Parses to: ${true}
 Attribute value: ${false}
@@ -40,7 +28,7 @@ Parses to: ${null}
 Attribute value: ${4.2}
 Parses to: ${4.2}
 Attribute value: ${-21.3}
-Parses to: ${-21.3}
+Parses to: ${(- 21.3)}
 Attribute value: ${4.}
 Parses to: ${4.0}
 Attribute value: ${.21}
@@ -68,9 +56,9 @@ Parses to: ${" with escaping \""}
 Attribute value: ${" with escaping \"\\\""}
 Parses to: ${" with escaping \"\\\""}
 Attribute value: ${" bad \ escaping"}
-Causes an error: Unable to parse the expression: org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError: Lexical error at line 1, column 10.  Encountered: " " (32), after : "\" bad \\"
+Causes an error: Unable to parse custom action attribute "test" with value "${" bad \ escaping"}": encountered "" bad \ ", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 Attribute value: ${" bad \' escaping"}
-Causes an error: Unable to parse the expression: org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError: Lexical error at line 1, column 10.  Encountered: "\'" (39), after : "\" bad \\"
+Causes an error: Unable to parse custom action attribute "test" with value "${" bad \' escaping"}": encountered "" bad \'", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 
 # string literals with '
 Attribute value: ${'abc'}
@@ -90,9 +78,9 @@ Parses to: ${" with escaping '"}
 Attribute value: ${' with escaping \'\\\''}
 Parses to: ${" with escaping '\\'"}
 Attribute value: ${' bad \ escaping'}
-Causes an error: Unable to parse the expression: org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError: Lexical error at line 1, column 10.  Encountered: " " (32), after : "\' bad \\"
+Causes an error: Unable to parse custom action attribute "test" with value "${' bad \ escaping'}": encountered "' bad \ ", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 Attribute value: ${' bad \" escaping'}
-Causes an error: Unable to parse the expression: org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError: Lexical error at line 1, column 10.  Encountered: "\"" (34), after : "\' bad \\"
+Causes an error: Unable to parse custom action attribute "test" with value "${' bad \" escaping'}": encountered "' bad \"", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 
 # identifiers
 Attribute value: ${abc}
@@ -143,3 +131,4 @@ Parses to: ${(- - not abc.def)}
 # array accessors of non-integer types
 Attribute value: ${  a ["hello"]."12" [17.5] }
 Parses to: ${a["hello"]."12"[17.5]}
+

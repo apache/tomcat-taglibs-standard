@@ -138,7 +138,7 @@ public class EvaluationTest
 	  Class cl = parseClassName (typeStr);
 	  pOut.println ("ExpectedType: " + cl);
 	  Evaluator e = new Evaluator ();
-	  Object val = e.evaluate (str, context, cl);
+	  Object val = e.evaluate ("test", str, context, cl);
 	  pOut.println ("Evaluates to: " + val);
 	  if (val != null) {
 	    pOut.println ("With type: " + val.getClass ().getName ());
