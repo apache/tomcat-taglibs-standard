@@ -100,11 +100,10 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
 	Scriptable scope = cx.initStandardObjects(null);
 
         // Put PageContext attributes/parameters in Rhino Scope
-        putAttributesInScope(scope, cx, pageContext, PageContext.PAGE_SCOPE);
-        putAttributesInScope(scope, cx, pageContext, PageContext.REQUEST_SCOPE);
-        putAttributesInScope(scope, cx, pageContext, PageContext.SESSION_SCOPE);
         putAttributesInScope(scope, cx, pageContext, PageContext.APPLICATION_SCOPE);
-        putParametersInScope(scope, cx, pageContext);
+        putAttributesInScope(scope, cx, pageContext, PageContext.SESSION_SCOPE);
+        putAttributesInScope(scope, cx, pageContext, PageContext.REQUEST_SCOPE);
+        putAttributesInScope(scope, cx, pageContext, PageContext.PAGE_SCOPE);
 
 
 	// Evaluate string
