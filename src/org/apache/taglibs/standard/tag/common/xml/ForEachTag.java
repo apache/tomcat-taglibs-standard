@@ -84,13 +84,9 @@ public class ForEachTag extends LoopTagSupport {
     // (We inherit semantics and Javadoc from LoopTagSupport.) 
 
     protected void prepare() throws JspTagException {
-	nodesIndex = 0;
-        try {
-            XPathUtil xu = new XPathUtil(pageContext);
-            nodes = xu.selectNodes(XPathUtil.getContext(this), select);
-        } catch (javax.xml.transform.TransformerException ex) {
-            throw new JspTagException(ex.toString());
-        }
+        nodesIndex = 0;
+        XPathUtil xu = new XPathUtil(pageContext);
+        nodes = xu.selectNodes(XPathUtil.getContext(this), select);
     }
 
     protected boolean hasNext() throws JspTagException {

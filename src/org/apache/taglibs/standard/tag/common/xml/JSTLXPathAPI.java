@@ -54,7 +54,10 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+
 package org.apache.taglibs.standard.tag.common.xml;
+
+import javax.servlet.jsp.JspTagException;
 
 import javax.xml.transform.TransformerException;
 
@@ -63,9 +66,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.traversal.NodeIterator;
 import org.w3c.dom.NodeList;
 
+import org.apache.taglibs.standard.resources.Resources;
+
 import org.apache.xml.utils.PrefixResolverDefault;
 import org.apache.xml.utils.PrefixResolver;
-
 import org.apache.xml.dtm.DTM;
 import org.apache.xml.dtm.ref.DTMNodeIterator;
 import org.apache.xml.dtm.ref.DTMNodeList;
@@ -107,11 +111,11 @@ public class JSTLXPathAPI extends XPathAPI {
      * @param prefixResolver The PrefixResolver using which prefixes in the XPath will be resolved to namespaces.
      * @return The first node found that matches the XPath, or null.
      *
-     * @throws TransformerException
+     * @throws JspTagException
      */
     public static Node selectSingleNode(
     Node contextNode, String str, PrefixResolver prefixResolver)
-    throws TransformerException {
+    throws JspTagException {
         
         // Have the XObject return its result as a NodeSetDTM.
         NodeIterator nl = selectNodeIterator(contextNode, str, prefixResolver);
@@ -129,11 +133,11 @@ public class JSTLXPathAPI extends XPathAPI {
      * @param prefixResolver The PrefixResolver using which prefixes in the XPath will be resolved to namespaces.
      * @return The first node found that matches the XPath, or null.
      *
-     * @throws TransformerException
+     * @throws JspTagException
      */
     public static Node selectSingleNode(
     Node contextNode, String str, PrefixResolver prefixResolver,
-    XPathContext xpathSupport ) throws TransformerException {
+    XPathContext xpathSupport ) throws JspTagException {
         
         // Have the XObject return its result as a NodeSetDTM.
         NodeIterator nl = selectNodeIterator(contextNode, str, prefixResolver, xpathSupport);
@@ -151,17 +155,17 @@ public class JSTLXPathAPI extends XPathAPI {
      *  @param prefixResolver The PrefixResolver using which prefixes in the XPath will be resolved to namespaces.
      *  @return A NodeIterator, should never be null.
      *
-     * @throws TransformerException
+     * @throws JspTagException
      */
     public static NodeIterator selectNodeIterator(
     Node contextNode, String str, PrefixResolver prefixResolver)
-    throws TransformerException {
+    throws JspTagException {
         
         // Execute the XPath, and have it return the result
-        XObject list = eval(contextNode, str, prefixResolver);
+        XObject list = eval(contextNode, str, prefixResolver, null);
         
         // Have the XObject return its result as a NodeSetDTM.
-        return list.nodeset();
+        return getNodeIterator(list);
     }
     
     /**
@@ -173,17 +177,17 @@ public class JSTLXPathAPI extends XPathAPI {
      *  @param prefixResolver The PrefixResolver using which prefixes in the XPath will be resolved to namespaces.
      *  @return A NodeIterator, should never be null.
      *
-     * @throws TransformerException
+     * @throws JspTagException
      */
     public static NodeIterator selectNodeIterator(
     Node contextNode, String str, PrefixResolver prefixResolver,
-    XPathContext xpathSupport ) throws TransformerException {
+    XPathContext xpathSupport ) throws JspTagException {
         
         // Execute the XPath, and have it return the result
         XObject list = eval(contextNode, str, prefixResolver, xpathSupport);
         
         // Have the XObject return its result as a NodeSetDTM.
-        return list.nodeset();
+        return getNodeIterator(list);
     }
     
     /**
@@ -195,16 +199,16 @@ public class JSTLXPathAPI extends XPathAPI {
      *  @param prefixResolver The PrefixResolver using which prefixes in the XPath will be resolved to namespaces.
      *  @return A NodeIterator, should never be null.
      *
-     * @throws TransformerException
+     * @throws JspTagException
      */
-    public static NodeList selectNodeList(
+    private static NodeList selectNodeList(
     Node contextNode, String str, PrefixResolver prefixResolver)
-    throws TransformerException {
+    throws JspTagException {
         // Execute the XPath, and have it return the result
-        XObject list = eval(contextNode, str, prefixResolver);
+        XObject list = eval(contextNode, str, prefixResolver, null);
         
         // Return a NodeList.
-        return list.nodelist();
+        return getNodeList(list);
     }
     
     /**
@@ -216,20 +220,52 @@ public class JSTLXPathAPI extends XPathAPI {
      *  @param prefixResolver The PrefixResolver using which prefixes in the XPath will be resolved to namespaces.
      *  @return A NodeIterator, should never be null.
      *
-     * @throws TransformerException
+     * @throws JspTagException
      */
     public static NodeList selectNodeList(
     Node contextNode, String str, PrefixResolver prefixResolver,
     XPathContext xpathSupport ) 
-    throws TransformerException 
+    throws JspTagException 
     {        
         // Execute the XPath, and have it return the result
         XObject list = eval(contextNode, str, prefixResolver, xpathSupport);
         
         // Return a NodeList.
-        return list.nodelist();
+        return getNodeList(list);
     }
         
+    /**
+     * Returns a NodeIterator from an XObject.
+     *  @param list The XObject from which a NodeIterator is returned.
+     *  @return A NodeIterator, should never be null.
+     *  @throws JspTagException
+     */
+    private static NodeIterator getNodeIterator(XObject list) 
+    throws JspTagException {
+        try {
+            return list.nodeset();
+        } catch (TransformerException ex) {
+            throw new JspTagException(
+                Resources.getMessage("XPATH_ERROR_XOBJECT", ex.getMessage()), ex);            
+        }
+    }        
+
+    /**
+     * Returns a NodeList from an XObject.
+     *  @param list The XObject from which a NodeList is returned.
+     *  @return A NodeList, should never be null.
+     *  @throws JspTagException
+     */
+    static NodeList getNodeList(XObject list) 
+    throws JspTagException {
+        try {
+            return list.nodelist();
+        } catch (TransformerException ex) {
+            throw new JspTagException(
+                Resources.getMessage("XPATH_ERROR_XOBJECT", ex.getMessage()), ex);            
+        }
+    }        
+    
     /**
      *   Evaluate XPath string to an XObject.
      *   XPath namespace prefixes are resolved from the namespaceNode.
@@ -250,28 +286,39 @@ public class JSTLXPathAPI extends XPathAPI {
      *   @see org.apache.xpath.objects.XString
      *   @see org.apache.xpath.objects.XRTreeFrag
      *
-     * @throws TransformerException
+     * @throws JspTagException
      */
     public static XObject eval(
     Node contextNode, String str, PrefixResolver prefixResolver,
-    XPathContext xpathSupport ) throws TransformerException {
+    XPathContext xpathSupport) throws JspTagException {
         //System.out.println("eval of XPathContext params: contextNode:str(xpath)"+
         // ":prefixResolver:xpathSupport => " + contextNode + ":" + str + ":" +
-        //  prefixResolver + ":" + xpathSupport );
-        
-        // Since we don't have a XML Parser involved here, install some default support
-        // for things like namespaces, etc.
-        // (Changed from: XPathContext xpathSupport = new XPathContext();
-        //    because XPathContext is weak in a number of areas... perhaps
-        //    XPathContext should be done away with.)
-        // Create the XPath object.
-        XPath xpath = new XPath(str, null, prefixResolver, XPath.SELECT, null);
-        
-        // Execute the XPath, and have it return the result
-        int ctxtNode = xpathSupport.getDTMHandleFromNode(contextNode);
-        
-        // System.out.println("Context Node id ( after getDTMHandlerFromNode) => " + ctxtNode );
-        
-        return xpath.execute(xpathSupport, ctxtNode, prefixResolver);
+        //  prefixResolver + ":" + xpathSupport );        
+        try {
+            if (xpathSupport == null) {
+                return eval(contextNode, str, prefixResolver);
+            }
+            
+            // Since we don't have a XML Parser involved here, install some default support
+            // for things like namespaces, etc.
+            // (Changed from: XPathContext xpathSupport = new XPathContext();
+            //    because XPathContext is weak in a number of areas... perhaps
+            //    XPathContext should be done away with.)
+            // Create the XPath object.
+            XPath xpath = new XPath(str, null, prefixResolver, XPath.SELECT, null);
+            
+            // Execute the XPath, and have it return the result
+            int ctxtNode = xpathSupport.getDTMHandleFromNode(contextNode);
+            
+            // System.out.println("Context Node id ( after getDTMHandlerFromNode) => " + ctxtNode );
+            XObject xobj = xpath.execute(xpathSupport, ctxtNode, prefixResolver);
+            return xobj;
+        } catch (TransformerException ex) {
+            throw new JspTagException(
+                Resources.getMessage("XPATH_ERROR_EVALUATING_EXPR", str, ex.getMessage()), ex);            
+        } catch (IllegalArgumentException ex) {
+            throw new JspTagException(
+                Resources.getMessage("XPATH_ILLEGAL_ARG_EVALUATING_EXPR", str, ex.getMessage()), ex);            
+        }
     }
 }

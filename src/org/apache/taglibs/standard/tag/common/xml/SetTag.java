@@ -100,27 +100,23 @@ public class SetTag extends TagSupport {
 
     // applies XPath expression from 'select' and stores the result in 'var'
     public int doStartTag() throws JspException {
-        try {
-	    // process the query
-	    XPathUtil xu = new XPathUtil(pageContext);
-	    List result = 
-		xu.selectNodes(XPathUtil.getContext(this), select);
-	    Object ret = result;
-
-	    // unwrap primitive types if that's what we received
-	    if (result.size() == 1) {
-	        Object o = result.get(0);
-	        if (o instanceof String || o instanceof Boolean
-	                || o instanceof Number)
-		    ret = o;
-	    }
-
-	    // expose the final result
-	    pageContext.setAttribute(var, ret, scope);
-	    return SKIP_BODY;
-        } catch (javax.xml.transform.TransformerException ex) {
-	    throw new JspTagException(ex.toString());
+        // process the query
+        XPathUtil xu = new XPathUtil(pageContext);
+        List result =
+        xu.selectNodes(XPathUtil.getContext(this), select);
+        Object ret = result;
+        
+        // unwrap primitive types if that's what we received
+        if (result.size() == 1) {
+            Object o = result.get(0);
+            if (o instanceof String || o instanceof Boolean
+            || o instanceof Number)
+                ret = o;
         }
+        
+        // expose the final result
+        pageContext.setAttribute(var, ret, scope);
+        return SKIP_BODY;
     }
 
     // Releases any resources we may have (or inherit)

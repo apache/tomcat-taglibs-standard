@@ -88,14 +88,9 @@ public class WhenTag extends WhenTagSupport {
     // Supplied conditional logic
 
     protected boolean condition() throws JspTagException {
-       try {
-            XPathUtil xu = new XPathUtil(pageContext);
-            return (xu.booleanValueOf(XPathUtil.getContext(this), select));
-        } catch (javax.xml.transform.TransformerException ex) {
-            throw new JspTagException(ex.toString());
-        }
+        XPathUtil xu = new XPathUtil(pageContext);
+        return (xu.booleanValueOf(XPathUtil.getContext(this), select));
     }
-
 
     //*********************************************************************
     // Private state

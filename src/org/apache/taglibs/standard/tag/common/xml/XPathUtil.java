@@ -168,6 +168,7 @@ public class XPathUtil {
         String localName) 
         throws UnresolvableException 
         {
+            //p("resolving: " + namespace + "/" + prefix + "/" + localName);
             // I'd prefer to match on namespace, but this doesn't appear
             // to work in Jaxen
             if (prefix == null || prefix.equals("")) {
@@ -238,6 +239,7 @@ public class XPathUtil {
             if (o == null) {
                 throw new UnresolvableException("$" + (prefix==null?"":"prefix"+":") + localName);
             }
+            //p("resolved to: " + o);
             return o;
         }                
     }
@@ -301,7 +303,7 @@ public class XPathUtil {
     /**
      * Evaluate an XPath expression to a String value. 
      */
-    public String valueOf(Node n, String xpath) throws TransformerException  {
+    public String valueOf(Node n, String xpath) throws JspTagException  {
         //System.out.println("valueOf of XPathUtil = passed node: xpath => " +
         //     n + " : " + xpath );        
         staticInit();
@@ -324,7 +326,7 @@ public class XPathUtil {
      * Evaluate an XPath expression to a boolean value. 
      */
     public boolean booleanValueOf(Node n, String xpath)
-    throws TransformerException {
+    throws JspTagException {
         
         staticInit();
         JstlVariableContext vs = new JstlVariableContext();
@@ -337,13 +339,18 @@ public class XPathUtil {
         XObject result = JSTLXPathAPI.eval( contextNode, xpath,
         jstlPrefixResolver, xpathSupport );
         
-        return result.bool();
+        try {
+            return result.bool();
+        } catch (TransformerException ex) {
+            throw new JspTagException(
+                Resources.getMessage("XPATH_ERROR_XOBJECT", ex.getMessage()), ex);            
+        }
     }
     
     /** 
      * Evaluate an XPath expression to a List of nodes. 
      */
-    public List selectNodes(Node n, String xpath)  throws TransformerException {
+    public List selectNodes(Node n, String xpath)  throws JspTagException {
         
         staticInit();
         JstlVariableContext vs = new JstlVariableContext();
@@ -357,7 +364,7 @@ public class XPathUtil {
         XObject result = JSTLXPathAPI.eval( contextNode, xpath,
         jstlPrefixResolver,xpathSupport );
         
-        NodeList nl= result.nodelist();
+        NodeList nl= JSTLXPathAPI.getNodeList(result);
         // System.out.println("NodeList => " + nl );
         Vector resultVect = new Vector();
         for ( int i=0; i<nl.getLength(); i++ ) {
@@ -372,7 +379,7 @@ public class XPathUtil {
      * Evaluate an XPath expression to a single node. 
      */
     public Node selectSingleNode(Node n, String xpath)
-    throws TransformerException {
+    throws JspTagException {
         //System.out.println("selectSingleNode of XPathUtil = passed node:" +
         //   "xpath => " + n + " : " + xpath );
         
