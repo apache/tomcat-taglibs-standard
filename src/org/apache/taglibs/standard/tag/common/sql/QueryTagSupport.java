@@ -112,10 +112,16 @@ public abstract class QueryTagSupport extends BodyTagSupport
     }
 
     private void init() {
-        scope = PageContext.PAGE_SCOPE;
         startRow = 0;
         maxRows = -1;
 	maxRowsSpecified = dataSourceSpecified = false;
+	isPartOfTransaction = false;
+	conn = null;
+	rawDataSource = null;
+	parameters = null;
+	sql = null;
+	var = null;
+        scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -267,11 +273,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    } catch (SQLException e) {} // Not much we can do
 	}
 
-	// Reset the per-invokation state.
-	parameters = null;
-	isPartOfTransaction = false;
 	conn = null;
-        rawDataSource = null;
+	parameters = null;
     }
 
 
@@ -281,6 +284,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
     private Connection getConnection() throws JspException, SQLException {
 	// Fix: Add all other mechanisms
 	Connection conn = null;
+	isPartOfTransaction = false;
+
 	TransactionTagSupport parent = (TransactionTagSupport) 
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
@@ -291,6 +296,10 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    conn = parent.getSharedConnection();
             isPartOfTransaction = true;
 	} else {
+	    if ((rawDataSource == null) && dataSourceSpecified) {
+		throw new JspException(
+		    Resources.getMessage("SQL_DATASOURCE_NULL"));
+	    }
 	    DataSource dataSource = DataSourceUtil.getDataSource(rawDataSource,
 								 pageContext);
             try {

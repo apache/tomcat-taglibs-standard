@@ -114,7 +114,7 @@ public class DataSourceUtil {
             dataSource = (DataSource) rawDataSource;
         } else {
 	    throw new JspException(
-                Resources.getMessage("SQL_DATASOURCE_INVALID"));
+                Resources.getMessage("SQL_DATASOURCE_INVALID_TYPE"));
 	}
 
 	return dataSource;

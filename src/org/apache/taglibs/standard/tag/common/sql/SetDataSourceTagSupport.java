@@ -76,13 +76,32 @@ import org.apache.taglibs.standard.resources.Resources;
 public class SetDataSourceTagSupport extends TagSupport {
 
     protected Object dataSource;
+    protected boolean dataSourceSpecified;
     protected String jdbcURL;
     protected String driverClassName;
     protected String userName;
     protected String password;
 
-    private int scope = PageContext.PAGE_SCOPE;
+    private int scope;
     private String var;
+
+
+    //*********************************************************************
+    // Constructor and initialization
+
+    public SetDataSourceTagSupport() {
+	super();
+	init();
+    }
+
+    private void init() {
+	dataSource = null;
+	dataSourceSpecified = false;
+	jdbcURL = driverClassName = userName = password = null;
+	var = null;
+	scope = PageContext.PAGE_SCOPE;
+    }
+
 
     //*********************************************************************
     // Accessor methods
@@ -100,6 +119,7 @@ public class SetDataSourceTagSupport extends TagSupport {
 	this.var = var;
     }
 
+
     //*********************************************************************
     // Tag logic
 
@@ -109,6 +129,11 @@ public class SetDataSourceTagSupport extends TagSupport {
         if (dataSource != null) {
             ds = DataSourceUtil.getDataSource(dataSource, pageContext);
         } else {
+	    if (dataSourceSpecified) {
+		throw new JspException(
+                    Resources.getMessage("SQL_DATASOURCE_NULL"));
+	    }
+
             DataSourceWrapper dsw = new DataSourceWrapper();
             try {
                 // set driver class iff provided by the tag
@@ -134,5 +159,10 @@ public class SetDataSourceTagSupport extends TagSupport {
         }
 
 	return SKIP_BODY;
+    }
+
+    // Releases any resources we may have (or inherit)
+    public void release() {
+	init();
     }
 }

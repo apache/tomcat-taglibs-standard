@@ -108,8 +108,13 @@ public abstract class UpdateTagSupport extends BodyTagSupport
     }
 
     private void init() {
+	rawDataSource = null;
+	sql = null;
+	conn = null;
+	parameters = null;
+	isPartOfTransaction = dataSourceSpecified = false;
         scope = PageContext.PAGE_SCOPE;
-	dataSourceSpecified = false;
+	var = null;
     }
 
 
@@ -210,15 +215,13 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	if (conn != null && !isPartOfTransaction) {
 	    try {
 		conn.close();
-	    } catch (SQLException e) {} // Not much we can do
+	    } catch (SQLException e) {
+		// Not much we can do
+	    }
 	}
 
-	// Reset the per-invokation state.
 	parameters = null;
-	isPartOfTransaction = false;
 	conn = null;
-        bodyContent = null;
-        rawDataSource = null;
     }
 
 
@@ -243,6 +246,8 @@ public abstract class UpdateTagSupport extends BodyTagSupport
     private Connection getConnection() throws JspException, SQLException {
 	// Fix: Add all other mechanisms
 	Connection conn = null;
+	isPartOfTransaction = false;
+
 	TransactionTagSupport parent = (TransactionTagSupport) 
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
@@ -253,6 +258,10 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	    conn = parent.getSharedConnection();
             isPartOfTransaction = true;
 	} else {
+	    if ((rawDataSource == null) && dataSourceSpecified) {
+		throw new JspException(
+		    Resources.getMessage("SQL_DATASOURCE_NULL"));
+	    }
 	    DataSource dataSource = DataSourceUtil.getDataSource(rawDataSource,
 								 pageContext);
             try {

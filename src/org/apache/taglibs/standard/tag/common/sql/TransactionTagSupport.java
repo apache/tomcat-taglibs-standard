@@ -96,6 +96,7 @@ public abstract class TransactionTagSupport extends TagSupport
 
     protected Object rawDataSource;
     protected DataSource dataSource;
+    protected boolean dataSourceSpecified;
 
 
     //*********************************************************************
@@ -116,6 +117,9 @@ public abstract class TransactionTagSupport extends TagSupport
 
     private void init() {
 	conn = null;
+	dataSource = null;
+	dataSourceSpecified = false;
+	rawDataSource = null;
 	isolation = Connection.TRANSACTION_NONE;
     }
 
@@ -129,6 +133,11 @@ public abstract class TransactionTagSupport extends TagSupport
      * the transaction.
      */
     public int doStartTag() throws JspException {
+
+	if ((rawDataSource == null) && dataSourceSpecified) {
+	    throw new JspException(
+                Resources.getMessage("SQL_DATASOURCE_NULL"));
+	}
 
         dataSource = DataSourceUtil.getDataSource(rawDataSource, pageContext);
 

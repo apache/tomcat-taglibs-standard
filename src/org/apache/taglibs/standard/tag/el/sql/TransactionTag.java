@@ -72,6 +72,7 @@ public class TransactionTag extends TransactionTagSupport {
 
     public void setDataSource(String dataSourceEL) {
 	this.dataSourceEL = dataSourceEL;
+	this.dataSourceSpecified = true;
     }
 
     public void setIsolation(String isolationEL) {

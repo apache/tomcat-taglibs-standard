@@ -77,6 +77,7 @@ public class SetDataSourceTag extends SetDataSourceTagSupport {
 
     public void setDataSource(String dataSourceEL) {
 	this.dataSourceEL = dataSourceEL;
+	this.dataSourceSpecified = true;
     }
 
     public void setDriver(String driverClassNameEL) {
