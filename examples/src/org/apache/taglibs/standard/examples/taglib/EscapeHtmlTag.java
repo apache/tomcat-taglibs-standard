@@ -55,12 +55,15 @@
 
 package org.apache.taglibs.standard.examples.taglib;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.taglibs.standard.examples.util.*;
+import org.apache.taglibs.standard.examples.util.Util;
 
 /**
  * <p>Tag handler for &lt;escapeHtml&gt;

@@ -55,7 +55,7 @@
 
 package org.apache.taglibs.standard.lang.jpath.example;
 
-import java.util.*;
+import java.util.GregorianCalendar;
 
 
 public class Event {

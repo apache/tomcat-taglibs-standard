@@ -55,10 +55,7 @@
 
 package org.apache.taglibs.standard.lang.jpath.adapter;
 
-import org.apache.taglibs.standard.lang.jpath.expression.*;
 import javax.servlet.jsp.jstl.core.LoopTagStatus;
-import javax.servlet.jsp.*;
-import java.util.*;
 
 public class StatusIterationContext implements IterationContext {
     private LoopTagStatus status;

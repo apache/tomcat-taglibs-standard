@@ -112,13 +112,17 @@
 
 package org.apache.taglibs.standard.lang.jpath.expression;
 
-import org.apache.taglibs.standard.lang.jpath.adapter.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import javax.servlet.http.*;
-import javax.servlet.*;
-import java.beans.*;
-import java.lang.reflect.*;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
+import javax.servlet.jsp.PageContext;
+
+import org.apache.taglibs.standard.lang.jpath.adapter.IterationContext;
 
 /**
  * The Identifier class

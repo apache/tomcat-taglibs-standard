@@ -112,8 +112,6 @@
 
 package org.apache.taglibs.standard.lang.jpath.expression;
 
-import org.apache.taglibs.standard.lang.jpath.adapter.*;
-import javax.servlet.jsp.*;
 
 /**
  * The EvaluationException class

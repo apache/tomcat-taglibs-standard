@@ -55,14 +55,19 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Locale;
+
 import javax.servlet.ServletResponse;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
-import org.apache.taglibs.standard.tag.common.core.Util;
+import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.jsp.tagext.TagSupport;
+
 import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.tag.common.core.Util;
 
 /**
  * Support for tag handlers for &lt;setLocale&gt;, the locale setting tag in

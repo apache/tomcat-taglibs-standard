@@ -55,8 +55,9 @@
 
 package org.apache.taglibs.standard.examples.beans;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.text.*;
 
 /**
  * Object that represents a Customer.

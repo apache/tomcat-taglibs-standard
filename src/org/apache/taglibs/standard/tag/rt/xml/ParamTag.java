@@ -55,9 +55,9 @@
 
 package org.apache.taglibs.standard.tag.rt.xml;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.xml.*;
+import javax.servlet.jsp.JspTagException;
+
+import org.apache.taglibs.standard.tag.common.xml.ParamSupport;
 
 /**
  * <p>A handler for &lt;param&gt; that supports rtexprvalue-based

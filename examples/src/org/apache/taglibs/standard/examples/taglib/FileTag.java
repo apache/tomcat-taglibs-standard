@@ -55,15 +55,15 @@
 
 package org.apache.taglibs.standard.examples.taglib;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.TagSupport;
+
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
-
-import org.apache.taglibs.standard.examples.util.*;
 
 /**
  * <p>Tag handler for &lt;file&gt;

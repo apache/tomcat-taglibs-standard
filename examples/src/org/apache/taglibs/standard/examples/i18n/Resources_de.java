@@ -1,6 +1,6 @@
 package org.apache.taglibs.standard.examples.i18n;
 
-import java.util.*;
+import java.util.ListResourceBundle;
 
 public class Resources_de extends ListResourceBundle {
     private static Object[][] contents;

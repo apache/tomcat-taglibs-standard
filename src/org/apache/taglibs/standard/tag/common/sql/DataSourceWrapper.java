@@ -55,10 +55,13 @@
 
 package org.apache.taglibs.standard.tag.common.sql;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
-import javax.sql.*;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
 import org.apache.taglibs.standard.resources.Resources;
 
 

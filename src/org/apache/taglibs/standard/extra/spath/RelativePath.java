@@ -55,7 +55,8 @@
 
 package org.apache.taglibs.standard.extra.spath;
 
-import java.util.*;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * <p>Represents a relative SPath expression.</p>

@@ -55,9 +55,12 @@
 
 package org.apache.taglibs.standard.lang.jpath.adapter;
 
-import org.apache.taglibs.standard.lang.jpath.expression.*;
-import javax.servlet.jsp.*;
-import java.util.*;
+import java.util.Iterator;
+
+import javax.servlet.jsp.PageContext;
+
+import org.apache.taglibs.standard.lang.jpath.expression.EvaluationException;
+import org.apache.taglibs.standard.lang.jpath.expression.Predicate;
 
 public interface JSPList extends Iterator {
     public Object next();

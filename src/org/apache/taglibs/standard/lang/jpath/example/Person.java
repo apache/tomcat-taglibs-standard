@@ -56,7 +56,8 @@
 package org.apache.taglibs.standard.lang.jpath.example;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 public class Person {

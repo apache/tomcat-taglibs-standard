@@ -112,9 +112,12 @@
 
 package org.apache.taglibs.standard.lang.jpath.expression;
 
-import org.apache.taglibs.standard.lang.jpath.adapter.*;
-import javax.servlet.jsp.*;
-import java.util.*;
+import java.util.GregorianCalendar;
+
+import javax.servlet.jsp.PageContext;
+
+import org.apache.taglibs.standard.lang.jpath.adapter.GregorianCalendarAdapter;
+import org.apache.taglibs.standard.lang.jpath.adapter.IterationContext;
 
 /**
  * The NowFunction class

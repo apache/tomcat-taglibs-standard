@@ -55,12 +55,15 @@
 
 package org.apache.taglibs.standard.tag.el.core;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import java.util.ArrayList;
+
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.jstl.core.LoopTag;
-import org.apache.taglibs.standard.tag.common.core.*;
+import javax.servlet.jsp.tagext.IterationTag;
+
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+import org.apache.taglibs.standard.tag.common.core.ForEachSupport;
+import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 
 /**
  * <p>A handler for &lt;forEach&gt; that accepts attributes as Strings

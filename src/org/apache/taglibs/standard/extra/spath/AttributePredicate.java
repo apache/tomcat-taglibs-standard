@@ -55,7 +55,6 @@
 
 package org.apache.taglibs.standard.extra.spath;
 
-import java.util.List;
 
 /**
  * <p>Represents a predicate expression concerning a single attribute.</p>

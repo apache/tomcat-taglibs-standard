@@ -55,10 +55,13 @@
 
 package org.apache.taglibs.standard.examples.startup;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
-import javax.servlet.*;
-import org.apache.taglibs.standard.examples.beans.*;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import org.apache.taglibs.standard.examples.beans.Customers;
 
 /**
  * Initialization class. Builds all the data structures

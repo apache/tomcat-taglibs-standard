@@ -57,9 +57,9 @@ package org.apache.taglibs.standard.examples.util;
 
 import java.io.PrintWriter;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.jsp.*;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
  * ServletResponseWrapper used for the the generation of 

@@ -55,10 +55,10 @@
 
 package org.apache.taglibs.standard.tag.el.core;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.core.*;
+import javax.servlet.jsp.JspException;
+
+import org.apache.taglibs.standard.tag.common.core.ImportSupport;
+import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 
 /**
  * <p>A handler for &lt;import&gt; that accepts attributes as Strings

@@ -55,9 +55,7 @@
 
 package org.apache.taglibs.standard.tag.rt.core;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.core.*;
+import org.apache.taglibs.standard.tag.common.core.OutSupport;
 
 /**
  * <p>Tag handler for &lt;out&gt; in JSTL's rtexprvalue library.</p>

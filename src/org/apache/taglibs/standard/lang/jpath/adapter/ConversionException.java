@@ -55,7 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jpath.adapter;
 
-import javax.servlet.jsp.*;
 
 public class ConversionException extends Exception {
 

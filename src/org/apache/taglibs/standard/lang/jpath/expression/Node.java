@@ -112,8 +112,9 @@
 
 package org.apache.taglibs.standard.lang.jpath.expression;
 
-import org.apache.taglibs.standard.lang.jpath.adapter.*;
-import javax.servlet.jsp.*;
+import javax.servlet.jsp.PageContext;
+
+import org.apache.taglibs.standard.lang.jpath.adapter.IterationContext;
 
 /* All AST nodes must implement this interface.  It provides basic
    machinery for constructing the parent and child relationships

@@ -55,8 +55,8 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import java.util.ResourceBundle;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  *

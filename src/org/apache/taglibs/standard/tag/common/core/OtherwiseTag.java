@@ -55,8 +55,6 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
 
 /**
  * <p>Tag handler for &lt;otherwise&gt; in JSTL.</p>

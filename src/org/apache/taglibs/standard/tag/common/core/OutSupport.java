@@ -55,12 +55,12 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
-import java.io.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.core.*;
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
-import org.apache.taglibs.standard.resources.Resources;
+import java.io.IOException;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
  * <p>Support for handlers of the &lt;out&gt; tag, which simply evalutes and

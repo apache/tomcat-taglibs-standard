@@ -112,8 +112,9 @@
 
 package org.apache.taglibs.standard.lang.jpath.expression;
 
-import org.apache.taglibs.standard.lang.jpath.adapter.*;
-import javax.servlet.jsp.*;
+import javax.servlet.jsp.PageContext;
+
+import org.apache.taglibs.standard.lang.jpath.adapter.IterationContext;
 
 /**
  * The Expression class is typically the top class in the expression

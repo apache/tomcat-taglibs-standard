@@ -57,8 +57,8 @@ package javax.servlet.jsp.jstl.core;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.PageContext;
 
 /**
  * Class supporting access to configuration data.

@@ -55,10 +55,9 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.core.*;
-import org.apache.taglibs.standard.resources.Resources;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * <p>A handler for the &lt;remove&gt; tag, which removes the variable

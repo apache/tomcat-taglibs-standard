@@ -55,9 +55,12 @@
 
 package org.apache.taglibs.standard.lang.jpath.adapter;
 
-import org.apache.taglibs.standard.lang.jpath.expression.*;
-import java.text.*;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Convert {
 

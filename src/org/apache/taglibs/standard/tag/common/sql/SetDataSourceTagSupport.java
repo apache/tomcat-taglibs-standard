@@ -55,15 +55,15 @@
 
 package org.apache.taglibs.standard.tag.common.sql;
 
-import java.util.*;
-import javax.sql.DataSource;
-import javax.servlet.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.jstl.sql.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.core.Config;
-import org.apache.taglibs.standard.tag.common.core.Util;
+import javax.servlet.jsp.tagext.TagSupport;
+import javax.sql.DataSource;
+
 import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.tag.common.core.Util;
 
 
 /**

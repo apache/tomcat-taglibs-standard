@@ -55,12 +55,11 @@
 
 package org.apache.taglibs.standard.tag.el.fmt;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
-import org.apache.taglibs.standard.lang.support.*;
-import org.apache.taglibs.standard.tag.common.fmt.*;
+
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+import org.apache.taglibs.standard.tag.common.fmt.MessageSupport;
 
 /**
  * <p>A handler for &lt;message&gt; that accepts attributes as Strings

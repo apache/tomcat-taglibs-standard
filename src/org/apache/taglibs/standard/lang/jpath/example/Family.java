@@ -56,7 +56,6 @@
 package org.apache.taglibs.standard.lang.jpath.example;
 
 
-import java.util.*;
 
 
 public class Family {

@@ -112,9 +112,15 @@
 
 package org.apache.taglibs.standard.lang.jpath.expression;
 
-import org.apache.taglibs.standard.lang.jpath.adapter.*;
-import javax.servlet.jsp.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+import javax.servlet.jsp.PageContext;
+
+import org.apache.taglibs.standard.lang.jpath.adapter.CollectionAdapter;
+import org.apache.taglibs.standard.lang.jpath.adapter.ConversionException;
+import org.apache.taglibs.standard.lang.jpath.adapter.Convert;
+import org.apache.taglibs.standard.lang.jpath.adapter.IterationContext;
 
 /**
  * The TokenizeFunction class

@@ -55,10 +55,12 @@
 
 package org.apache.taglibs.standard.tag.el.core;
 
-import javax.servlet.jsp.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
-import org.apache.taglibs.standard.tag.common.core.*;
+
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 
 /**
  * <p>Tag handler for &lt;if&gt; in JSTL's expression-evaluating library.  

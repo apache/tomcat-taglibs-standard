@@ -55,7 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jpath.adapter;
 
-import org.apache.taglibs.standard.lang.jpath.expression.*;
 
 public abstract class JSPAdapter {
     public static Object adapt(Object o) {

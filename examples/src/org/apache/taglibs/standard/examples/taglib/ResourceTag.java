@@ -55,15 +55,21 @@
 
 package org.apache.taglibs.standard.examples.taglib;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.Writer;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletResponseWrapper;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.TagSupport;
+
+import org.apache.taglibs.standard.examples.util.IOBean;
+import org.apache.taglibs.standard.examples.util.ServletResponseWrapperForWriter;
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
-
-import org.apache.taglibs.standard.examples.util.*;
 
 /**
  * <p>Tag handler for &lt;resource&gt;

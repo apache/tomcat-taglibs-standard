@@ -55,10 +55,10 @@
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
-import org.apache.taglibs.standard.tag.common.fmt.*;
+
+import org.apache.taglibs.standard.tag.common.fmt.MessageSupport;
 
 /**
  * <p>A handler for &lt;message&gt; that supports rtexprvalue-based

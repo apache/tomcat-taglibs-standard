@@ -54,8 +54,8 @@
  */ 
 package org.apache.taglibs.standard.tag.rt.sql;
 
-import javax.sql.*;
-import javax.servlet.jsp.*;
+import javax.servlet.jsp.JspException;
+
 import org.apache.taglibs.standard.tag.common.sql.TransactionTagSupport;
 
 /**

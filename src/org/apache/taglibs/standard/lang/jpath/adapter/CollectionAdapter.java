@@ -55,10 +55,15 @@
 
 package org.apache.taglibs.standard.lang.jpath.adapter;
 
-import org.apache.taglibs.standard.lang.jpath.expression.*;
-import javax.servlet.jsp.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
-import java.util.*;
+import javax.servlet.jsp.PageContext;
+
+import org.apache.taglibs.standard.lang.jpath.expression.EvaluationException;
+import org.apache.taglibs.standard.lang.jpath.expression.Expression;
+import org.apache.taglibs.standard.lang.jpath.expression.Predicate;
 
 public class CollectionAdapter extends JSPAdapter implements JSPList {
 

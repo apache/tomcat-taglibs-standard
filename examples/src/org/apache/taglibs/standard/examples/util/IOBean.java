@@ -55,7 +55,11 @@
 
 package org.apache.taglibs.standard.examples.util;
 
-import java.io.*;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+
 import javax.servlet.jsp.JspException;
 
 /**

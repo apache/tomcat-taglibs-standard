@@ -55,11 +55,11 @@
 
 package org.apache.taglibs.standard.tag.rt.core;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.LoopTag;
-import org.apache.taglibs.standard.tag.common.core.*;
+import javax.servlet.jsp.tagext.IterationTag;
+
+import org.apache.taglibs.standard.tag.common.core.ForTokensSupport;
 
 /**
  * <p>A handler for &lt;forTokens&gt; that supports rtexprvalue-based

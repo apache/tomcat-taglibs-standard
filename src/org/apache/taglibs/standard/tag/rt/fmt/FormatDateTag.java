@@ -55,10 +55,11 @@
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.fmt.*;
+import java.util.Date;
+
+import javax.servlet.jsp.JspTagException;
+
+import org.apache.taglibs.standard.tag.common.fmt.FormatDateSupport;
 
 /**
  * <p>A handler for &lt;formatDate&gt; that supports rtexprvalue-based

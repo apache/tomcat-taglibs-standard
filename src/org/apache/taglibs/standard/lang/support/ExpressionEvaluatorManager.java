@@ -55,13 +55,15 @@
 
 package org.apache.taglibs.standard.lang.support;
 
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import java.util.HashMap;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
+
 import org.apache.taglibs.standard.lang.jstl.Coercions;
-import org.apache.taglibs.standard.lang.jstl.Logger;
 import org.apache.taglibs.standard.lang.jstl.ELException;
+import org.apache.taglibs.standard.lang.jstl.Logger;
 
 /**
  * <p>A conduit to the JSTL EL.  Based on...</p>

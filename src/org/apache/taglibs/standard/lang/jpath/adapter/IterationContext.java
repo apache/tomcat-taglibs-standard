@@ -55,9 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jpath.adapter;
 
-import org.apache.taglibs.standard.lang.jpath.expression.*;
-import javax.servlet.jsp.*;
-import java.util.*;
 
 public interface IterationContext {
     public Object getCurrent();

@@ -55,13 +55,12 @@
 
 package org.apache.taglibs.standard.tag.el.xml;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.xml.sax.XMLFilter;
-import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import javax.servlet.jsp.JspException;
+
 import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
-import org.apache.taglibs.standard.tag.common.xml.*;
-import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.tag.common.xml.ParseSupport;
+import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import org.xml.sax.XMLFilter;
 
 /**
  * <p>A handler for &lt;parse&gt; that accepts attributes as Strings

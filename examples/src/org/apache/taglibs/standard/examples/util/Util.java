@@ -55,8 +55,15 @@
 
 package org.apache.taglibs.standard.examples.util;
 
-import java.io.*;
-import javax.servlet.jsp.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
+
+import javax.servlet.jsp.JspException;
 
 /**
  * <p>Utility class for examples webapp.

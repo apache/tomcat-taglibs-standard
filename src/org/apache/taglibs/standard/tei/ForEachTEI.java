@@ -55,7 +55,8 @@
 
 package org.apache.taglibs.standard.tei;
 
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.tagext.TagData;
+import javax.servlet.jsp.tagext.TagExtraInfo;
 
 /**
  * <p>An implementation of TagExtraInfo that implements validation for

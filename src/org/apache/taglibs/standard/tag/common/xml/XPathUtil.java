@@ -55,22 +55,29 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import javax.servlet.http.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.sax.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import org.jaxen.*;
-import org.jaxen.dom.*;
-import org.saxpath.*;
-import org.apache.taglibs.standard.resources.Resources;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.jsp.tagext.TagSupport;
+
+import org.jaxen.Context;
+import org.jaxen.ContextSupport;
+import org.jaxen.FunctionContext;
+import org.jaxen.SimpleNamespaceContext;
+import org.jaxen.UnresolvableException;
+import org.jaxen.VariableContext;
+import org.jaxen.XPath;
+import org.jaxen.XPathFunctionContext;
+import org.jaxen.dom.DOMXPath;
+import org.jaxen.dom.DocumentNavigator;
+import org.saxpath.SAXPathException;
+import org.w3c.dom.Node;
 
 /**
  * <p>Support for tag handlers that evaluate XPath expressions.</p>

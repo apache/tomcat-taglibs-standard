@@ -55,13 +55,14 @@
 
 package javax.servlet.jsp.jstl.fmt;
 
-import java.util.*;
-import java.text.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.jstl.core.Config;
+import java.text.MessageFormat;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import javax.servlet.jsp.PageContext;
+
 import org.apache.taglibs.standard.tag.common.fmt.BundleSupport;
 import org.apache.taglibs.standard.tag.common.fmt.MessageSupport;
-import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * Class which exposes the locale-determination logic for resource bundles

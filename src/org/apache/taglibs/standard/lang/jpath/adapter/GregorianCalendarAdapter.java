@@ -55,9 +55,7 @@
 
 package org.apache.taglibs.standard.lang.jpath.adapter;
 
-import org.apache.taglibs.standard.lang.jpath.expression.*;
-import javax.servlet.jsp.*;
-import java.util.*;
+import java.util.GregorianCalendar;
 
 public class GregorianCalendarAdapter implements JSPDate {
 
