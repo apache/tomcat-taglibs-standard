@@ -167,6 +167,8 @@ public abstract class MessageSupport extends BodyTagSupport {
 	    } else {
 		bundle = BundleSupport.getDefaultBundle(pageContext);
 	    }
+	} else {
+	    LocaleSupport.setResponseLocale(pageContext, bundle.getLocale());
 	}
 
 	String message = null;
