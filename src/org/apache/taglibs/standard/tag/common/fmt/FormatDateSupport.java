@@ -168,17 +168,6 @@ public abstract class FormatDateSupport extends TagSupport {
     public int doEndTag() throws JspException {
 
 	/*
-	 * If 'value' is neither a Number nor a Date, it is converted to a
-	 * String. For example, this is necessary if 'value' is the result
-	 * of a database lookup, in which case it will be an instance of
-	 * org.apache.taglibs.standard.tag.common.sql.ColumnImpl.
-	 */
-	if ((value != null)
-	    && !(value instanceof Date) && !(value instanceof String)) {
-	    value = value.toString();
-	}
-
-	/*
 	 * If no date or time is given, the current date and time are used.
 	 * If the date and/or time is given as a string literal, it is first
 	 * parsed into an instance of java.util.Date according to the default

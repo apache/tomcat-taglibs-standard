@@ -184,16 +184,6 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	}
 
 	/*
-	 * If 'value' is neither a Number nor a String, it is converted to a
-	 * String. For example, this is necessary if 'value' is the result
-	 * of a database lookup, in which case it will be an instance of
-	 * org.apache.taglibs.standard.tag.common.sql.ColumnImpl.
-	 */
-	if (!(value instanceof Number) && !(value instanceof String)) {
-	    value = value.toString();
-	}
-	
-	/*
 	 * If 'value' is a String, it is first parsed into an instance of
 	 * java.lang.Number according to the default pattern of the locale
 	 * given via the 'parseLocale' attribute. If this attribute is missing,
