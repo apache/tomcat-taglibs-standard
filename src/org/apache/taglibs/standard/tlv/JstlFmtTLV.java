@@ -1,7 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999 The Apache Software Foundation.  All rights 
+ * Copyright (c) 1999-2004 The Apache Software Foundation.  All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -127,6 +127,14 @@ public class JstlFmtTLV extends JstlBaseTLV {
     private final String MESSAGE_KEY = "key";
     private final String BUNDLE_PREFIX = "prefix";
     private final String VALUE = "value";
+
+
+    //*********************************************************************
+    // set its type and delegate validation to super-class
+    public  ValidationMessage[] validate(
+	    String prefix, String uri, PageData page) {
+	return super.validate( TYPE_FMT, prefix, uri, page );
+    }
 
 
     //*********************************************************************

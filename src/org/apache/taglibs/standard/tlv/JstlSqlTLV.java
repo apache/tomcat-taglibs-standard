@@ -1,7 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999 The Apache Software Foundation.  All rights 
+ * Copyright (c) 1999-2004 The Apache Software Foundation.  All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -92,6 +92,14 @@ public class JstlSqlTLV extends JstlBaseTLV {
 
 
     //*********************************************************************
+    // set its type and delegate validation to super-class
+    public  ValidationMessage[] validate(
+	    String prefix, String uri, PageData page) {
+	return super.validate( TYPE_SQL, prefix, uri, page );
+    }
+
+
+    //*********************************************************************
     // Contract fulfillment
 
     protected DefaultHandler getHandler() {
@@ -155,7 +163,8 @@ public class JstlSqlTLV extends JstlBaseTLV {
                     SCOPE, qn, a.getValue(SCOPE))); 
 	    if (qn.startsWith(prefix + ":") && hasEmptyVar(a))
 		fail(Resources.getMessage("TLV_EMPTY_VAR", qn));
-	    if (qn.startsWith(prefix + ":") && hasDanglingScope(a))
+	    if (qn.startsWith(prefix + ":") && hasDanglingScope(a) &&
+                !qn.startsWith(prefix + ":" + SETDATASOURCE))
 		fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 
 	    // now, modify state

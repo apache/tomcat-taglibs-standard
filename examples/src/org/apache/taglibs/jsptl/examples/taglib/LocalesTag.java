@@ -1,7 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999 The Apache Software Foundation.  All rights 
+ * Copyright (c) 1999-2003 The Apache Software Foundation.  All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,34 +53,61 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.rt.fmt;
+package org.apache.taglibs.standard.examples.taglib;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
-import org.apache.taglibs.standard.tag.common.fmt.*;
+import java.util.Locale;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.jstl.core.LoopTagSupport;
+
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 
 /**
- * <p>A handler for &lt;message&gt; that supports rtexprvalue-based
- * attributes.</p>
+ * <p>Tag handler for &lt;locales&gt;
  *
- * @author Jan Luehe
+ * @author Felipe Leme <jstl@felipeal.net>
+ * @version $Revision$ $Date$
  */
+public class LocalesTag extends LoopTagSupport {
 
-public class MessageTag extends MessageSupport {
+    private static final Locale[] locales = Locale.getAvailableLocales();
+    private int pointer; 
+    private String varTotal;
+    private String endEL;
+    private String beginEL;
 
-    //*********************************************************************
-    // Accessor methods
-
-    // for tag attribute
-    public void setKey(String key) throws JspTagException {
-        this.keyAttrValue = key;
-	this.keySpecified = true;
+    public void setVarTotal( String value ) {
+	varTotal = value;
     }
-
-    // for tag attribute
-    public void setBundle(LocalizationContext locCtxt) throws JspTagException {
-        this.bundleAttrValue = locCtxt;
-        this.bundleSpecified = true;
+    public void prepare() {
+	pointer = 0;
+	try {
+	    begin = ( (Integer) ExpressionEvaluatorManager.evaluate( "begin", beginEL, Integer.class,
+								     this, super.pageContext )).intValue();
+	    end = ( (Integer) ExpressionEvaluatorManager.evaluate( "end", endEL, Integer.class,
+								   this, super.pageContext )).intValue();
+	} catch( JspException exc ) {
+	    System.err.println( "Exception evaluating  EL expressions: beginEL = " + beginEL +
+				", endEL = " + endEL );
+	    begin = end = -1;
+	    exc.printStackTrace();
+	}
+	if ( varTotal!=null && varTotal.length()>0 ) {
+	    pageContext.setAttribute( varTotal, new Integer(locales.length) );
+	}
+    
+    } 
+    public boolean hasNext() {
+	return pointer < locales.length;
+    }  
+    public Object next() {
+	return locales[ pointer++ ];
     }
+  
+    public void setBegin( String value ) {
+  	beginEL = value;
+    }
+  
+    public void setEnd( String value ) {
+  	endEL = value;
+    }                     
 }

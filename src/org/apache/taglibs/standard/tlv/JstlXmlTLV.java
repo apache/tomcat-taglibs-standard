@@ -1,7 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999 The Apache Software Foundation.  All rights 
+ * Copyright (c) 1999-2004 The Apache Software Foundation.  All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -123,6 +123,14 @@ public class JstlXmlTLV extends JstlBaseTLV {
     private final String EVAL = "evaluator";
     private final String VALUE = "value";
     private final String SOURCE = "xml";
+
+
+    //*********************************************************************
+    // set its type and delegate validation to super-class
+    public  ValidationMessage[] validate(
+	    String prefix, String uri, PageData page) {
+	return super.validate( TYPE_XML, prefix, uri, page );
+    }
 
 
     //*********************************************************************

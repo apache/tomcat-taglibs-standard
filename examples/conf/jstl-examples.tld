@@ -9,6 +9,43 @@
   <uri>/jstl-examples-taglib</uri>
 
   <tag>
+    <name>defaultLocale</name>
+    <tag-class>org.apache.taglibs.standard.examples.taglib.DefaultLocaleTag</tag-class>
+    <body-content>JSP</body-content>
+  </tag>
+
+  <tag>
+    <name>locales</name>
+    <tag-class>org.apache.taglibs.standard.examples.taglib.LocalesTag</tag-class>
+    <body-content>JSP</body-content>
+    <attribute>
+        <name>var</name>
+        <required>required</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>varStatus</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>varTotal</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>begin</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>end</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
     <name>escapeHtml</name>
     <tag-class>org.apache.taglibs.standard.examples.taglib.EscapeHtmlTag</tag-class>
     <body-content>JSP</body-content>

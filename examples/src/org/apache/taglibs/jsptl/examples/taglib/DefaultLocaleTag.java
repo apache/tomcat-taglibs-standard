@@ -1,7 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999 The Apache Software Foundation.  All rights 
+ * Copyright (c) 1999-2003 The Apache Software Foundation.  All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,34 +53,28 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.rt.fmt;
+package org.apache.taglibs.standard.examples.taglib;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
-import org.apache.taglibs.standard.tag.common.fmt.*;
+import java.util.Locale;
+import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+import javax.servlet.jsp.JspTagException;
 
 /**
- * <p>A handler for &lt;message&gt; that supports rtexprvalue-based
- * attributes.</p>
+ * <p>Tag handler for &lt;locales&gt;
  *
- * @author Jan Luehe
+ * @author Felipe Leme <jstl@felipeal.net>
+ * @version $Revision$ $Date$
  */
 
-public class MessageTag extends MessageSupport {
+public class DefaultLocaleTag extends ConditionalTagSupport {
 
-    //*********************************************************************
-    // Accessor methods
+  private static final Locale defaultLocale = Locale.getDefault();
 
-    // for tag attribute
-    public void setKey(String key) throws JspTagException {
-        this.keyAttrValue = key;
-	this.keySpecified = true;
+  public boolean condition() throws JspTagException {   
+    LocalesTag localesTag = (LocalesTag) findAncestorWithClass( this, LocalesTag.class );
+    if ( localesTag == null ) {
+      throw new JspTagException( "defaultLocale bust be inside locales");
     }
-
-    // for tag attribute
-    public void setBundle(LocalizationContext locCtxt) throws JspTagException {
-        this.bundleAttrValue = locCtxt;
-        this.bundleSpecified = true;
-    }
+    return localesTag.getCurrent().equals( defaultLocale );
+   }
 }

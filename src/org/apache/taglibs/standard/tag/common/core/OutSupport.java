@@ -120,6 +120,7 @@ public class OutSupport extends BodyTagSupport {
     public int doStartTag() throws JspException {
 
       needBody = false;			// reset state related to 'default'
+      super.bodyContent = null;  // clean-up body (just in case container is pooling tag handlers)
 
       try {
 	// print value if available; otherwise, try 'default'
