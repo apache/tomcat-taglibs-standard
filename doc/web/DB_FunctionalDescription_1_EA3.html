@@ -13,7 +13,7 @@
   <hr width="100%" noshade>
 </h3>
 <h2> SQL Actions &#151; Functional Description <br>
-</h2>
+  Revision 1</h2>
 <h2><tt>&lt;sql:query&gt;<br>
   &lt;sql:update&gt;<br>
   &lt;sql:transaction&gt;<br>
@@ -25,7 +25,32 @@
   interface Row<br>
   interface ResultMetaData<br>
   interface ColumnMetaData<br>
-  interface Column</tt></h2>
+  interface Column</tt><tt><br>
+  </tt></h2>
+<p>The companion document <a href="DB_DesignNotes.html">Database Tags – Design 
+  Notes</a> <b>must</b> be read in conjunction with this document to understand 
+  <b>why</b> things were designed that way.</p>
+<p>I've changed slightly the format of this Functional Description to make it 
+  closer to what I'd eventually like the spec to be. I don't want the spec to 
+  be too dry, so the introduction gives the motivation for the tagset being presented, 
+  while the overview section gives a high level overview on the features supported 
+  by the tagset, as well as common use cases (without getting into too many details). 
+  Feedback on the format welcome.</p>
+<h3> Revision History</h3>
+<table BORDER cellspacing=2 cellpadding=0 width="245" >
+  <tr> 
+    <td width="49%">&nbsp;Revision 2</td>
+    <td width="51%">&nbsp;@@@</td>
+  </tr>
+  <tr> 
+    <td width="49%">&nbsp;Revision 1</td>
+    <td width="51%">&nbsp;2001.12.06</td>
+  </tr>
+  <tr> 
+    <td width="49%">&nbsp;Initial Version</td>
+    <td width="51%">&nbsp;2001.11.12</td>
+  </tr>
+</table>
 <hr width="100%" noshade>
 <h3>1. Introduction</h3>
 <p>Many dynamic web applications need to access relational databases for the dynamic 
@@ -241,10 +266,9 @@
 </blockquote>
 <p>If the action has a body, it is of the form:</p>
 <blockquote> 
-  <p><code>&lt;sql:update var=<i>&quot;varName&quot;<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </i></code><code>[sql=&quot;<i>sqlUpdate</i>&quot;] 
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[dataSource=<i>dataSourceSpec</i>]&gt;<br>
+  <p><code>&lt;sql:update [sql=&quot;<i>sqlUpdate</i>&quot;] <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[var=<i>&quot;varName&quot;]</i></code><code><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[dataSource=<i>dataSourceSpec</i>]&gt;<br>
     &nbsp;&nbsp;... optional update statement ...<br>
     &nbsp;&nbsp;... optional &lt;sql:param&gt; actions ...<br>
     &lt;/sql:query&gt;</code></p>
@@ -553,10 +577,10 @@ Behavior is defined as follows:
   <tr> 
     <td> 
       <p><code><b>&lt;sql:update&gt;</b></code></p>
-      <p><code>&lt;sql:update var=<i>&quot;varName&quot;</i> <br>
+      <p><code>&lt;sql:update [var=<i>&quot;varName&quot;</i>] <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sql=&quot;<i>sqlUpdate</i>&quot;<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]/&gt;</code></p>
-      <p><code>&lt;sql:update var=<i>&quot;varName&quot;<br>
+      <p><code>&lt;sql:update [var=<i>&quot;varName&quot;]<br>
         &nbsp;&nbsp;&nbsp; </i></code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[sql=&quot;<i>sqlUpdate</i>&quot;]<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [dataSource=<i>dataSourceSpec</i>]&gt;<br>
         &nbsp;&nbsp;... optional query statement ...<br>
