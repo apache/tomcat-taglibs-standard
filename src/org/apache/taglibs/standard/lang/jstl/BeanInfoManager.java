@@ -373,8 +373,17 @@ public class BeanInfoManager
     // See if this is a public class declaring the method
     if (Modifier.isPublic (pClass.getModifiers ())) {
       try {
-	Method m = pClass.getDeclaredMethod (pMethod.getName (),
+        Method m;
+        try {
+	  m = pClass.getDeclaredMethod (pMethod.getName (),
 					     pMethod.getParameterTypes ());
+        } catch (java.security.AccessControlException ex) {
+	  // kludge to accommodate J2EE RI's default settings
+	  // TODO: see if we can simply replace
+          //       getDeclaredMethod() with getMethod() ...?
+          m = pClass.getMethod(pMethod.getName (),
+                                             pMethod.getParameterTypes ());
+        }
 	if (Modifier.isPublic (m.getModifiers ())) {
 	  return m;
 	}
