@@ -74,29 +74,38 @@ import java.util.Locale;
 
 public class LocalizationContext {
 
-    private ResourceBundle bundle;
-    private Locale locale;
+    final private ResourceBundle bundle;
+    final private Locale locale;
 
     /**
-     * Constructor.
-     *
-     * Constructs empty LocalizationContext.
+     * Constructor for empty LocalizationContext.
      */
     public LocalizationContext() {
+	bundle = null;
+	locale = null;
     }
 
     /**
      * Constructor.
      *
-     * @param bundle The resource bundle, or null if no resource bundle was
-     * found
-     * @param locale The locale that led to the resource bundle match, or null
-     * if no resource bundle was found or <tt>bundle</tt> is a locale-less
-     * root resource bundle.
+     * @param bundle The resource bundle
+     * @param locale The locale that led to the resource bundle match
      */
     public LocalizationContext(ResourceBundle bundle, Locale locale) {
 	this.bundle = bundle;
 	this.locale = locale;
+    }
+
+    /**
+     * Constructor.
+     *
+     * <p> The localization context's locale is taken from the resource bundle.
+     *
+     * @param bundle The resource bundle
+     */
+    public LocalizationContext(ResourceBundle bundle) {
+	this.bundle = bundle;
+	this.locale = bundle.getLocale();
     }
 
     /** 
