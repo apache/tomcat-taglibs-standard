@@ -1,15 +1,15 @@
-<html><!-- #BeginTemplate "/Templates/ExamplesTemplate.dwt" -->
+<html>
+<!-- #BeginTemplate "/Templates/ExamplesTemplate.dwt" --> 
 <head>
 <!-- #BeginEditable "doctitle" --> 
 <title>Untitled Document</title>
-<!-- #EndEditable -->
+<!-- #EndEditable --> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="../global.css" type="text/css">
 </head>
-
 <body bgcolor="#FFFFFF" text="#000000">
 <table width="100%" border="0" cellpadding="5">
-  <tr>
+  <tr> 
     <td height="0"><font size="-1" color="#000099"><b>JSTL Early Access</b></font></td>
     <td align="center" height="0"><font size="-1" color="#000099"> <b>Beware &#151; 
       API and Tags may/will change</b></font></td>
@@ -19,17 +19,15 @@
   </tr>
   <tr> 
     <td colspan="3" bgcolor="#CCCCFF">JSTL Examples &nbsp;&nbsp;&nbsp;&nbsp;<a href="../index.html">Introduction</a> 
-      &#149; <a href="../elsupport/index.html">EL Support </a> &#149; 
-      <a href="../conditionals/index.html">Conditionals</a> &#149; 
-      <a href="../import/index.html"></a><a href="../iterators/index.html">Iterators</a> 
+      &#149; <a href="../elsupport/index.html">EL Support </a> &#149; <a href="../conditionals/index.html">Conditionals</a> 
+      &#149; <a href="../import/index.html"></a><a href="../iterators/index.html">Iterators</a> 
       &#149; <a href="../import/index.html">Import</a> &#149; <a href="../format/index.html">I18N 
-      & Formatting</a> &#149; <a href="../xml/index.html">XML</a> 
-      &#149; <a href="index.jsp">SQL</a> &#149; <a href="../ecmascript/index.html">EcmaScript</a> 
-      &#149; <a href="../misc/index.html">Misc.</a></td>
+      & Formatting</a> &#149; <a href="../xml/index.html">XML</a> &#149; <a href="index.jsp">SQL</a> 
+      &#149; <a href="../ecmascript/index.html">EcmaScript</a> &#149; <a href="../misc/index.html">Misc.</a></td>
   </tr>
 </table>
 <!-- #BeginEditable "body" --> 
-<h1>Database Tags Examples</h1>
+<h1>SQL Tags Examples</h1>
 <p>Enter your Driver Name and DataBase URL name to test Database Tag Library. 
   NOTE: You can access the tags directly at the bottom of the page to look at 
   the source, but they will NOT run properly without the correct database driver 
@@ -55,7 +53,7 @@
 </form>
 <%@ include file="links.html" %>
 <hr noshade color="#000099">
-<!-- #EndEditable -->
+<!-- #EndEditable --> 
 <hr noshade color="#000099">
 <table width="100%" border="0" cellpadding="5">
   <tr> 
@@ -69,4 +67,5 @@
   </tr>
 </table>
 </body>
-<!-- #EndTemplate --></html>
+<!-- #EndTemplate -->
+</html>
