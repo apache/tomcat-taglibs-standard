@@ -74,7 +74,138 @@ the "standard-examples" application as a guide.</p>
 
 <p>To use the Standard 1.0 taglib from its Jakarta Taglibs distribution,
 simply copy the JAR files in the distribution's 'lib' directory to your
-application's WEB-INF/lib directory.</p>
+application's WEB-INF/lib directory. The following JAR files are included 
+in the Standard 1.0 taglib distribution and need to be copied to your 
+application's WEB-INF/lib directory:</p>
+
+  <table width="95%" border="1" cellpadding="5">
+    <tr>
+      <th width="25%">Name</th>
+      <th width="40%">Description</th>
+      <th width="35%">Jar File Name</th>
+    </tr>
+    <tr>
+      <td width="25%">
+        <div align="center"><a href="http://java.sun.com/products/jsp/jstl">JSTL
+          1.0 API classes</a></div>
+      </td>
+      <td width="40%">
+        <div align="left">JSTL 1.0 API classes</div>
+      </td>
+      <td width="35%">
+        <div align="center">jstl.jar</div>
+      </td>
+    </tr>
+    <tr>
+      <td width="25%">
+        <div align="center"><a href="http://java.sun.com/products/jsp/jstl">JSTL
+          1.0 implementation classes</a></div>
+      </td>
+      <td width="40%">
+        <div align="left">Standard 1.0 JSTL implementation classes</div>
+      </td>
+      <td width="35%">
+        <div align="center">standard.jar</div>
+      </td>
+    </tr>
+    <tr>
+      <td width="25%">
+        <div align="center"><a href="http://www.jaxen.org">Jaxen 1.0</a></div>
+      </td>
+      <td width="40%">
+        <div align="left">Xpath engine capable of evaluating Xpath expressions.</div>
+      </td>
+      <td width="35%">
+        <div align="center">jaxen-full.jar</div>
+      </td>
+    </tr>
+    <tr>
+      <td width="25%">
+        <div align="center"><a href="http://www.saxpath.org">Saxpath 1.0</a></div>
+      </td>
+      <td width="40%">
+        <div align="left">Simple API for Xpath providing a single point for Xpath
+          expression parsing.</div>
+      </td>
+      <td width="35%">
+        <div align="center">saxpath.jar</div>
+      </td>
+    </tr>
+    <tr>
+      <td width="25%">
+        <div align="center"><a href="http://java.sun.com/products/jdbc/download.html">JDBC
+          2.0 Optional Package </a></div>
+      </td>
+      <td width="40%">
+        <div align="left">
+          <p>JDBC implementation classes. </p>
+          <p>Already present in J2SE 1.4.</p>
+        </div>
+      </td>
+      <td width="35%">
+        <div align="center">jdbc2_0-stdext.jar</div>
+      </td>
+    </tr>
+    <tr>
+      <td width="25%">
+        <div align="center"><a href="http://java.sun.com/products/xml/jaxp">JAXP
+          1.1 or JAXP 1.2 implementation</a></div>
+      </td>
+      <td width="40%">
+        <div align="left">Standard 1.0 taglib requires a JAXP 1.1
+          or 1.2 compliant parser</div>
+      </td>
+      <td width="35%">
+        <div align="center">
+          <table width="95%" border="0" align="center">
+            <tr>
+              <td width="79%"><font size="-1">example of JAXP 1.1 impl classes</font></td>
+              <td width="21%">
+                <div align="left">
+                  <ul>
+                    <li>crimson.jar</li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" height="22">
+                <hr>
+              </td>
+            </tr>
+            <tr>
+              <td width="79%"><font size="-1">example of JAXP 1.2 impl classes</font></td>
+              <td width="21%">
+                <ul>
+                  <li>jaxp-api.jar</li>
+                  <li>dom.jar</li>
+                  <li>sax.jar</li>
+                  <li>xercesImpl.jar</li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td width="25%">
+        <div align="center"><a href="http://xml.apache.org">Xalan</a></div>
+      </td>
+      <td width="40%">
+        <p>Apache XML Xalan XSLT<br>
+          Transformation Processor.<br>
+        </p>
+        <p> If you are using a version of Xalan 2.2.D12 or later you will also
+          need to obtain the xml-apis.jar which contains the JAXP APIs<br>
+        </p>
+      </td>
+      <td width="35%">
+        <div align="center">xalan.jar</div>
+      </td>
+    </tr>
+  </table>
+
 
 <h3>Multiple tag libraries</h3>
 
