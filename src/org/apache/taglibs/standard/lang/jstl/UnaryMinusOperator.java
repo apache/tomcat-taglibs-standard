@@ -118,6 +118,15 @@ public class UnaryMinusOperator
       return PrimitiveObjects.getInteger (0);
     }
 
+    else if (pValue instanceof String) {
+      double dval =
+	((Number) 
+	 (Coercions.coerceToPrimitiveNumber 
+	  (pValue, Double.class, pLogger))).
+	doubleValue ();
+      return PrimitiveObjects.getDouble (-dval);
+    }
+
     else if (pValue instanceof Byte) {
       return PrimitiveObjects.getByte 
 	((byte) -(((Byte) pValue).byteValue ()));

@@ -101,7 +101,7 @@ public class Logger
    **/
   public boolean isLoggingWarning ()
   {
-    return true;
+    return false;
   }
 
   //-------------------------------------

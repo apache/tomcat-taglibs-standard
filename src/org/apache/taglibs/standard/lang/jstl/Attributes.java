@@ -78,7 +78,7 @@ public class Attributes
   Map mPage;
   Map mRequest;
   Map mSession;
-  Map mApp;
+  Map mApplication;
 
   //-------------------------------------
   /**
@@ -134,12 +134,12 @@ public class Attributes
    *
    * Returns the map of application-scoped attributes
    **/
-  public Map getApp ()
+  public Map getApplication ()
   {
-    if (mApp == null) {
-      mApp = ImplicitObjects.getApplicationScopeMap (mContext);
+    if (mApplication == null) {
+      mApplication = ImplicitObjects.getApplicationScopeMap (mContext);
     }
-    return mApp;
+    return mApplication;
   }
 
   //-------------------------------------

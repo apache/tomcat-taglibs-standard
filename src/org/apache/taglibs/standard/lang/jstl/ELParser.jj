@@ -93,8 +93,8 @@ PARSER_END(ELParser)
 | < GT: ">" | "gt" >
 | < LT: "<" | "lt" >
 | < EQ: "==" >
-| < LE: "<=" | "lte" >
-| < GE: ">=" | "gte" >
+| < LE: "<=" | "le" >
+| < GE: ">=" | "ge" >
 | < NE: "!=" >
 | < LPAREN: "(" >
 | < RPAREN: ")" >
@@ -112,7 +112,7 @@ PARSER_END(ELParser)
 | < PAGE: "page" >
 | < REQUEST: "request" >
 | < SESSION: "session" >
-| < APP: "app" >
+| < APPLICATION: "application" >
 | < HEADER: "header" >
 | < PARAM: "param" >
 | < PARAMVALUES: "paramvalues" >
@@ -603,7 +603,7 @@ Scope Scope () :
   <PAGE> { return PageScope.SINGLETON; }
   | <REQUEST> { return RequestScope.SINGLETON; }
   | <SESSION> { return SessionScope.SINGLETON; }
-  | <APP> { return ApplicationScope.SINGLETON; }
+  | <APPLICATION> { return ApplicationScope.SINGLETON; }
   | <HEADER> { return HeaderScope.SINGLETON; }
   | <PARAM> { return ParamScope.SINGLETON; }
   | <PARAMVALUES> { return ParamvaluesScope.SINGLETON; }
@@ -732,7 +732,7 @@ String Identifier () :
    | t = <PAGE>
    | t = <REQUEST>
    | t = <SESSION>
-   | t = <APP>
+   | t = <APPLICATION>
    | t = <HEADER>
    | t = <PARAM>
    | t = <PARAMVALUES>

@@ -71,9 +71,9 @@ import javax.servlet.jsp.PageContext;
  * <ul><pre>
  * Evaluating a[b] (assuming a.b == a["b"])
  *   a is null
- *     warning - return null
+ *     return null
  *   b is null
- *     warning - return null
+ *     return null
  *   a is Map
  *     !a.containsKey (b)
  *       return null

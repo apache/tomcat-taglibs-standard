@@ -37,7 +37,7 @@ public interface ELParserConstants {
   int PAGE = 35;
   int REQUEST = 36;
   int SESSION = 37;
-  int APP = 38;
+  int APPLICATION = 38;
   int HEADER = 39;
   int PARAM = 40;
   int PARAMVALUES = 41;
@@ -88,7 +88,7 @@ public interface ELParserConstants {
     "\"page\"",
     "\"request\"",
     "\"session\"",
-    "\"app\"",
+    "\"application\"",
     "\"header\"",
     "\"param\"",
     "\"paramvalues\"",

@@ -503,7 +503,7 @@ public class ELParser implements ELParserConstants {
     case PAGE:
     case REQUEST:
     case SESSION:
-    case APP:
+    case APPLICATION:
     case HEADER:
     case PARAM:
     case PARAMVALUES:
@@ -553,9 +553,9 @@ public class ELParser implements ELParserConstants {
       jj_consume_token(SESSION);
                 {if (true) return SessionScope.SINGLETON;}
       break;
-    case APP:
-      jj_consume_token(APP);
-            {if (true) return ApplicationScope.SINGLETON;}
+    case APPLICATION:
+      jj_consume_token(APPLICATION);
+                    {if (true) return ApplicationScope.SINGLETON;}
       break;
     case HEADER:
       jj_consume_token(HEADER);
@@ -603,7 +603,7 @@ public class ELParser implements ELParserConstants {
     case PAGE:
     case REQUEST:
     case SESSION:
-    case APP:
+    case APPLICATION:
     case HEADER:
     case PARAM:
     case PARAMVALUES:
@@ -720,8 +720,8 @@ public class ELParser implements ELParserConstants {
     case SESSION:
       t = jj_consume_token(SESSION);
       break;
-    case APP:
-      t = jj_consume_token(APP);
+    case APPLICATION:
+      t = jj_consume_token(APPLICATION);
       break;
     case HEADER:
       t = jj_consume_token(HEADER);
@@ -775,7 +775,7 @@ public class ELParser implements ELParserConstants {
   }
 
   final private boolean jj_3R_14() {
-    if (jj_scan_token(APP)) return true;
+    if (jj_scan_token(APPLICATION)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }

@@ -70,7 +70,7 @@ import java.beans.PropertyEditorManager;
  * Applying arithmetic operator
  *   Binary operator - A {+,-,*} B
  *     if A and B are null
- *       warning - return 0
+ *       return 0
  *     if A or B is Float or Double
  *       coerce both A and B to Double
  *       apply operator
@@ -83,7 +83,7 @@ import java.beans.PropertyEditorManager;
  * 
  *   Binary operator - A {/,div} B
  *     if A and B are null
- *       warning - return 0
+ *       return 0
  *     otherwise
  *       coerce both A and B to Double
  *       apply operator
@@ -91,7 +91,7 @@ import java.beans.PropertyEditorManager;
  * 
  *   Binary operator - A {%,mod} B
  *     if A and B are null
- *       warning - return 0
+ *       return 0
  *     if A or B is Float or Double
  *       coerce both to Double
  *       apply operator
@@ -102,7 +102,9 @@ import java.beans.PropertyEditorManager;
  * 
  *   Unary minus operator - -A
  *     if A is null
- *      return 0
+ *       return 0
+ *     if A is String
+ *       coerce to Double, apply operator
  *     if A is Byte,Short,Integer,Long,Float,Double
  *       retain type, apply operator
  *     if operator results in exception, error
@@ -180,7 +182,7 @@ import java.beans.PropertyEditorManager;
  *       return A.toString
  * 
  *   coerce A to primitive Number type N
- *     A is null
+ *     A is null or ""
  *       return 0
  *     A is Character
  *       convert to short, apply following rules
@@ -200,7 +202,7 @@ import java.beans.PropertyEditorManager;
  *       error
  * 
  *   coerce A to Character should be
- *     A is null
+ *     A is null or ""
  *       return (char) 0
  *     A is Character
  *       return A
@@ -211,15 +213,12 @@ import java.beans.PropertyEditorManager;
  *     A is Number with greater precision than short
  *       coerce quietly - return (char) A
  *     A is String
- *       A.length () > 0
- *         return A.charAt (0)
- *       otherwise
- *         error
+ *       return A.charAt (0)
  *     otherwise
  *       error
  * 
  *   coerce A to Boolean
- *     A is null
+ *     A is null or ""
  *       return false
  *     A is Boolean
  *       return A
@@ -237,9 +236,11 @@ import java.beans.PropertyEditorManager;
  *       coerce quietly
  *     A is String
  *       T has no PropertyEditor
- *         error
+ *         if A is "", return null
+ *         otherwise error
  *       T's PropertyEditor throws exception
- *         error
+ *         if A is "", return null
+ *         otherwise error
  *       otherwise
  *         apply T's PropertyEditor
  *     otherwise
@@ -344,7 +345,8 @@ public class Coercions
 						Logger pLogger)
     throws ELException
   {
-    if (pValue == null) {
+    if (pValue == null ||
+	"".equals (pValue)) {
       return coerceToPrimitiveNumber (0, pClass);
     }
     else if (pValue instanceof Character) {
@@ -584,7 +586,8 @@ public class Coercions
 					     Logger pLogger)
     throws ELException
   {
-    if (pValue == null) {
+    if (pValue == null ||
+	"".equals (pValue)) {
       return PrimitiveObjects.getCharacter ((char) 0);
     }
     else if (pValue instanceof Character) {
@@ -602,15 +605,7 @@ public class Coercions
     }
     else if (pValue instanceof String) {
       String str = (String) pValue;
-      if (str.length () > 0) {
-	return PrimitiveObjects.getCharacter (str.charAt (0));
-      }
-      else {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError (Constants.EMPTY_STRING_TO_CHARACTER);
-	}
-	return PrimitiveObjects.getCharacter ((char) 0);
-      }
+      return PrimitiveObjects.getCharacter (str.charAt (0));
     }
     else {
       if (pLogger.isLoggingError ()) {
@@ -631,7 +626,8 @@ public class Coercions
 					 Logger pLogger)
     throws ELException
   {
-    if (pValue == null) {
+    if (pValue == null ||
+	"".equals (pValue)) {
       return Boolean.FALSE;
     }
     else if (pValue instanceof Boolean) {
@@ -683,27 +679,37 @@ public class Coercions
       String str = (String) pValue;
       PropertyEditor pe = PropertyEditorManager.findEditor (pClass);
       if (pe == null) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError
-	    (Constants.NO_PROPERTY_EDITOR,
-	     str,
-	     pClass.getName ());
+	if ("".equals (str)) {
+	  return null;
 	}
-	return null;
+	else {
+	  if (pLogger.isLoggingError ()) {
+	    pLogger.logError
+	      (Constants.NO_PROPERTY_EDITOR,
+	       str,
+	       pClass.getName ());
+	  }
+	  return null;
+	}
       }
       try {
 	pe.setAsText (str);
 	return pe.getValue ();
       }
       catch (IllegalArgumentException exc) {
-	if (pLogger.isLoggingError ()) {
-	  pLogger.logError
-	    (Constants.PROPERTY_EDITOR_ERROR,
-	     exc,
-	     pValue,
-	     pClass.getName ());
+	if ("".equals (str)) {
+	  return null;
 	}
-	return null;
+	else {
+	  if (pLogger.isLoggingError ()) {
+	    pLogger.logError
+	      (Constants.PROPERTY_EDITOR_ERROR,
+	       exc,
+	       pValue,
+	       pClass.getName ());
+	  }
+	  return null;
+	}
       }
     }
     else {

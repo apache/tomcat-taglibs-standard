@@ -83,7 +83,7 @@ public class ApplicationScope
    **/
   public String getScopeString ()
   {
-    return "app";
+    return "application";
   }
 
   //-------------------------------------
