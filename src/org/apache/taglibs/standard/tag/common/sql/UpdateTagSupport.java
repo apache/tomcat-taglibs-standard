@@ -80,7 +80,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
     implements TryCatchFinally, SQLExecutionTag {
 
     private String var;
-    private int scope = PageContext.PAGE_SCOPE;
+    private int scope;
 
     /*
      * The following properties take expression values, so the
@@ -88,7 +88,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      * specific subclasses.
      */
     protected Object rawDataSource;
-    protected DataSource dataSource;
+    protected boolean dataSourceSpecified;
     protected String sql;
 
     /*
@@ -97,7 +97,21 @@ public abstract class UpdateTagSupport extends BodyTagSupport
     private Connection conn;
     private List parameters;
     private boolean isPartOfTransaction;
-    private DataSourceUtil dsUtil;
+
+
+    //*********************************************************************
+    // Constructor and initialization
+
+    public UpdateTagSupport() {
+	super();
+	init();
+    }
+
+    private void init() {
+        scope = PageContext.PAGE_SCOPE;
+	dataSourceSpecified = false;
+    }
+
 
     //*********************************************************************
     // Accessor methods
@@ -105,7 +119,6 @@ public abstract class UpdateTagSupport extends BodyTagSupport
     /**
      * Setter method for the name of the variable to hold the
      * result.
-     *
      */
     public void setVar(String var) {
 	this.var = var;
@@ -114,25 +127,11 @@ public abstract class UpdateTagSupport extends BodyTagSupport
     /**
      * Setter method for the scope of the variable to hold the
      * result.
-     *
      */
     public void setScope(String scopeName) {
         scope = Util.getScope(scopeName);
     }
 
-    //*********************************************************************
-    // Public utility methods
-
-    /**
-     * Called by nested parameter elements to add PreparedStatement
-     * parameter values.
-     */
-    public void addSQLParameter(Object o) {
-	if (parameters == null) {
-	    parameters = new ArrayList();
-	}
-	parameters.add(o);
-    }
 
     //*********************************************************************
     // Tag logic
@@ -143,17 +142,19 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      */
     public int doStartTag() throws JspException {
 
-        dsUtil = new DataSourceUtil();
-        dsUtil.setDataSource(rawDataSource, pageContext);
-
-        dataSource = dsUtil.getDataSource();
+	// Reset the per-invokation state.
+	parameters = null;
+	isPartOfTransaction = false;
+	conn = null;
+        bodyContent = null;
+        rawDataSource = null;
 
 	try {
 	    conn = getConnection();
-	}
-	catch (SQLException e) {
+	} catch (SQLException e) {
 	    throw new JspException(sql + ": " + e.getMessage(), e);
 	}
+
 	return EVAL_BODY_BUFFERED;
     }
 
@@ -216,19 +217,25 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	if (conn != null && !isPartOfTransaction) {
 	    try {
 		conn.close();
-	    }
-	    catch (SQLException e) {} // Not much we can do
+	    } catch (SQLException e) {} // Not much we can do
 	}
-	/*
-	 * Reset the per-invokation state.
-	 */
-	parameters = null;
-	isPartOfTransaction = false;
-	conn = null;
-        dataSource = null;
-        bodyContent = null;
-        rawDataSource = null;
     }
+
+
+    //*********************************************************************
+    // Public utility methods
+
+    /**
+     * Called by nested parameter elements to add PreparedStatement
+     * parameter values.
+     */
+    public void addSQLParameter(Object o) {
+	if (parameters == null) {
+	    parameters = new ArrayList();
+	}
+	parameters.add(o);
+    }
+
 
     //*********************************************************************
     // Private utility methods
@@ -239,14 +246,15 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	TransactionTagSupport parent = (TransactionTagSupport) 
 	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
-            if (dsUtil.hasDataSourceAttribute()) {
+            if (dataSourceSpecified) {
                 throw new JspTagException(
                     Resources.getMessage("ERROR_NESTED_DATASOURCE"));
             }
 	    conn = parent.getSharedConnection();
             isPartOfTransaction = true;
-	}
-	else {
+	} else {
+	    DataSource dataSource = DataSourceUtil.getDataSource(rawDataSource,
+								 pageContext);
             try {
                 conn = dataSource.getConnection();
             } catch (Exception ex) {
@@ -254,6 +262,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
                     Resources.getMessage("DATASOURCE_INVALID"));
             }
 	}
+
 	return conn;
     }
 

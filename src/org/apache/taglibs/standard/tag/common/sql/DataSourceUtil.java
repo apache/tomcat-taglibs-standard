@@ -74,45 +74,33 @@ import org.apache.taglibs.standard.resources.Resources;
  */
 public class DataSourceUtil {
 
-    private static String ESCAPE = "\\";
-    private static String TOKEN = ",";
-    private DataSource dataSource;
-    private boolean hasDataSourceAttribute = false;
-
-    public DataSource getDataSource() {
-        return dataSource;
-    }
+    private static final String ESCAPE = "\\";
+    private static final String TOKEN = ",";
 
     /**
-     * Useful for Transaction nesting check
-     */
-    public boolean hasDataSourceAttribute() {
-        return hasDataSourceAttribute;
-    }
-
-    /**
-     * If dataSource is a String first do JNDI lookup
+     * If dataSource is a String first do JNDI lookup.
      * If lookup fails parse String like it was a set of JDBC parameters
      * Otherwise check to see if dataSource is a DataSource object and use as
      * is
      */
-    public void setDataSource(Object rawDataSource,
-			      PageContext pageContext) throws JspException {
+    static DataSource getDataSource(Object rawDataSource, PageContext pc)
+	throws JspException
+    {
+	DataSource dataSource = null;
 
         if (rawDataSource == null) {
-            rawDataSource = Config.find(pageContext, Config.SQL_DATASOURCE);
-            hasDataSourceAttribute = false;
-        } else {
-            hasDataSourceAttribute = true;
+            rawDataSource = Config.find(pc, Config.SQL_DATASOURCE);
         }
 
 	if (rawDataSource == null) {
-	    return;
+	    return null;
 	}
 
-        // If the 'dataSource' attribute's value resolves to a String
-        // after rtexpr/EL evaluation, use the string as JNDI path to
-        // a DataSource
+        /*
+	 * If the 'dataSource' attribute's value resolves to a String
+	 * after rtexpr/EL evaluation, use the string as JNDI path to
+	 * a DataSource
+	 */
         if (rawDataSource instanceof String) {
             try {
                 Context ctx = new InitialContext();
@@ -120,7 +108,7 @@ public class DataSourceUtil {
                 Context envCtx = (Context) ctx.lookup("java:comp/env");
                 dataSource = (DataSource) envCtx.lookup((String) rawDataSource);
             } catch (NamingException ex) {
-                setUsingParams((String) rawDataSource);
+                dataSource = getDataSource((String) rawDataSource);
             }
         } else if (rawDataSource instanceof DataSource) {
             dataSource = (DataSource) rawDataSource;
@@ -128,13 +116,17 @@ public class DataSourceUtil {
 	    throw new JspException(
                 Resources.getMessage("SQL_DATASOURCE_INVALID"));
 	}
+
+	return dataSource;
     }
 
     /**
      * Parse JDBC parameters and setup dataSource appropriately
      */
-    private void setUsingParams(String params) throws JspException {
-        dataSource = new DataSourceWrapper();
+    private static DataSource getDataSource(String params)
+	throws JspException
+    {
+        DataSourceWrapper dataSource = new DataSourceWrapper();
 
         String[] paramString = new String[4];
         int escCount = 0; 
@@ -163,12 +155,12 @@ public class DataSourceUtil {
         paramString[aryCount] = params.substring(begin);
 
 	// use the JDBC URL from the parameter string
-        ((DataSourceWrapper) dataSource).setJdbcURL(paramString[0]);
+        dataSource.setJdbcURL(paramString[0]);
 
 	// try to load a driver if it's present
         if (paramString[1] != null) {
             try {
-                ((DataSourceWrapper) dataSource).setDriverClassName(paramString[1]);
+                dataSource.setDriverClassName(paramString[1]);
             } catch (Exception ex) {
                 throw new JspTagException(
                     Resources.getMessage("DRIVER_INVALID_CLASS",
@@ -177,8 +169,10 @@ public class DataSourceUtil {
 	}
 
 	// set the username and password
-        ((DataSourceWrapper) dataSource).setUserName(paramString[2]);
-        ((DataSourceWrapper) dataSource).setPassword(paramString[3]);
+        dataSource.setUserName(paramString[2]);
+        dataSource.setPassword(paramString[3]);
+
+	return dataSource;
     }
 
 }

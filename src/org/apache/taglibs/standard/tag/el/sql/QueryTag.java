@@ -90,6 +90,7 @@ public class QueryTag extends QueryTagSupport {
 
     public void setDataSource(String dataSourceEL) {
 	this.dataSourceEL = dataSourceEL;
+	this.dataSourceSpecified = true;
     }
 
     /**
@@ -132,10 +133,10 @@ public class QueryTag extends QueryTagSupport {
         Object tempInt = null;
 
         if (dataSourceEL != null) {
-            rawDataSource = (Object)
-                ExpressionEvaluatorManager.evaluate("dataSource",
-                    dataSourceEL, Object.class, this, pageContext);
+            rawDataSource = (Object) ExpressionEvaluatorManager.evaluate(
+                "dataSource", dataSourceEL, Object.class, this, pageContext);
         }
+
         if (sqlEL != null) {
             sql = (String) ExpressionEvaluatorManager.evaluate("sql", sqlEL,
                 String.class, this, pageContext);
@@ -156,7 +157,8 @@ public class QueryTag extends QueryTagSupport {
                     maxRows = ((Integer) tempInt).intValue();
             }
         } catch (Exception ex) {
-            throw new JspException(Resources.getMessage("PARAM_BAD_VALUE"), ex);
+            throw new JspException(Resources.getMessage("PARAM_BAD_VALUE"),
+				   ex);
         }
     }
 }

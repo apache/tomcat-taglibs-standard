@@ -84,6 +84,7 @@ public class QueryTag extends QueryTagSupport {
     
     public void setDataSource(Object dataSource) {
 	this.rawDataSource = dataSource;
+	this.dataSourceSpecified = true;
     }
 
     /**

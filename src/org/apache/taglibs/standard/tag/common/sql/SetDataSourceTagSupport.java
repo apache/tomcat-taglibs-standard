@@ -107,11 +107,8 @@ public class SetDataSourceTagSupport extends TagSupport {
         DataSource ds;
 
         if (dataSource != null) {
-            DataSourceUtil dsUtil = new DataSourceUtil();
-            dsUtil.setDataSource(dataSource, pageContext);
-            ds = dsUtil.getDataSource();
-        }
-        else {
+            ds = DataSourceUtil.getDataSource(dataSource, pageContext);
+        } else {
             DataSourceWrapper dsw = new DataSourceWrapper();
             try {
                 // set driver class iff provided by the tag
@@ -132,10 +129,10 @@ public class SetDataSourceTagSupport extends TagSupport {
 
         if (var != null) {
 	    pageContext.setAttribute(var, ds, scope);
-        }
-        else {
+        } else {
             Config.set(pageContext, Config.SQL_DATASOURCE, ds, scope);
         }
+
 	return SKIP_BODY;
     }
 }

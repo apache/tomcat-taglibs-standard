@@ -102,7 +102,6 @@ public abstract class TransactionTagSupport extends TagSupport
     // Private state
 
     private Connection conn;
-    private DataSourceUtil dsUtil;
     private int isolation;
     private int origIsolation;
 
@@ -117,7 +116,6 @@ public abstract class TransactionTagSupport extends TagSupport
 
     private void init() {
 	conn = null;
-	dsUtil = null;
 	isolation = Connection.TRANSACTION_NONE;
     }
 
@@ -132,10 +130,7 @@ public abstract class TransactionTagSupport extends TagSupport
      */
     public int doStartTag() throws JspException {
 
-        dsUtil = new DataSourceUtil();
-        dsUtil.setDataSource(rawDataSource, pageContext);
-
-        dataSource = dsUtil.getDataSource();
+        dataSource = DataSourceUtil.getDataSource(rawDataSource, pageContext);
 
 	try {
 	    conn = getConnection();

@@ -71,6 +71,7 @@ public class UpdateTag extends UpdateTagSupport {
 
     public void setDataSource(String dataSourceEL) {
 	this.dataSourceEL = dataSourceEL;
+	this.dataSourceSpecified = true;
     }
 
     /**
