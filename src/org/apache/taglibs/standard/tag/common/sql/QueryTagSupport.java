@@ -86,8 +86,6 @@ public abstract class QueryTagSupport extends BodyTagSupport
 
     private String var;
     private int scope;
-    private int maxRows;
-    private int startRow;
 
 
     /*
@@ -98,6 +96,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
     protected Object rawDataSource;
     protected DataSource dataSource;
     protected String sql;
+    protected int maxRows;
+    protected int startRow;
 
     /*
      * Instance variables that are not for attributes
@@ -158,23 +158,6 @@ public abstract class QueryTagSupport extends BodyTagSupport
             scope = PageContext.APPLICATION_SCOPE;
         }
     }
-
-    /**
-     * Setter method for the startRow
-     *
-     */
-    public void setStartRow(int start) {
-	startRow = start;
-    }
-
-    /**
-     * Setter method for the maxRows
-     *
-     */
-    public void setMaxRows(int max) {
-	maxRows = max;
-    }
-
 
     //*********************************************************************
     // Public utility methods

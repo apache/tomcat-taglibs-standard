@@ -67,15 +67,44 @@ import org.apache.taglibs.standard.tag.common.sql.QueryTagSupport;
  */
 public class QueryTag extends QueryTagSupport {
 
-    private static final String MAX_ROWS =
-        "javax.servlet.jsp.jstl.sql.maxRows";
-
-    
     private String dataSourceEL;
     private String sqlEL;
+    private String startRowEL;
+    private String maxRowsEL;
+
+    //*********************************************************************
+    // Constructor
+
+    /**
+     * Constructs a new QueryTag.  As with TagSupport, subclasses
+     * should not provide other constructors and are expected to call
+     * the superclass constructor
+     */
+    public QueryTag() {
+        super();
+    }
+
+    //*********************************************************************
+    // Accessor methods
 
     public void setDataSource(String dataSourceEL) {
 	this.dataSourceEL = dataSourceEL;
+    }
+
+    /**
+     * The index of the first row returned can be
+     * specified using startRow.
+     */
+    public void setStartRow(String startRowEL) {
+	this.startRowEL = startRowEL;
+    }
+
+    /**
+     * Query result can be limited by specifying
+     * the maximum number of rows returned.
+     */
+    public void setMaxRows(String maxRowsEL) {
+	this.maxRowsEL = maxRowsEL;
     }
 
     /**
@@ -89,15 +118,40 @@ public class QueryTag extends QueryTagSupport {
     }
 
     public int doStartTag() throws JspException {
-	if (dataSourceEL != null) {
-	    rawDataSource = (Object) 
-		ExpressionEvaluatorManager.evaluate("dataSource", 
-		    dataSourceEL, Object.class, this, pageContext);
-	}
-	if (sqlEL != null) {
-	    sql = (String) ExpressionEvaluatorManager.evaluate("sql", sqlEL, 
-	        String.class, this, pageContext);
-	}
+        evaluateExpressions();
 	return super.doStartTag();
     }
+
+    //*********************************************************************
+    // Private utility methods
+
+    // Evaluates expressions as necessary
+    private void evaluateExpressions() throws JspException {
+        Object tempInt = null;
+
+        if (dataSourceEL != null) {
+            rawDataSource = (Object)
+                ExpressionEvaluatorManager.evaluate("dataSource",
+                    dataSourceEL, Object.class, this, pageContext);
+        }
+        if (sqlEL != null) {
+            sql = (String) ExpressionEvaluatorManager.evaluate("sql", sqlEL,
+                String.class, this, pageContext);
+        }
+
+        if (startRowEL != null) {
+            tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
+                "startRow", startRowEL, Integer.class, this, pageContext);
+            if (tempInt != null)
+                startRow = ((Integer) tempInt).intValue();
+        }
+
+        if (maxRowsEL != null) {
+            tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
+                "maxRows", maxRowsEL, Integer.class, this, pageContext);
+            if (tempInt != null)
+                maxRows = ((Integer) tempInt).intValue();
+        }
+    }
+
 }

@@ -63,11 +63,43 @@ import org.apache.taglibs.standard.tag.common.sql.QueryTagSupport;
  * Subclass for the JSTL library with rtexprvalue support.
  *
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 public class QueryTag extends QueryTagSupport {
+
+    //*********************************************************************
+    // Constructor
+
+    /**
+     * Constructs a new QueryTag.  As with TagSupport, subclasses
+     * should not provide other constructors and are expected to call
+     * the superclass constructor
+     */
+    public QueryTag() {
+        super();
+    }
+
+    //*********************************************************************
+    // Accessor methods
     
-    public void setDataSource(DataSource dataSource) {
-	this.dataSource = dataSource;
+    public void setDataSource(Object dataSource) {
+	this.rawDataSource = dataSource;
+    }
+
+    /**
+     * The index of the first row returned can be
+     * specified using startRow.
+     */
+    public void setStartRow(int startRow) {
+        this.startRow = startRow;
+    }
+
+    /**
+     * Query result can be limited by specifying
+     * the maximum number of rows returned.
+     */
+    public void setMaxRows(int maxRows) {
+        this.maxRows = maxRows;
     }
 
     /**
@@ -79,4 +111,5 @@ public class QueryTag extends QueryTagSupport {
     public void setSql(String sql) {
 	this.sql = sql;
     }
+
 }

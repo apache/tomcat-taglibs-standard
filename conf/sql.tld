@@ -99,12 +99,12 @@
     <attribute>
         <name>startRow</name>
         <required>false</required>
-        <rtexprvalue>true</rtexprvalue>
+        <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
         <name>maxRows</name>
         <required>false</required>
-        <rtexprvalue>true</rtexprvalue>
+        <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
 

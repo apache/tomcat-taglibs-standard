@@ -94,8 +94,8 @@ public class ResultImpl implements Result {
 
 	rows = new ArrayList();
         int beginRow = 0;
+
 	while (rs.next()) {
-            beginRow++;
             if (beginRow >= startRow) {
                 Column[] columns = new ColumnImpl[noOfColumns];
 
@@ -111,6 +111,7 @@ public class ResultImpl implements Result {
             Row currentRow = new RowImpl(columns);
             rows.add(currentRow);
             }
+            beginRow++;
 	}
 
     }
