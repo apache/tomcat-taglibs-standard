@@ -93,7 +93,7 @@ public class ParseNumberTag extends ParseNumberSupport {
 	    this.parseLocale = (Locale) loc;
 	} else {
 	    if (!"".equals((String) loc)) {
-		this.parseLocale = LocaleSupport.parseLocale((String) loc);
+		this.parseLocale = SetLocaleSupport.parseLocale((String) loc);
 	    }
 	}
     }

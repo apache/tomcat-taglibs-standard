@@ -175,7 +175,8 @@ public abstract class MessageSupport extends BodyTagSupport {
 						      Config.FMT_BUNDLE);
 	    }
 	} else {
-	    LocaleSupport.setResponseLocale(pageContext, bundle.getLocale());
+	    SetLocaleSupport.setResponseLocale(pageContext,
+					       bundle.getLocale());
 	}
 
 	String message = null;

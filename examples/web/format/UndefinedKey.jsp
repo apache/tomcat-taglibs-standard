@@ -7,7 +7,7 @@
 <body bgcolor="#FFFFFF">
 <h3>Undefined Key</h3>
 
-<fmt:locale value="it"/>
+<fmt:setLocale value="it"/>
 <fmt:bundle basename="org.apache.taglibs.standard.examples.i18n.Resources" var="itBundle"/>
 <fmt:message key="invalidKey" bundle="${itBundle}"/>
 

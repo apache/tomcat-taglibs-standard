@@ -222,7 +222,7 @@ public class ParseDateTag extends ParseDateSupport {
 		} else {
 		    String localeStr = (String) obj;
 		    if (!"".equals(localeStr)) {
-			parseLocale = LocaleSupport.parseLocale(localeStr);
+			parseLocale = SetLocaleSupport.parseLocale(localeStr);
 		    }
 		}
 	    }

@@ -18,8 +18,8 @@
 	<param-name>expressionAttributes</param-name>
 	<param-value>
             requestEncoding:value 
-	    locale:value
-	    locale:variant
+	    setLocale:value
+	    setLocale:variant
 	    timeZone:value
 	    bundle:basename
 	    bundle:prefix
@@ -75,8 +75,8 @@
   </tag>
 
   <tag>
-    <name>locale</name>
-    <tag-class>org.apache.taglibs.standard.tag.el.fmt.LocaleTag</tag-class>
+    <name>setLocale</name>
+    <tag-class>org.apache.taglibs.standard.tag.el.fmt.SetLocaleTag</tag-class>
     <body-content>EMPTY</body-content>
     <description>
         Establishes the locale to use for resource bundles and formatting

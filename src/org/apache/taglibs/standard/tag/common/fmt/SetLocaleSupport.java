@@ -64,13 +64,13 @@ import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * Support for tag handlers for &lt;locale&gt;, the locale setting tag in
+ * Support for tag handlers for &lt;setLocale&gt;, the locale setting tag in
  * JSTL 1.0.
  *
  * @author Jan Luehe
  */
 
-public abstract class LocaleSupport extends TagSupport {
+public abstract class SetLocaleSupport extends TagSupport {
 
     
     //*********************************************************************
@@ -96,7 +96,7 @@ public abstract class LocaleSupport extends TagSupport {
     //*********************************************************************
     // Constructor and initialization
 
-    public LocaleSupport() {
+    public SetLocaleSupport() {
 	super();
 	init();
     }
@@ -288,7 +288,7 @@ public abstract class LocaleSupport extends TagSupport {
 	}
 
 	if (format) {
-	    LocaleSupport.setResponseLocale(pc, match);
+	    setResponseLocale(pc, match);
 	}
 
 	return match;

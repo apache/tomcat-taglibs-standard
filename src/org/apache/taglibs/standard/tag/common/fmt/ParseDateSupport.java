@@ -154,7 +154,7 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	 */
 	Locale locale = parseLocale;
 	if (locale == null)
-	    locale = LocaleSupport.getFormattingLocale(
+	    locale = SetLocaleSupport.getFormattingLocale(
                 pageContext,
 	        this,
 		false,

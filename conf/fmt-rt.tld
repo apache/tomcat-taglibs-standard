@@ -34,8 +34,8 @@
   </tag>
 
   <tag>
-    <name>locale</name>
-    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.LocaleTag</tag-class>
+    <name>setLocale</name>
+    <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetLocaleTag</tag-class>
     <body-content>EMPTY</body-content>
     <description>
         Establishes the locale to use for resource bundles and formatting

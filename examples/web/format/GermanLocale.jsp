@@ -7,7 +7,7 @@
 <body bgcolor="#FFFFFF">
 <h3>German Locale</h3>
 
-<fmt:locale value="de"/>
+<fmt:setLocale value="de"/>
 <fmt:bundle basename="org.apache.taglibs.standard.examples.i18n.Resources">
  <fmt:message>
   greetingMorning

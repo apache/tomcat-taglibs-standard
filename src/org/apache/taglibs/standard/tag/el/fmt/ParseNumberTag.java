@@ -194,7 +194,7 @@ public class ParseNumberTag extends ParseNumberSupport {
 		} else {
 		    String localeStr = (String) obj;
 		    if (!"".equals(localeStr)) {
-			parseLocale = LocaleSupport.parseLocale(localeStr);
+			parseLocale = SetLocaleSupport.parseLocale(localeStr);
 		    }
 		}
 	    }

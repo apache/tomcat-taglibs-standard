@@ -183,7 +183,7 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	}
 
 	// Create formatter 
-	Locale locale = LocaleSupport.getFormattingLocale(
+	Locale locale = SetLocaleSupport.getFormattingLocale(
             pageContext,
 	    this,
 	    true,

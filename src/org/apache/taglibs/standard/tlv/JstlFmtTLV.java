@@ -109,7 +109,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
     // Constants
 
     // tag names
-    private final String LOCALE = "locale";
+    private final String SETLOCALE = "setLocale";
     private final String BUNDLE = "bundle";
     private final String TIMEZONE = "timeZone";
     private final String MESSAGE = "message";
@@ -187,7 +187,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
                 fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
                     SCOPE, qn, a.getValue(SCOPE)));
             if (qn.startsWith(prefix + ":")
-                && !isTag(qn, LOCALE) 
+                && !isTag(qn, SETLOCALE) 
 		&& !isTag(qn, BUNDLE)
 		&& !isTag(qn, TIMEZONE)
                 && hasDanglingScope(a))

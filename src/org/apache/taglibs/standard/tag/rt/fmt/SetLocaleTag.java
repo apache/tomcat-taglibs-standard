@@ -53,104 +53,32 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.el.fmt;
+package org.apache.taglibs.standard.tag.rt.fmt;
 
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
- * <p>A handler for &lt;locale&gt; that accepts attributes as Strings
- * and evaluates them as expressions at runtime.</p>
+ * <p>A handler for &lt;setLocale&gt; that supports rtexprvalue-based
+ * attributes.</p>
  *
  * @author Jan Luehe
  */
 
-public class LocaleTag extends LocaleSupport {
-
-    //*********************************************************************
-    // 'Private' state (implementation details)
-
-    private String value_;                    // stores EL-based property
-    private String variant_;                    // stores EL-based property
-
-
-    //*********************************************************************
-    // Constructor
-
-    /**
-     * Constructs a new LocaleTag.  As with TagSupport, subclasses
-     * should not provide other constructors and are expected to call
-     * the superclass constructor
-     */
-    public LocaleTag() {
-        super();
-        init();
-    }
-
-
-    //*********************************************************************
-    // Tag logic
-
-    // evaluates expression and chains to parent
-    public int doStartTag() throws JspException {
-
-        // evaluate any expressions we were passed, once per invocation
-        evaluateExpressions();
-
-	// chain to the parent implementation
-	return super.doStartTag();
-    }
-
-    // Releases any resources we may have (or inherit)
-    public void release() {
-        super.release();
-        init();
-    }
-
+public class SetLocaleTag extends SetLocaleSupport {
 
     //*********************************************************************
     // Accessor methods
 
-    // for EL-based attribute
-    public void setValue(String value_) {
-        this.value_ = value_;
+    // for tag attribute
+    public void setValue(String value) throws JspTagException {
+        this.value = value;
     }
 
-    // for EL-based attribute
-    public void setVariant(String variant_) {
-        this.variant_ = variant_;
-    }
-
-
-    //*********************************************************************
-    // Private (utility) methods
-
-    // (re)initializes state (during release() or construction)
-    private void init() {
-        // null implies "no expression"
-	value_ = variant_ = null;
-    }
-
-    // Evaluates expressions as necessary
-    private void evaluateExpressions() throws JspException {
-        /* 
-         * Note: we don't check for type mismatches here; we assume
-         * the expression evaluator will return the expected type
-         * (by virtue of knowledge we give it about what that type is).
-         * A ClassCastException here is truly unexpected, so we let it
-         * propagate up.
-         */
-
-	// 'value' attribute (mandatory)
-	value = (String) ExpressionEvaluatorManager.evaluate(
-	    "value", value_, String.class, this, pageContext);
-
-	if (variant_ != null) {
-	    variant = (String) ExpressionEvaluatorManager.evaluate(
-	        "variant", variant_, String.class, this, pageContext);
-	}
+    // for tag attribute
+    public void setVariant(String variant) throws JspTagException {
+        this.variant = variant;
     }
 }

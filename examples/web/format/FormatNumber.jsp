@@ -35,7 +35,7 @@
   <fmt:parseNumber value="${cur}" type="currency"/>
 
  <li> Format &quot;12345.67&quot; as US Dollar:<br>
-  <fmt:locale value="en-US"/>
+  <fmt:setLocale value="en-US"/>
   <fmt:formatNumber value="12345.67" type="currency"/><br>
       then parse its integer portion only and output the result:<br>
   <fmt:formatNumber value="12345.67" type="currency" var="cur"/>
@@ -43,7 +43,7 @@
 
  <li> Format &quot;12345.67&quot; as German currency (given string is
       parsed using &quot;en&quot; locale before it is formatted):<br>
-  <fmt:locale value="de-DE"/>
+  <fmt:setLocale value="de-DE"/>
   <fmt:formatNumber value="12345.67" type="currency"/>
  </ul>
 

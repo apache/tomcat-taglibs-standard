@@ -177,8 +177,8 @@ public abstract class BundleSupport extends BodyTagSupport {
 					   String basename) {
 	ResourceBundle ret = null;
 	    
-	Locale pref = LocaleSupport.getLocale(pageContext,
-					      Config.FMT_LOCALE);
+	Locale pref = SetLocaleSupport.getLocale(pageContext,
+						 Config.FMT_LOCALE);
 	if (pref != null) {
 	    // Preferred locale is application-based
 	    ret = findMatch(basename, pref);
@@ -189,8 +189,8 @@ public abstract class BundleSupport extends BodyTagSupport {
 
 	if (ret == null) {
 	    // no match found, use fallback locale (if present)
-	    pref = LocaleSupport.getLocale(pageContext,
-					   Config.FMT_FALLBACKLOCALE);
+	    pref = SetLocaleSupport.getLocale(pageContext,
+					      Config.FMT_FALLBACKLOCALE);
 	    if (pref != null) {
 		ret = findMatch(basename, pref);
 	    }
@@ -198,7 +198,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 
 	if (ret != null) {
 	    // set response locale
-	    LocaleSupport.setResponseLocale(pageContext, ret.getLocale());
+	    SetLocaleSupport.setResponseLocale(pageContext, ret.getLocale());
 	}
 	
 	return ret;
