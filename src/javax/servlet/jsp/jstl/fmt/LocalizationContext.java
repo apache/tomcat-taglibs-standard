@@ -53,103 +53,63 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.common.fmt;
+package javax.servlet.jsp.jstl.fmt;
 
-import java.util.*;
-import javax.servlet.ServletResponse;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import javax.servlet.jsp.jstl.core.Config;
-import org.apache.taglibs.standard.tag.common.core.Util;
-import org.apache.taglibs.standard.resources.Resources;
+import java.util.ResourceBundle;
+import java.util.Locale;
 
 /**
- * Support for tag handlers for &lt;setBundle&gt;, the JSTL 1.0 tag that loads
- * a resource bundle and stores it in a scoped variable.
+ * Class representing an I18N localization context.
+ *
+ * <p> An I18N localization context has two components: a resource bundle and
+ * the locale that led to the resource bundle match.
+ *
+ * <p> The resource bundle component is used by <fmt:message> for mapping
+ * message keys to localized messages, and the locale component is used by the
+ * <fmt:formatNumber>, <fmt:parseNumber>, <fmt:formatDate>, and
+ * <fmt:parseDate> actions as their formatting or parsing locale, respectively.
  *
  * @author Jan Luehe
  */
 
-public abstract class SetBundleSupport extends TagSupport {
+public class LocalizationContext {
 
-    
-    //*********************************************************************
-    // Package-scoped constants
+    private ResourceBundle bundle;
+    private Locale locale;
 
-    private static final ResourceBundle EMPTY_BUNDLE =
-	new ListResourceBundle() {
-		public Object[][] getContents() {
-		    return new Object[][] { { "", "" } };
-		}
-	    };
-
-
-    //*********************************************************************
-    // Protected state
-
-    protected String basename;                  // 'basename' attribute
-
-
-    //*********************************************************************
-    // Private state
-
-    private String scope;                       // 'scope' attribute
-    private String var;                         // 'var' attribute
-
-
-    //*********************************************************************
-    // Constructor and initialization
-
-    public SetBundleSupport() {
-	super();
-	init();
+    /**
+     * Constructor.
+     *
+     * @param bundle The resource bundle, or null if no resource bundle was
+     * found
+     * @param locale The locale that led to the resource bundle match, or null
+     * if no resource bundle was found or <tt>bundle</tt> is a locale-less
+     * root resource bundle.
+     */
+    public LocalizationContext(ResourceBundle bundle, Locale locale) {
+	this.bundle = bundle;
+	this.locale = locale;
     }
 
-    private void init() {
-	basename = null;
-	scope = "page";
+    /** 
+     * Gets the resource bundle of this I18N localization context.
+     * 
+     * @return The resource bundle of this I18N localization context, or null
+     * if this I18N localization context does not contain any resource bundle.
+     */ 
+    public ResourceBundle getResourceBundle() {
+	return bundle;
     }
 
-
-    //*********************************************************************
-    // Tag attributes known at translation time
-
-    public void setVar(String var) {
-        this.var = var;
-    }
-
-    public void setScope(String scope) {
-	this.scope = scope;
-    }
-
-
-    //*********************************************************************
-    // Tag logic
-
-    public int doEndTag() throws JspException {
-	ResourceBundle bundle = null;
-
-	if ((basename != null) && !basename.equals("")) {
-	    bundle = BundleSupport.getBundle(pageContext, basename);
-	}
-
-	if (bundle == null) {
-	    // storing "null" in a scoped variable would cause a NPE
-	    bundle = EMPTY_BUNDLE;
-	}
-
-	if (var != null) {
-	    pageContext.setAttribute(var, bundle, Util.getScope(scope));
-	} else {
-	    Config.set(pageContext, Config.FMT_LOCALIZATIONCONTEXT, bundle,
-		       Util.getScope(scope));
-	}
-
-	return EVAL_PAGE;
-    }
-
-    // Releases any resources we may have (or inherit)
-    public void release() {
-	init();
+    /** 
+     * Gets the locale of this I18N localization context.
+     *
+     * @return The locale of this I18N localization context, or null if this
+     * I18N localization context does not contain any resource bundle, or its
+     * resource bundle is a (locale-less) root resource bundle.
+     */ 
+    public Locale getLocale() {
+	return locale;
     }
 }
+

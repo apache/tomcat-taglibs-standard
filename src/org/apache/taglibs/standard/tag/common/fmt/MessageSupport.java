@@ -171,8 +171,8 @@ public abstract class MessageSupport extends BodyTagSupport {
 		bundle = parent.getBundle();
 		prefix = parent.getPrefix();
 	    } else {
-		bundle = (ResourceBundle) Config.find(pageContext,
-						      Config.FMT_BUNDLE);
+		bundle = (ResourceBundle)
+		    Config.find(pageContext, Config.FMT_LOCALIZATIONCONTEXT);
 	    }
 	} else {
 	    SetLocaleSupport.setResponseLocale(pageContext,

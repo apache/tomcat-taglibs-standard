@@ -71,8 +71,8 @@ public class Config {
 	= "javax.servlet.jsp.jstl.fmt.fallbackLocale";
     public static final String FMT_TIMEZONE
 	= "javax.servlet.jsp.jstl.fmt.timeZone";
-    public static final String FMT_BUNDLE
-	= "javax.servlet.jsp.jstl.fmt.bundle";
+    public static final String FMT_LOCALIZATIONCONTEXT
+	= "javax.servlet.jsp.jstl.fmt.localizationContext";
 
     /**
      * SQL configuration

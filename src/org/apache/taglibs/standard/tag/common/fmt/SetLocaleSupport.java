@@ -266,7 +266,7 @@ public abstract class SetLocaleSupport extends TagSupport {
 	    // use locale from parent <fmt:bundle> tag
 	    match = ((BundleSupport) parent).getBundle().getLocale();
 	} else if ((bundle = (ResourceBundle)
-		    Config.find(pc, Config.FMT_BUNDLE)) != null) {
+		    Config.find(pc, Config.FMT_LOCALIZATIONCONTEXT)) != null) {
 	    // Use locale associated with default bundle base name.
 	    match = bundle.getLocale();
 	} else {

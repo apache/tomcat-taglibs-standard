@@ -78,19 +78,17 @@ import org.apache.taglibs.standard.resources.Resources;
 public class LocaleSupport {
 
     /** 
-     * Retrieves the localized message corresponding to the given key. 
-     * 
-     * <p> The given key is looked up in the resource bundle with the default
-     * base name, which is retrieved from the
-     * <tt>javax.servlet.jsp.jsptl.fmt.basename</tt> scoped attribute or
-     * context configuration parameter.
-     * 
-     * <p> If the <tt>javax.servlet.jsp.jsptl.fmt.basename</tt> scoped
-     * attribute or context configuration parameter does not exist, or no
-     * resource bundle with the default base name exists, or the given key is
-     * undefined in the resource bundle with the default base name, the string
-     * &quot;???&lt;key&gt;???&quot; is returned, where
-     * &quot;&lt;key&gt;&quot; is replaced with the given <tt>key</tt>.
+     * Retrieves the localized message corresponding to the given key.
+     *
+     * <p> The given key is looked up in the resource bundle of the default
+     * I18N localization context, which is retrieved from the
+     * <tt>javax.servlet.jsp.jstl.fmt.localizationContext</tt> configuration
+     * setting.
+     *
+     * <p> If the configuration setting is empty, or the default I18N
+     * localization context does not contain any resource bundle, or the given
+     * key is undefined in its resource bundle, the string "???<key>???" is
+     * returned, where "<key>" is replaced with the given key.
      * 
      * @param pageContext the page in which to get the localized message
      * corresponding to the given key  
@@ -104,14 +102,14 @@ public class LocaleSupport {
     }
 
     /** 
-     * Retrieves the localized message corresponding to the given key. 
-     * 
-     * <p> The given key is looked up in the resource bundle with the given 
-     * base name. If no resource bundle with the given base name exists, 
-     * or the given key is undefined in the resource bundle, the string
-     * &quot;???&lt;key&gt;???&quot; is returned, where
-     * &quot;&lt;key&gt;&quot; is replaced with the given <tt>key</tt>
-     * argument.
+     * Retrieves the localized message corresponding to the given key.
+     *
+     * <p> The given key is looked up in the resource bundle with the given
+     * base name.
+     *
+     * <p> If no resource bundle with the given base name exists, or the given
+     * key is undefined in the resource bundle, the string "???<key>???" is
+     * returned, where "<key>" is replaced with the given key.
      * 
      * @param pageContext the page in which to get the localized message
      * corresponding to the given key  
@@ -126,14 +124,16 @@ public class LocaleSupport {
 	return getLocalizedMessage(pageContext, key, null, basename);
     }
 
-    /** 
-     * Retrieves the localized message corresponding to the given key and 
-     * performs parametric replacement on it.
-     * 
+    /**
+     * Retrieves the localized message corresponding to the given key, and
+     * performs parametric replacement using the arguments specified via
+     * <tt>args</tt>.
+     *
+     * <p> See the specification of the <fmt:message> action for a description
+     * of how parametric replacement is implemented.
+     *
      * <p> The localized message is retrieved as in
      * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String) getLocalizedMessage(pageContext, key)}.
-     * Parametric replacement is performed using the arguments specified via 
-     * <tt>args</tt>. 
      *
      * @param pageContext the page in which to get the localized message
      * corresponding to the given key  
@@ -148,14 +148,16 @@ public class LocaleSupport {
 	return getLocalizedMessage(pageContext, key, args, null);
     }
 
-    /** 
-     * Retrieves the localized message corresponding to the given key and
-     * performs parametric replacement on it.
+    /**
+     * Retrieves the localized message corresponding to the given key, and
+     * performs parametric replacement using the arguments specified via
+     * <tt>args</tt>.
+     *
+     * <p> See the specification of the <fmt:message> action for a description
+     * of how parametric replacement is implemented.
      *
      * <p> The localized message is retrieved as in
      * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String, java.lang.String) getLocalizedMessage(pageContext, key, basename)}.
-     * Parametric replacement is performed using the arguments specified via 
-     * <tt>args</tt>. 
      * 
      * @param pageContext the page in which to get the localized message
      * corresponding to the given key  
@@ -176,8 +178,8 @@ public class LocaleSupport {
 	if (basename != null) {
 	    bundle = BundleSupport.getBundle(pageContext, basename);
 	} else {
-	    bundle = (ResourceBundle) Config.find(pageContext,
-						  Config.FMT_BUNDLE);
+	    bundle = (ResourceBundle)
+		Config.find(pageContext, Config.FMT_LOCALIZATIONCONTEXT);
 	}
 	if (bundle != null) {
 	    try {
