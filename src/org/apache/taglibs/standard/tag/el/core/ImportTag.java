@@ -149,6 +149,9 @@ public class ImportTag extends ImportSupport {
 
 	url = (String) ExpressionUtil.evalNotNull(
 	    "import", "url", url_, String.class, this, pageContext);
+	if (url == null || url.equals(""))
+	    throw new NullAttributeException("import", "url");
+
 	context = (String) ExpressionUtil.evalNotNull(
 	    "import", "context", context_, String.class, this, pageContext);
 	charEncoding = (String) ExpressionUtil.evalNotNull(
