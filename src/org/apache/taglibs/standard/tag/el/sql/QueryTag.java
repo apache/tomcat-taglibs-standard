@@ -130,7 +130,7 @@ public class QueryTag extends QueryTagSupport {
 
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
-        Object tempInt = null;
+        Integer tempInt = null;
 
         if (dataSourceEL != null) {
             rawDataSource = (Object) ExpressionEvaluatorManager.evaluate(
@@ -142,23 +142,18 @@ public class QueryTag extends QueryTagSupport {
                 String.class, this, pageContext);
         }
 
-        try {
-            if (startRowEL != null) {
-                tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
-                    "startRow", startRowEL, Integer.class, this, pageContext);
-                if (tempInt != null)
-                    startRow = ((Integer) tempInt).intValue();
-            }
+	if (startRowEL != null) {
+	    tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
+                "startRow", startRowEL, Integer.class, this, pageContext);
+	    if (tempInt != null)
+		startRow = tempInt.intValue();
+	}
 
-            if (maxRowsEL != null) {
-                tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
-                    "maxRows", maxRowsEL, Integer.class, this, pageContext);
-                if (tempInt != null)
-                    maxRows = ((Integer) tempInt).intValue();
-            }
-        } catch (Exception ex) {
-            throw new JspException(Resources.getMessage("PARAM_BAD_VALUE"),
-				   ex);
-        }
+	if (maxRowsEL != null) {
+	    tempInt = (Integer) ExpressionEvaluatorManager.evaluate(
+                "maxRows", maxRowsEL, Integer.class, this, pageContext);
+	    if (tempInt != null)
+		maxRows = tempInt.intValue();
+	}
     }
 }
