@@ -132,10 +132,8 @@ public class SetTimeZoneTag extends SetTimeZoneSupport {
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
 	
-	// 'value' attribute (optional)
-	if (value_ != null) {
-	    value = ExpressionEvaluatorManager.evaluate(
-	        "value", value_, Object.class, this, pageContext);
-	}
+	// 'value' attribute (mandatory)
+	value = ExpressionEvaluatorManager.evaluate(
+	    "value", value_, Object.class, this, pageContext);
     }
 }
