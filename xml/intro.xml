@@ -10,13 +10,16 @@
 
   <section name="'Standard' Taglib" href="Welcome">
 
-    <big><b>JSP(tm) Standard Tag Library reference implementation</b></big>
+    <big><b>JSP(tm) Standard Tag Library reference implementation (Beta 1)</b></big>
 
     <p>The <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 Expert Group</a>,
       operating under the Java Community Process, will be hosting the
       reference implementation of the JSP Standard Tag Library (JSTL) at
-      Jakarta Taglibs.  JSTL is not finalized yet, but early-access releases
-      are currently available.
+      Jakarta Taglibs.  JSTL is currently in the 
+      <a href="http://www.jcp.org/procedures/jcp2/index.jsp#3">Public
+      Review</a> stage of the Java Community Process.  The
+      <a href="http://jcp.org/aboutJava/communityprocess/review/jsr052">
+      JSTL Public Draft</a> is now available.
     </p>
 
     <p><b>NOTE:</b> JSTL requires a JSP container that supports
@@ -25,12 +28,10 @@
       Tomcat 4</a> supports the new specifications.
     </p>
 
-    <p><b>IMPORTANT:</b> This release of JSTL is an early-access release and
-      does not represent a standard of any kind.  The API and implementation are
-      subject to change in the future. The major purpose of this release is to
-      provide early information to the community of JSP developers about the
-      direction and scope of JSTL.  Community feedback is actively sought; if
-      you have any comments, please email us at
+    <p><b>IMPORTANT:</b> This release of the JSTL RI is a beta release
+      and does not yet represent a final standard.  The API and implementation
+      are subject to change in the future.  Community feedback is actively
+      sought; if you have any comments, please email us at
       <a href="mailto:jsr052-comments@sun.com">jsr052-comments@sun.com</a>.
     </p>
 
@@ -39,9 +40,14 @@
   <section name="'Standard' Taglib News" href="News">
 
     <news>
-      <newsitem date="12/15/2001">
-	Early Access Release 3 made available for
+      <newsitem date="3/12/2002">
+	RI Beta 1 made available for
 	<a href="/builds/jakarta-taglibs/releases/standard">download</a>.
+        The <a href="http://jcp.org/aboutJava/communityprocess/review/jsr052">
+        JSTL Public Draft</a> is now available.
+      </newsitem>
+      <newsitem date="12/15/2001">
+	Early Access Release 3 was made available for download.
       </newsitem>
       <newsitem date="11/21/2001">
 	Early Access Release 2 was made available for download.
@@ -73,14 +79,14 @@
   <section name="Documentation" href="Documentation">
 
     <p>For more information about the JSP Standard Tag Library,
-       look at the on-line documentation for Early Access 3:</p>
+       look at the on-line documentation for Beta 1:</p>
     <ul>
       <!--  Uncomment this section and modify as needed when you start
             doing releases of the taglib, a link can be made to each
             available release. -->
-      <li>View the Early Access 3 documentation
-        <a href="standard-ea3/index.html">
-        JSP Standard Tag Library EA3 Documentation</a>
+      <li>View the Beta 1 documentation
+        <a href="standard-beta1/index.html">
+        JSP Standard Tag Library Beta 1 Documentation</a>
       </li>
 
       <li>View the most recent, nightly build of the
@@ -107,11 +113,11 @@
     <!--  Uncomment this section and modify as needed when you start
           doing releases of the taglib. -->
     <p>Download a binary distribution of the JSP Standard Tag Library
-      EA3 release:</p>
+      Beta 1 release:</p>
     <ul>
       <li>
         <a href="http://jakarta.apache.org/builds/jakarta-taglibs/releases/standard/">
-        JSP Standard Tag Library EA3 release</a></li>
+        JSP Standard Tag Library Beta 1 release</a></li>
     </ul>
 
     <p>Download the most recent, nightly snapshot:</p>
