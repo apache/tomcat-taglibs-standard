@@ -39,21 +39,24 @@ public interface ELParserConstants {
   int DIVIDE2 = 37;
   int MODULUS1 = 38;
   int MODULUS2 = 39;
-  int NOT = 40;
-  int AND = 41;
-  int OR = 42;
-  int PAGE_CONTEXT = 43;
-  int PAGE = 44;
-  int REQUEST = 45;
-  int SESSION = 46;
-  int APPLICATION = 47;
-  int PARAM = 48;
-  int PARAMS = 49;
-  int IDENTIFIER = 50;
-  int IMPL_OBJ_START = 51;
-  int LETTER = 52;
-  int DIGIT = 53;
-  int ILLEGAL_CHARACTER = 54;
+  int NOT1 = 40;
+  int NOT2 = 41;
+  int AND1 = 42;
+  int AND2 = 43;
+  int OR1 = 44;
+  int OR2 = 45;
+  int PAGE_CONTEXT = 46;
+  int PAGE = 47;
+  int REQUEST = 48;
+  int SESSION = 49;
+  int APPLICATION = 50;
+  int PARAM = 51;
+  int PARAMS = 52;
+  int IDENTIFIER = 53;
+  int IMPL_OBJ_START = 54;
+  int LETTER = 55;
+  int DIGIT = 56;
+  int ILLEGAL_CHARACTER = 57;
 
   int DEFAULT = 0;
   int IN_EXPRESSION = 1;
@@ -100,8 +103,11 @@ public interface ELParserConstants {
     "\"%\"",
     "\"mod\"",
     "\"not\"",
+    "\"!\"",
     "\"and\"",
+    "\"&&\"",
     "\"or\"",
+    "\"||\"",
     "\"pageContext\"",
     "\"page\"",
     "\"request\"",

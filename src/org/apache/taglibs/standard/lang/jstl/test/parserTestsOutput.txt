@@ -4,7 +4,7 @@ Parses to: abc
 Attribute value: ${ 3}
 Parses to: ${3}
 Attribute value: a${
-Causes an error: Unable to parse custom action attribute "test" with value "a${": encountered "<EOF>", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: Unable to parse custom action attribute "test" with value "a${": encountered "<EOF>", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 Attribute value: a${ 5 }
 Parses to: a${5}
 Attribute value: ${ 3 }b
@@ -76,9 +76,9 @@ Parses to: ${" with escaping \""}
 Attribute value: ${" with escaping \"\\\""}
 Parses to: ${" with escaping \"\\\""}
 Attribute value: ${" bad \ escaping"}
-Causes an error: Unable to parse custom action attribute "test" with value "${" bad \ escaping"}": encountered "" bad \ ", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: Unable to parse custom action attribute "test" with value "${" bad \ escaping"}": encountered "" bad \ ", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 Attribute value: ${" bad \' escaping"}
-Causes an error: Unable to parse custom action attribute "test" with value "${" bad \' escaping"}": encountered "" bad \'", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: Unable to parse custom action attribute "test" with value "${" bad \' escaping"}": encountered "" bad \'", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 
 # string literals with '
 Attribute value: ${'abc'}
@@ -98,9 +98,9 @@ Parses to: ${" with escaping '"}
 Attribute value: ${' with escaping \'\\\''}
 Parses to: ${" with escaping '\\'"}
 Attribute value: ${' bad \ escaping'}
-Causes an error: Unable to parse custom action attribute "test" with value "${' bad \ escaping'}": encountered "' bad \ ", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: Unable to parse custom action attribute "test" with value "${' bad \ escaping'}": encountered "' bad \ ", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 Attribute value: ${' bad \" escaping'}
-Causes an error: Unable to parse custom action attribute "test" with value "${' bad \" escaping'}": encountered "' bad \"", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
+Causes an error: Unable to parse custom action attribute "test" with value "${' bad \" escaping'}": encountered "' bad \"", expected one of "<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 
 # identifiers
 Attribute value: ${abc}
@@ -184,3 +184,16 @@ Parses to: ${(a != b)}
 Attribute value: ${ a ne b }
 Parses to: ${(a != b)}
 
+# logical operators
+Attribute value: ${ a and b}
+Parses to: ${(a and b)}
+Attribute value: ${ a && b}
+Parses to: ${(a and b)}
+Attribute value: ${ a or b}
+Parses to: ${(a or b)}
+Attribute value: ${ a || b}
+Parses to: ${(a or b)}
+Attribute value: ${ !a }
+Parses to: ${(not a)}
+Attribute value: ${ not a }
+Parses to: ${(not a)}

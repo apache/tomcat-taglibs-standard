@@ -117,9 +117,12 @@ PARSER_END(ELParser)
 | < DIVIDE2: "div" >
 | < MODULUS1: "%" >
 | < MODULUS2: "mod" >
-| < NOT: "not" >
-| < AND: "and" >
-| < OR: "or" >
+| < NOT1: "not" >
+| < NOT2: "!" >
+| < AND1: "and" >
+| < AND2: "&&" >
+| < OR1: "or" >
+| < OR2: "||" >
 | < PAGE_CONTEXT: "pageContext" >
 | < PAGE: "page" >
 | < REQUEST: "request" >
@@ -262,7 +265,7 @@ Expression OrExpression () :
 
     (
      (
-      <OR> { operator = OrOperator.SINGLETON; }
+      (<OR1> | <OR2>) { operator = OrOperator.SINGLETON; }
       )
      expression = AndExpression ()
 
@@ -302,7 +305,7 @@ Expression AndExpression () :
 
     (
      (
-      <AND> { operator = AndOperator.SINGLETON; }
+      (<AND1> | <AND2>) { operator = AndOperator.SINGLETON; }
       )
      expression = EqualityExpression ()
 
@@ -506,7 +509,7 @@ Expression UnaryExpression () :
 {
   (
    (
-    <NOT> { operator = NotOperator.SINGLETON; }
+    (<NOT1> | <NOT2>) { operator = NotOperator.SINGLETON; }
     | <MINUS> { operator = UnaryMinusOperator.SINGLETON; }
     )
   {

@@ -105,3 +105,10 @@ ${ a eq b }
 ${ a != b }
 ${ a ne b }
 
+# logical operators
+${ a and b}
+${ a && b}
+${ a or b}
+${ a || b}
+${ !a }
+${ not a }
