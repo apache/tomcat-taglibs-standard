@@ -111,7 +111,6 @@ public abstract class ImportSupport extends BodyTagSupport
     private int scope;			// processed 'scope' attribute
     private String varReader;           // 'varReader' attribute
     private Reader r;	 		// exposed reader, if relevant
-    private Object oldVarReader;	// overwritten attribute
     private boolean isAbsoluteUrl;	// is our URL absolute?
     private String urlWithParams;	// URL with <param>-added text
 
@@ -148,8 +147,6 @@ public abstract class ImportSupport extends BodyTagSupport
 	    // If we need to expose a Reader, we've got to do it right away
 	    if  (varReader != null) {
 	        r = acquireReader();
-	        Object oldVarReader =
-		    pageContext.getAttribute(varReader);
 	        pageContext.setAttribute(varReader, r);
 	    }
 	} catch (IOException ex) {
@@ -194,10 +191,7 @@ public abstract class ImportSupport extends BodyTagSupport
 		// 'r' can be null if an exception was thrown...
 	        if (r != null)
 		    r.close();
-	        if (oldVarReader != null)
-		    pageContext.setAttribute(varReader, oldVarReader);
-		else
-		    pageContext.removeAttribute(varReader);
+		pageContext.removeAttribute(varReader, PageContext.PAGE_SCOPE);
 	    }
         } catch (IOException ex) {
 	    // ignore it; close() failed, but there's nothing more we can do

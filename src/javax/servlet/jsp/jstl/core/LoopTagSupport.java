@@ -166,8 +166,6 @@ public abstract class LoopTagSupport
     private int index;                          // the current internal index
     private int count;                          // the iteration count
     private boolean last;                       // current round == last one?
-    private Object oldItem, oldStatus;		// variables we overwrite
-    private int oldItemScope, oldStatusScope;	// scopes of these variables
 
     //*********************************************************************
     // Constructor
@@ -254,35 +252,6 @@ public abstract class LoopTagSupport
         index = 0;
         count = 1;
         last = false;
-
-	// save old 'items' and 'status' if applicable
-	/* (Note that we are somewhat anal-retentive and record the
-         * scope of the variable we overwrite.  If the container attribute
-         * truly implements scoped attributes as a single namespace,
-	 * this may become important.  Ultimately, either findAttribute()
-	 * will stop at 'page' and this won't make a different, or it
-	 * will stop at something OTHER than 'page'.  If we find a variable
-         * outside page scope, we know that there was no variable of the
-         * same name WITHIN page scope, because of findAttribute()'s
-         * semantics.  Therefore, if we save this attribute, we know we're
-         * not missing anything in 'page'.  Thus, we are prepared for a
-         * container that overwrites a 'session'-scoped attribute on a
-         * call to setAttribute() to establish a 'page'-scoped attribute -- 
-         * which I believe is a legal implementation of setAttribute().
-         * If a user sets a session-scoped variable of the same name as
-         * itemId or statusId within her <c:forEach> loop, however, this
-         * could lead to some pretty unusual behavior.  I have opted to
-         * stick with section JSP2.8.2 of the JSP spec instead of to
-         * assume a page author will ignore this section.)
-         */
-	if (itemId != null) {
-	    oldItem = pageContext.findAttribute(itemId);
-	    oldItemScope = pageContext.getAttributesScope(itemId);
-	}
-	if (statusId != null) {
-	    oldStatus = pageContext.findAttribute(statusId);
-	    oldStatusScope = pageContext.getAttributesScope(statusId);
-	}
 
         // let the subclass conduct any necessary preparation
         prepare();
@@ -523,10 +492,6 @@ public abstract class LoopTagSupport
         beginSpecified = false; // not specified until it's specified :-)
         endSpecified = false;   // (as above)
         stepSpecified = false;  // (as above)
-	oldItem = null;		// no page-variable saved
-	oldStatus = null;	// no page-variable saved
-	oldItemScope = 0;	// no page-variable saved
-	oldStatusScope = 0;	// no page-variable saved
 
         // defaults for interface with page author
         begin = 0;              // when not specified, 'begin' is 0 by spec.
@@ -572,13 +537,13 @@ public abstract class LoopTagSupport
 
         if (itemId != null) {
             if (getCurrent() == null)
-                pageContext.removeAttribute(itemId);
+                pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
             else
                 pageContext.setAttribute(itemId, getCurrent());
         }
         if (statusId != null) {
             if (getIteratorStatus() == null)
-                pageContext.removeAttribute(statusId);
+                pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
             else
                 pageContext.setAttribute(statusId, getIteratorStatus());
         }
@@ -590,18 +555,11 @@ public abstract class LoopTagSupport
      * restores them to their prior values (and scopes).
      */
     private void unExposeVariables() {
-	if (itemId != null) {
-	    if (oldItem == null)
-	        pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
-	    else
-		pageContext.setAttribute(itemId, oldItem, oldItemScope);
-	}
-	if (statusId != null) {
-	    if (oldStatus == null)
-		pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
-	    else
-		pageContext.setAttribute(statusId, oldStatus, oldStatusScope);
-	}
+        // "nested" variables are now simply removed
+	if (itemId != null)
+            pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
+	if (statusId != null)
+	    pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
     }
 
     /**
