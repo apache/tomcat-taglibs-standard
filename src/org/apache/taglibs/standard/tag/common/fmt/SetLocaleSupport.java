@@ -455,9 +455,12 @@ public abstract class SetLocaleSupport extends TagSupport {
      *
      * The best match is given as the first available locale that exactly
      * matches the given preferred locale ("exact match"). If no exact match
-     * exists, the best match is given as the first available locale that 
-     * matches the preferred locale's language component and does not have any
-     * country component ("language match").
+     * exists, the best match is given to an available locale that meets
+     * the following criteria (in order of priority):
+     *  - available locale's variant is empty and exact match for both
+     *    language and country
+     *  - available locale's variant and country are empty, and exact match 
+     *    for language.
      *
      * @param pref the preferred locale
      * @param avail the available formatting locales
@@ -467,23 +470,30 @@ public abstract class SetLocaleSupport extends TagSupport {
      */
     private static Locale findFormattingMatch(Locale pref, Locale[] avail) {
 	Locale match = null;
-
-	for (int i=0; i<avail.length; i++) {
-	    if (pref.equals(avail[i])) {
-		// Exact match
-		match = avail[i];
-		break;
-	    } else {
-		if (pref.getLanguage().equals(avail[i].getLanguage())
-		        && ("".equals(avail[i].getCountry()))) {
-		    // Language match
-		    if (match == null) {
-			match = avail[i];
-		    }
-		}
-	    }
-	}
-
+        boolean langAndCountryMatch = false;
+        for (int i=0; i<avail.length; i++) {
+            if (pref.equals(avail[i])) {
+                // Exact match
+                match = avail[i];
+                break;
+            } else if (
+                    !"".equals(pref.getVariant()) &&
+                    "".equals(avail[i].getVariant()) &&
+                    pref.getLanguage().equals(avail[i].getLanguage()) &&
+                    pref.getCountry().equals(avail[i].getCountry())) {
+                // Language and country match; different variant
+                match = avail[i];
+                langAndCountryMatch = true;
+            } else if (
+                    !langAndCountryMatch &&
+                    pref.getLanguage().equals(avail[i].getLanguage()) &&
+                    ("".equals(avail[i].getCountry()))) {
+                // Language match
+                if (match == null) {
+                    match = avail[i];
+                }
+            }
+        }
 	return match;
     }
 }
