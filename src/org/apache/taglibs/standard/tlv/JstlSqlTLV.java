@@ -155,7 +155,8 @@ public class JstlSqlTLV extends JstlBaseTLV {
                     SCOPE, qn, a.getValue(SCOPE))); 
 	    if (qn.startsWith(prefix + ":") && hasEmptyVar(a))
 		fail(Resources.getMessage("TLV_EMPTY_VAR", qn));
-	    if (qn.startsWith(prefix + ":") && hasDanglingScope(a))
+	    if (qn.startsWith(prefix + ":") && hasDanglingScope(a) &&
+                !qn.startsWith(prefix + ":" + SETDATASOURCE))
 		fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 
 	    // now, modify state
