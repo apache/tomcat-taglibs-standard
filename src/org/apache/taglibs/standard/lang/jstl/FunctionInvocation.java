@@ -139,8 +139,12 @@ public class FunctionInvocation
       functionName = defaultPrefix + ":" + functionName;
     }
 
-    // ensure that the number of arguments matches the number of parameters
+    // ensure that the function's name is mapped
     Method target = (Method) functions.get(functionName);
+    if (target == null)
+      pLogger.logError(Constants.UNKNOWN_FUNCTION, functionName);
+
+    // ensure that the number of arguments matches the number of parameters
     Class[] params = target.getParameterTypes();
     if (params.length != argumentList.size())
       pLogger.logError(Constants.INAPPROPRIATE_FUNCTION_ARG_COUNT,
