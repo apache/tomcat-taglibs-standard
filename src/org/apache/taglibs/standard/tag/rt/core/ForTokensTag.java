@@ -111,7 +111,6 @@ public class ForTokensTag
 	// use the empty string to cause monolithic tokenization
         if (s == null)
 	    delims = "";
-            throw new NullAttributeException("forTokens", "delims");
     }
 
 }
