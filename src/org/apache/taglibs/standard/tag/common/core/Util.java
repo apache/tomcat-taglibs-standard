@@ -135,7 +135,8 @@ public class Util {
     }
 
     /**
-     * Searches the named attribute in the given page.
+     * Searches the named attribute in the given page after appending the
+     * various scope names to its name.
      *
      * First, the attribute is searched in page scope, with the suffix
      * ".page" appended to its name.
@@ -145,15 +146,13 @@ public class Util {
      * suffix ".session" appended to its name.
      * If not found. the attribute is searched in application scope, with the
      * suffix ".application" appended to its name.
-     * If still not found, the attribute is searched using the PageContext
-     * method findAttribute().
      *
      * @param pageContext The page in which to search the attribute
      * @param name The attribute name
      *
      * @return The value associated with the named attribute, or null.
      */
-    public static Object getAttribute(PageContext pageContext, String name) {
+    public static Object findAttribute(PageContext pageContext, String name) {
 	Object ret = pageContext.getAttribute(name + ".page",
 					      PageContext.PAGE_SCOPE);
 	if (ret == null) {
@@ -165,9 +164,6 @@ public class Util {
 		if (ret == null) {
 		    ret = pageContext.getAttribute(name + ".application",
 						   PageContext.APPLICATION_SCOPE);
-		    if (ret == null) {
-			ret = pageContext.findAttribute(name);
-		    }
 		}
 	    }
 	}
