@@ -142,7 +142,7 @@ public class Config {
 	case PageContext.REQUEST_SCOPE:
 	    return pc.getAttribute(name + REQUEST_SCOPE_SUFFIX, scope);
 	case PageContext.SESSION_SCOPE:
-	    return get(pc.getSession(), name + SESSION_SCOPE_SUFFIX);
+	    return get(pc.getSession(), name);
 	case PageContext.APPLICATION_SCOPE:
 	    return pc.getAttribute(name + APPLICATION_SCOPE_SUFFIX, scope);
 	default:
