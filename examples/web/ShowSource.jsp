@@ -1,13 +1,22 @@
 <!--
   Displays the content of the file specified in request
   parameter "filename".
+  <%-- Warning!  Can be used to retrieve the source code for
+       any file in the 'standard-examples' application.
+       It is not advisable to insert any sensitive code
+       (even as an experiment) into this application --%>
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/ea/core" %>
 <%@ taglib prefix="ex" uri="/jstl-examples-taglib" %>
 
+<%-- 
+  Let's get back the URL as a String so we can use it to
+  demonstrate "c:import"
+--%>
 <% pageContext.setAttribute("filepath",
-     "file:" + application.getRealPath(request.getParameter("filename"))); %>
+     application.
+       getResource(request.getParameter("filename")).toExternalForm()); %>
 <% pageContext.setAttribute("filename", request.getParameter("filename")); %>
 
 <html>
@@ -19,11 +28,8 @@
 
 <hr>
 
-<%-- <c:expr value="$filepath"/> --%>
 <c:import varReader="reader" url="$filepath">
-<%-- <ex:file id="reader" file="$param:filename"> --%>
   <ex:escapeHtml reader="$reader"/>
-<%-- </ex:file> --%>
 </c:import>
 <hr>
 </body>
