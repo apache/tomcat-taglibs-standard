@@ -152,6 +152,10 @@ public abstract class TransformSupport extends BodyTagSupport {
 
 	Source s;
 	if (xslt != null) {
+	    if (!(xslt instanceof String) && !(xslt instanceof Reader)
+                    && !(xslt instanceof javax.xml.transform.Source))
+		throw new JspTagException(
+		    Resources.getMessage("TRANSFORM_XSLT_UNRECOGNIZED"));
 	    s = getSource(xslt, xsltSystemId);
 	} else {
 	    throw new JspTagException(

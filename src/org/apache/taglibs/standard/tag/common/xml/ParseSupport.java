@@ -241,8 +241,14 @@ public abstract class ParseSupport extends BodyTagSupport {
     private Document parseInputSource(InputSource s)
 	    throws SAXException, IOException {
 	db.setEntityResolver(new JstlEntityResolver(pageContext));
-	if (systemId != null)
+
+        // normalize URIs so they can be processed consistently by resolver
+        if (systemId == null)
+            s.setSystemId("jstl:");
+	else if (ImportSupport.isAbsoluteUrl(systemId))
             s.setSystemId(systemId);
+        else
+            s.setSystemId("jstl:" + systemId);
 	return db.parse(s);
     }
 
@@ -277,8 +283,8 @@ public abstract class ParseSupport extends BodyTagSupport {
 	    if (systemId == null)
 		return null;
 
-	    // strip leading "file:" off URL if applicable
-	    if (systemId.startsWith("file:"))
+	    // strip leading "jstl:" off URL if applicable
+	    if (systemId.startsWith("jstl:"))
 		systemId = systemId.substring(5);
 
 	    // we're only concerned with relative URLs
