@@ -159,6 +159,10 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	        this,
 		false,
 	        DateFormat.getAvailableLocales());
+	if (locale == null) {
+	    throw new JspException(
+                    Resources.getMessage("PARSE_DATE_NO_PARSE_LOCALE"));
+	}
 
 	// Create parser
 	DateFormat parser = createParser(locale);
@@ -183,7 +187,7 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	    } else if (timeZone instanceof TimeZone) {
 		tz = (TimeZone) timeZone;
 	    } else {
-		throw new JspTagException(
+		throw new JspException(
                     Resources.getMessage("PARSE_DATE_BAD_TIMEZONE"));
 	    }
 	} else {
@@ -198,7 +202,9 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	try {
 	    parsed = parser.parse(value);
 	} catch (ParseException pe) {
-	    throw new JspTagException(pe.getMessage());
+	    throw new JspException(
+	            Resources.getMessage("PARSE_DATE_PARSE_ERROR", value),
+		    pe);
 	}
 
 	if (var != null) {
@@ -241,8 +247,7 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 		loc);
 	} else {
 	    throw new JspException(
-                    Resources.getMessage("PARSE_DATE_INVALID_TYPE", 
-					 type));
+                    Resources.getMessage("PARSE_DATE_INVALID_TYPE", type));
 	}
 
 	parser.setLenient(false);

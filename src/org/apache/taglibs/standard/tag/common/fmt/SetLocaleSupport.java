@@ -259,7 +259,6 @@ public abstract class SetLocaleSupport extends TagSupport {
 				      Tag fromTag,
 				      boolean format,
 				      Locale[] avail) {
-	Locale match = null;
 	LocalizationContext locCtxt = null;
 	
 	// Get formatting locale from enclosing <fmt:bundle>
@@ -292,6 +291,7 @@ public abstract class SetLocaleSupport extends TagSupport {
 	 * (in order of preference) against the available formatting
 	 * locales, and determining the best matching locale.
 	 */
+	Locale match = null;
 	Locale pref = getLocale(pc, Config.FMT_LOCALE);
 	if (pref != null) {
 	    // Preferred locale is application-based
@@ -303,14 +303,11 @@ public abstract class SetLocaleSupport extends TagSupport {
 	if (match == null) {
 	    //Use fallback locale.
 	    pref = getLocale(pc, Config.FMT_FALLBACKLOCALE);
-	    if ((pref == null)
-		|| ((match = findFormattingMatch(pref,
-						 avail)) == null)) {
-		// Use runtime's default locale.
-		match = Locale.getDefault();
+	    if (pref != null) {
+		match = findFormattingMatch(pref, avail);
 	    }
 	}
- 	if (format) {
+ 	if (format && (match != null)) {
 	    setResponseLocale(pc, match);
 	}
 

@@ -153,6 +153,8 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
+	String formatted = null;
+
 	if (value == null) {
 	    BodyContent bc = null;
 	    String bcs = null;
@@ -191,13 +193,16 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	    this,
 	    true,
 	    NumberFormat.getAvailableLocales());
-	NumberFormat formatter = createFormatter(locale);
 
-	// Configure the formatter
-	configureFormatter(formatter);
+	if (locale != null) {
+	    NumberFormat formatter = createFormatter(locale);
+	    configureFormatter(formatter);
+	    formatted = formatter.format(value);
+	} else {
+	    // no formatting locale available, use toString()
+	    formatted = value.toString();
+	}
 
-	// Format given numeric value
-	String formatted = formatter.format(value);
 	if (var != null) {
 	    pageContext.setAttribute(var, formatted, scope);	
 	} else {

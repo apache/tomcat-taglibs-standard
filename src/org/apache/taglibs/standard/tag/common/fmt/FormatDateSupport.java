@@ -135,6 +135,8 @@ public abstract class FormatDateSupport extends TagSupport {
      */
     public int doEndTag() throws JspException {
 
+	String formatted = null;
+
 	if (value == null) {
 	    if (var != null) {
 		pageContext.removeAttribute(var, scope);
@@ -148,39 +150,46 @@ public abstract class FormatDateSupport extends TagSupport {
 	    this,
 	    true,
 	    DateFormat.getAvailableLocales());
-	DateFormat formatter = createFormatter(locale);
 
-	// Apply pattern, if present
-	if (pattern != null) {
-	    try {
-		((SimpleDateFormat) formatter).applyPattern(pattern);
-	    } catch (ClassCastException cce) {
-		formatter = new SimpleDateFormat(pattern, locale);
+	if (locale != null) {
+	    DateFormat formatter = createFormatter(locale);
+
+	    // Apply pattern, if present
+	    if (pattern != null) {
+		try {
+		    ((SimpleDateFormat) formatter).applyPattern(pattern);
+		} catch (ClassCastException cce) {
+		    formatter = new SimpleDateFormat(pattern, locale);
+		}
 	    }
-	}
 
-	// Set time zone
-	TimeZone tz = null;
-	if ((timeZone instanceof String) && ((String) timeZone).equals("")) {
-	    timeZone = null;
-	}
-	if (timeZone != null) {
-	    if (timeZone instanceof String) {
-		tz = TimeZone.getTimeZone((String) timeZone);
-	    } else if (timeZone instanceof TimeZone) {
-		tz = (TimeZone) timeZone;
+	    // Set time zone
+	    TimeZone tz = null;
+	    if ((timeZone instanceof String)
+		&& ((String) timeZone).equals("")) {
+		timeZone = null;
+	    }
+	    if (timeZone != null) {
+		if (timeZone instanceof String) {
+		    tz = TimeZone.getTimeZone((String) timeZone);
+		} else if (timeZone instanceof TimeZone) {
+		    tz = (TimeZone) timeZone;
+		} else {
+		    throw new JspTagException(
+                            Resources.getMessage("FORMAT_DATE_BAD_TIMEZONE"));
+		}
 	    } else {
-		throw new JspTagException(
-                    Resources.getMessage("FORMAT_DATE_BAD_TIMEZONE"));
+		tz = TimeZoneSupport.getTimeZone(pageContext, this);
 	    }
+	    if (tz != null) {
+		formatter.setTimeZone(tz);
+	    }
+	    formatted = formatter.format(value);
 	} else {
-	    tz = TimeZoneSupport.getTimeZone(pageContext, this);
-	}
-	if (tz != null) {
-	    formatter.setTimeZone(tz);
+	    // no formatting locale available, use Date.toString()
+	    formatted = value.toString();
 	}
 
-	String formatted = formatter.format(value);
 	if (var != null) {
 	    pageContext.setAttribute(var, formatted, scope);	
 	} else {

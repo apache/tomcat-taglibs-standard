@@ -157,6 +157,10 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 	        this,
 		false,
 	        NumberFormat.getAvailableLocales());
+	if (locale == null) {
+	    throw new JspException(
+                    Resources.getMessage("PARSE_NUMBER_NO_PARSE_LOCALE"));
+	}
 
 	// Create parser
 	NumberFormat parser = createParser(locale);
@@ -170,7 +174,9 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 	try {
 	    parsed = parser.parse(value);
 	} catch (ParseException pe) {
-	    throw new JspTagException(pe.getMessage());
+	    throw new JspException(
+	            Resources.getMessage("PARSE_NUMBER_PARSE_ERROR", value),
+		    pe);
 	}
 
 	if (var != null) {
