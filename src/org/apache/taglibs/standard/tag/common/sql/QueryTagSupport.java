@@ -93,6 +93,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
     protected DataSource dataSource;
     protected String sql;
     protected int maxRows;
+    protected boolean maxRowsSpecified;
     protected int startRow;
 
     /*
@@ -114,7 +115,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
     private void init() {
         scope = PageContext.PAGE_SCOPE;
         startRow = 0;
-        maxRows = -999;
+        maxRows = -1;
+	maxRowsSpecified = false;
     }
 
 
@@ -161,12 +163,18 @@ public abstract class QueryTagSupport extends BodyTagSupport
      * getting the <code>Connection</code>
      */
     public int doStartTag() throws JspException {
-        if (maxRows == -999) {
-            try {
-                maxRows = Integer.parseInt(
-                    (String) Config.find(pageContext, Config.SQL_MAXROWS));
-            } catch (Exception ex) {
-                maxRows = -1;
+        if (!maxRowsSpecified) {
+	    Object obj = Config.find(pageContext, Config.SQL_MAXROWS);
+	    if (obj != null) {
+		if (obj instanceof Integer) {
+		    maxRows = ((Integer) obj).intValue();
+		} else {
+		    try {
+			maxRows = Integer.parseInt((String) obj);
+		    } catch (Exception ex) {
+			maxRows = -1;
+		    }
+		}
             }
         }
 

@@ -106,6 +106,7 @@ public class QueryTag extends QueryTagSupport {
      */
     public void setMaxRows(String maxRowsEL) {
 	this.maxRowsEL = maxRowsEL;
+	this.maxRowsSpecified = true;
     }
 
     /**
