@@ -146,6 +146,10 @@ public abstract class MessageSupport extends BodyTagSupport {
     }
 
     public int doEndTag() throws JspException {
+
+	String message = null;
+	ResourceBundle bundle = null;
+
 	if (key == null) {
 	    BodyContent bc = null;
 	    String bcs = null;
@@ -182,8 +186,9 @@ public abstract class MessageSupport extends BodyTagSupport {
 	    }
 	}
 
-	String message = null;
-	ResourceBundle bundle = locCtxt.getResourceBundle();
+	if (locCtxt != null) {
+	    bundle = locCtxt.getResourceBundle();
+	}
 	if (bundle == null) {
 	    message = UNDEFINED_KEY + key + UNDEFINED_KEY;
 	} else {
