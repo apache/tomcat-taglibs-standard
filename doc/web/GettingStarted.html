@@ -63,14 +63,10 @@ resources that will help you learn JSTL.</p>
 <p>JSTL 1.1 requires a JSP 2.0 container. We recommend you
 test the Standard Taglib with Tomcat 5.x. JSTL 1.0 only required 
 a JSP 1.2 container and is also available for download from
-<a href="http://jakarta.apache.org/taglibs">Jakarta Taglibs</a></p>
+<a href="http://jakarta.apache.org/taglibs">Jakarta Taglibs</a>.</p>
 
 <p>To install Tomcat, follow the instructions at <a
 href="http://jakarta.apache.org/tomcat">http://jakarta.apache.org/tomcat</a>.
-To install the Standard Taglib for use in a web application, follow the
-instructions at <a href="http://jakarta.apache.org/taglibs/binarydist.html">
-http://jakarta.apache.org/taglibs/binarydist.html</a>.  You can also use
-the "standard-examples" application as a guide.</p>
 
 <p>To use the Standard Taglib from its Jakarta Taglibs distribution,
 simply copy the JAR files in the distribution's 'lib' directory to your
@@ -108,28 +104,36 @@ application's WEB-INF/lib directory:</p>
         <div align="center">standard.jar</div>
       </td>
     </tr>
+  </table>
+
+<p>The standard tag library also has the following dependencies:</p>
+<ul>
+ <li>JAXP 1.2</li>
+ <li>Xalan 2.5</li>
+ <li>JDBC Standard Extension 2.0</li>
+</ul>
+
+<p>
+However, since all of these dependencies are included in J2SE 1.4.2 and higher, 
+it is therefore recommended to use J2SE 1.4.2 or higher to avoid having to 
+worry about these other dependencies.
+</p>
+
+<p>
+If the java platform under which you run your JSP container does not
+provide these dependencies, they must be made available either globally
+to all web-applications by your container, or individually within the
+WEB-INF/lib directory of your web-application.</p>
+
+<p>
+For convenience, these jar files have been included in directory 
+lib/old-dependencies of this distribution.</p>
+
+  <table width="95%" border="1" cellpadding="5">
     <tr>
-      <td width="25%">
-        <div align="center"><a href="http://www.jaxen.org">Jaxen 1.0</a></div>
-      </td>
-      <td width="40%">
-        <div align="left">Xpath engine capable of evaluating Xpath expressions.</div>
-      </td>
-      <td width="35%">
-        <div align="center">jaxen-full.jar</div>
-      </td>
-    </tr>
-    <tr>
-      <td width="25%">
-        <div align="center"><a href="http://www.saxpath.org">Saxpath 1.0</a></div>
-      </td>
-      <td width="40%">
-        <div align="left">Simple API for Xpath providing a single point for Xpath
-          expression parsing.</div>
-      </td>
-      <td width="35%">
-        <div align="center">saxpath.jar</div>
-      </td>
+      <th width="25%">Name</th>
+      <th width="40%">Description</th>
+      <th width="35%">Jar File Name</th>
     </tr>
     <tr>
       <td width="25%">
@@ -148,31 +152,15 @@ application's WEB-INF/lib directory:</p>
     </tr>
     <tr>
       <td width="25%">
-        <div align="center"><a href="http://java.sun.com/products/xml/jaxp">JAXP
-          1.1 or JAXP 1.2 implementation</a></div>
+        <div align="center"><a href="http://java.sun.com/products/xml/jaxp">
+          JAXP 1.2 implementation</a></div>
       </td>
       <td width="40%">
-        <div align="left">Standard Taglib requires a JAXP 1.1
-          or 1.2 compliant parser</div>
+        <div align="left">Standard Taglib requires a JAXP 1.2 compliant parser</div>
       </td>
       <td width="35%">
         <div align="center">
           <table width="95%" border="0" align="center">
-            <tr>
-              <td width="79%"><font size="-1">example of JAXP 1.1 impl classes</font></td>
-              <td width="21%">
-                <div align="left">
-                  <ul>
-                    <li>crimson.jar</li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" height="22">
-                <hr>
-              </td>
-            </tr>
             <tr>
               <td width="79%"><font size="-1">example of JAXP 1.2 impl classes</font></td>
               <td width="21%">
@@ -190,14 +178,11 @@ application's WEB-INF/lib directory:</p>
     </tr>
     <tr>
       <td width="25%">
-        <div align="center"><a href="http://xml.apache.org">Xalan</a></div>
+        <div align="center"><a href="http://xml.apache.org">Xalan 2.5</a></div>
       </td>
       <td width="40%">
         <p>Apache XML Xalan XSLT<br>
           Transformation Processor.<br>
-        </p>
-        <p> If you are using a version of Xalan 2.2.D12 or later you will also
-          need to obtain the xml-apis.jar which contains the JAXP APIs<br>
         </p>
       </td>
       <td width="35%">
@@ -205,6 +190,7 @@ application's WEB-INF/lib directory:</p>
       </td>
     </tr>
   </table>
+
 
 
 <h3>Multiple tag libraries</h3>
@@ -252,6 +238,14 @@ The constituent tag libraries of Standard Taglib are as follows:
       </td>
       <td><font face="Courier New, Courier, mono">&lt;sql:<i>tagname</i> ...&gt;</font></td>
     </tr>
+    <tr> 
+      <td>Functions</td>
+      <td>http://java.sun.com/jsp/jstl/functions</td>
+      <td> 
+        <div align="center"><font face="Courier New, Courier, mono">fn</font></div>
+      </td>
+      <td><font face="Courier New, Courier, mono">fn:<i>functionName</i>(...)</font></td>
+    </tr>
   </table>
 
 <p>Using the Standard Taglib libraries is simple; you simply need to import
@@ -268,13 +262,14 @@ follows:</p>
 
 <p>The EL makes it easy for page authors to
 access and manipulate application data. 
-For an overview and detailed definition of the default EL see 
+For an overview of the EL, see 
 Chapter 3 of the <a href="http://java.sun.com/products/jstl">JSTL Specification</a>.</p>
 
 <h3>Topics covered in JSTL </h3>
 
 <p>As we mentioned above, JSTL includes core tags to support iteration,
-conditionals, and expression-language support. For more information on
+conditionals, and expression-language support. It also supports EL functions 
+for string manipulation. For more information on
 precisely how these tags work, you should read the <a
 href="http://java.sun.com/products/jstl">JSTL specification</a>.  Here, we
 just offer a quick roadmap of each feature in order to help orient
@@ -291,8 +286,8 @@ you.</p>
     of tags -- &lt;choose&gt;, &lt;when&gt;, and &lt;otherwise&gt; -- that support 
     mutually exclusive conditionals. These latter three tags let you implement 
     a typical <tt>if/else if/else if/else</tt> structure.</dd>
-  <dt> <b>Expression languages</b></dt>
-  <dd>JSTL provides a few tags to facilitate use of expression languages. &lt;out&gt; 
+  <dt> <b>Expression language</b></dt>
+  <dd>JSTL provides a few tags to facilitate use of the expression language. &lt;out&gt; 
     prints out the value of a particular expression in the current EL, similar 
     to the way that the scriptlet expression (&lt;%= ... %&gt;) syntax prints 
     out the value of a expression in the scripting language (typically Java). 
@@ -316,6 +311,9 @@ you.</p>
     your JSP pages.</dd>
   <dt><b>Database access</b></dt>
   <dd>Easily access relational databases using the SQL actions. You can perform database queries, easily access results, perform updates, and group several operations into a transaction.</dd>
+  <dt><b>Functions</b></dt>
+  <dd>String manipulations can be performed using the functions provided in
+JSTL.</dd>
   <dt>&nbsp;</dt>
 </dl>
 
