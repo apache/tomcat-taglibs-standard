@@ -4,6 +4,9 @@
 
     <!-- Version Number -->
     <property name="standard-version" value="1.0.5" />
+    <property name="release.name" value="jakarta-taglibs-standard-${standard-version}" />
+    <property name="release.pre" value="nop" />
+    <property name="release.post" value="nop" />
 
     <!-- Now bundle with JAXP 1.2 -->
     <property name="isJaxp12" value="true" />
@@ -361,5 +364,32 @@
   <target name="copyIfPropSetNot" unless="prop.specified">
     <echo message="  Ignoring copy of ${prop} because property is not set."/>
   </target>  
-  
+
+  <!-- =================================================================== -->
+  <!-- Perform an official release -->
+  <!-- =================================================================== -->
+  <target name="release" depends="dist">
+    <mkdir dir="${release.dir}"/>
+    <antcall target="${release.pre}"/>
+    <!-- Copy the taglib to the release dir -->
+    <copy todir="${release.dir}" >
+      <fileset dir="${dist.dir}/${taglib.name}" excludes="doc/**"/>
+    </copy>
+    <copy file="../LICENSE"   tofile="${release.dir}/LICENSE"/>
+    <copy file="../NOTICE"    tofile="${release.dir}/NOTICE"/>
+    <copy file="../README"    tofile="${release.dir}/README"/>
+    <zip zipfile="${dist.dir}/${release.name}.zip"
+       basedir="${dist.dir}" includes="${release.name}/**"/>
+    <tar tarfile="${dist.dir}/${release.name}.tar"
+       basedir="${dist.dir}" includes="${release.name}/**"/>
+    <gzip zipfile="${dist.dir}/${release.name}.tar.gz"
+          src="${dist.dir}/${release.name}.tar"/>
+    <delete dir="${dist.dir}/${release.name}"/> 
+    <delete file="${dist.dir}/${release.name}.tar"/> 
+    <antcall target="${release.post}"/>
+  </target>
+
+  <!-- target that does nothing -->
+  <target name="nop"/> 
+
 </project>
