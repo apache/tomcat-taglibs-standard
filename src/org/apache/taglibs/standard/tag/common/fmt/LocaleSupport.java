@@ -56,6 +56,7 @@
 package org.apache.taglibs.standard.tag.common.fmt;
 
 import java.util.*;
+import javax.servlet.ServletResponse;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.core.Util;
@@ -74,9 +75,9 @@ public abstract class LocaleSupport extends TagSupport {
     // Package-scoped constants
 
     static final String LOCALE_ATTRIBUTE =
-	"javax.servlet.jsp.jsptl.i18n.locale";
+	"javax.servlet.jsp.jstl.i18n.locale";
 
-
+    
     //*********************************************************************
     // Private constants
 
@@ -123,8 +124,10 @@ public abstract class LocaleSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	pageContext.setAttribute(LOCALE_ATTRIBUTE, parseLocale(value, variant),
-				 scope);
+	Locale locale = parseLocale(value, variant);
+	pageContext.setAttribute(LOCALE_ATTRIBUTE, locale, scope);
+	setResponseLocale(pageContext, locale);
+
 	return EVAL_PAGE;
     }
 
@@ -135,68 +138,9 @@ public abstract class LocaleSupport extends TagSupport {
 
 
     //*********************************************************************
-    // Package-scoped utility methods
+    // Public utility methods
 
-    /*
-     * Determines the formatting locale to use with the given formatting
-     * action in the given page.
-     *
-     * <p> The formatting locale is determined as follows:
-     *
-     * <ul>
-     * <li> If the <tt>javax.servlet.jsp.jsptl.i18n.locale</tt> scoped
-     * attribute exists, use its locale.
-     *
-     * <li> If the formatting action is enclosed within a <bundle> action, use
-     * the locale of the parent bundle.
-     *
-     * <li> If the <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> scoped
-     * attribute exists, retrieve the default base name from it and use the
-     * best matching locale for the resource bundle with this base name.
-     *
-     * <li> Compare the client's preferred locales (in order of preference)
-     * against the available formatting locales given in the
-     * <tt>avail</tt> parameter, and use the best matching locale.
-     *
-     * <li> If no match is found, use the runtime's default locale.
-     * </ul>
-     *
-     * @param pageContext the page containing the formatting action
-     * @param fromTag the formatting action
-     * @param avail the array of available locales
-     *
-     * @return the formatting locale to use
-     */
-    static Locale getFormattingLocale(PageContext pageContext,
-				      Tag fromTag,
-				      Locale[] avail) {
-
-	Locale ret = (Locale) pageContext.findAttribute(LOCALE_ATTRIBUTE);
-	if (ret == null) {
-	    Tag t = findAncestorWithClass(fromTag, BundleSupport.class);
-	    if (t != null) {
-		// use locale from parent <bundle> tag
-		BundleSupport parent = (BundleSupport) t;
-		ret = parent.getBundle().getLocale();
-	    } else {
-		ResourceBundle bundle = BundleSupport.getDefaultBundle(
-                    pageContext, BundleSupport.DEFAULT_BASENAME);
-		if (bundle != null) {
-		    ret = bundle.getLocale();
-		} else {
-		    ret = getBestMatch(pageContext, avail);
-		    if (ret == null) {
-			// no match, use runtime's default locale
-			ret = Locale.getDefault();
-		    }
-		}
-	    }
-	}
-	
-	return ret;
-    }
-
-    /*
+    /**
      * Parses the given locale string into its language and (optionally)
      * country components, and returns the corresponding
      * <tt>java.util.Locale</tt> object.
@@ -209,7 +153,7 @@ public abstract class LocaleSupport extends TagSupport {
      * @throws IllegalArgumentException if the given locale does not have a
      * language component or has an empty country component
      */
-    static Locale parseLocale(String locale, String variant) {
+    public static Locale parseLocale(String locale, String variant) {
 
 	Locale ret = null;
 	String language = locale;
@@ -245,6 +189,105 @@ public abstract class LocaleSupport extends TagSupport {
 
 
     //*********************************************************************
+    // Package-scoped utility methods
+
+    /*
+     * Stores the given locale in the response object of the given page
+     * context, and stores the locale's associated charset in the
+     * javax.servlet.jsp.jstl.i18n.request.charset session attribute, which
+     * may be used by the <requestEncoding> action in a page invoked by a
+     * form included in the response to set the request charset to the same as
+     * the response charset (this makes it possible for the container to
+     * decode the form parameter values properly, since browsers typically
+     * encode form field values using the response's charset).
+     *
+     * @param pageContext the page context whose response object is assigned
+     * the given locale
+     * @param locale the response locale
+     */
+    static void setResponseLocale(PageContext pageContext, Locale locale) {
+	// set response locale
+	ServletResponse response = pageContext.getResponse();
+	response.setLocale(locale);
+	
+	// get response character encoding and store it in session attribute
+	pageContext.setAttribute(RequestEncodingSupport.REQUEST_CHAR_SET,
+				 response.getCharacterEncoding(),
+				 PageContext.SESSION_SCOPE);
+    }
+ 
+    /*
+     * Determines the formatting locale to use with the given formatting
+     * action in the given page.
+     *
+     * <p> The formatting locale is determined as follows:
+     *
+     * <ul>
+     * <li> If the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> scoped
+     * attribute exists, use its locale.
+     *
+     * <li> If the formatting action is enclosed within a <bundle> action, use
+     * the locale of the parent bundle.
+     *
+     * <li> If the <tt>javax.servlet.jsp.jstl.i18n.basename</tt> scoped
+     * attribute exists, retrieve the default base name from it and use the
+     * best matching locale for the resource bundle with this base name.
+     *
+     * <li> Compare the client's preferred locales (in order of preference)
+     * against the available formatting locales given in the
+     * <tt>avail</tt> parameter, and use the best matching locale.
+     *
+     * <li> If no match is found, use the runtime's default locale.
+     * </ul>
+     *
+     * @param pageContext the page containing the formatting action
+     * @param fromTag the formatting action
+     * @param format <tt>true</tt> if the formatting action is of type
+     * <formatXXX> (as opposed to <parseXXX>), and <tt>false</tt> otherwise
+     * @param avail the array of available locales
+     *
+     * @return the formatting locale to use
+     */
+    static Locale getFormattingLocale(PageContext pageContext,
+				      Tag fromTag,
+				      boolean format,
+				      Locale[] avail) {
+	Locale ret = (Locale) pageContext.findAttribute(LOCALE_ATTRIBUTE);
+	if (ret == null) {
+	    Tag t = findAncestorWithClass(fromTag, BundleSupport.class);
+	    if (t != null) {
+		// use locale from parent <bundle> tag
+		BundleSupport parent = (BundleSupport) t;
+		ret = parent.getBundle().getLocale();
+	    } else {
+		ResourceBundle bundle = BundleSupport.getDefaultBundle(
+                    pageContext, BundleSupport.DEFAULT_BASENAME);
+		if (bundle != null) {
+		    // use locale from bundle with default base name
+		    ret = bundle.getLocale();
+		} else {
+		    // get best matching formatting locale
+		    ret = getBestMatch(pageContext, avail);
+		    if (ret == null) {
+			// no match available, use runtime's default locale
+			ret = Locale.getDefault();
+		    }
+		}
+	    }
+	}
+	
+	/*
+	 * If this is a <formatXXX> (as opposed to a <parseXXX>) action,
+	 * set the response locale
+	 */
+	if (format)
+	    LocaleSupport.setResponseLocale(pageContext, ret);
+
+	return ret;
+    }
+
+
+    //*********************************************************************
     // Private utility methods
     
     /*
@@ -253,7 +296,8 @@ public abstract class LocaleSupport extends TagSupport {
      *
      * <p> The best matching locale is a client's preferred locale that matches
      * both the language and country components of an available formatting
-     * locale. This is considered an exact match.
+     * locale. This is considered an exact match. An exact match may exist only
+     * if the client's preferred locale specifies a country.
      *
      * <p> If no exact match exists, the first client locale that matches 
      * (just) the language component of an available locale is chosen.
@@ -277,7 +321,8 @@ public abstract class LocaleSupport extends TagSupport {
 	    Locale pref = (Locale) enum.nextElement();
 	    for (int i=0; i<avail.length; i++) {
 		if (pref.getLanguage().equals(avail[i].getLanguage())) {
-		    if (pref.getCountry().equals(avail[i].getCountry())) {
+		    if (pref.getCountry().length() > 0
+			&& pref.getCountry().equals(avail[i].getCountry())) {
 			// exact match
 			ret = avail[i];
 			foundExactMatch = true;	

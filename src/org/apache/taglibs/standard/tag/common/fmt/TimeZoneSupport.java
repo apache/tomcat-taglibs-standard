@@ -55,6 +55,7 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
+import java.io.IOException;
 import java.util.TimeZone;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
@@ -62,7 +63,7 @@ import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * Support for tag handlers for &lt;timezone&gt;, the timezone tag in
+ * Support for tag handlers for &lt;timeZone&gt;, the time zone tag in
  * JSTL 1.0.
  *
  * @author Jan Luehe
@@ -74,7 +75,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     // Package-scoped constants
 
     static final String TIMEZONE_ATTRIBUTE =
-	"javax.servlet.jsp.jsptl.i18n.timeZone";
+	"javax.servlet.jsp.jstl.i18n.timeZone";
 
 
     //*********************************************************************
@@ -130,7 +131,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 
     public int doStartTag() throws JspException {
 	timeZone = TimeZone.getTimeZone(value);
-	return EVAL_BODY_INCLUDE;
+	return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
@@ -138,10 +139,16 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 	    pageContext.setAttribute(var, timeZone, scope);	
 	} else if (getBodyContent() == null) {
 	    /*
-	     * If no 'var' attribute and no body, we store our time zone
-	     * in the javax.servlet.jsp.jsptl.i18n.timeZone scoped attribute
+	     * If no 'var' attribute and empty body, we store our time zone
+	     * in the javax.servlet.jsp.jstl.i18n.timeZone scoped attribute
 	     */
 	    pageContext.setAttribute(TIMEZONE_ATTRIBUTE, timeZone, scope);
+	} else {
+	    try {
+		pageContext.getOut().print(getBodyContent().getString());
+	    } catch (IOException ioe) {
+		throw new JspTagException(ioe.getMessage());
+	    }
 	}
 
 	return EVAL_PAGE;
@@ -150,5 +157,51 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     // Releases any resources we may have (or inherit)
     public void release() {
 	init();
+    }
+
+
+    //*********************************************************************
+    // Package-scoped utility methods
+
+    /*
+     * Returns the time zone.
+     *
+     * <p> If the given action is nested inside a &lt;timeZone&gt; tag,
+     * the time zone is taken from the enclosing &lt;timeZone&gt; tag.
+     *
+     * <p> Otherwise, the default time zone given by the
+     * <tt>javax.servlet.jsp.jstl.i18n.timeZone</tt> scoped attribute is used,
+     * which is searched in the page, request, session (if valid),
+     * and application scope(s) (in this order).
+     * 
+     * <p> If still not found, the JSP container's time zone is used.
+     *
+     * @param pageContext the page containing the action that requires the
+     * time zone
+     * @param fromTag the action that requires the time zone
+     *
+     * @return the time zone
+     */
+    static TimeZone getTimeZone(PageContext pageContext, Tag fromTag) {
+	TimeZone ret = null;
+
+	Tag t = findAncestorWithClass(fromTag, TimeZoneSupport.class);
+	if (t != null) {
+	    // use time zone from parent <timeZone> tag
+	    TimeZoneSupport parent = (TimeZoneSupport) t;
+	    ret = parent.getTimeZone();
+	} else {
+	    // get time zone from scoped attribute
+	    ret = (TimeZone)
+		pageContext.findAttribute(TIMEZONE_ATTRIBUTE);
+	    if (ret == null) {
+		String tz = pageContext.getServletContext().getInitParameter(
+		    TIMEZONE_ATTRIBUTE);
+		if (tz != null)
+		    ret = TimeZone.getTimeZone(tz);
+	    }
+	}
+
+	return ret;
     }
 }

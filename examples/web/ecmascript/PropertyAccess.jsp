@@ -22,7 +22,7 @@
     <th>Property</th>
     <th>Value</th>
   </tr>
-<c:forEach var="prop" items="$systemProperties" begin="1" end="5">
+<c:forEach var="prop" items="$numberMap" begin="1" end="5">
   <tr>
     <td>prop</td>
     <td>prop.getKey()</td>

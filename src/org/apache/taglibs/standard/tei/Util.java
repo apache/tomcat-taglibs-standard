@@ -64,26 +64,11 @@ import javax.servlet.jsp.tagext.*;
  */
 public class Util {
 
-    private static final String SCOPE_ATTRIBUTE = "scope";  
-    private static final String PAGE_SCOPE = "page";        
-    private static final String REQUEST_SCOPE = "request";  
-    private static final String SESSION_SCOPE = "session";  
-
-    // returns true if the given attribute name is specified, false otherwise
+    /**
+     * Returns true if the given attribute name is specified, false otherwise.
+     */
     public static boolean isSpecified(TagData data, String attributeName) {
         return (data.getAttribute(attributeName) != null);
     }
 
-    // returns true if the 'scope' attribute is valid
-    public static boolean isValidScope(TagData data) {
-        String scope = data.getAttributeString(SCOPE_ATTRIBUTE);
-
-	if ((scope != null)
-	    && !scope.equals(PAGE_SCOPE)
-	    && !scope.equals(REQUEST_SCOPE)
-	    && !scope.equals(SESSION_SCOPE))
-	    return false;
-
-        return true;
-    }
 }

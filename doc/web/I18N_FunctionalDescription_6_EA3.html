@@ -1,0 +1,1195 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.76C-CCK-MCD Netscape [en] (X11; U; SunOS 5.7 sun4u) [Netscape]">
+   <title>I18N -- Functional Description</title>
+<style media="screen" type="text/css"><!--
+.fixme { color: red }
+--></style>
+</head>
+<body bgcolor="#FFFFFF">
+
+<h3>
+
+<hr width="100%" noshade></h3>
+
+<h2>
+I18N-Capable Formatting Tags: Functional Description</h2>
+
+<h2>
+<tt>&lt;fmt:locale><br>
+&lt;fmt:timeZone><br>
+&lt;fmt:bundle><br>
+&lt;fmt:message><br>
+&lt;fmt:messageFormat><br>
+&lt;fmt:messageArg><br>
+&lt;fmt:formatNumber><br>
+&lt;fmt:parseNumber><br>
+&lt;fmt:formatDate><br>
+&lt;fmt:parseDate><br>
+&lt;fmt:exception><br>
+&lt;fmt:requestEncoding></tt></h2>
+
+<hr width="100%" noshade>
+<h3>
+1. Introduction</h3>
+With the explosion of application development based on web technologies,
+and the deployment of such applications on the Internet, applications must
+be able to adapt to the languages and formatting conventions of their clients.
+This means that page authors must be able to tailor any locale-specific
+page content according to the conventions of the client's language and
+cultural formatting conventions. For example, the number <tt>345987.246
+</tt>should
+be formatted as <tt>345 987,246 </tt>for French, <tt>345.987,246
+</tt>for
+German, and <tt>345,987.246</tt><i> </i>for clients<i> </i>in the U.S.
+<p>The process of designing an application (or page content) so that it
+can be adapted to various languages and regions without requiring any engineering
+changes is known as <i>internationalization</i>, or I18N for short. Once
+a web application has been internationalized, it can be adapted for a number
+of regions or languages by adding locale-specific components and translating
+text. This process is known as <i>localization</i>.
+<p>There are two approaches to internationalizing a web application:
+<ul>
+<li>
+Provide a version of the JSP in each of the target locales and have a controller
+servlet dispatch the request to the appropriate page (depending on the
+requested locale). This approach is useful if large amounts of data on
+a page or an entire web application need to be internationalized.</li>
+
+<li>
+Isolate any locale-sensitive data on a page (such as error messages, string
+literals, or button labels) into resource bundles, and access the data
+via I18N tags, so that the corresponding translated message is fetched
+automatically and inserted into the page.</li>
+</ul>
+This proposal supports both approaches. It defines two sets of<font size=+0>
+tags: I18N tags, whose purpose is to assist page authors with creating
+internationalized page content that can be localized into any locale available
+in the JSP container&nbsp; (this addresses the second approach), and formatting
+tags, which allow various data elements such as numbers, currencies, dates
+and times to be formatted and parsed in a locale-sensitive or customized
+manner (this may be used in either approach).</font>
+<h3>
+2. Locale selection</h3>
+JSTL supports both browser- and application-based locales, which are discussed
+in more detail.
+<h4>
+2.1 Browser-based locales</h4>
+By default, browser-sensing capabilities for locales are enabled. This
+means that the client determines (via its browser settings) which locale
+to use, and allows page authors to cater to the language preferences of
+their clients. For example, a shopping application may want to greet its
+customers in their language, and it may even want to label its GUI components
+in that language (for example, a cancel button would be labelled
+<tt>Cancel</tt>&nbsp;
+for English and <tt>Abbrechen</tt> for German speaking customers).
+<p>Any action that requires a locale first calls the <tt>getLocales()</tt>
+method on the incoming request, which provides a list, in order of preference,
+of the locales that the client wants to use. This list is processed differently
+depending on whether the action is an I18N or a formatting tag.
+<h5>
+2.1.1 Resource bundle locale</h5>
+Any I18N actions that acquire a resource bundle based on its base name
+(that is, the <tt>&lt;bundle></tt> action which (always) takes a <tt>basename</tt>
+attribute and the <tt>&lt;message></tt> action which may use the default
+resource bundle base name defined by the <tt>javax.servlet.jsp.jstl.i18n.basename
+</tt>attribute)
+determine the best matching locale by comparing the list of client locales
+against the list of available locales for the resource bundle in question,
+as follows:
+<p>For each of the client's preferred locales (in order of preference),
+the action checks if there is a matching locale for the resource bundle
+in question, by passing the resource bundle's base name and the client's
+requested locale to the <tt>java.util.ResourceBundle.getBundle()</tt> method.
+This method appends the name of the requested client locale to the given
+base name and searches for a resource bundle with that name. A resource
+bundle may be backed by a class or a properties file. If no resource bundle
+with that name exists (and the requested locale has both a language and
+a country component), the method appends just the requested locale's language
+name to the given base name and searches for a resource bundle with that
+name. If no resource bundle with that name exists, and the requested locale
+differs from the container's default locale, the method continues the search
+by appending the name of the container's default locale to the given base
+name. If no resource bundle with that name exists (and the container's
+default locale has both a language and a country component), the method
+appends just the language component of the container's default locale to
+the given base name. If there still is no match, the method searches for
+a resource bundle with just the given base name (without any locale name
+appended to it). If there still is no match, <tt>ResourceBundle.getBundle()
+</tt>raises
+a <tt>MissingResourceException</tt>, which is caught by the tag handler
+implementation and interpreted as if the resource bundle with the given
+base name does not exist for the requested client locale.
+<p>As a result of the search algorithm implemented by <tt>ResourceBundle.getBundle()</tt>,
+the locale of the resource bundle returned by <tt>ResourceBundle.getBundle()
+</tt>may
+either match both the country and language components of the requested
+locale ("exact match"), only its language ("language match"), or neither
+(depending on the container's default locale). Note that the locale of
+the returned resource bundle may not even have any language and country
+components. An exact match may exist only if the client's preferred locale
+specifies a country.
+<p>If there is an exact match, it is used, and no further client locales
+are checked. Otherwise, all remaining client locales are checked, and the
+first language match is used. If no such match exists, the fallback locale
+stored in the <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt> attribute,
+which is searched in the page, request, session (if valid), and application
+scope(s) (in this order), is used (see Section 16: Configuration parameters).
+If this attribute is not found, or there still is no match, an error message
+of the form <tt>"???&lt;key>???"</tt> (where
+<tt>&lt;key></tt> is the name
+of the message key to be looked up) is returned (see Section 8: &lt;message>).
+<p>The behavior is implementation-defined if the set of available resource
+bundles changes during execution of the page. Implementations may thus
+cache the best matching locale for a given resource bundle when one is
+found.
+<p>The following example assumes that a message key needs to be looked
+up in a resource bundle with base name "MyResources" which is available
+only in the US-English ("en-US") locale. Furthermore, it assumes that the
+client's only preferred locale is British-English ("en_UK"). Passing the
+requested base name ("MyResources") along with the preferred locale ("en-UK")
+to the <tt>ResourceBundle.getBundle()</tt> method will result in the following
+search order of resource bundles, assuming that the container's default
+locale is set to English ("en"):
+<p><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en_UK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(exact match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en_UK.properties&nbsp;&nbsp;
+(exact match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(no match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(no match)</tt>
+<p>Since <tt>MyResources_en_US </tt>is never searched in this example,
+an error message of the form <tt>"???&lt;key>???"</tt> (see above) is returned
+to the client.
+<p>With the container's default locale set to "en-US", the complete search
+order of <tt>ResourceBundle.getBundle()</tt> will be as follows:
+<p><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en_UK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(exact match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en_UK.properties&nbsp;&nbsp;
+(exact match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en_US&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en_US.properties&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources_en&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources_en.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(language match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (class) MyResources&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(no match)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (file)&nbsp; MyResources.properties&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(no match)</tt>
+<p>In this case, a language match with <tt>MyResources_en_US </tt>is found,
+which is returned. Since the client did not specify any additional preferred
+locales, the message key is looked up in this resource bundle.
+<p>If the client's preferred locales were "ja", "en-UK", "en-US", "en-CA",
+and "fr"<tt> </tt>(in this order), and the available ones (for the resource
+bundle in question) were "en" and "fr", the best match would be "en". Likewise,
+if the available ones were "en", "en-US", and "fr", then the best match
+would be "en-US".
+<h5>
+2.1.2 Formatting locale</h5>
+This is the locale used by the <tt>&lt;formatNumber></tt>, <tt>&lt;parseNumber></tt>,
+<tt>&lt;formatDate></tt>,
+and <tt>&lt;parseDate></tt> formatting actions.
+<p>If the formatting action is enclosed within a <tt>&lt;bundle> </tt>action,
+the locale of the parent bundle is used as the formatting locale.
+<p>Otherwise, if the <tt>javax.servlet.jsp.jstl.i18n.basenam</tt>e attribute
+is set, the best matching locale for that base name is determined (according
+to the algorithm described in Section 2.1.1) and used as the formatting
+locale.
+<p>Otherwise, the formatting action checks, for each of the client's preferred
+locales (in order of preference), if there is a matching locale available.
+The <tt>&lt;formatNumber>
+</tt>and<tt> &lt;parseNumber></tt>, and the <tt>&lt;formatDate>
+</tt>and
+<tt>&lt;parseDate>
+</tt>actions
+determine the available locales by calling <tt>java.text.NumberFormat.getAvailableLocales()</tt>
+and <tt>java.text.DateFormat.getAvailableLocales()</tt>, respectively.
+If there is an exact match (that is, a client's preferred locale specifies
+a country and matches both the language and country of an available locale),
+it is used, and no further client locales are checked. Otherwise, the first
+match on language is used. If no such match exists, the default locale
+of the JSP container's Java runtime is used. Once the best matching locale
+has been determined, it is cached, so that any subsequent formatting actions
+on the same page do not have to determine it again.
+<h4>
+2.2. Application-based locales</h4>
+The browser-sensing capabilities for locales can be disabled by setting
+the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> (scoped) attribute. This
+attribute may be set directly by application code for any of the JSP scopes.
+For example, an application might let its users pick their preferred locale
+and then set the <tt>javax.servlet.jsp.jstl.i18n.locale
+</tt>attribute
+accordingly. Alternatively, the <tt>&lt;locale> </tt>action may be used
+to set the <tt>javax.servlet.jsp.jstl.i18n.locale </tt>attribute with page
+scope only. This may be useful in the case where a client's preferred locale
+is retrieved from a database (using the JSTL database tags)and installed
+on the page using the <tt>&lt;locale></tt> tag.
+<p>The <tt>javax.servlet.jsp.jstl.i18n.locale</tt> attribute is searched
+in the page, request, session (if valid), and application scope(s) (in
+this order).
+<h3>
+3. Response encoding</h3>
+Every action that is responsible for establishing a locale passes that
+locale to the <tt>setLocale()</tt> method of the <tt>javax.servlet.ServletResponse</tt>.
+(This assumes that the response is buffered with a big enough buffer size,
+since <tt>setLocale()</tt> and <tt>setContentType()</tt> must be called
+before <tt>ServletResponse.getWriter()</tt> in order for the charset to
+affect the construction of the writer.)
+<p>More specifically, the response's <tt>setLocale()</tt> method is always
+called by the <tt>&lt;locale></tt> action. In addition, it is called by
+the following actions if browser-sensing capabilities for locales are enabled
+(that is, in the absence of the <tt>javax.servlet.jsp.jstl.i18n.locale</tt>
+attribute):
+<br>&nbsp;
+<li>
+Any <tt>&lt;bundle></tt> action.</li>
+
+<li>
+A <tt>&lt;message></tt> action that uses the default resource bundle base
+name (defined by the <tt>javax.servlet.jsp.jstl.i18n.basename</tt> attribute).</li>
+
+<li>
+A <tt>&lt;formatNumber></tt> or <tt>&lt;formatDate></tt> action that is
+not enclosed within a <tt>&lt;bundle> </tt>action.</li>
+
+<br>&nbsp;
+<p>&nbsp;
+<p>After an action has called <tt>ServletResponse.setLocale()</tt>, it
+determines the character encoding associated with the locale (by calling
+<tt>ServletResponse.getCharacterEncoding()</tt>)
+and stores it in the <tt>javax.servlet.jsp.jstl.i18n.request.charset</tt>
+session attribute. This attribute may be used by the <tt>&lt;requestEncoding></tt>
+action (see Section 16) in a page invoked by a form included in the response
+to set the request charset to the same as the response charset. This makes
+it possible for the container to decode the form parameter values properly,
+since browsers typically encode form field values using the response's
+charset.
+<h3>
+4. Time zone</h3>
+The <tt>javax.servlet.jsp.jstl.i18n.timeZone </tt>JSP attribute specifies
+the time zone in which any time information formatted using the <tt>&lt;formatDate></tt>
+action is represented. This allows any time information on a page to be
+tailored to the preferred time zone of its clients, which is useful if
+the server hosting the page containing the time information and its clients
+reside in different time zones. Page authors could be advised to always
+use the "long" time format which includes the time zone, but that would
+still require clients to convert the formatted time into their own time
+zone.
+<p>The <tt>javax.servlet.jsp.jstl.i18n.timeZone</tt> attribute may be set
+directly by application code for any of the JSP scopes. For example, an
+application might let its users pick their preferred time zone and then
+set the <tt>javax.servlet.jsp.jstl.i18n.timeZone
+</tt>attribute accordingly.
+Alternatively, the <tt>&lt;timeZone></tt> action may be used to set the
+<tt>javax.servlet.jsp.jstl.i18n.timeZone</tt>
+attribute for the current page context. This may be useful in the case
+where a client's preferred time zone is retrieved from a database (using
+the JSTL database tags) and imported into the page using the <tt>&lt;timeZone></tt>
+tag.
+<p>The <tt>javax.servlet.jsp.jstl.i18n.timeZone </tt>attribute is searched
+in the page, request, session (if valid), and application scope(s) (in
+this order). If not found, the JSP container's time zone is used.
+<h3>
+5. &lt;locale></h3>
+The <tt>&lt;locale></tt> action may be used to set or override the JSP
+attribute
+<tt>javax.servlet.jsp.jstl.i18n.locale</tt> with the locale specified
+by the <tt>value</tt> attribute in the scope given by the <tt>scope</tt>
+attribute (default: "page").
+<p>The locale specified by the <tt>value</tt> attribute must contain a
+two-letter (lower-case) language code (as defined by ISO-639), and may
+contain a two-letter (upper-case) country code (as defined by ISO-3166)<tt>.
+</tt>Language
+and country codes must be separated by hyphen ('-') or underscore ('_').
+<p>Optionally, a (vendor- or browser-specific) variant may be specified
+using the <tt>variant</tt> attribute. See the <tt>java.util.Locale</tt>
+javadocs for more information on variants.
+<p>Example:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:locale value="en-US" variant="UNIX"/></tt>
+<p>By using this action, the browser-sensing capabilities for locales described
+in Section 2 of this functional description are disabled. This means that
+if this action is being used, it should be declared at the beginning of
+a page, before any other I18N-capable formatting tags. Otherwise, a different
+locale might be used up to the position in the page where the <tt>&lt;locale></tt>
+action is specified.
+<h3>
+6. &lt;timeZone></h3>
+The <tt>&lt;timeZone></tt> action establishes the time zone (specified
+via the <tt>value</tt> attribute) to be used by any nested <tt>&lt;formatDate></tt>
+actions:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:timeZone value="America/Los_Angeles"></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;fmt:formatDate type="time"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/fmt:timeZone></tt>
+<p>The time zone may be specified as either an abbreviation (such as "PST"),
+a full name (such as "America/Los_Angeles"), or a custom format (such as
+"GMT-8:00). See
+<tt>java.util.TimeZone.getTimeZone()
+</tt>for more details
+on the supported time zone formats.
+<p>The <tt>var</tt> attribute may be used to expose the time zone as a
+JSP-scoped attribute of type <tt>java.util.TimeZone
+</tt>(with visibility
+<tt>AT_END</tt>),
+so that it can be referenced by any subsequent
+<tt>&lt;formatDate></tt>
+actions that are not nested inside a <tt>&lt;timeZone></tt> action and
+take a <tt>timeZone</tt> attribute:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:timeZone value="America/Los_Angeles"
+var="losAngelesTimeZone"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:formatDate type="time" timeZone="$losAngelesTimeZone"/></tt>
+<p>An empty <tt>&lt;timeZone></tt> action that is specified without the
+<tt>var</tt>
+attribute can be used to set or override the
+<tt>javax.servlet.jsp.jstl.i18n.timeZone</tt>
+attribute in the scope given by the <tt>scope</tt> attribute (default:
+"page"), thereby making its time zone the (new) default in that scope:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:timeZone value="America/Los_Angeles"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:formatDate type="time"/></tt>
+<h3>
+7. &lt;bundle></h3>
+The <tt>&lt;bundle> </tt>action loads the resource bundle whose base name
+is specified via the <tt>basename</tt> attribute:
+<p>&nbsp;<tt>&nbsp;&nbsp; &lt;fmt:bundle basename="com.acme.labels.ButtonLabels"></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;user-of-bundle/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/fmt:bundle></tt>
+<p>The resource bundle's locale is determined according to Section 2 of
+this functional description.
+<p>The <tt>var</tt> attribute may be used to expose the resource bundle
+as a JSP-scoped attribute of type <tt>java.util.ResourceBundle
+</tt>(with
+visibility <tt>AT_END</tt>), so that it can be referenced by any subsequent
+<tt>&lt;message></tt>
+actions that take a <tt>bundle</tt> attribute:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:bundle basename="com.acme.labels.ButtonLabels"
+var="buttonLabels"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:message key="Submit" bundle="$buttonLabels"/></tt>
+<p>Exposing a resource bundle via the <tt>var</tt> attribute is useful
+if the bundle needs to be accessed multiple times.
+<p>An empty <tt>&lt;bundle></tt> action that is specified without the <tt>var</tt>
+attribute can be used to set or override the <tt>javax.servlet.jsp.jstl.i18n.basename</tt>
+attribute in the scope given by the <tt>scope</tt> attribute (default:
+"page"), thereby making its base name the (new) default in that scope:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:bundle basename="com.acme.labels.ButtonLabels"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:message key="Submit"/></tt>
+<p>The <tt>prefix</tt> attribute is provided as a convenience for very
+long key names: Its value is prepended to any message key (see the <tt>&lt;message></tt>
+action) that is to be looked up in the resource bundle that was loaded
+by this action.
+<h3>
+8. &lt;message></h3>
+The <tt>&lt;message></tt> action retrieves the localized message corresponding
+to a given message key.
+<p>The message key may be specified via the
+<tt>key</tt> attribute; if
+missing, it is read from the tag's body content.
+<p>The resource bundle in which to look up the message key may be given
+by the <tt>bundle</tt> attribute. If this attribute is missing, and the
+<tt>&lt;message>
+</tt>action
+is nested inside a <tt>&lt;bundle></tt> tag, the resource bundle to use
+is taken from the enclosing <tt>&lt;bundle></tt> tag. Otherwise, the resource
+bundle with the default base name given by the
+<tt>javax.servlet.jsp.jstl.i18n.basename
+</tt>attribute
+is used,&nbsp; which is searched in the page, request, session (if valid),
+and application scope(s) (in this order).
+<p>The <tt>&lt;message></tt> action outputs its result to the current
+<tt>JspWriter</tt>
+object, unless the <tt>var</tt> attribute is specified, in which case the
+result is stored in the named JSP attribute.
+<p>Example:
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <tt>&lt;fmt:message key="Welcome"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;%-- Key is looked up in default bundle --%></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:bundle basename="Errors" var="errorBundle"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:bundle basename="Greetings"></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;fmt:message key="Welcome"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;%-- Key is looked up in parent &lt;bundle> tag --%></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;fmt:message key="WrongPassword"
+bundle="$errorBundle"/>&nbsp; &lt;%-- Key is looked up in errorBundle --%></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/fmt:bundle></tt>
+<p>If the given key is not found in the resource bundle, or a resource
+bundle with the given base name does not exist, a message is logged to
+the servlet context, and an error message of the form <tt>"???&lt;key>???"</tt>
+(where
+<tt>&lt;key></tt> is the name of the undefined key) is output to
+the current <tt>JspWriter
+</tt>object.
+<p>If the message corresponding to the given key is <i>compound</i>, that
+is, contains one or more variables, it may be supplied with argument values
+for these variables via the <tt>messageArgs</tt> attribute or one or more
+<tt>&lt;messageArg></tt>
+subtags (one for each argument value). This procedure is referred to as
+<i>parametric
+replacement.</i> Parametric replacement takes place in the order of the
+argument values given via the <tt>messageArgs</tt> attribute or the <tt>&lt;messageArg></tt>
+subtags. If the message is compound, but neither a <tt>messageArgs</tt>
+attribute nor any <tt>&lt;messageArg></tt> subtags are specified, the message
+is left unmodified. Specifying a <tt>&lt;message></tt> tag with both a
+<tt>messageArgs</tt>
+attribute and one or more <tt>&lt;messageArg></tt> subtags causes a translation
+error.
+<p>If the parent <tt>&lt;bundle></tt> action specifies a <tt>prefix</tt>
+attribute, its value is prepended to any key names to be looked up in that
+bundle. For example, using the <tt>prefix</tt> attribute, the key names
+in:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:bundle basename="Labels"></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;fmt:message key="com.acme.labels.firstName"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;fmt:message key="com.acme.labels.lastName"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/fmt:bundle></tt>
+<p>may be abbreviated to:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:bundle basename="Labels" prefix="com.acme.labels."></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;fmt:message key="firstName"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;fmt:message key="lastName"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/fmt:bundle></tt>
+<h3>
+9. &lt;messageFormat></h3>
+The <tt>&lt;messageFormat> </tt>action performs parametric replacement
+on a given pattern string , using the runtime's default locale.
+<p>The pattern string may be specified via the <tt>value</tt> attribute;
+if missing, it is read from the tag's body content.
+<p>The argument values for parametric replacement may be supplied via the
+<tt>messageArgs</tt>
+attribute or one or more
+<tt>&lt;messageArg></tt> subtags (one for each
+parameter in the pattern). Parametric replacement takes place in the order
+of the argument values given via the <tt>messageArgs</tt> attribute or
+the <tt>&lt;messageArg></tt> subtags. If neither a <tt>messageArgs</tt>
+attribute nor any <tt>&lt;messageArg></tt> subtags are specified, the given
+pattern is left unmodified. Specifying a <tt>&lt;messageFormat></tt> tag
+with both a <tt>messageArgs</tt> attribute and one or more <tt>&lt;messageArg></tt>
+subtags causes a translation error.
+<p>The result is output to the current <tt>JspWriter</tt> object, unless
+the <tt>var</tt> attribute is given, in which case it is stored in the
+named JSP attribute.
+<p>The <tt>&lt;messageFormat></tt> action is useful if a pattern needs
+to be supplied from sources other than resource bundles, or if a pattern
+extracted from a resource bundle needs to be used multiple times.
+<p>For example, when displaying a list of products, the same internationalized
+message (pattern) would be used to display the price, but rather than looking
+up the same pattern for every single product, the pattern could be looked
+up once (using the <tt>&lt;message></tt> action) and then passed in to
+the <tt>&lt;messageFormat></tt> action for each product, as follows:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:bundle basename="..." var="i18n"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:message key="store.product.price" bundle="$i18n"
+var="priceMsg"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;c:forEach ...></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... &lt;fmt:messageFormat value="$priceMsg">...&lt;/fmt:messageFormat></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/c:forEach></tt>
+<p>instead of the less efficient alternative:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:bundle basename="..." var="i18n"/></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;c:forEach ...></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... &lt;fmt:message key="store.product.price"
+bundle="$i18n">...&lt;/fmt:message></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/c:forEach></tt>
+<h3>
+10. &lt;messageArg></h3>
+The <tt>&lt;messageArg></tt> action provides a single argument (for parametric
+replacement) to the compound message or pattern in its parent
+<tt>&lt;message></tt>
+or <tt>&lt;messageFormat></tt> action, respectively.
+<p>One <tt>&lt;messageArg> </tt>action must be specified for each variable
+in the compound message or pattern. Parametric replacement takes place
+in the order of the <tt>&lt;messageArg></tt> tags.
+<p>The argument value can be specified either via the <tt>value</tt> attribute:
+<pre>&nbsp;&nbsp;&nbsp; &lt;fmt:message key="Welcome">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;fmt:messageArg value="$dateArg"/>
+&nbsp;&nbsp;&nbsp; &lt;/fmt:message></pre>
+or inline via the tag's body content:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:message key="Welcome"></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;fmt:messageArg></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;acme:doIt .../></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/fmt:messageArg></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/fmt:message></tt>
+<h3>
+11. &lt;formatNumber></h3>
+The <tt>&lt;formatNumber></tt> action allows the formatting of numbers,
+currencies, and percentages, using predefined or customized formatting
+styles.
+<p>The numeric value to be formatted may be specified via the <tt>value</tt>
+attribute; if missing, it is read from the tag's body content.
+<p>Depending on the value of the <tt>type</tt> attribute, which must be
+one of "number", "currency", or "percent" (default: "number"), the given
+numeric value is formatted as a number, currency, or percentage, respectively,
+using the default formatting pattern for numbers (currencies, percentages)
+of the page's locale, which is determined according to Section 2 of this
+functional description.
+<p>The result is output to the current
+<tt>JspWriter</tt> object, unless
+the <tt>var</tt> attribute is given, in which case it is stored (as a string)
+in the named JSP attribute.
+<p>Example: The output of
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:formatNumber value="9876543.21" type="currency"/></tt>
+<p>varies with the page's locale (given in parentheses), as follows:
+<p><tt>&nbsp;&nbsp;&nbsp; 9 876 543,21 F&nbsp;&nbsp; (fr_FR)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; 9.876.543,21 DM&nbsp; (de_DE)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; $9,876,543.21&nbsp;&nbsp;&nbsp; (en_US)</tt>
+<p>When formatting the given value as a number, the predefined formatting
+pattern of the page's locale can be overridden by using the <tt>pattern</tt>
+attribute, allowing page authors to control the display of leading and
+trailing zeros, prefixes and suffixes, grouping (thousands) separators,
+and the decimal separator of the formatted number. The given pattern string
+must follow the <a href="http://java.sun.com/docs/books/tutorial/i18n/format/numberpattern.html">Number
+Format Pattern Syntax&nbsp;</a> specified in the tutorial trail on internationalization
+at <tt>java.sun.com</tt>.
+<p>For example, a pattern of ".000" will cause any numeric value formatted
+with it to be represented with 3 fraction digits, adding trailing zeros
+if necessary, so that
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:formatNumber value="12.3" pattern=".000"/></tt>
+<p>will output "12.300".
+<p>Likewise, a pattern of "#,#00.0#" specifies that any numeric value formatted
+with it will be represented with a minimum of 2 integer digits, 1 fraction
+digit, and a maximum of 2 fraction digits, with every 3 integer digits
+grouped. Applied to "123456.7891", as in:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:formatNumber value="123456.7891" pattern="#,#00.0#"/></tt>
+<p>the formatted output will be "123,456.79" (note that rounding is handled
+automatically).
+<p>The <tt>value</tt> and <tt>pattern</tt> attributes accept both string
+literals and EL values.
+<p>If the numeric value to be formatted is given as a string literal, it
+is first parsed into an instance of <tt>java.lang.Number
+</tt>according
+to the default pattern of the locale specified by the <tt>parseLocale</tt>
+attribute. In the absence of this attribute, the English (<tt>en</tt>)
+locale is used. If the numeric string uses a pattern different from the
+parsing locale's default, it must be parsed using the
+<tt>&lt;parseNumber></tt>
+action.
+<p>The <tt>type</tt> attribute accepts (case-insensitive) literals only,
+causing an error at translation-time validation if the specified literal
+is illegal.
+<p>The <tt>pattern</tt> attribute may be used only when formatting numbers
+(that is, if the <tt>type</tt> attribute is missing or is equal to "number").
+Using it with a <tt>type</tt> attribute equal to "currency" or "percent"
+causes a translation-time error.
+<h3>
+12. &lt;parseNumber></h3>
+The <tt>&lt;parseNumber></tt> action may be used for parsing numbers, currencies,
+and percentages.
+<p>The numeric string to be parsed may be specified via the <tt>value</tt>
+attribute; if missing, it is read from the tag's body content.
+<p>Depending on the value of the <tt>type</tt> attribute, which must be
+one of "number", "currency", or "percent" (default: "number"), the given
+numeric string is parsed as a number, currency, or percentage, respectively,
+using the default formatting pattern for numbers (currencies, percentages)
+of the locale specified by the <tt>parseLocale</tt> attribute. If the <tt>parseLocale</tt>
+attribute is missing, the page's locale is used, which is determined according
+to Section 2 of this functional description.
+<p>If the number specified via the <tt>value</tt> attribute uses a format
+different from the page locale's default, the pattern required to parse
+it may be specified using the <tt>pattern</tt> attribute.
+<p>If the <tt>var</tt> attribute is given, the parsing result (of type
+<tt>java.lang.Number</tt>)
+is stored in the named JSP attribute.&nbsp; Otherwise, it is output to
+the current <tt>JspWriter</tt> object using <tt>java.lang.Number.toString()</tt>.
+<p>The <tt>value</tt> and <tt>pattern</tt> attributes accept both literals
+and EL values, whereas the <tt>type</tt> attribute accepts (case-insensitive)
+literals only, causing an error at translation-time validation if the specified
+literal is illegal.
+<p>The <tt>pattern</tt> attribute may be used only when parsing numbers
+(that is, if the <tt>type</tt> attribute is missing or equals "number").
+Using it with a <tt>type</tt> attribute equal to "currency" or "percent"
+causes a translation-time error.
+<h3>
+13. &lt;formatDate></h3>
+The <tt>&lt;formatDate</tt>> action allows the formatting of dates and
+times using predefined or customized formatting styles.
+<p>Depending on the value of the <tt>type</tt> attribute, which must be
+one of "time", "date", or "both" (default: "date"), only the time, the
+date, or both the time and date components of the date specified via the
+<tt>value</tt>
+attribute are formatted, using one of the predefined formatting styles
+for dates (specified via the <tt>dateStyle</tt> attribute) and times (specified
+via the <tt>timeStyle</tt> attribute) of the page's locale, which is determined
+according to Section 2 of this functional description.&nbsp; Legal values
+for the
+<tt>dateStyle</tt> and <tt>timeStyle</tt> attributes are "default",
+"short", "medium ", "long", and "full" (default: "default").
+<p>If the <tt>value</tt> attribute is missing, the current date and time
+are used.
+<p>Any time information is represented in the time zone given by the <tt>timeZone</tt>
+attribute.&nbsp; If this attribute is missing, and the <tt>&lt;formatDate>
+</tt>action
+is nested inside a <tt>&lt;timeZone></tt> tag, the time zone to use is
+taken from the enclosing <tt>&lt;timeZone></tt> tag. Otherwise, the default
+time zone given by the <tt>javax.servlet.jsp.jstl.i18n.timeZone</tt> attribute
+is used, which is searched in the page, request, session (if valid), and
+application scope(s) (in this order). If not found, the JSP container's
+time zone is used.
+<p>The action's result is output to the current <tt>JspWriter</tt> object,
+unless the <tt>var</tt> attribute is given, in which case it is stored
+(as a string) in the named JSP attribute.
+<p>Example: Assuming a current date of Oct 22, 2001 and a current time
+of 4:05:53 PM,
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:formatDate timeStyle="long" dateStyle="long"/></tt>
+<p>will output
+<p><tt>&nbsp;&nbsp;&nbsp; October 22, 2001 4:05:53 PM PDT</tt>
+<p>for the U.S. and
+<p><tt>&nbsp;&nbsp;&nbsp; 22 octobre 2001 16:05:53 GMT-07:0</tt>
+<p>for the French locale.
+<p>Page authors may also apply a customized formatting style for their
+times and dates by specifying the <tt>pattern</tt> attribute. The specified
+formatting pattern must use the <a href="http://java.sun.com/docs/books/tutorial/i18n/format/datepattern.html">Date
+Format Pattern Syntax</a> specified in the tutorial trail on internationalization
+at <tt>java.sun.com</tt>.
+<p>Example: Assuming the same current date and time as in the above example,
+the output of
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:formatDate pattern="EEE, MMM d, ''yy"/></tt>
+<p>will be
+<p><tt>&nbsp;&nbsp;&nbsp; Mon, Oct 22, '01</tt>
+<p>for the U.S. locale.
+<p>The <tt>value</tt> and <tt>pattern</tt> attributes accept both string
+literals and EL values (which must evaluate to objects of type<tt> java.util.Date
+</tt>in
+the case of the <tt>value</tt> attribute).
+<p>If the input to the
+<tt>value</tt> attribute is a string literal, it
+is first parsed into an instance of <tt>java.util.Date</tt> according to
+the default formatting style for dates of the parsing locale specified
+by the <tt>parseLocale</tt> attribute, that is, it is parsed in a fashion
+equivalent to using a <tt>&lt;parseDate></tt> action with <tt>type</tt>
+equal to "date" (its default value) and <tt>dateStyle</tt> equal to "default"
+(its default value). In the absence of the <tt>parseLocale</tt> attribute,
+the English (<tt>en</tt>) locale is used as the parsing locale. If the
+string in the <tt>value</tt> attribute uses a formatting style for dates
+different from the parsing locale's default, or includes a time component,
+it must first be parsed using a
+<tt>&lt;parseDate></tt> action whose parsing
+result can then be supplied to a <tt>&lt;formatDate></tt> action for formatting.
+<p>The <tt>type</tt>, <tt>timeStyle</tt>, and <tt>dateStyle</tt> attributes
+take (case-insensitive) literals only, causing an error at translation-time
+validation if the specified literal is illegal.
+<h3>
+14. &lt;parseDate></h3>
+The <tt>&lt;parseDate></tt> action may be used for parsing date and time
+strings.
+<p>The date string to be parsed may be specified via the <tt>value</tt>
+attribute; if missing, it is read from the tag's body content.
+<p>Depending on the value of the <tt>type</tt> attribute, which must be
+one of "time", "date", or "both" (default: "date"), the given date string
+is expected to contain only a time, a date, or both a time and date component,
+respectively. It is parsed according to one of the predefined formatting
+styles for dates (specified via the
+<tt>dateStyle</tt> attribute) and times
+(specified via the <tt>timeStyle</tt> attribute) of the locale specified
+by the <tt>parseLocale</tt> attribute. If the <tt>parseLocale</tt> attribute
+is missing, the page's locale is used, which is determined according to
+Section 2 of this functional description. Legal values for the
+<tt>dateStyle</tt>
+and <tt>timeStyle</tt> attributes are "default", "short", "medium ", "long",
+and "full" (default: "default").
+<p>If the given date string uses a different format, the pattern required
+to parse it may be specified via the <tt>pattern</tt> attribute.
+<p>If the given time information does not specify a time zone, it is interpreted
+in the time zone given by the <tt>timeZone</tt> attribute.&nbsp; If this
+attribute is missing, and the <tt>&lt;parseDate>
+</tt>action is nested
+inside a <tt>&lt;timeZone></tt> tag, the time zone is taken from the enclosing
+<tt>&lt;timeZone></tt>
+tag. Otherwise, the default time zone given by the
+<tt>javax.servlet.jsp.jstl.i18n.timeZone</tt>
+attribute is used, which is searched in the page, request, session (if
+valid), and application scope(s) (in this order). If not found, the JSP
+container's time zone is used.
+<p>If the <tt>var</tt> attribute is given, the parsing result (of type
+<tt>java.util.Date</tt>)
+is stored in the named JSP attribute. Otherwise, it is output to the current
+<tt>JspWriter</tt>
+object using <tt>java.util.Date.toString()</tt>.
+<p>The <tt>value</tt> and <tt>pattern</tt> attributes accept both literals
+and EL values. The <tt>type,timeStyle</tt>, and <tt>dateStyle</tt> attributes
+take (case-insensitive) literals only, causing an error at translation-time
+validation if the specified literal is illegal.
+<h3>
+15. &lt;exception></h3>
+The <tt>&lt;exception</tt>> action may be used to display the exception
+given by the <tt>value</tt> attribute in its localized form:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;fmt:exception value="$exception" bundle="$errorMessages"/></tt>
+<p>If no <tt>value</tt> attribute is given, and this action is used in
+an error page, the exception of the error page is used.
+<p>Developers may designate an exception as localizable by having it implement
+the <tt>javax.servlet.jsp.jstl.i18n.LocalizableException</tt> interface,
+which is defined as follows:
+<p><tt>&nbsp;&nbsp;&nbsp; public interface LocalizableException {</tt>
+<p><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /**</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Returns the
+exception's message key from which the exception's</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * localized message
+is derived via a resource bundle lookup.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public String getMessageKey();</tt>
+<p><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /**</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Returns the
+arguments for parametric replacement on the exception's</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * localized message.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public Object[] getMessageArgs();</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; }</tt>
+<p>If the given exception is not an instance of this interface, the <tt>&lt;exception></tt>
+action uses its fully qualified class name as the key to look up in the
+resource bundle for exception messages.
+<p>Otherwise, the <tt>&lt;exception></tt> action uses the return value
+of the exception's
+<tt>getMessageKey()</tt> method as the key . If <tt>getMessageKey</tt>
+returns null, the exception's fully qualified class name is used as the
+key.
+<p>The key is looked up in the resource bundle given by the <tt>bundle</tt>
+attribute. If this attribute is missing, and the
+<tt>&lt;exception> </tt>action
+is nested inside a <tt>&lt;bundle> </tt>tag, the resource bundle to use
+is taken from the enclosing <tt>&lt;bundle></tt> tag. Otherwise, the default
+resource bundle for exception messages, whose default base name is given
+by the <tt>javax.servlet.jsp.jstl.i18n.exception.basename</tt> scoped attribute,
+is used. This attribute is searched in the page, request, session (if valid),
+and application scope(s) (in this order).
+<p>The result of looking up the key in the resource bundle is used as the
+localized exception message. If the key is not found in the resource bundle,
+or the default resource bundle for exception messages does not exist, the
+return value of the exception's
+<tt>getLocalizedMessage()</tt> method is
+used as the localized exception message. If the exception is an instance
+of the <tt>LocalizableException </tt>interface, the return value of the
+excpetion's <tt>getMessageArgs()</tt> method is used for parametric replacement
+on the localized exception message.
+<p>The <tt>&lt;exception></tt> action outputs the localized exception message
+to the current
+<tt>JspWriter</tt> object.
+<p>If the <tt>stackTrace</tt> attribute is given with a value of <tt>true</tt>,
+the exception's stacktrace is printed out in addition to its localized
+exception message.
+<h3>
+16. &lt;requestEncoding></h3>
+The <tt>&lt;requestEncoding></tt> action may be used to set the request's
+character encoding, in order to be able to correctly decode request parameter
+values whose encoding&nbsp; is different from ISO-8859-1. This action is
+needed because browsers do not follow the HTTP spec by failing to include
+a <tt>Content-Type</tt> header in their requests.
+<p>More specifically, the purpose of the <tt>&lt;requestEncoding></tt>
+action is to set the request encoding to be the same as the response encoding
+in a page invoked by a form included in the response. Even when the encoding
+of the page that is generating the response containing the form is specified
+via the <tt>contentType</tt> attribute of a page directive, the response's
+locale (and thus character encoding) may differ from the value specified
+in the page directive if the page uses a <tt>&lt;locale> </tt>action or
+has enabled browser-sensing capabilities for locales, in which case the
+tag handler implementation of the I18N-capable formatting action calls
+<tt>ServletResponse.setLocale()</tt> (which also sets the response's encoding)
+with the specified or best-matching locale, respectively.
+<p>This assumes that the JSP&nbsp;container calls <tt>ServletResponse.setContentType()</tt>
+(with the value of the page directive's <tt>contentType</tt> attribute,
+if present) at the beginning of the page, and that any subsequent call
+to<tt> ServletResponse.setLocale() </tt>(by an I18N-capable formatting
+action in the page) overrides the page's existing encoding, so that the
+locale (and encoding) set by the last I18N-capable formatting action wins.
+(This assumes that the response is buffered with a big enough buffer size,
+since <tt>setLocale()</tt> and <tt>setContentType()</tt> must be called
+before <tt>ServletResponse.getWriter()</tt> in order for the charset to
+affect the construction of the writer.)
+<p>Example:
+<p>&nbsp;&nbsp;&nbsp; <tt>&lt;fmt:requestEncoding value="Shift_JIS" /></tt>
+<p>This action calls the <tt>setCharacterEncoding()</tt> method on the
+servlet request with the character encoding name specified in the <tt>value</tt>
+attribute. It must be used before any parameters are retrieved, either
+explicitly or through the use of an EL expression.
+<p>If the character encoding of the request parameters is not known in
+advance (since the locale and thus character encoding of the page that
+generated the form collecting the parameter values was determined dynamically),
+the <tt>value</tt> attribute must not be specified. In this case, the <tt>&lt;requestEncoding></tt>
+action first checks if there is a charset defined in the request <tt>Content-Type</tt>
+header. If not, it uses the character encoding from the <tt>javax.servlet.jsp.jstl.i18n.request.charset</tt>
+attribute, which is searched in the page, request, session (if valid),
+and application scope(s) (in this order). If this attribute is not found,
+the default character encoding (ISO-8859-1) is used.
+<h3>
+17. Configuration parameters</h3>
+This section discusses I18N- and formatting-related initialization parameters
+in a web application's deployment descriptor (DD) file.
+<h4>
+17.1 javax.servlet.jsp.jstl.i18n.basename</h4>
+This parameter specifies the base name of the application's default resource
+bundle, which is used if a <tt>&lt;message></tt> action does not specify
+a <tt>bundle</tt> attribute and is not nested inside a
+<tt>&lt;bundle>
+</tt>action.
+<p>Example:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;web-app></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-name>javax.servlet.jsp.jstl.i18n.basename&lt;/param-name></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-value>com.acme.MyResources&lt;/param-value></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
+<h4>
+17.2 javax.servlet.jsp.jstl.i18n.exception.basename</h4>
+This parameter specifies the base name of the application's default resource
+bundle for exception messages, which is used by the <tt>&lt;exception></tt>
+action.
+<p>Example:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;web-app></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-name>javax.servlet.jsp.jstl.i18n.exception.basename&lt;/param-name></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-value>com.acme.MyExceptionResources&lt;/param-value></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
+<h4>
+17.3 javax.servlet.jsp.jstl.i18n.fallbackLocale</h4>
+This parameter specifies the application's default fallback locale, which
+is used if browser-sensing capabilities are enabled, but none of the available
+locales for the resource bundle in question match any of the client's preferred
+locales.
+<p>Example:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;web-app></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-name>javax.servlet.jsp.jstl.i18n.fallbackLocale&lt;/param-name></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-value>fr-CA&lt;/param-value></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
+<h4>
+17.4 javax.servlet.jsp.jstl.i18n.timeZone</h4>
+This parameter specifies the application's default time zone in which any
+times and dates formatted using the <tt>&lt;formatDate></tt> action are
+represented.
+<p>Example:
+<p><tt>&nbsp;&nbsp;&nbsp; &lt;web-app></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-name>javax.servlet.jsp.jstl.i18n.timeZone&lt;/param-name></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;param-value>"America/Los_Angeles"&lt;/param-value></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/context-param></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; &lt;/web-app></tt>
+<h3>
+18. Developer support</h3>
+The locale-determination logic for resource bundles described in Section
+2.1.1 is exposed as a general convenience method so it may be used by any
+tag handler implementation that needs to produce localized messages. For
+example, a tag handler's exception messages may be intended directly for
+user consumption on an error page and therefore need to be localized.
+<p>The convenience method, named <tt>getLocalizedMessage()</tt> and exposed
+by the <tt>org.apache.taglibs.jstl.extra.i18n.Locale</tt> class, looks
+up a given message key in the resource bundle with a given base name (or
+the default base name), whose locale is determined according to the locale-determination
+logic described in Section 2.1.1, and optionally performs parametric replacement
+on the result of the lookup before returning it.
+<p><tt>getLocalizedMessage()</tt> comes in the following overloaded flavors:
+<p>&nbsp;<tt>&nbsp;&nbsp; /**</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * Retrieves the localized message corresponding
+to the given key.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * The given key is looked up in the resource
+bundle whose base</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * name is retrieved from the javax.servlet.jsp.jstl.i18n.basename
+scoped</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * attribute and whose locale is determined
+according to the</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * algorithm described in Section 2.1.1
+of the functional description.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * If the javax.servlet.jsp.jstl.i18n.basename
+attribute is not found</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * in any of the scopes, or no resource
+bundle with that base name exists,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * or the given key is undefined in the
+resource bundle that was loaded as</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * a result of this call, the string "???&lt;key>???"
+is returned,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * where "&lt;key>" is replaced with the
+given key</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param pageContext the page in which
+the given key must be localized</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param key the message key to be looked
+up</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @return the localized message corresponding
+to the given key</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; */</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; public static String getLocalizedMessage(PageContext
+pageContext,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String key);</tt>
+<p><tt>&nbsp;&nbsp;&nbsp; /**</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * Retrieves the localized message corresponding
+to the given key.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * The given key is looked up in the resource
+bundle with the given</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * base name whose locale is determined
+according to the</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * algorithm described in Section 2.1.1
+of the functional description.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * If no resource bundle with the given
+base name exists,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * or the given key is undefined in the
+resource bundle that was loaded as</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * a result of this call, the string "???&lt;key>???"
+is returned,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * where "&lt;key>" is replaced with the
+given key</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param pageContext the page in which
+the given key must be localized</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param key the message key to be looked
+up</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param basename the resource bundle
+base name</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @return the localized message corresponding
+to the given key</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; */</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; public static String getLocalizedMessage(PageContext
+pageContext,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String key,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String basename);</tt>
+<p><tt>&nbsp;&nbsp;&nbsp; /**</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * Retrieves the localized message corresponding
+to the given key and</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * performs parametric replacement using
+the arguments specified in the</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * &lt;tt>args&lt;/tt> parameter.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * The given key is looked up in the resource
+bundle whose base</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * name is retrieved from the javax.servlet.jsp.jstl.i18n.basename
+scoped</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * attribute and whose locale is determined
+according to the</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * algorithm described in Section 2.1.1
+of the functional description.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * Before being returned, the result of
+the lookup undergoes parametric</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * replacement, using the arguments specified
+in the &lt;tt>args&lt;/tt></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * parameter.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * If the javax.servlet.jsp.jstl.i18n.basename
+attribute is not found</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * in any of the scopes, or no resource
+bundle with that base name exists,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * or the given key is undefined in the
+resource bundle that was loaded as</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * a result of this call, the string "???&lt;key>???"
+is returned,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * where "&lt;key>" is replaced with the
+given key</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param pageContext the page in which
+the given key must be localized</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param key the message key to be looked
+up</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param args the arguments for parametric
+replacement</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @return the localized message corresponding
+to the given key</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; */</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; public static String getLocalizedMessage(PageContext
+pageContext,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String key,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Object[] args);</tt>
+<p><tt>&nbsp;&nbsp;&nbsp; /**</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * Retrieves the localized message corresponding
+to the given key.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * The given key is looked up in the resource
+bundle with the given</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * base name whose locale is determined
+according to the</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * algorithm described in Section 2.1.1
+of the functional description.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * Before being returned, the result of
+the lookup undergoes parametric</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * replacement, using the arguments specified
+in the &lt;tt>args&lt;/tt></tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * parameter.</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * If no resource bundle with the given
+base name exists,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * or the given key is undefined in the
+resource bundle that was loaded as</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * a result of this call, the string "???&lt;key>???"
+is returned,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * where "&lt;key>" is replaced with the
+given key</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param pageContext the page in which
+the given key must be localized</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param key the message key to be looked
+up</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param args the arguments for parametric
+replacement</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @param basename the resource bundle
+base name</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; *</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; * @return the localized message corresponding
+to the given key</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; */</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; public static String getLocalizedMessage(PageContext
+pageContext,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String key,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Object[] args,</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+String basename);</tt>
+<h3>
+19. Summary</h3>
+
+<table BORDER CELLPADDING=5 >
+<tr>
+<td COLSPAN="2" BGCOLOR="#000099"><b><font color="#FFFFFF"><font size=+1>I18N
+Tags</font></font></b></td>
+</tr>
+
+<tr BGCOLOR="#FFFF66">
+<td WIDTH="318"><b>Element</b></td>
+
+<td WIDTH="420"><b>Sample usage</b></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;locale></tt></b>
+<br><tt><font color="#000000"><b>value </b>variant scope</font></tt>
+<p>Establishes the locale specified by the <tt>value</tt> attribute for
+the variant given by the <tt>variant</tt> attribute.</td>
+
+<td WIDTH="420"><tt>&lt;fmt:locale value="en-US" variant="UNIX"/></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;timeZone></tt></b>
+<br><tt><font color="#000000"><b>value </b>var scope</font></tt>
+<p>Establishes the time zone given by the <tt>value</tt> attribute.</td>
+
+<td WIDTH="420"><tt>&lt;fmt:timeZone value="America/Los_Angeles"></tt>
+<br><tt>&nbsp; &lt;fmt:formatDate type="time"/></tt>
+<br><tt>&lt;/fmt:timeZone></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;bundle></tt></b>
+<br><tt><font color="#000000"><b>basename </b>prefix var scope</font></tt>
+<p>Loads the resource bundle whose base name is specified by the <tt>basename</tt>
+attribute, and optionally exposes it in the named scoped attribute.</td>
+
+<td WIDTH="420"><tt>&lt;fmt:bundle basename="Greetings" var="greetingBundle"/></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;message></tt></b>
+<br><tt><font color="#000000"><b>key </b>bundle messageArgs var scope</font></tt>
+<p>Fetches the localized message corresponding to the key specified by
+the <tt>key</tt> attribute from the resource bundle given by the <tt>bundle</tt>
+attribute, and performs parametric replacement on the retrieved message
+using the argument values supplied via the <tt>messageArgs</tt> attribute
+or&nbsp; <tt>&lt;messageArg></tt> subtags.</td>
+
+<td WIDTH="420"><tt>&lt;fmt:message key="Welcome" bundle="$greetingBundle"/></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;messageFormat></tt></b>
+<br><tt><font color="#000000"><b>value</b> messageArgs var scope</font></tt>
+<p>Performs parametric replacement on the pattern specified by the <tt>value</tt>
+attribute using the argument values supplied via <tt>&lt;messageArg></tt>
+subtags.</td>
+
+<td WIDTH="420"><tt>&lt;fmt:messageFormat value="$priceMsg"></tt>
+<br><tt>&nbsp; &lt;fmt:messageArg value="$priceArg"/></tt>
+<br><tt>&lt;/fmt:messageFormat></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;messageArg></tt></b>
+<br><tt><font color="#000000">value</font></tt>
+<p>Supplies the argument specified by the <tt>value</tt> attribute&nbsp;
+(if present) or the tag body to its parent <tt>&lt;message></tt> action
+for parametric replacement.</td>
+
+<td WIDTH="420"><tt>&lt;fmt:message key="Welcome" bundle="$greetingBundle">&nbsp;</tt>
+<br><tt>&nbsp; &lt;fmt:messageArg value="$dateArg"/></tt>
+<br><tt>&lt;/fmt:message></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;formatNumber></tt></b>
+<br><tt><font color="#000000"><b>value </b>type pattern parseLocale var
+scope</font></tt>
+<p><font color="#000000">Formats the given numeric value as a number, currency,
+or percentage using the locale's predefined or the specified (customized)
+formatting pattern.</font></td>
+
+<td WIDTH="420"><tt>&lt;fmt:formatNumber value="12345.67" parseLocale="de"
+type="currency"/></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;parseNumber></tt></b>
+<br><tt><font color="#000000"><b>value </b>type<b> </b>pattern parseLocale
+var scope</font></tt>
+<p><font color="#000000">Parses the given numeric string using the locale's
+default or the specified (customized) formatting pattern.</font></td>
+
+<td WIDTH="420"><tt>&lt;fmt:parseNumber value="$num" var="parsed"/></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;formatDate></tt></b>
+<br><tt><font color="#000000">value<b> </b>type dateStyle timeStyle pattern
+timeZone parseLocale var scope</font></tt>
+<p><font color="#000000">Formats the given (or current) date using the
+locale's predefined or the specified (customized) formatting pattern.</font></td>
+
+<td WIDTH="420"><tt>&lt;fmt:formatDate timeStyle="long" dateStyle="long"/></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;parseDate></tt></b>
+<br><tt><font color="#000000"><b>value</b> type dateStyle timeStyle pattern
+timeZone parseLocale var scope</font></tt>
+<p><font color="#000000">Parses the given date string using the locale's
+default or the specified (customized) formatting pattern.</font></td>
+
+<td WIDTH="420"><tt>&lt;fmt:parseDate value="May 22, 2001 4:05:53 PM PDT"
+var="parsed"/></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;exception></tt></b>
+<br><tt><font color="#000000">value bundle stackTrace</font></tt>
+<p><font color="#000000">Displays the exception given by the <tt>value</tt>
+attribute (or the error page's exception if no <tt>value</tt> attribute
+is given) in its localized form.</font></td>
+
+<td WIDTH="420"><tt>&lt;fmt:exception bundle="$errorMessages"/></tt></td>
+</tr>
+
+<tr>
+<td WIDTH="318"><b><tt>&lt;requestEncoding></tt></b>
+<br><tt><font color="#000000">value</font></tt>
+<p><font color="#000000">Sets the request character encoding to the charset
+specified by the <tt>value</tt> attribute.</font></td>
+
+<td WIDTH="420"><tt>&lt;fmt:requestEncoding value="Shift_JIS"/></tt></td>
+</tr>
+</table>
+
+</body>
+</html>
