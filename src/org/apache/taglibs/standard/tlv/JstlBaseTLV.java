@@ -102,11 +102,21 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     protected static final String APPLICATION_SCOPE = "application";
 
     // Relevant URIs
-    protected final String JSP = "http://java.sun.com/JSP/Page";   
+    protected final String JSP = "http://java.sun.com/JSP/Page"; 
+    
+    // JSTL 1.1
+    private final String CORE = "http://java.sun.com/jsp/jstl/core";
+    private final String FMT = "http://java.sun.com/jsp/jstl/fmt";
+    private final String SQL = "http://java.sun.com/jsp/jstl/sql";
+    private final String XML = "http://java.sun.com/jsp/jstl/xml";
+
+    // JSTL 1.0 EL
     private final String CORE_EL = "http://java.sun.com/jstl/core";
     private final String FMT_EL = "http://java.sun.com/jstl/fmt";
     private final String SQL_EL = "http://java.sun.com/jstl/sql";
     private final String XML_EL = "http://java.sun.com/jstl/xml";
+
+    // JSTL 1.0 RT
     private final String CORE_RT = "http://java.sun.com/jstl/core_rt";
     private final String FMT_RT = "http://java.sun.com/jstl/fmt_rt";
     private final String SQL_RT = "http://java.sun.com/jstl/sql_rt";
@@ -233,22 +243,26 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     }
 
     protected boolean isCoreTag(String tagUri, String tagLn, String target) {
-        return (isTag(tagUri, tagLn, CORE_EL, target)
+        return (isTag(tagUri, tagLn, CORE, target)
+	     || isTag(tagUri, tagLn, CORE_EL, target)
 	     || isTag(tagUri, tagLn, CORE_RT, target));
     }
 
     protected boolean isFmtTag(String tagUri, String tagLn, String target) {
-        return (isTag(tagUri, tagLn, FMT_EL, target) 
+        return (isTag(tagUri, tagLn, FMT, target) 
+	     || isTag(tagUri, tagLn, FMT_EL, target)
 	     || isTag(tagUri, tagLn, FMT_RT, target));
     }
 
     protected boolean isSqlTag(String tagUri, String tagLn, String target) {
-        return (isTag(tagUri, tagLn, SQL_EL, target) 
+        return (isTag(tagUri, tagLn, SQL, target) 
+	     || isTag(tagUri, tagLn, SQL_EL, target)
 	     || isTag(tagUri, tagLn, SQL_RT, target));
     }
 
     protected boolean isXmlTag(String tagUri, String tagLn, String target) {
-        return (isTag(tagUri, tagLn, XML_EL, target)
+        return (isTag(tagUri, tagLn, XML, target)
+	     || isTag(tagUri, tagLn, XML_EL, target)
 	     || isTag(tagUri, tagLn, XML_RT, target));
     }
 
