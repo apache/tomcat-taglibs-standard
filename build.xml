@@ -329,6 +329,8 @@
       </manifest>         
     </jar>        
 
+    <copy file="../LICENSE" tofile="${dist.dir}/${taglib.name}/LICENSE"/>
+    <copy file="../NOTICE" tofile="${dist.dir}/${taglib.name}/NOTICE"/>
     <copy file="README.dist" tofile="${dist.dir}/${taglib.name}/README"/>
     <copy file="${jaxen-full.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${saxpath.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
