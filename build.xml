@@ -4,7 +4,7 @@
   <!-- Version Number                                                      -->
   <!-- =================================================================== -->
 
-  <property name="standard-version" value="1.1.0" />
+  <property name="standard-version" value="1.1.1" />
   <property name="release.name" value="jakarta-taglibs-standard-${standard-version}" />
   <property name="release.pre" value="nop" />
   <property name="release.post" value="nop" />
