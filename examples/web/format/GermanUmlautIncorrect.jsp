@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 
 <html>
@@ -8,9 +9,9 @@
 <h3>German Umlaut characters decoded incorrectly:</h3>
 
 <ul>
- <li>a umlaut: <%= request.getParameter("a_umlaut") %>
- <li>o umlaut: <%= request.getParameter("o_umlaut") %>
- <li>u umlaut: <%= request.getParameter("u_umlaut") %>
+ <li>a umlaut: <c:out value="${param.a_umlaut}"/>
+ <li>o umlaut: <c:out value="${param.o_umlaut}"/>
+ <li>u umlaut: <c:out value="${param.u_umlaut}"/>
 </ul>
 
 </body>
