@@ -160,10 +160,11 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 		    && ((bcs = bc.getString()) != null)) {
 		value = bcs.trim();
 	    }
-	    if ((value == null) || value.equals("")) {
-		// do nothing
-		return EVAL_PAGE;
-	    }
+	}
+
+	if ((value == null) || value.equals("")) {
+	    // do nothing
+	    return EVAL_PAGE;
 	}
 
 	/*
