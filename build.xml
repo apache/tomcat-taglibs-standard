@@ -6,9 +6,6 @@
     <property file="../common.properties"/>
     <property name="jaxen-full.jar"   value="lib/jaxen-full.jar"/>
     <property name="saxpath.jar"      value="lib/saxpath.jar"/>
-    <!-- <property name="jdbc.jar"   value="lib/jdbc2_0-stdext.jar"/>-->
-    <!-- <property name="crimson.jar"      value="lib/crimson.jar"/> -->
-    <!-- <property name="xalan.jar"      value="lib/xalan.jar"/>-->
     <property name="classpath" value="${servlet23.jar}"/>
     <property name="taglib.name"    value="standard"/>
 
@@ -53,12 +50,14 @@
        <param name="file" value="${jdbc2_0-stdext.jar}"/>     
        <param name="fail.message" value="This build process for the Standard Taglib requires the Sun JDBC 2.0 Optional Package (Standard Extensions).  Please define the property jdbc2_0-stdext.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
-    <!--
+
+    <!-- JAXP 1.1 -->
     <antcall target="checkRequiredFile">
        <param name="file" value="${crimson.jar}"/>     
        <param name="fail.message" value="This build process for the Standard Taglib requires a JAXP 1.1-compliant XML parser, such as crimson.jar.  Please define the property crimson.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
-    -->
+
+    <!-- JAXP 1.2
     <antcall target="checkRequiredFile">
        <param name="file" value="${jaxp-api.jar}"/>     
        <param name="fail.message" value="This build process for the Standard Taglib requires jaxp-api.jar from JAXP 1.2.  Please define the property jaxp-api.jar in your build.properties file and ensure that the file exists."/>
@@ -75,20 +74,13 @@
        <param name="file" value="${xercesImpl.jar}"/>     
        <param name="fail.message" value="This build process for the Standard Taglib requires a xercesImpl.jar from JAXP 1.2.  Please define the property xercesImpl.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
+    -->
+
+    <!-- JAXP 1.1 and 1.2 -->
     <antcall target="checkRequiredFile">
        <param name="file" value="${xalan.jar}"/>     
        <param name="fail.message" value="This build process for the Standard Taglib requires xalan.jar.  Please define the property xalan.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
-    <!--
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${xml-apis.jar}"/>     
-       <param name="fail.message" value="This build process for the Standard Taglib requires various XML APIs.  Please define the property xml-apis.jar in your build.properties file and ensure that the file exists.  You can obtain xml-apis.jar as part of the Xalan distribution.  These APIs are available from http://xml.apache.org."/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jaxp.jar}"/>
-       <param name="fail.message" value="This build process for the standard taglib required the JAXP 1.1 jaxp.jar file, please define the property jaxp.jar in your build.properties file and ensure that the file exists."/>
-    </antcall>
-    -->
 
     <!-- Set up build directories -->
     <mkdir dir="${build.dir}"/>
@@ -142,11 +134,15 @@
     </copy>
     <copy file="${jdbc2_0-stdext.jar}" tofile="${build.examples}/WEB-INF/lib/jdbc2_0-stdext.jar" />
     <copy file="${xalan.jar}" tofile="${build.examples}/WEB-INF/lib/xalan.jar" />
+    <!-- JAXP 1.1 -->
+    <copy file="${crimson.jar}" tofile="${build.examples}/WEB-INF/lib/crimson.jar" />
+    
+    <!-- JAXP 1.2
     <copy file="${jaxp-api.jar}" tofile="${build.examples}/WEB-INF/lib/jaxp-api.jar" />
     <copy file="${dom.jar}" tofile="${build.examples}/WEB-INF/lib/dom.jar" />
     <copy file="${sax.jar}" tofile="${build.examples}/WEB-INF/lib/sax.jar" />
     <copy file="${xercesImpl.jar}" tofile="${build.examples}/WEB-INF/lib/xercesImpl.jar" />
-    <!-- <copy file="${xml-apis.jar}" tofile="${build.examples}/WEB-INF/lib/xml-apis.jar" /> -->
+    -->
 
     <!-- Copy required external API jar files -->
     <!-- Copy the 'standard' TLD files -->
@@ -198,9 +194,16 @@
   </target>
 -->
 
+      <!-- JAXP 1.1 -->
+      <javac srcdir="${library.src}" destdir="${build.library}"
+         classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+         debug="on"/>
+
+      <!-- JAXP 1.2
       <javac srcdir="${library.src}" destdir="${build.library}"
          classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
          debug="on"/>
+      -->
 
   </target>
 
@@ -240,10 +243,19 @@
     <copy file="README.dist" tofile="${dist.dir}/${taglib.name}/README"/>
     <copy file="${jaxen-full.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${saxpath.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+    <copy file="${jdbc2_0-stdext.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+    <copy file="${xalan.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+
+    <!-- JAXP 1.1 -->
+    <copy file="${crimson.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+
+    <!-- JAXP 1.2
     <copy file="${dom.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${sax.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${xercesImpl.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${jaxp-api.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+    -->
+
     <copy file="${conf.src}/c.tld" todir="${dist.dir}/${taglib.name}/tld"/>
     <copy file="${conf.src}/c-rt.tld" todir="${dist.dir}/${taglib.name}/tld"/>
     <copy file="${conf.src}/x.tld" todir="${dist.dir}/${taglib.name}/tld"/>
