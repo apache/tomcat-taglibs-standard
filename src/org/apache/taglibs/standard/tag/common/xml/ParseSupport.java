@@ -292,7 +292,9 @@ public abstract class ParseSupport extends BodyTagSupport {
 	    if (systemId.startsWith("/")) {
 	        s = ctx.getServletContext().getResourceAsStream(systemId);
 	        if (s == null)
-		    throw new FileNotFoundException(systemId);
+		    throw new FileNotFoundException(
+			Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
+			 systemId));
 	    } else {
 		String pagePath =
 		    ((HttpServletRequest) ctx.getRequest()).getServletPath();
@@ -300,6 +302,10 @@ public abstract class ParseSupport extends BodyTagSupport {
 		    pagePath.substring(0, pagePath.lastIndexOf("/"));
 		s = ctx.getServletContext().getResourceAsStream(
 		      basePath + "/" + systemId);
+	        if (s == null)
+		    throw new FileNotFoundException(
+			Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
+			 systemId));
 	    }
 	    return new InputSource(s);
         }

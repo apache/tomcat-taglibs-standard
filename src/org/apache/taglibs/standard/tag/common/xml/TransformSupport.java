@@ -361,7 +361,9 @@ public abstract class TransformSupport extends BodyTagSupport {
             if (href.startsWith("/")) {
                 s = ctx.getServletContext().getResourceAsStream(href);
                 if (s == null)
-                    throw new TransformerException(href);
+                    throw new TransformerException(
+                        Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
+                         href));
             } else {
                 String pagePath =
                     ((HttpServletRequest) ctx.getRequest()).getServletPath();
@@ -370,7 +372,9 @@ public abstract class TransformSupport extends BodyTagSupport {
                 s = ctx.getServletContext().getResourceAsStream(
                       basePath + "/" + href);
 		if (s == null)
-		    throw new TransformerException(href);
+		    throw new TransformerException(
+                        Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
+                         href));
             }
             return new StreamSource(s);
         }
