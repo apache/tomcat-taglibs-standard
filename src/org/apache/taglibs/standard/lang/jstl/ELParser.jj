@@ -615,11 +615,7 @@ PropertySuffix PropertySuffix () :
 }
 {
   <DOT> 
-     (property = Identifier ()
-      |
-      t = <STRING_LITERAL> 
-       { property = StringLiteral.getValueFromToken (t.image); }
-      )
+     (property = Identifier ())
 
     {
       return new PropertySuffix (property);
