@@ -157,7 +157,6 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
-	private boolean lastImportHadReader = false;
 
 	public Handler() {
 	    // "install" the default evaluator
@@ -235,9 +234,9 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    }
 
 	    // check invariants for <import>
-	    if (!importWithReaderDepths.empty()) {
-		// we're in an <import varReader="..."> tag, where
-		// <param> tags are illegal
+	    if (lastImportHadReader()) {
+		// we're immediately under an <import varReader="..."> tag,
+		// where <param> tags are illegal
 		if (isTag(qn, PARAM)) {
 		    fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
 			prefix, PARAM, IMPORT, VAR_READER));
@@ -272,13 +271,10 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // if we're in an import, record relevant state
 	    if (isTag(qn, IMPORT)) {
-		if (hasAttribute(a, VAR_READER)) {
+		if (hasAttribute(a, VAR_READER))
 		    importWithReaderDepths.push(new Integer(depth));
-		    lastImportHadReader = true;
-		} else {
+		else
 		    importWithoutReaderDepths.push(new Integer(depth));
-		    lastImportHadReader = false;
-		}
 	    }
 
 	    // if we're in a <message>, record relevant state
@@ -364,7 +360,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // update <import>-related state
 	    if (isTag(qn, IMPORT)) {
-		if (lastImportHadReader)
+		// pop from the appropriate "import" stack
+		if (lastImportHadReader())
 		    importWithReaderDepths.pop();
 		else
 		    importWithoutReaderDepths.pop();
@@ -394,6 +391,21 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	private boolean messageChild() {
 	    return (!messageDepths.empty()
 		&& (depth - 1) == ((Integer) messageDepths.peek()).intValue());
+	}
+
+	// returns the top int depth (peeked at) from a Stack of Integer
+	private int topDepth(Stack s) {
+	    if (s == null || s.empty())
+		return -1;
+	    else
+		return ((Integer) s.peek()).intValue();
+	}
+
+	// did the last <import> tag have a varReader attribute?
+	private boolean lastImportHadReader() {
+	    return (!importWithReaderDepths.empty()
+		&& (topDepth(importWithReaderDepths) >
+                    topDepth(importWithoutReaderDepths)));
 	}
     }
 }
