@@ -30,10 +30,15 @@
   <section name="'Standard' Taglib News" href="News">
 
     <news>
+      <newsitem date="7/27/2002">
+       Standard Taglib version 1.0.1 -- a minor bugfix release -- is now
+       <a href="/builds/jakarta-taglibs/releases/standard/">available</a>.
+      </newsitem>
       <newsitem date="6/21/2002">
-	Standard Taglib, final release 1.0, is now available for <a href="/builds/jakarta-taglibs/releases/standard/">download</a>.  This distribution
-        contains the same JSTL implementation as was included in Sun's Web
-        Services Developer Pack, version 1.0.
+	Standard Taglib, final release 1.0, is now available for
+        <a href="/builds/jakarta-taglibs/releases/standard/">download</a>.
+        This distribution contains the same JSTL implementation as was
+        included in Sun's Web Services Developer Pack, version 1.0.
       </newsitem>
 <!--
       <newsitem date="6/17/2002">
