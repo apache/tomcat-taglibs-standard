@@ -5,7 +5,7 @@
 </head>
 
 <body bgcolor="#FFFFFF">
-<h1>Getting started with JSTL (EA3)</h1>
+<h1>Getting started with JSTL 1.0 (EA3)</h1>
 
 <p>This document describes how to get up and running quickly with JSTL's
 second early-access release.  It can be useful to page authors and tag
@@ -70,7 +70,7 @@ jsr052-comments@sun.com</a> if you have any comments.</p>
 <hr />
 <h2><a name="#2" /></a>Getting started quickly</h2>
 
-<p>JSTL EA3 uses features provided only by the JSP 1.2 standard draft, so it requires 
+<p>JSTL 1.0 EA3 uses features provided only by the JSP 1.2 standard draft, so it requires 
   a JSP 1.2 container. We recommend you test JSTL with Tomcat 4.0.</p>
 
 <p>To install Tomcat, follow the instructions at <a
@@ -113,7 +113,7 @@ at the top of your JSP page, as follows:</p>
 
 <p>Half of JSTL's tag libraries -- the recommended ones -- rely on an expression 
   language. To facilitate experimentation and feedback, the JSTL RI currently 
-  lets you switch between a number of different languages. Since EA2, the ECMAScript 
+  lets you switch between a number of different languages. Since 1.0 EA2, the ECMAScript 
   language has been set as the default.</p>
 
 <p>The  expression language for a web application is configured by
@@ -132,7 +132,7 @@ and the JavaScript/Rhino evaluator is
 <tt>web.xml</tt> file that comes with the <tt>jstl-examples</tt>
 application.)</p>
 
-<p>In JSTL EA, you can also mix different expression languages on the same page 
+<p>In JSTL 1.0 EA, you can also mix different expression languages on the same page 
   using the <tt>&lt;expressionLanguage&gt;</tt> tag. This tag's <tt>evaluator</tt> 
   attribute points to the class containing the expression-evaluation logic you 
   wish to use. See the Functional Description of expression-language support for 
@@ -145,13 +145,13 @@ evaluate at runtime.  For example:</p>
 <pre>
     &lt;c:forEach items="<b>$page:myItems</b>" /&gt;
 </pre>
-<i><b>Important:</b> The expression-language support included with JSTL EA should 
+<i><b>Important:</b> The expression-language support included with JSTL 1.0 EA should 
 be considered even more experimental than the rest of the package. You should 
 not assume that either the "pluggability" mechanism or the prepackaged languages 
-themselves will remain in JSTL's final version, or even in the next EA releases.</i> 
-<h3>Topics covered in JSTL EA3</h3>
+themselves will remain in JSTL's final version, or even in the next 1.0 EA releases.</i> 
+<h3>Topics covered in JSTL 1.0 EA3</h3>
 
-<p>As we mentioned above, JSTL EA3 includes core tags to support iteration, conditionals, 
+<p>As we mentioned above, JSTL 1.0 EA3 includes core tags to support iteration, conditionals, 
   and expression-language support. For more information on precisely how these 
   tags work, you should read the "Functional Description" documents provided as 
   part of this distribution. Here, we just offer a quick roadmap of each feature 
@@ -200,7 +200,7 @@ themselves will remain in JSTL's final version, or even in the next EA releases.
 <h3>For tag developers...</h3>
 
 <p>Developers of custom tags should also read the "Functional Descriptions" provided 
-  for each topic addressed by JSTL EA. JSTL EA provides some abstract classes 
+  for each topic addressed by JSTL 1.0 EA. JSTL 1.0 EA provides some abstract classes 
   that assist with rapid development of tags and promote integration of custom 
   tags with JSTL's tag set.</p>
 
