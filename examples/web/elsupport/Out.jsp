@@ -20,5 +20,15 @@
     </tr>
   </c:forEach>
 </table>
+
+<h4>&lt;c:out&gt; with Reader object</h4>
+<%
+java.io.Reader reader1 = new java.io.StringReader("<foo>Text for a Reader!</foo>");
+pageContext.setAttribute("myReader1", reader1);
+java.io.Reader reader2 = new java.io.StringReader("<foo>Text for a Reader!</foo>");
+pageContext.setAttribute("myReader2", reader2);
+%>
+Reader1 (escapeXml=true) : <c:out value="${myReader1}"/><br>
+Reader2 (escapeXml=false): <c:out value="${myReader2}" escapeXml="false"/><br>
 </body>
 </html>

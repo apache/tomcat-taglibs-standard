@@ -124,7 +124,7 @@ public class OutSupport extends BodyTagSupport {
       try {
 	// print value if available; otherwise, try 'default'
 	if (value != null) {
-            out(pageContext, escapeXml, value.toString());
+            out(pageContext, escapeXml, value);
 	    return SKIP_BODY;
 	} else {
 	    // if we don't have a 'default' attribute, just go to the body
@@ -136,7 +136,7 @@ public class OutSupport extends BodyTagSupport {
 	    // if we do have 'default', print it
 	    if (def != null) {
 		// good 'default'
-                out(pageContext, escapeXml, def.toString());
+                out(pageContext, escapeXml, def);
 	    }
 	    return SKIP_BODY;
 	}
@@ -179,27 +179,51 @@ public class OutSupport extends BodyTagSupport {
      */
     public static void out(PageContext pageContext,
                            boolean escapeXml,
-                           String text) throws IOException {
+                           Object obj) throws IOException {
         JspWriter w = pageContext.getOut();
-	if (!escapeXml)
-            w.print(text);
-        else {
-            // avoid needless double-buffering (is this really more efficient?)
-            for (int i = 0; i < text.length(); i++) {
-                char c = text.charAt(i);
-                if (c == '&')
-                    w.print("&amp;");
-                else if (c == '<')
-                    w.print("&lt;");
-                else if (c == '>')
-                    w.print("&gt;");
-                else if (c == '"')
-                    w.print("&#034;");
-                else if (c == '\'')
-                    w.print("&#039;");
-                else
-                    w.print(c);
+	if (!escapeXml) {
+            // write chars as is
+            if (obj instanceof Reader) {
+                Reader reader = (Reader)obj;
+                char[] buf = new char[4096];
+                int count;
+                while ((count=reader.read(buf, 0, 4096)) != -1) {
+                    w.write(buf, 0, count);
+                }
+            } else {
+                w.print(obj.toString());
+            }
+        } else {
+            // escape XML chars
+            if (obj instanceof Reader) {
+                Reader reader = (Reader)obj;
+                int c;
+                while ((c=reader.read()) != -1) {
+                    escapeChar((char)c, w);
+                } 
+            } else {
+                String text = obj.toString();
+                // avoid needless double-buffering (is this really more efficient?)
+                for (int i = 0; i < text.length(); i++) {
+                    char c = text.charAt(i);
+                    escapeChar(c, w);
+                }
             }
         }
+    }
+    
+    private static void escapeChar(char c, JspWriter w) throws IOException {
+        if (c == '&')
+            w.print("&amp;");
+        else if (c == '<')
+            w.print("&lt;");
+        else if (c == '>')
+            w.print("&gt;");
+        else if (c == '"')
+            w.print("&#034;");
+        else if (c == '\'')
+            w.print("&#039;");
+        else
+            w.print(c);
     }
 }
