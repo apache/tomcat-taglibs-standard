@@ -77,18 +77,28 @@ import java.util.Map;
 public interface Result {
 
     /**
-     * Returns an array of Map objects. 
+     * Returns an array of Map objects. Column name is used as the key
+     * for the column value.
      *
      * @return the result rows as an array of <code>Map</code> objects
      */
     public Map[] getRows();
 
     /**
-     * Returns an array of Objects[]
+     * Returns an array of Objects[]. The first index
+     * designates the Row, the second the Column. The array
+     * stores the value at the specified row and column.
      *
      * @return the result rows as an array of <code>Object[]</code> objects
      */
     public Object[][] getRowsByIndex();
+
+    /**
+     * Returns an array of column names.
+     *
+     * @return the column names as an array of <code>String</code> objects
+     */
+    public String[] getColumnNames();
 
     /**
      * Returns the number of rows in the cached ResultSet

@@ -75,25 +75,20 @@
 
 <h2>Putting it all together</h2>
 
+<%-- Easiest example showing how to populate a table --%>
 <table border="1">
-  <c:forEach var="row" items="${deejays.rows}" varStatus="status">
-    <%-- Get the column names for the header of the table --%>
-    <c:choose>
-      <c:when test="${status.count == 1}">
-        <%-- Each row is a Map object key'd by the column name --%>
-        <tr>
-        <c:forEach var="metaData" items="${row}">
-          <th><c:out value="${metaData.key}"/></th>
-        </c:forEach>
-        </tr>
-      </c:when>
-    </c:choose>
+  <tr>
+  <%-- Get the column names for the header of the table --%>
+  <c:forEach var="columnName" items="${deejays.columnNames}">
+    <th><c:out value="${columnName}"/></th>
+  </c:forEach>
+
+  <%-- Get the value of each column while iterating over rows --%>
+  <c:forEach var="row" items="${deejays.rowsByIndex}">
     <tr>
-    <c:forEach var="column" items="${row}">
-      <%-- Get the value of each column while iterating over rows --%>
-      <td><c:out value="${column.value}"/></td>
-    </c:forEach>
-  </tr>
+      <c:forEach var="column" items="${row}">
+        <td><c:out value="${column}"/></td>
+      </c:forEach>
   </c:forEach>
 </table>
 

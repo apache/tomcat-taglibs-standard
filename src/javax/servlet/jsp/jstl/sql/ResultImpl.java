@@ -71,6 +71,7 @@ import java.util.*;
 public class ResultImpl implements Result {
     private List rowMap;
     private List rowByIndex;
+    private String[] columnNames;
     private boolean isLimited;
 
     /**
@@ -90,6 +91,8 @@ public class ResultImpl implements Result {
 	ResultSetMetaData rsmd = rs.getMetaData();
 	int noOfColumns = rsmd.getColumnCount();
         int beginRow = 0;
+
+        columnNames = new String[noOfColumns];
 
         /*
          * Shift maximum rows depending on starting point
@@ -111,8 +114,11 @@ public class ResultImpl implements Result {
 		            value = null;
 		        }
                         // 0-based indexing to be consistent w/JSTL 
+                        if (columnNames[i-1] == null) {
+                            columnNames[i-1] = rsmd.getColumnName(i);
+                        }
                         columns[i-1] = value;
-                        columnMap.put(rsmd.getColumnName(i), value);
+                        columnMap.put(columnNames[i-1], value);
 	            }
                 rowMap.add(columnMap);
                 rowByIndex.add(columns);
@@ -158,6 +164,17 @@ public class ResultImpl implements Result {
 
         //should just be able to return Object[][] object
         return (Object [][])rowByIndex.toArray(new Object[0][0]);
+    }
+
+    /**
+     * Returns an array of String objects. The array represents
+     * the names of the columns arranged in the same order as in
+     * the getRowsByIndex() method.
+     *
+     * @return an array of String[]
+     */
+    public String[] getColumnNames() {
+        return columnNames;
     }
 
     /**
