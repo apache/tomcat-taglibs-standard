@@ -1,7 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- * Copyright (c) 1999-2003 The Apache Software Foundation.  All rights 
+ * Copyright (c) 1999-2004 The Apache Software Foundation.  All rights 
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -104,27 +104,20 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     // Relevant URIs
     protected final String JSP = "http://java.sun.com/JSP/Page"; 
     
-    // JSTL 1.1
-    private final String CORE = "http://java.sun.com/jsp/jstl/core";
-    private final String FMT = "http://java.sun.com/jsp/jstl/fmt";
-    private final String SQL = "http://java.sun.com/jsp/jstl/sql";
-    private final String XML = "http://java.sun.com/jsp/jstl/xml";
+    // types of sub-classes - used on method validate()
+    private   static final int TYPE_UNDEFINED = 0;
+    protected static final int TYPE_CORE = 1;
+    protected static final int TYPE_FMT = 2;
+    protected static final int TYPE_SQL = 3;
+    protected static final int TYPE_XML = 4;
 
-    // JSTL 1.0 EL
-    private final String CORE_EL = "http://java.sun.com/jstl/core";
-    private final String FMT_EL = "http://java.sun.com/jstl/fmt";
-    private final String SQL_EL = "http://java.sun.com/jstl/sql";
-    private final String XML_EL = "http://java.sun.com/jstl/xml";
-
-    // JSTL 1.0 RT
-    private final String CORE_RT = "http://java.sun.com/jstl/core_rt";
-    private final String FMT_RT = "http://java.sun.com/jstl/fmt_rt";
-    private final String SQL_RT = "http://java.sun.com/jstl/sql_rt";
-    private final String XML_RT = "http://java.sun.com/jstl/xml_rt";
+    // which tlv is being validated
+    private int tlvType = TYPE_UNDEFINED;
 
     //*********************************************************************
     // Validation and configuration state (protected)
 
+    protected String uri;			// our taglib's uri (as passed by JSP container on XML View)
     protected String prefix;			// our taglib's prefix
     protected Vector messageVector;		// temporary error messages
     protected Map config;			// configuration (Map of Sets)
@@ -152,12 +145,14 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     
 
     //*********************************************************************
-    // Validation entry point
+    // Validation entry point - this method is called by the sub-classes to 
+    // do the validation.
 
     public synchronized ValidationMessage[] validate(
-	    String prefix, String uri, PageData page) {
+	    int type, String prefix, String uri, PageData page) {
 	try {
-
+	    this.tlvType = type;
+	    this.uri = uri;
 	    // initialize
 	    messageVector = new Vector();
 
@@ -242,28 +237,24 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
         return isTag(tagUri, tagLn, JSP, target);
     }
 
+    private boolean isTag( int type, String tagUri, String tagLn, String target) {
+        return ( this.tlvType == type && isTag(tagUri, tagLn, this.uri, target) );
+    }
+
     protected boolean isCoreTag(String tagUri, String tagLn, String target) {
-        return (isTag(tagUri, tagLn, CORE, target)
-	     || isTag(tagUri, tagLn, CORE_EL, target)
-	     || isTag(tagUri, tagLn, CORE_RT, target));
+	return isTag( TYPE_CORE, tagUri, tagLn, target );
     }
 
     protected boolean isFmtTag(String tagUri, String tagLn, String target) {
-        return (isTag(tagUri, tagLn, FMT, target) 
-	     || isTag(tagUri, tagLn, FMT_EL, target)
-	     || isTag(tagUri, tagLn, FMT_RT, target));
+	return isTag( TYPE_FMT, tagUri, tagLn, target );
     }
 
     protected boolean isSqlTag(String tagUri, String tagLn, String target) {
-        return (isTag(tagUri, tagLn, SQL, target) 
-	     || isTag(tagUri, tagLn, SQL_EL, target)
-	     || isTag(tagUri, tagLn, SQL_RT, target));
+	return isTag( TYPE_SQL, tagUri, tagLn, target );
     }
 
     protected boolean isXmlTag(String tagUri, String tagLn, String target) {
-        return (isTag(tagUri, tagLn, XML, target)
-	     || isTag(tagUri, tagLn, XML_EL, target)
-	     || isTag(tagUri, tagLn, XML_RT, target));
+	return isTag( TYPE_XML, tagUri, tagLn, target );
     }
 
     // utility method to determine if an attribute exists
