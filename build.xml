@@ -52,7 +52,7 @@
     <!-- Make sure required dependencies are available -->
     <antcall target="checkRequiredFile">
        <param name="file" value="${servlet23.jar}"/>
-       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile the Standard Taglib.  Please define the property servlet23.jar in your build.properties file and ensure that the file exists."/>
+       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile the Standard Taglib.  ${servlet23.jar}  Please define the property servlet23.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
     <antcall target="checkRequiredFile">
        <param name="file" value="${jdbc2_0-stdext.jar}"/>     
