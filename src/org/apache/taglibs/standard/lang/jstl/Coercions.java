@@ -110,6 +110,20 @@ import java.beans.PropertyEditorManager;
  *     if operator results in exception, error
  *     otherwise
  *       error
+ *
+ * Applying "empty" operator - empty A
+ *   if A is null
+ *     return true
+ *   if A is zero-length String
+ *     return true
+ *   if A is zero-length array
+ *     return true
+ *   if A is List and ((List) A).isEmpty()
+ *     return true
+ *   if A is Map and ((Map) A).isEmpty()
+ *     return true
+ *   otherwise
+ *     return false
  * 
  * Applying logical operators
  *   Binary operator - A {and,or} B

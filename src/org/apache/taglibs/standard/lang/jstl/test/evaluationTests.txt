@@ -746,3 +746,37 @@ ${false and 'true'}
 java.lang.Object
 ${false or 'true'}
 java.lang.Object
+
+#######################################################
+# test empty operator
+
+${ empty "A"}
+java.lang.Object
+${ empty "" }
+java.lang.Object
+${ empty null }
+java.lang.Object
+${ empty false}
+java.lang.Object
+${ empty 0}
+java.lang.Object
+${ not empty 0}
+java.lang.Object
+${ not empty empty 0}
+java.lang.Object
+${ empty emptyTests.emptyArray }
+java.lang.Object
+${ empty emptyTests.nonemptyArray }
+java.lang.Object
+${ empty emptyTests.emptyList }
+java.lang.Object
+${ empty emptyTests.nonemptyList }
+java.lang.Object
+${ empty emptyTests.emptyMap }
+java.lang.Object
+${ empty emptyTests.nonemptyMap }
+java.lang.Object
+${ empty emptyTests.emptySet }
+java.lang.Object
+${ empty emptyTests.nonemptySet }
+java.lang.Object

@@ -1126,47 +1126,47 @@ With type: java.lang.Double
 
 Expression: ${and}
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${and}": Encountered "and", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${and}": Encountered "and", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 With type: javax.servlet.jsp.JspException
 
 Expression: ${or}
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${or}": Encountered "or", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${or}": Encountered "or", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 With type: javax.servlet.jsp.JspException
 
 Expression: ${not}
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${not}": Encountered "}", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${not}": Encountered "}", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 With type: javax.servlet.jsp.JspException
 
 Expression: ${eq}
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${eq}": Encountered "eq", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${eq}": Encountered "eq", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 With type: javax.servlet.jsp.JspException
 
 Expression: ${ne}
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ne}": Encountered "ne", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ne}": Encountered "ne", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 With type: javax.servlet.jsp.JspException
 
 Expression: ${lt}
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${lt}": Encountered "lt", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${lt}": Encountered "lt", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 With type: javax.servlet.jsp.JspException
 
 Expression: ${gt}
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${gt}": Encountered "gt", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${gt}": Encountered "gt", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 With type: javax.servlet.jsp.JspException
 
 Expression: ${le}
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${le}": Encountered "le", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${le}": Encountered "le", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 With type: javax.servlet.jsp.JspException
 
 Expression: ${ge}
 ExpectedType: class java.lang.Object
-Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ge}": Encountered "ge", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Evaluates to: javax.servlet.jsp.JspException: An error occurred while evaluating custom action attribute "test" with value "${ge}": Encountered "ge", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 With type: javax.servlet.jsp.JspException
 
 Expression: ${instanceof}
@@ -1667,5 +1667,84 @@ With type: java.lang.Boolean
 Expression: ${false or 'true'}
 ExpectedType: class java.lang.Object
 Evaluates to: true
+With type: java.lang.Boolean
+
+
+#######################################################
+# test empty operator
+
+Expression: ${ empty "A"}
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ empty "" }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ empty null }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ empty false}
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ empty 0}
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ not empty 0}
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ not empty empty 0}
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ empty emptyTests.emptyArray }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ empty emptyTests.nonemptyArray }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ empty emptyTests.emptyList }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ empty emptyTests.nonemptyList }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ empty emptyTests.emptyMap }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ empty emptyTests.nonemptyMap }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ empty emptyTests.emptySet }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ empty emptyTests.nonemptySet }
+ExpectedType: class java.lang.Object
+Evaluates to: false
 With type: java.lang.Boolean
 

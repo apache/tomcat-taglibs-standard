@@ -533,6 +533,7 @@ public class ELParser implements ELParserConstants {
       case MINUS:
       case NOT1:
       case NOT2:
+      case EMPTY:
         ;
         break;
       default:
@@ -559,6 +560,10 @@ public class ELParser implements ELParserConstants {
       case MINUS:
         jj_consume_token(MINUS);
                 operator = UnaryMinusOperator.SINGLETON;
+        break;
+      case EMPTY:
+        jj_consume_token(EMPTY);
+                operator = EmptyOperator.SINGLETON;
         break;
       default:
         jj_la1[25] = jj_gen;
@@ -783,7 +788,7 @@ public class ELParser implements ELParserConstants {
   private int jj_gen;
   final private int[] jj_la1 = new int[31];
   final private int[] jj_la1_0 = {0x6,0x6,0x6,0x0,0x0,0x0,0x0,0x18600000,0x600000,0x18000000,0x18600000,0x79e0000,0x180000,0x60000,0x6000000,0x1800000,0x79e0000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80010000,0x20007580,0x80010000,0x7580,0x3000,};
-  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x3000,0x3000,0xc00,0xc00,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6,0x6,0xf8,0x30,0xc0,0xf8,0x304,0x300,0x304,0x0,0x4000,0x0,0x0,0x0,};
+  final private int[] jj_la1_1 = {0x0,0x0,0x0,0x3000,0x3000,0xc00,0xc00,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6,0x6,0xf8,0x30,0xc0,0xf8,0x4304,0x300,0x4304,0x0,0x8000,0x0,0x0,0x0,};
 
   public ELParser(java.io.InputStream stream) {
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
@@ -881,8 +886,8 @@ public class ELParser implements ELParserConstants {
 
   final public ParseException generateParseException() {
     jj_expentries.removeAllElements();
-    boolean[] la1tokens = new boolean[51];
-    for (int i = 0; i < 51; i++) {
+    boolean[] la1tokens = new boolean[52];
+    for (int i = 0; i < 52; i++) {
       la1tokens[i] = false;
     }
     if (jj_kind >= 0) {
@@ -901,7 +906,7 @@ public class ELParser implements ELParserConstants {
         }
       }
     }
-    for (int i = 0; i < 51; i++) {
+    for (int i = 0; i < 52; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

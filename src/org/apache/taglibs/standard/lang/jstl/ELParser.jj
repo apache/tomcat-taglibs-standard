@@ -123,6 +123,7 @@ PARSER_END(ELParser)
 | < AND2: "&&" >
 | < OR1: "or" >
 | < OR2: "||" >
+| < EMPTY: "empty" >
 
 
 /* Identifiers */
@@ -505,6 +506,7 @@ Expression UnaryExpression () :
    (
     (<NOT1> | <NOT2>) { operator = NotOperator.SINGLETON; }
     | <MINUS> { operator = UnaryMinusOperator.SINGLETON; }
+    | <EMPTY> { operator = EmptyOperator.SINGLETON; }
     )
   {
     if (singleOperator == null) {

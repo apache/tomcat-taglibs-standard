@@ -112,3 +112,13 @@ ${ a or b}
 ${ a || b}
 ${ !a }
 ${ not a }
+
+# empty operator
+${ empty "A"}
+${ empty "" }
+${ empty null }
+${ empty false}
+${ empty 0}
+${ not empty 0}
+${ not empty empty 0}
+${ empty }

@@ -4,7 +4,7 @@ Parses to: abc
 Attribute value: ${ 3}
 Parses to: ${3}
 Attribute value: a${
-Causes an error: An error occurred while parsing custom action attribute "test" with value "a${": Encountered "<EOF>", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Causes an error: An error occurred while parsing custom action attribute "test" with value "a${": Encountered "<EOF>", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 Attribute value: a${ 5 }
 Parses to: a${5}
 Attribute value: ${ 3 }b
@@ -76,9 +76,9 @@ Parses to: ${" with escaping \""}
 Attribute value: ${" with escaping \"\\\""}
 Parses to: ${" with escaping \"\\\""}
 Attribute value: ${" bad \ escaping"}
-Causes an error: An error occurred while parsing custom action attribute "test" with value "${" bad \ escaping"}": Encountered "" bad \ ", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${" bad \ escaping"}": Encountered "" bad \ ", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 Attribute value: ${" bad \' escaping"}
-Causes an error: An error occurred while parsing custom action attribute "test" with value "${" bad \' escaping"}": Encountered "" bad \'", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${" bad \' escaping"}": Encountered "" bad \'", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 
 # string literals with '
 Attribute value: ${'abc'}
@@ -98,9 +98,9 @@ Parses to: ${" with escaping '"}
 Attribute value: ${' with escaping \'\\\''}
 Parses to: ${" with escaping '\\'"}
 Attribute value: ${' bad \ escaping'}
-Causes an error: An error occurred while parsing custom action attribute "test" with value "${' bad \ escaping'}": Encountered "' bad \ ", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${' bad \ escaping'}": Encountered "' bad \ ", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 Attribute value: ${' bad \" escaping'}
-Causes an error: An error occurred while parsing custom action attribute "test" with value "${' bad \" escaping'}": Encountered "' bad \"", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", <IDENTIFIER>]
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${' bad \" escaping'}": Encountered "' bad \"", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
 
 # identifiers
 Attribute value: ${abc}
@@ -197,3 +197,21 @@ Attribute value: ${ !a }
 Parses to: ${(not a)}
 Attribute value: ${ not a }
 Parses to: ${(not a)}
+
+# empty operator
+Attribute value: ${ empty "A"}
+Parses to: ${(empty "A")}
+Attribute value: ${ empty "" }
+Parses to: ${(empty "")}
+Attribute value: ${ empty null }
+Parses to: ${(empty null)}
+Attribute value: ${ empty false}
+Parses to: ${(empty false)}
+Attribute value: ${ empty 0}
+Parses to: ${(empty 0)}
+Attribute value: ${ not empty 0}
+Parses to: ${(not empty 0)}
+Attribute value: ${ not empty empty 0}
+Parses to: ${(not empty empty 0)}
+Attribute value: ${ empty }
+Causes an error: An error occurred while parsing custom action attribute "test" with value "${ empty }": Encountered "}", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]

@@ -66,8 +66,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import org.apache.taglibs.standard.lang.jstl.ELException;
@@ -372,6 +374,32 @@ public class EvaluationTest
       ret.setAttribute ("pbean5", Factory.createBean5 ());
       ret.setAttribute ("pbean6", Factory.createBean6 ());
       ret.setAttribute ("pbean7", Factory.createBean7 ());
+    }
+
+    // Create the empty tests
+    {
+      Map m = new HashMap ();
+      m.put ("emptyArray", new Object [0]);
+      m.put ("nonemptyArray", new Object [] {"abc"});
+      m.put ("emptyList", new ArrayList ());
+      {
+	List l = new ArrayList ();
+	l.add ("hello");
+	m.put ("nonemptyList", l);
+      }
+      m.put ("emptyMap", new HashMap ());
+      {
+	Map m2 = new HashMap ();
+	m2.put ("a", "a");
+	m.put ("nonemptyMap", m2);
+      }
+      m.put ("emptySet", new HashSet ());
+      {
+	Set s = new HashSet ();
+	s.add ("hello");
+	m.put ("nonemptySet", s);
+      }
+      ret.setAttribute ("emptyTests", m);
     }
 
     return ret;
