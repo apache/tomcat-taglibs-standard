@@ -212,7 +212,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
 
 	    // record the most recent tag (for error reporting)
 	    lastElementName = qn;
-	    lastElementId = a.getValue("id");
+            lastElementId = a.getValue("http://java.sun.com/JSP/Page", "id");
 	}
 
 	public void characters(char[] ch, int start, int length) {
