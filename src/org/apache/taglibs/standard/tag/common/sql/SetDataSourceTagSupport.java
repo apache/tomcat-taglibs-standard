@@ -134,7 +134,7 @@ public class SetDataSourceTagSupport extends TagSupport {
 	    pageContext.setAttribute(var, ds, scope);
         }
         else {
-            pageContext.setAttribute(Config.SQL_DATASOURCE, ds, scope);
+            Config.set(pageContext, Config.SQL_DATASOURCE, ds, scope);
         }
 	return SKIP_BODY;
     }
