@@ -153,6 +153,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 		} catch (IOException ioe) {
 		    throw new JspTagException(ioe.getMessage());
 		}
+		return EVAL_PAGE;
 	    }
 	}
 
