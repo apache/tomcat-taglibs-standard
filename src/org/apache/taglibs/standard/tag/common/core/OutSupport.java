@@ -105,7 +105,7 @@ public class OutSupport extends BodyTagSupport {
     // resets local state
     private void init() {
         value = def = null;
-        escapeXml = false;
+        escapeXml = true;
 	needBody = false;
     }
 
