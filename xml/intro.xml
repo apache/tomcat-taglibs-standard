@@ -10,7 +10,7 @@
 
   <section name="'Standard' Taglib" href="Welcome">
 
-    <big><b>JSP(tm) Standard Tag Library reference implementation (Beta 1)</b></big>
+    <big><b>JSP(tm) Standard Tag Library reference implementation (Beta 2)</b></big>
 
     <p>The <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 Expert Group</a>,
       operating under the Java Community Process, will be hosting the
@@ -79,14 +79,14 @@
   <section name="Documentation" href="Documentation">
 
     <p>For more information about the JSP Standard Tag Library,
-       look at the on-line documentation for Beta 1:</p>
+       look at the on-line documentation for Beta 2:</p>
     <ul>
       <!--  Uncomment this section and modify as needed when you start
             doing releases of the taglib, a link can be made to each
             available release. -->
-      <li>View the Beta 1 documentation
+      <li>View the Beta 2 documentation
         <a href="standard-beta1/index.html">
-        JSP Standard Tag Library Beta 1 Documentation</a>
+        JSP Standard Tag Library Beta 2 Documentation</a>
       </li>
 
       <li>View the most recent, nightly build of the
@@ -113,11 +113,11 @@
     <!--  Uncomment this section and modify as needed when you start
           doing releases of the taglib. -->
     <p>Download a binary distribution of the JSP Standard Tag Library
-      Beta 1 release:</p>
+      Beta 2 release:</p>
     <ul>
       <li>
         <a href="http://jakarta.apache.org/builds/jakarta-taglibs/releases/standard/">
-        JSP Standard Tag Library Beta 1 release</a></li>
+        JSP Standard Tag Library Beta 2 release</a></li>
     </ul>
 
     <p>Download the most recent, nightly snapshot:</p>

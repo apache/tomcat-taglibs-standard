@@ -1,7 +1,7 @@
 JSP Standard Tag Library (JSTL)
 Release: Beta 2
 
-Thanks for downloading the JSTL Beta 1 release.  We hope you find the tags,
+Thanks for downloading the JSTL Beta 2 release.  We hope you find the tags,
 documents, and examples here of interest.  We're curious to hear your
 feedback on this release, which represents work in progress toward a
 standard JSP Tag Library.  Please contact us at
@@ -12,7 +12,7 @@ with any comments you might have.
 
 BINARY DISTRIBUTION
 
-This is the binary distribution of the Beta2 JSTL reference
+This is the binary distribution of the Beta 2 JSTL reference
 implementation.
 
 To use this distribution with your web applications, simply copy the JAR

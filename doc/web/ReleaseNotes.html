@@ -7,213 +7,19 @@
 <body bgcolor="#FFFFFF">
 <h1>'Standard' taglib (JSTL RI): Release Notes</h1>
 
-<p><b>The JSTL 1.0 Beta 1 RI builds on the 1.0 EA3 release, which introduced a
-variety of new features and rounded out some of the support initially
-provided in 1.0 EA2.  This document contains a running list of additions and
-changes.</b></p>
+<p><b>The JSTL 1.0 Beta 2 RI builds on the 1.0 Beta 1 release, which
+introduced a variety of new features and rounded out some of the support
+initially provided in 1.0 EA3.</b></p>
 
-<hr />
+<hr/>
 
-<dl>
-<dt><b>Nightly Build Changes and Enhancements since JSTL EA3 RI,
-Version 1.0 Release</b></dt>
-<dd>General:
-<ul>
- <li>Support for 'var' and 'scope' has been normalized in tag handlers, TLDs,
-     and TLVs.</li>
- <li>ScriptFreeTLV, and the new PreferredTaglibTLV, are now part of the
-     javax.servlet.* class hierarchy as directed by the working spec.</li>
- <li>JARs distributed by Sun were removed from the CVS archive and the build
-     process changed to accommodate this removal.  Licenses are now included
-     for those non-Apache JARs that remain checked into CVS.</li>
-</ul>
-</dd>
+<dt><b>19 Apr 2002 </b></dt>
+<dd>JSTL 1.0 Beta2 RI, version 1.0, introduced. See Appendix B of the Proposed Final Draft for a list of changes since Beta1.</dd>
 
-<dd>EL Support:
-<ul>
- <li>Default EL implementation.</li>
-  <ul>
-   <li>See the <a href="http://www.jcp.org/aboutJava/communityprocess/review/jsr052/index.html">JSTL 1.0 Specification</a> Appendix A for complete definition</li>
-   <li>Highlights:</li>
-    <ul>
-     <li>&lt;c:out&gt; replaces &lt;c:expr&gt;
-     <li>new "${expr}" syntax
-     <li>implicit objects references using "." replacing ":"
-    </ul>
-  </ul>
- <li>EcmaScript EL enhancements:
-  <ul>
-   <li>Direct associative container access.</li>
-   <li>List object access using the [] operator.</li>
-  </ul>
- <li>Overhaul of EcmaScript implementation:
-  <ul>
-   <li>Multiple scopes for script execution.</li>
-   <li>javascript pagecontext scope.</li>
-   <li>Separation of script compilation and execution.</li>
-   <li>Validation and caching.</li>
-   <li>Performance improvements.</li>
-  </ul>
- <li>JavascriptExpressionEvaluator implementation depended on public but
-     non-documented Rhino classes to unwrap objects. Removed dependency on
-     NativeString and NativeBoolean.</li>
-</ul>
-</dd>
+<p><dt><b>12 Mar 2002 </b></dt>
+<dd>JSTL 1.0 Beta1 RI, version 1.0, introduced.</dd>
 
-<dd>Core Actions:
-<ul>
- <li>&lt;c:url&gt; replaces &lt;c:urlEncode&gt;</li>
- <li>added &lt;c:catch&gt;</li>
- <li>&lt;c:urlEncode&gt; now supports &lt;c:param&gt;, but this support will
-     likely be modified before the spec is finished.</li>
- <li>&lt;c:param&gt; now accepts body content.</li>
- <li>IteratorTag, IteratorTagStatus, and IteratorTagSupport are
-     now called LoopTag, LoopTagStatus, and LoopTagSupport.</li>
- <li>LoopTag (and classes that use it) now provides a prepare() method that
-     lets developers set up an iteration.</li>
- <li>ConditionalTagSupport now provides a setScope() method in addition to
-     setVar().</li>
- <li>With some caveats yet to be addressed by the spec, &lt;c:forEach&gt; and
-     other tags that expose &quot;nested&quot; scoped attributes are now
-     nondestructive with respect to the attributes they overwrite.</li>
-</ul>
-</dd>
-
-<dd>XML Actions:
-<ul>
- <li>&lt;x:set&gt; now outputs Number, String, and Boolean in cases where it
-     would previously output an ArrayList with one element of any of these
-     types. This change was called for by the community-draft spec.</li>
- <li>Output of x:parse is now supported as input to x:transform.</li>
- <li>The name for the TEI class for &lt;x:transform&gt; was corrected.</li>
- <li>&lt;x:set&gt; now does NOT accept body content.</li>
- <li>&lt;x:parse&gt; now trims its body content.</li>
- <li>&lt;x:parse&gt;'s 'domVar' attribute was renamed to 'varDom'; 'scopeDom'
-     was added. &lt;x:parse&gt; incorrectly required its 'var' attribute;
-     this has been fixed.</li>
- <li>&lt;x:transform&gt;'s 'xslt' attribute is now optional, which was the
-     intended behavior all along.</li>
- <li>&lt;x:parse&gt; single 'source' attribute was replaced by 'xmlText' and
-     'xmlUrl' for accepting generic objects (e.g., DOMs) and URLs
-     respectively.</li>
- <li>&lt;x:transform&gt;'s 'source' attribute was modified similarly to
-     &lt;x:parse&gt;'s, and its 'xslt' attribute was replaced by 'xsltText' and
-     'xsltUrl' similarly.</li>
-</ul>
-</dd>
-
-<dd>SQL Actions:
-<ul>
- <li>Changes since Beta 1:</li>
- <ul>
-  <li>Improved exception messages for &lt;sql:query&gt; and &lt;sql:update&gt;</li>
-  <li>relative path used for DataSource JNDI resource path</li>
-  <li>&lt;sql:dateParam&gt; added handling java.util.Date param values</li>
-  <li>Result.getRowsCount() changed to Result.getRowCount()</li>
-  <li>ColumnMetaData removed</li>
-  <li>Result.getColumnNames() method added</li>
-  <li>Result.getRows() returns SortedMap with a case insensitive Comparator</li>
-  <li>Driver tag changed to setDataSource with support for a dataSource, JNDI path to DataSource, or JDBC parameters</li>
- </ul>
- <li>Changes since EA3:</li>
- <ul>
- <li>Modified Result interface:</li>
-  <ul>
-   <li>getRows() returns a Map[] where rows[index].colName returns a column's value</li>
-   <li>getRowsByIndex() returns Object[][] where rowsByIndex[rowIndex][colIndex] returns a column's value</li>
-   <li>getMetaData() returns ColumnMetaData[] where metaData[colIndex] returns column's metadata</li>
-   <li>getRowCount() replaces getSize()</li>
-  </ul>
- <li>Removed Row, Column, ResultMetaData interfaces.</li>
- <li>&lt;sql:update&gt;: Made 'var' attribute optional.</li>
- <li>&lt;sql:query&gt;: Fixed 'startRow' indexing, and allow 'startRow' and
-     'maxRows' to take EL expressions.</li>
- <li>&lt;sql:transaction&gt;: Allow 'transactionIsolation' to take EL
-     expression.</li>
- <li>&lt;sql:query&gt;: 'startRow' follows 0-based indexing, as directed by
-     the working spec.</li>
- <li>If 'dataSource' is specified in &lt;sql:query&gt; or &lt;sql:update&gt;,
-     it must not be nested inside an &lt;sql:transaction&gt;, as directed by
-     the working spec.</li>
- <li>javax.servlet.jsp.jstl.sql.Row: get() methods now return the value of the
-     designated column as a Java object (as opposed to an instance of
-     javax.servlet.jsp.jstl.sql.Column), as directed by the working spec.</li>
- <li>Implemented 0-based indexing (as opposed to the JDBC 1-based indexing)
-     for Rows and Columns, in order to be consistent with the behavior of
-     other JSTL tags.</li>
- <li>Changed prefix from javax.servlet.jsp.jstl.sql.driver to
-     javax.servlet.jsp.jstl.sql for the 'driver', 'url', 'user', and
-     'password' context init parameters.</li>
- <li>&lt;sql:driver&gt;: Implementation now uses 'url' (as opposed to
-     'jdbcURL') attribute, to comply with Functional Description.</li>
- <li>&lt;sql:driver&gt;: Added support for 'scope' attribute.</li>
- <li>&lt;sql:param&gt;: Implementation now treats 'value' attribute as
-     optional, to comply with the Functional Description.</li>
- <li>Implementation of &lt;sql:query&gt; and &lt;sql:update&gt; now searches
-     for scoped DataSource object, and performs JNDI lookup if it is a
-     String.</li>
- <li>&lt;sql:transaction&gt;: Implementation now supports
-     'transactionIsolation' attribute.</li>
- <li>Clarified SQL documentation by including information on where to place
-     drivers as well as the examples Table structure.</li>
- </ul>
-</ul>
-</dd>
-
-<dd>I18N-Capable Formatting Actions:
-<ul>
- <li>Removed &lt;fmt:exception&gt; as well as
-     javax.servlet.jsp.jstl.fmt.LocalizableException.
- <li>&lt;fmt:message&gt;: Removed 'messageArgs' attribute.</li>
- <li>Removed &lt;fmt:messageFormat&gt;.</li>
- <li>Renamed &lt;fmt:messageArg&gt; to &lt;fmt:param&gt;.</li>
- <li>'dateStyle' and 'timeStyle' are now defined to be dynamic in
-     &lt;fmt:formatDate&gt; and &lt;fmt:parseDate&gt;.</li>
- <li>Renamed 'i18n' to 'fmt' in all scoped attribute and config parameter
-     names (for example, javax.servlet.jsp.jstl.i18n.basename now is
-     javax.servlet.jsp.jstl.fmt.basename).</li>
- <li>Moved LocaleSupport class from org.apache.taglibs.standard.extra.i18n to
-     javax.servlet.jsp.jstl.fmt.</li>
- <li>&lt;fmt:formatNumber&gt;: Added 'currencyCode', 'currencySymbol',
-     'groupingUsed', 'maxIntegerDigits', 'minIntegerDigits',
-     'maxFractionDigits', 'minFractionDigits' attributes.</li>
- <li>&lt;fmt:parseNumber&gt;: Added 'integerOnly' attribute.</li>
- <li>Aligned locale determination algorithm for I18N and formatting
-     locales. The algorithm now gives preference to a
-     &quot;language match&quot; over an &quot;exact match&quot; that might
-     have occurred later on in the list of
-     available locales. The only difference between the I18N and formatting
-     logic is that in the I18N case, the container's default locale is always
-     ignored, whereas in the formatting case, it is used only as a last
-     resort.</li>
- <li>Made 'key' optional in &lt;fmt:message&gt;, and 'value' optional in
-     &lt;fmt:formatNumber&gt;, &lt;fmt:parseNumber&gt;, and
-     &lt;fmt:parseDate&gt; (already used to be optional in &lt;fmt:param&gt;).
-     If missing, it is read from the tag's body content.</li>
- <li>&lt;fmt:message&gt;: Implemented constraint that if 'key' attribute is
-     present and action has body, its body content must be empty after
-     trimming.</li>
- <li>&lt;fmt:formatDate&gt; and &lt;fmt:parseDate&gt; now support both
-     java.lang.String and java.util.TimeZone values specified via the
-     'timeZone' attribute.</li>
- <li>Added javax.servlet.jsp.jstl.i18n.locale context configuration
-     parameter, which allows application locale to be specified in
-     deployment descriptor file.</li>
- <li>Removed 'parseLocale' attribute from &lt;fmt:formatDate&gt; and
-     &lt;fmt:formatNumber&gt;. If the value to be formatted is given as a
-     String, it is now always parsed using the default pattern of the
-     &quot;en&quot; locale. If the String is formatted with a different
-     pattern, it must first be parsed to a java.util.Date or java.lang.Number
-     with &lt;fmt:parseDate&gt; or &lt;fmt:parseNumber&gt;, and the result can
-     then be used with &lt;fmt:formatDate&gt; or &lt;fmt:formatNumber&gt;,
-     respectively.</li>
- <li>&lt;fmt:formatDate&gt; now is defined to have a body. If its 'value'
-     attribute is missing, and its body content is empty after trimming,
-     &lt;fmt:formatDate&gt; formats the current time and date.</li>
-</ul>
-</dd>
-
-<dt><b>12 Dec 2001</b></dt>
+<p><dt><b>12 Dec 2001</b></dt>
 <dd>JSTL 1.0 EA3 RI, version 1.0, introduced.  Version includes the following
 changes and additions:
 <ul>
@@ -253,18 +59,18 @@ major changes and additions:
 </ul>
 </dd>
 
-<dt><b>09 Oct 2001</b></dt>
+<p><dt><b>09 Oct 2001</b></dt>
 <dd>JSTL 1.0 EA1 RI, version 1.2, introduced.  This version includes support
 for ECMAScript.</dd>
 
-<dt><b>23 Jul 2001</b></dt>
+<p><dt><b>23 Jul 2001</b></dt>
 <dd>JSTL 1.0 EA1 RI, version 1.1, is released.  This version is compatible
 with Tomcat 4.0 B6 and Tomcat 4.0 release.</dd>
 
-<dt><b>10 Jul 2001</b></dt>
+<p><dt><b>10 Jul 2001</b></dt>
 <dd>JSTL 1.0 EA1 RI first made available for download.</dd>
 
-<dt><b>08 Jul 2001</b></dt>
+<p><dt><b>08 Jul 2001</b></dt>
 <dd>Initial version of JSTL RI contributed by JSR-052 Expert Group
     and imported into Jakarta CVS archive.</dd>
 
