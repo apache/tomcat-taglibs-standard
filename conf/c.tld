@@ -87,6 +87,8 @@
     </attribute>
   </tag>
 
+  <!-- No experimental expression languages now that we're out of
+       early-access and in Public Review.
   <tag>
     <name>expressionLanguage</name>
     <tag-class>
@@ -105,6 +107,7 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
+  -->
 
   <tag>
     <name>if</name>

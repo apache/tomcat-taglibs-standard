@@ -71,8 +71,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * library. Currently implements the following checks:</p>
  * 
  * <ul>
- *   <li>Expression syntax validation, with full support for
- *      &lt;jx:expressionLanguage&gt;</li>
+ *   <li>Expression syntax validation.
  *   <li>Tag bodies that must either be empty or non-empty given
  *      particular attributes.</li>
  * </ul>
@@ -116,7 +115,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
     private final String FORMAT_NUMBER = "formatNumber";
     private final String PARSE_NUMBER = "parseNumber";
     private final String PARSE_DATE = "parseDate";
-    private final String EXPLANG = "expressionLanguage";
+    // private final String EXPLANG = "expressionLanguage";
     private final String JSP_TEXT = "jsp:text";
 
     // attribute names
@@ -141,18 +140,11 @@ public class JstlFmtTLV extends JstlBaseTLV {
 
 	// parser state
 	private int depth = 0;
-	private Stack expressionLanguage = new Stack();
+	// private Stack expressionLanguage = new Stack();
 	private Stack messageDepths = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
-
-	public Handler() {
-	    // "install" the default evaluator
-	    String defaultEvaluator = JstlCoreTLVHelper.getEvaluatorName();
-	    if (defaultEvaluator != null)
-		expressionLanguage.push(defaultEvaluator);
-	}
 
 	// process under the existing context (state), then modify it
 	public void startElement(
@@ -172,31 +164,23 @@ public class JstlFmtTLV extends JstlBaseTLV {
 		fail(Resources.getMessage("TLV_ILLEGAL_BODY",
 					  lastElementName));
 
-	    // temporarily "install" new expression language if appropriate
-	    if (isTag(qn, EXPLANG))
-		expressionLanguage.push(a.getValue(EVAL));
-
-	    // validate expression syntax if we need to
-	    Set expAtts;
-	    if (qn.startsWith(prefix + ":")
-		    && (expAtts = (Set) config.get(ln)) != null) {
-		for (int i = 0; i < a.getLength(); i++) {
-		    String attName = a.getLocalName(i);
-		    if (expAtts.contains(attName)) {
-			if (expressionLanguage.empty())
-			    fail("Unexpected failure to determine "
-				+ "expression language.");
-			String vMsg =
-			    validateExpression(
-				(String) expressionLanguage.peek(),
-				ln,
-				attName,
-				a.getValue(i));
-			if (vMsg != null)
-			    fail(vMsg);
-		    }
-		}
-	    }
+            // validate expression syntax if we need to
+            Set expAtts;
+            if (qn.startsWith(prefix + ":")
+                    && (expAtts = (Set) config.get(ln)) != null) {
+                for (int i = 0; i < a.getLength(); i++) {
+                    String attName = a.getLocalName(i);
+                    if (expAtts.contains(attName)) {
+                        String vMsg =
+                            validateExpression(
+                                ln,
+                                attName,
+                                a.getValue(i));
+                        if (vMsg != null)
+                            fail(vMsg);
+                    }
+                }
+            }
 
             // validate attributes
             if (qn.startsWith(prefix + ":") && !hasNoInvalidScope(a))
@@ -271,10 +255,6 @@ public class JstlFmtTLV extends JstlBaseTLV {
 	    if (isTag(qn, MESSAGE)) {
 		messageDepths.pop();
 	    }
-
-	    // update language state
-	    if (isTag(qn, EXPLANG))
-		expressionLanguage.pop();
 
 	    // update our depth
 	    depth--;

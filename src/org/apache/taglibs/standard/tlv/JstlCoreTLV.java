@@ -71,8 +71,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * Currently implements the following checks:</p>
  * 
  * <ul>
- *   <li>Expression syntax validation, with full support for
- *      &lt;jx:expressionLanguage&gt;</li>
+ *   <li>Expression syntax validation.
  *   <li>Choose / when / otherwise constraints</li>
  *   <li>Tag bodies that must either be empty or non-empty given
  *      particular attributes.  (E.g., <set> cannot have a body when
@@ -116,7 +115,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
     private final String IMPORT = "import";
     private final String PARAM = "param";
     private final String URL_ENCODE = "urlEncode";
-    private final String EXPLANG = "expressionLanguage";
+    // private final String EXPLANG = "expressionLanguage";
     private final String JSP_TEXT = "jsp:text";
 
     // attribute names
@@ -144,19 +143,11 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	private int depth = 0;
 	private Stack chooseDepths = new Stack();
 	private Stack chooseHasOtherwise = new Stack();
-	private Stack expressionLanguage = new Stack();
 	private Stack importWithReaderDepths = new Stack();
 	private Stack importWithoutReaderDepths = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
-
-	public Handler() {
-	    // "install" the default evaluator
-	    String defaultEvaluator = JstlCoreTLVHelper.getEvaluatorName();
-	    if (defaultEvaluator != null)
-		expressionLanguage.push(defaultEvaluator);
-	}
 
 	// process under the existing context (state), then modify it
 	public void startElement(
@@ -175,10 +166,6 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    if (bodyIllegal)
 		fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
 
-	    // temporarily "install" new expression language if appropriate
-	    if (isTag(qn, EXPLANG))
-		expressionLanguage.push(a.getValue(EVAL));
-
 	    // validate expression syntax if we need to
 	    Set expAtts;
 	    if (qn.startsWith(prefix + ":")
@@ -186,12 +173,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		for (int i = 0; i < a.getLength(); i++) {
 		    String attName = a.getLocalName(i);
 		    if (expAtts.contains(attName)) {
-			if (expressionLanguage.empty())
-			    fail("Unexpected failure to determine "
-				+ "expression language.");
 			String vMsg =
 			    validateExpression(
-				(String) expressionLanguage.peek(),
 				ln,
 				attName,
 				a.getValue(i));
@@ -336,10 +319,6 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		else
 		    importWithoutReaderDepths.pop();
 	    }
-
-	    // update language state
-	    if (isTag(qn, EXPLANG))
-		expressionLanguage.pop();
 
 	    // update our depth
 	    depth--;

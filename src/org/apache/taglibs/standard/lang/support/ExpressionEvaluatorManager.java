@@ -61,102 +61,34 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 
 /**
+ * <p>A conduit to the JSTL EL.  Based on...</p>
+ * 
  * <p>An implementation of the ExpressionEvaluatorManager called for by
  * the JSTL rev1 draft.  This class is responsible for delegating a
  * request for expression evaluating to the particular, "active"
  * ExpressionEvaluator for the given point in the PageContext object
  * passed in.</p>
  *
- * <p><b>WARNING</b>:  This class supports experimentation for the EA2
- * release of JSTL; it is not expected to be part of the final RI or
- * specification.</p>
- *
  * @author Shawn Bayern
  */
 public class ExpressionEvaluatorManager { 
 
     //*********************************************************************
-    // Implementation overview
-
-    /*
-     * We use a simple static table that indexes the currently active
-     * ExpressionEvaluator (EE) by a PageContext object.  Our strategy
-     * is straightforward:  we keep a java.util.Stack of
-     * ExpressionEvaluator objects for each PageContext, and if the
-     * stack is empty, we use the context parameter called for by the
-     * spec.
-     */
-
-    //*********************************************************************
     // Constants
 
-    public static final String DEFAULT_EVALUATOR_CLASS =
-        "org.apache.taglibs.standard.lang.javascript.JavascriptExpressionEvaluator";
-    private static final String EVALUATOR_PARAMETER =
-        "javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass";
+    public static final String EVALUATOR_CLASS =
+        "org.apache.taglibs.standard.lang.jstl.Evaluator";
+    // private static final String EVALUATOR_PARAMETER =
+    //    "javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass";
 
     //*********************************************************************
     // Internal, static state
 
-    /** The static table */
-    private static HashMap eeTab = new HashMap();
-
-    /** A separate static table to avoid unnecessary duplication of objects */
     private static HashMap nameMap = new HashMap();
 
 
     //*********************************************************************
     // Public static methods
-
-    /**
-     * Establishes the given ExpressionEvaluator as the "active" evaluator,
-     * preserving the stack of formerly actiev evaluators underneath it.
-     */
-    public static synchronized void pushEvaluator(
-                PageContext pageContext,
-                String expressionEvaluatorName)
-            throws JspException {
-
-        // we'll use these throughout...
-        Stack s;
-        ExpressionEvaluator e;
-
-        // create a Stack if one doesn't exist for our page
-        Object oStack = eeTab.get(pageContext);
-        if (oStack == null) {
-            s = new Stack();
-            eeTab.put(pageContext, s);
-        } else
-            s = (Stack) oStack;
-
-        // "install" the evaluator
-        e = getEvaluatorByName(expressionEvaluatorName);
-        s.push(e);
-    }
-
-
-    /**
-     * Retires the most recent ExpressionEvaluator from "activity," restoring
-     * the one immediately preceding it on the stack.
-     */
-    public static synchronized void popEvaluator(PageContext pageContext) {
-
-        // sanity check
-        Object oStack = eeTab.get(pageContext);
-        if (oStack == null) {
-            throw new IllegalStateException("popEvaluator() called " +
-                "on empty stack");
-        }
-
-        // remove the most recent evaluator
-        Stack s = (Stack) oStack;
-        s.pop();
-
-        // if there are none left, forget about the stack
-        if (s.empty())
-            eeTab.remove(pageContext);
-    }
-
 
     /** 
      * Invokes the evaluate() method on the "active" ExpressionEvaluator
@@ -171,30 +103,7 @@ public class ExpressionEvaluatorManager {
     {
 
         // the evaluator we'll use
-        ExpressionEvaluator target;
-
-        // figure out what evaluator to use, under a static lock
-        synchronized (ExpressionEvaluatorManager.class) {
-            Object oStack = eeTab.get(pageContext);
-            if (oStack == null || ((Stack) oStack).empty()) {
-                String name = pageContext.getServletContext().
-                    getInitParameter(EVALUATOR_PARAMETER);
-		if (name == null) {
-		    target = getEvaluatorByName(DEFAULT_EVALUATOR_CLASS);
-		    //throw new JspException("request to evaluate " +
-                    //    "expression but no expression language defined " +
-                    //    "(expression: '" + expression + "'; " +
-                    //    "attribute name: '" + attributeName + "')");
-		    if (target == null)
-			throw new JspException(
-			    "error loading default evaluator");
-                } else
-		    target = getEvaluatorByName(name);
-            } else {
-                Stack s = (Stack) oStack;
-                target = (ExpressionEvaluator) s.peek();
-            }
-        }
+        ExpressionEvaluator target = getEvaluatorByName(EVALUATOR_CLASS);
 
         // delegate the call
         return (target.evaluate(

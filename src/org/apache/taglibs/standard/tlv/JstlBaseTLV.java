@@ -182,14 +182,15 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     // Protected utility functions
 
     // delegate validation to the appropriate expression language
-    protected String validateExpression(String evaluator,
+    protected String validateExpression(
 	    String elem, String att, String expr) {
 
 	// let's just use the cache kept by the ExpressionEvaluatorManager
 	ExpressionEvaluator current;
 	try {
 	    current =
-	        ExpressionEvaluatorManager.getEvaluatorByName(evaluator);
+	        ExpressionEvaluatorManager.getEvaluatorByName(
+                  ExpressionEvaluatorManager.EVALUATOR_CLASS);
 	} catch (JspException ex) {
 	    // (using JspException here feels ugly, but it's what EEM uses)
 	    return ex.getMessage();
