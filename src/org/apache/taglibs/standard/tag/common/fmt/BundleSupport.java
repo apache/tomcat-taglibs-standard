@@ -229,37 +229,36 @@ public abstract class BundleSupport extends BodyTagSupport {
 	Locale loc = null;
 	ResourceBundle ret = null;
 	    
-	try {
-
-	    loc = (Locale)
-		pageContext.findAttribute(LocaleSupport.LOCALE_ATTRIBUTE);
-	    if (loc != null) {
-		// use resource bundle with specified locale
-		ret = ResourceBundle.getBundle(basename, loc);
-	    } else {
-		// use resource bundle with best matching locale
-		ret = getBestMatch(pageContext, basename);
-		if (ret == null) {
-		    // no match available, check if fallback locale exists
-		    String fallback = (String)
-			pageContext.findAttribute(FALLBACK_LOCALE);
-		    if (fallback == null)
-			fallback = pageContext.getServletContext().
-			    getInitParameter(FALLBACK_LOCALE);
-		    if (fallback != null) {
-			// use resource bundle with fallback locale
-			loc = LocaleSupport.parseLocale(fallback, null);
-			ret = ResourceBundle.getBundle(basename, loc);
-		    } else {
-			// use resource bundle with runtime's default locale
-			ret = ResourceBundle.getBundle(basename);
-		    }
+	loc = (Locale)
+	    pageContext.findAttribute(LocaleSupport.LOCALE_ATTRIBUTE);
+	if (loc != null) {
+	    // use resource bundle with specified locale
+	    ret = getBundle(basename, loc);
+	} else {
+	    // use resource bundle with best matching locale
+	    ret = getBestMatch(pageContext, basename);
+	    if (ret == null) {
+		// no match available, check if fallback locale exists
+		String fallback = (String)
+		    pageContext.findAttribute(FALLBACK_LOCALE);
+		if (fallback == null)
+		    fallback = pageContext.getServletContext().
+			getInitParameter(FALLBACK_LOCALE);
+		if (fallback != null) {
+		    // use resource bundle with fallback locale
+		    loc = LocaleSupport.parseLocale(fallback, null);
+		    ret = getBundle(basename, loc);
+		} else {
+		    // use resource bundle with runtime's default locale
+		    ret = getBundle(basename, Locale.getDefault());
 		}
 	    }
+	}
 
+	if (ret != null) {
+	    // set response locale
 	    LocaleSupport.setResponseLocale(pageContext, ret.getLocale());
-
-	} catch (MissingResourceException mre) {
+	} else {
 	    ServletContext sc = pageContext.getServletContext();
 	    sc.log(Resources.getMessage("MISSING_RESOURCE_BUNDLE", basename));
 	}
@@ -317,15 +316,10 @@ public abstract class BundleSupport extends BodyTagSupport {
      * @param basename the resource bundle's base name
      *
      * @return the resource bundle with the given base name and best matching
-     * (browser-based) locale, or <tt>null</tt> if no match was found
-     *
-     * @throws MissingResourceException if no resource bundle with the given
-     * base name exists
+     * locale, or <tt>null</tt> if no match was found
      */
     private static ResourceBundle getBestMatch(PageContext pageContext,
-					       String basename)
-	throws MissingResourceException {
-	
+					       String basename) {
 	ResourceBundle ret = null;
 	
 	// Determine locale from client's browser settings.
@@ -333,10 +327,13 @@ public abstract class BundleSupport extends BodyTagSupport {
 	     enum.hasMoreElements(); ) {
 	    /*
 	     * If client request doesn't provide an Accept-Language header,
-	     * the returned Enumeration contains the runtime's default locale.
+	     * the returned locale Enumeration contains the runtime's default
+	     * locale, so it always contains at least one element.
 	     */
 	    Locale pref = (Locale) enum.nextElement();
-	    ResourceBundle bundle = ResourceBundle.getBundle(basename, pref);
+	    ResourceBundle bundle = getBundle(basename, pref);
+	    if (bundle == null)
+		continue;
 	    Locale avail = bundle.getLocale();
 	    if (pref.getLanguage().equals(avail.getLanguage())) {
 		if (pref.getCountry().length() > 0
@@ -350,6 +347,28 @@ public abstract class BundleSupport extends BodyTagSupport {
 		    }
 		}
 	    }
+	}
+
+	return ret;
+    }
+
+    /*
+     * Gets the resource bundle with the given base name and locale.
+     * 
+     * <p> This method simply calls
+     * <tt>java.util.ResourceBundle.getBundle()</tt> and catches the
+     * potential <tt>java.util.MissingResourceException</tt>.
+     *
+     * @param basename the resource bundle base name
+     * @param loc the requested locale
+     *
+     * @return the requested resource bundle, or <tt>null</tt> if not found
+     */
+    private static ResourceBundle getBundle(String basename, Locale loc) {
+	ResourceBundle ret = null;
+	try {
+	    ret = ResourceBundle.getBundle(basename, loc);
+	} catch (MissingResourceException mre) {
 	}
 
 	return ret;
