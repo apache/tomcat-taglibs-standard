@@ -189,8 +189,8 @@ public class ParseNumberTag extends ParseNumberSupport {
 	    obj = ExpressionUtil.evalNotNull(
 	        "parseNumber", "parseLocale", parseLocale_, String.class, this,
 		pageContext);
-	    if (obj != null) {
-		parseLocale = LocaleSupport.parseLocale((String) obj, null);
+	    if ((obj != null) && !"".equals((String) obj)) {
+		parseLocale = LocaleSupport.parseLocale((String) obj);
 	    }
 	}
 

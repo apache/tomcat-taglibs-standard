@@ -212,12 +212,14 @@ public class ParseDateTag extends ParseDateSupport {
 	        "timeZone", timeZone_, Object.class, this, pageContext);
 	}
 
-	// 'parseLocale' attribute (if specified, must not be null)
-	String pl = (String) ExpressionUtil.evalNotNull(
-	    "parseDate", "parseLocale", parseLocale_, String.class, this,
-	    pageContext);
-	if (pl != null) {
-	    parseLocale = LocaleSupport.parseLocale(pl, null);
+	// 'parseLocale' attribute
+	if (parseLocale_ != null) {
+	    String pl = (String) ExpressionUtil.evalNotNull(
+	        "parseDate", "parseLocale", parseLocale_, String.class, this,
+		pageContext);
+	    if ((pl != null) && !"".equals(pl)) {
+		parseLocale = LocaleSupport.parseLocale(pl);
+	    }
 	}
     }
 }

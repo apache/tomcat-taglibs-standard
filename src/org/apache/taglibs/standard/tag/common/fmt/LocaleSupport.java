@@ -125,7 +125,12 @@ public abstract class LocaleSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	Locale locale = parseLocale(value, variant);
+	Locale locale = null;
+	if ((value == null) || "".equals(value)) {
+	    locale = Locale.getDefault();
+	} else {
+	    locale = parseLocale(value, variant);
+	}
 	pageContext.setAttribute(LOCALE + "." + scope, locale,
 				 Util.getScope(scope));
 	setResponseLocale(pageContext, locale);
@@ -173,10 +178,6 @@ public abstract class LocaleSupport extends TagSupport {
 	String language = locale;
 	String country = null;
 	int index = -1;
-
-	if ((locale == null) || locale.equals("")) {
-	    return Locale.getDefault();
-	}
 
 	if (((index = locale.indexOf(HYPHEN)) > -1)
 	        || ((index = locale.indexOf(UNDERSCORE)) > -1)) {
@@ -322,18 +323,22 @@ public abstract class LocaleSupport extends TagSupport {
      */
     static Locale getLocale(PageContext pageContext, String name,
 			    boolean extend) {
+	String loc = null;
 	Locale ret = null;
+
 	if (extend) {
 	    ret = (Locale) Util.findAttribute(pageContext, name);
 	}
 	if (ret == null) {
-	    ret = parseLocale((String) pageContext.findAttribute(name));
+	    loc = (String) pageContext.findAttribute(name);
+	    if (loc != null) {
+		ret = parseLocale(loc);
+	    }
 	}
 	if (ret == null) {
-	    String loc =
-		pageContext.getServletContext().getInitParameter(name);
+	    loc = pageContext.getServletContext().getInitParameter(name);
 	    if (loc != null) {
-		ret = parseLocale(loc, null);
+		ret = parseLocale(loc);
 	    }
 	}
 

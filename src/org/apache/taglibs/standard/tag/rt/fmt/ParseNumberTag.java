@@ -89,7 +89,9 @@ public class ParseNumberTag extends ParseNumberSupport {
 
     // 'parseLocale' attribute
     public void setParseLocale(String parseLocale) throws JspTagException {
-        this.parseLocale = LocaleSupport.parseLocale(parseLocale, null);
+	if (! "".equals(parseLocale)) {
+	    this.parseLocale = LocaleSupport.parseLocale(parseLocale);
+	}
     }
 
     // 'integerOnly' attribute
