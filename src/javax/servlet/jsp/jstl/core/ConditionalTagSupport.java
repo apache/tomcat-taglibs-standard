@@ -165,7 +165,9 @@ public abstract class ConditionalTagSupport
      * @param scope Scope of the 'var' attribute
      */
     public void setScope(String scope) {
-	if (scope.equalsIgnoreCase("request"))
+	if (scope.equalsIgnoreCase("page"))
+	    this.scope = PageContext.PAGE_SCOPE;
+	else if (scope.equalsIgnoreCase("request"))
 	    this.scope = PageContext.REQUEST_SCOPE;
 	else if (scope.equalsIgnoreCase("session"))
 	    this.scope = PageContext.SESSION_SCOPE;
