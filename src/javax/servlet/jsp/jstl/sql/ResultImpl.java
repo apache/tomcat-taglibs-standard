@@ -80,6 +80,8 @@ class ResultImpl implements Result, Serializable {
     /**
      * This constructor reads the ResultSet and saves a cached
      * copy.
+     * It's important to note that this object will be serializable only
+     * if the objects returned by the ResultSet are serializable too.
      *
      * @param rs an open <tt>ResultSet</tt>, positioned before the first
      * row
