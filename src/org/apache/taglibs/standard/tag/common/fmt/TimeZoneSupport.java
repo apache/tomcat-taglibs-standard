@@ -74,7 +74,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     // Package-scoped constants
 
     static final String TIMEZONE_ATTRIBUTE =
-	"javax.servlet.jsp.jsptl.i18n.timeZone";
+	"javax.servlet.jsp.jstl.i18n.timeZone";
 
 
     //*********************************************************************
@@ -139,7 +139,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 	} else if (getBodyContent() == null) {
 	    /*
 	     * If no 'var' attribute and no body, we store our time zone
-	     * in the javax.servlet.jsp.jsptl.i18n.timeZone scoped attribute
+	     * in the javax.servlet.jsp.jstl.i18n.timeZone scoped attribute
 	     */
 	    pageContext.setAttribute(TIMEZONE_ATTRIBUTE, timeZone, scope);
 	}

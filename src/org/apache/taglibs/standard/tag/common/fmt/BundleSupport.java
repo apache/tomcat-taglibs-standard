@@ -75,21 +75,21 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Public constants
 
     public static final String DEFAULT_BASENAME =
-	"javax.servlet.jsp.jsptl.i18n.basename";
+	"javax.servlet.jsp.jstl.i18n.basename";
 
 
     //*********************************************************************
     // Package-scoped constants
 
     static final String DEFAULT_EXCEPTION_BASENAME =
-	"javax.servlet.jsp.jsptl.i18n.exception.basename";
+	"javax.servlet.jsp.jstl.i18n.exception.basename";
 
 
     //*********************************************************************
     // Private constants
 
     private static final String FALLBACK_LOCALE =
-	"javax.servlet.jsp.jsptl.i18n.fallbackLocale";
+	"javax.servlet.jsp.jstl.i18n.fallbackLocale";
 
 
     //*********************************************************************
@@ -173,7 +173,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 	} else if (getBodyContent() == null) {
 	    /*
 	     * If no 'var' attribute and no body, we store our base name
-	     * in the javax.servlet.jsp.jsptl.i18n.basename scoped attribute
+	     * in the javax.servlet.jsp.jstl.i18n.basename scoped attribute
 	     */
 	    pageContext.setAttribute(DEFAULT_BASENAME, basename, scope);
 	}
@@ -196,7 +196,7 @@ public abstract class BundleSupport extends BodyTagSupport {
      * <p> The resource bundle's locale is determined as follows:
      *
      * <ul>
-     * <li> If the <tt>javax.servlet.jsp.jsptl.i18n.locale</tt> scoped 
+     * <li> If the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> scoped 
      * attribute exists, use the locale stored as its value.
      *
      * <li> Otherwise, compare the client's preferred locales (in order of
@@ -204,7 +204,7 @@ public abstract class BundleSupport extends BodyTagSupport {
      * use the best matching locale.
      *
      * <li> If no match is found, use the fallback locale given by the
-     * <tt>javax.servlet.jsp.jsptl.i18n.fallbackLocale</tt> scoped attribute,
+     * <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt> scoped attribute,
      * if it exists.
      *
      * <li> Otherwise, use the runtime's default locale.

@@ -74,7 +74,7 @@ public abstract class LocaleSupport extends TagSupport {
     // Package-scoped constants
 
     static final String LOCALE_ATTRIBUTE =
-	"javax.servlet.jsp.jsptl.i18n.locale";
+	"javax.servlet.jsp.jstl.i18n.locale";
 
 
     //*********************************************************************
@@ -144,13 +144,13 @@ public abstract class LocaleSupport extends TagSupport {
      * <p> The formatting locale is determined as follows:
      *
      * <ul>
-     * <li> If the <tt>javax.servlet.jsp.jsptl.i18n.locale</tt> scoped
+     * <li> If the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> scoped
      * attribute exists, use its locale.
      *
      * <li> If the formatting action is enclosed within a <bundle> action, use
      * the locale of the parent bundle.
      *
-     * <li> If the <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> scoped
+     * <li> If the <tt>javax.servlet.jsp.jstl.i18n.basename</tt> scoped
      * attribute exists, retrieve the default base name from it and use the
      * best matching locale for the resource bundle with this base name.
      *
