@@ -140,8 +140,8 @@ public class ParamTag extends ParamSupport {
          */
 
 	name = (String) ExpressionUtil.evalNotNull(
-	    "import", "name", name_, String.class, this, pageContext);
+	    "param", "name", name_, String.class, this, pageContext);
 	value = ExpressionUtil.evalNotNull(
-	    "import", "value", value_, Object.class, this, pageContext);
+	    "param", "value", value_, Object.class, this, pageContext);
     }
 }
