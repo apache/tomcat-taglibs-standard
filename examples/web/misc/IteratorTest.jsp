@@ -38,5 +38,23 @@
   count: ${status.count} &#149; 
   item:  ${i}><br>
 </c:forEach>
+
+<h4>Iteration with begin > end</h4>
+<c:catch var="ex">
+  <c:forEach var="i" items="${customers}" begin="3" end="1" varStatus="status">
+    index: ${status.index} &#149; 
+    count: ${status.count} &#149; 
+    item:  ${i}<br>
+  </c:forEach>
+  <c:forTokens var="i" items="one,two,three,four,five" delims="," begin="3" end="1" varStatus="status">
+    index: ${status.index} &#149; 
+    count: ${status.count} &#149; 
+    item:  ${i}<br>
+  </c:forTokens>
+</c:catch>
+<c:if test="${ex != null}">
+  Exception: ${ex}
+</c:if>
+
 </body>
 </html>

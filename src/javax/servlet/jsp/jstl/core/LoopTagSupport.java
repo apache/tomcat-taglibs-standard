@@ -247,11 +247,10 @@ public abstract class LoopTagSupport
      * Begins iterating by processing the first item.
      */
     public int doStartTag() throws JspException {
-
-        // make sure 'begin' isn't greater than 'end'
-        if (end != -1 && begin > end)
-	    throw new JspTagException(
-		"begin (" + begin + ") > end (" + end + ")");
+        if (end != -1 && begin > end) {
+            // JSTL 1.1. We simply do not execute the loop.
+            return SKIP_BODY;
+        }
 
         // we're beginning a new iteration, so reset our counts (etc.)
         index = 0;
