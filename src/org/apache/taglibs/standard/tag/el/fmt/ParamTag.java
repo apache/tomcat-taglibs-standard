@@ -62,13 +62,13 @@ import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
- * <p>A handler for &lt;messageArg&gt; that accepts message arguments as
+ * <p>A handler for &lt;param&gt; that accepts message arguments as
  * Strings and evaluates them as expressions at runtime.</p>
  *
  * @author Jan Luehe
  */
 
-public class MessageArgTag extends MessageArgSupport {
+public class ParamTag extends ParamSupport {
 
     //*********************************************************************
     // 'Private' state (implementation details)
@@ -80,11 +80,11 @@ public class MessageArgTag extends MessageArgSupport {
     // Constructor
 
     /**
-     * Constructs a new MessageArgTag.  As with TagSupport, subclasses
+     * Constructs a new ParamTag.  As with TagSupport, subclasses
      * should not provide other constructors and are expected to call
      * the superclass constructor
      */
-    public MessageArgTag() {
+    public ParamTag() {
         super();
         init();
     }
@@ -139,6 +139,6 @@ public class MessageArgTag extends MessageArgSupport {
          */
 
 	value = ExpressionUtil.evalNotNull(
-	    "messageArg", "value", value_, Object.class, this, pageContext);
+	    "param", "value", value_, Object.class, this, pageContext);
     }
 }

@@ -73,9 +73,6 @@ import org.apache.taglibs.standard.resources.Resources;
  * <ul>
  *   <li>Expression syntax validation, with full support for
  *      &lt;jx:expressionLanguage&gt;</li>
- *   <li>Any <message> or <messageFormat> action with a 'messageArgs'
- *      attribute must not have any <messageArg> subtags as its direct
- *      children.</li>
  *   <li>Tag bodies that must either be empty or non-empty given
  *      particular attributes.</li>
  * </ul>
@@ -115,9 +112,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
     // tag names
     private final String LOCALE = "locale";
     private final String MESSAGE = "message";
-    private final String MESSAGE_ARG = "messageArg";
-    private final String MESSAGE_FORMAT = "messageFormat";
-    private final String MESSAGE_OR_MESSAGE_FORMAT = "message(Format)";
+    private final String MESSAGE_PARAM = "param";
     private final String FORMAT_NUMBER = "formatNumber";
     private final String PARSE_NUMBER = "parseNumber";
     private final String PARSE_DATE = "parseDate";
@@ -127,7 +122,6 @@ public class JstlFmtTLV extends JstlBaseTLV {
     // attribute names
     private final String EVAL = "evaluator";
     private final String MESSAGE_KEY = "key";
-    private final String MESSAGE_ARGS = "messageArgs";
     private final String VALUE = "value";
 
 
@@ -149,7 +143,6 @@ public class JstlFmtTLV extends JstlBaseTLV {
 	private int depth = 0;
 	private Stack expressionLanguage = new Stack();
 	private Stack messageDepths = new Stack();
-	private Stack messageHasMessageArgs = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
@@ -213,37 +206,22 @@ public class JstlFmtTLV extends JstlBaseTLV {
                 && !isTag(qn, LOCALE) && hasDanglingScope(a))
                 fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 
-	    // check invariants for <message> and <messageFormat>
-	    if (isTag(qn, MESSAGE_ARG) && messageChild()
-		&& ((Boolean) messageHasMessageArgs.peek()).booleanValue()) {
-		/*
-		 * we're a <messageArg> tag and the direct child of a
-		 * <message> or <messageFormat> tag with a 'messageArgs'
-		 * attribute, which is illegal
-		 */
-		fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
-	            prefix, MESSAGE_ARG, MESSAGE_OR_MESSAGE_FORMAT,
-					  MESSAGE_ARGS));
+	    // make sure <fmt:param> is nested inside <fmt:message>
+	    if (isTag(qn, MESSAGE_PARAM) && messageDepths.empty()) {
+		fail(Resources.getMessage("PARAM_OUTSIDE_MESSAGE"));
 	    }
 
-	    // now, modify state
+	    // Now, modify state
 
-	    /*
-	     * if we're in a <message> or <messageFormat>, record relevant
-	     * state
-	     */
-	    if (isTag(qn, MESSAGE) || isTag(qn, MESSAGE_FORMAT)) {
+	    // If we're in a <message>, record relevant state
+	    if (isTag(qn, MESSAGE)) {
 		messageDepths.push(new Integer(depth));
-		if (hasAttribute(a, MESSAGE_ARGS))
-		    messageHasMessageArgs.push(new Boolean(true));
-		else
-		    messageHasMessageArgs.push(new Boolean(false));
 	    }
 
 	    // set up a check against illegal attribute/body combinations
 	    bodyIllegal = false;
 	    bodyNecessary = false;
-	    if (isTag(qn, MESSAGE_ARG)
+	    if (isTag(qn, MESSAGE_PARAM)
 		    || isTag(qn, FORMAT_NUMBER)
 		    || isTag(qn, PARSE_NUMBER)
 		    || isTag(qn, PARSE_DATE)) {
@@ -252,8 +230,6 @@ public class JstlFmtTLV extends JstlBaseTLV {
 		else
 		    bodyNecessary = true;
 	    } else if (isTag(qn, MESSAGE) && !hasAttribute(a, MESSAGE_KEY)) {
-		bodyNecessary = true;
-	    } else if (isTag(qn, MESSAGE_FORMAT) && !hasAttribute(a, VALUE)) {
 		bodyNecessary = true;
 	    }
 
@@ -291,10 +267,9 @@ public class JstlFmtTLV extends JstlBaseTLV {
 		    lastElementName));
 	    bodyIllegal = false;	// reset: we've left the tag
 
-	    // update <message>- or <messageFormat>-related state
-	    if (isTag(qn, MESSAGE) || isTag(qn, MESSAGE_FORMAT)) {
+	    // update <message>-related state
+	    if (isTag(qn, MESSAGE)) {
 		messageDepths.pop();
-		messageHasMessageArgs.pop();
 	    }
 
 	    // update language state
@@ -303,12 +278,6 @@ public class JstlFmtTLV extends JstlBaseTLV {
 
 	    // update our depth
 	    depth--;
-	}
-
-	// are we directly under a <message> or <messageFormat>?
-	private boolean messageChild() {
-	    return (!messageDepths.empty()
-		&& (depth - 1) == ((Integer) messageDepths.peek()).intValue());
 	}
     }
 }

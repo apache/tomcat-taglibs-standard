@@ -81,7 +81,6 @@ public class MessageTag extends MessageSupport {
 
     private String key_;                         // stores EL-based property
     private String bundle_;		         // stores EL-based property
-    private String messageArgs_;	         // stores EL-based property
 
 
     //*********************************************************************
@@ -131,11 +130,6 @@ public class MessageTag extends MessageSupport {
         this.bundle_ = bundle_;
     }
 
-    // for EL-based attribute
-    public void setMessageArgs(String messageArgs_) {
-        this.messageArgs_ = messageArgs_;
-    }
-
 
     //*********************************************************************
     // Private (utility) methods
@@ -143,7 +137,7 @@ public class MessageTag extends MessageSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	key_ = bundle_ = messageArgs_ = null;
+	key_ = bundle_ = null;
     }
 
     // Evaluates expressions as necessary
@@ -160,10 +154,6 @@ public class MessageTag extends MessageSupport {
 	    "message", "key", key_, String.class, this, pageContext);
 	bundle = (ResourceBundle) ExpressionUtil.evalNotNull(
 	    "message", "bundle", bundle_, ResourceBundle.class, this,
-	    pageContext);
-
-	messageArgs = (Object[]) ExpressionUtil.evalNotNull(
-	    "message", "messageArgs", messageArgs_, OBJECT_ARRAY_CLASS, this,
 	    pageContext);
     }
 }

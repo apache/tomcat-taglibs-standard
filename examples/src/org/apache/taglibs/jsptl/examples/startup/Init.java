@@ -166,9 +166,12 @@ public class Init implements ServletContextListener {
 	/**
 	 * Message arguments for parametric replacement
 	 */
-	Object[] messageArgs =
-	    new Object[] { sce.getServletContext().getServerInfo() };
-	sce.getServletContext().setAttribute("messageArgs", messageArgs);
+	Object[] serverInfoArgs =
+	    new Object[] {
+		sce.getServletContext().getServerInfo(),
+		System.getProperty("java.version")
+	    };
+	sce.getServletContext().setAttribute("serverInfoArgs", serverInfoArgs);
     }
     
     //*********************************************************************

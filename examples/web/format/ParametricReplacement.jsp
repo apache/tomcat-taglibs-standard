@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/ea/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/ea/fmt" %>
 
 <html>
@@ -12,25 +13,29 @@
 <fmt:formatDate type="both" var="currentDateString"/>
 <fmt:parseDate value="$currentDateString" type="both" var="currentDate"/>
 <ul>
- <li> String argument:<br>
+ <li> Using single &lt;param&gt; with 'value' evaluating to String:<br>
   <fmt:message key="currentTime" bundle="$deBundle">
-   <fmt:messageArg value="$currentDateString"/>
+   <fmt:param value="$currentDateString"/>
   </fmt:message>
  
- <li> <tt>java.util.Date</tt> argument:<br>
+ <li> Using single &lt;param&gt; with 'value' evaluating to <tt>java.util.Date</tt>:<br>
   <fmt:message key="currentTime" bundle="$deBundle">
-   <fmt:messageArg value="$currentDate"/>
+   <fmt:param value="$currentDate"/>
   </fmt:message>
 
- <li> Using &lt;messageArg&gt; body:<br>
+ <li> Using single &lt;param&gt; with body:<br>
   <fmt:message key="currentTime" bundle="$deBundle">
-   <fmt:messageArg>
+   <fmt:param>
     <fmt:formatDate type="both"/>
-   </fmt:messageArg>
+   </fmt:param>
   </fmt:message>
 
- <li> Using 'messageArgs' attribute:<br>
-  <fmt:message key="serverInfo" bundle="$deBundle" messageArgs="$messageArgs"/>
+ <li> Using multiple parameters:<br>
+  <fmt:message key="serverInfo" bundle="$deBundle">
+   <c:forEach var="arg" items="$serverInfoArgs">
+    <fmt:param value="$arg"/>
+   </c:forEach>
+  </fmt:message>
 </ul>
 
 </body>

@@ -53,32 +53,68 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.rt.fmt;
+package org.apache.taglibs.standard.tag.common.fmt;
 
-import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.fmt.*;
+import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * <p>A handler for &lt;messageFormat&gt; that supports rtexprvalue-based
- * attributes.</p>
+ * Support for tag handlers for &lt;param&gt;, the message argument
+ * subtag in JSTL 1.0 which supplies an argument for parametric replacement
+ * to its parent &lt;message&gt; tag.
  *
+ * @see MessageSupport
  * @author Jan Luehe
  */
 
-public class MessageFormatTag extends MessageFormatSupport {
+public abstract class ParamSupport extends BodyTagSupport {
 
     //*********************************************************************
-    // Accessor methods
+    // Protected state
 
-    // for tag attribute
-    public void setValue(String value) throws JspTagException {
-        this.value = value;
+    protected Object value;                          // 'value' attribute
+
+
+    //*********************************************************************
+    // Constructor and initialization
+
+    public ParamSupport() {
+	super();
+	init();
     }
 
-    // for tag attribute
-    public void setMessageArgs(Object[] messageArgs) throws JspTagException {
-        this.messageArgs = messageArgs;
+    private void init() {
+	value = null;
+    }
+
+
+    //*********************************************************************
+    // Tag logic
+
+    // Supply our value to our parent <message> tag
+    public int doEndTag() throws JspException {
+	Tag parent = findAncestorWithClass(this, MessageSupport.class);
+	if (parent == null) {
+	    throw new JspTagException(Resources.getMessage(
+                            "PARAM_OUTSIDE_MESSAGE"));
+	}
+
+	// get argument from 'value' attribute or body, as appropriate
+	if (value == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (value = bcs.trim()).equals(""))
+                throw new JspTagException(
+                    Resources.getMessage("PARAM_NO_VALUE"));
+	}
+
+	((MessageSupport) parent).addParam(value);
+
+	return EVAL_PAGE;
+    }
+
+    // Releases any resources we may have (or inherit)
+    public void release() {
+	init();
     }
 }

@@ -53,73 +53,27 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.common.fmt;
+package org.apache.taglibs.standard.tag.rt.fmt;
 
+import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
- * Support for tag handlers for &lt;messageArg&gt;, the message argument
- * subtag in JSTL 1.0 which supplies an argument for parametric replacement
- * to its parent &lt;message&gt; or &lt;messageFormat&gt; tag.
+ * <p>A handler for &lt;param&gt; that supports rtexprvalue-based
+ * message arguments.</p>
  *
- * @see MessageSupport
  * @author Jan Luehe
  */
 
-public abstract class MessageArgSupport extends BodyTagSupport {
+public class ParamTag extends ParamSupport {
 
     //*********************************************************************
-    // Protected state
+    // Accessor methods
 
-    protected Object value;                          // 'value' attribute
-
-
-    //*********************************************************************
-    // Constructor and initialization
-
-    public MessageArgSupport() {
-	super();
-	init();
-    }
-
-    private void init() {
-	value = null;
-    }
-
-
-    //*********************************************************************
-    // Tag logic
-
-    // Supply our value to our parent <message> or <messageFormat> tag
-    public int doEndTag() throws JspException {
-	Tag parent = findAncestorWithClass(this, MessageSupport.class);
-	if (parent == null) {
-	    parent = findAncestorWithClass(this, MessageFormatSupport.class);
-	    if (parent == null)
-		throw new JspTagException(Resources.getMessage(
-                    "MESSAGE_ARG_OUTSIDE_MESSAGE_AND_MESSAGE_FORMAT"));
-	}
-
-	// get argument from 'value' attribute or body, as appropriate
-	if (value == null) {
-            String bcs = getBodyContent().getString();
-            if ((bcs == null) || (value = bcs.trim()).equals(""))
-                throw new JspTagException(
-                    Resources.getMessage("MESSAGE_ARG_NO_VALUE"));
-	}
-
-	if (parent instanceof MessageSupport)
-	    ((MessageSupport) parent).addMessageArg(value);
-	else
-	    ((MessageFormatSupport) parent).addMessageArg(value);
-
-	return EVAL_PAGE;
-    }
-
-    // Releases any resources we may have (or inherit)
-    public void release() {
-	init();
+    // for tag attribute
+    public void setValue(Object value) throws JspTagException {
+        this.value = value;
     }
 }

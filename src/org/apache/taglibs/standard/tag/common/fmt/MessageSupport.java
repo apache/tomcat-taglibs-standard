@@ -84,7 +84,6 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     protected String key;                         // 'key' attribute
     protected ResourceBundle bundle;              // 'bundle' attribute
-    protected Object[] messageArgs;               // 'messageArgs' attribute
 
 
     //*********************************************************************
@@ -92,7 +91,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     private String var;                           // 'var' attribute
     private int scope;                            // 'scope' attribute
-    private List arguments;
+    private List params;
 
 
     //*********************************************************************
@@ -100,7 +99,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     public MessageSupport() {
 	super();
-	arguments = new ArrayList();
+	params = new ArrayList();
 	init();
     }
 
@@ -108,8 +107,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 	key = var = null;
 	bundle = null;
 	scope = PageContext.PAGE_SCOPE;
-	messageArgs = null;
-	arguments.clear();
+	params.clear();
     }
 
 
@@ -131,10 +129,10 @@ public abstract class MessageSupport extends BodyTagSupport {
     /**
      * Adds an argument (for parametric replacement) to this tag's message.
      *
-     * @see MessageArgSupport
+     * @see ParamSupport
      */
-    public void addMessageArg(Object arg) {
-	arguments.add(arg);
+    public void addParam(Object arg) {
+	params.add(arg);
     }
 
 
@@ -181,9 +179,8 @@ public abstract class MessageSupport extends BodyTagSupport {
 		    key = prefix + key;
 		message = bundle.getString(key);
 		// Perform parametric replacement if required
-		if (!arguments.isEmpty())
-		    messageArgs = arguments.toArray();
-		if (messageArgs != null) {
+		if (!params.isEmpty()) {
+		    Object[] messageArgs = params.toArray();
 		    MessageFormat formatter = new MessageFormat("");
 		    formatter.setLocale(bundle.getLocale());
 		    formatter.applyPattern(message);
