@@ -71,7 +71,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Justyna Horwat
  */
 
-public abstract class DateParamTagSupport extends BodyTagSupport {
+public abstract class DateParamTagSupport extends TagSupport {
 
     //*********************************************************************
     // Private constants

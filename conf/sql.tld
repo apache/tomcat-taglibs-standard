@@ -150,7 +150,7 @@
   <tag>
     <name>dateParam</name>
     <tag-class>org.apache.taglibs.standard.tag.el.sql.DateParamTag</tag-class>
-    <body-content>JSP</body-content>
+    <body-content>empty</body-content>
     <description>
         Sets a parameter in an SQL statement to the specified java.util.Date val
 ue.
