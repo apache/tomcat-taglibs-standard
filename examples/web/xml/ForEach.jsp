@@ -34,7 +34,7 @@
 <x:forEach select="$document//a">
   -> 
   <x:if select=".//d">
-    &ltd&gt; element present
+    &lt;d&gt; element present
   </x:if>
   <br />
 </x:forEach>
