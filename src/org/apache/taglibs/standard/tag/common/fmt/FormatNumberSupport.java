@@ -187,15 +187,31 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	    }
 	}
 
-	// Create formatter 
-	Locale locale = SetLocaleSupport.getFormattingLocale(
+	// Determine formatting locale
+	Locale loc = SetLocaleSupport.getFormattingLocale(
             pageContext,
 	    this,
 	    true,
 	    NumberFormat.getAvailableLocales());
 
-	if (locale != null) {
-	    NumberFormat formatter = createFormatter(locale);
+	if (loc != null) {
+	    // Create formatter 
+	    NumberFormat formatter = null;
+	    if ((pattern != null) && !pattern.equals("")) {
+		// if 'pattern' is specified, 'type' is ignored
+		DecimalFormatSymbols symbols = new DecimalFormatSymbols(loc);
+		formatter = new DecimalFormat(pattern, symbols);
+	    } else {
+		formatter = createFormatter(loc);
+	    }
+	    if (((pattern != null) && !pattern.equals(""))
+		    || CURRENCY.equalsIgnoreCase(type)) {
+		try {
+		    setCurrency(formatter);
+		} catch (Exception e) {
+		    throw new JspTagException(e.getMessage());
+		}
+	    }
 	    configureFormatter(formatter);
 	    formatted = formatter.format(value);
 	} else {
@@ -230,23 +246,8 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	
 	if ((type == null) || NUMBER.equalsIgnoreCase(type)) {
 	    formatter = NumberFormat.getNumberInstance(loc);
-	    if (pattern != null) {
-		/*
-		 * Let potential ClassCastException propagate up (will almost
-		 * never happen)
-		 */
-		DecimalFormat df = (DecimalFormat) formatter;
-		df.applyPattern(pattern);
-	    }
 	} else if (CURRENCY.equalsIgnoreCase(type)) {
 	    formatter = NumberFormat.getCurrencyInstance(loc);
-	    if ((currencyCode != null) || (currencySymbol != null)) {
-		try {
-		    setCurrency(formatter);
-		} catch (Exception e) {
-		    throw new JspTagException(e.getMessage());
-		}
-	    }
 	} else if (PERCENT.equalsIgnoreCase(type)) {
 	    formatter = NumberFormat.getPercentInstance(loc);
 	} else {
@@ -257,6 +258,11 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	return formatter;
     }
 
+    /*
+     * Applies the 'groupingUsed', 'maxIntegerDigits', 'minIntegerDigits',
+     * 'maxFractionDigits', and 'minFractionDigits' attributes to the given
+     * formatter.
+     */
     private void configureFormatter(NumberFormat formatter) {
 	if (groupingUsedSpecified)
 	    formatter.setGroupingUsed(isGroupingUsed);
@@ -298,9 +304,13 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
      * <1.4        EUR           \u20AC       \u20AC
      * >=1.4       EUR           \u20AC       Locale's currency symbol for Euro
      */
-    private void setCurrency(NumberFormat currencyFormat) throws Exception {
+    private void setCurrency(NumberFormat formatter) throws Exception {
 	String code = null;
 	String symbol = null;
+
+	if ((currencyCode == null) && (currencySymbol == null)) {
+	    return;
+	}
 
 	if ((currencyCode != null) && (currencySymbol != null)) {
 	    if (currencyClass != null)
@@ -335,13 +345,13 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	    Class numberFormatClass = Class.forName("java.text.NumberFormat");
 	    m = numberFormatClass.getMethod("setCurrency", paramTypes);
 	    methodArgs[0] = currency;
-	    m.invoke(currencyFormat, methodArgs);
+	    m.invoke(formatter, methodArgs);
 	} else {
 	    /*
 	     * Let potential ClassCastException propagate up (will almost
 	     * never happen)
 	     */
-	    DecimalFormat df = (DecimalFormat) currencyFormat;
+	    DecimalFormat df = (DecimalFormat) formatter;
 	    DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
 	    dfs.setCurrencySymbol(symbol);
 	    df.setDecimalFormatSymbols(dfs);
