@@ -41,9 +41,6 @@
             attributes need their syntax validated.
         </description>
      </init-param>
-    <description>
-	Provides core validation features for JSTL tags.
-    </description>
   </validator>
 
   <tag>
