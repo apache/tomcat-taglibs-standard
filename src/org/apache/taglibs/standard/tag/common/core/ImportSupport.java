@@ -161,8 +161,6 @@ public abstract class ImportSupport extends BodyTagSupport
 	    }
 	} catch (IOException ex) {
 	    throw new JspTagException(ex.toString());
-	} catch (ServletException ex) {
-	    throw new JspTagException(ex.toString());
 	}
 
 	return EVAL_BODY_INCLUDE;
@@ -182,8 +180,6 @@ public abstract class ImportSupport extends BodyTagSupport
 	    }
 	    return EVAL_PAGE;
         } catch (IOException ex) {
-	    throw new JspTagException(ex.toString());
-        } catch (ServletException ex) {
 	    throw new JspTagException(ex.toString());
         }
     }
@@ -257,8 +253,7 @@ public abstract class ImportSupport extends BodyTagSupport
      * somewhat cute...)
      */
 
-    private String acquireString() throws IOException, JspTagException,
-	    ServletException {
+    private String acquireString() throws IOException, JspException {
 	if (isAbsoluteUrl) {
 	    // for absolute URLs, delegate to our peer
 	    BufferedReader r = new BufferedReader(acquireReader());
@@ -306,27 +301,49 @@ public abstract class ImportSupport extends BodyTagSupport
 	    // from this context, get a dispatcher
 	    RequestDispatcher rd =
                 c.getRequestDispatcher(stripSession(targetUrl));
+	    if (rd == null)
+		throw new JspTagException(stripSession(targetUrl));
 
 	    // include the resource, using our custom wrapper
 	    ImportResponseWrapper irw = 
 		new ImportResponseWrapper(
 		    (HttpServletResponse) pageContext.getResponse());
-	    rd.include(pageContext.getRequest(), irw);
+
+	    // spec mandates specific error handling form include()
+	    try {
+	        rd.include(pageContext.getRequest(), irw);
+	    } catch (IOException ex) {
+		throw new JspException(ex);
+	    } catch (RuntimeException ex) {
+		throw new JspException(ex);
+	    } catch (ServletException ex) {
+		Throwable rc = ex.getRootCause();
+		if (rc == null)
+		    throw new JspException(ex);
+		else
+		    throw new JspException(rc);
+	    }
+
+	    // disallow inappropriate response codes per JSTL spec
+	    if (irw.getStatus() < 200 || irw.getStatus() > 299) {
+		throw new JspTagException(irw.getStatus() + " " +
+		    stripSession(targetUrl));
+	    }
 
 	    // recover the response String from our wrapper
 	    return irw.getString();
 	}
     }
 
-    private Reader acquireReader() throws IOException, ServletException,
-	    JspTagException {
+    private Reader acquireReader() throws IOException, JspException {
 	if (!isAbsoluteUrl) {
 	    // for relative URLs, delegate to our peer
 	    return new StringReader(acquireString());
 	} else {
 	    try {
 	        // handle absolute URLs ourselves, using java.net.URL
-	        URL u = new URL(targetUrl());
+		String target = targetUrl();
+	        URL u = new URL(target);
                 URLConnection uc = u.openConnection();
                 InputStream i = uc.getInputStream();
 
@@ -341,11 +358,20 @@ public abstract class ImportSupport extends BodyTagSupport
 		    else
 		        r = new InputStreamReader(i, DEFAULT_ENCODING);
 	        }
+
+		// check response code for HTTP URLs before returning, per spec,
+		// before returning
+		if (uc instanceof HttpURLConnection) {
+		    int status = ((HttpURLConnection) uc).getResponseCode();
+		    if (status != 200)
+			throw new JspTagException(status + " " + target);
+		}
+
 	        return r;
 	    } catch (IOException ex) {
-		throw new JspTagException(
-		    Resources.getMessage("IMPORT_IO", targetUrl())
-		    + " [" + ex + "]");
+		throw new JspException(ex);
+	    } catch (RuntimeException ex) {  // because the spec makes us
+		throw new JspException(ex);
 	    }
 	}
     }
@@ -396,6 +422,9 @@ public abstract class ImportSupport extends BodyTagSupport
 
 	/** 'True if getOutputStream() was called; false otherwise. */
 	private boolean isStreamUsed;
+
+	/** The HTTP status set by the target. */
+	private int status = 200;
 	
 	//************************************************************
 	// Constructor and methods
@@ -425,12 +454,20 @@ public abstract class ImportSupport extends BodyTagSupport
 
 	/** Has no effect. */
 	public void setContentType(String x) {
-	   // ignore
+	    // ignore
 	}
 
 	/** Has no effect. */
 	public void setLocale(Locale x) {
-	   // ignore
+	    // ignore
+	}
+
+	public void setStatus(int status) {
+	    this.status = status;
+	}
+
+	public int getStatus() {
+	    return status;
 	}
 
 	/** 
