@@ -21,6 +21,7 @@
 <hr>
 
 <sql:transaction dataSource="$example">
+
   <sql:update var="newTable" dataSource="$example">
     create table mytable (
       nameid int not null,
@@ -28,7 +29,6 @@
       constraint pk_mytable primary key (nameid)
     )
   </sql:update>
-</sql:transaction>
 
 <h2>Inserting three rows into table</h2>
   <sql:update var="updateCount" dataSource="$example">
@@ -44,20 +44,22 @@
 <p>DONE: Inserting three rows into table</p>
 
 
-<sql:query var="deejays" dataSource="$example">
-  SELECT * FROM mytable
-</sql:query>
+  <sql:query var="deejays" dataSource="$example">
+    SELECT * FROM mytable
+  </sql:query>
+
+</sql:transaction>
 
 
 <table border="1">
   <tr>
-    <c:forEach var="metaData" begin="1" items="$deejays.metaData.columns">
+    <c:forEach var="metaData" items="$deejays.metaData.columns">
       <th><c:expr value="$metaData.name"/> </th>
     </c:forEach>
   </tr>
-  <c:forEach var="rows" begin="1" items="$deejays.rows">
+  <c:forEach var="rows" items="$deejays.rows">
     <tr>
-      <c:forEach var="column" begin="1" items="$rows.columns">
+      <c:forEach var="column" items="$rows.columns">
         <td><c:expr value="$column"/></td>
       </c:forEach>
     </tr>
@@ -80,13 +82,13 @@
 
 <table border="1">
   <tr>
-    <c:forEach var="metaData" begin="1" items="$deejays.metaData.columns">
+    <c:forEach var="metaData" items="$deejays.metaData.columns">
       <th><c:expr value="$metaData.name"/> </th>
     </c:forEach>
   </tr>
-  <c:forEach var="rows" begin="1" items="$deejays.rows">
+  <c:forEach var="rows" items="$deejays.rows">
     <tr>
-      <c:forEach var="column" begin="1" items="$rows.columns">
+      <c:forEach var="column" items="$rows.columns">
         <td><c:expr value="$column"/></td>
       </c:forEach>
     </tr>

@@ -23,6 +23,7 @@
 />
 
 <sql:transaction dataSource="$example">
+
   <sql:update var="newTable" dataSource="$example">
     create table mytable (
       nameid int not null,
@@ -46,14 +47,14 @@
       <sql:param value="$newName"/>
   </sql:update>
 
-</sql:transaction>
-
 <sql:query var="deejay" dataSource="$example">
   SELECT * FROM mytable
 </sql:query>
 
+</sql:transaction>
+
 <table border="1">
-  <c:forEach var="rows" begin="1" items="$deejay.rows">
+  <c:forEach var="rows" items="$deejay.rows">
     <tr>
       <td><c:expr value="$rows.get('nameid')"/></td>
       <td><c:expr value="$rows.get('name')"/></td>

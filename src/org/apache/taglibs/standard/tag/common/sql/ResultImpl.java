@@ -66,6 +66,7 @@ import javax.servlet.jsp.jstl.sql.*;
  * instance for each column in the row. 
  *
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 
 public class ResultImpl implements Result {
@@ -96,7 +97,7 @@ public class ResultImpl implements Result {
 	while (rs.next()) {
             beginRow++;
             if (beginRow >= startRow) {
-                Column[] columns = new ColumnImpl[noOfColumns + 1];
+                Column[] columns = new ColumnImpl[noOfColumns];
 
 	        // JDBC uses 1 as the lowest index!
 	        for (int i = 1; i <= noOfColumns; i++) {
@@ -104,7 +105,8 @@ public class ResultImpl implements Result {
 		    if (rs.wasNull()) {
 		        value = null;
 		    }
-                    columns[i] = new ColumnImpl(value, resultMD.get(i));
+                    // 0-based indexing to be consistent w/JSTL 
+                    columns[i-1] = new ColumnImpl(value, resultMD.get(i-1));
 	        }
             Row currentRow = new RowImpl(columns);
             rows.add(currentRow);
@@ -123,12 +125,13 @@ public class ResultImpl implements Result {
             return null;
         }
 
-        Row[] rowArray = new Row[rows.size() + 1];
+        Row[] rowArray = new Row[rows.size()];
         int index = 0;
 	Iterator i = rows.iterator();
 	while (i.hasNext()) {
-            index++;
+            // 0-based indexing to be consistent w/JSTL 
             rowArray[index] = (Row) i.next();
+            index++;
 	}
         return rowArray;
     }

@@ -64,6 +64,7 @@ import javax.servlet.jsp.jstl.sql.*;
  * Used by the <code>ResultImpl</code> to cache the result set </p>
  *
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 
 public class RowImpl implements Row {
@@ -87,7 +88,7 @@ public class RowImpl implements Row {
      * @return the Column object of the named column
      */
     public Column get(String name) {
-	for (int i=1; i < columns.length; i++) {
+	for (int i=0; i < columns.length; i++) {
             try {
 	        if (name.equalsIgnoreCase(columns[i].getName())) {
 	            return columns[i];
@@ -107,7 +108,7 @@ public class RowImpl implements Row {
      * @return the Column object of the indexed column
      */
     public Column get(int index) {
-        if ((index > 0) && (index <= columns.length)) {
+        if ((index >= 0) && (index < columns.length)) {
 	    return columns[index];
         }
         return null;

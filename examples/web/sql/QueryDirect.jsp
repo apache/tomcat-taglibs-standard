@@ -20,6 +20,7 @@
 />
 
 <sql:transaction dataSource="$example">
+
   <sql:update var="newTable" dataSource="$example">
     create table mytable (
       nameid int not null,
@@ -37,16 +38,20 @@
   <sql:update var="updateCount" dataSource="$example">
     INSERT INTO mytable VALUES (3,'Paul van Dyk')
   </sql:update>
+
+  <sql:query var="deejays" dataSource="$example">
+    SELECT * FROM mytable
+  </sql:query>
+
 </sql:transaction>
-
-
-<sql:query var="deejays" dataSource="$example">
-  SELECT * FROM mytable
-</sql:query>
 
 <hr>
 
 <h2>Using the Row index and Column name</h2>
+Row[0].get('nameid'): <c:expr value="$deejays.rows[0].get('nameid')" />
+<br>
+Row[0].get('name'): <c:expr value="$deejays.rows[0].get('name')" />
+<br>
 Row[1].get('nameid'): <c:expr value="$deejays.rows[1].get('nameid')" />
 <br>
 Row[1].get('name'): <c:expr value="$deejays.rows[1].get('name')" />
@@ -55,49 +60,45 @@ Row[2].get('nameid'): <c:expr value="$deejays.rows[2].get('nameid')" />
 <br>
 Row[2].get('name'): <c:expr value="$deejays.rows[2].get('name')" />
 <br>
-Row[3].get('nameid'): <c:expr value="$deejays.rows[3].get('nameid')" />
-<br>
-Row[3].get('name'): <c:expr value="$deejays.rows[3].get('name')" />
-<br>
 
 <hr>
 
 <h2>Using the Row index and Column object</h2>
+Row[0]Cols[0]: <c:expr value="$deejays.rows[0].columns[0]" />
+<br>
+Row[0]Cols[1]: <c:expr value="$deejays.rows[0].columns[1]" />
+<br>
+Row[1]Cols[0]: <c:expr value="$deejays.rows[1].columns[0]" />
+<br>
 Row[1]Cols[1]: <c:expr value="$deejays.rows[1].columns[1]" />
 <br>
-Row[1]Cols[2]: <c:expr value="$deejays.rows[1].columns[2]" />
+Row[2]Cols[0]: <c:expr value="$deejays.rows[2].columns[0]" />
 <br>
 Row[2]Cols[1]: <c:expr value="$deejays.rows[2].columns[1]" />
-<br>
-Row[2]Cols[2]: <c:expr value="$deejays.rows[2].columns[2]" />
-<br>
-Row[3]Cols[1]: <c:expr value="$deejays.rows[3].columns[1]" />
-<br>
-Row[3]Cols[2]: <c:expr value="$deejays.rows[3].columns[2]" />
 <br>
 
 <hr>
 
 <h2>Using the Row and Column indexes</h2>
+Row[0].get(0): <c:expr value="$deejays.rows[0].get(0)" />
+<br>
+Row[0].get(1): <c:expr value="$deejays.rows[0].get(1)" />
+<br>
+Row[1].get(0): <c:expr value="$deejays.rows[1].get(0)" />
+<br>
 Row[1].get(1): <c:expr value="$deejays.rows[1].get(1)" />
 <br>
-Row[1].get(2): <c:expr value="$deejays.rows[1].get(2)" />
+Row[2].get(0): <c:expr value="$deejays.rows[2].get(0)" />
 <br>
 Row[2].get(1): <c:expr value="$deejays.rows[2].get(1)" />
-<br>
-Row[2].get(2): <c:expr value="$deejays.rows[2].get(2)" />
-<br>
-Row[3].get(1): <c:expr value="$deejays.rows[3].get(1)" />
-<br>
-Row[3].get(2): <c:expr value="$deejays.rows[3].get(2)" />
 <br>
 
 <hr>
 
 <h2>Getting the MetaData from the Column Object</h2>
-Col[1]MetaData: <c:expr value="$deejays.metaData.columns[1].name" />
+Col[0]MetaData: <c:expr value="$deejays.metaData.columns[0].name" />
 <br>
-Col[2]MetaData: <c:expr value="$deejays.metaData.columns[2].name" />
+Col[1]MetaData: <c:expr value="$deejays.metaData.columns[1].name" />
 
 <sql:update var="newTable" dataSource="$example">
   drop table mytable

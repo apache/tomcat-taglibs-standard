@@ -64,6 +64,7 @@ import javax.servlet.jsp.jstl.sql.*;
  * of this class are used by the <code>ResultImpl</code> instances.</p>
  *
  * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 public class ResultMetaDataImpl implements ResultMetaData {
     private ColumnMetaData[] columnMD;
@@ -76,8 +77,7 @@ public class ResultMetaDataImpl implements ResultMetaData {
      */
     public ResultMetaDataImpl (ResultSetMetaData rsmd) throws SQLException {
 	int noOfColumns = rsmd.getColumnCount();
-	// JDBC uses 1 as the lowest index!
-	columnMD = new ColumnMetaData[noOfColumns + 1];
+	columnMD = new ColumnMetaData[noOfColumns];
 	getMetaDataCache(rsmd);
     }
 
@@ -90,7 +90,7 @@ public class ResultMetaDataImpl implements ResultMetaData {
      * @return the ColumnMetaData object of the named column
      */
     public ColumnMetaData get(String name) {
-        for (int i = 1; i <= columnMD.length; i++) {
+        for (int i = 0; i < columnMD.length; i++) {
             try {
 	        if (name.equals(columnMD[i].getName())) {
 	            return columnMD[i];
@@ -110,7 +110,7 @@ public class ResultMetaDataImpl implements ResultMetaData {
      * @return the ColumnMetaData object of the indexed column
      */
     public ColumnMetaData get(int index) {
-        if ((index > 0) && (index <= columnMD.length)) {
+        if ((index >= 0) && (index < columnMD.length)) {
             return (ColumnMetaData) columnMD[index];
         }
         return null;
@@ -256,7 +256,8 @@ public class ResultMetaDataImpl implements ResultMetaData {
 	    catch (SQLException e) {
 		((ColumnMetaDataImpl)md).setClassNameException(e);
 	    }
-	    columnMD[i] = md;
+            // 0-based indexing to be consistent w/JSTL
+	    columnMD[i-1] = md;
 	}
 	return;
     }
