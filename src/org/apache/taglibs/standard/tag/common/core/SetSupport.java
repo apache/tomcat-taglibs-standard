@@ -168,6 +168,11 @@ public class SetSupport extends BodyTagSupport {
                     for (int i = 0; i < pd.length; i++) {
                         if (pd[i].getName().equals(property)) {
 			    Method m = pd[i].getWriteMethod();
+                            if (m == null) {
+                                throw new JspException(
+                                    Resources.getMessage("SET_NO_SETTER_METHOD",
+				        property));
+                            }
 			    if (result != null) {
 			        m.invoke(target,
 			             new Object[] { 
