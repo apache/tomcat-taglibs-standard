@@ -14,13 +14,13 @@
 
 <hr>
 
-<% pageContext.setAttribute("filePath", "file:/" + application.getRealPath(request.getParameter("filename"))); %>
-
-<c:import varReader="reader" url="$filePath">
+<% pageContext.setAttribute("filename",
+     "file:" + application.getRealPath(request.getParameter("filename"))); %>
+<c:import varReader="reader" url="$filename">
+<%-- <ex:file id="reader" file="$param:filename"> --%>
   <ex:escapeHtml reader="$reader"/>
+<%-- </ex:file> --%>
 </c:import>
-
 <hr>
-
 </body>
 </html>
