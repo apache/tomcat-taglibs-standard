@@ -14,7 +14,10 @@ private final int jjStopStringLiteralDfa_0(int pos, long active0)
    {
       case 0:
          if ((active0 & 0x4L) != 0L)
+         {
+            jjmatchedKind = 1;
             return 2;
+         }
          return -1;
       default :
          return -1;
@@ -106,7 +109,7 @@ private final int jjMoveNfa_0(int startState, int curPos)
 {
    int[] nextStates;
    int startsAt = 0;
-   jjnewStateCnt = 3;
+   jjnewStateCnt = 4;
    int i = 1;
    jjstateSet[0] = startState;
    int j, kind = 0x7fffffff;
@@ -129,7 +132,11 @@ private final int jjMoveNfa_0(int startState, int curPos)
                      jjCheckNAddTwoStates(0, 1);
                   }
                   else if (curChar == 36)
-                     jjstateSet[jjnewStateCnt++] = 2;
+                  {
+                     if (kind > 1)
+                        kind = 1;
+                     jjCheckNAdd(2);
+                  }
                   break;
                case 0:
                   if ((0xffffffefffffffffL & l) == 0L)
@@ -140,7 +147,7 @@ private final int jjMoveNfa_0(int startState, int curPos)
                   break;
                case 1:
                   if (curChar == 36)
-                     jjstateSet[jjnewStateCnt++] = 2;
+                     jjCheckNAdd(2);
                   break;
                case 2:
                   if (kind > 1)
@@ -206,7 +213,7 @@ private final int jjMoveNfa_0(int startState, int curPos)
          kind = 0x7fffffff;
       }
       ++curPos;
-      if ((i = jjnewStateCnt) == (startsAt = 3 - (jjnewStateCnt = startsAt)))
+      if ((i = jjnewStateCnt) == (startsAt = 4 - (jjnewStateCnt = startsAt)))
          return curPos;
       try { curChar = input_stream.readChar(); }
       catch(java.io.IOException e) { return curPos; }

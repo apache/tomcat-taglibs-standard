@@ -14,6 +14,20 @@ Parses to: ${1}${2}
 Attribute value: abc ${ 1} ${ 2} def
 Parses to: abc ${1} ${2} def
 
+# testing values that end with or contain "$"
+Attribute value: $
+Parses to: $
+Attribute value: \$
+Parses to: \$
+Attribute value:   $  
+Parses to:   $  
+Attribute value: test$
+Parses to: test$
+Attribute value: $test
+Parses to: $test
+Attribute value: test$test
+Parses to: test$test
+
 # literals
 Attribute value: ${1}
 Parses to: ${1}
@@ -96,7 +110,7 @@ Parses to: ${(bad * identifier)}
 Attribute value: ${a .b .c}
 Parses to: ${a.b.c}
 Attribute value: ${ abc . 'def.ghi' . ghi . "jkl \"" }
-Parses to: ${abc."def.ghi".ghi."jkl \""}
+Causes an error: Unable to parse custom action attribute "test" with value "${ abc . 'def.ghi' . ghi . "jkl \"" }": encountered "'def.ghi'", expected one of ""pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 
 # array accessors
 Attribute value: ${ a[14] }
@@ -130,5 +144,5 @@ Parses to: ${(- - not abc.def)}
 
 # array accessors of non-integer types
 Attribute value: ${  a ["hello"]."12" [17.5] }
-Parses to: ${a["hello"]."12"[17.5]}
+Causes an error: Unable to parse custom action attribute "test" with value "${  a ["hello"]."12" [17.5] }": encountered ""12"", expected one of ""pageContext", "page", "request", "session", "application", "param", "params", <IDENTIFIER>"
 

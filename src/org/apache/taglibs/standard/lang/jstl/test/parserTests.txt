@@ -7,6 +7,14 @@ ${ 3 }b
 ${ 1 }${ 2 }
 abc ${ 1} ${ 2} def
 
+# testing values that end with or contain "$"
+$
+\$
+  $  
+test$
+$test
+test$test
+
 # literals
 ${1}
 ${-12}
