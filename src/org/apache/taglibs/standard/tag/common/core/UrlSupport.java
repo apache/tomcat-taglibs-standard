@@ -181,13 +181,10 @@ public abstract class UrlSupport extends BodyTagSupport
 	HttpServletRequest request =
 	    (HttpServletRequest) pageContext.getRequest();
 	if (context == null) {
-	    if (!url.startsWith("/")) {
-                String page =
-		    request.getContextPath() + request.getServletPath();
-		String dir = page.substring(0, page.lastIndexOf("/") + 1);
-	        return (dir + url);
-	    } else
-	        return (request.getContextPath() + url);
+	    if (url.startsWith("/"))
+		return (request.getContextPath() + url);
+	    else
+		return url;
 	} else {
             if (!context.startsWith("/") || !url.startsWith("/"))
                 throw new JspTagException(
