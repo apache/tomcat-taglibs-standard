@@ -119,17 +119,16 @@ public class DataSourceUtil {
                 Context ctx = new InitialContext();
                 // relative to standard JNDI root for J2EE app
                 Context envCtx = (Context) ctx.lookup("java:comp/env");
-                dataSource = (DataSource) envCtx.lookup((String)rawDataSource);
+                dataSource = (DataSource) envCtx.lookup((String) rawDataSource);
             } catch (NamingException ex) {
-                throw new JspException(ex.toString(), ex);
+                setUsingParams((String) rawDataSource);
             }
-            if (dataSource == null) {
-                setUsingParams((String)rawDataSource);
-            }
-        }
-        else if (rawDataSource instanceof DataSource) {
+        } else if (rawDataSource instanceof DataSource) {
             dataSource = (DataSource) rawDataSource;
-        }
+        } else {
+	    throw new JspException(
+                Resources.getMessage("SQL_DATASOURCE_INVALID"));
+	}
     }
 
     /**
