@@ -117,4 +117,11 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
+
+  <function>
+    <name>display</name>
+    <function-class>org.apache.taglibs.jsptl.examples.taglib.Functions</function-class>
+    <function-signature>java.lang.String display(java.lang.Object)</function-signature>
+  </function>
+
 </taglib>

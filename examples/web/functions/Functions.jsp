@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="ex" uri="/jstl-examples-taglib" %>
 
 <html>
 <head>
@@ -226,6 +227,12 @@
   </tr>
   <tr>
     <td>${s1}</td>
+    <td>12</td>
+    <td>5</td>
+    <td>&nbsp;${fn:substring(s1, 12, 5)}</td>
+  </tr>
+  <tr>
+    <td>${s1}</td>
     <td>23</td>
     <td>-1</td>
     <td>${fn:substring(s1, 23, -1)}</td>
@@ -444,6 +451,109 @@
     <td>&nbsp;${fn:toUpperCase("")}</td>
   </tr>
 </table>
+
+<c:set var="s2" value="one two three one two three one two three"/>
+<h4>fn:replace</h4>
+<table cellpadding="5" border="1">
+  <tr>
+    <th align="left">Input String</th>
+    <th>Substring Before</th>
+    <th>Substring After</th>
+    <th>Result</th>
+  </tr>
+  <tr>
+    <td>${s1}</td>
+    <td>e</td>
+    <td>*</td>
+    <td>${fn:replace(s1, "e", "*")}</td>
+  </tr>
+  <tr>
+    <td>${s2}</td>
+    <td>two</td>
+    <td>empty</td>
+    <td>${fn:replace(s2, "two", "")}</td>
+  </tr>
+  <tr>
+    <td>${s2}</td>
+    <td>empty</td>
+    <td>one</td>
+    <td>${fn:replace(s2, "", "one")}</td>
+  </tr>
+  <tr>
+    <td>null</td>
+    <td>one</td>
+    <td>two</td>
+    <td>&nbsp;${fn:replace(undefined, "one", "two")}</td>
+  </tr>
+</table>
+
+<c:set var="s3" value="one|two|three|four"/>
+<c:set var="s5" value="one|two+three*four"/>
+<h4>fn:split</h4>
+<table cellpadding="5" border="1">
+  <tr>
+    <th align="left">Input String</th>
+    <th>Delimiters</th>
+    <th>Result</th>
+  </tr>
+  <tr>
+    <td>${s1}</td>
+    <td>empty</td>
+    <td>${ex:display(fn:split(s1, ""))}</td>
+  </tr>
+  <tr>
+    <td>${s3}</td>
+    <td>|</td>
+    <td>${ex:display(fn:split(s3, "|"))}</td>
+  </tr>
+  <tr>
+    <td>${s3}</td>
+    <td>+</td>
+    <td>${ex:display(fn:split(s3, "+"))}</td>
+  </tr>
+  <tr>
+    <td>${s5}</td>
+    <td>|+</td>
+    <td>${ex:display(fn:split(s5, "|+"))}</td>
+  </tr>
+  <tr>
+    <td>empty</td>
+    <td>empty</td>
+    <td>${ex:display(fn:split("", ""))}</td>
+  </tr>
+</table>
+
+<%-- need fix to jasper
+<c:set var="a1" value='${fn:split(s1, "")}'/>
+<h4>fn:join</h4>
+<table cellpadding="5" border="1">
+  <tr>
+    <th align="left">Input Array</th>
+    <th>Separator</th>
+    <th>Result</th>
+  </tr>
+  <tr>
+    <td>${ex:display(s4)}</td>
+    <td> + </td>
+    <td>${fn:join(s4, " + ")}</td>
+  </tr>
+  <tr>
+    <td>${ex:display(s4)}</td>
+    <td>empty</td>
+    <td>${fn:join(s4, "")}</td>
+  </tr>
+  <tr>
+    <td>${ex:display(s4)}</td>
+    <td>null</td>
+    <td>${fn:join(s4, null)}</td>
+  </tr>
+  <tr>
+    <td>null</td>
+    <td>empty</td>
+    <td>${fn:join(null, "")}</td>
+  </tr>
+</table>
+--%>
 
 </body>
 </html>

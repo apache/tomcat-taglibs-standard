@@ -41,10 +41,30 @@
     <function-signature>int indexOf(java.lang.String, java.lang.String)</function-signature>
   </function>
 
+<!-- need fix to jasper
+  <function>
+    <name>join</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>java.lang.String join(java.lang.String[], java.lang.String)</function-signature>
+  </function>
+-->
+
   <function>
     <name>length</name>
     <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
     <function-signature>int length(java.lang.Object)</function-signature>
+  </function>
+
+  <function>
+    <name>replace</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>java.lang.String replace(java.lang.String, java.lang.String, java.lang.String)</function-signature>
+  </function>
+
+  <function>
+    <name>split</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>java.lang.String[] split(java.lang.String, java.lang.String)</function-signature>
   </function>
 
   <function>

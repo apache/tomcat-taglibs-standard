@@ -127,6 +127,7 @@ public class Functions {
         if (beginIndex >= input.length()) beginIndex = input.length() - 1;
         if (beginIndex < 0) beginIndex = 0;
         if (endIndex < 0 || endIndex > input.length()) endIndex = input.length();
+        if (endIndex < beginIndex) return "";
         return input.substring(beginIndex, endIndex);
     }    
     
@@ -171,6 +172,55 @@ public class Functions {
         return input.trim();
     }    
 
+    public static String replace(
+    String input, 
+    String substringBefore,
+    String substringAfter) 
+    {
+        if (input == null) input = "";
+        if (input.length() == 0) return "";
+        if (substringBefore == null) substringBefore = "";
+        if (substringBefore.length() == 0) return input;
+                
+        StringBuffer buf = new StringBuffer(input.length());
+        int startIndex = 0;
+        int index;
+        while ((index = input.indexOf(substringBefore, startIndex)) != -1) {
+            buf.append(input.substring(startIndex, index)).append(substringAfter);
+            startIndex = index + substringBefore.length();
+        }
+        return buf.append(input.substring(startIndex)).toString();
+    }
+    
+    public static String[] split(
+    String input, 
+    String delimiters) 
+    {
+        String[] array;
+        if (input == null) input = "";
+        if (input.length() == 0) {
+            array = new String[1];
+            array[0] = "";
+            return array;
+        }
+        
+        if (delimiters == null) delimiters = "";
+
+        StringTokenizer tok;
+        if (delimiters.length() == 0) {
+            tok = new StringTokenizer(input);
+        } else {        
+            tok = new StringTokenizer(input, delimiters);
+        }
+        int count = tok.countTokens();
+        array = new String[count];
+        int i = 0;
+        while (tok.hasMoreTokens()) {
+            array[i++] = tok.nextToken();
+        }
+        return array;
+    }        
+        
     //*********************************************************************
     // Collections processing
     
@@ -207,7 +257,16 @@ public class Functions {
         throw new JspTagException(Resources.getMessage("FOREACH_BAD_ITEMS"));        
     }      
 
-    /** @@@ LEFT TO DO
-     * split(), join(), replace()
-     */    
+    public static String join(String[] array, String separator) {
+        if (array == null) return "";         
+        if (separator == null) separator = "";
+        
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<array.length; i++) {
+            buf.append(array[i]);
+            if (i < array.length-1) buf.append(separator);
+        }
+        
+        return buf.toString();
+    }
 }
