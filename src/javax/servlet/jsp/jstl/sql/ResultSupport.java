@@ -72,7 +72,7 @@ public class ResultSupport {
     /**
      * Returns an array of Row objects.
      *
-     * @param ResultSet the ResultSet object
+     * @param rs the ResultSet object
      *
      * @return the <code>Result</code> object of the result
      */
@@ -87,7 +87,7 @@ public class ResultSupport {
     /**
      * Returns the Result object of the cached ResultSet limited by maxRows
      *
-     * @param ResultSet the ResultSet object
+     * @param rs the ResultSet object
      * @param maxRows the maximum number of rows
      *
      * @return the <code>Result</code> object of the result limited by maxRows

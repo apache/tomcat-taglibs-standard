@@ -87,7 +87,7 @@ public interface SQLExecutionTag {
     /**
      * Adds a PreparedStatement parameter value
      *
-     * @param the PreparedStatement parameter value
+     * @param value the PreparedStatement parameter value
      */
     public void addSQLParameter(Object value);
 }

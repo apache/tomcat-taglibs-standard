@@ -57,7 +57,6 @@ package javax.servlet.jsp.jstl.tlv;
 
 import java.io.*;
 import java.util.*;
-import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.xml.parsers.*;
 import org.xml.sax.*;

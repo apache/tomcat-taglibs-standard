@@ -58,10 +58,8 @@ package javax.servlet.jsp.jstl.fmt;
 import java.util.*;
 import java.text.*;
 import javax.servlet.jsp.*;
-import javax.servlet.jsp.jstl.core.Config;
 import org.apache.taglibs.standard.tag.common.fmt.BundleSupport;
 import org.apache.taglibs.standard.tag.common.fmt.MessageSupport;
-import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * Class which exposes the locale-determination logic for resource bundles
@@ -167,7 +165,7 @@ public class LocaleSupport {
      * 
      * @return the localized message corresponding to the given key 
      */ 
-    public static String getLocalizedMessage(PageContext pc, 
+    public static String getLocalizedMessage(PageContext pageContext, 
                                              String key, 
                                              Object[] args, 
                                              String basename) {
@@ -176,9 +174,9 @@ public class LocaleSupport {
 	    + MessageSupport.UNDEFINED_KEY;
 
 	if (basename != null) {
-	    locCtxt = BundleSupport.getLocalizationContext(pc, basename);
+	    locCtxt = BundleSupport.getLocalizationContext(pageContext, basename);
 	} else {
-	    locCtxt = BundleSupport.getLocalizationContext(pc);
+	    locCtxt = BundleSupport.getLocalizationContext(pageContext);
 	}
 
 	if (locCtxt != null) {

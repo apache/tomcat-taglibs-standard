@@ -198,7 +198,7 @@ public abstract class LoopTagSupport
      * does not simply call for an Iterator from its subtags.)</p>
      * 
      * @return the java.lang.Object to use in the next round of iteration
-     * @exception NoSuchElementException
+     * @exception java.util.NoSuchElementException
      *            if next() is called but no new elements are available
      * @exception javax.servlet.jsp.JspTagException
      *            for other, unexpected exceptions
@@ -216,7 +216,7 @@ public abstract class LoopTagSupport
      *
      * @return <tt>true</tt> if there is at least one more item to iterate
      *         over, <tt>false</tt> otherwise
-     * @exception javax.servlet.JspTagException
+     * @exception javax.servlet.jsp.JspTagException
      * @see #next
      */
     protected abstract boolean hasNext() throws JspTagException;
@@ -227,7 +227,7 @@ public abstract class LoopTagSupport
      * Subclasses can assume that prepare() will be called once for
      * each invocation of doStartTag() in the superclass.</p>
      *
-     * @exception javax.servlet.JspTagException
+     * @exception javax.servlet.jsp.JspTagException
      */
     protected abstract void prepare() throws JspTagException;
 
