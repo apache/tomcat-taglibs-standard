@@ -109,4 +109,15 @@ public abstract class BinaryOperator
   }
 
   //-------------------------------------
+  /**
+   *
+   * Returns true if the operator expects its arguments to be coerced
+   * to Booleans.  The And/Or operators set this to true.
+   **/
+  public boolean shouldCoerceToBoolean ()
+  {
+    return false;
+  }
+
+  //-------------------------------------
 }

@@ -743,3 +743,14 @@ ${(bean1a.map1)["key1"]}
 java.lang.Object
 
 
+#######################################################
+# test String/boolean logical operators
+
+${'true' and false}
+java.lang.Object
+${'true' or true}
+java.lang.Object
+${false and 'true'}
+java.lang.Object
+${false or 'true'}
+java.lang.Object

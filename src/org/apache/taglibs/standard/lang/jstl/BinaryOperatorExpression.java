@@ -150,6 +150,13 @@ public class BinaryOperatorExpression
     Object value = mExpression.evaluate (pContext, pLogger);
     for (int i = 0; i < mOperators.size (); i++) {
       BinaryOperator operator = (BinaryOperator) mOperators.get (i);
+
+      // For the And/Or operators, we need to coerce to a boolean
+      // before testing if we shouldEvaluate
+      if (operator.shouldCoerceToBoolean ()) {
+	value = Coercions.coerceToBoolean (value, pLogger);
+      }
+
       if (operator.shouldEvaluate (value)) {
 	Expression expression = (Expression) mExpressions.get (i);
 	Object nextValue = expression.evaluate (pContext, pLogger);
