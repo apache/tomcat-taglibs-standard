@@ -277,8 +277,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
     private Connection getConnection() throws SQLException {
 	// Fix: Add all other mechanisms
 	Connection conn = null;
-	TransactionTag parent = (TransactionTag) 
-	    findAncestorWithClass(this, TransactionTag.class);
+	TransactionTagSupport parent = (TransactionTagSupport) 
+	    findAncestorWithClass(this, TransactionTagSupport.class);
 	if (parent != null) {
 	    conn = parent.getSharedConnection();
 	}
