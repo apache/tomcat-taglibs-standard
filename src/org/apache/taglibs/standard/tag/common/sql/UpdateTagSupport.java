@@ -155,6 +155,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	    PreparedStatement ps = conn.prepareStatement(sqlStatement);
 	    setParameters(ps, parameters);
 	    result = ps.executeUpdate();
+            ps.close();
 	}
 	catch (Throwable e) {
 	    throw new JspException(sqlStatement + ": " + e.getMessage(), e);
