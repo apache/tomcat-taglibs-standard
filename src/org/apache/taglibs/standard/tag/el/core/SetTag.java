@@ -58,43 +58,46 @@ package org.apache.taglibs.standard.tag.el.core;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.core.*;
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
-import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * <p>A handler for the &lt;set&gt; tag, which evaluates an expression
- * -- or its body -- and stores the resulting value in the 'scoped'
- * attribute specified by the 'var' and 'scope' attributes.</p>
+ * <p>A handler for &lt;sett&gt;, which redirects the browser to a
+ * new URL.
  *
  * @author Shawn Bayern
  */
-public class SetTag extends BodyTagSupport {
+
+public class SetTag extends SetSupport {
 
     //*********************************************************************
-    // Internal state
+    // 'Private' state (implementation details)
 
-    private String value;                               // tag attribute
-    private int scope;					// tag attribute
-    private String var;					// tag attribute
+    private String value_;			// stores EL-based property
+    private String target_;			// stores EL-based property
+    private String property_;			// stores EL-based property
+
 
     //*********************************************************************
-    // Construction and initialization
+    // Constructor
 
-    /**
-     * Constructs a new handler.  As with TagSupport, subclasses should
-     * not provide other constructors and are expected to call the
-     * superclass constructor.
-     */
     public SetTag() {
         super();
         init();
     }
 
-    // resets local state
-    private void init() {
-        value = var = null;
-	scope = PageContext.PAGE_SCOPE;
+
+    //*********************************************************************
+    // Tag logic
+
+    // evaluates expression and chains to parent
+    public int doStartTag() throws JspException {
+
+        // evaluate any expressions we were passed, once per invocation
+        evaluateExpressions();
+
+	// chain to the parent implementation
+	return super.doStartTag();
     }
+
 
     // Releases any resources we may have (or inherit)
     public void release() {
@@ -104,58 +107,50 @@ public class SetTag extends BodyTagSupport {
 
 
     //*********************************************************************
-    // Tag logic
+    // Accessor methods
 
-    // evaluates the expression and stores it appropriately
-    public int doEndTag() throws JspException {
+    public void setValue(String value_) {
+        this.value_ = value_;
+    }
 
-	Object result;			// what we'll store in scope:var
+    public void setTarget(String target_) {
+        this.target_ = target_;
+    }
 
-	// determine the value by...
-	if (value != null) {
-            // ... evaluating our expression
-            result = ExpressionEvaluatorManager.evaluate(
-                "value", value, Object.class, this, pageContext);
-	    if (result == null) {
-		// throw new NullAttributeException("set", "value");
-		pageContext.removeAttribute(var, scope);
-		return EVAL_PAGE;
-	    }
-	} else {
-	    // ... retrieving and trimming our body
-	    if (bodyContent == null || bodyContent.getString() == null)
-		result = "";
-	    else
-		result = bodyContent.getString().trim();
-	}
-
-	/*
-         * Store the result, letting an IllegalArgumentException
-         * propagate back if the scope is invalid (e.g., if an attempt
-         * is made to store something in the session without any
-	 * HttpSession existing).
-         */
-	pageContext.setAttribute(var, result, scope);
-
-	return EVAL_PAGE;
+    public void setProperty(String property_) {
+        this.property_ = property_;
     }
 
 
     //*********************************************************************
-    // Accessor methods
+    // Private (utility) methods
 
-    // for tag attribute
-    public void setVar(String var) {
-	this.var = var;
+    // (re)initializes state (during release() or construction)
+    private void init() {
+        // null implies "no expression"
+	value_ = target_ = property_ = null;
     }
 
-    // for tag attribute
-    public void setValue(String value) {
-        this.value = value;
-    }
+    /* Evaluates expressions as necessary */
+    private void evaluateExpressions() throws JspException {
+        /* 
+         * Note: we don't check for type mismatches here; we assume
+         * the expression evaluator will return the expected type
+         * (by virtue of knowledge we give it about what that type is).
+         * A ClassCastException here is truly unexpected, so we let it
+         * propagate up.
+         */
 
-    // for tag attribute
-    public void setScope(String scope) {
-        this.scope = Util.getScope(scope);
+	value = (String) ExpressionUtil.evalNotNull(
+	    "set", "value", value_, String.class, this, pageContext);
+	target = ExpressionUtil.evalNotNull(
+	    "set", "target", target_, Object.class, this, pageContext);
+	try {
+	    property = (String) ExpressionUtil.evalNotNull(
+	         "set", "property", property_, String.class, this, pageContext);
+        } catch (NullAttributeException ex) {
+            // explicitly let 'property' be null
+            property = null;
+        }
     }
 }
