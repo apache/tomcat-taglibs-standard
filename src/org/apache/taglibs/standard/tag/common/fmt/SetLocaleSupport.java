@@ -236,9 +236,11 @@ public abstract class SetLocaleSupport extends TagSupport {
 	
 	// get response character encoding and store it in session attribute
 	if (pc.getSession() != null) {
-	    pc.setAttribute(RequestEncodingSupport.REQUEST_CHAR_SET,
+            try {
+	        pc.setAttribute(RequestEncodingSupport.REQUEST_CHAR_SET,
 			    response.getCharacterEncoding(),
 			    PageContext.SESSION_SCOPE);
+            } catch (IllegalStateException ex) {} // invalidated session ignored
 	}
     }
  
