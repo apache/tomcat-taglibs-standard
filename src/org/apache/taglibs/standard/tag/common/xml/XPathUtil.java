@@ -127,7 +127,7 @@ public class XPathUtil {
                 String localName) throws UnresolvableException {
 	    // I'd prefer to match on namespace, but this doesn't appear
             // to work in Jaxen
-	    if (prefix == null) {
+	    if (prefix == null || prefix.equals("")) {
 		return notNull(
 		    pageContext.findAttribute(localName),
 		    prefix,
