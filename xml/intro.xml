@@ -92,7 +92,7 @@
 
   <section name="Documentation" href="Documentation">
 
-    <p>For more information about the JSP Standard Tag Library,
+    <p>For more information about the Standard Taglib,
        look at the on-line documentation:</p>
     <ul>
       <!--  Uncomment this section and modify as needed when you start
@@ -103,7 +103,7 @@
       </li>
 
       <li>View the most recent, nightly build of the
-        <a href="index.html">JSP Standard Tag Library Documentation</a>
+        <a href="index.html">Standard Taglib Documentation</a>
       </li>
     </ul>
   
@@ -140,7 +140,7 @@
     <ul>
       <li>
         <a href="http://jakarta.apache.org/builds/jakarta-taglibs/nightly/projects/standard/">
-        JSP Standard Tag Library nightly snapshot</a></li>
+        Standard Taglib nightly snapshot</a></li>
     </ul>
 
     <p>Nightly build distributions of the development version for all the
