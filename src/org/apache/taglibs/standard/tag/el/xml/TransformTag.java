@@ -60,6 +60,7 @@ import javax.servlet.jsp.tagext.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.Result;
 import org.apache.taglibs.standard.tag.el.core.ExpressionUtil;
+import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 import org.apache.taglibs.standard.tag.common.xml.*;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -180,5 +181,10 @@ public class TransformTag extends TransformSupport {
 //	     this, pageContext);
 	result = (Result) ExpressionUtil.evalNotNull(
 	    "transform", "result", result_, Result.class, this, pageContext);
+
+	if (xmlUrl_ != null && (xmlUrl == null || xmlUrl.equals("")))
+	    throw new NullAttributeException("transform", "xmlUrl");
+	if (xsltUrl_ != null && (xsltUrl == null || xsltUrl.equals("")))
+	    throw new NullAttributeException("transform", "xsltUrl");
     }
 }
