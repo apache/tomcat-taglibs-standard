@@ -39,9 +39,12 @@
   <section name="'Standard' Taglib News" href="News">
 
     <news>
-      <newsitem date="11/21/2001">
-	Early Access Release 2 made available for
+      <newsitem date="12/15/2001">
+	Early Access Release 3 made available for
 	<a href="/builds/jakarta-taglibs/releases/standard">download</a>.
+      </newsitem>
+      <newsitem date="11/21/2001">
+	Early Access Release 2 was made available for download.
 	The "jsptl" tag library has been renamed to the "standard" tag
 	library.  JSPTL has been renamed to JSTL.
       </newsitem>
@@ -70,14 +73,14 @@
   <section name="Documentation" href="Documentation">
 
     <p>For more information about the JSP Standard Tag Library,
-       look at the on-line documentation for Early Access 2:</p>
+       look at the on-line documentation for Early Access 3:</p>
     <ul>
       <!--  Uncomment this section and modify as needed when you start
             doing releases of the taglib, a link can be made to each
             available release. -->
-      <li>View the Early Access 2 documentation
-        <a href="standard-ea2/index.html">
-        JSP Standard Tag Library EA2 Documentation</a>
+      <li>View the Early Access 3 documentation
+        <a href="standard-ea3/index.html">
+        JSP Standard Tag Library EA3 Documentation</a>
       </li>
 
       <li>View the most recent, nightly build of the
@@ -104,11 +107,11 @@
     <!--  Uncomment this section and modify as needed when you start
           doing releases of the taglib. -->
     <p>Download a binary distribution of the JSP Standard Tag Library
-      EA2 release:</p>
+      EA3 release:</p>
     <ul>
       <li>
         <a href="http://jakarta.apache.org/builds/jakarta-taglibs/releases/standard/">
-        JSP Standard Tag Library EA2 release</a></li>
+        JSP Standard Tag Library EA3 release</a></li>
     </ul>
 
     <p>Download the most recent, nightly snapshot:</p>
@@ -140,6 +143,7 @@
       <li>Pierre Delisle (specification lead)</li>
       <li>Shawn Bayern (implementation lead)</li>
       <li>Nathan Abramson</li>
+      <li>Hans Bergsten</li>
       <li>Scott Hasse</li>
       <li>Justyna Horwat</li>
       <li>Mark Kolb</li>
