@@ -176,10 +176,13 @@ public class JavascriptExpressionEvaluator
                     result = ((Wrapper) result).unwrap();
                 }
 
-                if (result instanceof NativeString) {
-                    result = result.toString();
-                } else if (result instanceof NativeBoolean) {
-                    result = new Boolean(result.toString());
+                if (expectedType == String.class) {
+                    result = cx.toString(result);
+                } else if (expectedType == Boolean.class ||
+                           expectedType == Boolean.TYPE)
+                {
+                    result = cx.toBoolean(result) ? Boolean.TRUE
+                                                  : Boolean.FALSE;
                 } else if (result instanceof Undefined) {
                     result = null;
                 }
