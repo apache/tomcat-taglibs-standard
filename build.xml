@@ -82,7 +82,6 @@
   <!-- **************** JAXP 1.1, 1.2 checks ******************** -->
 
   <target name="checkJaxp11" unless="isJaxp12">
-    <echo>in JAXP11</echo>
     <antcall target="checkRequiredFile">
        <param name="file" value="${crimson.jar}"/>     
        <param name="fail.message" value="This build process for the Standard Taglib requires a JAXP 1.1-compliant XML parser, such as crimson.jar.  Please define the property crimson.jar in your build.properties file and ensure that the file exists."/>
@@ -90,7 +89,6 @@
   </target>
 
   <target name="checkJaxp12" if="isJaxp12">
-    <echo>in JAXP12</echo>
     <antcall target="checkRequiredFile">
        <param name="file" value="${jaxp-api.jar}"/>     
        <param name="fail.message" value="This build process for the Standard Taglib requires jaxp-api.jar from JAXP 1.2.  Please define the property jaxp-api.jar in your build.properties file and ensure that the file exists."/>
@@ -112,12 +110,10 @@
   <!-- **************** JAXP 1.1, 1.2 copying ******************** -->
 
   <target name="copyJaxp11" unless="isJaxp12">
-    <echo>copy JAXP11</echo>
     <copy file="${crimson.jar}" tofile="${build.examples}/WEB-INF/lib/crimson.jar" />
   </target>
 
   <target name="copyJaxp12" if="isJaxp12">
-    <echo>copy JAXP11</echo>
     <copy file="${jaxp-api.jar}" tofile="${build.examples}/WEB-INF/lib/jaxp-api.jar" />
     <copy file="${dom.jar}" tofile="${build.examples}/WEB-INF/lib/dom.jar" />
     <copy file="${sax.jar}" tofile="${build.examples}/WEB-INF/lib/sax.jar" />
@@ -133,6 +129,20 @@
     <copy file="${sax.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${xercesImpl.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
     <copy file="${jaxp-api.jar}" todir="${dist.dir}/${taglib.name}/lib"/>
+  </target>
+
+  <!-- **************** JAXP 1.1, 1.2 compiling ******************** -->
+
+  <target name="compileJaxp11" unless="isJaxp12">
+      <javac srcdir="${library.src}" destdir="${build.library}"
+         classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+         debug="on"/>
+  </target>
+
+  <target name="compileJaxp12" if="isJaxp12">
+      <javac srcdir="${library.src}" destdir="${build.library}"
+         classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+         debug="on"/>
   </target>
 
   <!-- **************** Compile Tag Library Components ******************** -->
@@ -223,17 +233,8 @@
   </target>
 -->
 
-      <!-- JAXP 1.1 -->
-      <javac srcdir="${library.src}" destdir="${build.library}"
-         classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
-         debug="on"/>
-
-      <!-- JAXP 1.2
-      <javac srcdir="${library.src}" destdir="${build.library}"
-         classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
-         debug="on"/>
-      -->
-
+    <antcall target="compileJaxp11"/>
+    <antcall target="compileJaxp12"/>
   </target>
 
   <!-- Compile the library as well as the associated applications -->
