@@ -9,7 +9,7 @@
 <h3>Parse / Filter / Expr</h3>
 
 <ex:SPath var="spath" select="//a"/>
-<x:parse var="a" filter="$spath">
+<x:parse var="a" filter="${spath}">
  <nope>
   <a>
    <b>
