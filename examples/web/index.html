@@ -9,39 +9,34 @@
 
 <body bgcolor="#FFFFFF" text="#000000">
 <table width="100%" border="0" cellpadding="5">
-  <tr>
-    <td height="0"><font size="-1" color="#000099"><b>JSTL Early Access</b></font></td>
-    <td align="center" height="0"><font size="-1" color="#000099"> <b>Beware &#151; 
-      API and Tags may/will change</b></font></td>
-    <td align="right" height="0"><font size="-1" color="#003399"><a href="mailto:taglibs-user@jakarta.apache.org"><b>support</b></a> 
+  <tr> 
+    <td height="0"><font color="#000099"><b>standard taglib &#149; implementation 
+      of the JSP Standard Tag Library &#149; </b></font><font color="#003399"><a href="mailto:taglibs-user@jakarta.apache.org"><b>support</b></a> 
       &nbsp;&nbsp;<b><a href="mailto:taglibs-dev@jakarta.apache.org">development</a>&nbsp;&nbsp; 
-      <a href="mailto:jsr-52-comments@jcp.org">comments to JSR052 EG</a></b></font></td>
+      <a href="mailto:jsr-52-comments@jcp.org">comments to JSR-52</a></b></font></td>
   </tr>
   <tr> 
-    <td colspan="3" bgcolor="#CCCCFF">JSTL Examples &nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Introduction</a> 
-      &#149; <a href="elsupport/index.html">EL Support </a> &#149; <a href="conditionals/index.html">Conditionals</a> 
+    <td bgcolor="#CCCCFF"><font size="-1">Examples &nbsp;&nbsp;&nbsp;&nbsp;<a href="index.html">Introduction</a> 
+      &#149; <a href="elsupport/index.html">General Purpose</a> &#149; <a href="conditionals/index.html">Conditionals</a> 
       &#149; <a href="iterators/index.html">Iterators</a> &#149; <a href="import/index.jsp">Import</a> 
       &#149; <a href="format/index.html">I18N & Formatting</a> &#149; <a href="xml/index.html">XML</a> 
-      &#149; <a href="sql/index.jsp">SQL</a> &#149; <a href="misc/index.html">Misc.</a></td>
+      &#149; <a href="sql/index.jsp">SQL</a> &#149; <a href="misc/index.html">Misc.</a></font></td>
   </tr>
 </table>
-<!-- #BeginEditable "body" --> 
-<h1>Welcome to the standard-examples web application!</h1>
+<!-- #BeginEditable "body" -->
+<h2>Welcome to the standard-examples web application!</h2>
 <p>This web application includes a variety of sample JSP pages that showcase the 
-  JSTL tags currently being specified within the <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 
+  JSTL tags specified within the <a href="http://www.jcp.org/jsr/detail/52.jsp">JSR-052 
   Expert Group</a>. 
-<p><b>WARNING: This is Beta 2. The goal of this early access program is to keep 
-  the community informed of the EG's progress as well as to give the community 
-  a chance to experiment with the standard tag library (JSTL) early in the specification 
-  process so that valuable feedback can quickly be channelled back to the Expert 
-  Group.</b> 
 <h3>Documentation</h3>
-<p>The <a href="http://www.jcp.org/aboutJava/communityprocess/review/jsr052/index.html">JSTL 1.0 Specification</a> developed by the JSR052 expert group under the <a href="http://www.jcp.org">Java Community Process</a> is a complete JSTL 1.0 reference.</p> 
+<p>The <a href="http://www.jcp.org/aboutJava/communityprocess/review/jsr052/index.html">JSTL 
+  1.0 Specification</a> developed by the JSR052 expert group under the <a href="http://www.jcp.org">Java 
+  Community Process</a> is a complete JSTL 1.0 reference.</p>
 <p>Documentation on the JSTL tags is available at <a href="http://jakarta.apache.org/taglibs/doc/standard-doc">http://jakarta.apache.org/taglibs/doc/standard-doc</a>. 
-  It is also available as the standard-doc web application of the JSTL Beta 2 release. 
+  It is also available as the standard-doc web application of the standard taglib 
+  release. 
 <h3>Mailing Lists</h3>
-<p>There are three ways to obtain information from or send your comments to the 
-  JSR052 Expert Group: 
+<p>There are three ways to obtain information from or send your comments: 
 <ol>
   <li><b>Support</b>: For support/usage questions, please use the <a href="mailto:taglibs-user@jakarta.apache.org">user 
     mailing list</a> of jakarta-taglibs. </li>
@@ -49,7 +44,7 @@
     the <a href="mailto:taglibs-dev@jakarta.apache.org">developer mailing list</a> 
     of jakarta-taglibs</li>
   <li><b>Comments to the JSR052 EG</b>: To provide the Expert Group with feedback 
-    on the JSTL, use either the <a href="mailto:taglibs-dev@jakarta.apache.org">developers 
+    on JSTL, use either the <a href="mailto:taglibs-dev@jakarta.apache.org">developers 
     mailing list</a> at Jakarta, or you may contact the expert group privately 
     at <a href="mailto:jsr-52-comments@jcp.org">jsr-52-comments@jcp.org</a>. All 
     comments will be read, but we cannot guarantee a personal reply to all messages 
@@ -58,7 +53,7 @@
 <h3>Examples</h3>
 <p>The JSTL examples have been divided in the following categories:</p>
 <ul>
-  <li><a href="elsupport/index.html">Expression Language Support Tags</a></li>
+  <li><a href="elsupport/index.html">General Purpose Tags</a></li>
   <li><a href="conditionals/index.html">Conditional Tags</a></li>
   <li><a href="iterators/index.html">Iterator Tags</a></li>
   <li><a href="import/index.jsp">Import Tags</a> </li>
@@ -131,13 +126,10 @@
 <hr noshade color="#000099">
 <table width="100%" border="0" cellpadding="5">
   <tr> 
-    <td height="24"><font size="-1" color="#000099"><b>JSTL Early Access</b></font></td>
-    <td align="center" height="24"><font size="-1" color="#000099"> <b>Beware 
-      &#151; API and Tags may/will change</b></font></td>
-    <td align="right" height="24"><font size="-1" color="#003399"><a href="mailto:taglibs-user@jakarta.apache.org"><b>support</b></a> 
-      <b>&nbsp;&nbsp; <a href="mailto:taglibs-dev@jakarta.apache.org">development</a> 
-      &nbsp;&nbsp;<a href="mailto:jsr-52-comments@jcp.org">comments to JSR052 
-      EG</a></b></font></td>
+    <td height="24"><font color="#000099"><b>standard taglib &#149; implementation 
+      of the JSP Standard Tag Library &#149; </b></font><font color="#003399"><a href="mailto:taglibs-user@jakarta.apache.org"><b>support</b></a> 
+      &nbsp;&nbsp;<b><a href="mailto:taglibs-dev@jakarta.apache.org">development</a>&nbsp;&nbsp; 
+      <a href="mailto:jsr-52-comments@jcp.org">comments to JSR-52</a></b></font></td>
   </tr>
 </table>
 </body>
