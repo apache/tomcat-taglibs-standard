@@ -59,23 +59,20 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 
 /**
- * <p>ConditionalTagSupport is an abstract class that facilitates
- * implementation of conditional tags -- specifically, tags in the style
- * of &lt;if&gt;.</p>
+ * <p>Abstract class that facilitates implementation of conditional actions 
+ * where the boolean result is exposed as a JSP scoped variable. The 
+ * boolean result may then be used as the test condition in a &lt;c:when&gt;
+ * action.</p>
  *
- * <p>In particular, this base class provides support for:</p>
+ * <p>This base class provides support for:</p>
  * 
  * <ul>
- *  <li> conditional execution based on an overridable <tt>condition()</tt>
- *       method </li>
- *  <li> scoped attributes storing the result (as a Boolean) of the
- *       logic executed by a subclass (optionally by attribute) </li>
+ *  <li> Conditional processing of the action's body based on the returned value
+ *       of the abstract method <tt>condition()</tt>.</li>
+ *  <li> Storing the result of <tt>condition()</tt> as a <tt>Boolean</tt> object
+ *       into a JSP scoped variable identified by attributes <tt>var</tt> and
+ *       <tt>scope</tt>.
  * </ul>
- *
- * <p>Since this method implements the behavior anticipated to be
- * recommended by the standard (with respect to tags that support
- * boolean logic), it is expected that it will be part of the JSTL API.
- * </p>
  * 
  * @author Shawn Bayern
  */
@@ -87,11 +84,12 @@ public abstract class ConditionalTagSupport
     // Abstract methods
 
     /**
-     * <p>Returns a <tt>boolean</tt> representing the condition that
-     * a particular subclass uses to drive its conditional logic.
+     * <p>Subclasses implement this method to compute the boolean result
+     * of the conditional action. This method is invoked once per tag invocation 
+     * by <tt>doStartTag()</tt>.
      *
-     * @return a boolean representing the result of arbitrary logic
-     *         that will be used to drive a tag's behavior
+     * @return a boolean representing the condition that a particular subclass
+     *   uses to drive its conditional logic.
      */
     protected abstract boolean condition() throws JspTagException;
 
@@ -100,9 +98,10 @@ public abstract class ConditionalTagSupport
     // Constructor
 
     /**
-     * Base constructor to initialize local state.  As with TagSupport,
-     * subclasses should not provide other constructors and are expected
-     * to call the superclass constructor.
+     * Base constructor to initialize local state.  As with <tt>TagSupport</tt>,
+     * subclasses should not implement constructors with arguments, and
+     * no-argument constructors implemented by subclasses must call the 
+     * superclass constructor.
      */
     public ConditionalTagSupport() {
         super();
