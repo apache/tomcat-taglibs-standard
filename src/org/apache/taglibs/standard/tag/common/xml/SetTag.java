@@ -56,8 +56,11 @@
 package org.apache.taglibs.standard.tag.common.xml;
 
 import java.util.List;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.TagSupport;
+
 import org.apache.taglibs.standard.tag.common.core.Util;
 
 /**

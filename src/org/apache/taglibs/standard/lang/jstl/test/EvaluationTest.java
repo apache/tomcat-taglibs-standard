@@ -70,9 +70,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-import org.apache.taglibs.standard.lang.jstl.ELException;
+
 import org.apache.taglibs.standard.lang.jstl.Evaluator;
 import org.apache.taglibs.standard.lang.jstl.test.beans.Factory;
 
@@ -314,10 +315,10 @@ public class EvaluationTest
     PageContext ret = new PageContextImpl ();
 
     // Create some basic values for lookups
-    ret.setAttribute ("val1a", "page-scoped1", ret.PAGE_SCOPE);
-    ret.setAttribute ("val1b", "request-scoped1", ret.REQUEST_SCOPE);
-    ret.setAttribute ("val1c", "session-scoped1", ret.SESSION_SCOPE);
-    ret.setAttribute ("val1d", "app-scoped1", ret.APPLICATION_SCOPE);
+    ret.setAttribute ("val1a", "page-scoped1", PageContext.PAGE_SCOPE);
+    ret.setAttribute ("val1b", "request-scoped1", PageContext.REQUEST_SCOPE);
+    ret.setAttribute ("val1c", "session-scoped1", PageContext.SESSION_SCOPE);
+    ret.setAttribute ("val1d", "app-scoped1", PageContext.APPLICATION_SCOPE);
 
     // Create a bean
     {

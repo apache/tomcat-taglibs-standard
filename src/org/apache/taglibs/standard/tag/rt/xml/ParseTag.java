@@ -55,10 +55,10 @@
 
 package org.apache.taglibs.standard.tag.rt.xml;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspTagException;
+
+import org.apache.taglibs.standard.tag.common.xml.ParseSupport;
 import org.xml.sax.XMLFilter;
-import org.apache.taglibs.standard.tag.common.xml.*;
 
 /**
  * <p>A handler for &lt;parse&gt; that supports rtexprvalue-based

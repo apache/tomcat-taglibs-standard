@@ -55,10 +55,9 @@
 
 package org.apache.taglibs.standard.tag.rt.core;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.core.*;
+import javax.servlet.jsp.JspTagException;
+
+import org.apache.taglibs.standard.tag.common.core.ImportSupport;
 
 /**
  * <p>A handler for &lt;import&gt; that supports rtexprvalue-based

@@ -55,13 +55,15 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.Enumeration;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.taglibs.standard.resources.Resources;
 

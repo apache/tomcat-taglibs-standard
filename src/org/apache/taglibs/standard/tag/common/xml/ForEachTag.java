@@ -55,11 +55,11 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import java.util.List;
+
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.LoopTagSupport;
+
 import org.apache.taglibs.standard.resources.Resources;
 
 /**

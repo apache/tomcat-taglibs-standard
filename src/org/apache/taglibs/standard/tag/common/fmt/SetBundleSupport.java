@@ -55,14 +55,13 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
-import java.util.*;
-import javax.servlet.ServletResponse;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
+import javax.servlet.jsp.tagext.TagSupport;
+
 import org.apache.taglibs.standard.tag.common.core.Util;
-import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * Support for tag handlers for &lt;setBundle&gt;, the JSTL 1.0 tag that loads

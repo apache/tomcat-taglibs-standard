@@ -55,11 +55,10 @@
 
 package org.apache.taglibs.standard.tag.el.fmt;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.lang.support.*;
-import org.apache.taglibs.standard.tag.common.fmt.*;
+import javax.servlet.jsp.JspException;
+
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+import org.apache.taglibs.standard.tag.common.fmt.SetLocaleSupport;
 
 /**
  * <p>A handler for &lt;setLocale&gt; that accepts attributes as Strings

@@ -55,10 +55,9 @@
 
 package org.apache.taglibs.standard.tag.el.core;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.core.*;
-import org.apache.taglibs.standard.resources.Resources;
+import javax.servlet.jsp.JspException;
+
+import org.apache.taglibs.standard.tag.common.core.ParamSupport;
 
 /**
  * <p>A handler for &lt;param&gt; that accepts attributes as Strings

@@ -55,20 +55,21 @@
 
 package org.apache.taglibs.standard.lang.jstl.test;
 
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.jsp.PageContext;
-import java.util.Enumeration;
-import javax.servlet.ServletResponse;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.el.ExpressionEvaluator;
 import javax.servlet.jsp.el.VariableResolver;
-import javax.servlet.http.HttpSession;
-import java.util.Collections;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletConfig;
-import javax.servlet.Servlet;
 
 /**
  *

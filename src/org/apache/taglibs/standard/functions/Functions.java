@@ -56,8 +56,14 @@
 package org.apache.taglibs.standard.functions;
 
 import java.lang.reflect.Array;
-import java.util.*;
-import javax.servlet.jsp.*;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+import javax.servlet.jsp.JspTagException;
+
 import org.apache.taglibs.standard.resources.Resources;
 import org.apache.taglibs.standard.tag.common.core.Util;
 

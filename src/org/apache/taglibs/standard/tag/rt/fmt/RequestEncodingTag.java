@@ -55,10 +55,9 @@
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.fmt.*;
+import javax.servlet.jsp.JspTagException;
+
+import org.apache.taglibs.standard.tag.common.fmt.RequestEncodingSupport;
 
 /**
  * <p>A handler for &lt;requestEncoding&gt; that supports rtexprvalue-based

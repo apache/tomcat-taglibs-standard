@@ -55,9 +55,11 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import java.net.URLEncoder;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.Tag;
+
 import org.apache.taglibs.standard.resources.Resources;
 
 /**

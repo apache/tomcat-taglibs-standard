@@ -55,16 +55,15 @@
 
 package org.apache.taglibs.standard.tlv;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import javax.xml.parsers.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluator;
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+import java.util.Set;
+import java.util.Stack;
+
+import javax.servlet.jsp.tagext.PageData;
+import javax.servlet.jsp.tagext.ValidationMessage;
+
 import org.apache.taglibs.standard.resources.Resources;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>A SAX-based TagLibraryValidator for the JSTL XML library.

@@ -55,9 +55,9 @@
 
 package org.apache.taglibs.standard.tag.rt.core;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.core.*;
+import javax.servlet.jsp.JspTagException;
+
+import org.apache.taglibs.standard.tag.common.core.UrlSupport;
 
 /**
  * <p>A handler for &lt;urlEncode&gt; that supports rtexprvalue-based

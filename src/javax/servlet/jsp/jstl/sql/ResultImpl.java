@@ -56,8 +56,13 @@
 package javax.servlet.jsp.jstl.sql;
 
 import java.io.Serializable;
-import java.sql.*;
-import java.util.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * <p>This class creates a cached version of a <tt>ResultSet</tt>.

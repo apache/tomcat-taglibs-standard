@@ -55,10 +55,9 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
-import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
-import org.apache.taglibs.standard.tag.common.core.*;
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+
+import org.apache.taglibs.standard.tag.common.core.WhenTagSupport;
 
 /**
  * <p>Tag handler for &lt;if&gt; in JSTL's XML library.</p>

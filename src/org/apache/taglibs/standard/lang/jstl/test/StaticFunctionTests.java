@@ -55,8 +55,10 @@
 
 package org.apache.taglibs.standard.lang.jstl.test;
 
-import java.util.*;
-import org.apache.taglibs.standard.lang.jstl.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.taglibs.standard.lang.jstl.Evaluator;
 
 /**
  *

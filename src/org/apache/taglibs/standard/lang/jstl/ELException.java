@@ -55,7 +55,6 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import java.text.MessageFormat;
 
 /**
  *

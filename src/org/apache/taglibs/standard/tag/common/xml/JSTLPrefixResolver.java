@@ -56,11 +56,11 @@
  */
 package org.apache.taglibs.standard.tag.common.xml;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
-import org.apache.xml.utils.PrefixResolver;
-
 import java.util.HashMap;
+
+import org.apache.xml.utils.PrefixResolver;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * <meta name="usage" content="general"/>

@@ -55,11 +55,13 @@
 
 package org.apache.taglibs.standard.tag.rt.core;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import java.util.ArrayList;
+
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.LoopTag;
-import org.apache.taglibs.standard.tag.common.core.*;
+import javax.servlet.jsp.tagext.IterationTag;
+
+import org.apache.taglibs.standard.tag.common.core.ForEachSupport;
 
 /**
  * <p>A handler for &lt;forEach&gt; that supports rtexprvalue-based

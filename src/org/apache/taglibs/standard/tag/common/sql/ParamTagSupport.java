@@ -54,10 +54,11 @@
  */ 
 package org.apache.taglibs.standard.tag.common.sql;
 
-import java.util.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.jstl.sql.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.jstl.sql.SQLExecutionTag;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+
 import org.apache.taglibs.standard.resources.Resources;
 
 

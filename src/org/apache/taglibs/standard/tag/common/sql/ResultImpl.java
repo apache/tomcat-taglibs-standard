@@ -55,8 +55,14 @@
 
 package org.apache.taglibs.standard.tag.common.sql;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 import javax.servlet.jsp.jstl.sql.Result;
 
 /**

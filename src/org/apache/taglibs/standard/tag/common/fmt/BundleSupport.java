@@ -56,15 +56,20 @@
 package org.apache.taglibs.standard.tag.common.fmt;
 
 import java.io.IOException;
-import java.util.*;
-import javax.servlet.ServletContext;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+
 import org.apache.taglibs.standard.tag.common.core.Util;
-import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * Support for tag handlers for &lt;bundle&gt;, the resource bundle loading

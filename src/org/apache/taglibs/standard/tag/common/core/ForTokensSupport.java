@@ -55,10 +55,9 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import java.util.StringTokenizer;
+
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.LoopTagSupport;
 
 /**

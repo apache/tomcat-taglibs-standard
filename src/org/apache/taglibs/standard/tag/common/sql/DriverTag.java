@@ -55,11 +55,11 @@
 
 package org.apache.taglibs.standard.tag.common.sql;
 
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.jstl.sql.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.ServletContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * <p>Tag handler for &lt;Driver&gt; in JSTL, used to create

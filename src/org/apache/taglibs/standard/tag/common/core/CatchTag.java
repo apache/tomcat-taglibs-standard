@@ -55,8 +55,9 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.tagext.TryCatchFinally;
 
 /**
  * <p>Tag handler for &lt;catch&gt; in JSTL 1.0.</p>

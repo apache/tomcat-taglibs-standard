@@ -55,17 +55,15 @@
 
 package org.apache.taglibs.standard.tag.common.sql;
 
-import java.sql.*;
-import java.util.*;
-import javax.sql.*;
-import javax.servlet.*;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.jstl.sql.*;
-import javax.servlet.jsp.tagext.*;
-import javax.servlet.jsp.jstl.core.Config;
-import javax.naming.InitialContext;
-import javax.naming.Context;
-import javax.naming.NamingException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.tagext.TryCatchFinally;
+import javax.sql.DataSource;
+
 import org.apache.taglibs.standard.resources.Resources;
 
 

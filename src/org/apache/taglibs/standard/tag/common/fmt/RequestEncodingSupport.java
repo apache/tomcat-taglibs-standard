@@ -55,12 +55,12 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
-import java.io.*;
-import java.util.TimeZone;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.core.Util;
-import org.apache.taglibs.standard.resources.Resources;
+import java.io.UnsupportedEncodingException;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * Support for tag handlers for &lt;requestEncoding&gt;, the tag for setting

@@ -55,10 +55,12 @@
 
 package org.apache.taglibs.standard.tag.el.core;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.tag.common.core.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
+
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 
 /**
  * <p>Contains some static utilities to facilitate common forms of

@@ -55,8 +55,9 @@
 
 package org.apache.taglibs.standard.extra.spath;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * <p>Tag handler that exposes SPath functionality.</p>

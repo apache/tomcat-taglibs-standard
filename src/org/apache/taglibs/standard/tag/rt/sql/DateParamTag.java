@@ -54,9 +54,8 @@
  */ 
 package org.apache.taglibs.standard.tag.rt.sql;
 
-import javax.servlet.jsp.*;
 import java.util.Date;
-import org.apache.taglibs.standard.lang.support.*;
+
 import org.apache.taglibs.standard.tag.common.sql.DateParamTagSupport;
 
 /**

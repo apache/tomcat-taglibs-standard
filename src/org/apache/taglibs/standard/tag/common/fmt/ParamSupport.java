@@ -55,8 +55,11 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.Tag;
+
 import org.apache.taglibs.standard.resources.Resources;
 
 /**

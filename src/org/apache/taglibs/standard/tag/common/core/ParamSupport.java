@@ -55,15 +55,15 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
-import java.lang.reflect.*;
-import java.util.*;
-import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.Tag;
 
 import org.apache.taglibs.standard.resources.Resources;
-import org.apache.taglibs.standard.tag.common.core.Util;
 
 /**
  * <p>Support for tag handlers for &lt;param&gt;, the URL parameter
