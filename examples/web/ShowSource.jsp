@@ -21,10 +21,10 @@
 
 <html>
 <head>
-  <title>JSTL: Source code for <c:expr value="${filename}"/></title>
+  <title>JSTL: Source code for <c:out value="${filename}"/></title>
 </head>
 <body bgcolor="#FFFFFF">
-<h3>Source code for:&nbsp; <c:expr value="${filename}"/></h3>
+<h3>Source code for:&nbsp; <c:out value="${filename}"/></h3>
 
 <hr>
 
