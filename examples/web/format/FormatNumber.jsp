@@ -24,11 +24,11 @@
   <fmt:parseNumber value="$cur" type="currency"/>
 
  <li> Parse numeric string (using default &quot;en&quot; locale) and format as currency:
-  <fmt:locale value="de"/>
+  <fmt:locale value="de-de"/>
   <fmt:formatNumber value="12345.67" type="currency"/>
 
  <li> Parse numeric string (using 'parseLocale' locale) and format as currency:
-  <fmt:locale value="de"/>
+  <fmt:locale value="de-de"/>
   <fmt:formatNumber parseLocale="de" type="currency">
    12345.67
   </fmt:formatNumber>
