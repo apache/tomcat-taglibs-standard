@@ -5,7 +5,7 @@
 <taglib>
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
-  <short-name>sql-rt</short-name>
+  <short-name>sql_rt</short-name>
   <uri>http://java.sun.com/jstl/ea/sql-rt</uri>
   <display-name>JSTL sql RT</display-name>
   <description>JSTL 1.0 sql library</description>
