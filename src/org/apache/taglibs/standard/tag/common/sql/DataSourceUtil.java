@@ -165,13 +165,20 @@ public class DataSourceUtil {
         }
         paramString[aryCount] = params.substring(begin);
 
+	// use the JDBC URL from the parameter string
         ((DataSourceWrapper)dataSource).setJdbcURL(paramString[0]);
-        try {
-            ((DataSourceWrapper)dataSource).setDriverClassName(paramString[1]);
-        } catch (Exception ex) {
-            throw new JspTagException(
-                Resources.getMessage("DRIVER_INVALID_CLASS", ex.getMessage()));
-        }
+
+	// try to load a driver if it's present
+        if (paramString[1] != null) {
+            try {
+                ((DataSourceWrapper)dataSource).setDriverClassName(paramString[1]);
+            } catch (Exception ex) {
+                throw new JspTagException(
+                    Resources.getMessage("DRIVER_INVALID_CLASS", ex.getMessage()));
+            }
+	}
+
+	// set the username and password
         ((DataSourceWrapper)dataSource).setUserName(paramString[2]);
         ((DataSourceWrapper)dataSource).setPassword(paramString[3]);
     }
