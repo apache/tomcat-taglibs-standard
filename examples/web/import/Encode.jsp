@@ -7,7 +7,7 @@
 <body bgcolor="#FFFFFF">
 <h3>URL Encoding</h3>
 
-<h4>&lt;urlEncode&gt;</h4>
+<h4>&lt;c:url&gt;</h4>
 
 <table border="1" bgcolor="#dddddd">
  <tr>
