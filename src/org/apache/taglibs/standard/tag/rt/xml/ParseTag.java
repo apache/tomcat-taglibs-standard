@@ -79,8 +79,8 @@ public class ParseTag extends ParseSupport {
     }
 
     // 'doc' replaces 'xml' as of JSTL 1.1
-    public void setDoc(String xml_) {
-        this.xml = xml_;
+    public void setDoc(Object xml) throws JspTagException {
+        this.xml = xml;
     }
 
     public void setSystemId(String systemId) throws JspTagException {
