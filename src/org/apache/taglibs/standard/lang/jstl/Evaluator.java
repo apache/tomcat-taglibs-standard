@@ -137,7 +137,7 @@ public class Evaluator
 	 pExpectedType);
     }
     catch (ELException exc) {
-      return new JspException
+      throw new JspException
 	(MessageFormat.format
 	 (Constants.ATTRIBUTE_EVALUATION_EXCEPTION,
 	  new Object [] {

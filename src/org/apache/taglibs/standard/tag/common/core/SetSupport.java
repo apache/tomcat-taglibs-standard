@@ -80,6 +80,7 @@ public class SetSupport extends BodyTagSupport {
     protected String property;                          // tag attribute
     private String var;					// tag attribute
     private int scope;					// tag attribute
+    private boolean scopeSpecified;			// status
 
     //*********************************************************************
     // Construction and initialization
@@ -97,7 +98,7 @@ public class SetSupport extends BodyTagSupport {
     // resets local state
     private void init() {
         value = var = null;
-	valueSpecified = false;
+	scopeSpecified = valueSpecified = false;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -139,9 +140,12 @@ public class SetSupport extends BodyTagSupport {
              * is made to store something in the session without any
 	     * HttpSession existing).
              */
-	    if (result != null)
-	        pageContext.setAttribute(var, result, scope);
-	    else
+	    if (result != null) {
+		if (scopeSpecified)
+	            pageContext.setAttribute(var, result, scope);
+		else
+		    pageContext.removeAttribute(var);
+	    } else
 		pageContext.removeAttribute(var);
 
 	} else if (target != null) {
@@ -180,9 +184,8 @@ public class SetSupport extends BodyTagSupport {
 		    throw new JspException(ex);
 		}
 	    }
-
 	} else {
-	    // should't ever occur because of validation in TLV and settesr
+	    // should't ever occur because of validation in TLV and setters
 	    throw new JspTagException();
 	}
 
@@ -201,5 +204,6 @@ public class SetSupport extends BodyTagSupport {
     // for tag attribute
     public void setScope(String scope) {
         this.scope = Util.getScope(scope);
+	this.scopeSpecified = true;
     }
 }
