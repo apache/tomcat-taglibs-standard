@@ -285,6 +285,13 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
         return true;
     }
 
+    // returns true if the 'var' attribute is empty
+    protected boolean hasEmptyVar(Attributes a) {
+	if ("".equals(a.getValue(VAR)))
+	    return true;
+	return false;
+    }
+
     // returns true if the 'scope' attribute is present without 'var'
     protected boolean hasDanglingScope(Attributes a) {
 	return (a.getValue(SCOPE) != null && a.getValue(VAR) == null);

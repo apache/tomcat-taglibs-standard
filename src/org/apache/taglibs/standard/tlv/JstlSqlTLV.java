@@ -153,6 +153,8 @@ public class JstlSqlTLV extends JstlBaseTLV {
             if (qn.startsWith(prefix + ":") && !hasNoInvalidScope(a))
                 fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
                     SCOPE, qn, a.getValue(SCOPE))); 
+	    if (qn.startsWith(prefix + ":") && hasEmptyVar(a))
+		fail(Resources.getMessage("TLV_EMPTY_VAR", qn));
 	    if (qn.startsWith(prefix + ":") && hasDanglingScope(a))
 		fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
 

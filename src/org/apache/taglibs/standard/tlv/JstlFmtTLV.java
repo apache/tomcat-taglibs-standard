@@ -190,6 +190,8 @@ public class JstlFmtTLV extends JstlBaseTLV {
             if (qn.startsWith(prefix + ":") && !hasNoInvalidScope(a))
                 fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
                     SCOPE, qn, a.getValue(SCOPE)));
+	    if (qn.startsWith(prefix + ":") && hasEmptyVar(a))
+		fail(Resources.getMessage("TLV_EMPTY_VAR", qn));
             if (qn.startsWith(prefix + ":")
                 && !isFmtTag(ns, ln, SETLOCALE) 
 		&& !isFmtTag(ns, ln, SETBUNDLE)
