@@ -90,8 +90,8 @@ public abstract class MessageSupport extends BodyTagSupport {
     //*********************************************************************
     // Private state
 
-    private String var;                                // 'var' attribute
-    private int scope;                                 // 'scope' attribute
+    private String var;                           // 'var' attribute
+    private int scope;                            // 'scope' attribute
     private List arguments;
 
 
@@ -142,8 +142,14 @@ public abstract class MessageSupport extends BodyTagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	String prefix = null;
+	if (key == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (key = bcs.trim()).equals(""))
+                throw new JspTagException(
+                    Resources.getMessage("MESSAGE_NO_KEY"));
+	}
 
+	String prefix = null;
 	if (bundle == null) {
 	    Tag t = findAncestorWithClass(this, BundleSupport.class);
 	    if (t != null) {

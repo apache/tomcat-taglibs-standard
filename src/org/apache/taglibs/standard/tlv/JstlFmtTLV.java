@@ -67,24 +67,21 @@ import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * <p>A SAX-based TagLibraryValidator for the core JSTL tag library.
- * Currently implements the following checks:</p>
+ * <p>A SAX-based TagLibraryValidator for the JSTL i18n-capable formatting
+ * library. Currently implements the following checks:</p>
  * 
  * <ul>
  *   <li>Expression syntax validation, with full support for
  *      &lt;jx:expressionLanguage&gt;</li>
- *   <li>Choose / when / otherwise constraints</li>
+ *   <li><message> with 'messageArgs' attribute must not have any <messageArg>
+ *      subtags as its direct children.</li>
  *   <li>Tag bodies that must either be empty or non-empty given
- *      particular attributes.  (E.g., <set> cannot have a body when
- *      'value' is specified; it *must* have a body otherwise.)  For
- *      these purposes, "having a body" refers to non-whitespace
- *      content inside the tag.</li>
- *   <li>Other minor constraints.</li>
+ *      particular attributes.</li>
  * </ul>
  * 
  * @author Shawn Bayern
  */
-public class JstlCoreTLV extends JstlBaseTLV {
+public class JstlFmtTLV extends JstlBaseTLV {
 
     //*********************************************************************
     // Implementation Overview
@@ -101,6 +98,13 @@ public class JstlCoreTLV extends JstlBaseTLV {
      * "how do I read my init parameters and then validate?"  But also,
      * the specific SAX methodology was kept as general as possible to
      * allow for experimentation and flexibility.
+     *
+     * Much of the code and structure is duplicated from JstlCoreTLV.
+     * An effort has been made to re-use code where unambiguously useful.
+     * However, splitting logic among parent/child classes isn't
+     * necessarily the cleanest approach when writing a parser like the
+     * one we need.  I'd like to reorganize this somewhat, but it's not
+     * a priority.
      */
 
 
@@ -108,22 +112,20 @@ public class JstlCoreTLV extends JstlBaseTLV {
     // Constants
 
     // tag names
-    private final String CHOOSE = "choose";
-    private final String WHEN = "when";
-    private final String OTHERWISE = "otherwise";
-    private final String EXPR = "expr";
-    private final String SET = "set";
-    private final String IMPORT = "import";
-    private final String PARAM = "param";
-    private final String URL_ENCODE = "urlEncode";
+    private final String MESSAGE = "message";
+    private final String MESSAGE_ARG = "messageArg";
+    private final String MESSAGE_FORMAT = "messageFormat";
+    private final String FORMAT_NUMBER = "formatNumber";
+    private final String PARSE_NUMBER = "parseNumber";
+    private final String PARSE_DATE = "parseDate";
     private final String EXPLANG = "expressionLanguage";
     private final String JSP_TEXT = "jsp:text";
 
     // attribute names
     private final String EVAL = "evaluator";
+    private final String MESSAGE_KEY = "key";
+    private final String MESSAGE_ARGS = "messageArgs";
     private final String VALUE = "value";
-    private final String DEFAULT = "default";
-    private final String VAR_READER = "varReader";
 
 
     //*********************************************************************
@@ -142,11 +144,9 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	// parser state
 	private int depth = 0;
-	private Stack chooseDepths = new Stack();
-	private Stack chooseHasOtherwise = new Stack();
 	private Stack expressionLanguage = new Stack();
-	private Stack importWithReaderDepths = new Stack();
-	private Stack importWithoutReaderDepths = new Stack();
+	private Stack messageDepths = new Stack();
+	private Stack messageHasMessageArgs = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
@@ -162,9 +162,9 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	public void startElement(
 	        String ns, String ln, String qn, Attributes a) {
 
-	    // substitute our own parsed 'ln' if it's not provided
-	    if (ln == null)
-		ln = getLocalPart(qn);
+            // substitute our own parsed 'ln' if it's not provided
+            if (ln == null)
+                ln = getLocalPart(qn);
 
 	    // for simplicity, we can ignore <jsp:text> for our purposes
 	    // (don't bother distinguishing between it and its characters)
@@ -173,7 +173,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // check body-related constraint
 	    if (bodyIllegal)
-		fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
+		fail(Resources.getMessage("TLV_ILLEGAL_BODY",
+					  lastElementName));
 
 	    // temporarily "install" new expression language if appropriate
 	    if (isTag(qn, EXPLANG))
@@ -204,77 +205,45 @@ public class JstlCoreTLV extends JstlBaseTLV {
             // validate attributes
             if (!hasNoInvalidScope(a))
                 fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
-                    SCOPE, qn, a.getValue(SCOPE))); 
+                    SCOPE, qn, a.getValue(SCOPE)));
 
-	    // check invariants for <choose>
-	    if (chooseChild()) {
-		// ensure <choose> has the right children
-		if(!isTag(qn, WHEN) && !isTag(qn, OTHERWISE)) {
-		    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
-			prefix, CHOOSE, qn));
-		}
-
-		// make sure <otherwise> is the last tag
-		if (((Boolean) chooseHasOtherwise.peek()).booleanValue()) {
-		   fail(Resources.getMessage("TLV_ILLEGAL_ORDER",
-			qn, prefix, OTHERWISE, CHOOSE));
-		}
-		if (isTag(qn, OTHERWISE)) {
-		    chooseHasOtherwise.pop();
-		    chooseHasOtherwise.push(new Boolean(true));
-		}
-
-	    }
-
-	    // check invariants for <import>
-	    if (lastImportHadReader()) {
-		// we're immediately under an <import varReader="..."> tag,
-		// where <param> tags are illegal
-		if (isTag(qn, PARAM)) {
-		    fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
-			prefix, PARAM, IMPORT, VAR_READER));
-		}
-	    }
-	    if (!importWithoutReaderDepths.empty()) {
-		// we're in an <import> without a Reader; nothing but
-		// <param> is allowed
-		if (!isTag(qn, PARAM))
-		    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
-			prefix, IMPORT, qn));
+	    // check invariants for <message>
+	    if (isTag(qn, MESSAGE_ARG) && messageChild()
+		&& ((Boolean) messageHasMessageArgs.peek()).booleanValue()) {
+		/*
+		 * we're a <messageArg> tag and the direct child of
+		 * <message messageArgs="...">, which is illegal
+		 */
+		fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
+	            prefix, MESSAGE_ARG, MESSAGE, MESSAGE_ARGS));
 	    }
 
 	    // now, modify state
 
-	    // we're a choose, so record new choose-specific state
-	    if (isTag(qn, CHOOSE)) {
-		chooseDepths.push(new Integer(depth));
-		chooseHasOtherwise.push(new Boolean(false));
-	    }
-
-	    // if we're in an import, record relevant state
-	    if (isTag(qn, IMPORT)) {
-		if (hasAttribute(a, VAR_READER))
-		    importWithReaderDepths.push(new Integer(depth));
+	    // if we're in a <message>, record relevant state
+	    if (isTag(qn, MESSAGE)) {
+		messageDepths.push(new Integer(depth));
+		if (hasAttribute(a, MESSAGE_ARGS))
+		    messageHasMessageArgs.push(new Boolean(true));
 		else
-		    importWithoutReaderDepths.push(new Integer(depth));
+		    messageHasMessageArgs.push(new Boolean(false));
 	    }
 
 	    // set up a check against illegal attribute/body combinations
 	    bodyIllegal = false;
 	    bodyNecessary = false;
-	    if (isTag(qn, EXPR)) {
-		if (hasAttribute(a, DEFAULT))
-		    bodyIllegal = true;
-	    } else if (isTag(qn, SET)) {
+	    if (isTag(qn, MESSAGE_ARG)
+		    || isTag(qn, FORMAT_NUMBER)
+		    || isTag(qn, PARSE_NUMBER)
+		    || isTag(qn, PARSE_DATE)) {
 		if (hasAttribute(a, VALUE))
 		    bodyIllegal = true;
 		else
 		    bodyNecessary = true;
-	    } else if (isTag(qn, URL_ENCODE)) {
-		if (hasAttribute(a, VALUE))
-		    bodyIllegal = true;
-		else
-		    bodyNecessary = true;
+	    } else if (isTag(qn, MESSAGE) && !hasAttribute(a, MESSAGE_KEY)) {
+		bodyNecessary = true;
+	    } else if (isTag(qn, MESSAGE_FORMAT) && !hasAttribute(a, VALUE)) {
+		bodyNecessary = true;
 	    }
 
 	    // record the most recent tag (for error reporting)
@@ -294,23 +263,9 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // check and update body-related constraints
 	    if (bodyIllegal)
-		fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
-	    bodyNecessary = false;		// body is no longer necessary!
-	    if (!importWithoutReaderDepths.empty()) {
-		// we're in an <import> without a Reader; nothing but
-		// <param> is allowed
 		fail(Resources.getMessage("TLV_ILLEGAL_BODY",
-		    prefix + ":" + IMPORT));
-	    }
-
-	    // make sure <choose> has no non-whitespace text
-	    if (chooseChild()) {
-		String msg = 
-		    Resources.getMessage("TLV_ILLEGAL_TEXT_BODY",
-			prefix, CHOOSE,
-			(s.length() < 7 ? s : s.substring(0,7)));
-		fail(msg);
-	    }
+					  lastElementName));
+	    bodyNecessary = false;		// body is no longer necessary!
 	}
 
 	public void endElement(String ns, String ln, String qn) {
@@ -325,19 +280,10 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		    lastElementName));
 	    bodyIllegal = false;	// reset: we've left the tag
 
-	    // update <choose>-related state
-	    if (isTag(qn, CHOOSE)) {
-		chooseDepths.pop();
-		chooseHasOtherwise.pop();
-	    }
-
-	    // update <import>-related state
-	    if (isTag(qn, IMPORT)) {
-		// pop from the appropriate "import" stack
-		if (lastImportHadReader())
-		    importWithReaderDepths.pop();
-		else
-		    importWithoutReaderDepths.pop();
+	    // update <message>-related state
+	    if (isTag(qn, MESSAGE)) {
+		messageDepths.pop();
+		messageHasMessageArgs.pop();
 	    }
 
 	    // update language state
@@ -348,25 +294,10 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    depth--;
 	}
 
-	// are we directly under a <choose>?
-	private boolean chooseChild() {
-	    return (!chooseDepths.empty()
-		&& (depth - 1) == ((Integer) chooseDepths.peek()).intValue());
-	}
-
-	// returns the top int depth (peeked at) from a Stack of Integer
-	private int topDepth(Stack s) {
-	    if (s == null || s.empty())
-		return -1;
-	    else
-		return ((Integer) s.peek()).intValue();
-	}
-
-	// did the last <import> tag have a varReader attribute?
-	private boolean lastImportHadReader() {
-	    return (!importWithReaderDepths.empty()
-		&& (topDepth(importWithReaderDepths) >
-                    topDepth(importWithoutReaderDepths)));
+	// are we directly under a <message>
+	private boolean messageChild() {
+	    return (!messageDepths.empty()
+		&& (depth - 1) == ((Integer) messageDepths.peek()).intValue());
 	}
     }
 }

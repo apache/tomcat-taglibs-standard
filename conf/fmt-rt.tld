@@ -144,7 +144,7 @@
     </description>
     <attribute>
         <name>key</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
@@ -178,7 +178,7 @@
     </description>
     <attribute>
         <name>value</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
@@ -212,13 +212,13 @@
     <name>formatNumber</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.FormatNumberTag</tag-class>
     <tei-class>org.apache.taglibs.standard.tei.FormatNumberTEI</tei-class>
-    <body-content>EMPTY</body-content>
+    <body-content>JSP</body-content>
     <description>
         Formats a numeric value as a number, currency, or percentage
     </description>
     <attribute>
         <name>value</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
@@ -252,13 +252,13 @@
     <name>parseNumber</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParseNumberTag</tag-class>
     <tei-class>org.apache.taglibs.standard.tei.ParseNumberTEI</tei-class>
-    <body-content>EMPTY</body-content>
+    <body-content>JSP</body-content>
     <description>
         Parses the string representation of a number, currency, or percentage
     </description>
     <attribute>
         <name>value</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
@@ -347,13 +347,13 @@
     <name>parseDate</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.ParseDateTag</tag-class>
     <tei-class>org.apache.taglibs.standard.tei.ParseDateTEI</tei-class>
-    <body-content>EMPTY</body-content>
+    <body-content>JSP</body-content>
     <description>
         Parses the string representation of a date and/or time
     </description>
     <attribute>
         <name>value</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>

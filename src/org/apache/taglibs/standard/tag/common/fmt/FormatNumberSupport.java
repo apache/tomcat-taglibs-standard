@@ -70,7 +70,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Jan Luehe
  */
 
-public abstract class FormatNumberSupport extends TagSupport {
+public abstract class FormatNumberSupport extends BodyTagSupport {
 
     //*********************************************************************
     // Public constants
@@ -144,6 +144,12 @@ public abstract class FormatNumberSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
+	if (value == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (value = bcs.trim()).equals(""))
+                throw new JspTagException(
+                    Resources.getMessage("FORMAT_NUMBER_NO_VALUE"));
+	}
 
 	/*
 	 * If the value given is a string literal, it is first parsed into an

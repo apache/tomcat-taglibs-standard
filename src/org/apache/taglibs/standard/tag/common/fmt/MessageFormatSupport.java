@@ -131,8 +131,14 @@ public abstract class MessageFormatSupport extends BodyTagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	String message = value;
+	if (value == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (value = bcs.trim()).equals(""))
+                throw new JspTagException(
+                    Resources.getMessage("MESSAGE_FORMAT_NO_VALUE"));
+	}
 
+	String message = value;
 	if (!arguments.isEmpty()) {
 	    MessageFormat formatter = new MessageFormat("");
 	    formatter.applyPattern(value);

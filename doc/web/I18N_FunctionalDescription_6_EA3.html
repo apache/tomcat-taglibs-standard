@@ -14,7 +14,8 @@
 
 <hr width="100%" noshade></h3>
 
-<h2> I18N-Capable Formatting Tags:&nbsp;Functional Description</h2>
+<h2>
+I18N-Capable Formatting Tags: Functional Description</h2>
 
 <h2>
 <tt>&lt;fmt:locale><br>
@@ -29,6 +30,7 @@
 &lt;fmt:parseDate><br>
 &lt;fmt:exception><br>
 &lt;fmt:requestEncoding></tt></h2>
+
 <hr width="100%" noshade>
 <h3>
 1. Introduction</h3>
@@ -190,9 +192,12 @@ name (defined by the <tt>javax.servlet.jsp.jstl.i18n.basename</tt> attribute).</
 A <tt>&lt;formatNumber></tt> or <tt>&lt;formatDate></tt> action that is
 not enclosed within a <tt>&lt;bundle> </tt>action.</li>
 
-<p><br>After an action has called <tt>ServletResponse.setLocale()</tt>,
-it determines the character encoding associated with the locale (by calling
-<tt>ServletResponse.getCharacterEncoding()</tt>) and stores it in the <tt>javax.servlet.jsp.jstl.i18n.request.charset</tt>
+<br>&nbsp;
+<p>&nbsp;
+<p>After an action has called <tt>ServletResponse.setLocale()</tt>, it
+determines the character encoding associated with the locale (by calling
+<tt>ServletResponse.getCharacterEncoding()</tt>)
+and stores it in the <tt>javax.servlet.jsp.jstl.i18n.request.charset</tt>
 session attribute. This attribute may be used by the <tt>&lt;requestEncoding></tt>
 action in a page invoked by a form included in the response to set the
 request charset to the same as the response charset. This makes it possible
@@ -311,8 +316,10 @@ by this action.
 <h3>
 8. &lt;message></h3>
 The <tt>&lt;message></tt> action retrieves the localized message corresponding
-to the message key specified by the
-<tt>key</tt> attribute.
+to a given message key.
+<p>The message key may be specified via the
+<tt>key</tt> attribute; if
+missing, it is read from the tag's body content.
 <p>The resource bundle in which to look up the message key may be given
 by the <tt>bundle</tt> attribute. If this attribute is missing, and the
 <tt>&lt;message>
@@ -371,8 +378,9 @@ in:
 <h3>
 9. &lt;messageFormat></h3>
 The <tt>&lt;messageFormat> </tt>action performs parametric replacement
-on the pattern string specified via the <tt>value</tt> attribute, using
-the runtime's default locale.
+on a given pattern string , using the runtime's default locale.
+<p>The pattern string may be specified via the <tt>value</tt> attribute;
+if missing, it is read from the tag's body content.
 <p>The argument values for parametric replacement must be supplied via
 <tt>&lt;messageArg></tt>
 subtags. Each <tt>&lt;messageArg></tt> subtag replaces one parameter in
@@ -427,12 +435,14 @@ or inline via the tag's body content:
 The <tt>&lt;formatNumber></tt> action allows the formatting of numbers,
 currencies, and percentages, using predefined or customized formatting
 styles.
+<p>The numeric value to be formatted may be specified via the <tt>value</tt>
+attribute; if missing, it is read from the tag's body content.
 <p>Depending on the value of the <tt>type</tt> attribute, which must be
-one of "number", "currency", or "percent" (default: "number"), the numeric
-value specified by the <tt>value</tt> attribute is formatted as a number,
-currency, or percentage, respectively, using the default formatting pattern
-for numbers (currencies, percentages) of the page's locale, which is determined
-according to Section 2 of this functional description.
+one of "number", "currency", or "percent" (default: "number"), the given
+numeric value is formatted as a number, currency, or percentage, respectively,
+using the default formatting pattern for numbers (currencies, percentages)
+of the page's locale, which is determined according to Section 2 of this
+functional description.
 <p>The result is output to the current
 <tt>JspWriter</tt> object, unless
 the <tt>var</tt> attribute is given, in which case it is stored (as a string)
@@ -465,7 +475,7 @@ grouped. Applied to "123456.7891", as in:
 automatically).
 <p>The <tt>value</tt> and <tt>pattern</tt> attributes accept both string
 literals and EL values.
-<p>If the input to the <tt>value</tt> attribute is a string literal, it
+<p>If the numeric value to be formatted is given as a string literal, it
 is first parsed into an instance of <tt>java.lang.Number
 </tt>according
 to the default pattern of the locale specified by the <tt>parseLocale</tt>
@@ -485,14 +495,15 @@ causes a translation-time error.
 12. &lt;parseNumber></h3>
 The <tt>&lt;parseNumber></tt> action is used for parsing numbers, currencies,
 and percentages.
+<p>The numeric string to be parsed may be specified via the <tt>value</tt>
+attribute; if missing, it is read from the tag's body content.
 <p>Depending on the value of the <tt>type</tt> attribute, which must be
-one of "number", "currency", or "percent" (default: "number"), the string
-specified via the <tt>value</tt> attribute is parsed as a number, currency,
-or percentage, respectively, using the default formatting pattern for numbers
-(currencies, percentages) of the locale specified by the <tt>parseLocale</tt>
-attribute. If the <tt>parseLocale</tt> attribute is missing, the page's
-locale is used, which is determined according to Section 2 of this functional
-description.
+one of "number", "currency", or "percent" (default: "number"), the given
+numeric string is parsed as a number, currency, or percentage, respectively,
+using the default formatting pattern for numbers (currencies, percentages)
+of the locale specified by the <tt>parseLocale</tt> attribute. If the <tt>parseLocale</tt>
+attribute is missing, the page's locale is used, which is determined according
+to Section 2 of this functional description.
 <p>If the number specified via the <tt>value</tt> attribute uses a format
 different from the page locale's default, the pattern required to parse
 it may be specified using the <tt>pattern</tt> attribute.
@@ -580,17 +591,18 @@ validation if the specified literal is illegal.
 <h3>
 14. &lt;parseDate></h3>
 The <tt>&lt;parseDate></tt> action is used for parsing date and time strings.
+<p>The date string to be parsed may be specified via the <tt>value</tt>
+attribute; if missing, it is read from the tag's body content.
 <p>Depending on the value of the <tt>type</tt> attribute, which must be
-one of "time", "date", or "both" (default: "date"), the date string given
-via the
-<tt>value</tt> attribute is expected to contain only a time, a
-date, or both a time and date component, respectively. It is parsed according
-to one of the predefined formatting styles for dates (specified via the
-<tt>dateStyle</tt>
-attribute) and times (specified via the <tt>timeStyle</tt> attribute) of
-the locale specified by the <tt>parseLocale</tt> attribute. If the <tt>parseLocale</tt>
-attribute is missing, the page's locale is used, which is determined according
-to Section 2 of this functional description. Legal values for the
+one of "time", "date", or "both" (default: "date"), the given date string
+is expected to contain only a time, a date, or both a time and date component,
+respectively. It is parsed according to one of the predefined formatting
+styles for dates (specified via the
+<tt>dateStyle</tt> attribute) and times
+(specified via the <tt>timeStyle</tt> attribute) of the locale specified
+by the <tt>parseLocale</tt> attribute. If the <tt>parseLocale</tt> attribute
+is missing, the page's locale is used, which is determined according to
+Section 2 of this functional description. Legal values for the
 <tt>dateStyle</tt>
 and <tt>timeStyle</tt> attributes are "default", "short", "medium ", "long",
 and "full" (default: "default").
@@ -688,8 +700,8 @@ explicitly or through the use of an EL expression.
 <p>If the character encoding of the request parameters is not known in
 advance (since the locale and thus character encoding of the page that
 generated the form collecting the parameter values was determined dynamically),
-the <tt>value</tt> attribute must not be specified. In this case, the <tt>&lt;requestEncoding></tt>&nbsp;action
-first checks if there is a charset defined in the request <tt>Content-Type</tt>
+the <tt>value</tt> attribute must not be specified. In this case, the <tt>&lt;requestEncoding></tt>
+action first checks if there is a charset defined in the request <tt>Content-Type</tt>
 header. If not, it uses the character encoding from the <tt>javax.servlet.jsp.jstl.i18n.request.charset</tt>
 attribute, which is searched in the page, request, session (if valid),
 and application scope(s) (in this order). If this attribute is not found,

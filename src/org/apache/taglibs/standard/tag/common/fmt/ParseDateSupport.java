@@ -70,7 +70,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Jan Luehe
  */
 
-public abstract class ParseDateSupport extends TagSupport {
+public abstract class ParseDateSupport extends BodyTagSupport {
 
     //*********************************************************************
     // Protected state
@@ -140,11 +140,16 @@ public abstract class ParseDateSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	DateFormat formatter = null;
+	if (value == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (value = bcs.trim()).equals(""))
+                throw new JspTagException(
+                    Resources.getMessage("PARSE_DATE_NO_VALUE"));
+	}
 
 	/*
-	 * Use parsing locale specified via the 'parseLocale' attribute.
-	 * If no such attribute, use page's locale.
+	 * Set up parsing locale: Use locale specified via the 'parseLocale'
+	 * attribute (if present), or else determine page's locale.
 	 */
 	Locale locale = parseLocale;
 	if (locale == null)
@@ -154,6 +159,8 @@ public abstract class ParseDateSupport extends TagSupport {
 		false,
 	        DateFormat.getAvailableLocales());
 
+	// Get appropriate formatter instance
+	DateFormat formatter = null;
 	switch (type) {
 	case FormatDateSupport.DATE_TYPE:
 	    formatter = DateFormat.getDateInstance(dateStyle, locale);
@@ -182,6 +189,7 @@ public abstract class ParseDateSupport extends TagSupport {
 	if (timeZone != null)
 	    formatter.setTimeZone(timeZone);
 
+	// Parse date
 	Date parsed = null;
 	try {
 	    parsed = formatter.parse(value);

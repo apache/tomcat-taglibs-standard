@@ -15,7 +15,9 @@
   <fmt:formatNumber value="123456789" type="currency"/>
 
  <li> Format as percentage: 
-  <fmt:formatNumber value="123456789" type="percent"/>
+  <fmt:formatNumber type="percent">
+   123456789
+  </fmt:formatNumber>
 
  <li> Format as currency, parse, and print parsed result: 
   <fmt:formatNumber value="123456789" type="currency" var="cur"/>
@@ -27,7 +29,9 @@
 
  <li> Parse numeric string (using 'parseLocale' locale) and format as currency:
   <fmt:locale value="de"/>
-  <fmt:formatNumber value="12345.67" parseLocale="de" type="currency"/>
+  <fmt:formatNumber parseLocale="de" type="currency">
+   12345.67
+  </fmt:formatNumber>
 </ul>
 
 </body>
