@@ -125,10 +125,7 @@ public class DataSourceUtil {
             }
         } else if (rawDataSource instanceof DataSource) {
             dataSource = (DataSource) rawDataSource;
-        } else {
-	    throw new JspException(
-                Resources.getMessage("SQL_DATASOURCE_INVALID"));
-	}
+        }
     }
 
     /**
