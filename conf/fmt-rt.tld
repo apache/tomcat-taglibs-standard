@@ -22,7 +22,7 @@
   <tag>
     <name>requestEncoding</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.RequestEncodingTag</tag-class>
-    <body-content>EMPTY</body-content>
+    <body-content>empty</body-content>
     <description>
         Sets the request character encoding
     </description>
@@ -36,7 +36,7 @@
   <tag>
     <name>setLocale</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetLocaleTag</tag-class>
-    <body-content>EMPTY</body-content>
+    <body-content>empty</body-content>
     <description>
         Stores the given locale in the locale configuration variable
     </description>
@@ -75,7 +75,7 @@
   <tag>
     <name>setTimeZone</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetTimeZoneTag</tag-class>
-    <body-content>EMPTY</body-content>
+    <body-content>empty</body-content>
     <description>
         Stores the given time zone in the time zone configuration variable
     </description>
@@ -118,7 +118,7 @@
   <tag>
     <name>setBundle</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.SetBundleTag</tag-class>
-    <body-content>EMPTY</body-content>
+    <body-content>empty</body-content>
     <description>
         Loads a resource bundle and stores it in the named scoped variable or
         the bundle configuration variable
@@ -300,7 +300,7 @@
   <tag>
     <name>formatDate</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.fmt.FormatDateTag</tag-class>
-    <body-content>EMPTY</body-content>
+    <body-content>empty</body-content>
     <description>
         Formats a date and/or time using the supplied styles and pattern
     </description>
