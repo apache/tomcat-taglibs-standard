@@ -340,9 +340,9 @@ public abstract class ImportSupport extends BodyTagSupport
 	    // for relative URLs, delegate to our peer
 	    return new StringReader(acquireString());
 	} else {
+            String target = targetUrl();
 	    try {
 	        // handle absolute URLs ourselves, using java.net.URL
-		String target = targetUrl();
 	        URL u = new URL(target);
                 URLConnection uc = u.openConnection();
                 InputStream i = uc.getInputStream();
@@ -369,9 +369,11 @@ public abstract class ImportSupport extends BodyTagSupport
 
 	        return r;
 	    } catch (IOException ex) {
-		throw new JspException(ex);
+		throw new JspException(
+                    Resources.getMessage("IMPORT_ABS_ERROR", target, ex), ex);
 	    } catch (RuntimeException ex) {  // because the spec makes us
-		throw new JspException(ex);
+		throw new JspException(
+                    Resources.getMessage("IMPORT_ABS_ERROR", target, ex), ex);
 	    }
 	}
     }
