@@ -100,9 +100,11 @@ public class Config {
      * had its own name space, that is, the same configuration variable name
      * in one scope does not replace one stored in a different scope.
      *
-     * @param pc 
+     * @param pc Page context in which the configuration variable is to be
+     * looked up
      * @param name Configuration variable name
-     * @param scope Configuration scope
+     * @param scope Scope in which the configuration variable is to be looked
+     * up
      *
      * @return The <tt>java.lang.Object</tt> associated with the configuration
      * variable, or null if it is not defined.
@@ -129,7 +131,8 @@ public class Config {
      * had its own name space, that is, the same configuration variable name
      * in one scope does not replace one stored in a different scope.
      *
-     * @param request
+     * @param request Request object in which the configuration variable is to
+     * be looked up
      * @param name Configuration variable name
      *
      * @return The <tt>java.lang.Object</tt> associated with the configuration
@@ -146,7 +149,8 @@ public class Config {
      * had its own name space, that is, the same configuration variable name
      * in one scope does not replace one stored in a different scope.
      *
-     * @param session
+     * @param session Session object in which the configuration variable is to
+     * be looked up
      * @param name Configuration variable name
      *
      * @return The <tt>java.lang.Object</tt> associated with the configuration
@@ -163,7 +167,8 @@ public class Config {
      * had its own name space, that is, the same configuration variable name
      * in one scope does not replace one stored in a different scope.
      *
-     * @param context
+     * @param context Servlet context in which the configuration variable is
+     * to be looked up
      * @param name Configuration variable name
      *
      * @return The <tt>java.lang.Object</tt> associated with the configuration
@@ -181,10 +186,10 @@ public class Config {
      * variable name in one scope does not replace one stored in a different
      * scope.
      *
-     * @param pc
+     * @param pc Page context in which the configuration variable is to be set
      * @param name Configuration variable name
-     * @param value
-     * @param scope
+     * @param value Configuration variable value
+     * @param scope Scope in which the configuration variable is to be set
      */
     public static void set(PageContext pc, String name, Object value,
 			   int scope) {
@@ -214,9 +219,10 @@ public class Config {
      * variable name in one scope does not replace one stored in a different
      * scope.
      *
-     * @param request
+     * @param request Request object in which the configuration variable is to
+     * be set
      * @param name Configuration variable name
-     * @paran value
+     * @paran value Configuration variable value
      */
     public static void set(ServletRequest request, String name, Object value) {
 	request.setAttribute(name + REQUEST_SCOPE_SUFFIX, value);
@@ -230,9 +236,10 @@ public class Config {
      * variable name in one scope does not replace one stored in a different
      * scope.
      *
-     * @param session
+     * @param session Session object in which the configuration variable is to
+     * be set
      * @param name Configuration variable name
-     * @param value
+     * @param value Configuration variable value
      */
     public static void set(HttpSession session, String name, Object value) {
 	session.setAttribute(name + SESSION_SCOPE_SUFFIX, value);
@@ -246,9 +253,10 @@ public class Config {
      * variable name in one scope does not replace one stored in a different
      * scope.
      *
-     * @param context
+     * @param context Servlet context in which the configuration variable is to
+     * be set
      * @param name Configuration variable name
-     * @param value
+     * @param value Configuration variable value
      */
     public static void set(ServletContext context, String name, Object value) {
 	context.setAttribute(name + APPLICATION_SCOPE_SUFFIX, value);
@@ -261,9 +269,11 @@ public class Config {
      * its own namespace, that is, the same configuration variable name in one
      * scope does not impact one stored in a different scope.
      *
-     * @param pc
+     * @param pc Page context from which the configuration variable is to be
+     * removed
      * @param name Configuration variable name
-     * @param scope
+     * @param scope Scope from which the configuration variable is to be 
+     * removed
      */
     public static void remove(PageContext pc, String name, int scope) {
 	switch (scope) {
@@ -291,7 +301,8 @@ public class Config {
      * its own namespace, that is, the same configuration variable name in one
      * scope does not impact one stored in a different scope.
      * 
-     * @param request
+     * @param request Request object from which the configuration variable is
+     * to be removed
      * @param name Configuration variable name
      */
     public static void remove(ServletRequest request, String name) {
@@ -305,7 +316,8 @@ public class Config {
      * its own namespace, that is, the same configuration variable name in one
      * scope does not impact one stored in a different scope.
      *
-     * @param session
+     * @param session Session object from which the configuration variable is
+     * to be removed
      * @param name Configuration variable name
      */
     public static void remove(HttpSession session, String name) {
@@ -319,7 +331,8 @@ public class Config {
      * its own namespace, that is, the same configuration variable name in one
      * scope does not impact one stored in a different scope.
      *
-     * @param context
+     * @param context Servlet context from which the configuration variable is
+     * to be removed
      * @param name Configuration variable name
      */
     public static void remove(ServletContext context, String name) {
@@ -328,8 +341,7 @@ public class Config {
  
     /**
      * Finds the value associated with a specific configuration setting
-     * identified by its context initialization parameter name (argument
-     * <tt>name</tt>).
+     * identified by its context initialization parameter name.
      *
      * <p> For each of the JSP scopes (page, request, session, application),
      * get the value of the configuration variable identified by <tt>name</tt>
@@ -337,8 +349,10 @@ public class Config {
      * found. If no value is found, get the value of the context initialization
      * parameter identified by <tt>name</tt>.
      *
-     * @param pc
-     * @param name Configuration variable name
+     * @param pc Page context in which the configuration setting is to be 
+     * searched
+     * @param name Context initialization parameter name of the configuration
+     * setting
      * 
      * @return The <tt>java.lang.Object</tt> associated with the configuration
      * setting identified by <tt>name</tt>, or null if it is not defined.
