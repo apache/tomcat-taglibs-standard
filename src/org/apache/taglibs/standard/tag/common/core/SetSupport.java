@@ -167,8 +167,11 @@ public class SetSupport extends BodyTagSupport {
 		    boolean succeeded = false;
                     for (int i = 0; i < pd.length; i++) {
                         if (pd[i].getName().equals(property)) {
-			    pd[i].getWriteMethod().invoke(target,
-			        new Object[] { result });
+			    Method m = pd[i].getWriteMethod();
+			    m.invoke(target,
+			             new Object[] { 
+				       ExpressionEvaluatorManager.coerce(
+					  result, m.getParameterTypes()[0])});
 			    succeeded = true;
 			}
 		    }

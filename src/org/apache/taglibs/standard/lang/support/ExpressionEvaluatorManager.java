@@ -59,6 +59,9 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+import org.apache.taglibs.standard.lang.jstl.Coercions;
+import org.apache.taglibs.standard.lang.jstl.Logger;
+import org.apache.taglibs.standard.lang.jstl.ELException;
 
 /**
  * <p>A conduit to the JSTL EL.  Based on...</p>
@@ -85,7 +88,7 @@ public class ExpressionEvaluatorManager {
     // Internal, static state
 
     private static HashMap nameMap = new HashMap();
-
+    private static Logger logger = new Logger(System.out);
 
     //*********************************************************************
     // Public static methods
@@ -129,9 +132,6 @@ public class ExpressionEvaluatorManager {
             attributeName, expression, expectedType, null, pageContext));
     }
 
-    //*********************************************************************
-    // Public static utility method (un-spec'd, local to RI)
-
     /**
      * Gets an ExpressionEvaluator from the cache, or seeds the cache
      * if we haven't seen a particular ExpressionEvaluator before.
@@ -165,6 +165,17 @@ public class ExpressionEvaluatorManager {
                 "couldn't instantiate ExpressionEvaluator: " +
                 ex.getMessage(), ex);
         }
+    }
+
+    /** Performs a type conversion according to the EL's rules. */
+    public static Object coerce(Object value, Class classe)
+            throws JspException {
+	try {
+	    // just delegate the call
+	    return Coercions.coerce(value, classe, logger);
+	} catch (ELException ex) {
+	    throw new JspException(ex);
+	}
     }
 
 } 
