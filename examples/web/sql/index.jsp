@@ -84,7 +84,7 @@
 </form>
 <hr>
 <p>NOTE: You can access the tags directly here to look at the source. If you do 
-  not provide a valid Driver and URL using the above form the tags NOT run properly.</p>
+  not provide a valid Driver and URL using the above form, the tags will NOT run properly.</p>
 <%@ include file="links.html" %>
 <!-- #EndEditable -->
 <hr noshade color="#000099">
