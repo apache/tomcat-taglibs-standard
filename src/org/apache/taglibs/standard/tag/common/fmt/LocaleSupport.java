@@ -56,6 +56,7 @@
 package org.apache.taglibs.standard.tag.common.fmt;
 
 import java.util.*;
+import javax.servlet.ServletResponse;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.core.Util;
@@ -76,7 +77,7 @@ public abstract class LocaleSupport extends TagSupport {
     static final String LOCALE_ATTRIBUTE =
 	"javax.servlet.jsp.jstl.i18n.locale";
 
-
+    
     //*********************************************************************
     // Private constants
 
@@ -123,8 +124,10 @@ public abstract class LocaleSupport extends TagSupport {
     // Tag logic
 
     public int doEndTag() throws JspException {
-	pageContext.setAttribute(LOCALE_ATTRIBUTE, parseLocale(value, variant),
-				 scope);
+	Locale locale = parseLocale(value, variant);
+	pageContext.setAttribute(LOCALE_ATTRIBUTE, locale, scope);
+	setResponseLocale(pageContext, locale);
+
 	return EVAL_PAGE;
     }
 
@@ -189,6 +192,31 @@ public abstract class LocaleSupport extends TagSupport {
     // Package-scoped utility methods
 
     /*
+     * Stores the given locale in the response object of the given page
+     * context, and stores the locale's associated charset in the
+     * javax.servlet.jsp.jstl.i18n.request.charset session attribute, which
+     * may be used by the <requestEncoding> action in a page invoked by a
+     * form included in the response to set the request charset to the same as
+     * the response charset (this makes it possible for the container to
+     * decode the form parameter values properly, since browsers typically
+     * encode form field values using the response's charset).
+     *
+     * @param pageContext the page context whose response object is assigned
+     * the given locale
+     * @param locale the response locale
+     */
+    static void setResponseLocale(PageContext pageContext, Locale locale) {
+	// set response locale
+	ServletResponse response = pageContext.getResponse();
+	response.setLocale(locale);
+	
+	// get response character encoding and store it in session attribute
+	pageContext.setAttribute(RequestEncodingSupport.REQUEST_CHAR_SET,
+				 response.getCharacterEncoding(),
+				 PageContext.SESSION_SCOPE);
+    }
+ 
+    /*
      * Determines the formatting locale to use with the given formatting
      * action in the given page.
      *
@@ -214,14 +242,16 @@ public abstract class LocaleSupport extends TagSupport {
      *
      * @param pageContext the page containing the formatting action
      * @param fromTag the formatting action
+     * @param format <tt>true</tt> if the formatting action is of type
+     * <formatXXX> (as opposed to <parseXXX>), and <tt>false</tt> otherwise
      * @param avail the array of available locales
      *
      * @return the formatting locale to use
      */
     static Locale getFormattingLocale(PageContext pageContext,
 				      Tag fromTag,
+				      boolean format,
 				      Locale[] avail) {
-
 	Locale ret = (Locale) pageContext.findAttribute(LOCALE_ATTRIBUTE);
 	if (ret == null) {
 	    Tag t = findAncestorWithClass(fromTag, BundleSupport.class);
@@ -233,17 +263,26 @@ public abstract class LocaleSupport extends TagSupport {
 		ResourceBundle bundle = BundleSupport.getDefaultBundle(
                     pageContext, BundleSupport.DEFAULT_BASENAME);
 		if (bundle != null) {
+		    // use locale from bundle with default base name
 		    ret = bundle.getLocale();
 		} else {
+		    // get best matching formatting locale
 		    ret = getBestMatch(pageContext, avail);
 		    if (ret == null) {
-			// no match, use runtime's default locale
+			// no match available, use runtime's default locale
 			ret = Locale.getDefault();
 		    }
 		}
 	    }
 	}
 	
+	/*
+	 * If this is a <formatXXX> (as opposed to a <parseXXX>) action,
+	 * set the response locale
+	 */
+	if (format)
+	    LocaleSupport.setResponseLocale(pageContext, ret);
+
 	return ret;
     }
 

@@ -196,6 +196,7 @@ public abstract class FormatDateSupport extends TagSupport {
 	Locale locale = LocaleSupport.getFormattingLocale(
             pageContext,
 	    this,
+	    true,
 	    DateFormat.getAvailableLocales());
 	switch (type) {
 	case DATE_TYPE:

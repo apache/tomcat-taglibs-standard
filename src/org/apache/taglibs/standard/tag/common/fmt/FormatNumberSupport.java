@@ -169,6 +169,7 @@ public abstract class FormatNumberSupport extends TagSupport {
 	Locale locale = LocaleSupport.getFormattingLocale(
             pageContext,
 	    this,
+	    true,
 	    NumberFormat.getAvailableLocales());
 	switch (type) {
 	case NUMBER_TYPE:

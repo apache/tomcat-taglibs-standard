@@ -72,9 +72,9 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class RequestEncodingSupport extends TagSupport {
 
     //*********************************************************************
-    // Private constants
+    // Package-scoped constants
 
-    private static final String REQUEST_CHAR_SET =
+    static final String REQUEST_CHAR_SET =
 	"javax.servlet.jsp.jstl.i18n.request.charset";
 
 

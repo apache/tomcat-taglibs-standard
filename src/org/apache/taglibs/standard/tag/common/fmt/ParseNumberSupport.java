@@ -138,6 +138,7 @@ public abstract class ParseNumberSupport extends TagSupport {
 	    locale = LocaleSupport.getFormattingLocale(
                 pageContext,
 	        this,
+		false,
 	        NumberFormat.getAvailableLocales());
 
 	switch (type) {

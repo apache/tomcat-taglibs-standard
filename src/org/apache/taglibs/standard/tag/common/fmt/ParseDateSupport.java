@@ -151,6 +151,7 @@ public abstract class ParseDateSupport extends TagSupport {
 	    locale = LocaleSupport.getFormattingLocale(
                 pageContext,
 	        this,
+		false,
 	        DateFormat.getAvailableLocales());
 
 	switch (type) {
