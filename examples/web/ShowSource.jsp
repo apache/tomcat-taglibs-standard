@@ -4,7 +4,7 @@
 -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/ea/core" %>
-<%@ taglib prefix="ex" uri="/jsptl-examples-taglib" %>
+<%@ taglib prefix="ex" uri="/jstl-examples-taglib" %>
 <html>
 <head>
   <title>JSTL: Source code for <c:expr value="$param:filename"/></title>
@@ -13,11 +13,14 @@
 <h3>Source code for:&nbsp; <c:expr value="$param:filename"/></h3>
 
 <hr>
-<%-- <c:import varReader="reader" url="$param:filename"> --%>
-<ex:file id="reader" file="$param:filename">
+
+<% pageContext.setAttribute("filePath", "file:/" + application.getRealPath(request.getParameter("filename"))); %>
+
+<c:import varReader="reader" url="$filePath">
   <ex:escapeHtml reader="$reader"/>
-</ex:file>
-<%-- </c:import> --%>
+</c:import>
+
 <hr>
+
 </body>
 </html>
