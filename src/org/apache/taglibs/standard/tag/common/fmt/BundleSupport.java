@@ -76,6 +76,12 @@ public abstract class BundleSupport extends BodyTagSupport {
     
 
     //*********************************************************************
+    // Private constants
+
+    private static final Locale EMPTY_LOCALE = new Locale("", "");
+
+
+    //*********************************************************************
     // Protected state
 
     protected String basename;                  // 'basename' attribute
@@ -199,6 +205,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 	LocalizationContext locCtxt = null;
 	ResourceBundle bundle = null;
 
+	// Try preferred locales
 	Locale pref = SetLocaleSupport.getLocale(pc, Config.FMT_LOCALE);
 	if (pref != null) {
 	    // Preferred locale is application-based
@@ -212,7 +219,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 	}
 	
 	if (locCtxt == null) {
-	    // No match found using preferred locale(s), go try fallback locale
+	    // No match found with preferred locales, try using fallback locale
 	    pref = SetLocaleSupport.getLocale(pc, Config.FMT_FALLBACKLOCALE);
 	    if (pref != null) {
 		bundle = findMatch(basename, pref);
@@ -221,8 +228,21 @@ public abstract class BundleSupport extends BodyTagSupport {
 		}
 	    }
 	}
+
+	if (locCtxt == null) {
+	    // try using the root resource bundle with the given basename
+	    try {
+		bundle = ResourceBundle.getBundle(basename, EMPTY_LOCALE);
+		if (bundle != null) {
+		    locCtxt = new LocalizationContext(bundle, null);
+		}
+	    } catch (MissingResourceException mre) {
+		// do nothing
+	    }
+	}
 	
 	if (locCtxt == null) {
+	    // create empty localization context
 	    locCtxt = new LocalizationContext();
 	}
 	 
