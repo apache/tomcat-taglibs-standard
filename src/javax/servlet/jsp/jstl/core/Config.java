@@ -348,7 +348,10 @@ public class Config {
 	if (ret == null) {
 	    ret = get(pc, name, PageContext.REQUEST_SCOPE);
 	    if (ret == null) {
-		ret = get(pc, name, PageContext.SESSION_SCOPE);
+		if (pc.getSession() != null) {
+		    // check session only if a session is present
+		    ret = get(pc, name, PageContext.SESSION_SCOPE);
+		}
 		if (ret == null) {
 		    ret = get(pc, name, PageContext.APPLICATION_SCOPE);
 		    if (ret == null) {
