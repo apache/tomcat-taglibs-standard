@@ -346,7 +346,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 		ret = bundle;
 	    } else {
 		if (pref.getLanguage().equals(avail.getLanguage())
-		    && (avail.getCountry() == null)) {
+		    && ("".equals(avail.getCountry()))) {
 		    /*
 		     * Language match.
 		     * By making sure the available locale does not have a 
