@@ -63,30 +63,13 @@ import org.apache.taglibs.standard.tag.common.fmt.MessageSupport;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * Exposes the resource bundle locale-determination logic through utility 
- * methods to any tag handlers that need to produce localized messages.
+ * Class which exposes the locale-determination logic for resource bundles
+ * through convenience methods.
  *
- * <p> A resource bundle's locale is determined as follows:
- *
- * <ul>
- * <li> If the <tt>javax.servlet.jsp.jsptl.i18n.locale</tt> scoped 
- * attribute exists, use the locale stored as its value.
- *
- * <li> Otherwise, compare the client's preferred locales (in order of
- * preference) against the available locales for the resource bundle's base
- * name, and use the best matching locale.
- * The best matching locale is defined as the client's preferred locale that
- * matches both the language and country components of an available locale for
- * the base name in question. This is considered an exact match.
- * If no exact match exists, the first client locale that matches (just) the
- * language component of an available locale is used.
- *
- * <li> If no match is found, use the fallback locale given by the
- * <tt>javax.servlet.jsp.jsptl.i18n.fallbackLocale</tt> scoped attribute, if it
- * exists.
- *
- * <li> Otherwise, use the runtime's default locale.
- * </ul>
+ * <p> This class may be useful to any tag handler implementation that needs
+ * to produce localized messages. For example, this might be useful for 
+ * exception messages that are intended directly for user consumption on an 
+ * error page.
  *
  * @author Jan Luehe
  */
@@ -96,22 +79,21 @@ public class LocaleSupport {
     /** 
      * Retrieves the localized message corresponding to the given key. 
      * 
-     * The given key is looked up in the resource bundle whose base 
-     * name is retrieved from the
-     * <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> scoped attribute and
-     * whose locale is determined according to the algorithm described in
-     * the header of this class. 
+     * <p> The given key is looked up in the resource bundle with the default
+     * base name, which is retrieved from the
+     * <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> scoped attribute or
+     * context configuration parameter.
      * 
-     * If the <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> attribute is not
-     * found in any of the scopes, or no resource bundle with that base name
-     * exists, or the given key is undefined in the resource bundle that was
-     * loaded as a result of this call, the string
+     * <p> If the <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> scoped
+     * attribute or context configuration parameter does not exist, or no
+     * resource bundle with the default base name exists, or the given key is
+     * undefined in the resource bundle with the default base name, the string
      * &quot;???&lt;key&gt;???&quot; is returned, where
-     * &quot;&lt;key&gt;&quot; is replaced with the given <tt>key</tt>
-     * argument.
+     * &quot;&lt;key&gt;&quot; is replaced with the given <tt>key</tt>.
      * 
-     * @param pageContext the page in which the given key must be localized 
-     * @param key the message key to be looked up 
+     * @param pageContext the page in which to get the localized message
+     * corresponding to the given key  
+     * @param key the message key
      * 
      * @return the localized message corresponding to the given key 
      */ 
@@ -123,19 +105,16 @@ public class LocaleSupport {
     /** 
      * Retrieves the localized message corresponding to the given key. 
      * 
-     * The given key is looked up in the resource bundle with the given 
-     * base name whose locale is determined according to the 
-     * algorithm described in the header of this class.
-     * 
-     * If no resource bundle with the given base name exists, 
-     * or the given key is undefined in the resource bundle that was loaded as 
-     * a result of this call, the string
+     * <p> The given key is looked up in the resource bundle with the given 
+     * base name. If no resource bundle with the given base name exists, 
+     * or the given key is undefined in the resource bundle, the string
      * &quot;???&lt;key&gt;???&quot; is returned, where
      * &quot;&lt;key&gt;&quot; is replaced with the given <tt>key</tt>
      * argument.
      * 
-     * @param pageContext the page in which the given key must be localized 
-     * @param key the message key to be looked up 
+     * @param pageContext the page in which to get the localized message
+     * corresponding to the given key  
+     * @param key the message key
      * @param basename the resource bundle base name 
      * 
      * @return the localized message corresponding to the given key 
@@ -148,29 +127,16 @@ public class LocaleSupport {
 
     /** 
      * Retrieves the localized message corresponding to the given key and 
-     * performs parametric replacement using the arguments specified in the 
-     * <tt>args</tt> parameter. 
+     * performs parametric replacement on it.
      * 
-     * The given key is looked up in the resource bundle whose base 
-     * name is retrieved from the
-     * <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> scoped attribute and
-     * whose locale is determined according to the algorithm described in the
-     * header of this class.
-     * 
-     * Before being returned, the result of the lookup undergoes parametric 
-     * replacement, using the arguments specified in the <tt>args</tt> 
-     * parameter. 
-     * 
-     * If the <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> attribute is not
-     * found in any of the scopes, or no resource bundle with that base name
-     * exists, or the given key is undefined in the resource bundle that was
-     * loaded as a result of this call, the string
-     * &quot;???&lt;key&gt;???&quot; is returned, where
-     * &quot;&lt;key&gt;&quot; is replaced with the given <tt>key</tt>
-     * argument.
-     * 
-     * @param pageContext the page in which the given key must be localized 
-     * @param key the message key to be looked up 
+     * <p> The localized message is retrieved as in
+     * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String) getLocalizedMessage(pageContext, key)}.
+     * Parametric replacement is performed using the arguments specified via 
+     * <tt>args</tt>. 
+     *
+     * @param pageContext the page in which to get the localized message
+     * corresponding to the given key  
+     * @param key the message key
      * @param args the arguments for parametric replacement 
      * 
      * @return the localized message corresponding to the given key 
@@ -182,24 +148,17 @@ public class LocaleSupport {
     }
 
     /** 
-     * Retrieves the localized message corresponding to the given key. 
+     * Retrieves the localized message corresponding to the given key and
+     * performs parametric replacement on it.
+     *
+     * <p> The localized message is retrieved as in
+     * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String, java.lang.String) getLocalizedMessage(pageContext, key, basename)}.
+     * Parametric replacement is performed using the arguments specified via 
+     * <tt>args</tt>. 
      * 
-     * The given key is looked up in the resource bundle with the given 
-     * base name whose locale is determined according to the 
-     * algorithm described in the header of this class.
-     * 
-     * Before being returned, the result of the lookup undergoes parametric 
-     * replacement, using the arguments specified in the <tt>args</tt> 
-     * parameter. 
-     * 
-     * If no resource bundle with the given base name exists, 
-     * or the given key is undefined in the resource bundle that was loaded as 
-     * a result of this call, the string &quot;???&lt;key&gt;???&quot; is
-     * returned, where &quot;&lt;key&gt;&quot; is replaced with the given
-     * <tt>key</tt> argument.
-     * 
-     * @param pageContext the page in which the given key must be localized 
-     * @param key the message key to be looked up 
+     * @param pageContext the page in which to get the localized message
+     * corresponding to the given key  
+     * @param key the message key
      * @param args the arguments for parametric replacement 
      * @param basename the resource bundle base name 
      * 
