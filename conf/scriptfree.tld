@@ -6,7 +6,7 @@
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>scriptfree</short-name>
-  <uri>http://jakarta.apache.org/taglibs/standard/scriptfree</uri>
+  <uri>http://java.sun.com/jstl/ea/scriptfree</uri>
   <description>
     Validates JSP pages to prohibit use of scripting elements.
   </description>
