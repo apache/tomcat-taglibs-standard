@@ -134,6 +134,15 @@ public abstract class TransformSupport extends BodyTagSupport {
 	//************************************
 	// Initialize
 
+	// set up our DocumentBuilderFactory if necessary
+	if (dbf == null) {
+	    dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(true);
+            dbf.setValidating(false);
+	}
+        if (db == null)
+	    db = dbf.newDocumentBuilder();
+
 	// set up the TransformerFactory if necessary
         if (tf == null)
             tf = TransformerFactory.newInstance();
@@ -168,17 +177,6 @@ public abstract class TransformSupport extends BodyTagSupport {
     // and store as 'var' or through 'result'
     public int doEndTag() throws JspException {
       try {
-
-	//************************************
-	// Initialize
-
-	// set up our DocumentBuilderFactory if necessary
-	if (dbf == null) {
-	    dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
-            dbf.setValidating(false);
-	} if (db == null)
-	    db = dbf.newDocumentBuilder();
 
 	//************************************
 	// Determine source XML
@@ -266,6 +264,7 @@ public abstract class TransformSupport extends BodyTagSupport {
             // passing them to our resolver.)  This is silly, but what can
             // you do?  If this is a bug and not a feature of the TrAX
             // implementation, we can remove the DOM logic below, later.
+	    Source result;
 	    if (systemId == null || ImportSupport.isAbsoluteUrl(systemId)) {
 	        // explicitly go through SAX to maintain
 	        // control over how relative external entities resolve
@@ -275,8 +274,7 @@ public abstract class TransformSupport extends BodyTagSupport {
 	        InputSource s = new InputSource((Reader) o);
 	        if (systemId != null)
                     s.setSystemId(systemId);
-	        Source result = new SAXSource(xr, s);
-	        return result;
+	        result = new SAXSource(xr, s);
 	    } else {
 		// go through DOM to maintain full control over entities
 		InputSource s = new InputSource((Reader) o);
@@ -284,8 +282,17 @@ public abstract class TransformSupport extends BodyTagSupport {
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		db.setEntityResolver(
 		    new ParseSupport.JstlEntityResolver(pageContext));
-		return new DOMSource(db.parse(s));
+		result = new DOMSource(db.parse(s));
 	    }
+
+	    // normalize URIs so they can be processed consistently by resolver
+	    if (systemId == null)
+		result.setSystemId("jstl:");
+	    else if (ImportSupport.isAbsoluteUrl(systemId))
+		result.setSystemId(systemId);
+	    else 
+		result.setSystemId("jstl:" + systemId);
+	    return result;
         } else if (o instanceof Node) {
 	    return new DOMSource((Node) o);
         } else if (o instanceof List) {
@@ -346,20 +353,35 @@ public abstract class TransformSupport extends BodyTagSupport {
         }
         public Source resolve(String href, String base)
 	        throws TransformerException {
+
             // pass if we don't have a systemId
             if (href == null)
                 return null;
 
+	    // remove "jstl" marker from 'base'
+	    if (base != null && base.startsWith("jstl:"))
+		base = base.substring(5);
+
             // we're only concerned with relative URLs
-            if (ImportSupport.isAbsoluteUrl(href))
+            if (ImportSupport.isAbsoluteUrl(href)
+		    || ImportSupport.isAbsoluteUrl(base))
                 return null;
+
+	    // base is relative; remove everything after trailing '/'
+	    if (base.lastIndexOf("/") == -1)
+		base = "";
+	    else
+		base = base.substring(0, base.lastIndexOf("/") + 1);
+
+	    // concatenate to produce the real URL we're interested in
+	    String target = base + href;	    
 
             // for relative URLs, load and wrap the resource.
             // don't bother checking for 'null' since we specifically want
             // the parser to fail if the resource doesn't exist
             InputStream s;
-            if (href.startsWith("/")) {
-                s = ctx.getServletContext().getResourceAsStream(href);
+            if (target.startsWith("/")) {
+                s = ctx.getServletContext().getResourceAsStream(target);
                 if (s == null)
                     throw new TransformerException(
                         Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
@@ -370,7 +392,7 @@ public abstract class TransformSupport extends BodyTagSupport {
                 String basePath =
                     pagePath.substring(0, pagePath.lastIndexOf("/"));
                 s = ctx.getServletContext().getResourceAsStream(
-                      basePath + "/" + href);
+                      basePath + "/" + target);
 		if (s == null)
 		    throw new TransformerException(
                         Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
