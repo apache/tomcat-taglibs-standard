@@ -7,9 +7,9 @@
 <body bgcolor="#FFFFFF">
 <h1>'Standard' taglib (JSTL RI): Release Notes</h1>
 
-<p><b>The JSTL 1.0 EA3 RI builds on the 1.0 EA2 release, which introduced a
+<p><b>The JSTL 1.0 Beta  RI builds on the 1.0 EA3 release, which introduced a
 variety of new features and rounded out some of the support initially
-provided in 1.0 EA1.  This document contains a running list of additions and
+provided in 1.0 EA2.  This document contains a running list of additions and
 changes.</b></p>
 
 <hr />
@@ -31,6 +31,16 @@ Version 1.0 Release</b></dt>
 
 <dd>EL Support:
 <ul>
+ <li>Default EL implementation.</li>
+  <ul>
+   <li>See the <a href="http://www.jcp.org/aboutJava/communityprocess/review/jsr052/index.html">JSTL 1.0 Specification</a> Appendix A for complete definition</li>
+   <li>Highlights:</li>
+    <ul>
+     <li>&lt;c:out&gt; replaces &lt;c:expr&gt;
+     <li>new "${expr}" syntax
+     <li>implicit objects references using "." replacing ":"
+    </ul>
+  </ul>
  <li>EcmaScript EL enhancements:
   <ul>
    <li>Direct associative container access.</li>
@@ -92,6 +102,14 @@ Version 1.0 Release</b></dt>
 
 <dd>SQL Actions:
 <ul>
+ <li>Modified Result interface:</li>
+  <ul>
+   <li>getRows() returns a Map[] where rows[index].colName returns a column's value</li>
+   <li>getRowsByIndex() returns Object[][] where rowsByIndex[rowIndex][colIndex] returns a column's value</li>
+   <li>getMetaData() returns ColumnMetaData[] where metaData[colIndex] returns column's metadata</li>
+   <li>getRowsCount() replaces getSize()</li>
+  </ul>
+ <li>Removed Row, Column, ResultMetaData interfaces.</li>
  <li>&lt;sql:update&gt;: Made 'var' attribute optional.</li>
  <li>&lt;sql:query&gt;: Fixed 'startRow' indexing, and allow 'startRow' and
      'maxRows' to take EL expressions.</li>

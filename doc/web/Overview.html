@@ -7,7 +7,7 @@
 <body bgcolor="#FFFFFF" text="#000000">
 <h1>Overview</h1>
 <p>This document provides a high level overview of the JSP&#153; Standard Tag 
-  Library (JSTL) as it stands for EA3 (Early Access release 3). If you have a 
+  Library (JSTL) as it stands for Beta 1. If you have a 
   strong opinion on the topic &#151; positive (you really like it), or constructive 
   (we messed up some parts and you have some constructive comments for improvements) 
   &#151; we'll be happy to hear from you at <a href="mailto:jsr052-comments@sun.com">jsr052-comments@sun.com</a>. 
@@ -91,7 +91,7 @@
   without having to use scriptlets or request-time expression values. </p>
 <p>For example, this conditional tag tests whether the country of a customer is 
   the USA.</p>
-<p><code> &nbsp;&nbsp;&lt;c:if test=&quot;$customer.address.country == 'USA'&quot&gt;<br>
+<p><code> &nbsp;&nbsp;&lt;c:if test=&quot;${customer.address.country == 'USA'}&quot&gt;<br>
   &nbsp;&nbsp;&nbsp;&nbsp;...</code><br>
   <code>&nbsp;&nbsp;&lt;/c:if&gt;</code></p>
 <p>There were quite a few issues involved with the support of an Expression Language 
@@ -129,7 +129,7 @@
 <p>The convention is to use the name &quot;var&quot; for any tag attribute that 
   exports information about the tag. For example, an iterator tag exposes the 
   current item of the collection it is iterating over in the following way:</p>
-<p><code>&nbsp;&nbsp;&lt;c:forEach var=&quot;customer&quot; items=&quot;$customers&quot;&gt;</code><code><br>
+<p><code>&nbsp;&nbsp;&lt;c:forEach var=&quot;customer&quot; items=&quot;${customers}&quot;&gt;</code><code><br>
   &nbsp;&nbsp;&nbsp;&nbsp;...</code><br>
   <code>&nbsp;&nbsp;&lt;/c:forEach&gt;</code></p>
 <p>It is important to note that a name different than &quot;id&quot; was selected 
@@ -152,7 +152,7 @@
   of a tag; i.e. tags with lots of attributes that can do just about anything. 
   Rather, we privilege a larger number of tags with well focused behavior.</p>
 <hr noshade>
-<h2>JSTL EA3&#151; Quick Reference</h2>
+<h2>JSTL Beta 1&#151; Quick Reference</h2>
 <h2>Core Actions</h2>
 <table width="100%" border="1" cellpadding="5">
   <tr bgcolor="#000099"> 
@@ -165,18 +165,18 @@
   </tr>
   <tr> 
     <td width="31%"> 
-      <p><code><b>&lt;expr&gt;</b></code><br>
+      <p><code><b>&lt;out&gt;</b></code><br>
         <code><b>value</b> <font color="#000000">default</font> </code><br>
         <br>
         Like <code>&lt;%= ... %&gt;</code> but for EL expressions.<br>
       </p>
     </td>
     <td width="48%"> 
-      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;$customer.address.city&quot;/&gt;<br>
+      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${customer.address.city}&quot;/&gt;<br>
         <br>
         &lt;c:set var=&quot;customerFmt&quot; scope=&quot;request&quot;&gt;<br>
         &nbsp;&nbsp;&lt;font color=red&gt;<br>
-        &nbsp;&nbsp;&nbsp; </code><code>&lt;c:expr value=&quot;$customer&quot;/&gt;<br>
+        &nbsp;&nbsp;&nbsp; </code><code>&lt;c:out value=&quot;${customer}&quot;/&gt;<br>
         &nbsp; &lt;/font&gt;<br>
         &lt;/c:set&gt;</code></p>
       </td>
@@ -190,11 +190,11 @@
       <code><br>
       </code></td>
     <td width="48%"> 
-      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;$customer.address.city&quot;/&gt;<br>
+      <p><code>&lt;c:set var=&quot;city&quot; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value=&quot;${customer.address.city}&quot;/&gt;<br>
         <br>
         &lt;c:set var=&quot;customerFmt&quot; scope=&quot;request&quot;&gt;<br>
         &nbsp;&nbsp;&lt;font color=red&gt;<br>
-        &nbsp;&nbsp;&nbsp; &lt;c:expr value=&quot;$customer&quot;/&gt;<br>
+        &nbsp;&nbsp;&nbsp; &lt;c:out value=&quot;${customer}&quot;/&gt;<br>
         &nbsp; &lt;/font&gt;<br>
         &lt;/c:set&gt;</code></p>
     </td>
@@ -231,11 +231,11 @@
         supporting subsetting and other functionality</p>
     </td>
     <td width="48%" height="123"><code>&lt;c:forEach var=&quot;customer&quot; 
-      items=&quot;$customers&quot;&gt;</code><code><br>
+      items=&quot;${customers}&quot;&gt;</code><code><br>
       &nbsp;&nbsp;...<br>
       &lt;/c:forEach&gt;<br>
       <br>
-      &lt;c:forEach var=&quot;customer&quot; items=&quot;$customers&quot;<br>
+      &lt;c:forEach var=&quot;customer&quot; items=&quot;${customers}&quot;<br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status=&quot;status&quot; 
       <br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;begin=&quot;100&quot; 
@@ -298,13 +298,13 @@
         evaluation of this condition.</p>
     </td>
     <td width="58%" height="123"> 
-      <p><code>&lt;c:if test=&quot;$customer.address.country == 'USA'&quot;&gt; 
+      <p><code>&lt;c:if test=&quot;${customer.address.country == 'USA'}&quot;&gt; 
         </code><code><br>
         &nbsp;&nbsp;...<br>
         &lt;/c:if&gt;<br>
         <br>
         &lt;c:if var=&quot;isUsCustomer&quot;<br>
-        &nbsp;&nbsp;test=&quot;$customer.address.country == 'USA'&quot;/&gt;</code></p>
+        &nbsp;&nbsp;test=&quot;${customer.address.country == 'USA'}&quot;/&gt;</code></p>
     </td>
   </tr>
   <tr> 
@@ -365,7 +365,7 @@
       <p><code>&lt;c:import url=&quot;ftp://ftp.acme.com/README&quot;/&gt;<br>
         <br>
         </code><code>&lt;c:import url=&quot;/xml/doc.xml&quot; varReader=&quot;in&quot;/><br>
-        &lt;acme:process in=&quot;$in&quot;</code><code>/></code></p>
+        &lt;acme:process in=&quot;${in}&quot;</code><code>/></code></p>
     </td>
   </tr>
   <tr> 
@@ -391,7 +391,7 @@
     </td>
     <td width="61%"> 
       <pre>&lt;a href=&quot;http://acme.com/register
-   ?name=&lt;c:urlEncode value='$name'/&gt;&quot;/></pre>
+   ?name=&lt;c:urlEncode value='${name}'/&gt;&quot;/></pre>
     </td>
   </tr>
 </table>
@@ -415,18 +415,18 @@
       attribute specified by &quot;var&quot; (or &quot;domVar&quot;).</td>
     <td width="392"> <code>&lt;c:import url=&quot;http://acme.com/athletes?country=ethiopia&quot; 
       var=&quot;xml&quot;/><br>
-      &lt;x:parse source=&quot;$xml&quot; var=&quot;athletes&quot;/&gt; </code></td>
+      &lt;x:parse source=&quot;${xml}&quot; var=&quot;athletes&quot;/&gt; </code></td>
   </tr>
   <tr> 
     <td width="318"> 
-      <p><code><b>&lt;expr&gt;</b></code><br>
+      <p><code><b>&lt;out&gt;</b></code><br>
         <code><font color="#000000"><b>select</b></font></code><br>
         <br>
         Evaluates the given XPath expression and outputs its text value.<br>
       </p>
     </td>
     <td width="392"> 
-      <p><code>&lt;x:expr select=&quot;$ath/name&quot;/&gt;</code></p>
+      <p><code>&lt;x:out select=&quot;${ath/name}&quot;/&gt;</code></p>
     </td>
   </tr>
   <tr> 
@@ -438,7 +438,7 @@
         scoped attribute specified by &quot;var&quot;.</p>
     </td>
     <td width="392"> <code>&lt;x:set<br>
-      &nbsp;&nbsp;select=&quot;$athletes/athlete[country=$request:country]&quot; 
+      &nbsp;&nbsp;select=&quot;${athletes/athlete[country=${request.country]}&quot; 
       &nbsp;&nbsp;var=&quot;athletesOfCountry&quot;/&gt;</code></td>
   </tr>
 </table>
@@ -458,7 +458,7 @@
       <br>
       Evaluates the given XPath expression and iterates over the result, setting 
       the context node to each element in the iteration.</td>
-    <td width="45%"><code>&lt;x:forEach select=&quot;$doc//author&quot;&gt;<br>
+    <td width="45%"><code>&lt;x:forEach select=&quot;${doc//author}&quot;&gt;<br>
       &nbsp;&nbsp;&lt;x:valueOf select=&quot;@name&quot;&gt;<br>
       &lt;/x:forEach&gt; </code></td>
   </tr>
@@ -471,7 +471,7 @@
         expression evaluates to true (as if by a call to the XPath &quot;boolean&quot; 
         function).</p>
     </td>
-    <td width="45%"><code>&lt;x:if select=&quot;$customer/[location='UK']&quot;&gt;<br>
+    <td width="45%"><code>&lt;x:if select=&quot;${customer/[location='UK']}&quot;&gt;<br>
       &nbsp;&nbsp;UK based<br>
       &lt;/x:if&gt;</code> </td>
   </tr>
@@ -522,7 +522,7 @@
     </td>
     <td width="61%" height="123"> 
       <pre>&lt;c:import url=&quot;/xml/employees.xml&quot; var=&quot;xml&quot;/>
-&lt;c:import url=&quot;/xslt/customerList.xsl&quot; var=&quot;xslt&quot;/><br>&lt;x:xslt source=&quot;$xml&quot; xslt=&quot;$xslt&quot;/&gt;</pre>
+&lt;c:import url=&quot;/xslt/customerList.xsl&quot; var=&quot;xslt&quot;/><br>&lt;x:xslt source=&quot;${xml}&quot; xslt=&quot;${xslt}&quot;/&gt;</pre>
     </td>
   </tr>
   <tr> 
@@ -534,7 +534,7 @@
     <td width="61%"> 
       <pre>
 
-&lt;x:transform source=&quot;$xml&quot; xslt=&quot;$xslt&quot;&gt;<br>  &lt;x:param name=&quot;foo&quot; value=&quot;foo-value&quot;/&gt;<br>&lt;/x:transform&gt;</pre>
+&lt;x:transform source=&quot;${xml}&quot; xslt=&quot;${xslt}&quot;&gt;<br>  &lt;x:param name=&quot;foo&quot; value=&quot;foo-value&quot;/&gt;<br>&lt;/x:transform&gt;</pre>
       <p>&nbsp;</p>
     </td>
   </tr>
@@ -546,9 +546,9 @@
         that use the same XSLT stylesheet.</p>
     </td>
     <td width="61%"> 
-      <pre>&lt;c:import url=&quot;/xslt/style.xsl&quot; var=&quot;xslt&quot;/&gt;<br>&lt;x:transformer xslt=&quot;$xslt&quot; var=&quot;transformer&quot;/&gt;<br>...<br>&lt;x:transform source=&quot;$xml&quot; transformer=&quot;$transformer&quot; /&gt;
+      <pre>&lt;c:import url=&quot;/xslt/style.xsl&quot; var=&quot;xslt&quot;/&gt;<br>&lt;x:transformer xslt=&quot;${xslt}&quot; var=&quot;transformer&quot;/&gt;<br>...<br>&lt;x:transform source=&quot;${xml}&quot; transformer=&quot;${transformer}&quot; /&gt;
 ...
-&lt;x:transform source=&quot;$xml2&quot; transformer=&quot;$transformer&quot; /&gt;</pre>
+&lt;x:transform source=&quot;${xml2}&quot; transformer=&quot;${transformer}&quot; /&gt;</pre>
     </td>
   </tr>
 </table>
@@ -595,7 +595,7 @@
         attribute, and performs parametric replacement on the retrieved message 
         using the argument values supplied via <tt>&lt;messageArg></tt> subtags
     </td>
-    <td width="392"><tt>&lt;fmt:message key="Welcome" bundle="$greetingBundle"/></tt></td>
+    <td width="392"><tt>&lt;fmt:message key="Welcome" bundle="${greetingBundle}"/></tt></td>
   </tr>
   <tr> 
     <td width="318"><b><tt>&lt;messageFormat></tt></b> <br>
@@ -604,8 +604,8 @@
         attribute using the argument values supplied via <tt>&lt;messageArg></tt> 
         subtags
     </td>
-    <td width="392"><tt>&lt;fmt:messageFormat value="$priceMsg"></tt> <br>
-      <tt>&nbsp; &lt;fmt:messageArg value="$priceArg"/></tt> <br>
+    <td width="392"><tt>&lt;fmt:messageFormat value="${priceMsg}"></tt> <br>
+      <tt>&nbsp; &lt;fmt:messageArg value="${priceArg}"/></tt> <br>
       <tt>&lt;/fmt:messageFormat></tt></td>
   </tr>
   <tr> 
@@ -615,9 +615,9 @@
         (if present) or the tag body to its parent <tt>&lt;message></tt> action 
         for parametric replacement
     </td>
-    <td width="392"><tt>&lt;fmt:message key="Welcome" bundle="$greetingBundle">&nbsp;</tt> 
+    <td width="392"><tt>&lt;fmt:message key="Welcome" bundle="${greetingBundle}">&nbsp;</tt> 
       <br>
-      <tt>&nbsp; &lt;fmt:messageArg value="$dateArg"/></tt> <br>
+      <tt>&nbsp; &lt;fmt:messageArg value="${dateArg}"/></tt> <br>
       <tt>&lt;/fmt:message></tt></td>
   </tr>
   <tr> 
@@ -635,7 +635,7 @@
       <p><font color="#000000">Parses the given numeric string using the locale's 
         default or the specified (customized) formatting pattern</font>
     </td>
-    <td width="392"><tt>&lt;fmt:parseNumber value="$num" var="parsed"/></tt></td>
+    <td width="392"><tt>&lt;fmt:parseNumber value="${num}" var="parsed"/></tt></td>
   </tr>
   <tr> 
     <td width="318"><b><tt>&lt;formatDate></tt></b> <br>
@@ -662,7 +662,7 @@
         attribute (or the error page's exception if no <tt>value</tt> attribute 
         is given) in its localized form</font>
     </td>
-    <td width="392"><tt>&lt;fmt:exception bundle="$errorMessages"/></tt></td>
+    <td width="392"><tt>&lt;fmt:exception bundle="${errorMessages}"/></tt></td>
   </tr>
 </table>
 <h2>SQL actions</h2>
@@ -697,7 +697,7 @@
     <td> 
       <p><code>&lt;sql:query var=&quot;customers&quot;<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-        dataSource=&quot;$dataSource&quot;<i>&gt;<br>
+        dataSource=&quot;${dataSource}&quot;<i>&gt;<br>
         </i>&nbsp;&nbsp; SELECT * FROM employees<br>
         &nbsp; &nbsp;WHERE country = 'China'<br>
         &nbsp;&nbsp;&nbsp;ORDER BY lastname<br>
@@ -726,9 +726,9 @@
         &nbsp;&nbsp;SET BALANCE = ?<br>
         &nbsp; WHERE accountNo = ?<br>
         </code><code>&nbsp;&nbsp;&lt;sql:param<br>
-        &nbsp;&nbsp;&nbsp;&nbsp; value=&quot;$balance&quot;&gt;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; value=&quot;${balance}&quot;&gt;<br>
         &nbsp;&nbsp;&lt;sql:param<br>
-        &nbsp;&nbsp;&nbsp; &nbsp;value=&quot;$accountNo&quot;&gt;<br>
+        &nbsp;&nbsp;&nbsp; &nbsp;value=&quot;${accountNo}&quot;&gt;<br>
         &lt;/sql:update&gt;</code></p>
     </td>
   </tr>
@@ -822,52 +822,6 @@
       validator to make sure that no scripting elements appear on the page: 
       <pre>&lt;%@ taglib prefix="scriptfree"
     uri="http://java.sun.com/jstl/ea/scriptfree" %&gt;</pre>
-    </td>
-  </tr>
-</table>
-<h2>Expression Language Selection</h2>
-<table width="100%" border="1" cellpadding="5">
-  <tr bgcolor="#000099"> 
-    <td colspan="2"><b><font color="#FFFFFF" size="+1">Expression Language Selection</font></b></td>
-  </tr>
-  <tr> 
-    <td colspan="2"> 
-      <p>Temporary mechanisms that allow for runtime pluggability of expression-language 
-        evaluators. This allows for experimentation with expression languages 
-        and is not expected to remain in the final release of JSTL 1.0.</p>
-    </td>
-  </tr>
-  <tr> 
-    <td width="24%" bgcolor="#FFFF66"><b>Element</b></td>
-    <td width="76%" bgcolor="#FFFF66"><b>Sample usage</b></td>
-  </tr>
-  <tr> 
-    <td width="24%"> 
-      <p><code><b>context parameter </b></code></p>
-      <p>Establishes the default Expression Language used by the web application.<br>
-      </p>
-    </td>
-    <td width="76%"> 
-      <p><code>&lt;context-param&gt;<br>
-        &nbsp;&nbsp;&lt;param-name&gt;<br>
-        &nbsp;&nbsp;&nbsp; </code><code>javax.servlet.jstl.ExpressionEvaluatorClass<br>
-        &nbsp;&nbsp;&lt;/param-name&gt;<br>
-        &nbsp;&nbsp;&lt;param-value&gt;<br>
-        &nbsp;&nbsp;&nbsp; org.apache.taglibs.jstl.lang.spel.Evaluator<br>
-        &nbsp;&nbsp;&lt;/param-value&gt;<br>
-        &lt;/context-param&gt;</code></p>
-    </td>
-  </tr>
-  <tr> 
-    <td width="24%"> 
-      <p><code><b>&lt;expressionLanguage&gt;</b></code></p>
-      <p>Change the current Expression Language</p>
-    </td>
-    <td width="76%"> 
-      <p><code>&lt;c:expressionLanguage<br>
-        &nbsp;&nbsp;</code><code>evaluator=&quot;org.apache.taglibs.jstl.lang.jpath.Evaluator"&gt;<br>
-        &nbsp;&nbsp;...<br>
-        &lt;/c:expressionLanguage&gt;</code></p>
     </td>
   </tr>
 </table>

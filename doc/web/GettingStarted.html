@@ -5,7 +5,7 @@
 </head>
 
 <body bgcolor="#FFFFFF">
-<h1>Getting started with JSTL 1.0 (EA3)</h1>
+<h1>Getting started with JSTL 1.0 (Beta 1)</h1>
 
 <p>This document describes how to get up and running quickly with JSTL's
 second early-access release.  It can be useful to page authors and tag
@@ -70,7 +70,7 @@ jsr052-comments@sun.com</a> if you have any comments.</p>
 <hr />
 <h2><a name="#2" /></a>Getting started quickly</h2>
 
-<p>JSTL 1.0 EA3 uses features provided only by the JSP 1.2 standard draft, so it requires 
+<p>JSTL 1.0 Beta 1 uses features provided only by the JSP 1.2 standard draft, so it requires 
   a JSP 1.2 container. We recommend you test JSTL with Tomcat 4.0.</p>
 
 <p>To install Tomcat, follow the instructions at <a
@@ -109,49 +109,27 @@ at the top of your JSP page, as follows:</p>
     &lt;%@ taglib uri="http://java.sun.com/jstl/ea/core" prefix="c" %&gt;
 </pre>
 
-<h3>Expression languages</h3>
+<h3>Expression language</h3>
 
-<p>Half of JSTL's tag libraries -- the recommended ones -- rely on an expression 
-  language. To facilitate experimentation and feedback, the JSTL RI currently 
-  lets you switch between a number of different languages. Since 1.0 EA2, the ECMAScript 
-  language has been set as the default.</p>
+<p>Half of JSTL's tag libraries -- the recommended ones -- rely on an expression language. The EL makes it easy for page authors to access and manipulate application data.</p> 
 
-<p>The  expression language for a web application is configured by
-setting the servlet context parameter
-<tt>javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass</tt> to the class
-containing the expression-evaluation logic you wish to use. In
-<tt>standard.jar</tt>, the SPEL is identified by the class
-<tt>org.apache.taglibs.standard.lang.spel.Evaluator</tt>; JPath is identified
-by the class
-<tt>org.apache.taglibs.standard.lang.jpath.JPathExpressionEvaluator</tt>;
-JXPath's evaluator is
-<tt>org.apache.taglibs.standard.lang.jxpath.JXPathExpressionEvaluator</tt>;
-and the JavaScript/Rhino evaluator is
-<tt>org.apache.taglibs.standard.lang.javascript.JavascriptExpressionEvaluator</tt>.
-(For an example of how this context parameter is set, see the
-<tt>web.xml</tt> file that comes with the <tt>jstl-examples</tt>
-application.)</p>
+<p>For an overview and detailed definition of the default EL see <a href="http://www.jcp.org/aboutJava/communityprocess/review/jsr052/index.html">JSTL 1.0 Specification</a> Chapter 3 and Appendix A respectively.</p>
+ 
+<p>The JSTL RI used to let you switch between a number of different expression languages to facilitate experimentation and feecback. Multiple languages are no longer supported since a default EL has been decided upon. </p>
 
-<p>In JSTL 1.0 EA, you can also mix different expression languages on the same page 
-  using the <tt>&lt;expressionLanguage&gt;</tt> tag. This tag's <tt>evaluator</tt> 
-  attribute points to the class containing the expression-evaluation logic you 
-  wish to use. See the Functional Description of expression-language support for 
-  more information.</p>
+<p>
 
 <p>The attributes in tags for the EL version of the library do not accept
 rtexprvalues.  Instead, you specify literal expressions that the tags
 evaluate at runtime.  For example:</p>
 
 <pre>
-    &lt;c:forEach items="<b>$page:myItems</b>" /&gt;
+    &lt;c:forEach items="<b>${page.myItems}</b>" /&gt;
 </pre>
-<i><b>Important:</b> The expression-language support included with JSTL 1.0 EA should 
-be considered even more experimental than the rest of the package. You should 
-not assume that either the "pluggability" mechanism or the prepackaged languages 
-themselves will remain in JSTL's final version, or even in the next 1.0 EA releases.</i> 
-<h3>Topics covered in JSTL 1.0 EA3</h3>
 
-<p>As we mentioned above, JSTL 1.0 EA3 includes core tags to support iteration, conditionals, 
+<h3>Topics covered in JSTL 1.0 Beta 1</h3>
+
+<p>As we mentioned above, JSTL 1.0 Beta 1 includes core tags to support iteration, conditionals, 
   and expression-language support. For more information on precisely how these 
   tags work, you should read the "Functional Description" documents provided as 
   part of this distribution. Here, we just offer a quick roadmap of each feature 
@@ -169,8 +147,7 @@ themselves will remain in JSTL's final version, or even in the next 1.0 EA relea
     mutually exclusive conditionals. These latter three tags let you implement 
     a typical <tt>if/else if/else if/else</tt> structure.</dd>
   <dt> <b>Expression languages</b></dt>
-  <dd>We described the EL support in JSTL above. In addition to &lt;expressionLanguage&gt;, 
-    JSTL provides a few other tags to facilitate use of expression language. &lt;expr&gt; 
+  <dd>JSTL provides a few tags to facilitate use of expression languages. &lt;out&gt; 
     prints out the value of a particular expression in the current EL, similar 
     to the way that the scriptlet expression (&lt;%= ... %=&gt;) syntax prints 
     out the value of a expression in the scripting language (typically Java). 
@@ -193,7 +170,7 @@ themselves will remain in JSTL's final version, or even in the next 1.0 EA relea
     use XPath to select content, and perform XSLT transformations from within 
     your JSP pages.</dd>
   <dt><b>Database access</b></dt>
-  <dd>Easily access relational databases using the SQL actions.</dd>
+  <dd>Easily access relational databases using the SQL actions. You can perform database queries, easily access results, perform updates, and group several operations into a transaction.</dd>
   <dt>&nbsp;</dt>
 </dl>
 
