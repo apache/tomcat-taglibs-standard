@@ -27,7 +27,7 @@
         param:value
         driver:driver
         driver:url
-        driver:userName
+        driver:user
         </param-value>
         <description>
             Whitespace-separated list of colon-separated token pairs
@@ -180,7 +180,7 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>userName</name>
+        <name>user</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>

@@ -81,7 +81,7 @@ public class DriverTag extends DriverTagSupport {
 	this.jdbcURLEL = jdbcURLEL;
     }
 
-    public void setUserName(String userNameEL) {
+    public void setUser(String userNameEL) {
 	this.userNameEL = userNameEL;
     }
 
@@ -107,12 +107,12 @@ public class DriverTag extends DriverTagSupport {
 
         if (jdbcURLEL != null) {
                 jdbcURL = (String) ExpressionEvaluatorManager.evaluate
-                ("Url", jdbcURLEL, String.class, this, pageContext);
+                ("url", jdbcURLEL, String.class, this, pageContext);
         }
 
         if (userNameEL != null) {
                 userName = (String) ExpressionEvaluatorManager.evaluate
-                ("userName", userNameEL, String.class, this, pageContext);
+                ("user", userNameEL, String.class, this, pageContext);
         }
     }
 

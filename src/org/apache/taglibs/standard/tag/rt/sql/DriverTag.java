@@ -71,11 +71,11 @@ public class DriverTag extends DriverTagSupport {
 	this.driverClassName = driverClassName;
     }
 
-    public void setJdbcURL(String jdbcURL) {
+    public void setUrl(String jdbcURL) {
 	this.jdbcURL = jdbcURL;
     }
 
-    public void setUserName(String userName) {
+    public void setUser(String userName) {
 	this.userName = userName;
     }
 
