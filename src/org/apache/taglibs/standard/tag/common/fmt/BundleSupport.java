@@ -323,8 +323,22 @@ public abstract class BundleSupport extends BodyTagSupport {
 		// Exact match
 		match = bundle;
 	    } else {
-		if (pref.getLanguage().equals(avail.getLanguage())
-		    && ("".equals(avail.getCountry()))) {
+                /*
+                 * We have to make sure that the match we got is for
+                 * the specified locale. The way ResourceBundle.getBundle()
+                 * works, if a match is not found with (1) the specified locale,
+                 * it tries to match with (2) the current default locale as 
+                 * returned by Locale.getDefault() or (3) the root resource 
+                 * bundle (basename).
+                 * We must ignore any match that could have worked with (2) or (3).
+                 * So if an exact match is not found, we make the following extra
+                 * tests:
+                 *     - avail locale must be equal to preferred locale
+                 *     - avail country must be empty or equal to preferred country
+                 *       (the equality match might have failed on the variant)
+		 */
+                if (pref.getLanguage().equals(avail.getLanguage())
+		    && ("".equals(avail.getCountry()) || pref.getCountry().equals(avail.getCountry()))) {
 		    /*
 		     * Language match.
 		     * By making sure the available locale does not have a 
