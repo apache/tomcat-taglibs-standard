@@ -53,7 +53,7 @@
  *
  */ 
 
-package org.apache.taglibs.standard;
+package standard.src.org.apache.taglibs.standard;
 
 /**
  * [lifted from xalan]
@@ -128,7 +128,7 @@ public class Version
    */
   public static int getReleaseVersionNum()
   {
-    return 1;
+    return 0;
   }
 
   /**
@@ -142,7 +142,7 @@ public class Version
    */
   public static int getMaintenanceVersionNum()
   {
-    return 0;
+    return 4;
   }
 
   /**
@@ -164,6 +164,6 @@ public class Version
    */
   public static int getDevelopmentVersionNum()
   {
-    return 15;
+    return 0;
   }
 }
