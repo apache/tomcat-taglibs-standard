@@ -130,9 +130,9 @@ public class Functions {
     // Character replacement
     
     public static String escapeXml(String input) {
-        if (input == null) input = "";
+        if (input == null) return "";
         return Util.escapeXml(input);
-    }    
+    }
     
     public static String trim(String input) {
         if (input == null) return "";
