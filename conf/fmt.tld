@@ -20,7 +20,6 @@
             requestEncoding:value 
 	    exception:value
 	    exception:bundle
-	    exception:stackTrace
 	    locale:value
 	    locale:variant
 	    timeZone:value
@@ -35,9 +34,17 @@
 	    formatNumber:value
 	    formatNumber:pattern
 	    formatNumber:parseLocale
+            formatNumber:currencyCode
+            formatNumber:currencySymbol
+            formatNumber:groupingUsed
+            formatNumber:maxIntegerDigits
+            formatNumber:minIntegerDigits
+            formatNumber:maxFractionDigits
+            formatNumber:minFractionDigits
 	    parseNumber:value
 	    parseNumber:pattern
 	    parseNumber:parseLocale
+            parseNumber:integerOnly
 	    formatDate:value
 	    formatDate:pattern
 	    formatDate:timeZone
@@ -94,11 +101,6 @@
     </attribute>
     <attribute>
         <name>bundle</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>stackTrace</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -289,6 +291,41 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <name>currencyCode</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>currencySymbol</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>groupingUsed</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>maxIntegerDigits</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>minIntegerDigits</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>maxFractionDigits</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>minFractionDigits</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>var</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -325,6 +362,11 @@
     </attribute>
     <attribute>
         <name>parseLocale</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>integerOnly</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>

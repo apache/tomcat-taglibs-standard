@@ -76,6 +76,7 @@ public class ParseNumberTag extends ParseNumberSupport {
     private String value_;                       // stores EL-based property
     private String pattern_;		         // stores EL-based property
     private String parseLocale_;	         // stores EL-based property
+    private String integerOnly_;	         // stores EL-based property
 
 
     //*********************************************************************
@@ -130,6 +131,12 @@ public class ParseNumberTag extends ParseNumberSupport {
         this.parseLocale_ = parseLocale_;
     }
 
+    // for EL-based attribute
+    public void setIntegerOnly(String integerOnly_) {
+        this.integerOnly_ = integerOnly_;
+	this.integerOnlySpecified = true;
+    }
+
 
     //*********************************************************************
     // Private (utility) methods
@@ -137,11 +144,13 @@ public class ParseNumberTag extends ParseNumberSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = pattern_ = parseLocale_ = null;
+	value_ = pattern_ = parseLocale_ = integerOnly_ = null;
     }
 
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
+	Object r = null;
+
         /* 
          * Note: we don't check for type mismatches here; we assume
          * the expression evaluator will return the expected type
@@ -152,15 +161,22 @@ public class ParseNumberTag extends ParseNumberSupport {
 
 	value = (String) ExpressionUtil.evalNotNull(
 	    "parseNumber", "value", value_, String.class, this, pageContext);
+
 	pattern = (String) ExpressionUtil.evalNotNull(
 	    "parseNumber", "pattern", pattern_, String.class, this,
 	    pageContext);
 
-	String pl = (String) ExpressionUtil.evalNotNull(
+	r = ExpressionUtil.evalNotNull(
 	    "parseNumber", "parseLocale", parseLocale_, String.class, this,
 	    pageContext);
-	if (pl != null)
-	    parseLocale = LocaleSupport.parseLocale(pl, null);
+	if (r != null)
+	    parseLocale = LocaleSupport.parseLocale((String) r, null);
+
+	r = ExpressionUtil.evalNotNull(
+	    "parseNumber", "integerOnly", integerOnly_, Boolean.class, this,
+	    pageContext);
+	if (r != null)
+	    isIntegerOnly = ((Boolean) r).booleanValue();
     }
 }
 

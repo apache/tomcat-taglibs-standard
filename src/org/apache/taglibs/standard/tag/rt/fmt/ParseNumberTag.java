@@ -86,4 +86,10 @@ public class ParseNumberTag extends ParseNumberSupport {
     public void setParseLocale(String parseLocale) throws JspTagException {
         this.parseLocale = LocaleSupport.parseLocale(parseLocale, null);
     }
+
+    // for tag attribute
+    public void setIntegerOnly(boolean isIntegerOnly) throws JspTagException {
+        this.isIntegerOnly = isIntegerOnly;
+	this.integerOnlySpecified = true;
+    }
 }

@@ -74,11 +74,16 @@ import org.apache.taglibs.standard.resources.Resources;
 public abstract class ExceptionSupport extends TagSupport {
 
     //*********************************************************************
+    // Private constants
+    private static final String SERVLET_EXCEPTION =
+	"javax.servlet.error.exception";
+
+    
+    //*********************************************************************
     // Protected state
 
     protected Exception value;                       // 'value' attribute
     protected ResourceBundle bundle;                 // 'bundle' attribute
-    protected boolean stackTrace;		     // 'stackTrace' attribute
 
 
     //*********************************************************************
@@ -92,7 +97,6 @@ public abstract class ExceptionSupport extends TagSupport {
     private void init() {
 	value = null;
 	bundle = null;
-	stackTrace = false;
     }
 
 
@@ -103,10 +107,24 @@ public abstract class ExceptionSupport extends TagSupport {
 	Object[] messageArgs = null;
 
 	if (value == null) {
+	    /*
+	     * Check javax.servlet.jsp.jspException request attribute
+	     * defined in JSP 1.2
+	     */
 	    value = pageContext.getException();
-	    if (value == null)
-		throw new JspTagException(
-		    Resources.getMessage("EXCEPTION_NOT_IN_ERROR_PAGE"));
+	    if (value == null) {
+		/*
+		 * Check javax.servlet.error.exception request attribute
+		 * defined in Servlet 2.3
+		 */
+		value = (Exception)
+		    pageContext.getAttribute(SERVLET_EXCEPTION,
+					     PageContext.REQUEST_SCOPE);
+		if (value == null) {
+		    throw new JspTagException(
+		        Resources.getMessage("EXCEPTION_NOT_IN_ERROR_PAGE"));
+		}
+	    }
 	}
 
 	if (bundle == null) {
@@ -144,12 +162,7 @@ public abstract class ExceptionSupport extends TagSupport {
 	}
 
 	try {
-	    JspWriter writer = pageContext.getOut();
-	    writer.print(message);
-	    if (stackTrace) {
-		writer.newLine();
-		value.printStackTrace(new PrintWriter(writer));
-	    }
+	    pageContext.getOut().print(message);
 	} catch (IOException ioe) {
 	    throw new JspTagException(ioe.getMessage());
 	}

@@ -86,4 +86,46 @@ public class FormatNumberTag extends FormatNumberSupport {
     public void setParseLocale(String parseLocale) throws JspTagException {
         this.parseLocale = LocaleSupport.parseLocale(parseLocale, null);
     }
+
+    // for tag attribute
+    public void setCurrencyCode(String currencyCode) throws JspTagException {
+        this.currencyCode = currencyCode;
+    }
+
+    // for tag attribute
+    public void setCurrencySymbol(String currencySymbol)
+	throws JspTagException {
+        this.currencySymbol = currencySymbol;
+    }
+
+    // for tag attribute
+    public void setGroupingUsed(boolean isGroupingUsed)
+	throws JspTagException {
+        this.isGroupingUsed = isGroupingUsed;
+	this.groupingUsedSpecified = true;
+    }
+
+    // for tag attribute
+    public void setMaxIntegerDigits(int maxDigits) throws JspTagException {
+        this.maxIntegerDigits = maxDigits;
+	this.maxIntegerDigitsSpecified = true;
+    }
+
+    // for tag attribute
+    public void setMinIntegerDigits(int minDigits) throws JspTagException {
+        this.minIntegerDigits = minDigits;
+	this.minIntegerDigitsSpecified = true;
+    }
+
+    // for tag attribute
+    public void setMaxFractionDigits(int maxDigits) throws JspTagException {
+        this.maxFractionDigits = maxDigits;
+	this.maxFractionDigitsSpecified = true;
+    }
+
+    // for tag attribute
+    public void setMinFractionDigits(int minDigits) throws JspTagException {
+        this.minFractionDigits = minDigits;
+	this.minFractionDigitsSpecified = true;
+    }
 }

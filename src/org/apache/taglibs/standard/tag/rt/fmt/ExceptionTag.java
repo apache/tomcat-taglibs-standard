@@ -81,9 +81,4 @@ public class ExceptionTag extends ExceptionSupport {
     public void setBundle(ResourceBundle bundle) throws JspTagException {
         this.bundle = bundle;
     }
-
-    // for tag attribute
-    public void setStackTrace(boolean stackTrace) throws JspTagException {
-        this.stackTrace = stackTrace;
-    }
 }

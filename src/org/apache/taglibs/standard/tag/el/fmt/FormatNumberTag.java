@@ -76,6 +76,13 @@ public class FormatNumberTag extends FormatNumberSupport {
     private String value_;                       // stores EL-based property
     private String pattern_;		         // stores EL-based property
     private String parseLocale_;	         // stores EL-based property
+    private String currencyCode_;   	         // stores EL-based property
+    private String currencySymbol_;   	         // stores EL-based property
+    private String groupingUsed_;   	         // stores EL-based property
+    private String maxIntegerDigits_;   	 // stores EL-based property
+    private String minIntegerDigits_;   	 // stores EL-based property
+    private String maxFractionDigits_;   	 // stores EL-based property
+    private String minFractionDigits_;   	 // stores EL-based property
 
 
     //*********************************************************************
@@ -130,6 +137,46 @@ public class FormatNumberTag extends FormatNumberSupport {
         this.parseLocale_ = parseLocale_;
     }
 
+    // for EL-based attribute
+    public void setCurrencyCode(String currencyCode_) {
+        this.currencyCode_ = currencyCode_;
+    }
+
+    // for EL-based attribute
+    public void setCurrencySymbol(String currencySymbol_) {
+        this.currencySymbol_ = currencySymbol_;
+    }
+
+    // for EL-based attribute
+    public void setGroupingUsed(String groupingUsed_) {
+        this.groupingUsed_ = groupingUsed_;
+	this.groupingUsedSpecified = true;
+    }
+
+    // for EL-based attribute
+    public void setMaxIntegerDigits(String maxIntegerDigits_) {
+        this.maxIntegerDigits_ = maxIntegerDigits_;
+	this.maxIntegerDigitsSpecified = true;
+    }
+
+    // for EL-based attribute
+    public void setMinIntegerUsed(String minIntegerDigits_) {
+        this.minIntegerDigits_ = minIntegerDigits_;
+	this.minIntegerDigitsSpecified = true;
+    }
+
+    // for EL-based attribute
+    public void setMaxFractionDigits(String maxFractionDigits_) {
+        this.maxFractionDigits_ = maxFractionDigits_;
+	this.maxFractionDigitsSpecified = true;
+    }
+
+    // for EL-based attribute
+    public void minFractionDigits(String minFractionDigits_) {
+        this.minFractionDigits_ = minFractionDigits_;
+	this.minFractionDigitsSpecified = true;
+    }
+
 
     //*********************************************************************
     // Private (utility) methods
@@ -138,10 +185,16 @@ public class FormatNumberTag extends FormatNumberSupport {
     private void init() {
         // null implies "no expression"
 	value_ = pattern_ = parseLocale_ = null;
+	currencyCode_ = currencySymbol_ = null;
+	groupingUsed_ = null;
+	maxIntegerDigits_ = minIntegerDigits_ = null;
+	maxFractionDigits_ = minFractionDigits_ = null;
     }
 
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
+	Object r = null;
+
         /* 
          * Note: we don't check for type mismatches here; we assume
          * the expression evaluator will return the expected type
@@ -152,15 +205,60 @@ public class FormatNumberTag extends FormatNumberSupport {
 
 	value = ExpressionUtil.evalNotNull(
 	    "formatNumber", "value", value_, Object.class, this, pageContext);
+
 	pattern = (String) ExpressionUtil.evalNotNull(
 	    "formatNumber", "pattern", pattern_, String.class, this,
 	    pageContext);
 
-	String pl = (String) ExpressionUtil.evalNotNull(
+	// parseLocale
+	r = ExpressionUtil.evalNotNull(
 	    "formatNumber", "parseLocale", parseLocale_, String.class, this,
 	    pageContext);
-	if (pl != null)
-	    parseLocale = LocaleSupport.parseLocale(pl, null);
+	if (r != null)
+	    parseLocale = LocaleSupport.parseLocale((String) r, null);
+
+	currencyCode = (String) ExpressionUtil.evalNotNull(
+	    "formatNumber", "currencyCode", currencyCode_, String.class, this,
+	    pageContext);
+
+	currencySymbol = (String) ExpressionUtil.evalNotNull(
+	    "formatNumber", "currencySymbol", currencySymbol_, String.class,
+	    this, pageContext);
+
+	// groupingUsed
+	r = ExpressionUtil.evalNotNull(
+	    "formatNumber", "groupingUsed", groupingUsed_, Boolean.class, this,
+	    pageContext);
+	if (r != null)
+	    isGroupingUsed = ((Boolean) r).booleanValue();
+	
+	// maxIntegerDigits
+	r = ExpressionUtil.evalNotNull(
+	    "formatNumber", "maxIntegerDigits", maxIntegerDigits_,
+	    Integer.class, this, pageContext);
+	if (r != null)
+	    maxIntegerDigits = ((Integer) r).intValue();
+
+	// minIntegerDigits	
+	r = ExpressionUtil.evalNotNull(
+	    "formatNumber", "minIntegerDigits", minIntegerDigits_,
+	    Integer.class, this, pageContext);
+	if (r != null)
+	    minIntegerDigits = ((Integer) r).intValue();
+	
+	// maxFractionDigits
+	r = ExpressionUtil.evalNotNull(
+	    "formatNumber", "maxFractionDigits", maxFractionDigits_,
+	    Integer.class, this, pageContext);
+	if (r != null)
+	    maxFractionDigits = ((Integer) r).intValue();
+	
+	// minFractionDigits
+	r = ExpressionUtil.evalNotNull(
+	    "formatNumber", "minFractionDigits", minFractionDigits_,
+	    Integer.class, this, pageContext);
+	if (r != null)
+	    minFractionDigits = ((Integer) r).intValue();
     }
 }
 

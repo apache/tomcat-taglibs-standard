@@ -78,6 +78,8 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
     protected String value;                      // 'value' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Locale parseLocale;                // 'parseLocale' attribute
+    protected boolean isIntegerOnly;             // 'integerOnly' attribute
+    protected boolean integerOnlySpecified;
 
 
     //*********************************************************************
@@ -98,9 +100,10 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 
     private void init() {
 	value = pattern = var = null;
+	parseLocale = null;
+	integerOnlySpecified = false;
 	type = FormatNumberSupport.NUMBER_TYPE;
 	scope = PageContext.PAGE_SCOPE;
-	parseLocale = null;
     }
 
 
@@ -147,27 +150,31 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 	        NumberFormat.getAvailableLocales());
 
 	// Get appropriate formatter instance
-	NumberFormat formatter = null;
+	NumberFormat parser = null;
 	switch (type) {
 	case FormatNumberSupport.NUMBER_TYPE:
-	    formatter = NumberFormat.getNumberInstance(locale);
+	    parser = NumberFormat.getNumberInstance(locale);
 	    if (pattern != null) {
-		DecimalFormat df = (DecimalFormat) formatter;
+		DecimalFormat df = (DecimalFormat) parser;
 		df.applyPattern(pattern);
 	    }
 	    break;
 	case FormatNumberSupport.CURRENCY_TYPE:
-	    formatter = NumberFormat.getCurrencyInstance(locale);
+	    parser = NumberFormat.getCurrencyInstance(locale);
 	    break;
 	case FormatNumberSupport.PERCENT_TYPE:
-	    formatter = NumberFormat.getPercentInstance(locale);
+	    parser = NumberFormat.getPercentInstance(locale);
 	    break;
 	} // switch
+
+	// Configure parser
+	if (integerOnlySpecified)
+	    parser.setParseIntegerOnly(isIntegerOnly);
 
 	// Parse number
 	Number parsed = null;
 	try {
-	    parsed = formatter.parse(value);
+	    parsed = parser.parse(value);
 	} catch (ParseException pe) {
 	    throw new JspTagException(pe.getMessage());
 	}

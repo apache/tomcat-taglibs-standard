@@ -76,7 +76,6 @@ public class ExceptionTag extends ExceptionSupport {
 
     private String value_;                       // stores EL-based property
     private String bundle_;		         // stores EL-based property
-    private String stackTrace_;		         // stores EL-based property
 
 
     //*********************************************************************
@@ -126,11 +125,6 @@ public class ExceptionTag extends ExceptionSupport {
         this.bundle_ = bundle_;
     }
 
-    // for EL-based attribute
-    public void setStackTrace(String stackTrace_) {
-        this.stackTrace_ = stackTrace_;
-    }
-
 
     //*********************************************************************
     // Private (utility) methods
@@ -138,7 +132,7 @@ public class ExceptionTag extends ExceptionSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	value_ = bundle_ = stackTrace_ = null;
+	value_ = bundle_  = null;
     }
 
     // Evaluates expressions as necessary
@@ -156,16 +150,5 @@ public class ExceptionTag extends ExceptionSupport {
 	bundle = (ResourceBundle) ExpressionUtil.evalNotNull(
 	    "exception", "bundle", bundle_, ResourceBundle.class, this,
 	    pageContext);
-
-	if (stackTrace_ != null) {
-	    if (stackTrace_.equalsIgnoreCase("false"))
-	        stackTrace = false;
-	    else if (stackTrace_.equalsIgnoreCase("true"))
-		stackTrace = true;
-	    else
-		throw new JspTagException(
-		    Resources.getMessage("EXCEPTION_STACKTRACE_BOOLEAN",
-					 stackTrace_));
-	}
     }
 }

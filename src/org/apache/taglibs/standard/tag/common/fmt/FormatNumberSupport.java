@@ -58,6 +58,7 @@ package org.apache.taglibs.standard.tag.common.fmt;
 import java.util.*;
 import java.text.*;
 import java.io.IOException;
+import java.lang.reflect.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import org.apache.taglibs.standard.tag.common.core.Util;
@@ -89,23 +90,51 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 
 
     //*********************************************************************
+    // Private constants
+
+    private static final Class[] GET_INSTANCE_PARAM_TYPES =
+	new Class[] { String.class };
+
+
+    //*********************************************************************
     // Protected state
 
-    protected Object value;                      // 'value' attribute
-    protected String pattern;                    // 'pattern' attribute
-    protected Locale parseLocale;                // 'parseLocale' attribute
+    protected Object value;                    // 'value' attribute
+    protected String pattern;                  // 'pattern' attribute
+    protected Locale parseLocale;              // 'parseLocale' attribute
+    protected String currencyCode;             // 'currencyCode' attribute
+    protected String currencySymbol;           // 'currencySymbol' attribute
+    protected boolean isGroupingUsed;          // 'groupingUsed' attribute
+    protected boolean groupingUsedSpecified;
+    protected int maxIntegerDigits;            // 'maxIntegerDigits' attribute
+    protected boolean maxIntegerDigitsSpecified;
+    protected int minIntegerDigits;            // 'minIntegerDigits' attribute
+    protected boolean minIntegerDigitsSpecified;
+    protected int maxFractionDigits;           // 'maxFractionDigits' attribute
+    protected boolean maxFractionDigitsSpecified;
+    protected int minFractionDigits;           // 'minFractionDigits' attribute
+    protected boolean minFractionDigitsSpecified;
 
 
     //*********************************************************************
     // Private state
 
-    private int type;                            // 'type' attribute
-    private String var;                          // 'var' attribute
-    private int scope;                           // 'scope' attribute
+    private int type;                          // 'type' attribute
+    private String var;                        // 'var' attribute
+    private int scope;                         // 'scope' attribute
+    private static Class currencyClass;
 
 
     //*********************************************************************
     // Constructor and initialization
+
+    static {
+	try {
+	    currencyClass = Class.forName("java.util.Currency");
+	    // container's runtime is J2SE 1.4 or greater
+	} catch (Exception cnfe) {
+	}
+    }
 
     public FormatNumberSupport() {
 	super();
@@ -113,11 +142,14 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
     }
 
     private void init() {
-	pattern = var = null;
 	value = null;
+	pattern = var = currencyCode = currencySymbol = null;
+	groupingUsedSpecified = false;
+	maxIntegerDigitsSpecified = minIntegerDigitsSpecified = false;
+	maxFractionDigitsSpecified = minFractionDigitsSpecified = false;
+	parseLocale = null;
 	type = NUMBER_TYPE;
 	scope = PageContext.PAGE_SCOPE;
-	parseLocale = null;
     }
 
 
@@ -191,18 +223,33 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
 	case NUMBER_TYPE:
 	    formatter = NumberFormat.getNumberInstance(locale);
 	    if (pattern != null) {
+		/*
+		 * Let potential ClassCastException propagate up (will almost
+		 * never happen)
+		 */
 		DecimalFormat df = (DecimalFormat) formatter;
 		df.applyPattern(pattern);
 	    }
 	    break;
 	case CURRENCY_TYPE:
 	    formatter = NumberFormat.getCurrencyInstance(locale);
+	    if ((currencyCode != null) || (currencySymbol != null)) {
+		try {
+		    setCurrency(formatter);
+		} catch (Exception e) {
+		    throw new JspTagException(e.getMessage());
+		}
+	    }
 	    break;
 	case PERCENT_TYPE:
 	    formatter = NumberFormat.getPercentInstance(locale);
 	    break;
 	} // switch
 
+	// Configure the formatter
+	configureFormatter(formatter);
+
+	// Format given numeric value
 	String formatted = formatter.format(value);
 	if (var != null) {
 	    pageContext.setAttribute(var, formatted, scope);	
@@ -220,5 +267,100 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
     // Releases any resources we may have (or inherit)
     public void release() {
 	init();
+    }
+
+
+    //*********************************************************************
+    // Private utility methods
+
+    private void configureFormatter(NumberFormat formatter) {
+	if (groupingUsedSpecified)
+	    formatter.setGroupingUsed(isGroupingUsed);
+	if (maxIntegerDigitsSpecified)
+	    formatter.setMaximumIntegerDigits(maxIntegerDigits);
+	if (minIntegerDigitsSpecified)
+	    formatter.setMinimumIntegerDigits(minIntegerDigits);
+	if (maxFractionDigitsSpecified)
+	    formatter.setMaximumFractionDigits(maxFractionDigits);
+	if (minFractionDigitsSpecified)
+	    formatter.setMinimumFractionDigits(minFractionDigits);
+    }
+
+    /*
+     * Override the formatting locale's default currency symbol with the
+     * specified currency code (specified via the "currencyCode" attribute) or
+     * currency symbol (specified via the "currencySymbol" attribute).
+     *
+     * If both "currencyCode" and "currencySymbol" are present,
+     * "currencyCode" takes precedence over "currencySymbol" if the
+     * java.util.Currency class is defined in the container's runtime (that
+     * is, if the container's runtime is J2SE 1.4 or greater), and
+     * "currencySymbol" takes precendence over "currencyCode" otherwise.
+     *
+     * If only "currencyCode" is given, it is used as a currency symbol if
+     * java.util.Currency is not defined.
+     *
+     * Example:
+     *
+     * JDK    "currencyCode" "currencySymbol" Currency symbol being displayed
+     * -----------------------------------------------------------------------
+     * all         ---            ---         Locale's default currency symbol
+     *
+     * <1.4        EUR            ---         EUR
+     * >=1.4       EUR            ---         Locale's currency symbol for Euro
+     *
+     * all         ---           \u20AC       \u20AC
+     * 
+     * <1.4        EUR           \u20AC       \u20AC
+     * >=1.4       EUR           \u20AC       Locale's currency symbol for Euro
+     */
+    private void setCurrency(NumberFormat currencyFormat) throws Exception {
+	String code = null;
+	String symbol = null;
+
+	if ((currencyCode != null) && (currencySymbol != null)) {
+	    if (currencyClass != null)
+		code = currencyCode;
+	    else
+		symbol = currencySymbol;
+	} else if (currencyCode == null) {
+	    symbol = currencySymbol;
+	} else {
+	    if (currencyClass != null)
+		code = currencyCode;
+	    else
+		symbol = currencyCode;
+	}
+
+	if (code != null) {
+	    Object[] methodArgs = new Object[1];
+
+	    /*
+	     * java.util.Currency.getInstance()
+	     */
+	    Method m = currencyClass.getMethod("getInstance",
+					       GET_INSTANCE_PARAM_TYPES);
+	    methodArgs[0] = code;
+	    Object currency = m.invoke(null, methodArgs);
+
+	    /*
+	     * java.text.NumberFormat.setCurrency()
+	     */
+	    Class[] paramTypes = new Class[1];
+	    paramTypes[0] = currencyClass;
+	    Class numberFormatClass = Class.forName("java.text.NumberFormat");
+	    m = numberFormatClass.getMethod("setCurrency", paramTypes);
+	    methodArgs[0] = currency;
+	    m.invoke(currencyFormat, methodArgs);
+	} else {
+	    /*
+	     * Let potential ClassCastException propagate up (will almost
+	     * never happen)
+	     */
+	    DecimalFormat df = (DecimalFormat) currencyFormat;
+	    DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
+	    dfs.setCurrencySymbol(symbol);
+	    df.setDecimalFormatSymbols(dfs);
+	}
     }
 }

@@ -87,13 +87,6 @@ public abstract class BundleSupport extends BodyTagSupport {
 
 
     //*********************************************************************
-    // Private constants
-
-    private static final String FALLBACK_LOCALE =
-	"javax.servlet.jsp.jstl.i18n.fallbackLocale";
-
-
-    //*********************************************************************
     // Protected state
 
     protected String basename;                          // 'basename' attribute
@@ -211,10 +204,8 @@ public abstract class BundleSupport extends BodyTagSupport {
      * use the best matching locale.
      *
      * <li> If no match is found, use the fallback locale given by the
-     * <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt> scoped attribute,
-     * if it exists.
-     *
-     * <li> Otherwise, use the runtime's default locale.
+     * <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt> scoped attribute
+     * or config parameter (if present).
      * </ul>
      *
      * @param pageContext the page in which the resource bundle with the
@@ -226,34 +217,22 @@ public abstract class BundleSupport extends BodyTagSupport {
      */
     public static ResourceBundle getBundle(PageContext pageContext,
 					   String basename) {
-	Locale loc = null;
 	ResourceBundle ret = null;
 	    
-	loc = LocaleSupport.getLocale(pageContext, LocaleSupport.LOCALE);
-	if (loc != null) {
-	    /*
-	     * Use resource bundle with specified locale. If specified locale
-	     * is not available, fall back on container's default locale.
-	     */
-	    ret = getBundle(basename, loc);
+	Locale pref = LocaleSupport.getLocale(pageContext,
+					      LocaleSupport.LOCALE);
+	if (pref != null) {
+	    // Use resource bundle with specified locale.
+	    ret = getBundle(basename, pref);
 	} else {
 	    // use resource bundle with best matching locale
-	    ret = getBestMatch(pageContext, basename);
+	    ret = getBestLocaleMatch(pageContext, basename);
 	    if (ret == null) {
 		// no match available, use fallback locale (if present)
-		loc = LocaleSupport.getLocale(pageContext, FALLBACK_LOCALE);
-		if (loc != null) {
-		    ret = getBundle(basename, loc);
-		} else {
-		    /*
-		     * No fallback locale specified. Use container's default
-		     * locale, which was already considered by
-		     * ResourceBundle.getBundle() in getBestMatch(), but was
-		     * not returned by the latter, since it did not match
-		     * the language/country of any of the client's preferred
-		     * locales
-		     */
-		    ret = getBundle(basename, Locale.getDefault());
+		pref = LocaleSupport.getLocale(pageContext,
+					       LocaleSupport.FALLBACK_LOCALE);
+		if (pref != null) {
+		    ret = getBundle(basename, pref);
 		}
 	    }
 	}
@@ -281,8 +260,7 @@ public abstract class BundleSupport extends BodyTagSupport {
      * does not exist, or the requested resource bundle does not exist
      */
     public static ResourceBundle getDefaultBundle(PageContext pageContext,
-						  String name) {
-	
+						  String name) {	
 	ResourceBundle ret = null;
 
 	String defaultBasename = (String) pageContext.findAttribute(name);
@@ -300,19 +278,18 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Private utility methods
     
     /*
-     * Compares the client's preferred locales (in order of preference) against
-     * the available locales for the resource bundle with the given base name,
-     * and returns the resource bundle for the best matching locale.
+     * Returns the resource bundle with the best matching locale.
      *
-     * <p> The best matching locale is a client's preferred locale that matches
-     * both the language and country components of an available locale for the
-     * given base name. This is considered an exact match. An exact match may
-     * exist only if the client's preferred locale specifies a country.
+     * Each of the client's preferred locales (in order of preference) is
+     * compared against the available locales (using the
+     * java.util.ResourceBundle method getBundle()), and the best matching
+     * locale is determined as the first available locale which either:
      *
-     * <p> If no exact match exists, the first client locale that matches 
-     * (just) the language component of an available locale is used.
+     * - exactly matches a preferred locale
+     *   (using java.util.Locale.equals()), or
      *
-     * <p> If still no match is found, <tt>null</tt> is returned.
+     * - does not have a country component and matches (just) the language 
+     *   component of a preferred locale.
      *
      * @param pageContext the page in which the resource bundle with the
      * given base name is requested
@@ -321,8 +298,8 @@ public abstract class BundleSupport extends BodyTagSupport {
      * @return the resource bundle with the given base name and best matching
      * locale, or <tt>null</tt> if no match was found
      */
-    private static ResourceBundle getBestMatch(PageContext pageContext,
-					       String basename) {
+    private static ResourceBundle getBestLocaleMatch(PageContext pageContext,
+						     String basename) {
 	ResourceBundle ret = null;
 	
 	// Determine locale from client's browser settings.
@@ -334,43 +311,60 @@ public abstract class BundleSupport extends BodyTagSupport {
 	     * locale, so it always contains at least one element.
 	     */
 	    Locale pref = (Locale) enum.nextElement();
-	    ResourceBundle bundle = getBundle(basename, pref);
-	    if (bundle == null)
-		continue;
-	    Locale avail = bundle.getLocale();
-	    if (pref.getLanguage().equals(avail.getLanguage())) {
-		if (pref.getCountry().length() > 0
-		    && pref.getCountry().equals(avail.getCountry())) {
-		    // exact match
-		    ret = bundle;
-		    break;
-		} else {
-		    if (ret == null) {
-			ret = bundle;
-		    }
-		}
+	    ret = getBundle(basename, pref);
+	    if (ret != null) {
+		break;
 	    }
 	}
-
+	
 	return ret;
     }
 
     /*
-     * Gets the resource bundle with the given base name and locale.
+     * Gets the resource bundle with the given base name and preferred locale.
      * 
-     * <p> This method simply calls
-     * <tt>java.util.ResourceBundle.getBundle()</tt> and catches the
-     * potential <tt>java.util.MissingResourceException</tt>.
+     * This method calls java.util.ResourceBundle.getBundle(), but ignores
+     * its return value unless its locale represents an exact or language match
+     * with the given preferred locale.
      *
      * @param basename the resource bundle base name
-     * @param loc the requested locale
+     * @param pref the preferred locale
      *
-     * @return the requested resource bundle, or <tt>null</tt> if not found
+     * @return the requested resource bundle, or <tt>null</tt> if no resource
+     * bundle with the given base name exists or if there is no exact- or
+     * language-match between the preferred locale and the locale of
+     * the bundle returned by java.util.ResourceBundle.getBundle().
      */
-    private static ResourceBundle getBundle(String basename, Locale loc) {
+    private static ResourceBundle getBundle(String basename, Locale pref) {
 	ResourceBundle ret = null;
+
 	try {
-	    ret = ResourceBundle.getBundle(basename, loc);
+	    ResourceBundle bundle = ResourceBundle.getBundle(basename, pref);
+	    Locale avail = bundle.getLocale();
+	    if (pref.equals(avail)) {
+		// Exact match
+		ret = bundle;
+	    } else {
+		if (pref.getLanguage().equals(avail.getLanguage())
+		    && (avail.getCountry() == null)) {
+		    /*
+		     * Language match.
+		     * By making sure the available locale does not have a 
+		     * country and matches the preferred locale's language, we
+		     * rule out "matches" based on the container's default
+		     * locale. For example, if the preferred locale is 
+		     * "en-US", the container's default locale is "en-UK", and
+		     * there is a resource bundle (with the requested base
+		     * name) available for "en-UK", ResourceBundle.getBundle()
+		     * will return it, but even though its language matches
+		     * that of the preferred locale, we must ignore it,
+		     * because matches based on the container's default locale
+		     * are not portable across different containers with
+		     * different default locales.
+		     */
+		    ret = bundle;
+		}
+	    }
 	} catch (MissingResourceException mre) {
 	}
 
