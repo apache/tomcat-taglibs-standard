@@ -248,7 +248,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
 	    ResultSet rs = ps.executeQuery();
 	    result = new ResultImpl(rs, startRow, maxRows);
 	}
-	catch (SQLException e) {
+	catch (Throwable e) {
 	    throw new JspException(sqlStatement + ": " + e.getMessage(), e);
 	}
 	pageContext.setAttribute(var, result, scope);

@@ -192,7 +192,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
 	    setParameters(ps, parameters);
 	    result = ps.executeUpdate();
 	}
-	catch (SQLException e) {
+	catch (Throwable e) {
 	    throw new JspException(sqlStatement + ": " + e.getMessage(), e);
 	}
 	if (var != null)
