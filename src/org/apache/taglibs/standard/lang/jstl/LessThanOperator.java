@@ -108,6 +108,10 @@ public class LessThanOperator
     if (pLeft == pRight) {
       return Boolean.FALSE;
     }
+    else if (pLeft == null ||
+	     pRight == null) {
+      return Boolean.FALSE;
+    }
     else {
       return super.apply (pLeft, pRight, pContext, pLogger);
     }

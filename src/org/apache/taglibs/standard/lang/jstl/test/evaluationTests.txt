@@ -806,3 +806,54 @@ ${ 9220838762064379904.0 - 9220838762064379900.0 }
 java.lang.Object
 ${ 9220838762064379904 - 9220838762064379900 }
 java.lang.Object
+
+#######################################################
+# test relational operators involving null
+
+${ null == null }
+java.lang.Object
+${ null != null }
+java.lang.Object
+${ null > null }
+java.lang.Object
+${ null < null }
+java.lang.Object
+${ null >= null }
+java.lang.Object
+${ null <= null }
+java.lang.Object
+
+${ null == 3 }
+java.lang.Object
+${ null != 3 }
+java.lang.Object
+${ null > 3 }
+java.lang.Object
+${ null < 3 }
+java.lang.Object
+${ null >= 3 }
+java.lang.Object
+${ null <= 3 }
+java.lang.Object
+
+${ 3 == null }
+java.lang.Object
+${ 3 != null }
+java.lang.Object
+${ 3 > null }
+java.lang.Object
+${ 3 < null }
+java.lang.Object
+${ 3 >= null }
+java.lang.Object
+${ 3 <= null }
+java.lang.Object
+
+${ null == "" }
+java.lang.Object
+${ null != "" }
+java.lang.Object
+${ "" == null }
+java.lang.Object
+${ "" != null }
+java.lang.Object

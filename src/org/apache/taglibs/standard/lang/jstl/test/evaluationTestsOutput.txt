@@ -1807,3 +1807,120 @@ ExpectedType: class java.lang.Object
 Evaluates to: 4
 With type: java.lang.Long
 
+
+#######################################################
+# test relational operators involving null
+
+Expression: ${ null == null }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ null != null }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ null > null }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ null < null }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ null >= null }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ null <= null }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+
+Expression: ${ null == 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ null != 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ null > 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ null < 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ null >= 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ null <= 3 }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+
+Expression: ${ 3 == null }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ 3 != null }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ 3 > null }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ 3 < null }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ 3 >= null }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ 3 <= null }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+
+Expression: ${ null == "" }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ null != "" }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+
+Expression: ${ "" == null }
+ExpectedType: class java.lang.Object
+Evaluates to: false
+With type: java.lang.Boolean
+
+Expression: ${ "" != null }
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: java.lang.Boolean
+

@@ -140,6 +140,8 @@ import java.beans.PropertyEditorManager;
  *         return true
  *       otherwise
  *         return false
+ *     if A or B is null
+ *       return false
  *     if A or B is Float or Double
  *       coerce both A and B to Double
  *       apply operator

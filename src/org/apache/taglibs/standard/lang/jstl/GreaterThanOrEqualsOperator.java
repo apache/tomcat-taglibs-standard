@@ -108,6 +108,10 @@ public class GreaterThanOrEqualsOperator
     if (pLeft == pRight) {
       return Boolean.TRUE;
     }
+    else if (pLeft == null ||
+	     pRight == null) {
+      return Boolean.FALSE;
+    }
     else {
       return super.apply (pLeft, pRight, pContext, pLogger);
     }
