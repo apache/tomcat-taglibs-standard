@@ -72,6 +72,7 @@ public class UrlTag extends UrlSupport {
     // 'Private' state (implementation details)
 
     private String value_;			// stores EL-based property
+    private String context_;			// stores EL-based property
 
 
     //*********************************************************************
@@ -116,6 +117,11 @@ public class UrlTag extends UrlSupport {
         this.value_ = value_;
     }
 
+    public void setContext(String context_) {
+        this.context_ = context_;
+    }
+
+
     //*********************************************************************
     // Private (utility) methods
 
@@ -136,6 +142,8 @@ public class UrlTag extends UrlSupport {
          */
 
 	value = (String) ExpressionUtil.evalNotNull(
-	    "import", "value", value_, String.class, this, pageContext);
+	    "url", "value", value_, String.class, this, pageContext);
+	context = (String) ExpressionUtil.evalNotNull(
+	    "url", "context", context_, String.class, this, pageContext);
     }
 }

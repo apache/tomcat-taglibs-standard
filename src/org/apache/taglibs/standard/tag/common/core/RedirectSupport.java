@@ -77,6 +77,7 @@ public abstract class RedirectSupport extends BodyTagSupport
     // Protected state
 
     protected String url;                        // 'url' attribute
+    protected String context;                    // 'context' attribute
 
     //*********************************************************************
     // Private state
@@ -136,7 +137,8 @@ public abstract class RedirectSupport extends BodyTagSupport
 	String result;				// the eventual result
 
 	// add (already encoded) parameters
-	result = params.aggregateParams(url);
+        String baseUrl = UrlSupport.resolveUrl(url, context, pageContext);
+        result = params.aggregateParams(baseUrl);
 
         // if the URL is relative, rewrite it with 'redirect' encoding rules
         HttpServletResponse response =

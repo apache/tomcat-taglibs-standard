@@ -76,4 +76,9 @@ public class UrlTag extends UrlSupport {
         this.value = value;
     }
 
+    // for tag attribute
+    public void setContext(String context) throws JspTagException {
+        this.context = context;
+    }
+
 }

@@ -72,6 +72,7 @@ public class RedirectTag extends RedirectSupport {
     // 'Private' state (implementation details)
 
     private String url_;			// stores EL-based property
+    private String context_;			// stores EL-based property
 
 
     //*********************************************************************
@@ -116,13 +117,17 @@ public class RedirectTag extends RedirectSupport {
         this.url_ = url_;
     }
 
+    public void setContext(String context_) {
+        this.context_ = context_;
+    }
+
     //*********************************************************************
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	url_ = null;
+	url_ = context_ = null;
     }
 
     /* Evaluates expressions as necessary */
@@ -136,6 +141,8 @@ public class RedirectTag extends RedirectSupport {
          */
 
 	url = (String) ExpressionUtil.evalNotNull(
-	    "import", "url", url_, String.class, this, pageContext);
+	    "redirect", "url", url_, String.class, this, pageContext);
+	context = (String) ExpressionUtil.evalNotNull(
+	    "redirect", "context", context_, String.class, this, pageContext);
     }
 }

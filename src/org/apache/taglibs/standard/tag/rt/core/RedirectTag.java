@@ -76,4 +76,9 @@ public class RedirectTag extends RedirectSupport {
         this.url = url;
     }
 
+    // for tag attribute
+    public void setContext(String context) throws JspTagException {
+        this.context = context;
+    }
+
 }

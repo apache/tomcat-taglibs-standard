@@ -77,6 +77,7 @@ public abstract class UrlSupport extends BodyTagSupport
     // Protected state
 
     protected String value;                      // 'value' attribute
+    protected String context;			 // 'context' attribute
 
     //*********************************************************************
     // Private state
@@ -96,6 +97,7 @@ public abstract class UrlSupport extends BodyTagSupport
     private void init() {
 	value = var = null;
 	params = null;
+	context = null;
 	scope = PageContext.PAGE_SCOPE;
     }
 
@@ -136,7 +138,8 @@ public abstract class UrlSupport extends BodyTagSupport
 	String result;				// the eventual result
 
 	// add (already encoded) parameters
-	result = params.aggregateParams(value);
+	String baseUrl = resolveUrl(value, context, pageContext);
+	result = params.aggregateParams(baseUrl);
 
 	// if the URL is relative, rewrite it
 	if (!ImportSupport.isAbsoluteUrl(result)) {
@@ -163,4 +166,34 @@ public abstract class UrlSupport extends BodyTagSupport
     public void release() {
 	init();
     }
+
+    //*********************************************************************
+    // Utility methods
+
+    public static String resolveUrl(
+            String url, String context, PageContext pageContext)
+	    throws JspException {
+	// don't touch absolute URLs
+	if (ImportSupport.isAbsoluteUrl(url))
+	    return url;
+
+	// normalize relative URLs against a context root
+	HttpServletRequest request =
+	    (HttpServletRequest) pageContext.getRequest();
+	if (context == null) {
+	    if (!url.startsWith("/")) {
+                String page =
+		    request.getContextPath() + request.getServletPath();
+		String dir = page.substring(0, page.lastIndexOf("/") + 1);
+	        return (dir + url);
+	    } else
+	        return (request.getContextPath() + url);
+	} else {
+            if (!context.startsWith("/") || !url.startsWith("/"))
+                throw new JspTagException(
+                    Resources.getMessage("IMPORT_BAD_RELATIVE"));
+            return (context + url);
+        }
+    }
+
 }
