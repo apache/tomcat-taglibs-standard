@@ -164,7 +164,7 @@ public class ExceptionTag extends ExceptionSupport {
 		stackTrace = true;
 	    else
 		throw new JspTagException(
-		    Resources.getMessage("PARAM_STACKTRACE_BOOLEAN",
+		    Resources.getMessage("EXCEPTION_STACKTRACE_BOOLEAN",
 					 stackTrace_));
 	}
     }
