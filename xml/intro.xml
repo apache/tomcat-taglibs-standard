@@ -3,33 +3,45 @@
 
 <properties>
   <author>Shawn Bayern</author>
-  <title>The Jakarta-Taglibs Project: 'Standard' taglib: JSP[tm] Standard Tag Library (JSTL) implementation</title>
+  <title>The Jakarta-Taglibs Project: Standard-1.0 taglib: JSP[tm] Standard Tag Library (JSTL 1.0) implementation</title>
 </properties>
 
 <body>
 
-  <section name="'Standard' Taglib" href="Welcome">
+  <section name="Standard-1.0 Taglib" href="Welcome">
 
-    <big><b>JSP(tm) Standard Tag Library implementation (1.0)</b></big>
+    <big><b>JSP(tm) Standard Tag Library 1.0 implementation</b></big>
 
-    <p>Jakarta Taglibs hosts the Standard Taglib, an implementation of
+    <p>Jakarta Taglibs hosts the Standard Taglib 1.0, an implementation of
       the <a href="http://java.sun.com/products/jsp/jstl">JSP Standard Tag
-      Library (JSTL)</a>, which was developed under the
+      Library (JSTL)</a>, version 1.0, which was developed under the
       <a href="http://jcp.org/">Java Community Process</a>.
     </p>
 
-    <p><b>NOTE:</b> JSTL requires a JSP container that supports
+    <p><b>NOTE:</b> 
+    Standard-1.0 (JSTL 1.0) requires a JSP container that supports
       the Java Servlet 2.3 and JavaServer Pages 1.2 specifications.
       Jakarta <a href="http://jakarta.apache.org/tomcat/">
-      Tomcat 4</a> supports the new specifications. The Standard 1.0 taglib
-      has been tested with Tomcat 4.0.4.
+      Tomcat 4</a> supports these specifications. The Standard 1.0 taglib
+      has been tested with Tomcat 4.1.24.
     </p>
+    <p><a href="http://jakarta.apache.org/taglibs/doc/standard-doc/intro.html">Standard-1.1</a> 
+    (implementation of the JSTL 1.1 specification) requires a JSP container that supports
+      the Java Servlet 2.4 and JavaServer Pages 2.0 specifications.
+      Jakarta <a href="http://jakarta.apache.org/tomcat/">
+      Tomcat 5</a> supports the new specifications. The Standard-1.1 taglib
+      has been tested with Tomcat 5.0.3.</p>
 
   </section>
 
   <section name="'Standard' Taglib News" href="News">
 
     <news>
+      <newsitem date="09/25/2003">
+       Standard Taglib version 1.0.4 - another bugfix release - is now
+       available from the <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
+       Apache Jakarta Project Mirrors</a>.
+      </newsitem>
       <newsitem date="02/20/2003">
        Standard Taglib version 1.0.3 -- another minor bugfix release -- is now
        available from the <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
@@ -162,8 +174,7 @@
 
   <section name="JSTL Books" href="Books">
 
-    <p>The following books about JSTL are available, or will be published
-    shortly:</p>
+    <p>The following books about JSTL are available:</p>
 
     <ul>
       <li><a href="http://jstlbook.com/"><i>JSTL in Action</i></a>, Shawn Bayern, Manning</li>
