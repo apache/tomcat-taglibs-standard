@@ -53,7 +53,7 @@
  *
  */ 
 
-package standard.src.org.apache.taglibs.standard.extra.spath;
+package org.apache.taglibs.standard.extra.spath;
 
 import java.io.*;
 import java.util.*;
