@@ -16,7 +16,7 @@
 
 <h2>
 I18N/Formatting Tags - Functional Description&nbsp;<br>
-Draft Version 5</h2>
+</h2>
 
 <h2>
 <tt>&lt;fmt:locale><br>
@@ -30,75 +30,6 @@ Draft Version 5</h2>
 &lt;fmt:formatDate><br>
 &lt;fmt:parseDate><br>
 &lt;fmt:exception></tt></h2>
-This document provides a functional description of the I18N/Formatting
-tags. It does not cover all the details that the spec is going to address,
-but rather focusses on the functionality offered by the tags.
-<p>The following should be noted:
-<ul>
-<li>
-The companion document <a href="I18N_DesignNotes_4.html">I18N/Formatting
-Tags - Design Notes</a> <b>must</b> be read in conjunction with this document
-in order to understand the underlying design decisions.</li>
-</ul>
-
-<h3>
-Revision History</h3>
-
-<table BORDER CELLSPACING=2 CELLPADDING=0 WIDTH="400" NOSAVE >
-<tr NOSAVE>
-<td WIDTH="80%" NOSAVE>&nbsp;<b>Initial version</b></td>
-
-<td WIDTH="20%">&nbsp;<b>10.24.01</b></td>
-</tr>
-
-<tr>
-<td WIDTH="80%">&nbsp;<b>Revision 1</b>:
-<br>- Added <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale.</tt></td>
-
-<td WIDTH="20%">&nbsp;<b>10.26.01</b></td>
-</tr>
-
-<tr>
-<td WIDTH="80%">&nbsp;<b>Revision 2</b>:
-<br>- Added <tt>javax.servlet.jsp.jstl.i18n.timeZone </tt>attribute and
-<tt>&lt;timeZone>
-</tt>action.
-<br>- Added bodyless version of <tt>&lt;bundle></tt> action without
-<tt>var</tt>
-attribute.</td>
-
-<td WIDTH="20%">&nbsp;<b>10.30.01</b></td>
-</tr>
-
-<tr>
-<td WIDTH="80%">&nbsp;<b>Revision 3</b>:
-<br>- Added <tt>var</tt> attribute and body to <tt>&lt;timeZone> </tt>action.
-<br>- Removed <tt>basename</tt> and <tt>messageArgs</tt> attributes from
-<tt>&lt;message>
-</tt>action.</td>
-
-<td WIDTH="20%">&nbsp;<b>10.31.01</b></td>
-</tr>
-
-<tr>
-<td WIDTH="80%">&nbsp;<b>Revision 4</b>:
-<br>- Added <tt>&lt;messageFormat> </tt>action.
-<br>- <tt>&lt;locale></tt>: Replaced <tt>language</tt> and <tt>country</tt>
-attributes with <tt>value</tt>, and added <tt>variant</tt> attribute.
-<br>- Added "Response encoding" (section 3) and "Developer support" (section
-17) sections.</td>
-
-<td WIDTH="20%">&nbsp;<b>11.13.01</b></td>
-</tr>
-
-<tr>
-<td WIDTH="80%">&nbsp;<b>Revision 5</b>:
-<br>- Added <tt>scope</tt> attribute.
-<br>- Added <tt>&lt;exception></tt> action.</td>
-
-<td WIDTH="20%">&nbsp;<b>11.20.01</b></td>
-</tr>
-</table>
 
 <hr width="100%" noshade>
 <h3>
