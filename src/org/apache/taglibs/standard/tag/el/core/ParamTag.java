@@ -74,7 +74,6 @@ public class ParamTag extends ParamSupport {
 
     private String name_;                       // stores EL-based property
     private String value_;			// stores EL-based property
-    private String encode_;			// stores EL-based property
 
 
     //*********************************************************************
@@ -124,9 +123,6 @@ public class ParamTag extends ParamSupport {
         this.value_ = value_;
     }
 
-    public void setEncode(String encode_) {
-        this.encode_ = encode_;
-    }
 
     //*********************************************************************
     // Private (utility) methods
@@ -134,7 +130,7 @@ public class ParamTag extends ParamSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	name_ = value_ = encode_ = null;
+	name_ = value_ = null;
     }
 
     /* Evaluates expressions as necessary */
@@ -151,15 +147,5 @@ public class ParamTag extends ParamSupport {
 	    "import", "name", name_, String.class, this, pageContext);
 	value = (String) ExpressionUtil.evalNotNull(
 	    "import", "value", value_, String.class, this, pageContext);
-
-	if (encode_ != null) {
-	    if (encode_.equalsIgnoreCase("false"))
-	        encode = false;
-	    else if (encode_.equalsIgnoreCase("true"))
-		encode = true;
-	    else
-		throw new JspTagException(
-		    Resources.getMessage("PARAM_ENCODE_BOOLEAN", encode_));
-	}
     }
 }

@@ -81,9 +81,4 @@ public class ParamTag extends ParamSupport {
         this.value = value;
     }
 
-    // for tag attribute
-    public void setEncode(boolean encode) throws JspTagException {
-        this.encode = encode;
-    }
-
 }

@@ -75,7 +75,13 @@ public abstract class ParamSupport extends BodyTagSupport {
 
     protected String name;                       // 'name' attribute
     protected String value;                      // 'value' attribute
-    protected boolean encode;			 // 'encode' attribute
+
+    /**
+     * There used to be an 'encode' attribute; I've left this as a
+     * vestige in case custom subclasses want to use our functionality
+     * but NOT encode parameters.
+     */
+    protected boolean encode = true;
 
     //*********************************************************************
     // Constructor and initialization
@@ -87,7 +93,6 @@ public abstract class ParamSupport extends BodyTagSupport {
 
     private void init() {
 	name = value = null;
-	encode = true;				// encode by default
     }
 
 

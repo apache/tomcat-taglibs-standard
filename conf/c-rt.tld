@@ -236,11 +236,6 @@
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
-    <attribute>
-        <name>encode</name>
-        <required>false</required>
-        <rtexprvalue>true</rtexprvalue>
-    </attribute>
   </tag>
 
   <tag>
