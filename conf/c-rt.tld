@@ -60,6 +60,7 @@
   <tag>
     <name>import</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.core.ImportTag</tag-class>
+    <tei-class>org.apache.taglibs.standard.tei.ImportTEI</tei-class>
     <body-content>JSP</body-content>
     <description>
         Retrieves an absolute or relative URL and exposes its contents
