@@ -3,7 +3,7 @@
     <!-- ******************** Adjustable Properties *********************** -->
 
     <!-- Version Number -->
-    <property name="standard-version" value="1.0.3" />
+    <property name="standard-version" value="1.0.5" />
 
     <!-- Now bundle with JAXP 1.2 -->
     <property name="isJaxp12" value="true" />
