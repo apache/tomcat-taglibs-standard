@@ -9,19 +9,20 @@
 <h1>
 Standard: An Implementation of the JSP&#153; Standard Tag Library (JSTL)<br>
 <p>
-Version: 1.0.1<br>
+Version: 1.0.2<br>
 Release Notes
 </h1>
 </center>
 
-<p>The Standard 1.0.1 release builds on the Standard 1.0 FCS release, an 
+<p>The Standard 1.0.2 release is a minor update to the Standard 1.0.1
+release, which builds on the Standard 1.0 FCS release, an 
 implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0 Specification</a>. The Standard 1.0.1 release includes many bug fixes and updates</p>
 
-<p>The Standard 1.0.1 release, which is hosted at Apache, is used as the source repository for the <a href="http://java.sun.com/products/jstl">JSTL 1.0 reference implementation</a> supplied by Sun Microsystems, Inc.</p>
+<p>The Standard Taglib, which is hosted at Apache, is used as the source repository for the <a href="http://java.sun.com/products/jstl">JSTL 1.0 reference implementation</a> supplied by Sun Microsystems, Inc.</p>
 <hr/>
 
 <h2>Release History</h2>
-<dt><b>Current</b></dt>
+<dt><b>13 October 2002</b></dt>
 <p><dd>Bugs fixed since Standard 1.0.1 Taglib release:</dd>
 <ul>
   <blockquote>
@@ -49,6 +50,12 @@ implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0
       </tr>
       <tr>
         <td width="27%" height="15">
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12333">12333</a></div>
+        </td>
+        <td width="73%" height="15">There was a bug in the EL grammar that caused attribute values like <tt>"$${X}"</tt> to be parsed as a single string instead of a string followed by an expression.</td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
           <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12963">12963</a></div>
         </td>
         <td width="73%" height="15">The <code>&lt;c:url&gt;</code> <code>value</code> attribute and the <code>
@@ -59,6 +66,13 @@ implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0
           <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=13405">13405</a></div>
         </td>
         <td width="73%" height="15">According to the JDBC specification, a null can be passed to the <code>PreparedStatement.setObject()</code> and the parameter will be set to JDBC NULL properly. The broken <code>PreparedStatment.setNull()</code> call has been removed.
+        </td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=13518">13518</a></div>
+        </td>
+        <td width="73%" height="15">There was a typographical error in our sample TLDs for the PermittedTaglibTLV and ScriptFreeTLV validators.
         </td>
       </tr>
     </table>
@@ -76,6 +90,7 @@ implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0
     </li>
     <li>Root cause now exposed when an EL expression evaluation fails.
     </li>
+    <li>New regression tests for the EL parser.</li>
   </ul>
 </blockquote>
 
