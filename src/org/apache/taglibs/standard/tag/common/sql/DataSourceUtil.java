@@ -102,10 +102,13 @@ public class DataSourceUtil {
         if (rawDataSource == null) {
             rawDataSource = Config.find(pageContext, Config.SQL_DATASOURCE);
             hasDataSourceAttribute = false;
-	    return;
         } else {
             hasDataSourceAttribute = true;
         }
+
+	if (rawDataSource == null) {
+	    return;
+	}
 
         // If the 'dataSource' attribute's value resolves to a String
         // after rtexpr/EL evaluation, use the string as JNDI path to
