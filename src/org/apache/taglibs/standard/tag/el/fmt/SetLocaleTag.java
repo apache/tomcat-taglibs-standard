@@ -136,18 +136,12 @@ public class SetLocaleTag extends SetLocaleSupport {
 
     // Evaluates expressions as necessary
     private void evaluateExpressions() throws JspException {
-        /* 
-         * Note: we don't check for type mismatches here; we assume
-         * the expression evaluator will return the expected type
-         * (by virtue of knowledge we give it about what that type is).
-         * A ClassCastException here is truly unexpected, so we let it
-         * propagate up.
-         */
 
 	// 'value' attribute (mandatory)
-	value = (String) ExpressionEvaluatorManager.evaluate(
-	    "value", value_, String.class, this, pageContext);
+	value = ExpressionEvaluatorManager.evaluate(
+	    "value", value_, Object.class, this, pageContext);
 
+	// 'variant' attribute (optional)
 	if (variant_ != null) {
 	    variant = (String) ExpressionEvaluatorManager.evaluate(
 	        "variant", variant_, String.class, this, pageContext);

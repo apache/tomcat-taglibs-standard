@@ -73,7 +73,7 @@ public class SetLocaleTag extends SetLocaleSupport {
     // Accessor methods
 
     // for tag attribute
-    public void setValue(String value) throws JspTagException {
+    public void setValue(Object value) throws JspTagException {
         this.value = value;
     }
 

@@ -83,7 +83,7 @@ public abstract class SetLocaleSupport extends TagSupport {
     //*********************************************************************
     // Protected state
 
-    protected String value;                      // 'value' attribute
+    protected Object value;                      // 'value' attribute
     protected String variant;                    // 'variant' attribute
 
 
@@ -120,11 +120,19 @@ public abstract class SetLocaleSupport extends TagSupport {
 
     public int doEndTag() throws JspException {
 	Locale locale = null;
-	if ((value == null) || "".equals(value)) {
+
+	if (value == null) {
 	    locale = Locale.getDefault();
+	} else if (value instanceof String) {
+	    if (((String) value).trim().equals("")) {
+		locale = Locale.getDefault();
+	    } else {
+		locale = parseLocale((String) value, variant);
+	    }
 	} else {
-	    locale = parseLocale(value, variant);
+	    locale = (Locale) value;
 	}
+
 	Config.set(pageContext, Config.FMT_LOCALE, locale,
 		   Util.getScope(scope));
 	setResponseLocale(pageContext, locale);
