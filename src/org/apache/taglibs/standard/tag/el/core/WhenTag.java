@@ -88,13 +88,17 @@ public class WhenTag extends WhenTagSupport {
     //*********************************************************************
     // Supplied conditional logic
 
-    protected boolean condition() throws JspException {
-       Object r = ExpressionEvaluatorManager.evaluate(
+    protected boolean condition() throws JspTagException {
+        try { 
+            Object r = ExpressionEvaluatorManager.evaluate(
                 "test", test, Boolean.class, this, pageContext);
-        if (r == null)
-	    throw new NullAttributeException("when", "test");
-        else
-            return (((Boolean) r).booleanValue());
+            if (r == null)
+	        throw new NullAttributeException("when", "test");
+            else
+                return (((Boolean) r).booleanValue());
+	} catch (JspException ex) {
+	    throw new JspTagException(ex.toString());
+	}
     }
 
 

@@ -69,7 +69,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * <p>In particular, this base class does the following:</p>
  * 
  * <ul>
- *  <li> overrides ComparisonTagSupport.doStartTag() to implement the
+ *  <li> overrides ConditionalTagSupport.doStartTag() to implement the
  *       appropriate semantics of subtags of &lt;choose&gt; </li>
  * </ul>
  *

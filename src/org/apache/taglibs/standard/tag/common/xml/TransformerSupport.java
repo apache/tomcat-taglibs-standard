@@ -117,7 +117,7 @@ public abstract class TransformerSupport extends BodyTagSupport {
 	    xslt = bodyContent.getString();
 
 	// get a Source and feed it to our factory
-	Source s = TransformSupport.getSource(xslt);
+	Source s = TransformSupport.getSource(xslt, false);
 	Transformer t = tf.newTransformer(s);
 
 	// expose the Transformer

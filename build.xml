@@ -5,11 +5,11 @@
     <property file="../build.properties"/>
     <property file="../common.properties"/>
     <property name="js.jar"   value="lib/js.jar"/>
-    <property name="jdbc.jar"   value="lib/jdbc2_0-stdext.jar"/>
     <property name="jaxen-full.jar"   value="lib/jaxen-full.jar"/>
     <property name="saxpath.jar"      value="lib/saxpath.jar"/>
-    <property name="crimson.jar"      value="lib/crimson.jar"/>
-    <property name="xalan.jar"      value="lib/xalan.jar"/>
+    <!-- <property name="jdbc.jar"   value="lib/jdbc2_0-stdext.jar"/>-->
+    <!-- <property name="crimson.jar"      value="lib/crimson.jar"/> -->
+    <!-- <property name="xalan.jar"      value="lib/xalan.jar"/>-->
     <property name="classpath" value="${servlet23.jar}"/>
     <property name="taglib.name"    value="standard"/>
 
@@ -48,16 +48,31 @@
     <!-- Make sure required dependencies are available -->
     <antcall target="checkRequiredFile">
        <param name="file" value="${servlet23.jar}"/>
-       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile the standard taglib. please define the property servlet23.jar in your build.properties file and ensure that the file exists."/>
+       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile the Standard Taglib.  Please define the property servlet23.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
     <antcall target="checkRequiredFile">
-       <param name="file" value="${jaxp.jar}"/>
-       <param name="fail.message" value="The standard taglib required the JAXP 1.1 jaxp.jar file, please define the property jaxp.jar in your build.properties file and ensure that the file exists."/>
+       <param name="file" value="${jdbc2_0-stdext.jar}"/>     
+       <param name="fail.message" value="This build process for the Standard Taglib requires the Sun JDBC 2.0 Optional Package (Standard Extensions).  Please define the property jdbc2_0-stdext.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
     <antcall target="checkRequiredFile">
        <param name="file" value="${crimson.jar}"/>     
-       <param name="fail.message" value="The standard taglib required the JAXP 1.1 crimson.jar file, please define the property crimson.jar in your build.properties file and ensure that the file exists."/>
+       <param name="fail.message" value="This build process for the Standard Taglib requires a JAXP 1.1-compliant XML parser, such as crimson.jar.  Please define the property crimson.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${xalan.jar}"/>     
+       <param name="fail.message" value="This build process for the Standard Taglib requires a JAXP 1.1-compliant XSLT processors, such as xalan.jar.  Please define the property xalan.jar in your build.properties file and ensure that the file exists."/>
+    </antcall>
+    <!--
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${xml-apis.jar}"/>     
+       <param name="fail.message" value="This build process for the Standard Taglib requires various XML APIs.  Please define the property xml-apis.jar in your build.properties file and ensure that the file exists.  You can obtain xml-apis.jar as part of the Xalan distribution.  These APIs are available from http://xml.apache.org."/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jaxp.jar}"/>
+       <param name="fail.message" value="This build process for the standard taglib required the JAXP 1.1 jaxp.jar file, please define the property jaxp.jar in your build.properties file and ensure that the file exists."/>
+    </antcall>
+    -->
+
     <!--
     <antcall target="checkOptionalFile">
        <param name="file" value="${jxpath.jar}"/>
@@ -115,6 +130,11 @@
     <copy todir="${build.examples}/WEB-INF/lib">
       <fileset dir="lib" includes="*.jar"/>
     </copy>
+    <copy file="${jdbc2_0-stdext.jar}" tofile="${build.examples}/WEB-INF/lib/jdbc2_0-stdext.jar" />
+    <copy file="${xalan.jar}" tofile="${build.examples}/WEB-INF/lib/xalan.jar" />
+    <copy file="${crimson.jar}" tofile="${build.examples}/WEB-INF/lib/crimson.jar" />
+    <!-- <copy file="${xml-apis.jar}" tofile="${build.examples}/WEB-INF/lib/xml-apis.jar" /> -->
+
     <!-- Copy required external API jar files -->
     <!--
     <copy file="${jaxp.jar}"
@@ -179,9 +199,14 @@
   </target>
 -->
 
-    <javac srcdir="${library.src}" destdir="${build.library}"
-           classpath="${servlet23.jar}:${jxpath.jar}:${js.jar}:${jdbc.jar}:${jaxen-full.jar}:${saxpath.jar}:${crimson.jar}:${xalan.jar}"
+<!--    <javac srcdir="${library.src}" destdir="${build.library}"
+           classpath="${servlet23.jar}:${jxpath.jar}:${js.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
 	   debug="on"/>
+-->
+      <javac srcdir="${library.src}" destdir="${build.library}"
+         classpath="${servlet23.jar}:${jxpath.jar}:${js.jar}:${jdbc2_0-stdext.jar}:${xalan.jar}:${crimson.jar}:${jaxen-full.jar}:${saxpath.jar}"
+         debug="on"/>
+
   </target>
 
   <!-- Compile the library as well as the associated applications -->
