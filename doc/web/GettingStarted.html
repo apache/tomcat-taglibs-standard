@@ -89,6 +89,11 @@ directory of your Tomcat distribution) for more information about XML
 parsers in Tomcat 4.</p>
 -->
 
+<p>To use JSTL, include the 'standard.jar' file in your application's
+WEB-INF/lib directory.  If you use the default expression language
+(ECMAScript), you should also include the distribution's 'js.jar' file in
+WEB-INF/lib.</p>
+
 <h3>Multiple tag libraries</h3>
 
 <p>See the <a href="Overview.html">Overview Document</a> for information
@@ -115,7 +120,7 @@ at the top of your JSP page, as follows:</p>
 setting the servlet context parameter
 <tt>javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass</tt> to the class
 containing the expression-evaluation logic you wish to use. In
-<tt>jstl.jar</tt>, the SPEL is identified by the class
+<tt>standard.jar</tt>, the SPEL is identified by the class
 <tt>org.apache.taglibs.standard.lang.spel.Evaluator</tt>; JPath is identified
 by the class
 <tt>org.apache.taglibs.standard.lang.jpath.JPathExpressionEvaluator</tt>;
