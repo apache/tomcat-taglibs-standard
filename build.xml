@@ -1,5 +1,3 @@
-
-
 <project name="standard" default="main" basedir=".">
 
     <!-- ******************** Adjustable Properties *********************** -->
@@ -139,13 +137,43 @@
   <target name="compileJaxp11" unless="isJaxp12">
       <javac srcdir="${library.src}" destdir="${build.library}"
          classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+	 excludes="org/apache/taglibs/standard/lang/jstl/parser/jsp20/*"
          debug="on"/>
   </target>
 
   <target name="compileJaxp12" if="isJaxp12">
       <javac srcdir="${library.src}" destdir="${build.library}"
          classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+	 excludes="org/apache/taglibs/standard/lang/jstl/parser/jsp20/*"
          debug="on"/>
+  </target>
+
+  <!-- **************** Special JSP 2.0 EL target ******************** -->
+
+  <target name="jsp20el.build">
+    <echo message="Building JSP 2.0 expression language."/>
+    <mkdir dir="${build.dir}/${taglib.name}/jsp20el"/>
+    <javac srcdir="${library.src}"
+           destdir="${build.dir}/${taglib.name}/jsp20el"
+	   classpath="${servlet23.jar}"
+	   debug="on">
+      <include name="org/apache/taglibs/standard/lang/jstl/*"/>
+      <include name="org/apache/taglibs/standard/lang/jstl/parser/*"/>
+      <exclude name="org/apache/taglibs/standard/lang/jstl/parser/ELParser.java"/>
+      <include name="org/apache/taglibs/standard/lang/jstl/parser/jsp20/*"/>
+      <include name="org/apache/taglibs/standard/lang/support/**"/>
+    </javac>
+  </target>
+
+  <target name="jsp20el.dist" depends="jsp20el.build">
+    <mkdir dir="${dist.dir}/jsp20el"/>
+    <jar jarfile="${dist.dir}/jsp20el/jsp20el.jar"
+         basedir="${build.dir}/${taglib.name}/jsp20el"/>
+  </target>
+
+  <target name="jsp20el.clean">
+    <delete dir="${build.dir}/${taglib.name}/jsp20el"/>
+    <delete dir="${dist.dir}/jsp20el"/>
   </target>
 
   <!-- **************** Compile Tag Library Components ******************** -->
@@ -205,36 +233,11 @@
     <copy todir="${build.library}/META-INF">
       <fileset dir="conf" includes="*.tld"/>
     </copy>
-    <!--
-    <copy file="${conf.src}/jx.tld"
-              tofile="${build.library}/META-INF/jx.tld"/>
-    <copy file="${conf.src}/jr.tld"
-              tofile="${build.library}/META-INF/jr.tld"/>
-    <copy file="${conf.src}/x.tld"
-              tofile="${build.library}/META-INF/x.tld"/>
-    -->
     <copy todir="${build.library}">
 	<fileset dir="${library.src}">
 	    <include name="**/*.properties"/>
 	</fileset>
     </copy>
-<!--
-    - [ for optional JXPath (versus integrated JXPath) ... ] -
-    <javac srcdir="${library.src}" destdir="${build.library}"
-           classpath="${servlet23.jar}"
-	   excludes="org/apache/taglibs/standard/lang/jxpath/**"
-	   debug="on"/>
-    <available file="${jxpath.jar}" property="jxpath.available"/>
-    <antcall target="libraryJXPath"/>
-  </target>
-
-  <target name="libraryJXPath" if="jxpath.available">
-    <javac srcdir="${library.src}" destdir="${build.library}"
-	classpath="${servlet23.jar}"
-	includes="org/apache/taglibs/standard/lang/jxpath/**"
-	debug="on"/>
-  </target>
--->
 
     <antcall target="compileJaxp11"/>
     <antcall target="compileJaxp12"/>
