@@ -20,6 +20,21 @@
   </validator>
 
   <tag>
+    <name>catch</name>
+    <tag-class>org.apache.taglibs.standard.tag.common.core.CatchTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+        Catches any Throwable that occurs in its body and optionally
+        exposes it.
+    </description>
+    <attribute>
+        <name>var</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
     <name>choose</name>
     <tag-class>org.apache.taglibs.standard.tag.common.core.ChooseTag</tag-class>
     <body-content>JSP</body-content>
