@@ -55,12 +55,11 @@
 
 package org.apache.taglibs.standard.examples.taglib;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import javax.servlet.jsp.jstl.core.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
 
 import org.apache.taglibs.standard.examples.beans.Customer;
-import org.apache.taglibs.standard.examples.util.*;
 
 /**
  * <p>Tag handler for &lt;usCustomer&gt;

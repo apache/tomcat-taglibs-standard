@@ -56,8 +56,8 @@
 package org.apache.taglibs.standard.examples.taglib;
 
 import java.lang.reflect.Array;
-import java.util.*;
-import javax.servlet.jsp.*;
+
+import javax.servlet.jsp.JspTagException;
 
 /**
  * <p>Exmaples taglib Functions</p>

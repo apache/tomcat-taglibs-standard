@@ -57,9 +57,9 @@ package org.apache.taglibs.standard.examples.taglib;
 
 import java.io.IOException;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import javax.servlet.jsp.jstl.core.*;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.taglibs.standard.examples.beans.Customer;
 

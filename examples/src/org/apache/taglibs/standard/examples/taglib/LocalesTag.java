@@ -56,7 +56,7 @@
 package org.apache.taglibs.standard.examples.taglib;
 
 import java.util.Locale;
-import javax.servlet.jsp.JspException;
+
 import javax.servlet.jsp.jstl.core.LoopTagSupport;
 
 /**

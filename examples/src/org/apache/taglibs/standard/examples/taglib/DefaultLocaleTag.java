@@ -56,8 +56,9 @@
 package org.apache.taglibs.standard.examples.taglib;
 
 import java.util.Locale;
-import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
 
 /**
  * <p>Tag handler for &lt;locales&gt;
