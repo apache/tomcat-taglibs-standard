@@ -1,0 +1,35 @@
+# Sample build.properties bundled with a standalone (i.e. without all the
+# other jakarta-taglibs taglibs) source distribution of the
+# standard tag library. If building from a full source distribution
+# of jakarta-taglibs, properties mus be set in jakarta-taglibs/build.properties.
+
+# The base directory of your jakarta-taglibs-standard distribution
+
+base.dir=${user.home}/jakarta-taglibs-standard
+build.dir = ${base.dir}/build
+dist.dir = ${base.dir}/dist
+
+# Servlet 2.4 and JSP 2.0
+
+#servlet24.jar=
+#jsp20.jar=
+
+# Standard (JSTL RI) and dbtags require the 
+# JDBC 2.0 Standard Extensions
+# {No need to specify if using J2SE 1.4.2 or higher)
+
+#jdbc2_0-stdext.jar=
+
+# JAXP 1.2
+# {No need to specify if using J2SE 1.4.2 or higher)
+
+#jaxp-api.jar=
+#dom.jar=
+#sax.jar=
+#xercesImpl.jar=
+
+# Xalan
+# {No need to specify if using J2SE 1.4.2 or higher)
+
+#xalan.jar=
+
