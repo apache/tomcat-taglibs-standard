@@ -295,13 +295,6 @@
   <!-- Compile the documentation application -->
   <target name="documentation-build" depends="prepare-build">
   
-    <style in="${xml.src}/intro.xml"
-           destdir="${build.doc}"                                          
-           out="${build.doc}/intro.html"
-           style="${taglibs.xsl}">
-      <param name="prefix" expression="../../"/>
-    </style>
-    
     <copy todir="${build.doc}/WEB-INF">
       <fileset dir="${doc.src}/conf"/>
     </copy>
@@ -365,6 +358,20 @@
             bottom='&lt;font size="-1"&gt;Copyright 2003 Sun Microsystems, Inc. All Rights Reserved.&lt;/font&gt;'/>
   </target>
 
+  <!-- =================================================================== -->
+  <!-- Nightly (components generated for the website)                      -->
+  <!-- =================================================================== -->
+  
+  <target name="dist-nightly" depends="dist">
+    <!-- website intro page for the taglib -->
+    <style in="${xml.src}/intro.xml"
+           destdir="${build.doc}"                                          
+           out="${build.doc}/intro.html"
+           style="${taglibs.xsl}">
+      <param name="prefix" expression="../../"/>
+    </style>
+  </target>    
+  
   <!-- =================================================================== -->
   <!-- Public utility targets                                              -->
   <!-- =================================================================== -->
