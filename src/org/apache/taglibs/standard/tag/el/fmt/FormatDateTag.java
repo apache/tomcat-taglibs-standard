@@ -121,7 +121,6 @@ public class FormatDateTag extends FormatDateSupport {
     // for EL-based attribute
     public void setValue(String value_) {
         this.value_ = value_;
-	this.valueSpecified = true;
     }
 
     // for EL-based attribute
@@ -169,11 +168,9 @@ public class FormatDateTag extends FormatDateSupport {
          * propagate up.
          */
 
-	// 'value' attribute
-	if (value_ != null) {
-	    value = ExpressionEvaluatorManager.evaluate(
-	        "value", value_, Object.class, this, pageContext);
-	}
+	// 'value' attribute (mandatory)
+	value = (Date) ExpressionEvaluatorManager.evaluate(
+	    "value", value_, Date.class, this, pageContext);
 
 	// 'type' attribute
 	if (type_ != null) {

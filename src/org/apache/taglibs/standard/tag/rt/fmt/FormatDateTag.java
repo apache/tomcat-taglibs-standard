@@ -73,9 +73,8 @@ public class FormatDateTag extends FormatDateSupport {
     // Accessor methods
 
     // 'value' attribute
-    public void setValue(Object value) throws JspTagException {
+    public void setValue(Date value) throws JspTagException {
         this.value = value;
-	this.valueSpecified = true;
     }
 
     // 'type' attribute

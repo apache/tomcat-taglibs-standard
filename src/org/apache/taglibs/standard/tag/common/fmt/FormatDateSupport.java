@@ -70,7 +70,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Jan Luehe
  */
 
-public abstract class FormatDateSupport extends BodyTagSupport {
+public abstract class FormatDateSupport extends TagSupport {
 
     //*********************************************************************
     // Private constants
@@ -83,8 +83,7 @@ public abstract class FormatDateSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected Object value;                      // 'value' attribute
-    protected boolean valueSpecified;
+    protected Date value;                        // 'value' attribute
     protected String type;                       // 'type' attribute
     protected String pattern;                    // 'pattern' attribute
     protected Object timeZone;                   // 'timeZone' attribute
@@ -109,7 +108,6 @@ public abstract class FormatDateSupport extends BodyTagSupport {
 
     private void init() {
 	type = dateStyle = timeStyle = null;
-	valueSpecified = false;
 	pattern = var = null;
 	value = null;
 	timeZone = null;
@@ -137,40 +135,11 @@ public abstract class FormatDateSupport extends BodyTagSupport {
      */
     public int doEndTag() throws JspException {
 
-	if (!valueSpecified && (getBodyContent() == null)) {
-	    // 'value' missing, use current date
-	    value = new Date();
-	} 
-
 	if (value == null) {
-	    BodyContent bc = null;
-	    String bcs = null;
-	    if (((bc = getBodyContent()) != null)
-		    && ((bcs = bc.getString()) != null)) {
-		value = bcs.trim();
+	    if (var != null) {
+		pageContext.removeAttribute(var, scope);
 	    }
-	}
-
-	if ((value == null) || value.equals("")) {
-	    // do nothing
 	    return EVAL_PAGE;
-	}
-
-	/*
-	 * If the date and/or time is given as a string literal, it is first
-	 * parsed into an instance of java.util.Date according to the default
-	 * pattern of the "en" locale.
-	 */
-	if (value instanceof String) {
-	    DateFormat parser
-		= DateFormat.getDateInstance(DateFormat.DEFAULT,
-					     Locale.ENGLISH);
-	    parser.setLenient(false);
-	    try {
-		value = parser.parse((String) value);
-	    } catch (ParseException pe) {
-		throw new JspTagException(pe.getMessage());
-	    }
 	}
 
 	// Create formatter
