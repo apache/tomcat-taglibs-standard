@@ -6,7 +6,6 @@
     version="2.0">
     
   <tlib-version>1.1</tlib-version>
-  <jsp-version>2.0</jsp-version>
   <short-name>x</short-name>
   <uri>http://java.sun.com/jstl-el/xml</uri>
   <display-name>JSTL XML</display-name>
