@@ -121,6 +121,9 @@ public class Constants
   public static final String CANT_FIND_ATTRIBUTE =
     getStringResource ("CANT_FIND_ATTRIBUTE");
 
+  public static final String CANT_INDEX =
+    getStringResource ("CANT_INDEX");
+
   //-------------------------------------
   // Getting resources
   //-------------------------------------

@@ -2,6 +2,7 @@
 package org.apache.taglibs.standard.lang.spel.parser;
 import org.apache.taglibs.standard.lang.spel.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SpelParserTokenManager implements SpelParserConstants
 {
@@ -147,6 +148,10 @@ private final int jjMoveStringLiteralDfa0_0()
       case 62:
          jjmatchedKind = 36;
          return jjMoveStringLiteralDfa1_0(0x10000000000L);
+      case 91:
+         return jjStopAtPos(0, 42);
+      case 93:
+         return jjStopAtPos(0, 43);
       case 97:
          return jjMoveStringLiteralDfa1_0(0x220000L);
       case 101:
@@ -844,12 +849,12 @@ public static final String[] jjstrLiteralImages = {
 "\160\141\162\141\155", "\160\141\162\141\155\166\141\154\165\145\163", "\141\156\144", "\157\162", 
 "\156\157\164", "\145\161", "\156\145", "\154\164", "\147\164", "\154\145", "\147\145", 
 "\151\156\163\164\141\156\143\145\157\146", null, null, null, "\72", "\56", "\76", "\74", "\75\75", "\74\75", "\76\75", 
-"\41\75", };
+"\41\75", "\133", "\135", };
 public static final String[] lexStateNames = {
    "DEFAULT", 
 };
 static final long[] jjtoToken = {
-   0x3fcfffffcc1L, 
+   0xffcfffffcc1L, 
 };
 static final long[] jjtoSkip = {
    0x3eL, 

@@ -60,6 +60,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import java.util.List;
 
 /**
  *
@@ -67,7 +68,7 @@ import javax.servlet.jsp.PageContext;
  * {expression}.{property0}.{property1}...
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author$
+ * @author Shawn Bayern
  **/
 
 public class PropertyExpression
@@ -96,15 +97,35 @@ public class PropertyExpression
   { return mPropertyNames; }
 
   //-------------------------------------
+  // property baseIndexes
+  List mBaseIndexes;
+
+  //-------------------------------------
+  // property propertyIndexes
+  List mPropertyIndexes;
+
+  //-------------------------------------
   /**
    *
-   * Constructor
+   * Constructors
    **/
   public PropertyExpression (Expression pBase,
 			     String [] pPropertyNames)
   {
+    // mBase = pBase;
+    // mPropertyNames = pPropertyNames;
+    this(pBase, null, pPropertyNames, null);
+  }
+
+  public PropertyExpression (Expression pBase,
+			     List pBaseIndexes,
+			     String [] pPropertyNames,
+			     List pPropertyIndexes)
+  {
     mBase = pBase;
+    mBaseIndexes = pBaseIndexes;
     mPropertyNames = pPropertyNames;
+    mPropertyIndexes = pPropertyIndexes;
   }
 
   //-------------------------------------
@@ -136,8 +157,16 @@ public class PropertyExpression
     // Evaluate the base first
     Object baseVal = mBase.evaluate (pContext);
 
-    // Now evaluate each property
+    // Retrieve indexed value from baseVal as appropriate
+    if (mBaseIndexes != null) {
+	Indexer ind = new LiteralIndexes(mBaseIndexes);
+	baseVal = ind.index(baseVal);
+    }
+
+    // Now evaluate each property (if we've got any)
     Object ret = baseVal;
+    if (mPropertyNames == null)
+	return ret;
     for (int i = 0; i < mPropertyNames.length; i++) {
       String propertyName = mPropertyNames [i];
 
@@ -191,6 +220,12 @@ public class PropertyExpression
 	   propertyName,
 	   ret.getClass ().getName (),
 	   exc.getTargetException ());
+      }
+
+      // Retrieve indexed value from result if necessary
+      if (mPropertyIndexes != null && mPropertyIndexes.get(i) != null) {
+	Indexer ind = new LiteralIndexes((List) mPropertyIndexes.get(i));
+	ret = ind.index(ret);
       }
     }
 

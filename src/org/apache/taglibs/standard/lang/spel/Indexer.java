@@ -55,50 +55,17 @@
 
 package org.apache.taglibs.standard.lang.spel;
 
+import java.util.*;
+
 /**
- *
- * <p>An expression representing an integer literal value.  The value
- * is stored internally as a long.
+ * <p>Represents an entity that can be used to retrieve index properties
+ * from a base object.</p>
  * 
- * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
+ * @author Shawn Bayern
+ */
+interface Indexer {
 
-public class IntegerLiteral
-  extends Literal
-{
-  //-------------------------------------
-  /**
-   *
-   * Constructor
-   **/
-  public IntegerLiteral (String pToken)
-  {
-    super (getValueFromToken (pToken));
-  }
+    /** Indexes the base object. */
+    Object index(Object a);
 
-  //-------------------------------------
-  /**
-   *
-   * Parses the given token into the literal value
-   **/
-  static Object getValueFromToken (String pToken)
-  {
-    // return new Long (pToken);
-    return new Integer (pToken);
-  }
-
-  //-------------------------------------
-  // Expression methods
-  //-------------------------------------
-  /**
-   *
-   * Returns the expression in the expression language syntax
-   **/
-  public String getExpressionString ()
-  {
-    return getValue ().toString ();
-  }
-
-  //-------------------------------------
 }

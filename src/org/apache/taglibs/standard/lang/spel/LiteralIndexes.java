@@ -55,50 +55,80 @@
 
 package org.apache.taglibs.standard.lang.spel;
 
+import java.util.*;
+
 /**
- *
- * <p>An expression representing an integer literal value.  The value
- * is stored internally as a long.
+ * <p>An indexer that stores and applies array-like indexes:
+ *    <tt>[a][b][c]...</tt></p>
  * 
- * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
+ * @author Shawn Bayern
+ */
+class LiteralIndexes implements Indexer {
 
-public class IntegerLiteral
-  extends Literal
-{
-  //-------------------------------------
-  /**
-   *
-   * Constructor
-   **/
-  public IntegerLiteral (String pToken)
-  {
-    super (getValueFromToken (pToken));
-  }
+    //*********************************************************************
+    // Private data
 
-  //-------------------------------------
-  /**
-   *
-   * Parses the given token into the literal value
-   **/
-  static Object getValueFromToken (String pToken)
-  {
-    // return new Long (pToken);
-    return new Integer (pToken);
-  }
+    /** The actual indexes we store. */
+    private int[] indexes;
 
-  //-------------------------------------
-  // Expression methods
-  //-------------------------------------
-  /**
-   *
-   * Returns the expression in the expression language syntax
-   **/
-  public String getExpressionString ()
-  {
-    return getValue ().toString ();
-  }
 
-  //-------------------------------------
+    //*********************************************************************
+    // Constructor
+
+    /** Constructs a new Indexer representing literal indexes. */
+    public LiteralIndexes(List l) {
+	indexes = new int[l.size()];
+	for (int i = 0; i < indexes.length; i++) {
+	    Object item = l.get(i);
+	    if (!(item instanceof Integer))
+		throw new IllegalArgumentException();
+	    indexes[i] = ((Integer) item).intValue();
+	}
+    }
+
+    /** Constructs a new Indexer representing literal indexes. */
+    public LiteralIndexes(int[] i) {
+	indexes = i;
+    }
+
+    //*********************************************************************
+    // Implementation of 'Indexer' contract
+
+    /**
+     * Applies this instance's indexes to the given base object.
+     * For example, if the base object is 'a', the first index is 0,
+     * and the second index is 1, then we return a[0][1], throwing
+     * an IllegalArgumentException if 'a' does not support the
+     * requisite indexing.
+     */
+    public Object index(Object a) {
+	for (int i = 0; i < indexes.length; i++) {
+	    // For the moment, we just support simple arrays.
+	    // If the array is of primitives, "promote" referents to boxed 
+            // types.  (Could do this with introspection, but there's something
+	    // comfortingly concrete about explicit enumeration.)
+	    if (!a.getClass().isArray())
+		throw new IllegalArgumentException(Constants.CANT_INDEX);
+	    else if (a instanceof Object[]) {
+		a = ((Object[]) a)[indexes[i]];
+	    } else if (a instanceof boolean[]) {
+		a = new Boolean(((boolean[]) a)[indexes[i]]);
+	    } else if (a instanceof char[]) {
+		a = new Character(((char[]) a)[indexes[i]]);
+	    } else if (a instanceof byte[]) {
+		a = new Byte(((byte[]) a)[indexes[i]]);
+	    } else if (a instanceof short[]) {
+		a = new Short(((short[]) a)[indexes[i]]);
+	    } else if (a instanceof int[]) {
+		a = new Integer(((int[]) a)[indexes[i]]);
+	    } else if (a instanceof long[]) {
+		a = new Long(((long[]) a)[indexes[i]]);
+	    } else if (a instanceof float[]) {
+		a = new Float(((float[]) a)[indexes[i]]);
+	    } else if (a instanceof double[]) {
+		a = new Double(((double[]) a)[indexes[i]]);
+	    }
+	}
+	return a;
+    }
 }
