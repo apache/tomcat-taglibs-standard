@@ -379,7 +379,7 @@
     <name>formatDate</name>
     <tag-class>org.apache.taglibs.standard.tag.el.fmt.FormatDateTag</tag-class>
     <tei-class>org.apache.taglibs.standard.tei.FormatDateTEI</tei-class>
-    <body-content>EMPTY</body-content>
+    <body-content>JSP</body-content>
     <description>
         Formats a date and/or time using the supplied styles and pattern
     </description>

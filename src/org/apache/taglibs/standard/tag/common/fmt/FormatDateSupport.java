@@ -70,7 +70,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Jan Luehe
  */
 
-public abstract class FormatDateSupport extends TagSupport {
+public abstract class FormatDateSupport extends BodyTagSupport {
 
     //*********************************************************************
     // Public constants
@@ -167,13 +167,20 @@ public abstract class FormatDateSupport extends TagSupport {
 
 	/*
 	 * If no date or time is given, the current date and time are used.
+	 */
+	if (value == null) {
+            String bcs = getBodyContent().getString();
+            if ((bcs == null) || (value = bcs.trim()).equals("")) {
+		value = new Date();
+	    }
+	}
+
+	/*
 	 * If the date and/or time is given as a string literal, it is first
 	 * parsed into an instance of java.util.Date according to the default
 	 * pattern of the "en" locale.
 	 */
-	if (value == null) {
-	    value = new Date();
-	} else if (value instanceof String) {
+	if (value instanceof String) {
 	    DateFormat parser
 		= DateFormat.getDateInstance(DateFormat.DEFAULT,
 					     Locale.ENGLISH);
