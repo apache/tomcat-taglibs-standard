@@ -217,8 +217,8 @@ public abstract class TransformSupport extends BodyTagSupport {
     //*********************************************************************
     // Public methods for subtags
 
-    /** Sets a transformation parameter on our transformer. */
-    public void setParameter(String name, String value) {
+    /** Sets (adds) a transformation parameter on our transformer. */
+    public void addParameter(String name, Object value) {
 	t.setParameter(name, value);
     }
 
