@@ -133,4 +133,36 @@ public class Util {
 
 	return ret;
     }
+    
+    /**
+     * Performs the following substring replacements 
+     * (to facilitate output to XML/HTML pages):
+     *
+     *    & -> &amp;
+     *    < -> &lt;
+     *    > -> &gt;
+     *    " -> &#034;
+     *    ' -> &#039;
+     *
+     * See also OutSupport.out().
+     */
+    public static String escapeXml(String input) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (c == '&')
+                sb.append("&amp;");
+            else if (c == '<')
+                sb.append("&lt;");
+            else if (c == '>')
+                sb.append("&gt;");
+            else if (c == '"')
+                sb.append("&#034;");
+            else if (c == '\'')
+                sb.append("&#039;");
+            else
+                sb.append(c);
+        }
+        return sb.toString();
+    }    
 }

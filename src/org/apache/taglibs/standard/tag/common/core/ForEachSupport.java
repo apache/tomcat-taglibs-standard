@@ -59,7 +59,7 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 import javax.servlet.jsp.jstl.core.LoopTagSupport;
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -175,10 +175,12 @@ public abstract class ForEachSupport extends LoopTagSupport {
             items = beginEndForEachIterator();
         }
 
+        /* ResultSet no more supported in <c:forEach>
         // step must be 1 when ResultSet is passed in
         if (rawItems instanceof ResultSet && step != 1)
             throw new JspTagException(
 		Resources.getMessage("FOREACH_STEP_NO_RESULTSET"));
+        */
     }
 
 
@@ -242,8 +244,10 @@ public abstract class ForEachSupport extends LoopTagSupport {
             items = toForEachIterator((Enumeration) o);
         else if (o instanceof Map)
             items = toForEachIterator((Map) o);
+        /*
         else if (o instanceof ResultSet)
             items = toForEachIterator((ResultSet) o);
+        */
         else if (o instanceof String)
             items = toForEachIterator((String) o);
         else
@@ -390,6 +394,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
         return new SimpleForEachIterator(m.entrySet().iterator());
     }
 
+    /* No more supported in JSTL. See interface Result instead.
     // thinly wraps a ResultSet in an appropriate Iterator
     protected ForEachIterator toForEachIterator(ResultSet rs)
             throws JspTagException {
@@ -419,6 +424,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
 
         return new ResultSetAdapter(rs);
     }
+    */
 
     // tokenizes a String as a CSV and returns an iterator over it
     protected ForEachIterator toForEachIterator(String s) {

@@ -174,6 +174,8 @@ public class OutSupport extends BodyTagSupport {
      *    > -> &gt;
      *    " -> &#034;
      *    ' -> &#039;
+     *
+     * See also Util.escapeXml().
      */
     public static void out(PageContext pageContext,
                            boolean escapeXml,

@@ -1,4 +1,4 @@
-<%@ taglib prefix="sql" uri="http://java.sun.com/jstl-el/sql" %>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 
 <html>
 <head>

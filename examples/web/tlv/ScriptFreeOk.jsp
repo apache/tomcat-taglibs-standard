@@ -1,5 +1,5 @@
 <%@ taglib prefix="scriptfree" uri="http://jakarta.apache.org/taglibs/standard/scriptfree" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl-el/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
   <title>JSTL: Tag Library Validator -- ScriptFree OK</title>

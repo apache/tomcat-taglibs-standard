@@ -55,6 +55,12 @@
 
 package org.apache.taglibs.standard.functions;
 
+import java.lang.reflect.Array;
+import java.util.*;
+import javax.servlet.jsp.*;
+import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.tag.common.core.Util;
+
 /**
  * <p>JSTL Functions</p>
  * 
@@ -64,7 +70,7 @@ package org.apache.taglibs.standard.functions;
 public class Functions {
 
     //*********************************************************************
-    // String Capitalization
+    // String capitalization
 
     /**
      * Converts all of the characters of the input string to upper case.
@@ -79,4 +85,122 @@ public class Functions {
     public static String toLowerCase(String input) {
         return input.toLowerCase();
     }
+    
+    //*********************************************************************
+    // Substring processing
+    
+    public static int indexOf(String input, String substring) {
+        if (input == null) input = "";
+        if (substring == null) substring = "";
+        return input.indexOf(substring);
+    }    
+
+    public static boolean contains(String input, String substring) {
+        return indexOf(input, substring) != -1;
+    }    
+
+    public static boolean containsIgnoreCase(String input, String substring) {
+        if (input == null) input = "";
+        if (substring == null) substring = "";        
+        String inputUC = input.toUpperCase();
+        String substringUC = substring.toUpperCase();
+        return indexOf(inputUC, substringUC) != -1;
+    }    
+
+    public static boolean startsWith(String input, String substring) {
+        if (input == null) input = "";
+        if (substring == null) substring = "";
+        return input.startsWith(substring);
+    }    
+        
+    public static boolean endsWith(String input, String substring) {
+        if (input == null) input = "";
+        if (substring == null) substring = "";
+        int index = input.indexOf(substring);
+        if (index == -1) return false;
+        if (index == 0 && substring.length() == 0) return true;
+        return (index == input.length() - substring.length());
+    }  
+    
+    public static String substring(String input, int beginIndex, int endIndex) {
+        if (input == null) input = "";
+        if (beginIndex < 0) beginIndex = 0;
+        if (endIndex < 0 || endIndex > input.length()) endIndex = input.length();
+        return input.substring(beginIndex, endIndex);
+    }    
+    
+    public static String substringAfter(String input, String substring) {
+        if (input == null) input = "";
+        if (substring == null) substring = "";
+        int index = input.indexOf(substring);
+        if (index == -1) {
+            return "";
+        } else {
+            return input.substring(index+substring.length());
+        }
+    }    
+        
+    public static String substringBefore(String input, String substring) {
+        if (input == null) input = "";
+        if (substring == null) substring = "";
+        int index = input.indexOf(substring);
+        if (index == -1) {
+            return "";
+        } else {
+            return input.substring(0, index);
+        }
+    }    
+
+    //*********************************************************************
+    // Character replacement
+    
+    public static String escapeXml(String input) {
+        if (input == null) input = "";
+        return Util.escapeXml(input);
+    }    
+    
+    public static String trim(String input) {
+        if (input == null) return "";
+        return input.trim();
+    }    
+
+    //*********************************************************************
+    // Collections processing
+    
+    public static int length(Object obj) throws JspTagException {
+        if (obj == null) return 0;  
+        
+        if (obj instanceof String) return ((String)obj).length();
+        if (obj instanceof Collection) return ((Collection)obj).size();
+        if (obj instanceof Map) return ((Map)obj).size();
+        
+        int count = 0;
+        if (obj instanceof Iterator) {
+            Iterator iter = (Iterator)obj;
+            count = 0;
+            while (iter.hasNext()) {
+                count++;
+                iter.next();
+            }
+            return count;
+        }            
+        if (obj instanceof Enumeration) {
+            Enumeration enum = (Enumeration)obj;
+            count = 0;
+            while (enum.hasMoreElements()) {
+                count++;
+                enum.nextElement();
+            }
+            return count;
+        }
+        try {
+            count = Array.getLength(obj);
+            return count;
+        } catch (IllegalArgumentException ex) {}
+        throw new JspTagException(Resources.getMessage("FOREACH_BAD_ITEMS"));        
+    }      
+
+    /** @@@ LEFT TO DO
+     * split(), join(), replace()
+     */    
 }

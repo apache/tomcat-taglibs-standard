@@ -1,5 +1,5 @@
 <%@ taglib prefix="permittedTaglibs" uri="http://jakarta.apache.org/taglibs/standard/permittedTaglibs" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl-el/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ex" uri="/jstl-examples-taglib" %>
 
 <html>

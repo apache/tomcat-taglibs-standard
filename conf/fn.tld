@@ -9,7 +9,67 @@
   <display-name>JSTL functions</display-name>
   <tlib-version>1.1</tlib-version>
   <short-name>fn</short-name>
-  <uri>http://java.sun.com/jstl-el/functions</uri>
+  <uri>http://java.sun.com/jsp/jstl/functions</uri>
+
+  <function>
+    <name>contains</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>boolean contains(java.lang.String, java.lang.String)</function-signature>
+  </function>
+
+  <function>
+    <name>containsIgnoreCase</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>boolean containsIgnoreCase(java.lang.String, java.lang.String)</function-signature>
+  </function>
+
+  <function>
+    <name>endsWith</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>boolean endsWith(java.lang.String, java.lang.String)</function-signature>
+  </function>
+
+  <function>
+    <name>escapeXml</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>java.lang.String escapeXml(java.lang.String)</function-signature>
+  </function>
+
+  <function>
+    <name>indexOf</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>int indexOf(java.lang.String, java.lang.String)</function-signature>
+  </function>
+
+  <function>
+    <name>length</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>int length(java.lang.Object)</function-signature>
+  </function>
+
+  <function>
+    <name>startsWith</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>boolean startsWith(java.lang.String, java.lang.String)</function-signature>
+  </function>
+
+  <function>
+    <name>substring</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>java.lang.String substring(java.lang.String, int, int)</function-signature>
+  </function>
+
+  <function>
+    <name>substringAfter</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>java.lang.String substringAfter(java.lang.String, java.lang.String)</function-signature>
+  </function>
+
+  <function>
+    <name>substringBefore</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>java.lang.String substringBefore(java.lang.String, java.lang.String)</function-signature>
+  </function>
 
   <function>
     <name>toLowerCase</name>
@@ -21,6 +81,12 @@
     <name>toUpperCase</name>
     <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
     <function-signature>java.lang.String toUpperCase(java.lang.String)</function-signature>
+  </function>
+
+  <function>
+    <name>trim</name>
+    <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
+    <function-signature>java.lang.String trim(java.lang.String)</function-signature>
   </function>
 
 </taglib>

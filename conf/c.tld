@@ -9,7 +9,7 @@
   <display-name>JSTL core</display-name>
   <tlib-version>1.1</tlib-version>
   <short-name>c</short-name>
-  <uri>http://java.sun.com/jstl-el/core</uri>
+  <uri>http://java.sun.com/jsp/jstl/core</uri>
 
   <validator>
     <description>
