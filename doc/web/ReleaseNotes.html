@@ -47,9 +47,28 @@ implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0
         <td width="73%" height="15">The <code>xml:transform</code> tag can now be used with a series of imported
           stylesheets.</td>
       </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12963">12963</a></div>
+        </td>
+        <td width="73%" height="15">The <code>&lt;c:url&gt;</code> <code>value</code> attribute and the <code>
+          &lt;c:redirect&gt;</code> <code>url</code> attribute are required as defined in the JSTL specification.</td>
+      </tr>
     </table>
   </blockquote>
 </ul>
+<blockquote> 
+  <p>Other changes and additions:</p>
+  <ul>
+    <li>Wrapped number formatting examples that use browser-based locale inside <c:catch>. Now the parse 
+      exception that occurs with "de_DE" locale due to a bug in <code>java.text.NumberFormat</code> 
+      (Bugtraq bugid: 4709840) can be documented appropriately.
+    </li>
+    <li>The "jsp20el.build" target was modified so that the JSTP 2.0 EL packages were renamed to avoid potential
+      JSTL 1.0 conflict.
+    </li>
+  </ul>
+</blockquote>
 
 <dt><b>26 July 2002</b></dt>
 <p><dd>Standard 1.0.1 Taglib released. Bugs fixed since Standard 1.0 Taglib 
