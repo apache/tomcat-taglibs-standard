@@ -149,6 +149,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	private int depth = 0;
 	private Stack chooseDepths = new Stack();
 	private Stack chooseHasOtherwise = new Stack();
+	private Stack chooseHasWhen = new Stack();
         private Stack urlTags = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
@@ -198,6 +199,12 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // check invariants for <choose>
 	    if (chooseChild()) {
+		// mark <choose> for the first the first <when>
+		if (isCoreTag(ns, ln, WHEN)) {
+		    chooseHasWhen.pop();
+		    chooseHasWhen.push(new Boolean(true));
+		}
+
 		// ensure <choose> has the right children
 		if(!isCoreTag(ns, ln, WHEN) && !isCoreTag(ns, ln, OTHERWISE)) {
 		    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
@@ -240,6 +247,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    // we're a choose, so record new choose-specific state
 	    if (isCoreTag(ns, ln, CHOOSE)) {
 		chooseDepths.push(new Integer(depth));
+		chooseHasWhen.push(new Boolean(false));
 		chooseHasOtherwise.push(new Boolean(false));
 	    }
 
@@ -321,6 +329,10 @@ public class JstlCoreTLV extends JstlBaseTLV {
 
 	    // update <choose>-related state
 	    if (isCoreTag(ns, ln, CHOOSE)) {
+		Boolean b = (Boolean) chooseHasWhen.pop();
+		if (!b.booleanValue())
+		    fail(Resources.getMessage("TLV_PARENT_WITHOUT_SUBTAG",
+			CHOOSE, WHEN));
 		chooseDepths.pop();
 		chooseHasOtherwise.pop();
 	    }
