@@ -77,7 +77,7 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 
     protected String value;                      // 'value' attribute
     protected String pattern;                    // 'pattern' attribute
-    protected TimeZone timeZone;                 // 'timeZone' attribute
+    protected Object timeZone;                   // 'timeZone' attribute
     protected Locale parseLocale;                // 'parseLocale' attribute
 
 
@@ -184,10 +184,22 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 	}
 
 	// Set time zone
-	if (timeZone == null)
-	    timeZone = TimeZoneSupport.getTimeZone(pageContext, this);
-	if (timeZone != null)
-	    formatter.setTimeZone(timeZone);
+	TimeZone tz = null;
+	if (timeZone != null) {
+	    if (timeZone instanceof String) {
+		tz = TimeZone.getTimeZone((String) timeZone);
+	    } else if (timeZone instanceof TimeZone) {
+		tz = (TimeZone) timeZone;
+	    } else {
+		throw new JspTagException(
+                    Resources.getMessage("PARSE_DATE_BAD_TIMEZONE"));
+	    }
+	} else {
+	    tz = TimeZoneSupport.getTimeZone(pageContext, this);
+	}
+	if (tz != null) {
+	    formatter.setTimeZone(tz);
+	}
 
 	// Parse date
 	Date parsed = null;

@@ -83,8 +83,8 @@ public class FormatDateTag extends FormatDateSupport {
     }
 
     // for tag attribute
-    public void setTimeZone(String timeZone) throws JspTagException {
-        this.timeZone = TimeZone.getTimeZone(timeZone);
+    public void setTimeZone(Object timeZone) throws JspTagException {
+        this.timeZone = timeZone;
     }
 
     // for tag attribute

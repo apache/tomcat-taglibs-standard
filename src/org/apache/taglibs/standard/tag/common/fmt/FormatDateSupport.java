@@ -99,7 +99,7 @@ public abstract class FormatDateSupport extends TagSupport {
 
     protected Object value;                      // 'value' attribute
     protected String pattern;                    // 'pattern' attribute
-    protected TimeZone timeZone;                 // 'timeZone' attribute
+    protected Object timeZone;                   // 'timeZone' attribute
     protected Locale parseLocale;                // 'parseLocale' attribute
 
 
@@ -221,10 +221,22 @@ public abstract class FormatDateSupport extends TagSupport {
 	}
 
 	// Set time zone
-	if (timeZone == null)
-	    timeZone = TimeZoneSupport.getTimeZone(pageContext, this);
-	if (timeZone != null)
-	    formatter.setTimeZone(timeZone);
+	TimeZone tz = null;
+	if (timeZone != null) {
+	    if (timeZone instanceof String) {
+		tz = TimeZone.getTimeZone((String) timeZone);
+	    } else if (timeZone instanceof TimeZone) {
+		tz = (TimeZone) timeZone;
+	    } else {
+		throw new JspTagException(
+                    Resources.getMessage("FORMAT_DATE_BAD_TIMEZONE"));
+	    }
+	} else {
+	    tz = TimeZoneSupport.getTimeZone(pageContext, this);
+	}
+	if (tz != null) {
+	    formatter.setTimeZone(tz);
+	}
 
 	String formatted = formatter.format(value);
 	if (var != null) {

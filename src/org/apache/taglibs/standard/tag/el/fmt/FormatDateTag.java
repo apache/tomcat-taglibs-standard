@@ -162,11 +162,9 @@ public class FormatDateTag extends FormatDateSupport {
 	    "formatDate", "pattern", pattern_, String.class, this,
 	    pageContext);
 
-	String tz = (String) ExpressionUtil.evalNotNull(
-	    "formatDate", "timeZone", timeZone_, String.class, this,
+	timeZone = ExpressionUtil.evalNotNull(
+	    "formatDate", "timeZone", timeZone_, Object.class, this,
 	    pageContext);
-	if (tz != null)
-	    timeZone = TimeZone.getTimeZone(tz);
 
 	String pl = (String) ExpressionUtil.evalNotNull(
 	    "formatDate", "parseLocale", parseLocale_, String.class, this,

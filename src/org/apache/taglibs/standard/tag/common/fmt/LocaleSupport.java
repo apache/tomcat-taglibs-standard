@@ -309,7 +309,7 @@ public abstract class LocaleSupport extends TagSupport {
 	    String loc =
 		pageContext.getServletContext().getInitParameter(name);
 	    if (loc != null) {
-		ret = LocaleSupport.parseLocale(loc, null);
+		ret = parseLocale(loc, null);
 	    }
 	}
 

@@ -162,11 +162,9 @@ public class ParseDateTag extends ParseDateSupport {
 	    "parseDate", "pattern", pattern_, String.class, this,
 	    pageContext);
 
-	String tz = (String) ExpressionUtil.evalNotNull(
-	    "parseDate", "timeZone", timeZone_, String.class, this,
+	timeZone = ExpressionUtil.evalNotNull(
+	    "parseDate", "timeZone", timeZone_, Object.class, this,
 	    pageContext);
-	if (tz != null)
-	    timeZone = TimeZone.getTimeZone(tz);
 
 	String pl = (String) ExpressionUtil.evalNotNull(
 	    "parseDate", "parseLocale", parseLocale_, String.class, this,
