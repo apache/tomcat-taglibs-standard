@@ -113,19 +113,18 @@ public class SetDataSourceTagSupport extends TagSupport {
         else {
             ds = new DataSourceWrapper();
             try {
-                String className = getDriverClassName();
                 // set driver class iff provided by the tag
-                if (className != null) {
-                    ds.setDriverClassName(getDriverClassName());
+                if (driverClassName != null) {
+                    ds.setDriverClassName(driverClassName);
                 }
             }
             catch (Exception e) {
                 throw new JspTagException(
                     Resources.getMessage("DRIVER_INVALID_CLASS", e.getMessage()));
             }
-            ds.setJdbcURL(getJdbcURL());
-            ds.setUserName(getUserName());
-            ds.setPassword(getPassword());
+            ds.setJdbcURL(jdbcURL);
+            ds.setUserName(userName);
+            ds.setPassword(password);
         }
 
         if (var != null) {
@@ -136,37 +135,4 @@ public class SetDataSourceTagSupport extends TagSupport {
         }
 	return SKIP_BODY;
     }
-
-
-    //*********************************************************************
-    // Private utility methods
-
-    private String getDriverClassName() {
-	if (driverClassName != null) {
-	    return driverClassName;
-	}
-	return (String) Config.find(pageContext, Config.SQL_DRIVER);
-    }
-
-    private String getJdbcURL() {
-	if (jdbcURL != null) {
-	    return jdbcURL;
-	}
-	return (String) Config.find(pageContext, Config.SQL_URL);
-    }
-
-    private String getUserName() {
-	if (userName != null) {
-	    return userName;
-	}
-	return (String) Config.find(pageContext, Config.SQL_USER);
-    }
-
-    private String getPassword() {
-	if (password != null) {
-	    return password;
-	}
-	return (String) Config.find(pageContext, Config.SQL_PASSWORD);
-    }
-
 }
