@@ -108,6 +108,9 @@
         Using the Jakarta-Taglibs
         Source Distribution</a></li>
     </ul>
+
+    <p>See the <a href="#Books">JSTL Books</a> section below
+    for more documentation.</p>
   
   </section>
 
@@ -138,6 +141,19 @@
       <li>Download entire
         <a href="http://jakarta.apache.org/builds/jakarta-taglibs/nightly">
         Jakarta-Taglibs Distribution</a></li>
+    </ul>
+
+  </section>
+
+  <section name="JSTL Books" href="Books">
+
+    <p>The following books about JSTL are available, or will be published
+    shortly:</p>
+
+    <ul>
+      <li><a href="http://jstlbook.com/"><i>JSTL in Action</i></a>, Shawn Bayern, Manning</li>
+      <li><a href="http://TheJSPBook.com/"><i>JavaServer Pages</i></a>, Hans Bergsten, O'Reilly</li>
+      <li><a href="http://www.core-jstl.com"><i>Core JSTL: Mastering the JSP Standard Tag Library</i></a>, David Geary, Sun Microsystems Press</li>
     </ul>
 
   </section>
