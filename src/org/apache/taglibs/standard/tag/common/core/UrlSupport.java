@@ -186,10 +186,18 @@ public abstract class UrlSupport extends BodyTagSupport
 	    else
 		return url;
 	} else {
-            if (!context.startsWith("/") || !url.startsWith("/"))
+            if (!context.startsWith("/") || !url.startsWith("/")) {
                 throw new JspTagException(
                     Resources.getMessage("IMPORT_BAD_RELATIVE"));
-            return (context + url);
+            }
+            if (context.equals("/")) {
+                // Don't produce string starting with '//', many
+                // browsers interpret this as host name, not as
+                // path on same host.
+                return url;
+            } else {
+                return (context + url);
+            }
         }
     }
 
