@@ -223,7 +223,7 @@ public abstract class LocaleSupport extends TagSupport {
      *
      * <ul>
      * <li> If the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> scoped
-     * attribute exists, use its locale.
+     * attribute or context configuration parameter exists, use its locale.
      *
      * <li> If the formatting action is enclosed within a <bundle> action, use
      * the locale of the parent bundle.
@@ -251,7 +251,7 @@ public abstract class LocaleSupport extends TagSupport {
 				      Tag fromTag,
 				      boolean format,
 				      Locale[] avail) {
-	Locale ret = (Locale) pageContext.findAttribute(LOCALE);
+	Locale ret = getLocale(pageContext, LOCALE);
 	if (ret == null) {
 	    Tag t = findAncestorWithClass(fromTag, BundleSupport.class);
 	    if (t != null) {
