@@ -60,33 +60,28 @@ import javax.servlet.ServletRequest;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Class supporting access to configuration data.
+ */
 public class Config {
 
     /**
-     * I18N/Formatting configuration
+     * I18N/Formatting actions related configuration data
      */
     public static final String FMT_LOCALE
 	= "javax.servlet.jsp.jstl.fmt.locale";
     public static final String FMT_FALLBACKLOCALE
 	= "javax.servlet.jsp.jstl.fmt.fallbackLocale";
-    public static final String FMT_TIMEZONE
-	= "javax.servlet.jsp.jstl.fmt.timeZone";
     public static final String FMT_LOCALIZATIONCONTEXT
 	= "javax.servlet.jsp.jstl.fmt.localizationContext";
+    public static final String FMT_TIMEZONE
+	= "javax.servlet.jsp.jstl.fmt.timeZone";
 
     /**
-     * SQL configuration
+     * SQL actions related configuration data
      */
     public static final String SQL_DATASOURCE
 	= "javax.servlet.jsp.jstl.sql.dataSource";
-    public static final String SQL_DRIVER
-	= "javax.servlet.jsp.jstl.sql.driver";
-    public static final String SQL_URL
-	= "javax.servlet.jsp.jstl.sql.url";
-    public static final String SQL_USER
-	= "javax.servlet.jsp.jstl.sql.user";
-    public static final String SQL_PASSWORD
-	= "javax.servlet.jsp.jstl.sql.password";
     public static final String SQL_MAXROWS
 	= "javax.servlet.jsp.jstl.sql.maxRows";
 	
@@ -99,12 +94,18 @@ public class Config {
     private static final String APPLICATION_SCOPE_SUFFIX = ".application";
 
     /**
-     * XXX
-     * @param pc
-     * @param name
-     * @param scope
+     * Looks up a configuration variable in the given scope.
      *
-     * @return
+     * <p> The lookup of configuration variables is performed as if each scope
+     * had its own name space, that is, the same configuration variable name
+     * in one scope does not replace one stored in a different scope.
+     *
+     * @param pc 
+     * @param name Configuration variable name
+     * @param scope Configuration scope
+     *
+     * @return The <tt>java.lang.Object</tt> associated with the configuration
+     * variable, or null if it is not defined.
      */
     public static Object get(PageContext pc, String name, int scope) {
 	switch (scope) {
@@ -122,42 +123,66 @@ public class Config {
     }
 
     /**
-     * XXX
-     * @param request
-     * @param name
+     * Looks up a configuration variable in the "request" scope.
      *
-     * @return
+     * <p> The lookup of configuration variables is performed as if each scope
+     * had its own name space, that is, the same configuration variable name
+     * in one scope does not replace one stored in a different scope.
+     *
+     * @param request
+     * @param name Configuration variable name
+     *
+     * @return The <tt>java.lang.Object</tt> associated with the configuration
+     * variable, or null if it is not defined.
      */
     public static Object get(ServletRequest request, String name) {
 	return request.getAttribute(name + REQUEST_SCOPE_SUFFIX);
     }
 
     /**
-     * XXX
-     * @param session
-     * @param name
+     * Looks up a configuration variable in the "session" scope.
      *
-     * @return
+     * <p> The lookup of configuration variables is performed as if each scope
+     * had its own name space, that is, the same configuration variable name
+     * in one scope does not replace one stored in a different scope.
+     *
+     * @param session
+     * @param name Configuration variable name
+     *
+     * @return The <tt>java.lang.Object</tt> associated with the configuration
+     * variable, or null if it is not defined.
      */
     public static Object get(HttpSession session, String name) {
 	return session.getAttribute(name + SESSION_SCOPE_SUFFIX);
     }
 
     /**
-     * XXX
-     * @param context
-     * @param name
+     * Looks up a configuration variable in the "application" scope.
      *
-     * @return
+     * <p> The lookup of configuration variables is performed as if each scope
+     * had its own name space, that is, the same configuration variable name
+     * in one scope does not replace one stored in a different scope.
+     *
+     * @param context
+     * @param name Configuration variable name
+     *
+     * @return The <tt>java.lang.Object</tt> associated with the configuration
+     * variable, or null if it is not defined.
      */
     public static Object get(ServletContext context, String name) {
 	return context.getAttribute(name + APPLICATION_SCOPE_SUFFIX);
     }
 
     /**
-     * XXX
+     * Sets the value of a configuration variable in the given scope.
+     *
+     * <p> Setting the value of a configuration variable is performed as if
+     * each scope had its own namespace, that is, the same configuration
+     * variable name in one scope does not replace one stored in a different
+     * scope.
+     *
      * @param pc
-     * @param name
+     * @param name Configuration variable name
      * @param value
      * @param scope
      */
@@ -182,9 +207,15 @@ public class Config {
     }
 
     /**
-     * XXX
+     * Sets the value of a configuration variable in the "request" scope.
+     *
+     * <p> Setting the value of a configuration variable is performed as if
+     * each scope had its own namespace, that is, the same configuration
+     * variable name in one scope does not replace one stored in a different
+     * scope.
+     *
      * @param request
-     * @param name
+     * @param name Configuration variable name
      * @paran value
      */
     public static void set(ServletRequest request, String name, Object value) {
@@ -192,9 +223,15 @@ public class Config {
     }
 
     /**
-     * XXX
+     * Sets the value of a configuration variable in the "session" scope.
+     *
+     * <p> Setting the value of a configuration variable is performed as if
+     * each scope had its own namespace, that is, the same configuration
+     * variable name in one scope does not replace one stored in a different
+     * scope.
+     *
      * @param session
-     * @param name
+     * @param name Configuration variable name
      * @param value
      */
     public static void set(HttpSession session, String name, Object value) {
@@ -202,9 +239,15 @@ public class Config {
     }
 
     /**
-     * XXX
+     * Sets the value of a configuration variable in the "application" scope.
+     *
+     * <p> Setting the value of a configuration variable is performed as if
+     * each scope had its own namespace, that is, the same configuration
+     * variable name in one scope does not replace one stored in a different
+     * scope.
+     *
      * @param context
-     * @param name
+     * @param name Configuration variable name
      * @param value
      */
     public static void set(ServletContext context, String name, Object value) {
@@ -212,9 +255,14 @@ public class Config {
     }
  
     /**
-     * XXX
+     * Removes a configuration variable from the given scope.
+     *
+     * <p> Removing a configuration variable is performed as if each scope had
+     * its own namespace, that is, the same configuration variable name in one
+     * scope does not impact one stored in a different scope.
+     *
      * @param pc
-     * @param name
+     * @param name Configuration variable name
      * @param scope
      */
     public static void remove(PageContext pc, String name, int scope) {
@@ -237,38 +285,63 @@ public class Config {
     }
 
     /**
-     * XXX
+     * Removes a configuration variable from the "request" scope.
+     *
+     * <p> Removing a configuration variable is performed as if each scope had
+     * its own namespace, that is, the same configuration variable name in one
+     * scope does not impact one stored in a different scope.
+     * 
      * @param request
-     * @param name
+     * @param name Configuration variable name
      */
     public static void remove(ServletRequest request, String name) {
 	request.removeAttribute(name + REQUEST_SCOPE_SUFFIX);
     }
 
     /**
-     * XXX
+     * Removes a configuration variable from the "session" scope.
+     *
+     * <p> Removing a configuration variable is performed as if each scope had
+     * its own namespace, that is, the same configuration variable name in one
+     * scope does not impact one stored in a different scope.
+     *
      * @param session
-     * @param name
+     * @param name Configuration variable name
      */
     public static void remove(HttpSession session, String name) {
 	session.removeAttribute(name + SESSION_SCOPE_SUFFIX);
     }
 
     /**
-     * XXX
+     * Removes a configuration variable from the "application" scope.
+     *
+     * <p> Removing a configuration variable is performed as if each scope had
+     * its own namespace, that is, the same configuration variable name in one
+     * scope does not impact one stored in a different scope.
+     *
      * @param context
-     * @param name
+     * @param name Configuration variable name
      */
     public static void remove(ServletContext context, String name) {
 	context.removeAttribute(name + APPLICATION_SCOPE_SUFFIX);
     }
  
     /**
-     * XXX
+     * Finds the value associated with a specific configuration setting
+     * identified by its context initialization parameter name (argument
+     * <tt>name</tt>).
+     *
+     * <p> For each of the JSP scopes (page, request, session, application),
+     * get the value of the configuration variable identified by <tt>name</tt>
+     * using method <tt>get()</tt>. Return as soon as a non-null value is
+     * found. If no value is found, get the value of the context initialization
+     * parameter identified by <tt>name</tt>.
+     *
      * @param pc
-     * @param name
+     * @param name Configuration variable name
      * 
-     * @return
+     * @return The <tt>java.lang.Object</tt> associated with the configuration
+     * setting identified by <tt>name</tt>, or null if it is not defined.
      */
     public static Object find(PageContext pc, String name) {
 	Object ret = get(pc, name, PageContext.PAGE_SCOPE);
