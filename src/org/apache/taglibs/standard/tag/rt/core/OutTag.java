@@ -71,7 +71,7 @@ public class OutTag extends OutSupport {
     // Accessors
        
     // for tag attribute
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
       

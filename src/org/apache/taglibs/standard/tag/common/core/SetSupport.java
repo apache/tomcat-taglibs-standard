@@ -65,9 +65,7 @@ import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * <p>A handler for the &lt;set&gt; tag, which evaluates an expression
- * -- or its body -- and stores the resulting value in the 'scoped'
- * attribute specified by the 'var' and 'scope' attributes.</p>
+ * <p>Support for handlers of the &lt;set&gt; tag.</p>
  *
  * @author Shawn Bayern
  */
@@ -76,7 +74,7 @@ public class SetSupport extends BodyTagSupport {
     //*********************************************************************
     // Internal state
 
-    protected String value;                             // tag attribute
+    protected Object value;                             // tag attribute
     protected Object target;                            // tag attribute
     protected String property;                          // tag attribute
     private String var;					// tag attribute
@@ -111,21 +109,14 @@ public class SetSupport extends BodyTagSupport {
     //*********************************************************************
     // Tag logic
 
-    // evaluates the expression and stores it appropriately
     public int doEndTag() throws JspException {
 
         Object result;		// what we'll store in scope:var
 
         // determine the value by...
         if (value != null) {
-            // ... evaluating our expression
-            result = ExpressionEvaluatorManager.evaluate(
-                "value", value, Object.class, this, pageContext);
-	    if (result == null) {
-		// throw new NullAttributeException("set", "value");
-		pageContext.removeAttribute(var, scope);
-		return EVAL_PAGE;
-	    }
+	    // ... reading our attribute
+	    result = value;
   	} else {
 	    // ... retrieving and trimming our body
 	    if (bodyContent == null || bodyContent.getString() == null)
@@ -143,14 +134,17 @@ public class SetSupport extends BodyTagSupport {
              * is made to store something in the session without any
 	     * HttpSession existing).
              */
-	    pageContext.setAttribute(var, result, scope);
+	    if (result != null)
+	        pageContext.setAttribute(var, result, scope);
+	    else
+		pageContext.removeAttribute(var);
 
 	} else if (target != null) {
 
 	    // save the result to target.property
 	    if (target instanceof Map) {
 		// ... treating it as a Map entry
-		if (property == null)
+		if (result == null)
 		    ((Map) target).remove(property);
 		else
 		    ((Map) target).put(property, result);

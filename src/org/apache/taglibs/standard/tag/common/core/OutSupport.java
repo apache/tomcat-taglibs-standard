@@ -84,7 +84,7 @@ public class OutSupport extends BodyTagSupport {
     //*********************************************************************
     // Internal state
 
-    protected String value ;                    // tag attribute
+    protected Object value;                     // tag attribute
     protected String def;			// tag attribute
     protected boolean escapeXml;		// tag attribute
     private boolean needBody;			// non-space body needed?
@@ -138,9 +138,9 @@ public class OutSupport extends BodyTagSupport {
 	    }
 
 	    // if we do have 'default', try it
-	    if (result != null) {
+	    if (def != null) {
 		// good 'default'
-                out(pageContext, escapeXml, result.toString());
+                out(pageContext, escapeXml, def.toString());
 		return SKIP_BODY;
 	    } else {
 		// bad 'default'

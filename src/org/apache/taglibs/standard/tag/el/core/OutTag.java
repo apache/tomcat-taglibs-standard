@@ -133,16 +133,14 @@ public class OutTag extends OutSupport {
 
     /* Evaluates expressions as necessary */
     private void evaluateExpressions() throws JspException {
-        /* 
-         * Note: we don't check for type mismatches here; we assume
-         * the expression evaluator will return the expected type
-         * (by virtue of knowledge we give it about what that type is).
-         * A ClassCastException here is truly unexpected, so we let it
-         * propagate up.
-         */
-
-	value = (String) ExpressionUtil.evalNotNull(
-	    "out", "value", value_, String.class, this, pageContext);
+	value = null;
+	try {
+	    value = ExpressionUtil.evalNotNull(
+	        "out", "value", value_, Object.class, this, pageContext);
+	} catch (Exception ex) {
+	    // explicitly allow 'null' for value and mask other errors per spec
+	    value = null;
+	}
 	def = (String) ExpressionUtil.evalNotNull(
 	    "out", "default", default_, String.class, this, pageContext);
 	escapeXml = true;

@@ -141,10 +141,20 @@ public class SetTag extends SetSupport {
          * propagate up.
          */
 
-	value = (String) ExpressionUtil.evalNotNull(
-	    "set", "value", value_, String.class, this, pageContext);
+	// 'value'
+	try {
+	    value = ExpressionUtil.evalNotNull(
+	        "set", "value", value_, Object.class, this, pageContext);
+	} catch (NullAttributeException ex) {
+	    // explicitly let 'value' be null
+	    value = null;
+	}
+
+	// 'target'
 	target = ExpressionUtil.evalNotNull(
 	    "set", "target", target_, Object.class, this, pageContext);
+
+	// 'property'
 	try {
 	    property = (String) ExpressionUtil.evalNotNull(
 	         "set", "property", property_, String.class, this, pageContext);
