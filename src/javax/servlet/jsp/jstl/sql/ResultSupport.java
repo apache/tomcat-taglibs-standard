@@ -66,7 +66,7 @@ import java.sql.SQLException;
  * @author Justyna Horwat
  *
  */
-public class ResultFactory {
+public class ResultSupport {
 
 
     /**
