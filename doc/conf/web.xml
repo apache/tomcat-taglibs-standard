@@ -6,8 +6,13 @@
 
 <web-app>
 
-  <description>
-  Documentation for the 'standard' tag library (JSTL EA3)
-  </description>
+    <description>
+      Documentation for the 'standard' tag library
+    </description>
+
+    <welcome-file-list>
+      <welcome-file>index.jsp</welcome-file>
+      <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 
 </web-app>
