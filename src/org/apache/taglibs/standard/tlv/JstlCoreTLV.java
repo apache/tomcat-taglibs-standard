@@ -252,16 +252,14 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	    }
 
 	    // check invariants for <message>
-	    if (messageChild()
-	            && ((Boolean) messageHasMessageArgs.peek()).booleanValue()) {
+	    if (isTag(qn, MESSAGE_ARG) && messageChild()
+		&& ((Boolean) messageHasMessageArgs.peek()).booleanValue()) {
 		/*
-		 * we're the direct child of a <message messageArgs="..."> tag,
-		 * which means that <messageArg> tags are illegal
+		 * we're a <messageArg> tag and the direct child of
+		 * <message messageArgs="...">, which is illegal
 		 */
-		if (isTag(qn, MESSAGE_ARG)) {
-		    fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
-		        prefix, MESSAGE_ARG, MESSAGE, MESSAGE_ARGS));
-		}
+		fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
+	            prefix, MESSAGE_ARG, MESSAGE, MESSAGE_ARGS));
 	    }
 
 	    // now, modify state
