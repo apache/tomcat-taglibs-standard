@@ -164,5 +164,29 @@ public class Util {
                 sb.append(c);
         }
         return sb.toString();
-    }    
+    }  
+    
+    /**
+     * Get the value associated with a content-type attribute.
+     * Syntax defined in RFC 2045, section 5.1.
+     */
+    public static String getContentTypeAttribute(String input, String name) {
+	int begin;
+	int end;
+        int index = input.toUpperCase().indexOf(name.toUpperCase());
+        if (index == -1) return null;
+        index += 8; // charset=
+        if (input.charAt(index) == '"') {
+            // attribute value is a quoted string
+            begin = index + 1;
+            end = input.indexOf('"', begin);
+            if (end == -1) return null;
+        } else {
+            begin = index;
+            end = input.indexOf(';', begin);
+            if (end == -1) end = input.indexOf(' ', begin);
+            if (end == -1) end = input.length();
+        }
+        return input.substring(begin, end).trim();
+    }
 }

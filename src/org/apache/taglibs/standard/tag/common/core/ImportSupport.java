@@ -340,6 +340,7 @@ public abstract class ImportSupport extends BodyTagSupport
 	    // for relative URLs, delegate to our peer
 	    return new StringReader(acquireString());
 	} else {
+            // absolute URL
             String target = targetUrl();
 	    try {
 	        // handle absolute URLs ourselves, using java.net.URL
@@ -349,15 +350,24 @@ public abstract class ImportSupport extends BodyTagSupport
 
 	        // okay, we've got a stream; encode it appropriately
 	        Reader r = null;
-	        if (charEncoding != null && !charEncoding.equals(""))
-		    r = new InputStreamReader(i, charEncoding);
-	        else {
-		    String responseAdvisoryEncoding = uc.getContentEncoding();
-		    if (responseAdvisoryEncoding != null)
-		        r = new InputStreamReader(i, responseAdvisoryEncoding);
-		    else
-		        r = new InputStreamReader(i, DEFAULT_ENCODING);
-	        }
+                String charSet; 
+	        if (charEncoding != null && !charEncoding.equals("")) {
+                    charSet = charEncoding;
+                } else {
+                    // charSet extracted according to RFC 2045, section 5.1
+		    String contentType = uc.getContentType();
+		    if (contentType != null) {
+                        charSet = Util.getContentTypeAttribute(contentType, "charset");
+                        if (charSet == null) charSet = DEFAULT_ENCODING;
+                    } else {
+                        charSet = DEFAULT_ENCODING;
+                    }
+                }
+                try {
+                    r = new InputStreamReader(i, charSet);
+                } catch (Exception ex) {
+                    r = new InputStreamReader(i, DEFAULT_ENCODING);
+                }
 
 		// check response code for HTTP URLs before returning, per spec,
 		// before returning
