@@ -9,9 +9,9 @@
 <h1>SQL Transactions</h1>
 
 
-<!-- NOTE: the sql:driver tag is for prototyping and simple applications. You should really use a DataSource object instead --!>
+<!-- NOTE: the sql:setDriver tag is for prototyping and simple applications. You should really use a DataSource object instead --!>
 
-<sql:driver
+<sql:setDriver
   var="example"
   driver="${myDbDriver}"
   url="${myDbUrl}"

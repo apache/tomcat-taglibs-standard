@@ -26,10 +26,10 @@
         update:sql
         update:dataSource
         param:value
-        driver:driver
-        driver:url
-        driver:user
-        driver:password
+        setDriver:driver
+        setDriver:url
+        setDriver:user
+        setDriver:password
         </param-value>
         <description>
             Whitespace-separated list of colon-separated token pairs
@@ -148,7 +148,7 @@
   </tag>
 
   <tag>
-    <name>driver</name>
+    <name>setDriver</name>
     <tag-class>org.apache.taglibs.standard.tag.el.sql.DriverTag</tag-class>
     <body-content>empty</body-content>
     <description>

@@ -119,7 +119,7 @@
   </tag>
 
   <tag>
-    <name>driver</name>
+    <name>setDriver</name>
     <tag-class>org.apache.taglibs.standard.tag.common.sql.DriverTag</tag-class>
     <body-content>empty</body-content>
     <description>

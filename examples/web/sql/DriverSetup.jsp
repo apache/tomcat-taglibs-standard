@@ -10,7 +10,7 @@
 
 <code>
 <pre>
-&lt;sql:driver
+&lt;sql:setDriver
   var="example"
   driver="RmiJdbc.RJDriver"
   url="jdbc:rmi://localhost:1099/jdbc:cloudscape:CloudscapeDB;create=true"
