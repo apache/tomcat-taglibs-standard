@@ -68,7 +68,7 @@ import org.apache.taglibs.standard.resources.Resources;
  *
  * @author Shawn Bayern
  */
-public class ExprTag extends ExprTagSupport {
+public class ExprTag extends ExprSupport {
 
     //*********************************************************************
     // 'Private' state (implementation details)
