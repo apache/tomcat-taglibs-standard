@@ -31,16 +31,19 @@
 
     <news>
       <newsitem date="10/13/2002">
-       Standard Taglib version 1.0.2 -- another minor bugfix release -- is
-       now <a href="http://www.apache.org/dist/jakarta/taglibs/releases/standard/">available</a>.
+       Standard Taglib version 1.0.2 -- another minor bugfix release -- is now
+       available from an <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
+       Apache Jakarta Project Mirror</a>.
       </newsitem>
       <newsitem date="7/27/2002">
        Standard Taglib version 1.0.1 -- a minor bugfix release -- is now
-       <a href="http://www.apache.org/dist/jakarta/taglibs/releases/standard/">available</a>.
+       available from an <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
+       Apache Jakarta Project Mirror</a>.
       </newsitem>
       <newsitem date="6/21/2002">
-	Standard Taglib, final release 1.0, is now available for
-        <a href="http://www.apache.org/dist/jakarta/taglibs/releases/standard/">download</a>.
+	Standard Taglib, final release 1.0, is now available for download from an
+        <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
+        Apache Jakarta Project Mirror</a>.
         This distribution contains the same JSTL implementation as was
         included in Sun's Web Services Developer Pack, version 1.0.
       </newsitem>
@@ -132,8 +135,10 @@
     <p>Download a binary distribution of the Standard 1.0 release:</p>
     <ul>
       <li>
-        <a href="http://www.apache.org/dist/jakarta/taglibs/releases/standard/">
-        Standard 1.0 release</a></li>
+        Download the Standard Tag Library 1.0 Release from an
+        <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
+        Apache Jakarta Project Mirror</a>
+      </li>
     </ul>
 
     <p>Download the most recent, nightly snapshot:</p>
