@@ -180,9 +180,9 @@ public abstract class ParamSupport extends BodyTagSupport {
 		throw new IllegalStateException();
 	    done = true;
 
-	    // reverse the order of our two lists
-	    Collections.reverse(this.names);
-	    Collections.reverse(this.values);
+	    //// reverse the order of our two lists
+	    // Collections.reverse(this.names);
+	    // Collections.reverse(this.values);
 
 	    // build a string from the parameter list 
 	    StringBuffer newParams = new StringBuffer();
