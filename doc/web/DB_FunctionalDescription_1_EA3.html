@@ -62,7 +62,7 @@
   <p>1. Transparent collaboration (implicit scoped attribute)</p>
   <p>Initialization code in the application logic (e.g. application event listener, 
     initialization servlet) can be used to set the default DataSource associated 
-    with a web application via the scoped attribute &quot;javax.servlet.JSTL.DataSource&quot;. 
+    with a web application via the scoped attribute &quot;javax.servlet.jsp.jstl.DataSource&quot;. 
     With this approach, an application with a single database makes the DataSource 
     that is being used by the database actions totally transparent to the page 
     author</p>
@@ -222,8 +222,8 @@
     &lt;sql:transaction&gt; tag, retrieve a Connection from our parent and do 
     nothing to release it. The connection is managed by the parent.</li>
   <li>If neither (1) nor (2), then look for a DataSource named by scoped attribute 
-    &quot;javax.servlet.JSTL.DataSource&quot;. Handling of the connection is 
-    then as described in 1.</li>
+    &quot;javax.servlet.jsp.jstl.DataSource&quot;. Handling of the connection 
+    is then as described in 1.</li>
 </ol>
 <p>It is illegal for &lt;sql:query&gt; to specify a DataSource when nested within 
   &lt;sql:transaction&gt; (throws JspTagException).</p>
@@ -365,10 +365,10 @@ Behavior is defined as follows:
   information would be hard coded in a JSP page.</p>
 <p>The context init parameters are:</p>
 <ul>
-  <li>javax.servlet.jstl.sql.driver.driver</li>
-  <li> javax.servlet.jstl.sql.driver.url</li>
-  <li> javax.servlet.jstl.sql.driver.user</li>
-  <li> javax.servlet.jstl.sql.driver.password</li>
+  <li>javax.servlet.jsp.jstl.sql.driver.driver</li>
+  <li> javax.servlet.jsp.jstl.sql.driver.url</li>
+  <li> javax.servlet.jsp.jstl.sql.driver.user</li>
+  <li> javax.servlet.jsp.jstl.sql.driver.password</li>
 </ul>
 <p>For example, assuming a prototype web application whose database is accessible 
   by anyone without any password:</p>
