@@ -84,9 +84,9 @@ public abstract class MessageSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected String key;                         // 'key' attribute
-    protected boolean keySpecified;	          // status
-    protected LocalizationContext locCtxt;        // 'bundle' attribute
+    protected String keyAttrValue;       // 'key' attribute value
+    protected boolean keySpecified;	 // 'key' attribute specified
+    protected LocalizationContext bundleAttrValue; // 'bundle' attribute value
     protected boolean bundleSpecified;   // 'bundle' attribute specified?
 
 
@@ -108,10 +108,12 @@ public abstract class MessageSupport extends BodyTagSupport {
     }
 
     private void init() {
-	key = var = null;
-	keySpecified = false;
-	locCtxt = null;
+	var = null;
 	scope = PageContext.PAGE_SCOPE;
+	keyAttrValue = null;
+	keySpecified = false;
+	bundleAttrValue = null;
+	bundleSpecified = false;
     }
 
 
@@ -144,31 +146,26 @@ public abstract class MessageSupport extends BodyTagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
-        if (!bundleSpecified) {
-            // must reset the locCtxt to null so it can be reevaluated
-            // (necessary because the tag may be reused and localization
-            // context used for the tag may have changed).
-            locCtxt = null;
-        }
 	params.clear();
 	return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
 
-        String keyInput = null;
+        String key = null;
+	LocalizationContext locCtxt = null;
 
         // determine the message key by...
         if (keySpecified) {
 	    // ... reading 'key' attribute
-	    keyInput = key;
+	    key = keyAttrValue;
 	} else {
 	    // ... retrieving and trimming our body
 	    if (bodyContent != null && bodyContent.getString() != null)
-	        keyInput = bodyContent.getString().trim();
+	        key = bodyContent.getString().trim();
 	}
 
-	if ((keyInput == null) || keyInput.equals("")) {
+	if ((key == null) || key.equals("")) {
 	    try {
 		pageContext.getOut().print("??????");
 	    } catch (IOException ioe) {
@@ -178,7 +175,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 	}
 
 	String prefix = null;
-	if (locCtxt == null) {
+	if (!bundleSpecified) {
 	    Tag t = findAncestorWithClass(this, BundleSupport.class);
 	    if (t != null) {
 		// use resource bundle from parent <bundle> tag
@@ -190,21 +187,22 @@ public abstract class MessageSupport extends BodyTagSupport {
 	    }
 	} else {
 	    // localization context taken from 'bundle' attribute
+	    locCtxt = bundleAttrValue;
 	    if (locCtxt.getLocale() != null) {
 		SetLocaleSupport.setResponseLocale(pageContext,
 						   locCtxt.getLocale());
 	    }
 	}
 
-	String message = UNDEFINED_KEY + keyInput + UNDEFINED_KEY;
+	String message = UNDEFINED_KEY + key + UNDEFINED_KEY;
 	if (locCtxt != null) {
 	    ResourceBundle bundle = locCtxt.getResourceBundle();
 	    if (bundle != null) {
 		try {
 		    // prepend 'prefix' attribute from parent bundle
 		    if (prefix != null)
-			keyInput = prefix + keyInput;
-		    message = bundle.getString(keyInput);
+			key = prefix + key;
+		    message = bundle.getString(key);
 		    // Perform parametric replacement if required
 		    if (!params.isEmpty()) {
 			Object[] messageArgs = params.toArray();
@@ -216,7 +214,7 @@ public abstract class MessageSupport extends BodyTagSupport {
 			message = formatter.format(messageArgs);
 		    }
 		} catch (MissingResourceException mre) {
-		    message = UNDEFINED_KEY + keyInput + UNDEFINED_KEY;
+		    message = UNDEFINED_KEY + key + UNDEFINED_KEY;
 		}
 	    }
 	}

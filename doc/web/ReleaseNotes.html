@@ -9,24 +9,22 @@
 <h1>
 Standard: An Implementation of the JSP&#153; Standard Tag Library (JSTL)<br>
 <p>
-Version: 1.0.4-dev (In Development)<br>
+Version: 1.0.4<br>
 Release Notes
 </h1>
 </center>
 
-<p>The Standard 1.0.4-dev release is a minor update to the Standard 1.0.3
+<p>The Standard 1.0.4 release is a minor update to the Standard 1.0.3
 release, which builds on the Standard 1.0 FCS release, an 
 implementation of the final <a href="http://java.sun.com/products/jstl">JSTL 1.0 Specification</a>. The Standard
-1.0.4-dev release includes many bug fixes and updates. An official release of
-JSTL 1.0.4 should happen once important bugs have been fixed and the release is
-stable.</p>
+1.0.4 release includes many bug fixes and updates.</p>
 
 <p>The Standard Taglib, which is hosted at Apache, is used as the source repository for the <a href="http://java.sun.com/products/jstl">JSTL 1.0 reference implementation</a> supplied by Sun Microsystems, Inc.</p>
 <hr/>
 
 <h2>Release History</h2>
 
-<dt><b>As of Today &#149; Standard 1.0.4-dev nightly</b></dt>
+<dt><b>September 2003 &#149; Standard 1.0.4</b></dt>
 <p><dd>Bugs fixed since Standard 1.0.3 Taglib release:</dd>
 <ul>
   <blockquote>
@@ -40,20 +38,59 @@ stable.</p>
       <tr>
         <td width="27%" height="15">
           <div align="center"><a
-href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=16069">16912</a></div>
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=16912">16912</a></div>
         </td>
         <td width="73%" height="15">
         We take advantage of the new method URLEncoder.encode(String,String) if running on J2SE 1.4.
         &lt;c:param&gt; will then use the proper encoding.
         </td>
       </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=17440">17440</a></div>
+        </td>
+        <td width="73%" height="15">
+        Resource bundle that only differs with the variant of the locale will
+now be properly selected.
+        </td>
+      </tr>
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=20197">20197</a></div>
+        </td>
+        <td width="73%" height="15">
+<sql:setDataSource> did not allow the specification of a scope without
+a var attribute to set the SQl DataSource configuration setting. Fixed.
+        </td>
+      </tr>    
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=22034">22034</a></div>
+        </td>
+        <td width="73%" height="15">
+Page scope not properly set with &lt;c:if&gt;. Fixed.
+        </td>
+      </tr>    
+      <tr>
+        <td width="27%" height="15">
+          <div align="center"><a
+href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=21188">21188</a></div>
+        </td>
+        <td width="73%" height="15">
+Config.find() fails on invalidated sessions. Fixed.
+        </td>
+      </tr>    
     </table>
   </blockquote>
 </ul>
+
 <blockquote> 
   <p>Other changes and additions:</p>
   <ul>
-    <li>TBD</li>
+    <li>Added Version class to easily tell the version of the jar file.</li>
   </ul>
 </blockquote>
 
