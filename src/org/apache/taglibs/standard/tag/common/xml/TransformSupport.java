@@ -356,11 +356,11 @@ public abstract class TransformSupport extends BodyTagSupport {
 
             // we're only concerned with relative URLs
             if (ImportSupport.isAbsoluteUrl(href)
-		    || ImportSupport.isAbsoluteUrl(base))
+		    || (base != null && ImportSupport.isAbsoluteUrl(base)))
                 return null;
 
 	    // base is relative; remove everything after trailing '/'
-	    if (base.lastIndexOf("/") == -1)
+	    if (base == null || base.lastIndexOf("/") == -1)
 		base = "";
 	    else
 		base = base.substring(0, base.lastIndexOf("/") + 1);
