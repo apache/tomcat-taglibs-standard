@@ -36,6 +36,13 @@
   <section name="Standard-1.1 Taglib News" href="News">
 
     <news>
+      <newsitem date="07/20/2004">
+       Standard Taglib version 1.1.1 
+       - A minor bug fix update - 
+       is now available from the 
+       <a href="http://jakarta.apache.org/site/binindex.cgi#Release%20Builds">
+       Apache Jakarta Project Mirrors</a>.
+      </newsitem>
       <newsitem date="01/30/2004">
        Standard Taglib version 1.1.0 - First official release of our 
        implementation of JSTL 1.1 - is now
