@@ -21,15 +21,133 @@ the support initially provided in Standard 1.0 EA3.</p>
 <hr/>
 
 <h2>Release History</h2>
-
-<p><dt><b>21 Jun 2002</b></dt>
+<dt><b>Current</b></dt>
+<blockquote> 
+  <p>Bugs fixed since Standard 1.0 Taglib Final release: </p>
+</blockquote>
+<ul>
+  <blockquote> 
+    <table width="95%" border="1">
+      <tr> 
+        <th width="27%"> 
+          <div align="center">Bug Id</div>
+        </th>
+        <th width="73%">Summary</th>
+      </tr>
+      <tr> 
+        <td width="27%" height="15"> 
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=8723">8723</a></div>
+        </td>
+        <td width="73%" height="15">Fixed '<code>xslt</code>' attribute for <code>&lt;x:transform&gt;</code> 
+          to only accept an<br>
+          object exported by <code>&lt;x:parse&gt;</code> if it's a <code>String</code>, 
+          <code>Reader</code>, or<br>
+          <code>javax.xml.transform.Source</code>.</td>
+      </tr>
+      <tr> 
+        <td width="27%" height="15"> 
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=9257">9257</a></div>
+        </td>
+        <td width="73%" height="15">Added <code>&quot;UNICODE_INPUT = true&quot;</code> 
+          to the <code>ELParser.jj</code><br>
+          options so that non-ascii values can be parsed.</td>
+      </tr>
+      <tr> 
+        <td width="27%"> 
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=9528">9528</a></div>
+        </td>
+        <td width="73%"><code>GettingStarted.html</code> guide updated to include 
+          all jar dependency information. </td>
+      </tr>
+      <tr> 
+        <td width="27%"> 
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=9581">9581</a></div>
+        </td>
+        <td width="73%">SQL examples updated to allow for the inputting of <code>dataSource</code> 
+          username and password.</td>
+      </tr>
+      <tr> 
+        <td width="27%"> 
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=9968">9968</a></div>
+        </td>
+        <td width="73%"><code>c:url</code> tag no longer prepends path to page 
+          relative URLs. </td>
+      </tr>
+      <tr> 
+        <td width="27%"> 
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=10175">10175</a></div>
+        </td>
+        <td width="73%">Added a <code>&lt;welcome-file-list&gt;</code> element 
+          to the example application's deployment descriptor. Modified <code>standard-doc</code> 
+          in a corresponding fashion.</td>
+      </tr>
+      <tr> 
+        <td width="27%" height="32"> 
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=10334">10334</a></div>
+        </td>
+        <td width="73%" height="32"> 
+          <p><code>BundleSupport</code> modified to use the current context classloader 
+            instead of the classloader that loaded it. This change was necessary 
+            in order for <code>BundleSupport</code> to properly find resources 
+            in a web application.</p>
+          <p>The SQL <code>DataSourceWrapper</code> also modified to properly 
+            use classloader delegation to load resources.</p>
+        </td>
+      </tr>
+      <tr> 
+        <td width="27%"> 
+          <div align="center"><a href="http://nagoya.apache.org/bugzilla/show_bug.cgi?id=10856">10856</a></div>
+        </td>
+        <td width="73%">Fixed incorrect <code>x:param</code> error message.</td>
+      </tr>
+    </table>
+  </blockquote>
+</ul>
+<blockquote> 
+  <p>Other changes and additions:</p>
+  <ul>
+    <li>Improved <code>x:parse</code> action's <code>EntityResolver</code> to 
+      work with JAXP 1.2. URI's normalized so they can be processed consistently.</li>
+    <li> The <a href="http://java.sun.com/products/jstl">JSTL 1.0 Specification</a> 
+      has all the official functional descriptions; out of date documentation 
+      removed.</li>
+    <li>Hard-coded and browser-based locales separated into distinct pages in 
+      order to avoid conflicting response encodings.</li>
+    <li>Formatting web application examples updated to use EL to access request 
+      parameters.</li>
+    <li><code>query</code> and <code>update </code>tags modified to catch a more 
+      generic JDBC driver implementation generated exception when it occurs and 
+      provide a meaningful error message.</li>
+    <li><code>DateParam</code> tag modified to have an empty body content as defined 
+      by the spec.</li>
+    <li><code>PreparedStatement.setNull(parameterIndex, java.sql.Types.NULL)</code> 
+      now used when specifying null parameter values.</li>
+    <li>XPath performance improved by caching parsed representations of XPath 
+      expressions.</li>
+    <li>Support for relative system ID's in <code>&lt;x:transform&gt;</code> simplified.</li>
+    <li>Improved <code>TimeZoneSupport</code> javadocs</li>
+    <li>Added Japanese resources</li>
+    <li>Added support for <a href="http://www.jcp.org/jsr/detail/152.jsp">JSP 
+      2.0</a> functionality in the JSTL EL. By default, none of the new features 
+      are enabled in order to comply with the <a href="http://java.sun.com/products/jstl">JSTL 
+      1.0 Specification</a>. The functionality will be triggered by a particular 
+      way of calling the interpreter. 
+      <ul>
+        <li>Created new new &quot;<code>jsp20</code>&quot; parser directory. </li>
+        <li>Added new &quot;<code>jsp20e</code>l&quot; build target for <a href="http://www.jcp.org/jsr/detail/152.jsp">JSP 
+          2.0</a> specific features. </li>
+        <li>Added copy of <code>*.properties</code> to <a href="http://www.jcp.org/jsr/detail/152.jsp">JSP 
+          2.0</a> EL jar.</li>
+      </ul>
+    </li>
+  </ul>
+</blockquote>
+<dt><b>21 Jun 2002</b></dt>
 <dd>Final Standard Taglib 1.0 release</dd>
 
 <p><dt><b>17 Jun 2002</b></dt>
 <dd>Standard Taglib RC1 released.</dd>
-
-<dt><b>29 May 2002 </b></dt>
-<dd>Minor bug fixes in XML tag library, as well as Japanese resources, committed to Jakarta CVS archive.</dd>
+<dd>&nbsp;</dd>
 
 <dt><b>19 Apr 2002 </b></dt>
 <dd>Standard 1.0 Beta2 released, which is compliant with the <a href="http://jcp.org/aboutJava/communityprocess/first/jsr052/">JSTL Proposed Final Draft</a>.</dd>
@@ -89,23 +207,9 @@ with Tomcat 4.0 B6 and Tomcat 4.0 release.</dd>
 <dd>JSTL 1.0 EA1 RI first made available for download.</dd>
 
 <p><dt><b>08 Jul 2001</b></dt>
-<dd>Initial version of JSTL RI contributed by JSR-052 Expert Group
-    and imported into Jakarta CVS archive.</dd>
+<dd>Initial version of JSTL RI contributed by JSR-052 Expert Group and imported 
+  into Jakarta CVS archive.</dd>
 
-
-<h2>Known Issues</h2>
-
-<ol>
-<li>Use of <tt>null</tt> with &lt;sql:param&gt; and &lt;sql:dateParam&gt;
-<p> The Standard 1.0 taglib utilizes the
-<tt>PreparedStatement.setObject(parameterIndex, null)</tt> when
-specifying the &lt;sql:dateParam value="${null}" type='date'/&gt; or
-&lt;sql:param value="${null}" /&gt; actions. Not all JDBC drivers currently
-support the passing of <tt>null</tt> to the <tt>PreparedStatement.setObject()</tt>
-method.  If you encounter a failure with your JDBC driver, please
-execute a SQL DML statement which does not require &lt;sql:param&gt; or
-&lt;sql:dateParam&gt; to specify a <tt>null</tt> value for a given column.
-</ol>
 
 </body>
 </html>
