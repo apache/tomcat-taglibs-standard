@@ -289,8 +289,17 @@
     <copy file="${conf.src}/sql-rt.tld" todir="${dist.dir}/${taglib.name}/tld"/>
   </target>
 
+  <!-- javadoc -->
+  <target name="javadoc-dist">
+   <mkdir dir="${dist.library}/javadoc"/>
+   <javadoc packagenames="javax.servlet.jsp.jstl.*"
+            sourcepath="src"
+            classpath="${servlet23.jar}:${jdbc2_0-stdext.jar}:${crimson.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}:${jaxen-full.jar}:${saxpath.jar}"
+            destdir="${dist.library}/javadoc"/>
+  </target>
+
   <!-- Create the entire set of distribution files -->
-  <target name="dist" depends="library-dist,examples-dist,documentation-dist"/>
+  <target name="dist" depends="library-dist,examples-dist,documentation-dist,javadoc-dist"/>
 
 
 
