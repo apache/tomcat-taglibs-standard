@@ -6,6 +6,7 @@
   <tlib-version>1.0 EA2</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>ex</short-name>
+  <uri>/jstl-examples-taglib</uri>
 
   <tag>
     <name>escapeHtml</name>
