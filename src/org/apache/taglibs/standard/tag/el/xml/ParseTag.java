@@ -154,6 +154,8 @@ public class ParseTag extends ParseSupport {
 	    "parse", "xmlText", xmlText_, Object.class, this, pageContext);
 	xmlUrl = (String) ExpressionUtil.evalNotNull(
 	    "parse", "xmlUrl", xmlUrl_, String.class, this, pageContext);
+	if (xmlUrl_ != null && (xmlUrl == null || xmlUrl.equals("")))
+	    throw new NullAttributeException("import", "url");
 
 	try {
 	    filter = (XMLFilter) ExpressionUtil.evalNotNull(
