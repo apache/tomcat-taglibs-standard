@@ -87,6 +87,17 @@ public class StaticFunctionTests {
     System.out.println(o);
     o = e.evaluate("", "${add(2, 3) + 5}", Integer.class, null, null, m, "foo");
     System.out.println(o);
+
+    System.out.println("---");
+    o = e.evaluate("", "${getInt(getInteger(getInt(5)))}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${getInteger(getInt(getInteger(5)))}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${getInt(getInt(getInt(5)))}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+    o = e.evaluate("", "${getInteger(getInteger(getInteger(5)))}", Integer.class, null, null, m, "foo");
+    System.out.println(o);
+
   }
 
   public static int add(int a, int b) {
@@ -97,6 +108,14 @@ public class StaticFunctionTests {
     return a * b;
   }
 
+  public static int getInt(Integer i) {
+    return i.intValue();
+  }
+
+  public static Integer getInteger(int i) {
+    return new Integer(i);
+  }
+
   public static Map getSampleMethodMap() throws Exception {
     Map m = new HashMap();
     Class c = StaticFunctionTests.class;
@@ -104,6 +123,10 @@ public class StaticFunctionTests {
      c.getMethod("add", new Class[] { Integer.TYPE, Integer.TYPE }));
     m.put("foo:multiply",
      c.getMethod("multiply", new Class[] { Integer.TYPE, Integer.TYPE }));
+    m.put("foo:getInt",
+     c.getMethod("getInt", new Class[] { Integer.class }));
+    m.put("foo:getInteger",
+     c.getMethod("getInteger", new Class[] { Integer.TYPE }));
     return m;
   }
 
