@@ -75,7 +75,7 @@ public abstract class RequestEncodingSupport extends TagSupport {
     // Package-scoped constants
 
     static final String REQUEST_CHAR_SET =
-	"javax.servlet.jsp.jstl.i18n.request.charset";
+	"javax.servlet.jsp.jstl.fmt.request.charset";
 
 
     //*********************************************************************

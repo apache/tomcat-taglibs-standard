@@ -53,7 +53,7 @@
  *
  */ 
 
-package org.apache.taglibs.standard.extra.i18n;
+package javax.servlet.jsp.jstl.fmt;
 
 import java.util.*;
 import java.text.*;
@@ -81,10 +81,10 @@ public class LocaleSupport {
      * 
      * <p> The given key is looked up in the resource bundle with the default
      * base name, which is retrieved from the
-     * <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> scoped attribute or
+     * <tt>javax.servlet.jsp.jsptl.fmt.basename</tt> scoped attribute or
      * context configuration parameter.
      * 
-     * <p> If the <tt>javax.servlet.jsp.jsptl.i18n.basename</tt> scoped
+     * <p> If the <tt>javax.servlet.jsp.jsptl.fmt.basename</tt> scoped
      * attribute or context configuration parameter does not exist, or no
      * resource bundle with the default base name exists, or the given key is
      * undefined in the resource bundle with the default base name, the string

@@ -74,9 +74,9 @@ public abstract class LocaleSupport extends TagSupport {
     //*********************************************************************
     // Package-scoped constants
 
-    static final String LOCALE = "javax.servlet.jsp.jstl.i18n.locale";
+    static final String LOCALE = "javax.servlet.jsp.jstl.fmt.locale";
     static final String FALLBACK_LOCALE =
-	"javax.servlet.jsp.jstl.i18n.fallbackLocale";
+	"javax.servlet.jsp.jstl.fmt.fallbackLocale";
 
     
     //*********************************************************************
@@ -195,7 +195,7 @@ public abstract class LocaleSupport extends TagSupport {
     /*
      * Stores the given locale in the response object of the given page
      * context, and stores the locale's associated charset in the
-     * javax.servlet.jsp.jstl.i18n.request.charset session attribute, which
+     * javax.servlet.jsp.jstl.fmt.request.charset session attribute, which
      * may be used by the <requestEncoding> action in a page invoked by a
      * form included in the response to set the request charset to the same as
      * the response charset (this makes it possible for the container to
@@ -224,13 +224,13 @@ public abstract class LocaleSupport extends TagSupport {
      * <p> The formatting locale is determined as follows:
      *
      * <ul>
-     * <li> If the <tt>javax.servlet.jsp.jstl.i18n.locale</tt> scoped
+     * <li> If the <tt>javax.servlet.jsp.jstl.fmt.locale</tt> scoped
      * attribute or context configuration parameter exists, use its locale.
      *
      * <li> If the formatting action is enclosed within a <bundle> action, use
      * the locale of the parent bundle.
      *
-     * <li> If the <tt>javax.servlet.jsp.jstl.i18n.basename</tt> scoped
+     * <li> If the <tt>javax.servlet.jsp.jstl.fmt.basename</tt> scoped
      * attribute exists, retrieve the default base name from it and use the
      * best matching locale for the resource bundle with this base name.
      *
@@ -239,7 +239,7 @@ public abstract class LocaleSupport extends TagSupport {
      * <tt>avail</tt> parameter, and use the best matching locale.
      *
      * <li> If no match is found, use the fallback locale given by the
-     * <tt>javax.servlet.jsp.jstl.i18n.fallbackLocale</tt> scoped attribute
+     * <tt>javax.servlet.jsp.jstl.fmt.fallbackLocale</tt> scoped attribute
      * or config parameter (if present).
      *
      * <li> If no match is found, use the runtime's default locale.
