@@ -18,11 +18,11 @@
 
 <sql:driver
   var="example"
-  driver="$myDbDriver"
-  url="$myDbUrl"
+  driver="${myDbDriver}"
+  url="${myDbUrl}"
 />
 
-<sql:transaction dataSource="$example">
+<sql:transaction dataSource="${example}">
 
   <sql:update var="newTable">
     create table mytable (
@@ -43,7 +43,7 @@
   <sql:update var="updateCount">
     INSERT INTO mytable VALUES (?,?)
       <sql:param value="3"/>
-      <sql:param value="$newName"/>
+      <sql:param value="${newName}"/>
   </sql:update>
 
   <sql:query var="deejay">
@@ -52,16 +52,18 @@
 
 </sql:transaction>
 
+<%-- TBD by JSR 052 EG
 <table border="1">
-  <c:forEach var="rows" items="$deejay.rows">
+  <c:forEach var="rows" items="${deejay.rows}">
     <tr>
-      <td><c:out value="$rows.get('nameid')"/></td>
-      <td><c:out value="$rows.get('name')"/></td>
+      <td><c:out value="${rows.get('nameid')}"/></td>
+      <td><c:out value="${rows.get('name')}"/></td>
     </tr>
     </c:forEach>
 </table>
+--%>
 
-<sql:update var="newTable" dataSource="$example">
+<sql:update var="newTable" dataSource="${example}">
   drop table mytable
 </sql:update>
 

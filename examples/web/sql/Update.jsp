@@ -14,13 +14,13 @@
 
 <sql:driver
   var="example"
-  driver="$myDbDriver"
-  url="$myDbUrl"
+  driver="${myDbDriver}"
+  url="${myDbUrl}"
 />
 
 <hr>
 
-<sql:transaction dataSource="$example">
+<sql:transaction dataSource="${example}">
 
   <sql:update var="newTable">
     create table mytable (
@@ -52,14 +52,14 @@
 
 <table border="1">
   <tr>
-    <c:forEach var="metaData" items="$deejays.metaData.columns">
-      <th><c:out value="$metaData.name"/> </th>
+    <c:forEach var="metaData" items="${deejays.metaData.columns}">
+      <th><c:out value="${metaData.name}"/> </th>
     </c:forEach>
   </tr>
-  <c:forEach var="rows" items="$deejays.rows">
+  <c:forEach var="rows" items="${deejays.rows}">
     <tr>
-      <c:forEach var="column" items="$rows.columns">
-        <td><c:out value="$column"/></td>
+      <c:forEach var="column" items="${rows.columns}">
+        <td><c:out value="${column}"/></td>
       </c:forEach>
     </tr>
   </c:forEach>
@@ -68,27 +68,27 @@
 
 <h2>Deleting second row from table</h2>
 
-  <sql:update var="updateCount" dataSource="$example">
+  <sql:update var="updateCount" dataSource="${example}">
     DELETE FROM mytable WHERE nameid=2
   </sql:update>
 
 <p>DONE: Deleting second row from table</p>
 
-<sql:query var="deejays" dataSource="$example">
+<sql:query var="deejays" dataSource="${example}">
   SELECT * FROM mytable
 </sql:query>
 
 
 <table border="1">
   <tr>
-    <c:forEach var="metaData" items="$deejays.metaData.columns">
-      <th><c:out value="$metaData.name"/> </th>
+    <c:forEach var="metaData" items="${deejays.metaData.columns}">
+      <th><c:out value="${metaData.name}"/> </th>
     </c:forEach>
   </tr>
-  <c:forEach var="rows" items="$deejays.rows">
+  <c:forEach var="rows" items="${deejays.rows}">
     <tr>
-      <c:forEach var="column" items="$rows.columns">
-        <td><c:out value="$column"/></td>
+      <c:forEach var="column" items="${rows.columns}">
+        <td><c:out value="${column}"/></td>
       </c:forEach>
     </tr>
   </c:forEach>
@@ -96,7 +96,7 @@
 
 
 
-<sql:update var="newTable" dataSource="$example">
+<sql:update var="newTable" dataSource="${example}">
   drop table mytable
 </sql:update>
 

@@ -14,11 +14,11 @@
 
 <sql:driver
   var="example"
-  driver="$myDbDriver"
-  url="$myDbUrl"
+  driver="${myDbDriver}"
+  url="${myDbUrl}"
 />
 
-<sql:transaction dataSource="$example">
+<sql:transaction dataSource="${example}">
 
   <sql:update var="newTable">
     create table mytable (
@@ -44,25 +44,27 @@
 
 </sql:transaction>
 
+<%-- TBD by JSR 052 EG
 <hr>
 
 <h2>Iterating on each Row using the MetaData</h2>
 
 <table border="1">
-  <c:forEach var="rows" items="$deejays.rows">
+  <c:forEach var="rows" items="${deejays.rows}">
     <tr>
-      <td> id: <c:out value="$rows.get('nameid')"/> </td>
-      <td> name: <c:out value="$rows.get('name')"/> </td>
+      <td> id: <c:out value="${rows.get('nameid')}"/> </td>
+      <td> name: <c:out value="${rows.get('name')}"/> </td>
     </tr>
   </c:forEach>
 </table>
+--%>
 
 <hr>
 
 <h2>Iterating on each Column getting the MetaData</h2>
 
-<c:forEach var="metaData" items="$deejays.metaData.columns">
-  metaData: <c:out value="$metaData.name"/> <br>
+<c:forEach var="metaData" items="${deejays.metaData.columns}">
+  metaData: <c:out value="${metaData.name}"/> <br>
 </c:forEach>
 
 <hr>
@@ -70,10 +72,10 @@
 <h2>Iterating over each Row of the result</h2>
 
 <table border="1">
-  <c:forEach var="rows" items="$deejays.rows">
+  <c:forEach var="rows" items="${deejays.rows}">
     <tr>
-      <c:forEach var="column" items="$rows.columns">
-        <td><c:out value="$column"/></td>
+      <c:forEach var="column" items="${rows.columns}">
+        <td><c:out value="${column}"/></td>
       </c:forEach>
     </tr>
   </c:forEach>
@@ -84,11 +86,11 @@
 <h2>Iterating over Columns without knowing the name or index</h2>
 
 <table border="1">
-  <c:forEach var="rows" items="$deejays.rows">
-      <c:forEach var="column" items="$rows.columns">
+  <c:forEach var="rows" items="${deejays.rows}">
+      <c:forEach var="column" items="${rows.columns}">
   <tr>
-        <td>Name: <c:out value="$column.name"/></td>
-        <td>Value: <c:out value="$column"/></td>
+        <td>Name: <c:out value="${column.name}"/></td>
+        <td>Value: <c:out value="${column}"/></td>
   </tr>
       </c:forEach>
   </c:forEach>
@@ -100,20 +102,20 @@
 
 <table border="1">
   <tr>
-    <c:forEach var="metaData" items="$deejays.metaData.columns">
-      <th><c:out value="$metaData.name"/> </th>
+    <c:forEach var="metaData" items="${deejays.metaData.columns}">
+      <th><c:out value="${metaData.name}"/> </th>
     </c:forEach>
   </tr>
-  <c:forEach var="rows" items="$deejays.rows">
+  <c:forEach var="rows" items="${deejays.rows}">
     <tr>
-      <c:forEach var="column" items="$rows.columns">
-        <td><c:out value="$column"/></td>
+      <c:forEach var="column" items="${rows.columns}">
+        <td><c:out value="${column}"/></td>
       </c:forEach>
     </tr>
   </c:forEach>
 </table>
 
-<sql:update var="newTable" dataSource="$example">
+<sql:update var="newTable" dataSource="${example}">
   drop table mytable
 </sql:update>
 

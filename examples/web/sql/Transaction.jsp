@@ -13,15 +13,15 @@
 
 <sql:driver
   var="example"
-  driver="$myDbDriver"
-  url="$myDbUrl"
+  driver="${myDbDriver}"
+  url="${myDbUrl}"
 />
 
 <p>You can group transactions together using the &lt;sql:transaction&gt; tag.</p>
 
 <h2>Dropping table and creating table using a transaction</h2>
 
-<sql:transaction dataSource="$example">
+<sql:transaction dataSource="${example}">
   <sql:update var="newTable">
     create table mytable (
       nameid int primary key,
@@ -36,7 +36,7 @@
 
 <h2>Populating table in one transaction</h2>
 
-<sql:transaction dataSource="$example">
+<sql:transaction dataSource="${example}">
   <sql:update var="updateCount">
     INSERT INTO mytable VALUES (1,'Paul Oakenfold')
   </sql:update>
@@ -50,7 +50,7 @@
 
 <p>DONE: Populating table in one transaction</p>
 
-<sql:update var="newTable" dataSource="$example">
+<sql:update var="newTable" dataSource="${example}">
   drop table mytable
 </sql:update>
 
