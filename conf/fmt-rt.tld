@@ -12,7 +12,7 @@
 
   <validator>
     <validator-class>
-        org.apache.taglibs.standard.tlv.JstlCoreTLV
+        org.apache.taglibs.standard.tlv.JstlFmtTLV
     </validator-class>
     <description>
         Provides core validation features for JSTL tags.
