@@ -181,17 +181,19 @@ public class LocaleSupport {
 	    locCtxt = BundleSupport.getLocalizationContext(pc);
 	}
 
-	ResourceBundle bundle = locCtxt.getResourceBundle();
-	if (bundle != null) {
-	    try {
-		message = bundle.getString(key);
-		if (args != null) {
-		    MessageFormat formatter = new MessageFormat("");
-		    formatter.setLocale(bundle.getLocale());
-		    formatter.applyPattern(message);
-		    message = formatter.format(args);
+	if (locCtxt != null) {
+	    ResourceBundle bundle = locCtxt.getResourceBundle();
+	    if (bundle != null) {
+		try {
+		    message = bundle.getString(key);
+		    if (args != null) {
+			MessageFormat formatter = new MessageFormat("");
+			formatter.setLocale(bundle.getLocale());
+			formatter.applyPattern(message);
+			message = formatter.format(args);
+		    }
+		} catch (MissingResourceException mre) {
 		}
-	    } catch (MissingResourceException mre) {
 	    }
 	}
 

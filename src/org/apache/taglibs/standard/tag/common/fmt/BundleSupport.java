@@ -170,7 +170,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 	    locCtxt = (LocalizationContext) obj;
 	} else {
 	    // localization context is a bundle basename
-	    locCtxt = BundleSupport.getLocalizationContext(pc, (String) obj);
+	    locCtxt = getLocalizationContext(pc, (String) obj);
 	}
 
 	return locCtxt;
@@ -199,8 +199,8 @@ public abstract class BundleSupport extends BodyTagSupport {
      *
      * @return Localization context containing the resource bundle with the
      * given base name for which a match between the preferred (or fallback)
-     * and available locales exists, or empty localization context containing
-     * the null bundle if no resource bundle match was found
+     * and available locales exists, or null if no resource bundle match was
+     * found
      */
     public static LocalizationContext getLocalizationContext(PageContext pc,
 							     String basename) {
@@ -242,16 +242,13 @@ public abstract class BundleSupport extends BodyTagSupport {
 		// do nothing
 	    }
 	}
-	
-	if (locCtxt == null) {
-	    // create empty localization context
-	    locCtxt = new LocalizationContext();
-	}
-	 
-	bundle = locCtxt.getResourceBundle();
-	if (bundle != null) {
-	    // set response locale
-	    SetLocaleSupport.setResponseLocale(pc, bundle.getLocale());
+		 
+	if (locCtxt != null) {
+	    bundle = locCtxt.getResourceBundle();
+	    if (bundle != null) {
+		// set response locale
+		SetLocaleSupport.setResponseLocale(pc, bundle.getLocale());
+	    }
 	}
 
 	return locCtxt;

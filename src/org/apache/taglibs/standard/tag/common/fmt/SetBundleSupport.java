@@ -124,6 +124,11 @@ public abstract class SetBundleSupport extends TagSupport {
 							   basename);
 	}
 
+	if (locCtxt == null) {
+	    // create empty localization context
+	    locCtxt = new LocalizationContext();
+	}
+
 	if (var != null) {
 	    pageContext.setAttribute(var, locCtxt, Util.getScope(scope));
 	} else {

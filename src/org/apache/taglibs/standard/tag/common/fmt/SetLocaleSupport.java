@@ -265,13 +265,15 @@ public abstract class SetLocaleSupport extends TagSupport {
 	Tag parent = findAncestorWithClass(fromTag, BundleSupport.class);
 	if (parent != null) {
 	    // use locale from parent <fmt:bundle> tag
-	    locCtxt = ((BundleSupport) parent).getLocalizationContext();
-	    ResourceBundle bundle = locCtxt.getResourceBundle();
-	    if (bundle != null) {
-		if (format) {
-		    setResponseLocale(pc, bundle.getLocale());
+	    if ((locCtxt = ((BundleSupport) parent).getLocalizationContext())
+		                                                != null) {
+		ResourceBundle bundle = locCtxt.getResourceBundle();
+		if (bundle != null) {
+		    if (format) {
+			setResponseLocale(pc, bundle.getLocale());
+		    }
+		    return bundle.getLocale();
 		}
-		return bundle.getLocale();
 	    }
 	}
 
