@@ -57,7 +57,7 @@ package javax.servlet.jsp.jstl.sql;
 
 /**
  * <p>This interface allows tag handlers implementing it to receive
- * values for parameter markers ("?") in their SQL statements.</p>
+ * values for parameter markers in their SQL statements.</p>
  *
  * <p>This interface is implemented by both &lt;sql:query&gt; and
  * &lt;sql:update&gt;. Its <code>addSQLParameter()</code> method

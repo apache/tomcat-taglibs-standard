@@ -117,7 +117,8 @@ public abstract class LoopTagSupport
     protected int begin;
 
     /**
-     * Ending index ('end' attribute).  -1 internally indicates 'no end
+     * Ending index of the iteration ('end' attribute).
+     * A value of -1 internally indicates 'no end
      * specified', although accessors for the core JSTL tags do not
      * allow this value to be supplied directly by the user.
      */
