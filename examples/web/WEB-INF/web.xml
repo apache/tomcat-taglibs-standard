@@ -19,21 +19,4 @@
       <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
-<!--  FIXME
-    <taglib>
-        <taglib-uri>/jstl-examples-taglib</taglib-uri>
-        <taglib-location>/WEB-INF/jstl-examples.tld</taglib-location>
-    </taglib>
-
-    <taglib>
-        <taglib-uri>http://jakarta.apache.org/taglibs/standard/scriptfree</taglib-uri>
-        <taglib-location>/WEB-INF/scriptfree.tld</taglib-location>
-    </taglib>
-
-    <taglib>
-        <taglib-uri>http://jakarta.apache.org/taglibs/standard/permittedTaglibs</taglib-uri>
-        <taglib-location>/WEB-INF/permittedTaglibs.tld</taglib-location>
-    </taglib>
--->
-
 </web-app>

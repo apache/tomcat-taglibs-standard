@@ -281,7 +281,7 @@
   
     <!-- Copy web.xml + examples TLD -->
     <copy todir="${build.examples}/WEB-INF">
-      <fileset dir="${examples.src}/conf"/>
+      <fileset dir="${examples.src}/web/WEB-INF"/>
     </copy>
     
     <!-- Copy web pages -->
