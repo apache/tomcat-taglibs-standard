@@ -123,7 +123,7 @@ public abstract class SetBundleSupport extends TagSupport {
 	if (var != null) {
 	    pageContext.setAttribute(var, locCtxt, scope);
 	} else {
-	    Config.set(pageContext, Config.FMT_LOCALIZATIONCONTEXT, locCtxt,
+	    Config.set(pageContext, Config.FMT_LOCALIZATION_CONTEXT, locCtxt,
 		       scope);
 	}
 

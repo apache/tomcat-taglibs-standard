@@ -168,7 +168,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
     public int doStartTag() throws JspException {
 
         if (!maxRowsSpecified) {
-	    Object obj = Config.find(pageContext, Config.SQL_MAXROWS);
+	    Object obj = Config.find(pageContext, Config.SQL_MAX_ROWS);
 	    if (obj != null) {
 		if (obj instanceof Integer) {
 		    maxRows = ((Integer) obj).intValue();

@@ -158,7 +158,7 @@ public abstract class BundleSupport extends BodyTagSupport {
     public static LocalizationContext getLocalizationContext(PageContext pc) {
 	LocalizationContext locCtxt = null;
 
-	Object obj = Config.find(pc, Config.FMT_LOCALIZATIONCONTEXT);
+	Object obj = Config.find(pc, Config.FMT_LOCALIZATION_CONTEXT);
 	if (obj == null) {
 	    return null;
 	}
@@ -221,7 +221,7 @@ public abstract class BundleSupport extends BodyTagSupport {
 	
 	if (locCtxt == null) {
 	    // No match found with preferred locales, try using fallback locale
-	    pref = SetLocaleSupport.getLocale(pc, Config.FMT_FALLBACKLOCALE);
+	    pref = SetLocaleSupport.getLocale(pc, Config.FMT_FALLBACK_LOCALE);
 	    if (pref != null) {
 		bundle = findMatch(basename, pref);
 		if (bundle != null) {

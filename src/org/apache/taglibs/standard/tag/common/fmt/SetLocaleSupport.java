@@ -305,7 +305,7 @@ public abstract class SetLocaleSupport extends TagSupport {
 	}
 	if (match == null) {
 	    //Use fallback locale.
-	    pref = getLocale(pc, Config.FMT_FALLBACKLOCALE);
+	    pref = getLocale(pc, Config.FMT_FALLBACK_LOCALE);
 	    if (pref != null) {
 		match = findFormattingMatch(pref, avail);
 	    }

@@ -134,7 +134,7 @@ public abstract class SetTimeZoneSupport extends TagSupport {
 	if (var != null) {
 	    pageContext.setAttribute(var, timeZone, scope);
 	} else {
-	    Config.set(pageContext, Config.FMT_TIMEZONE, timeZone, scope);
+	    Config.set(pageContext, Config.FMT_TIME_ZONE, timeZone, scope);
 	}
 
 	return EVAL_PAGE;

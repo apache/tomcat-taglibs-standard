@@ -70,19 +70,19 @@ public class Config {
      */
     public static final String FMT_LOCALE
 	= "javax.servlet.jsp.jstl.fmt.locale";
-    public static final String FMT_FALLBACKLOCALE
+    public static final String FMT_FALLBACK_LOCALE
 	= "javax.servlet.jsp.jstl.fmt.fallbackLocale";
-    public static final String FMT_LOCALIZATIONCONTEXT
+    public static final String FMT_LOCALIZATION_CONTEXT
 	= "javax.servlet.jsp.jstl.fmt.localizationContext";
-    public static final String FMT_TIMEZONE
+    public static final String FMT_TIME_ZONE
 	= "javax.servlet.jsp.jstl.fmt.timeZone";
 
     /**
      * SQL actions related configuration data
      */
-    public static final String SQL_DATASOURCE
+    public static final String SQL_DATA_SOURCE
 	= "javax.servlet.jsp.jstl.sql.dataSource";
-    public static final String SQL_MAXROWS
+    public static final String SQL_MAX_ROWS
 	= "javax.servlet.jsp.jstl.sql.maxRows";
 	
     /*

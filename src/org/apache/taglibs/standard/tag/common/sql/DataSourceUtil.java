@@ -89,7 +89,7 @@ public class DataSourceUtil {
 	DataSource dataSource = null;
 
         if (rawDataSource == null) {
-            rawDataSource = Config.find(pc, Config.SQL_DATASOURCE);
+            rawDataSource = Config.find(pc, Config.SQL_DATA_SOURCE);
         }
 
 	if (rawDataSource == null) {

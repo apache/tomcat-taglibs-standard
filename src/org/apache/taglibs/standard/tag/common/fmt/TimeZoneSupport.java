@@ -174,7 +174,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
 	    tz = parent.getTimeZone();
 	} else {
 	    // get time zone from config variable or context init param
-	    Object obj = Config.find(pc, Config.FMT_TIMEZONE);
+	    Object obj = Config.find(pc, Config.FMT_TIME_ZONE);
 	    if (obj != null) {
 		if (obj instanceof TimeZone) {
 		    tz = (TimeZone) obj;
