@@ -246,6 +246,20 @@ public abstract class TransformSupport extends BodyTagSupport {
     // Utility methods
 
     /**
+     * Wraps systemId with a "jstl:" prefix to prevent the parser from
+     * thinking that the URI is truly relative and resolving it against
+     * the current directory in the filesystem.
+     */
+    private static String wrapSystemId(String systemId) {
+      if (systemId == null)
+          return "jstl:";
+      else if (ImportSupport.isAbsoluteUrl(systemId))
+          return systemId;
+      else
+          return ("jstl:" + systemId);
+    }
+
+    /**
      * Retrieves a Source from the given Object, whether it be a String,
      * Reader, Node, or other supported types (even a Source already).
      * If 'url' is true, then we must be passed a String and will interpret
@@ -261,41 +275,15 @@ public abstract class TransformSupport extends BodyTagSupport {
 	    // if we've got a string, chain to Reader below
 	    return getSource(new StringReader((String) o), systemId);
         } else if (o instanceof Reader) {
-	    // Without a systemId, or with an absolute one, we can
-	    // read the input through SAX.  If our systemId relative,
-	    // however, JAXP seems to effectively require us to go through DOM.
-	    // (TrAX resolves our relative URLs to full paths before
-            // passing them to our resolver.)  This is silly, but what can
-            // you do?  If this is a bug and not a feature of the TrAX
-            // implementation, we can remove the DOM logic below, later.
-	    Source result;
-	    if (systemId == null || ImportSupport.isAbsoluteUrl(systemId)) {
-	        // explicitly go through SAX to maintain
-	        // control over how relative external entities resolve
-	        XMLReader xr = XMLReaderFactory.createXMLReader();
-                xr.setEntityResolver(
-                    new ParseSupport.JstlEntityResolver(pageContext));
-	        InputSource s = new InputSource((Reader) o);
-	        if (systemId != null)
-                    s.setSystemId(systemId);
-	        result = new SAXSource(xr, s);
-	    } else {
-		// go through DOM to maintain full control over entities
-		InputSource s = new InputSource((Reader) o);
-		s.setSystemId(systemId);
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		db.setEntityResolver(
-		    new ParseSupport.JstlEntityResolver(pageContext));
-		result = new DOMSource(db.parse(s));
-	    }
-
-	    // normalize URIs so they can be processed consistently by resolver
-	    if (systemId == null)
-		result.setSystemId("jstl:");
-	    else if (ImportSupport.isAbsoluteUrl(systemId))
-		result.setSystemId(systemId);
-	    else 
-		result.setSystemId("jstl:" + systemId);
+	    // explicitly go through SAX to maintain control
+	    // over how relative external entities resolve
+            XMLReader xr = XMLReaderFactory.createXMLReader();
+            xr.setEntityResolver(
+                new ParseSupport.JstlEntityResolver(pageContext));
+            InputSource s = new InputSource((Reader) o);
+            s.setSystemId(wrapSystemId(systemId));
+            Source result = new SAXSource(xr, s);
+            result.setSystemId(wrapSystemId(systemId));
 	    return result;
         } else if (o instanceof Node) {
 	    return new DOMSource((Node) o);

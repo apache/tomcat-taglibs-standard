@@ -279,6 +279,7 @@ public abstract class ParseSupport extends BodyTagSupport {
         }
         public InputSource resolveEntity(String publicId, String systemId)
 	        throws FileNotFoundException {
+
 	    // pass if we don't have a systemId
 	    if (systemId == null)
 		return null;
