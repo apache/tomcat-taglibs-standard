@@ -91,13 +91,6 @@ public interface Result {
     public Object[][] getRowsByIndex();
 
     /**
-     * Returns an array of ColumnMetaData objects of the cached ResultSet
-     *
-     * @return an array of <code>ColumnMetaData</code> objects of the result
-     */
-    public ColumnMetaData[] getMetaData();
-
-    /**
      * Returns the number of rows in the cached ResultSet
      *
      * @return the number of rows in the result

@@ -76,13 +76,6 @@ Row[2][0]: <c:out value="${deejays.rowsByIndex[2][0]}" />
 Row[2][1]: <c:out value="${deejays.rowsByIndex[2][1]}" />
 <br>
 
-<hr>
-
-<h2>Getting the MetaData from the Column Object</h2>
-Col[0]MetaData: <c:out value="${deejays.metaData[0].name}" />
-<br>
-Col[1]MetaData: <c:out value="${deejays.metaData[1].name}" />
-
 <sql:update var="newTable" dataSource="${example}">
   drop table mytable
 </sql:update>

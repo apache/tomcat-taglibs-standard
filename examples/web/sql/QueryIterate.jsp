@@ -46,14 +46,6 @@
 
 <hr>
 
-<h2>Iterating on each Column getting the MetaData</h2>
-
-<c:forEach var="metaData" items="${deejays.metaData}">
-  metaData: <c:out value="${metaData.name}"/> <br>
-</c:forEach>
-
-<hr>
-
 <h2>Iterating over each Row of the result</h2>
 
 <table border="1">
@@ -71,10 +63,10 @@
 <h2>Iterating over Columns without knowing the index</h2>
 
 <table border="1">
-  <c:forEach var="rows" items="${deejays.rows}">
+  <c:forEach var="row" items="${deejays.rows}">
   <tr>
-    <td>Name: <c:out value="${rows.NAMEID}"/></td>
-    <td>Value: <c:out value="${rows.NAME}"/></td>
+    <td>Name: <c:out value="${row.NAMEID}"/></td>
+    <td>Value: <c:out value="${row.NAME}"/></td>
   </tr>
   </c:forEach>
 </table>
@@ -84,19 +76,27 @@
 <h2>Putting it all together</h2>
 
 <table border="1">
-  <tr>
-    <c:forEach var="metaData" items="${deejays.metaData}">
-      <th><c:out value="${metaData.name}"/> </th>
+  <c:forEach var="row" items="${deejays.rows}" varStatus="status">
+    <%-- Get the column names for the header of the table --%>
+    <c:choose>
+      <c:when test="${status.count == 1}">
+        <%-- Each row is a Map object key'd by the column name --%>
+        <tr>
+        <c:forEach var="metaData" items="${row}">
+          <th><c:out value="${metaData.key}"/></th>
+        </c:forEach>
+        </tr>
+      </c:when>
+    </c:choose>
+    <tr>
+    <c:forEach var="column" items="${row}">
+      <%-- Get the value of each column while iterating over rows --%>
+      <td><c:out value="${column.value}"/></td>
     </c:forEach>
   </tr>
-  <c:forEach var="row" items="${deejays.rowsByIndex}">
-    <tr>
-      <c:forEach var="column" items="${row}">
-        <td><c:out value="${column}"/></td>
-      </c:forEach>
-    </tr>
   </c:forEach>
 </table>
+
 
 <sql:update var="newTable" dataSource="${example}">
   drop table mytable

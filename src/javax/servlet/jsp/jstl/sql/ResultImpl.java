@@ -71,7 +71,6 @@ import java.util.*;
 public class ResultImpl implements Result {
     private List rowMap;
     private List rowByIndex;
-    private ResultMetaDataUtil resultMD;
     private boolean isLimited;
 
     /**
@@ -89,10 +88,9 @@ public class ResultImpl implements Result {
 	rowByIndex = new ArrayList();
 
 	ResultSetMetaData rsmd = rs.getMetaData();
-        resultMD = new ResultMetaDataUtil(rsmd);
-
 	int noOfColumns = rsmd.getColumnCount();
         int beginRow = 0;
+
         /*
          * Shift maximum rows depending on starting point
          */
@@ -114,7 +112,7 @@ public class ResultImpl implements Result {
 		        }
                         // 0-based indexing to be consistent w/JSTL 
                         columns[i-1] = value;
-                        columnMap.put((resultMD.get(i-1)).getName(),value);
+                        columnMap.put(rsmd.getColumnName(i), value);
 	            }
                 rowMap.add(columnMap);
                 rowByIndex.add(columns);
@@ -176,15 +174,6 @@ public class ResultImpl implements Result {
     }
 
     /**
-     * Returns the ColumnMetaData array object of the cached ResultSet
-     *
-     * @return the ColumnMetaData array object
-     */
-    public ColumnMetaData[] getMetaData() {
-        return resultMD.getColumns();
-    }
-
-    /**
      * Returns true of the query was limited by a maximum row setting
      *
      * @return true if the query was limited by a MaxRows attribute
@@ -193,207 +182,4 @@ public class ResultImpl implements Result {
         return isLimited;
     }
 
-    /**
-     * <p>This class encapsulates all the meta data for a result set. Instances
-     * of this class are used by the <code>ResultImpl</code> instances.</p>
-     *
-     * @author Hans Bergsten
-     * @author Justyna Horwat
-     */
-    private class ResultMetaDataUtil {
-        private ColumnMetaData[] columnMD;
-
-        /**
-         * This constructor creates a ColumnMetaData object from the ResultSetMetaData
-         *
-         * @param rsmd ResultSetMetaData object
-         * @exception if a database error occurs
-         */
-        public ResultMetaDataUtil (ResultSetMetaData rsmd) throws SQLException {
-	    int noOfColumns = rsmd.getColumnCount();
-	    columnMD = new ColumnMetaData[noOfColumns];
-	    getMetaDataCache(rsmd);
-        }
-    
-        /**
-         * Returns the ColumnMetaData for the named column
-         *
-         * @param name the name of the column
-         * @exception if a database error occurs
-         *
-         * @return the ColumnMetaData object of the named column
-         */
-        public ColumnMetaData get(String name) {
-            for (int i = 0; i < columnMD.length; i++) {
-                try {
-	            if (name.equals(columnMD[i].getName())) {
-	            return columnMD[i];
-	            }
-                } catch (SQLException ex) {
-                    // can't get the column
-                }
-            }
-	    return null;
-        }
-    
-        /**
-         * Returns the ColumnMetaData for the given column index
-         *
-         * @param index the index of the column
-         *
-         * @return the ColumnMetaData object of the indexed column
-         */
-        public ColumnMetaData get(int index) {
-            if ((index >= 0) && (index < columnMD.length)) {
-                return (ColumnMetaData) columnMD[index];
-            }
-            return null;
-        }
-    
-        /**
-         * Returns an array of ColumnMetaData objects
-         *
-         * @return an array of ColumnMetaData objects
-         */
-        public ColumnMetaData[] getColumns() {
-	    return columnMD;
-        }
-    
-        /**
-         * Returns an array of ColumnMetaData instances for all columns.
-         * All Column instances for a specific column in all rows share
-         * the same ColumnMetaData instance.
-         */
-        private void getMetaDataCache(ResultSetMetaData rsmd) 
-            throws SQLException {
-	    int noOfColumns = rsmd.getColumnCount();
-    
-	    for (int i = 1; i <= noOfColumns; i++) {
-	        ColumnMetaData md = new ColumnMetaDataImpl();
-	    try {
-		    ((ColumnMetaDataImpl)md).setAutoIncrement(rsmd.isAutoIncrement(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setAutoIncrementException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setCaseSensitive(rsmd.isCaseSensitive(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setCaseSensitiveException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setSearchable(rsmd.isSearchable(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setSearchableException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setCurrency(rsmd.isCurrency(i));
-	        }
-	        catch (SQLException e) {
-		((ColumnMetaDataImpl)md).setCurrencyException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setNullable(rsmd.isNullable(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setNullableException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setSigned(rsmd.isSigned(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setSignedException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setDisplaySize(rsmd.getColumnDisplaySize(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setDisplaySizeException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setLabel(rsmd.getColumnLabel(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setLabelException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setName(rsmd.getColumnName(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setNameException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setSchemaName(rsmd.getSchemaName(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setSchemaNameException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setPrecision(rsmd.getPrecision(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setPrecisionException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setScale(rsmd.getScale(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setScaleException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setTableName(rsmd.getTableName(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setTableNameException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setCatalogName(rsmd.getCatalogName(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setCatalogNameException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setType(rsmd.getColumnType(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setTypeException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setTypeName(rsmd.getColumnTypeName(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setTypeNameException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setReadOnly(rsmd.isReadOnly(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setReadOnlyException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setWritable(rsmd.isWritable(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setWritableException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setDefinitelyWritable(rsmd.isDefinitelyWritable(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setDefinitelyWritableException(e);
-	        }
-	        try {
-		    ((ColumnMetaDataImpl)md).setClassName(rsmd.getColumnClassName(i));
-	        }
-	        catch (SQLException e) {
-		    ((ColumnMetaDataImpl)md).setClassNameException(e);
-	        }
-                // 0-based indexing to be consistent w/JSTL
-	        columnMD[i-1] = md;
-	    }
-	    return;
-        }
-    }
 }

@@ -51,17 +51,24 @@
 
 
 <table border="1">
-  <tr>
-    <c:forEach var="metaData" items="${deejays.metaData}">
-      <th><c:out value="${metaData.name}"/> </th>
+  <c:forEach var="row" items="${deejays.rows}" varStatus="status">
+    <%-- Get the column names for the header of the table --%>
+    <c:choose>
+      <c:when test="${status.count == 1}">
+        <%-- Each row is a Map object key'd by the column name --%>
+        <tr>
+        <c:forEach var="metaData" items="${row}">
+          <th><c:out value="${metaData.key}"/></th>
+        </c:forEach>
+        </tr>
+      </c:when>
+    </c:choose>
+    <tr>
+    <c:forEach var="column" items="${row}">
+      <%-- Get the value of each column while iterating over rows --%>
+      <td><c:out value="${column.value}"/></td>
     </c:forEach>
   </tr>
-  <c:forEach var="row" items="${deejays.rowsByIndex}">
-    <tr>
-      <c:forEach var="column" items="${row}">
-        <td><c:out value="${column}"/></td>
-      </c:forEach>
-    </tr>
   </c:forEach>
 </table>
 
@@ -80,20 +87,26 @@
 
 
 <table border="1">
-  <tr>
-    <c:forEach var="metaData" items="${deejays.metaData}">
-      <th><c:out value="${metaData.name}"/> </th>
+  <c:forEach var="row" items="${deejays.rows}" varStatus="status">
+    <%-- Get the column names for the header of the table --%>
+    <c:choose>
+      <c:when test="${status.count == 1}">
+        <%-- Each row is a Map object key'd by the column name --%>
+        <tr>
+        <c:forEach var="metaData" items="${row}">
+          <th><c:out value="${metaData.key}"/></th>
+        </c:forEach>
+        </tr>
+      </c:when>
+    </c:choose>
+    <tr>
+    <c:forEach var="column" items="${row}">
+      <%-- Get the value of each column while iterating over rows --%>
+      <td><c:out value="${column.value}"/></td>
     </c:forEach>
   </tr>
-  <c:forEach var="row" items="${deejays.rowsByIndex}">
-    <tr>
-      <c:forEach var="column" items="${row}">
-        <td><c:out value="${column}"/></td>
-      </c:forEach>
-    </tr>
   </c:forEach>
 </table>
-
 
 
 <sql:update var="newTable" dataSource="${example}">
