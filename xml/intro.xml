@@ -16,16 +16,17 @@
       operating under the Java Community Process, will be hosting the
       reference implementation of the JSP Standard Tag Library (JSTL) at
       Jakarta Taglibs.  JSTL is currently in the 
-      <a href="http://www.jcp.org/procedures/jcp2/index.jsp#3">Public
-      Review</a> stage of the Java Community Process.  The
+      <a href="http://jcp.org/procedures/jcp2/index.jsp#3.2">
+      Public Final Draft stage</a> of the Java Community Process.  The
       <a href="http://jcp.org/aboutJava/communityprocess/review/jsr052">
-      JSTL Public Draft</a> is now available.
+      JSTL Public Final Draftt</a> is now available.
     </p>
 
     <p><b>NOTE:</b> JSTL requires a JSP container that supports
       the Java Servlet 2.3 and JavaServer Pages 1.2 specifications.
       Jakarta  <a href="http://jakarta.apache.org/tomcat/">
-      Tomcat 4</a> supports the new specifications.
+      Tomcat 4</a> supports the new specifications.  JSTL Beta 2
+      has been tested with Tomcat 4.0.3 and Tomcat 4.0.4B2.
     </p>
 
     <p><b>IMPORTANT:</b> This release of the JSTL RI is a beta release
@@ -40,32 +41,36 @@
   <section name="'Standard' Taglib News" href="News">
 
     <news>
-      <newsitem date="3/12/2002">
-	RI Beta 1 made available for
+      <newsitem date="4/19/2002">
+	RI Beta 2 made available for
 	<a href="/builds/jakarta-taglibs/releases/standard">download</a>.
-        The <a href="http://jcp.org/aboutJava/communityprocess/review/jsr052">
-        JSTL Public Draft</a> is now available.
+        The <a href="http://jcp.org/aboutJava/communityprocess/first/jsr052/">
+        JSTL Proposed Final Draft</a> is now available.
+      </newsitem>
+      <newsitem date="3/12/2002">
+	RI Beta 1 was posted, and
+        the <a href="http://jcp.org/aboutJava/communityprocess/review/jsr052">
+        JSTL Public Draft</a> was made available.
       </newsitem>
       <newsitem date="12/15/2001">
-	Early Access Release 3 was made available for download.
+	Early Access Release 3 was posted.
       </newsitem>
       <newsitem date="11/21/2001">
-	Early Access Release 2 was made available for download.
+	Early Access Release 2 was posted.
 	The "jsptl" tag library has been renamed to the "standard" tag
 	library.  JSPTL has been renamed to JSTL.
       </newsitem>
       <newsitem date="10/09/2001">
-	Early Access Release 1.2 was made available for download.
+	Early Access Release 1.2 was posted.
 	This version, like EA 1.1, was compatible with Tomcat 4.0.
       </newsitem>
       <newsitem date="07/23/2001">
-        Early Access Release 1.1 was made available for download.
+        Early Access Release 1.1 was posted.
         This version was compatible with 
         Tomcat 4 B6 and Tomcat 4.0.
       </newsitem>
       <newsitem date="07/10/2001">
-        Early Access Release 1 of the JSTL was made available for
-	download.
+        Early Access Release 1 of the JSTL was posted.
       </newsitem>
       <newsitem date="07/08/2001">
         JSTL contributed by the Java Community Process
@@ -85,7 +90,7 @@
             doing releases of the taglib, a link can be made to each
             available release. -->
       <li>View the Beta 2 documentation
-        <a href="standard-beta1/index.html">
+        <a href="standard-beta2/index.html">
         JSP Standard Tag Library Beta 2 Documentation</a>
       </li>
 
