@@ -102,7 +102,7 @@ public class DriverTag extends DriverTagSupport {
     private void evaluateExpressions() throws JspException {
         if (driverClassNameEL != null) {
                 driverClassName = (String) ExpressionEvaluatorManager.evaluate
-                ("driverClassName", driverClassNameEL, String.class, this, pageContext);
+                ("driver", driverClassNameEL, String.class, this, pageContext);
         }
 
         if (jdbcURLEL != null) {

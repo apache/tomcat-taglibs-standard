@@ -136,7 +136,7 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>driverClassName</name>
+        <name>driver</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
