@@ -143,13 +143,14 @@ public class Evaluator
 	 defaultPrefix);
     }
     catch (ELException exc) {
-      throw new JspException
+	throw new JspException
 	(MessageFormat.format
 	 (Constants.ATTRIBUTE_EVALUATION_EXCEPTION,
 	  new Object [] {
 	    "" + pAttributeName,
 	    "" + pAttributeValue,
-	    exc.getMessage ()
+	    exc.getMessage(),
+	    exc.getRootCause()
 	  }));
     }
   }
