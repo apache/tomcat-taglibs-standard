@@ -3,7 +3,7 @@
     <!-- ******************** Adjustable Properties *********************** -->
 
     <!-- Version Number -->
-    <property name="standard-version" value="1.0.3" />
+    <property name="standard-version" value="1.1.0" />
 
     <property file="../build.properties"/>
     <property file="${user.home}/build.properties"/>
@@ -126,64 +126,11 @@
          srcdir="${library.src}" 
          destdir="${build.library}"
          bootclasspath="${xalan.jar}:${java.home}/lib/rt.jar"
-         classpath="${servlet24.jar}:${jsp20.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}"
-	 excludes="org/apache/taglibs/standard/lang/jstl/parser/jsp20/*"
-         debug="on"/>
-  </target>
-
-  <!-- **************** Special JSP 2.0 EL target ******************** -->
-
-  <target name="jsp20el.build">
-    <echo message="Building JSP 2.0 expression language."/>
-    <property name="jsp20el.build.dir"   value="${build.dir}/${taglib.name}/jsp20el"/>
-    <property name="jsp20el.scratch.dir"   value="${build.dir}/${taglib.name}/jsp20el/scratch"/>
-    <property name="jsp20el.package.dir"   value="org/apache/jasper/runtime/el"/>
-
-    <mkdir dir="${jsp20el.build.dir}"/>
-    <mkdir dir="${jsp20el.scratch.dir}"/>
-
-    <copy todir="${jsp20el.scratch.dir}/${jsp20el.package.dir}">
-        <fileset dir="${library.src}/org/apache/taglibs/standard/lang">
-            <include name="jstl/*"/>
-            <include name="jstl/parser/*"/>
-            <include name="jstl/parser/jsp20/*"/>
-            <include name="support/*"/>
-        </fileset>
-    </copy>
-    <!-- rename packages and imports for JSP 2.0 -->
-    <replace dir="${jsp20el.scratch.dir}/${jsp20el.package.dir}">
-        <include name="**/*"/>
-        <replacetoken>org.apache.taglibs.standard.lang</replacetoken>
-        <replacevalue>org.apache.jasper.runtime.el</replacevalue>
-    </replace>
-
-    <javac srcdir="${jsp20el.scratch.dir}"
-           destdir="${jsp20el.build.dir}"
-	   classpath="${servlet24.jar}:${jsp20.jar}:${build.library}"
-	   debug="on">
-      <include name="${jsp20el.package.dir}/jstl/*"/>
-      <include name="${jsp20el.package.dir}/jstl/parser/*"/>
-      <exclude name="${jsp20el.package.dir}/jstl/parser/ELParser.java"/>
-      <include name="${jsp20el.package.dir}/jstl/parser/jsp20/*"/>
-      <include name="${jsp20el.package.dir}/support/**"/>
-    </javac>
-    <copy todir="${jsp20el.build.dir}/${jsp20el.package.dir}/jstl">
-	<fileset dir="${jsp20el.scratch.dir}/${jsp20el.package.dir}/jstl">
-	    <include name="**/*.properties"/>
-	</fileset>
-    </copy>
-    <delete dir="${jsp20el.scratch.dir}"/>
-  </target>
-
-  <target name="jsp20el.dist" depends="jsp20el.build">
-    <mkdir dir="${dist.dir}/jsp20el"/>
-    <jar jarfile="${dist.dir}/jsp20el/jsp20el.jar"
-         basedir="${build.dir}/${taglib.name}/jsp20el"/>
-  </target>
-
-  <target name="jsp20el.clean">
-    <delete dir="${build.dir}/${taglib.name}/jsp20el"/>
-    <delete dir="${dist.dir}/jsp20el"/>
+         classpath="${servlet24.jar}:${jsp20.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}"
+	 excludes="org/apache/taglibs/standard/lang/jstl/parser/jsp20/* org/apache/taglibs/standard/lang/jpath/** org/apache/taglibs/standard/lang/spel/**"
+	 debug="${compile.debug}"
+         deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}"/>
   </target>
 
   <!-- **************** Compile Tag Library Components ******************** -->
@@ -237,7 +184,10 @@
     <copy file="${dist.library}/lib/jstl.jar"
               tofile="${build.examples}/WEB-INF/lib/jstl.jar"/>
     <javac srcdir="${examples.src}" destdir="${build.examples}/WEB-INF/classes"
-        classpath="${servlet24.jar}:${jsp20.jar}:${build.library}"/>
+           classpath="${servlet24.jar}:${jsp20.jar}:${build.library}"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"/>
   </target>
 
   <!-- Compile the tag library itself -->
@@ -331,7 +281,7 @@
   </target>
 
   <!-- Create the entire set of distribution files -->
-  <target name="dist" depends="library-dist,examples-dist,documentation-dist,javadoc-dist,jsp20el.dist"/>
+  <target name="dist" depends="library-dist,examples-dist,documentation-dist,javadoc-dist"/>
 
 
 
