@@ -156,7 +156,11 @@ public class JavascriptExpressionEvaluator implements ExpressionEvaluator {
         while (attributes !=null && attributes.hasMoreElements()) {
             attribute = (String)attributes.nextElement();
             value = pageContext.getAttribute(attribute, scope);
-            rhinoScope.put(attribute, rhinoScope, rhinoContext.toObject(value, rhinoScope));
+	    if (value != null)
+                rhinoScope.put(
+		    attribute,
+		    rhinoScope,
+		    rhinoContext.toObject(value, rhinoScope));
         }
     }
 
