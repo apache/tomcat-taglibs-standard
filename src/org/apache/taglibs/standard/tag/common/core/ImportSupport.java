@@ -149,8 +149,8 @@ public abstract class ImportSupport extends BodyTagSupport
 	    if  (varReader != null) {
 	        r = acquireReader();
 	        Object oldVarReader =
-		    pageContext.getAttribute(varReader, scope);
-	        pageContext.setAttribute(varReader, r, scope);
+		    pageContext.getAttribute(varReader);
+	        pageContext.setAttribute(varReader, r);
 	    }
 	} catch (IOException ex) {
 	    throw new JspTagException(ex.toString());
@@ -195,9 +195,9 @@ public abstract class ImportSupport extends BodyTagSupport
 	        if (r != null)
 		    r.close();
 	        if (oldVarReader != null)
-		    pageContext.setAttribute(varReader, oldVarReader, scope);
+		    pageContext.setAttribute(varReader, oldVarReader);
 		else
-		    pageContext.removeAttribute(varReader, scope);
+		    pageContext.removeAttribute(varReader);
 	    }
         } catch (IOException ex) {
 	    // ignore it; close() failed, but there's nothing more we can do
