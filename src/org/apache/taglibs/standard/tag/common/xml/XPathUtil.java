@@ -112,44 +112,84 @@ public class XPathUtil {
     private static final String HEADER_NS_URL
 	= "http://java.sun.com/jstl/xpath/header";
 
+    private static final String PAGE_P = "page";
+    private static final String REQUEST_P = "request";
+    private static final String SESSION_P = "session";
+    private static final String APP_P = "application";
+    private static final String PARAM_P = "param";
+    private static final String INITPARAM_P = "initParam";
+    private static final String COOKIE_P = "cookie";
+    private static final String HEADER_P = "header";
+
     protected class JstlVariableContext implements VariableContext {
 	// retrieves object using JSTL's custom variable-mapping rules
         public Object getVariableValue(String namespace, String prefix,
                 String localName) throws UnresolvableException {
-	    if (namespace == null)
-		return pageContext.findAttribute(localName);
-	    else if (namespace.equals(PAGE_NS_URL))
-		return pageContext.getAttribute(localName,
-		    PageContext.PAGE_SCOPE);
-	    else if (namespace.equals(REQUEST_NS_URL))
-		return pageContext.getAttribute(localName,
-		    PageContext.REQUEST_SCOPE);
-	    else if (namespace.equals(SESSION_NS_URL))
-		return pageContext.getAttribute(localName,
-		    PageContext.SESSION_SCOPE);
-	    else if (namespace.equals(APP_NS_URL))
-		return pageContext.getAttribute(localName,
-		    PageContext.APPLICATION_SCOPE);
-	    else if (namespace.equals(PARAM_NS_URL))
-		return pageContext.getRequest().getParameter(localName);
-	    else if (namespace.equals(INITPARAM_NS_URL))
-		return
-		    pageContext.getServletConfig().getInitParameter(localName);
-	    else if (namespace.equals(HEADER_NS_URL)) {
+	    // I'd prefer to match on namespace, but this doesn't appear
+            // to work in Jaxen
+	    if (prefix == null) {
+		return notNull(
+		    pageContext.findAttribute(localName),
+		    prefix,
+		    localName);
+	    } else if (prefix.equals(PAGE_P)) {
+		return notNull(
+		    pageContext.getAttribute(localName,PageContext.PAGE_SCOPE),
+		    prefix,
+		    localName);
+	    } else if (prefix.equals(REQUEST_P)) {
+		return notNull(
+		    pageContext.getAttribute(localName,
+			PageContext.REQUEST_SCOPE),
+		    prefix,
+		    localName);
+	    } else if (prefix.equals(SESSION_P)) {
+		return notNull(
+		    pageContext.getAttribute(localName,
+		        PageContext.SESSION_SCOPE),
+		    prefix,
+		    localName);
+	    } else if (prefix.equals(APP_P)) {
+		return notNull(
+		    pageContext.getAttribute(localName,
+		        PageContext.APPLICATION_SCOPE),
+		    prefix,
+		    localName);
+	    } else if (prefix.equals(PARAM_P)) {
+		return notNull(
+		    pageContext.getRequest().getParameter(localName),
+		    prefix,
+		    localName);
+	    } else if (prefix.equals(INITPARAM_P)) {
+		return notNull(
+		    pageContext.getServletConfig().getInitParameter(localName),
+		    prefix,
+		    localName);
+	    } else if (prefix.equals(HEADER_P)) {
 		HttpServletRequest hsr =
 		    (HttpServletRequest) pageContext.getRequest();
-		return hsr.getHeader(localName);
-	    } else if (namespace.equals(COOKIE_NS_URL)) {
+		return notNull(
+		    hsr.getHeader(localName),
+		    prefix,
+		    localName);
+	    } else if (prefix.equals(COOKIE_P)) {
 		HttpServletRequest hsr =
 		    (HttpServletRequest) pageContext.getRequest();
 		Cookie[] c = hsr.getCookies();
 		for (int i = 0; i < c.length; i++)
 		    if (c[i].getName().equals(localName))
 			return c[i].getValue();
-		return null;
+		throw new UnresolvableException("$" + prefix + ":" + localName);
 	    } else
-		throw new UnresolvableException(prefix + ":" + localName);
+		throw new UnresolvableException("$" + prefix + ":" + localName);
         }
+
+	private Object notNull(Object o, String prefix, String localName)
+	        throws UnresolvableException {
+	    if (o == null)
+		throw new UnresolvableException("$" + prefix + ":" + localName);
+	    return o;
+	}
     }
 
     //*********************************************************************
