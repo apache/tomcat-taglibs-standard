@@ -1,27 +1,21 @@
 <html>
 <head>
-<title>JSPTL: Overview</title>
+<title>JSTL: Overview</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000">
 <h1>Overview</h1>
 <p>This document provides a high level overview of the JSP&#153; Standard Tag 
-  Library (JSTL) as it stands for Beta 2. If you have a 
-  strong opinion on the topic &#151; positive (you really like it), or constructive 
-  (we messed up some parts and you have some constructive comments for improvements) 
-  &#151; we'll be happy to hear from you at <a href="mailto:jsr-52-comments@jcp.org">jsr-52-comments@jcp.org</a>. 
-  All comments will be read but we cannot guaranteee personal replies to all of 
-  them. </p>
-<p>Make sure you read this document first, then check out the jstl-examples web 
+  Library (JSTL).</p>
+
+<p>Make sure you read this document first, then check out the standard-examples web 
   application in the release (once you have installed it on your web container 
   following the instructions in the <a href="GettingStarted.html">Getting Started</a> 
   document). This will help you get a good feel for what JSTL is all about. Then 
   browse the other docs to get all the details, and finally give JSTL a ride in 
-  your own <b>prototype</b> web application. You should use JSTL only in prototype 
-  webapps because this is Early Access and things may/will change as we gather 
-  feedback and make adjustments. Thanks for your help making JSTL an awesome standard 
-  tag library...</p>
+  your own <b>prototype</b> web application. Thanks for your help making JSTL an awesome standard 
+  tag library.</p>
 <h3>Design Philosophy</h3>
 <p>JSP tag libraries help provide a clean separation between the business logic 
   and the presentation layer of web applications. By keeping the programming logic 
@@ -29,8 +23,7 @@
   pages without having to resort to the scripting language associated with their 
   JSP pages (usually the Java programming language). </p>
 <p>The base design philosophy in JSTL is therefore to provide page authors with 
-  a script free environment. EA1 defines the foundation elements to make this 
-  possible.</p>
+  a script free environment.</p>
 <h3>Multiple TLDs</h3>
 <p>A Tag Library is a collection of actions that encapsulate functionality to 
   be used from within a JSP page. JSTL includes a wide variety of actions that 
@@ -103,17 +96,9 @@
   the EL-based tag libraries, while it is still possible for hard core scripting 
   page authors to use JSTL with rtexprvalues (provides benefits for type safety 
   and performance) via the request-time based tag libraries (their URI simply 
-  has the &quot;-rt&quot; suffix appended).</p>
-<p>It is a hard task for the Expert Group to decide on a specific EL without first 
-  getting the general feeling from the community. This is why JSTL currently 
-  does not define a specific EL, but provides mechanisms for experimentation with 
-  a variety of ELs. Tell us what you feel is important for that EL, and feel free 
-  to implement one that others can experiment with. The goal is to select a single 
-  EL once the JSTL spec is ready for Community Review.</p>
-<p>Early Access contains several candidate Expression Languages. One of them is 
-  an implementation subset of ECMAScript (JavaScript) and is the one used by default. 
-  Please check <a href="EcmaScriptEL.html">EcmaScript as an Expression Language 
-  for JSTL</a>.</p>
+  has the &quot;_rt&quot; suffix appended).</p>
+<p>After a lot of productive deliberation, the JSR-052 expert group
+  determined the syntax for a single expression language in JSTL.</p>
 <h3>Tag Collaboration</h3>
 <p>Tags usually collaborate with their environment in implicit and/or explicit 
   ways. Implicit collaboration is done via a well defined interface that allows 
@@ -143,14 +128,12 @@
   and an appropriate name is selected for any other secondary piece of information 
   exposed (e.g. an iteration current status information is exported by the foreach 
   tag via attribute <code>status</code>.)</p>
-<p>The fact that JSTL tags do not expose scripting variables would make it hard 
-  to collaborate with other tags whose data must be passed as rtexprvalues. To 
-  that effect, tag &lt;declare&gt; allows to declare a scripting variable to be 
-  associated with the JSP scoped attribute of the same name.</p>
 <h3>Tag Overloading</h3>
-<p>In JSTL, we try as much as possible to avoid too much &quot;overloading&quot; 
-  of a tag; i.e. tags with lots of attributes that can do just about anything. 
-  Rather, we privilege a larger number of tags with well focused behavior.</p>
+<p>One of the design principles of JSTL is to avoid too much
+&quot;overloading&quot; of a tag, that is, to avoid tags with lots of
+attributes that can do just about anything. Instead, JSTL gives
+preference to a (slightly) larger number of tags with well focused
+behavior.</p>
 <p>&nbsp;</p>
 </body>
 </html>

@@ -1,25 +1,18 @@
 <html>
 <head>
-<title>JSTL: Getting Started</title>
+<title>Getting Started</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 
 <body bgcolor="#FFFFFF">
-<h1>Getting started with JSTL 1.0 (Beta 2)</h1>
+<h1>Getting Started with the Standard 1.0 Taglib</h1>
 
-<p>This document describes how to get up and running quickly with JSTL's
-second early-access release.  It can be useful to page authors and tag
+<p>This document describes how to get up and running quickly with the
+Standard 1.0 taglib, an implementation of the Java Server Pages&#153; Standard
+Tag Library (JSTL). This document may be useful to page authors and tag
 developers who are interested in JSTL's functionality.  Using the
-"jstl-examples" application is also a great way to familiarize yourself
-with JSTL's functionality and use.</p>
-
-<p><b>IMPORTANT:</b> This release of JSTL is an early-access release and
-does not represent a standard of any kind.  The API and implementation are
-subject to change in the future. The major purpose of this release is to
-provide early information to the community of JSP developers about the
-direction and scope of JSTL.  Community feedback is actively sought; if
-you have any comments, please email us at
-<a href="mailto:jsr-52-comments@jcp.org">jsr-52-comments@jcp.org</a>.
+"standard-examples" application is also a great way to familiarize
+yourself with JSTL's functionality and use.</p>
 
 <hr />
 <h2>Introduction</h2>
@@ -27,8 +20,9 @@ you have any comments, please email us at
 <a name="#1.1" /></a>
 <h3>What is JSTL?  Where does it come from?</h3>
 
-<p>JSTL is the JSP(tm) Standard Tag Library.  It is an effort of the Java
-Community Process (JCP) and comes out of the JSR-052 expert group.</p>
+<p>JSTL is the Java Server Pages Standard Tag Library.  It is an
+effort of the Java Community Process (JCP) and comes out of the
+JSR-052 expert group.</p>
 
 <a name="#1.2" /></a>
 <h3>What does JSTL do?</h3>
@@ -43,67 +37,48 @@ the same everywhere.</p>
 JSP containers.  Also, when tags are standard, containers can recognize
 them and optimize their implementations.</p>
 
-<p>The current early-access release of JSTL has support for core iteration
+<p>JSTL provides support for core iteration
 and control-flow features, text inclusion, internationalizaton-capable
 formatting tags, and XML-manipulation tags.  It also supports an
-<i>expression language</i> to simplify page development, and it includes
-an experimental version of several such languages for testing purposes.  
+<i>expression language</i> to simplify page development.
 Developers may also be interested in JSTL's current extensibility
 mechanisms; JSTL currently provides a framework for integrating custom
 tags with JSTL tags.</p>
 
-<h3>What does "early access" mean?</h3>
-
-<p>As we noted above, <b>this release of JSTL is not an official release;
-it does not represent a final standard of any kind</b>.  Basing production
-systems on the APIs and implementations offered here is not advised.  The
-good news is that you still have time to comment on JSTL before it is
-finalized:  mail us at <a href="mailto:jsr-52-comments@jcp.org">
-jsr-52-comments@jcp.org</a> if you have any comments.</p>
-
-<h3>What has changed in this release?</h3>
+<h3>What has changed in this Standard taglib release?</h3>
 <p>Please see the <a href="ReleaseNotes.html">Release Notes</a> document for 
-  information on JSTL RI changes.</p>
+  information on any release changes.</p>
 
 <p>&nbsp;</p>
 
 <hr />
 <h2><a name="#2" /></a>Getting started quickly</h2>
 
-<p>JSTL 1.0 Beta 2 uses features provided only by the JSP 1.2 standard draft, so it requires 
-  a JSP 1.2 container. We recommend you test JSTL with Tomcat 4.0.</p>
+<p>The Standard 1.0 taglib uses features provided only by the JSP 1.2
+specification, so it requires a JSP 1.2 container. We recommend you
+test the Standard 1.0 taglib with Tomcat 4.0.</p>
 
 <p>To install Tomcat, follow the instructions at <a
 href="http://jakarta.apache.org/tomcat">http://jakarta.apache.org/tomcat</a>.
-To install the JSTL libraries for use in a web application, follow the
-instructions at <a
-href="http://jakarta.apache.org/taglibs/binarydist.html">
+To install the Standard 1.0 taglib for use in a web application, follow the
+instructions at <a href="http://jakarta.apache.org/taglibs/binarydist.html">
 http://jakarta.apache.org/taglibs/binarydist.html</a>.  You can also use
-the "jstl-examples" application as a guide.</p>
+the "standard-examples" application as a guide.</p>
 
-<!--
-<p>If your web application does not already use an XML parser, you will
-need to make one available because current versions of Tomcat do not. See
-the Tomcat 4 release notes (RELEASE-NOTES-4.0-B7.txt in the top level
-directory of your Tomcat distribution) for more information about XML
-parsers in Tomcat 4.</p>
--->
-
-<p>To use JSTL, include the 'standard.jar' file in your application's
-WEB-INF/lib directory.  If you use the default expression language
-(ECMAScript), you should also include the distribution's 'js.jar' file in
-WEB-INF/lib.</p>
+<p>To use the Standard 1.0 taglib, include the 'jstl.jar' and
+'standard.jar' files in your application's WEB-INF/lib directory.</p>
 
 <h3>Multiple tag libraries</h3>
 
-<p>See the <a href="Overview.html">Overview Document</a> for information
-on JSTL's constituent tag libraries.  That document lists JSTL's
-current TLD URIs and recommended taglib prefixes.</p>
+<p>See the <a href="Overview.html">Overview Document</a> for
+information on the constituent tag libraries of Standard 1.0.  That
+document lists the TLD URIs and recommended taglib prefixes.</p>
 
-<p>Using the JSTL libraries is simple; you simply need to import them into
-your JSP pages using the <b>taglib</b> directive.  For instance, to import
-the core JSTL library into your page, you would include the following line
-at the top of your JSP page, as follows:</p>
+<p>Using the Standard 1.0 libraries is simple; you simply need to import
+them into your JSP pages using the <b>taglib</b> directive.  For
+instance, to import the 'core' JSTL library into your page, you would
+include the following line at the top of your JSP page, as
+follows:</p>
 
 <pre>
     &lt;%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %&gt;
@@ -111,11 +86,16 @@ at the top of your JSP page, as follows:</p>
 
 <h3>Expression language</h3>
 
-<p>Half of JSTL's tag libraries -- the recommended ones -- rely on an expression language. The EL makes it easy for page authors to access and manipulate application data.</p> 
+<p>Half of JSTL's tags -- the recommended ones -- rely
+on an expression language. The EL makes it easy for page authors to
+access and manipulate application data.</p>
 
-<p>For an overview and detailed definition of the default EL see <a href="http://www.jcp.org/aboutJava/communityprocess/review/jsr052/index.html">JSTL 1.0 Specification</a> Chapter 3 and Appendix A respectively.</p>
+<p>For an overview and detailed definition of the default EL see Chapter 3 and Appendix A of the <a href="http://java.sun.com/products/jsp/jstl">JSTL 1.0 Specification</a>.</p>
  
-<p>The JSTL RI used to let you switch between a number of different expression languages to facilitate experimentation and feecback. Multiple languages are no longer supported since a default EL has been decided upon. </p>
+<p>Earlier versions of the Standard 1.0 taglib used to
+let you switch between a number of different expression languages to
+facilitate experimentation and feecback. Multiple languages are no
+longer supported since a default EL has been decided upon. </p>
 
 <p>
 
@@ -127,13 +107,14 @@ evaluate at runtime.  For example:</p>
     &lt;c:forEach items="<b>${page.myItems}</b>" /&gt;
 </pre>
 
-<h3>Topics covered in JSTL 1.0 Beta 2</h3>
+<h3>Topics covered in JSTL </h3>
 
-<p>As we mentioned above, JSTL 1.0 Beta 2 includes core tags to support iteration, conditionals, 
-  and expression-language support. For more information on precisely how these 
-  tags work, you should read the "Functional Description" documents provided as 
-  part of this distribution. Here, we just offer a quick roadmap of each feature 
-  in order to help orient you.</p>
+<p>As we mentioned above, JSTL includes core tags to support
+iteration, conditionals, and expression-language support. For more
+information on precisely how these tags work, you should read the
+"Functional Description" documents provided as part of this
+distribution. Here, we just offer a quick roadmap of each feature in
+order to help orient you.</p>
 
 <dl> 
   <dt><b>Iteration</b></dt>
@@ -176,10 +157,11 @@ evaluate at runtime.  For example:</p>
 
 <h3>For tag developers...</h3>
 
-<p>Developers of custom tags should also read the "Functional Descriptions" provided 
-  for each topic addressed by JSTL 1.0 EA. JSTL 1.0 EA provides some abstract classes 
-  that assist with rapid development of tags and promote integration of custom 
-  tags with JSTL's tag set.</p>
+<p>Developers of custom tags should also read the "Functional
+Descriptions" provided for each topic addressed by JSTL.
+JSTL defines some abstract classes that assist with rapid
+development of tags and promote integration of custom tags with JSTL's
+tag set.</p>
 
 <p>For instance, custom tags can use JSTL's expression-language
 mechanism.  As another example, extending
@@ -194,7 +176,7 @@ you easily implement iteration tags.  The handlers for the &lt;forEach&gt;
 and &lt;forTokens&gt; tags extend this class and thus implement the
 <tt>javax.servlet.jsp.jstl.core.IteratorTag</tt> interface, which provides
 a well-defined mechanism for iteration tags to communicate with custom
-subtags you can write.  See the "jstl-examples" application for one
+subtags you can write.  See the "standard-examples" application for one
 example of how you might use such custom subtags.</p>
 
 </body>
