@@ -419,23 +419,23 @@ public abstract class LoopTagSupport
             public boolean isLast() {
                 return (last);                // use cached value
             }
-            public boolean isBeginSpecified() {
-                return (beginSpecified);
+            public Integer getBegin() {
+                if (beginSpecified)
+                    return (new Integer(begin));
+                else
+                    return null;
             }
-            public boolean isEndSpecified() {
-                return (endSpecified);
+            public Integer getEnd() {
+                if (endSpecified)
+                    return (new Integer(end));
+                else
+                    return null;
             }
-            public boolean isStepSpecified() {
-                return (stepSpecified);
-            }
-            public int getBegin() {
-                return (begin);
-            }
-            public int getEnd() {
-                return (end);
-            }
-            public int getStep() {
-                return (step);
+            public Integer getStep() {
+                if (stepSpecified)
+                    return (new Integer(step));
+                else
+                    return null;
             }
         }
 

@@ -132,63 +132,30 @@ public interface LoopTagStatus {
     public boolean isLast();
 
     /**
-     * Returns information about whether the 'begin' attribute was
-     * specified.
+     * Returns the value of the 'begin' attribute for the associated tag,
+     * or null if no 'begin' attribute was specified.
      *
-     * @return <tt>true</tt> if 'begin' was specified, <tt>false</tt>
-     * otherwise.
+     * @return the 'begin' value for the associated tag, or null
+     * if no 'begin' attribute was specified
      */
-    public boolean isBeginSpecified();
+    public Integer getBegin();
 
     /**
-     * Returns information about whether the 'end' attribute was
-     * specified.
+     * Returns the value of the 'end' attribute for the associated tag,
+     * or null if no 'end' attribute was specified.
      *
-     * @return <tt>true</tt> if 'end' was specified, <tt>false</tt>
-     * otherwise.
+     * @return the 'end' value for the associated tag, or null
+     * if no 'end' attribute was specified
      */
-    public boolean isEndSpecified();
+    public Integer getEnd();
 
     /**
-     * Returns information about whether the 'step' attribute was
-     * specified.
+     * Returns the value of the 'step' attribute for the associated tag,
+     * or null if no 'step' attribute was specified.
      *
-     * @return <tt>true</tt> if 'step' was specified, <tt>false</tt>
-     * otherwise.
+     * @return the 'step' value for the associated tag, or null
+     * if no 'step' attribute was specified
      */
-    public boolean isStepSpecified();
-
-    /**
-     * Returns the value of the 'begin' attribute for the associated tag.  
-     * If this attribute was not specified, the result is undefined.
-     * (isBeginSpecified() should be called prior to this method to ensure
-     * that the result is sensible.)
-     *
-     * @return the 'begin' value for the associated tag, or an undefined
-     * value if this attribute was not specified.
-     */
-    public int getBegin();
-
-    /**
-     * Returns the value of the 'end' attribute for the associated tag.  
-     * If this attribute was not specified, the result is undefined.
-     * (isEndSpecified() should be called prior to this method to ensure
-     * that the result is sensible.)
-     *
-     * @return the 'end' value for the associated tag, or an undefined
-     * value if this attribute was not specified.
-     */
-    public int getEnd();
-
-    /**
-     * Returns the value of the 'step' attribute for the associated tag.  
-     * If this attribute was not specified, the result is undefined.
-     * (isStepSpecified() should be called prior to this method to ensure
-     * that the result is sensible.)
-     *
-     * @return the 'step' value for the associated tag, or an undefined
-     * value if this attribute was not specified.
-     */
-    public int getStep();
+    public Integer getStep();
 
 }
