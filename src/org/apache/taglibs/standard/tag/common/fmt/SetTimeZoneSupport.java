@@ -94,8 +94,9 @@ public abstract class SetTimeZoneSupport extends TagSupport {
 	init();
     }
 
+    // resets local state
     private void init() {
-	value = null;
+	value = var = null;
 	scope = "page";
     }
 
@@ -130,8 +131,12 @@ public abstract class SetTimeZoneSupport extends TagSupport {
 	    timeZone = (TimeZone) value;
 	}
 
-	Config.set(pageContext, Config.FMT_TIMEZONE, timeZone,
-		   Util.getScope(scope));
+	if (var != null) {
+	    pageContext.setAttribute(var, timeZone, Util.getScope(scope));
+	} else {
+	    Config.set(pageContext, Config.FMT_TIMEZONE, timeZone,
+		       Util.getScope(scope));
+	}
 
 	return EVAL_PAGE;
     }
