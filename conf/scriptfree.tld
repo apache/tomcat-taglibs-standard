@@ -38,7 +38,7 @@
     </init-param>
     <init-param>
       <param-name>allowRTExpressions</param-name>
-      <param-value>true</param-value>
+      <param-value>false</param-value>
       <description>
         Controls whether or not expressions used to supply request-time
         attribute values are considered valid.

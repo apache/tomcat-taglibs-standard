@@ -51,7 +51,7 @@
 
   <tag>
     <name>if</name>
-    <tag-class>org.apache.taglibs.standard.tag.common.core.IfTag</tag-class>
+    <tag-class>org.apache.taglibs.standard.tag.common.xml.IfTag</tag-class>
     <body-content>JSP</body-content>
     <description>
         XML conditional tag, which evalutes its body if the
