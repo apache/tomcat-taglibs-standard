@@ -86,22 +86,22 @@ public class JSTLVariableResolver
     if ("pageContext".equals (pName)) {
       return ctx;
     }
-    else if ("page".equals (pName)) {
+    else if ("pageScope".equals (pName)) {
       return ImplicitObjects.
 	getImplicitObjects (ctx).
 	getPageScopeMap ();
     }
-    else if ("request".equals (pName)) {
+    else if ("requestScope".equals (pName)) {
       return ImplicitObjects.
 	getImplicitObjects (ctx).
 	getRequestScopeMap ();
     }
-    else if ("session".equals (pName)) {
+    else if ("sessionScope".equals (pName)) {
       return ImplicitObjects.
 	getImplicitObjects (ctx).
 	getSessionScopeMap ();
     }
-    else if ("application".equals (pName)) {
+    else if ("applicationScope".equals (pName)) {
       return ImplicitObjects.
 	getImplicitObjects (ctx).
 	getApplicationScopeMap ();
@@ -111,10 +111,30 @@ public class JSTLVariableResolver
 	getImplicitObjects (ctx).
 	getParamMap ();
     }
-    else if ("params".equals (pName)) {
+    else if ("paramValues".equals (pName)) {
       return ImplicitObjects.
 	getImplicitObjects (ctx).
 	getParamsMap ();
+    }
+    else if ("header".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getHeaderMap ();
+    }
+    else if ("headerValues".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getHeadersMap ();
+    }
+    else if ("initParam".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getInitParamMap ();
+    }
+    else if ("cookie".equals (pName)) {
+      return ImplicitObjects.
+	getImplicitObjects (ctx).
+	getCookieMap ();
     }
 
     // Otherwise, just look it up in the page context

@@ -162,22 +162,22 @@ With type: java.lang.Boolean
 # looking up objects in scopes
 
 # val1a - defined in page scope
-Expression: ${page.val1a}
+Expression: ${pageScope.val1a}
 ExpectedType: class java.lang.String
 Evaluates to: page-scoped1
 With type: java.lang.String
 
-Expression: ${request.val1a}
+Expression: ${requestScope.val1a}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
 
-Expression: ${session.val1a}
+Expression: ${sessionScope.val1a}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
 
-Expression: ${application.val1a}
+Expression: ${applicationScope.val1a}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
@@ -189,22 +189,22 @@ With type: java.lang.String
 
 
 # val1b - defined in request scope
-Expression: ${page.val1b}
+Expression: ${pageScope.val1b}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
 
-Expression: ${request.val1b}
+Expression: ${requestScope.val1b}
 ExpectedType: class java.lang.String
 Evaluates to: request-scoped1
 With type: java.lang.String
 
-Expression: ${session.val1b}
+Expression: ${sessionScope.val1b}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
 
-Expression: ${application.val1b}
+Expression: ${applicationScope.val1b}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
@@ -216,22 +216,22 @@ With type: java.lang.String
 
 
 # val1c - defined in session scope
-Expression: ${page.val1c}
+Expression: ${pageScope.val1c}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
 
-Expression: ${request.val1c}
+Expression: ${requestScope.val1c}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
 
-Expression: ${session.val1c}
+Expression: ${sessionScope.val1c}
 ExpectedType: class java.lang.String
 Evaluates to: session-scoped1
 With type: java.lang.String
 
-Expression: ${application.val1c}
+Expression: ${applicationScope.val1c}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
@@ -243,22 +243,22 @@ With type: java.lang.String
 
 
 # val1d - defined in application scope
-Expression: ${page.val1d}
+Expression: ${pageScope.val1d}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
 
-Expression: ${request.val1d}
+Expression: ${requestScope.val1d}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
 
-Expression: ${session.val1d}
+Expression: ${sessionScope.val1d}
 ExpectedType: class java.lang.String
 Evaluates to: 
 With type: java.lang.String
 
-Expression: ${application.val1d}
+Expression: ${applicationScope.val1d}
 ExpectedType: class java.lang.String
 Evaluates to: app-scoped1
 With type: java.lang.String

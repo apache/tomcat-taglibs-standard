@@ -75,49 +75,49 @@ java.lang.Object
 # looking up objects in scopes
 
 # val1a - defined in page scope
-${page.val1a}
+${pageScope.val1a}
 java.lang.String
-${request.val1a}
+${requestScope.val1a}
 java.lang.String
-${session.val1a}
+${sessionScope.val1a}
 java.lang.String
-${application.val1a}
+${applicationScope.val1a}
 java.lang.String
 ${val1a}
 java.lang.String
 
 # val1b - defined in request scope
-${page.val1b}
+${pageScope.val1b}
 java.lang.String
-${request.val1b}
+${requestScope.val1b}
 java.lang.String
-${session.val1b}
+${sessionScope.val1b}
 java.lang.String
-${application.val1b}
+${applicationScope.val1b}
 java.lang.String
 ${val1b}
 java.lang.String
 
 # val1c - defined in session scope
-${page.val1c}
+${pageScope.val1c}
 java.lang.String
-${request.val1c}
+${requestScope.val1c}
 java.lang.String
-${session.val1c}
+${sessionScope.val1c}
 java.lang.String
-${application.val1c}
+${applicationScope.val1c}
 java.lang.String
 ${val1c}
 java.lang.String
 
 # val1d - defined in application scope
-${page.val1d}
+${pageScope.val1d}
 java.lang.String
-${request.val1d}
+${requestScope.val1d}
 java.lang.String
-${session.val1d}
+${sessionScope.val1d}
 java.lang.String
-${application.val1d}
+${applicationScope.val1d}
 java.lang.String
 ${val1d}
 java.lang.String

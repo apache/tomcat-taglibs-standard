@@ -62,6 +62,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
 
@@ -95,6 +97,10 @@ public class ImplicitObjects
   Map mApplication;
   Map mParam;
   Map mParams;
+  Map mHeader;
+  Map mHeaders;
+  Map mInitParam;
+  Map mCookie;
 
   //-------------------------------------
   /**
@@ -205,6 +211,62 @@ public class ImplicitObjects
       mParams = createParamsMap (mContext);
     }
     return mParams;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the Map that maps header name to a single header
+   * values.
+   **/
+  public Map getHeaderMap ()
+  {
+    if (mHeader == null) {
+      mHeader = createHeaderMap (mContext);
+    }
+    return mHeader;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the Map that maps header name to an array of header
+   * values.
+   **/
+  public Map getHeadersMap ()
+  {
+    if (mHeaders == null) {
+      mHeaders = createHeadersMap (mContext);
+    }
+    return mHeaders;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the Map that maps init parameter name to a single init
+   * parameter values.
+   **/
+  public Map getInitParamMap ()
+  {
+    if (mInitParam == null) {
+      mInitParam = createInitParamMap (mContext);
+    }
+    return mInitParam;
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Returns the Map that maps cookie name to the first matching
+   * Cookie in request.getCookies().
+   **/
+  public Map getCookieMap ()
+  {
+    if (mCookie == null) {
+      mCookie = createCookieMap (mContext);
+    }
+    return mCookie;
   }
 
   //-------------------------------------
@@ -415,6 +477,140 @@ public class ImplicitObjects
 	  return false;
 	}
       };
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Creates the Map that maps header name to single header
+   * value.
+   **/
+  public static Map createHeaderMap (PageContext pContext)
+  {
+    final HttpServletRequest request =
+      (HttpServletRequest) pContext.getRequest ();
+    return new EnumeratedMap ()
+      {
+	public Enumeration enumerateKeys () 
+	{
+	  return request.getHeaderNames ();
+	}
+
+	public Object getValue (Object pKey) 
+	{
+	  if (pKey instanceof String) {
+	    return request.getHeader ((String) pKey);
+	  }
+	  else {
+	    return null;
+	  }
+	}
+
+	public boolean isMutable ()
+	{
+	  return false;
+	}
+      };
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Creates the Map that maps header name to an array of header
+   * values.
+   **/
+  public static Map createHeadersMap (PageContext pContext)
+  {
+    final HttpServletRequest request =
+      (HttpServletRequest) pContext.getRequest ();
+    return new EnumeratedMap ()
+      {
+	public Enumeration enumerateKeys () 
+	{
+	  return request.getHeaderNames ();
+	}
+
+	public Object getValue (Object pKey) 
+	{
+	  if (pKey instanceof String) {
+	    // Drain the header enumeration
+	    List l = new ArrayList ();
+	    Enumeration enum = request.getHeaders ((String) pKey);
+	    if (enum != null) {
+	      while (enum.hasMoreElements ()) {
+		l.add (enum.nextElement ());
+	      }
+	    }
+	    String [] ret = (String []) l.toArray (new String [l.size ()]);
+	    return ret;
+	  }
+	  else {
+	    return null;
+	  }
+	}
+
+	public boolean isMutable ()
+	{
+	  return false;
+	}
+      };
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Creates the Map that maps init parameter name to single init
+   * parameter value.
+   **/
+  public static Map createInitParamMap (PageContext pContext)
+  {
+    final ServletContext context = pContext.getServletContext ();
+    return new EnumeratedMap ()
+      {
+	public Enumeration enumerateKeys () 
+	{
+	  return context.getInitParameterNames ();
+	}
+
+	public Object getValue (Object pKey) 
+	{
+	  if (pKey instanceof String) {
+	    return context.getInitParameter ((String) pKey);
+	  }
+	  else {
+	    return null;
+	  }
+	}
+
+	public boolean isMutable ()
+	{
+	  return false;
+	}
+      };
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Creates the Map that maps cookie name to the first matching
+   * Cookie in request.getCookies().
+   **/
+  public static Map createCookieMap (PageContext pContext)
+  {
+    // Read all the cookies and construct the entire map
+    HttpServletRequest request = (HttpServletRequest) pContext.getRequest ();
+    Cookie [] cookies = request.getCookies ();
+    Map ret = new HashMap ();
+    for (int i = 0; cookies != null && i < cookies.length; i++) {
+      Cookie cookie = cookies [i];
+      if (cookie != null) {
+	String name = cookie.getName ();
+	if (!ret.containsKey (name)) {
+	  ret.put (name, cookie);
+	}
+      }
+    }
+    return ret;
   }
 
   //-------------------------------------
