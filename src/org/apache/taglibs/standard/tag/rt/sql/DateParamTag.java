@@ -52,48 +52,25 @@
  * <http://www.apache.org/>.
  *
  */ 
-package org.apache.taglibs.standard.tag.common.sql;
+package org.apache.taglibs.standard.tag.rt.sql;
 
-import java.util.*;
 import javax.servlet.jsp.*;
-import javax.servlet.jsp.jstl.sql.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.resources.Resources;
-
+import java.util.Date;
+import org.apache.taglibs.standard.lang.support.*;
+import org.apache.taglibs.standard.tag.common.sql.DateParamTagSupport;
 
 /**
- * <p>Tag handler for &lt;Param&gt; in JSTL, used to set
- * parameter values for a SQL statement.</p>
- * 
- * @author Hans Bergsten
+ * Subclass for the JSTL library with rtexprvalue support.
+ *
+ * @author Justyna Horwat
  */
+public class DateParamTag extends DateParamTagSupport {
+    
+    public void setValue(Date value) {
+	this.rawValue = value;
+    }
 
-public abstract class ParamTagSupport extends BodyTagSupport {
-    protected Object value;
-
-    //*********************************************************************
-    // Tag logic
-
-    public int doEndTag() throws JspException {
-	SQLExecutionTag parent = (SQLExecutionTag) 
-	    findAncestorWithClass(this, SQLExecutionTag.class);
-	if (parent == null) {
-	    throw new JspTagException(
-                Resources.getMessage("SQL_PARAM_OUTSIDE_PARENT"));
-	}
-
-	Object paramValue = null;
-	if (value != null) {
-	    paramValue = value;
-	}
-	else if (bodyContent != null) {
-	    paramValue = bodyContent.getString().trim();
-	    if (((String) paramValue).trim().length() == 0) {
-		paramValue = null;
-	    }
-	}
-
-	parent.addSQLParameter(paramValue);
-	return EVAL_PAGE;
+    public void setType(String type) {
+	this.type = type;
     }
 }

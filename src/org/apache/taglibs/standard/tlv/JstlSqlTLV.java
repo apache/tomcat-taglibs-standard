@@ -81,6 +81,7 @@ public class JstlSqlTLV extends JstlBaseTLV {
     private final String UPDATE = "update";
     private final String TRANSACTION = "transaction";
     private final String PARAM = "param";
+    private final String DATEPARAM = "dateParam";
 
     private final String JSP_TEXT = "jsp:text";
 
@@ -168,7 +169,8 @@ public class JstlSqlTLV extends JstlBaseTLV {
              *   </c:forEach>
              *  </sql:query>
              */
-            if (isTag(qn, PARAM) && (queryDepths.empty() && updateDepths.empty()) ) {
+            if ( (isTag(qn, PARAM) || isTag(qn, DATEPARAM)) 
+                && (queryDepths.empty() && updateDepths.empty()) ) {
                 fail(Resources.getMessage("SQL_PARAM_OUTSIDE_PARENT"));
             }
 
@@ -196,6 +198,10 @@ public class JstlSqlTLV extends JstlBaseTLV {
                 if (hasAttribute(a, DATASOURCE) && !transactionDepths.empty()) {
                     fail(Resources.getMessage("ERROR_NESTED_DATASOURCE"));
                 }
+            }
+
+            if (isTag(qn, DATEPARAM)) {
+                bodyIllegal = true;
             }
 
 	    // record the most recent tag (for error reporting)

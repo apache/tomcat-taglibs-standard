@@ -52,48 +52,50 @@
  * <http://www.apache.org/>.
  *
  */ 
-package org.apache.taglibs.standard.tag.common.sql;
+package org.apache.taglibs.standard.tag.el.sql;
 
-import java.util.*;
 import javax.servlet.jsp.*;
-import javax.servlet.jsp.jstl.sql.*;
-import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.resources.Resources;
-
+import org.apache.taglibs.standard.lang.support.*;
+import org.apache.taglibs.standard.tag.common.sql.DateParamTagSupport;
 
 /**
- * <p>Tag handler for &lt;Param&gt; in JSTL, used to set
- * parameter values for a SQL statement.</p>
- * 
- * @author Hans Bergsten
+ * Subclass for the JSTL library with EL support.
+ *
+ * @author Justyna Horwat
  */
+public class DateParamTag extends DateParamTagSupport {
+    
+    private String valueEL;
+    private String typeEL;
 
-public abstract class ParamTagSupport extends BodyTagSupport {
-    protected Object value;
+    public void setValue(String valueEL) {
+	this.valueEL = valueEL;
+    }
+
+    public void setType(String typeEL) {
+	this.typeEL = typeEL;
+    }
+
+    public int doStartTag() throws JspException {
+        evaluateExpressions();
+	return super.doStartTag();
+    }
 
     //*********************************************************************
-    // Tag logic
+    // Private utility methods
 
-    public int doEndTag() throws JspException {
-	SQLExecutionTag parent = (SQLExecutionTag) 
-	    findAncestorWithClass(this, SQLExecutionTag.class);
-	if (parent == null) {
-	    throw new JspTagException(
-                Resources.getMessage("SQL_PARAM_OUTSIDE_PARENT"));
+    // Evaluates expressions as necessary
+    private void evaluateExpressions() throws JspException {
+	if (valueEL != null) {
+	    rawValue = (Object) 
+		ExpressionEvaluatorManager.evaluate("value", valueEL, 
+		    Object.class, this, pageContext);
 	}
-
-	Object paramValue = null;
-	if (value != null) {
-	    paramValue = value;
-	}
-	else if (bodyContent != null) {
-	    paramValue = bodyContent.getString().trim();
-	    if (((String) paramValue).trim().length() == 0) {
-		paramValue = null;
-	    }
-	}
-
-	parent.addSQLParameter(paramValue);
-	return EVAL_PAGE;
+	if (typeEL != null) {
+	    type = (String) 
+		ExpressionEvaluatorManager.evaluate("type", typeEL, 
+		    String.class, this, pageContext);
+        }
     }
+
 }

@@ -55,6 +55,9 @@
 package org.apache.taglibs.standard.tag.common.sql;
 
 import java.util.*;
+import java.sql.Time;
+import java.sql.Date;
+import java.sql.Timestamp;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.jstl.sql.*;
 import javax.servlet.jsp.tagext.*;
@@ -65,11 +68,26 @@ import org.apache.taglibs.standard.resources.Resources;
  * <p>Tag handler for &lt;Param&gt; in JSTL, used to set
  * parameter values for a SQL statement.</p>
  * 
- * @author Hans Bergsten
+ * @author Justyna Horwat
  */
 
-public abstract class ParamTagSupport extends BodyTagSupport {
-    protected Object value;
+public abstract class DateParamTagSupport extends BodyTagSupport {
+    protected java.util.Date value;
+    protected String type;
+    protected Object rawValue;
+
+    //*********************************************************************
+    // Constructor
+
+    public DateParamTagSupport() {
+        super();
+        init();
+    }
+
+    private void init() {
+        value = null;
+        type = "TIMESTAMP";
+    }
 
     //*********************************************************************
     // Tag logic
@@ -82,18 +100,36 @@ public abstract class ParamTagSupport extends BodyTagSupport {
                 Resources.getMessage("SQL_PARAM_OUTSIDE_PARENT"));
 	}
 
-	Object paramValue = null;
-	if (value != null) {
-	    paramValue = value;
-	}
-	else if (bodyContent != null) {
-	    paramValue = bodyContent.getString().trim();
-	    if (((String) paramValue).trim().length() == 0) {
-		paramValue = null;
-	    }
-	}
+        if (rawValue != null) {
+            value = getConvertedValue();
+        }
 
-	parent.addSQLParameter(paramValue);
+	parent.addSQLParameter(value);
 	return EVAL_PAGE;
+    }
+
+    //*********************************************************************
+    // Private utility methods
+
+    private java.util.Date getConvertedValue() {
+        if (type.equalsIgnoreCase("TIMESTAMP")) {
+            if (!(rawValue instanceof java.sql.Timestamp)) {
+                return new java.sql.Timestamp(
+                    ((java.util.Date)rawValue).getTime());
+            }
+        }
+        if (type.equalsIgnoreCase("TIME")) {
+            if (!(rawValue instanceof java.sql.Time)) {
+                return new java.sql.Time(
+                    ((java.util.Date)rawValue).getTime());
+            }
+        }
+        if (type.equalsIgnoreCase("DATE")) {
+            if (!(rawValue instanceof java.sql.Date)) {
+                return new java.sql.Date(
+                    ((java.util.Date)rawValue).getTime());
+            }
+        }
+        return (java.util.Date)rawValue;
     }
 }
