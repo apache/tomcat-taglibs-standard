@@ -140,12 +140,12 @@ public abstract class ParseDateSupport extends BodyTagSupport {
 		    && ((bcs = bc.getString()) != null)) {
 		value = bcs.trim();
 	    }
-	    if ((value == null) || value.equals("")) {
-		if (var != null) {
-		    pageContext.removeAttribute(var, scope);
-		}
-		return EVAL_PAGE;
+	}
+	if ((value == null) || value.equals("")) {
+	    if (var != null) {
+		pageContext.removeAttribute(var, scope);
 	    }
+	    return EVAL_PAGE;
 	}
 
 	/*
