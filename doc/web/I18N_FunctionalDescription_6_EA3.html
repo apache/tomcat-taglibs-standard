@@ -250,10 +250,15 @@ this order).
 3. Response encoding</h3>
 Every action that is responsible for establishing a locale passes that
 locale to the <tt>setLocale()</tt> method of the <tt>javax.servlet.ServletResponse</tt>.
+(This assumes that the response is buffered with a big enough buffer size,
+since <tt>setLocale()</tt> and <tt>setContentType()</tt> must be called
+before <tt>ServletResponse.getWriter()</tt> in order for the charset to
+affect the construction of the writer.)
 <p>More specifically, the response's <tt>setLocale()</tt> method is always
 called by the <tt>&lt;locale></tt> action. In addition, it is called by
-the following actions in the absence of the <tt>javax.servlet.jsp.jstl.i18n.locale</tt>
-attribute:
+the following actions if browser-sensing capabilities for locales are enabled
+(that is, in the absence of the <tt>javax.servlet.jsp.jstl.i18n.locale</tt>
+attribute):
 <br>&nbsp;
 <li>
 Any <tt>&lt;bundle></tt> action.</li>
@@ -266,19 +271,16 @@ name (defined by the <tt>javax.servlet.jsp.jstl.i18n.basename</tt> attribute).</
 A <tt>&lt;formatNumber></tt> or <tt>&lt;formatDate></tt> action that is
 not enclosed within a <tt>&lt;bundle> </tt>action.</li>
 
-<br>&nbsp;
-<p>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<p>After an action has called <tt>ServletResponse.setLocale()</tt>, it
-determines the character encoding associated with the locale (by calling
+<p><br>After an action has called <tt>ServletResponse.setLocale()</tt>,
+it determines the character encoding associated with the locale (by calling
 <tt>ServletResponse.getCharacterEncoding()</tt>)
 and stores it in the <tt>javax.servlet.jsp.jstl.i18n.request.charset</tt>
 session attribute. This attribute may be used by the <tt>&lt;requestEncoding></tt>
-action in a page invoked by a form included in the response to set the
-request charset to the same as the response charset. This makes it possible
-for the container to decode the form parameter values properly, since browsers
-typically encode form field values using the response's charset.
+action (see Section 16)&nbsp;in a page invoked by a form included in the
+response to set the request charset to the same as the response charset.
+This makes it possible for the container to decode the form parameter values
+properly, since browsers typically encode form field values using the response's
+charset.
 <h3>
 4. Time zone</h3>
 The <tt>javax.servlet.jsp.jstl.i18n.timeZone </tt>JSP attribute specifies
