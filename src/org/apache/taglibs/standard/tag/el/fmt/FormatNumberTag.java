@@ -160,7 +160,7 @@ public class FormatNumberTag extends FormatNumberSupport {
     }
 
     // for EL-based attribute
-    public void setMinIntegerUsed(String minIntegerDigits_) {
+    public void setMinIntegerDigits(String minIntegerDigits_) {
         this.minIntegerDigits_ = minIntegerDigits_;
 	this.minIntegerDigitsSpecified = true;
     }
