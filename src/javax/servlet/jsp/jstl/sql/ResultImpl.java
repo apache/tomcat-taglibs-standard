@@ -192,7 +192,7 @@ class ResultImpl implements Result {
     }
 
     /**
-     * Returns true of the query was limited by a maximum row setting
+     * Returns true if the query was limited by a maximum row setting
      *
      * @return true if the query was limited by a MaxRows attribute
      */

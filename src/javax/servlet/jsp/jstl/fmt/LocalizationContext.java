@@ -64,10 +64,10 @@ import java.util.Locale;
  * <p> An I18N localization context has two components: a resource bundle and
  * the locale that led to the resource bundle match.
  *
- * <p> The resource bundle component is used by <fmt:message> for mapping
+ * <p> The resource bundle component is used by &lt;fmt:message&gt; for mapping
  * message keys to localized messages, and the locale component is used by the
- * <fmt:message>, <fmt:formatNumber>, <fmt:parseNumber>, <fmt:formatDate>,
- * and <fmt:parseDate> actions as their formatting locale.
+ * &lt;fmt:message&gt;, &lt;fmt:formatNumber&gt;, &lt;fmt:parseNumber&gt;, &lt;fmt:formatDate&gt;,
+ * and &lt;fmt:parseDate&gt; actions as their formatting locale.
  *
  * @author Jan Luehe
  */

@@ -87,8 +87,8 @@ public class LocaleSupport {
      *
      * <p> If the configuration setting is empty, or the default I18N
      * localization context does not contain any resource bundle, or the given
-     * key is undefined in its resource bundle, the string "???<key>???" is
-     * returned, where "<key>" is replaced with the given key.
+     * key is undefined in its resource bundle, the string "???&lt;key&gt;???" is
+     * returned, where "&lt;key&gt;" is replaced with the given key.
      * 
      * @param pageContext the page in which to get the localized message
      * corresponding to the given key  
@@ -108,8 +108,8 @@ public class LocaleSupport {
      * base name.
      *
      * <p> If no resource bundle with the given base name exists, or the given
-     * key is undefined in the resource bundle, the string "???<key>???" is
-     * returned, where "<key>" is replaced with the given key.
+     * key is undefined in the resource bundle, the string "???&lt;key&gt;???" is
+     * returned, where "&lt;key&gt;" is replaced with the given key.
      * 
      * @param pageContext the page in which to get the localized message
      * corresponding to the given key  
@@ -129,7 +129,7 @@ public class LocaleSupport {
      * performs parametric replacement using the arguments specified via
      * <tt>args</tt>.
      *
-     * <p> See the specification of the <fmt:message> action for a description
+     * <p> See the specification of the &lt;fmt:message&gt; action for a description
      * of how parametric replacement is implemented.
      *
      * <p> The localized message is retrieved as in
@@ -153,7 +153,7 @@ public class LocaleSupport {
      * performs parametric replacement using the arguments specified via
      * <tt>args</tt>.
      *
-     * <p> See the specification of the <fmt:message> action for a description
+     * <p> See the specification of the &lt;fmt:message&gt; action for a description
      * of how parametric replacement is implemented.
      *
      * <p> The localized message is retrieved as in

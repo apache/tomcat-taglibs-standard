@@ -114,7 +114,7 @@ public abstract class ConditionalTagSupport
     // Lifecycle management and implementation of conditional behavior
 
     /**
-     * Includes its body if <tt>condition()</tt> evalutes to true.
+     * Includes its body if <tt>condition()</tt> evaluates to true.
      */
     public int doStartTag() throws JspException {
 
