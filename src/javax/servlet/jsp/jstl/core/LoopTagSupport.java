@@ -59,37 +59,36 @@ import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 
 /**
- * <p>JSTL 1.0 allows developers to write custom iteration tags by
- * implementing the LoopTag interface.  (This is not to be confused with
- * javax.servlet.jsp.tagext.IterationTag as defined in JSP 1.2.) 
- * LoopTag establishes a mechanism for iteration tags to be recognized
- * and for type-safe communication with custom subtags.
- * </p>
- * 
+ * <p>Base support class to facilitate implementation of iteration tags.</p>
+ *
  * <p>Since most iteration tags will behave identically with respect to
- * actual iterative behavior, however, JSTL 1.0 provides this
+ * actual iterative behavior, JSTL provides this
  * base support class to facilitate implementation.  Many iteration tags
- * will extend this and merely implement the hasNext() and next() methods
+ * will extend this and merely implement the <tt>hasNext()</tt> and 
+ * <tt>next()</tt> methods
  * to provide contents for the handler to iterate over.</p>
  *
  * <p>In particular, this base class provides support for:</p>
  * 
  * <ul>
- *  <li> iteration control, based on protected next() and hasNext() methods
- *  <li> subsetting (begin, end, step functionality, including validation
+ *  <li> Iteration control, based on protected <tt>prepare()</tt>, <tt>next()</tt>,
+ *       and <tt>hasNext()</tt> methods
+ *  <li> Subsetting (<tt>begin</tt>, <tt>end</tt>, <tt>step></tt>functionality, 
+ *       including validation
  *       of subset parameters for sensibility)
- *  <li> item retrieval (getCurrent())
- *  <li> status retrieval (LoopTagStatus)
- *  <li> exposing attributes (set by 'var' and 'varStatus' attributes)
+ *  <li> item retrieval (<tt>getCurrent()</tt>)
+ *  <li> status retrieval (<tt>LoopTagStatus</tt>)
+ *  <li> exposing attributes (set by <tt>var</tt> and <tt>varStatus</tt> attributes)
  * </ul>
  *
- * <p>In providing support for these tasks, LoopTagSupport contains
+ * <p>In providing support for these tasks, <tt>LoopTagSupport</tt> contains
  * certain control variables that act to modify the iteration.  Accessors
  * are provided for these control variables when the variables represent
- * information needed or wanted at translation time (e.g., var, status).  For
+ * information needed or wanted at translation time (e.g., <tt>var</tt>, 
+ * <tt>varStatus</tt>).  For
  * other variables, accessors cannot be provided here since subclasses
  * may differ on their implementations of how those accessors are received.
- * For instance, one subclass might accept a String and convert it into
+ * For instance, one subclass might accept a <tt>String</tt> and convert it into
  * an object of a specific type by using an expression evaluator; others
  * might accept objects directly.  Still others might not want to expose
  * such information to outside control.</p>
@@ -172,8 +171,9 @@ public abstract class LoopTagSupport
 
     /**
      * Constructs a new LoopTagSupport.  As with TagSupport, subclasses
-     * should not provide other constructors and are expected to call
-     * the superclass constructor
+     * should not implement constructors with arguments, and no-arguments
+     * constructors implemented by subclasses must call the superclass
+     * constructor.
      */
     public LoopTagSupport() {
         super();
