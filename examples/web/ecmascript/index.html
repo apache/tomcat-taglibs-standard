@@ -28,15 +28,19 @@
 </table>
 <!-- #BeginEditable "body" --> 
 <h2>EcmaScript Expression Language Examples</h2>
-<p>In order to use EcmaScript, make sure to set the context parameter to the EcmaScript 
-  expression language in your web.xml file as follows:
-<p> 
-<pre>
+<p>In EA2, EcmaScript is the default Expression Language. Instructions below were 
+  necessary only with EA1 when there were no default EL (and one had to be explicitely 
+  defined).
+<blockquote>
+  <p>In order to use EcmaScript, make sure to set the context parameter to the 
+    EcmaScript expression language in your web.xml file as follows:</p>
+  <pre>
     &lt;context-param&gt;
         &lt;param-name&gt;javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass&lt;/param-name&gt;
         &lt;param-value&gt;org.apache.taglibs.standard.lang.javascript.JavascriptExpressionEvaluator&lt;/param-value&gt;
     &lt;/context-param&gt;
 </pre>
+</blockquote>
 <h3>Arithmetic Operators&nbsp;&nbsp; <a href="../ShowSource.jsp?filename=/ecmascript/ArithmeticOperators.jsp"><img src="../images/code.gif" width="24" height="24" border="0"></a> 
   <a href="ArithmeticOperators.jsp"><img src="../images/execute.gif" width="24" height="24" border="0"></a> 
 </h3>
@@ -87,7 +91,7 @@ The key and value of a Map.Entry object can be accessed directly.<br>
   <a href="FunctionCall.jsp"><img src="../images/execute.gif" width="24" height="24" border="0"></a> 
 </h3>
 Functions can be invoked using the () operator.<br>
-<!-- #EndEditable -->
+<!-- #EndEditable --> 
 <hr noshade color="#000099">
 <table width="100%" border="0" cellpadding="5">
   <tr> 
