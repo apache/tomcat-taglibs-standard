@@ -190,8 +190,9 @@ public class ForEachTag
 	if (items_ != null) {
             rawItems = ExpressionEvaluatorManager.evaluate(
                 "items", items_, Object.class, this, pageContext);
+	    // use an empty list to indicate "no iteration", if relevant
 	    if (rawItems == null)
-		throw new NullAttributeException("forEach", "items");
+		rawItems = new ArrayList();
         }
     }
 }
