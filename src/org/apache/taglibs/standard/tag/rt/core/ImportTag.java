@@ -79,12 +79,12 @@ public class ImportTag extends ImportSupport {
 
     // for tag attribute
     public void setContext(String context) throws JspTagException {
-        this.url = context;
+        this.context = context;
     }
 
     // for tag attribute
     public void setCharEncoding(String charEncoding) throws JspTagException {
-        this.url = charEncoding;
+        this.charEncoding = charEncoding;
     }
 
 }
