@@ -246,7 +246,8 @@ public abstract class LoopTagSupport
 
         // make sure 'begin' isn't greater than 'end'
         if (end != -1 && begin > end)
-            return SKIP_BODY;                   // nothing to do
+	    throw new JspTagException(
+		"begin (" + begin + ") > end (" + end + ")");
 
         // we're beginning a new iteration, so reset our counts (etc.)
         index = 0;
