@@ -13,7 +13,7 @@
 <c:urlEncode var="param2" value="$_paramValue2"/>
 <c:urlEncode var="param3" value="$_paramValue3"/>
 
-<c:import url="contextUrl" context="contextName>
+<c:import url="$_contextUrl" context="$_contextName">
     <c:param name="$_paramName1" value="$param1"/>
     <c:param name="$_paramName2" value="$param2"/>
     <c:param name="$_paramName3" value="$param3"/>
