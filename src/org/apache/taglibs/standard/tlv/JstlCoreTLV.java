@@ -79,6 +79,8 @@ import org.apache.taglibs.standard.resources.Resources;
  *      'value' is specified; it *must* have a body otherwise.)  For
  *      these purposes, "having a body" refers to non-whitespace
  *      content inside the tag.</li>
+ *   <li><message> with 'messageArgs' attribute must not have any <messageArg>
+ *      subtags as its direct children.</li>
  *   <li>Other minor constraints.</li>
  * </ul>
  * 
@@ -117,6 +119,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
     private final String PARAM = "param";
     private final String URL_ENCODE = "urlEncode";
     private final String EXPLANG = "expressionLanguage";
+    private final String MESSAGE = "message";
+    private final String MESSAGE_ARG = "messageArg";
     private final String JSP_TEXT = "jsp:text";
 
     // attribute names
@@ -124,6 +128,7 @@ public class JstlCoreTLV extends JstlBaseTLV {
     private final String VALUE = "value";
     private final String DEFAULT = "default";
     private final String VAR_READER = "varReader";
+    private final String MESSAGE_ARGS = "messageArgs";
 
 
     //*********************************************************************
@@ -147,6 +152,8 @@ public class JstlCoreTLV extends JstlBaseTLV {
 	private Stack expressionLanguage = new Stack();
 	private Stack importWithReaderDepths = new Stack();
 	private Stack importWithoutReaderDepths = new Stack();
+	private Stack messageDepths = new Stack();
+	private Stack messageHasMessageArgs = new Stack();
 	private String lastElementName = null;
 	private boolean bodyNecessary = false;
 	private boolean bodyIllegal = false;
@@ -241,7 +248,20 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		// <param> is allowed
 		if (!isTag(qn, PARAM))
 		    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
-			qn, prefix, IMPORT));
+			prefix, IMPORT, qn));
+	    }
+
+	    // check invariants for <message>
+	    if (messageChild()
+	            && ((Boolean) messageHasMessageArgs.peek()).booleanValue()) {
+		/*
+		 * we're the direct child of a <message messageArgs="..."> tag,
+		 * which means that <messageArg> tags are illegal
+		 */
+		if (isTag(qn, MESSAGE_ARG)) {
+		    fail(Resources.getMessage("TLV_ILLEGAL_PARAM",
+		        prefix, MESSAGE_ARG, MESSAGE, MESSAGE_ARGS));
+		}
 	    }
 
 	    // now, modify state
@@ -261,6 +281,15 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		    importWithoutReaderDepths.push(new Integer(depth));
 		    lastImportHadReader = false;
 		}
+	    }
+
+	    // if we're in a <message>, record relevant state
+	    if (isTag(qn, MESSAGE)) {
+		messageDepths.push(new Integer(depth));
+		if (hasAttribute(a, MESSAGE_ARGS))
+		    messageHasMessageArgs.push(new Boolean(true));
+		else
+		    messageHasMessageArgs.push(new Boolean(false));
 	    }
 
 	    // set up a check against illegal attribute/body combinations
@@ -343,6 +372,12 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		    importWithoutReaderDepths.pop();
 	    }
 
+	    // update <message>-related state
+	    if (isTag(qn, MESSAGE)) {
+		messageDepths.pop();
+		messageHasMessageArgs.pop();
+	    }
+
 	    // update language state
 	    if (isTag(qn, EXPLANG))
 		expressionLanguage.pop();
@@ -357,5 +392,10 @@ public class JstlCoreTLV extends JstlBaseTLV {
 		&& (depth - 1) == ((Integer) chooseDepths.peek()).intValue());
 	}
 
+	// are we directly under a <message>
+	private boolean messageChild() {
+	    return (!messageDepths.empty()
+		&& (depth - 1) == ((Integer) messageDepths.peek()).intValue());
+	}
     }
 }
