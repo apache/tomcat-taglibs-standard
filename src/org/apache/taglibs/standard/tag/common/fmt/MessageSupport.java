@@ -82,8 +82,9 @@ public abstract class MessageSupport extends BodyTagSupport {
     //*********************************************************************
     // Protected state
 
-    protected String key;                              // 'key' attribute
-    protected ResourceBundle bundle;                   // 'bundle' attribute
+    protected String key;                         // 'key' attribute
+    protected ResourceBundle bundle;              // 'bundle' attribute
+    protected Object[] messageArgs;               // 'messageArgs' attribute
 
 
     //*********************************************************************
@@ -106,12 +107,13 @@ public abstract class MessageSupport extends BodyTagSupport {
     private void init() {
 	key = var = null;
 	bundle = null;
+	messageArgs = null;
 	scope = PageContext.PAGE_SCOPE;
 	arguments.clear();
     }
 
 
-   //*********************************************************************
+    //*********************************************************************
     // Tag attributes known at translation time
 
     public void setVar(String var) {
@@ -165,11 +167,14 @@ public abstract class MessageSupport extends BodyTagSupport {
 		if (prefix != null)
 		    key = prefix + key;
 		message = bundle.getString(key);
-		if (!arguments.isEmpty()) {
+		// Perform parametric replacement if required
+		if (!arguments.isEmpty())
+		    messageArgs = arguments.toArray();
+		if (messageArgs != null) {
 		    MessageFormat formatter = new MessageFormat("");
 		    formatter.setLocale(bundle.getLocale());
 		    formatter.applyPattern(message);
-		    message = formatter.format(arguments.toArray());
+		    message = formatter.format(messageArgs);
 		}
 	    } catch (MissingResourceException mre) {
 		ServletContext sc = pageContext.getServletContext();

@@ -146,6 +146,13 @@ public class Init implements ServletContextListener {
 	// don't use 'enum' for attribute name because it is a 
 	// reserved word in EcmaScript.
         sce.getServletContext().setAttribute("enumeration", enum);
+
+	/**
+	 * Message arguments for parametric replacement
+	 */
+	Object[] messageArgs =
+	    new Object[] { sce.getServletContext().getServerInfo() };
+	sce.getServletContext().setAttribute("messageArgs", messageArgs);
     }
     
     //*********************************************************************

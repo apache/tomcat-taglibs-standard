@@ -28,6 +28,9 @@
     <fmt:formatDate type="both"/>
    </fmt:messageArg>
   </fmt:message>
+
+ <li>
+  <fmt:message key="serverInfo" bundle="$deBundle" messageArgs="$messageArgs"/>
 </ul>
 
 </body>
