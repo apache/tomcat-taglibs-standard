@@ -43,7 +43,7 @@
     <br> The following error has occurred:<br><br>
     <c:out value="${ex}" escapeXml='false'/> <br>
     <c:if test="${ex.rootCause.class.name == 'java.text.ParseException' && pageContext.response.locale == 'de_DE'}">
-      <br> This is a known bug in java.text.NumberFormat (Bugtraq bugid: 4709840).
+      <br> This is due to a known bug in java.text.NumberFormat (Bugtraq bugid: 4709840).
     </c:if>
   </font>
 </c:if>
