@@ -29,11 +29,22 @@
     <tag-class>org.apache.taglibs.standard.tag.rt.sql.TransactionTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
+        <description>
+DataSource associated with the database to access. A
+String value represents a relative path to a JNDI
+resource or the parameters for the JDBC
+DriverManager facility.
+        </description>
         <name>dataSource</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+Transaction isolation level. If not specified, it is the
+isolation level the DataSource has been configured
+with.
+        </description>
         <name>isolation</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -49,31 +60,62 @@
     <tag-class>org.apache.taglibs.standard.tag.rt.sql.QueryTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
+        <description>
+Name of the exported scoped variable for the
+query result. The type of the scoped variable is
+javax.servlet.jsp.jstl.sql.
+Result (see Chapter 16 "Java APIs").
+        </description>
         <name>var</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+Scope of var.
+        </description>
         <name>scope</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+SQL query statement.
+        </description>
         <name>sql</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+Data source associated with the database to
+query. A String value represents a relative path
+to a JNDI resource or the parameters for the
+DriverManager class.
+        </description>
         <name>dataSource</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+The returned Result object includes the rows
+starting at the specified index. The first row of
+the original query result set is at index 0. If not
+specified, rows are included starting from the
+first row at index 0.
+        </description>
         <name>startRow</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+The maximum number of rows to be included in
+the query result. If not specified, or set to -1, no
+limit on the maximum number of rows is
+enforced.
+        </description>
         <name>maxRows</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -89,21 +131,38 @@
     <tag-class>org.apache.taglibs.standard.tag.rt.sql.UpdateTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
+        <description>
+Name of the exported scoped variable for the result
+of the database update. The type of the scoped
+variable is java.lang.Integer.
+        </description>
         <name>var</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+Scope of var.
+        </description>
         <name>scope</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+SQL update statement.
+        </description>
         <name>sql</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+Data source associated with the database to update.
+A String value represents a relative path to a JNDI
+resource or the parameters for the JDBC
+DriverManager class.
+        </description>
         <name>dataSource</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -118,6 +177,9 @@
     <tag-class>org.apache.taglibs.standard.tag.rt.sql.ParamTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
+        <description>
+Parameter value.
+        </description>
         <name>value</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -132,11 +194,18 @@
     <tag-class>org.apache.taglibs.standard.tag.rt.sql.DateParamTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
+        <description>
+Parameter value for DATE, TIME, or
+TIMESTAMP column in a database table.
+        </description>
         <name>value</name>
         <required>true</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+One of "date", "time" or "timestamp".
+        </description>
         <name>type</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
@@ -151,36 +220,67 @@
     <tag-class>org.apache.taglibs.standard.tag.rt.sql.SetDataSourceTag</tag-class>
     <body-content>empty</body-content>
     <attribute>
+        <description>
+Name of the exported scoped variable
+for the data source specified. Type can
+be String or DataSource.
+        </description>
         <name>var</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+If var is specified, scope of the
+exported variable. Otherwise, scope of
+the data source configuration variable.
+        </description>
         <name>scope</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+Data source. If specified as a string, it
+can either be a relative path to a JNDI
+resource, or a JDBC parameters string
+as defined in Section 10.1.1.
+        </description>
         <name>dataSource</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+JDBC parameter: driver class name.
+        </description>
         <name>driver</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+JDBC parameter: URL associated with
+the database.
+        </description>
         <name>url</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+JDBC parameter: database user on
+whose behalf the connection to the
+database is being made.
+        </description>
         <name>user</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
+        <description>
+JDBC parameter: user password
+        </description>
         <name>password</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
