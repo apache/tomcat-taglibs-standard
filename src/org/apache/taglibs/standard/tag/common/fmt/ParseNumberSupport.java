@@ -150,20 +150,27 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 	 * Set up parsing locale: Use locale specified via the 'parseLocale'
 	 * attribute (if present), or else determine page's locale.
 	 */
-	Locale locale = parseLocale;
-	if (locale == null)
-	    locale = SetLocaleSupport.getFormattingLocale(
+	Locale loc = parseLocale;
+	if (loc == null)
+	    loc = SetLocaleSupport.getFormattingLocale(
                 pageContext,
 	        this,
 		false,
 	        NumberFormat.getAvailableLocales());
-	if (locale == null) {
+	if (loc == null) {
 	    throw new JspException(
                     Resources.getMessage("PARSE_NUMBER_NO_PARSE_LOCALE"));
 	}
 
 	// Create parser
-	NumberFormat parser = createParser(locale);
+	NumberFormat parser = null;
+	if ((pattern != null) && !pattern.equals("")) {
+	    // if 'pattern' is specified, 'type' is ignored
+	    DecimalFormatSymbols symbols = new DecimalFormatSymbols(loc);
+	    parser = new DecimalFormat(pattern, symbols);
+	} else {
+	    parser = createParser(loc);
+	}
 
 	// Configure parser
 	if (integerOnlySpecified)
@@ -206,10 +213,6 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
 
 	if ((type == null) || NUMBER.equalsIgnoreCase(type)) {
 	    parser = NumberFormat.getNumberInstance(loc);
-	    if (pattern != null) {
-		DecimalFormat df = (DecimalFormat) parser;
-		df.applyPattern(pattern);
-	    }
 	} else if (CURRENCY.equalsIgnoreCase(type)) {
 	    parser = NumberFormat.getCurrencyInstance(loc);
 	} else if (PERCENT.equalsIgnoreCase(type)) {
