@@ -326,6 +326,10 @@
       <fileset dir="${conf.src}" includes="*.tld"/>
     </copy>
       
+    <!-- LICENSE and NOTICE files copied at the top level of the distribution -->
+    <copy file="../LICENSE" tofile="${dist.library}/LICENSE"/>
+    <copy file="../NOTICE" tofile="${dist.library}/NOTICE"/>
+
     <!-- README file copied at the top level of the distribution -->
     <copy file="README_bin.txt" tofile="${dist.library}/README"/>
     
