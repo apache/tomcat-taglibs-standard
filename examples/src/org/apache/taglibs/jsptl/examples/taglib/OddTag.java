@@ -77,7 +77,7 @@ public class OddTag extends TagSupport {
             throw new JspTagException("<odd> must be nested within a LoopTag");
         }
         
-        int count = iteratorTag.getIteratorStatus().getCount();
+        int count = iteratorTag.getLoopStatus().getCount();
         System.out.println("count: " + count);
                 System.out.println("count odd/even: " + (count % 2));
         return (count % 2 == 1) ? EVAL_BODY_INCLUDE : SKIP_BODY;

@@ -77,7 +77,7 @@ public class EvenTag extends TagSupport {
             throw new JspTagException("<even> must be nested within a LoopTag");
         }
         
-        int count = iteratorTag.getIteratorStatus().getCount();
+        int count = iteratorTag.getLoopStatus().getCount();
         return (count % 2 == 0) ? EVAL_BODY_INCLUDE : SKIP_BODY;
     }
 }
