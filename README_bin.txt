@@ -27,9 +27,9 @@ dependencies:
       - Xalan 2.5 
       - JDBC Standard Extension 2.0
 
-Since all of the dependencies in (2) are included in J2SE 1.4.2 and higher, 
-this is therefore the J2SE version of choice to use the standard
-tag library.
+Since all of the dependencies in (2) are included in Sun's
+distribution of J2SE 1.4.2 (and higher), this is therefore the J2SE
+version of choice to use the standard tag library.
 
 If the java platform under which you run your JSP container does not
 provide these dependencies, they must be made available either globally
@@ -39,7 +39,7 @@ WEB-INF/lib directory of your web-application.
 For convenience, these jar files have been included in directory 
 lib/old-dependencies of this distribution. If you would like to download
 these jar files yourself (if you built the binary distribution from the
-source), instructions on where you can get them are included below.
+CVS source tree), instructions on where you can get them are included below.
 
 ---
 JAXP 1.2
@@ -63,10 +63,10 @@ Apache at http://xml.apache.org/xalan-j.
 
   - xalan.jar
 
-Please note that if you use J2SE 1.4.1, you must supersede the version of
-xalan.jar provided by the JDK with version 2.5 or higher of Xalan. 
-This newer version of xalan.jar must then be made available through the 
-endorsed dirs mechanism.
+Please note that if you use Sun's distribution of J2SE 1.4.1, you must
+supersede the version of xalan.jar provided by the J2SE with version
+2.5 or higher of Xalan.  This newer version of xalan.jar must then be
+made available through the endorsed dirs mechanism.
 
 ---
 JDBC Standard Extension 2.0

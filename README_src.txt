@@ -13,17 +13,18 @@ please go to http://java.sun.com/products/jstl.
 BUILD ENVIRONMENT SETUP
 
 ---
-J2SE
+J2SE (Java 2 Standard Edition)
 
-Download and install version 1.4.2 or higher of J2SE (Java 2 Standard Edition)
+Download and install Sun's distribution of J2SE 1.4.2 (or higher) 
 for your operating system platform. J2SE can be found at 
 http://java.sun.com/j2se.
 
-J2SE 1.4.2 (and higher) includes many of the libraries that standard 1.1 depends
-on. However, please note that standard 1.1 will compile and run on previous
-versions of J2SE (from 1.3 up to 1.4.1) as long as the standard 1.1 dependencies
-not included in these versions of the J2SE are properly setup.
-See section 'LIBRARY DEPENDENCIES' for details.
+Sun's distribution of J2SE 1.4.2 includes many of the libraries that
+standard 1.1 depends on. However, please note that standard 1.1 will
+compile and run on previous versions of J2SE (from 1.3 up to 1.4.1) as
+long as the standard 1.1 dependencies not included in these versions
+of the J2SE are properly setup.  See section 'LIBRARY DEPENDENCIES'
+for details.
 
   - Set a JAVA_HOME environment variable to point at the directory 
     where J2SE is installed.
@@ -54,9 +55,15 @@ dependencies:
       - Xalan 2.5 
       - JDBC Standard Extension 2.0
 
-Since all of the dependencies in (2) are included in J2SE 1.4.2 and higher, 
-this is therefore the J2SE version of choice to compile and run the 
-standard tag library.
+Since all of the dependencies in (2) are included in Sun's
+distribution of J2SE 1.4.2 (or higher), this is therefore the J2SE
+version of choice to compile and run the standard tag library.
+
+If you sill need the jar files for the dependencies listed in (2), they
+have been included in directory lib/old-dependencies of this distribution
+(sorry, the jars are not included in the CVS tree, just in the source and
+binary distributions). Instructions on where you can get these jar files 
+are also included below.
 
 ---
 build.properties
@@ -73,9 +80,10 @@ build.properties
 ---
 Servlet 2.4 and JSP 2.0
 
-Download and install the Servlet 2.4 and JSP 2.0 APIs.
-The jar files for these APIs may be found in a distribution
-of Tomcat 5 available at http://jakarta.apache.org/tomcat.
+Download and install the Servlet 2.4 and JSP 2.0 APIs.  The jar files
+for these APIs may be found in distributions of jakarta-servlet-api-5-bin
+and jakarta-jsp-api-5-bin at http://cvs.apache.org/builds/jakarta-tomcat-5/nightly.  
+They are also included in Tomcat 5, available at http://jakarta.apache.org/tomcat.
 
 Set the following properties in build.properties to the
 file paths of the jars:
@@ -84,7 +92,8 @@ file paths of the jars:
 
 ---
 JAXP 1.2
-[required only if building with J2SE 1.3]
+[required only if building with versions of J2SE that do not include
+the JAXP APIs, such as J2SE 1.3]
 
 The JAXP 1.2 jar files can be obtained in the Java Web Services
 Developer Pack (JWSDP) available at 
