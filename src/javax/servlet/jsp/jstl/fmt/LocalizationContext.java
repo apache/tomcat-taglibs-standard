@@ -66,19 +66,22 @@ import java.util.Locale;
  *
  * <p> The resource bundle component is used by <fmt:message> for mapping
  * message keys to localized messages, and the locale component is used by the
- * <fmt:formatNumber>, <fmt:parseNumber>, <fmt:formatDate>, and
- * <fmt:parseDate> actions as their formatting or parsing locale, respectively.
+ * <fmt:message>, <fmt:formatNumber>, <fmt:parseNumber>, <fmt:formatDate>,
+ * and <fmt:parseDate> actions as their formatting locale.
  *
  * @author Jan Luehe
  */
 
 public class LocalizationContext {
 
+    // the localization context's resource bundle
     final private ResourceBundle bundle;
+
+    // the localization context's locale
     final private Locale locale;
 
     /**
-     * Constructor for empty LocalizationContext.
+     * Constructs an empty I18N localization context.
      */
     public LocalizationContext() {
 	bundle = null;
@@ -86,10 +89,14 @@ public class LocalizationContext {
     }
 
     /**
-     * Constructor.
+     * Constructs an I18N localization context from the given resource bundle
+     * and locale.
      *
-     * @param bundle The resource bundle
-     * @param locale The locale that led to the resource bundle match
+     * <p> The specified locale is the application- or browser-based preferred
+     * locale that led to the resource bundle match.
+     *
+     * @param bundle The localization context's resource bundle
+     * @param locale The localization context's locale
      */
     public LocalizationContext(ResourceBundle bundle, Locale locale) {
 	this.bundle = bundle;
@@ -97,9 +104,10 @@ public class LocalizationContext {
     }
 
     /**
-     * Constructor.
+     * Constructs an I18N localization context from the given resource bundle.
      *
-     * <p> The localization context's locale is taken from the resource bundle.
+     * <p> The localization context's locale is taken from the given
+     * resource bundle.
      *
      * @param bundle The resource bundle
      */
@@ -112,7 +120,7 @@ public class LocalizationContext {
      * Gets the resource bundle of this I18N localization context.
      * 
      * @return The resource bundle of this I18N localization context, or null
-     * if this I18N localization context does not contain any resource bundle.
+     * if this I18N localization context is empty
      */ 
     public ResourceBundle getResourceBundle() {
 	return bundle;
@@ -122,8 +130,8 @@ public class LocalizationContext {
      * Gets the locale of this I18N localization context.
      *
      * @return The locale of this I18N localization context, or null if this
-     * I18N localization context does not contain any resource bundle, or its
-     * resource bundle is a (locale-less) root resource bundle.
+     * I18N localization context is empty, or its resource bundle is a
+     * (locale-less) root resource bundle.
      */ 
     public Locale getLocale() {
 	return locale;
