@@ -168,12 +168,16 @@ public class Config {
 	switch (scope) {
 	case PageContext.PAGE_SCOPE:
 	    pc.setAttribute(name + PAGE_SCOPE_SUFFIX, value, scope);
+	    break;
 	case PageContext.REQUEST_SCOPE:
 	    pc.setAttribute(name + REQUEST_SCOPE_SUFFIX, value, scope);
+	    break;
 	case PageContext.SESSION_SCOPE:
 	    pc.setAttribute(name + SESSION_SCOPE_SUFFIX, value, scope);
+	    break;
 	case PageContext.APPLICATION_SCOPE:
 	    pc.setAttribute(name + APPLICATION_SCOPE_SUFFIX, value, scope);
+	    break;
 	default:
 	    throw new IllegalArgumentException("unknown scope");
 	}
@@ -219,12 +223,16 @@ public class Config {
 	switch (scope) {
 	case PageContext.PAGE_SCOPE:
 	    pc.removeAttribute(name + PAGE_SCOPE_SUFFIX, scope);
+	    break;
 	case PageContext.REQUEST_SCOPE:
 	    pc.removeAttribute(name + REQUEST_SCOPE_SUFFIX, scope);
+	    break;
 	case PageContext.SESSION_SCOPE:
 	    pc.removeAttribute(name + SESSION_SCOPE_SUFFIX, scope);
+	    break;
 	case PageContext.APPLICATION_SCOPE:
 	    pc.removeAttribute(name + APPLICATION_SCOPE_SUFFIX, scope);
+	    break;
 	default:
 	    throw new IllegalArgumentException("unknown scope");
 	}

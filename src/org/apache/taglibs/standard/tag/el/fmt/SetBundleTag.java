@@ -62,31 +62,30 @@ import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
- * <p>A handler for &lt;bundle&gt; that accepts attributes as Strings
+ * <p>A handler for &lt;setBundle&gt; that accepts attributes as Strings
  * and evaluates them as expressions at runtime.</p>
  *
  * @author Shawn Bayern
  * @author Jan Luehe
  */
 
-public class BundleTag extends BundleSupport {
+public class SetBundleTag extends SetBundleSupport {
 
     //*********************************************************************
     // 'Private' state (implementation details)
 
     private String basename_;                    // stores EL-based property
-    private String prefix_;		         // stores EL-based property
 
 
     //*********************************************************************
     // Constructor
 
     /**
-     * Constructs a new BundleTag.  As with TagSupport, subclasses
+     * Constructs a new SetBundleTag.  As with TagSupport, subclasses
      * should not provide other constructors and are expected to call
      * the superclass constructor
      */
-    public BundleTag() {
+    public SetBundleTag() {
         super();
         init();
     }
@@ -120,11 +119,6 @@ public class BundleTag extends BundleSupport {
         this.basename_ = basename_;
     }
 
-    // for EL-based attribute
-    public void setPrefix(String prefix_) {
-        this.prefix_ = prefix_;
-    }
-
 
     //*********************************************************************
     // Private (utility) methods
@@ -132,7 +126,7 @@ public class BundleTag extends BundleSupport {
     // (re)initializes state (during release() or construction)
     private void init() {
         // null implies "no expression"
-	basename_ = prefix_ = null;
+	basename_ = null;
     }
 
     // Evaluates expressions as necessary
@@ -140,11 +134,6 @@ public class BundleTag extends BundleSupport {
 	if (basename_ != null) {
 	    basename = (String) ExpressionEvaluatorManager.evaluate(
 	        "basename", basename_, String.class, this, pageContext);
-	}
-
-	if (prefix_ != null) {
-	    prefix = (String) ExpressionEvaluatorManager.evaluate(
-	        "prefix", prefix_, String.class, this, pageContext);
 	}
     }
 }

@@ -58,6 +58,7 @@ package javax.servlet.jsp.jstl.fmt;
 import java.util.*;
 import java.text.*;
 import javax.servlet.jsp.*;
+import javax.servlet.jsp.jstl.core.Config;
 import org.apache.taglibs.standard.tag.common.fmt.BundleSupport;
 import org.apache.taglibs.standard.tag.common.fmt.MessageSupport;
 import org.apache.taglibs.standard.resources.Resources;
@@ -175,7 +176,8 @@ public class LocaleSupport {
 	if (basename != null) {
 	    bundle = BundleSupport.getBundle(pageContext, basename);
 	} else {
-	    bundle = BundleSupport.getDefaultBundle(pageContext);
+	    bundle = (ResourceBundle) Config.find(pageContext,
+						  Config.FMT_BUNDLE);
 	}
 	if (bundle != null) {
 	    try {

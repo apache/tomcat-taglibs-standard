@@ -65,29 +65,25 @@ import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * Support for tag handlers for &lt;bundle&gt;, the resource bundle
- * loading tag in JSTL 1.0.
+ * Support for tag handlers for &lt;bundle&gt;, the resource bundle loading
+ * tag in JSTL 1.0.
  *
  * @author Jan Luehe
  */
 
 public abstract class BundleSupport extends BodyTagSupport {
-
+    
 
     //*********************************************************************
     // Protected state
 
-    protected String basename;                          // 'basename' attribute
-    protected String prefix;                            // 'prefix' attribute
+    protected String basename;                  // 'basename' attribute
+    protected String prefix;                    // 'prefix' attribute
 
 
     //*********************************************************************
     // Private state
 
-    private static ResourceBundle emptyResourceBundle;
-
-    private String scope;                               // 'scope' attribute
-    private String var;                                 // 'var' attribute
     private Locale fallbackLocale;
     private ResourceBundle bundle;
 
@@ -95,38 +91,17 @@ public abstract class BundleSupport extends BodyTagSupport {
     //*********************************************************************
     // Constructor and initialization
 
-    static {
-	emptyResourceBundle = new ListResourceBundle() {
-		public Object[][] getContents() {
-		    return new Object[][] { { "", "" } };
-		}
-	    };
-    }
-
     public BundleSupport() {
 	super();
 	init();
     }
 
     private void init() {
-	basename = prefix = var = null;
+	basename = prefix = null;
 	bundle = null;
-	scope = "page";
     }
 
     
-    //*********************************************************************
-    // Tag attributes known at translation time
-
-    public void setVar(String var) {
-        this.var = var;
-    }
-
-    public void setScope(String scope) {
-	this.scope = scope;
-    }
-    
-
     //*********************************************************************
     // Collaboration with subtags
 
@@ -143,33 +118,22 @@ public abstract class BundleSupport extends BodyTagSupport {
     // Tag logic
 
     public int doStartTag() throws JspException {
+	if ((basename == null) || basename.equals("")) {
+	    basename = (String) Config.find(pageContext, Config.FMT_BASENAME);
+	}
+
 	if ((basename != null) && !basename.equals("")) {
 	    bundle = getBundle(pageContext, basename);
 	}
+
 	return EVAL_BODY_BUFFERED;
     }
 
     public int doEndTag() throws JspException {
-	if (var != null) {
-	    if (bundle != null) {
-		pageContext.setAttribute(var, bundle, Util.getScope(scope));
-	    } else {
-		pageContext.setAttribute(var, emptyResourceBundle,
-					 Util.getScope(scope));
-	    }
-	} else if (getBodyContent() == null) {
-	    /*
-	     * If no 'var' attribute and empty body, we store our base name
-	     * in the javax.servlet.jsp.jstl.fmt.basename scoped attribute
-	     */
-	    Config.set(pageContext, Config.FMT_BUNDLE, bundle,
-		       Util.getScope(scope));
-	} else {
-	    try {
-		pageContext.getOut().print(getBodyContent().getString());
-	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
-	    }
+	try {
+	    pageContext.getOut().print(getBodyContent().getString());
+	} catch (IOException ioe) {
+	    throw new JspTagException(ioe.getMessage());
 	}
 
 	return EVAL_PAGE;
@@ -237,29 +201,6 @@ public abstract class BundleSupport extends BodyTagSupport {
 	    LocaleSupport.setResponseLocale(pageContext, ret.getLocale());
 	}
 	
-	return ret;
-    }
-
-    /**
-     * Gets the resource bundle with the default base name, which is given by
-     * the scoped attribute or initialization parameter named
-     * javax.servlet.jsp.jstl.fmt.exception.basename.
-     *
-     * @param pageContext the page in which the resource bundle is requested
-     * @name the name of the scoped attribute or initialization parameter
-     *
-     * @return the requested resource bundle, or <tt>null</tt>
-     * if the scoped attribute or initialization parameter with the given name
-     * does not exist, or the requested resource bundle does not exist
-     */
-    public static ResourceBundle getDefaultBundle(PageContext pc) {
-	ResourceBundle ret = null;
-
-	String def = (String) Config.find(pc, Config.FMT_BASENAME);
-	if (def != null) {
-	    ret = getBundle(pc, def);
-	}
-
 	return ret;
     }
 

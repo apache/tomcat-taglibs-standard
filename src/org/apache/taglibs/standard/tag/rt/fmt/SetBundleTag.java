@@ -53,98 +53,27 @@
  *
  */ 
 
-package org.apache.taglibs.standard.tag.el.fmt;
+package org.apache.taglibs.standard.tag.rt.fmt;
 
 import java.util.*;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
-import org.apache.taglibs.standard.lang.support.*;
 import org.apache.taglibs.standard.tag.common.fmt.*;
 
 /**
- * <p>A handler for &lt;bundle&gt; that accepts attributes as Strings
- * and evaluates them as expressions at runtime.</p>
+ * <p>A handler for &lt;setBundle&gt; that supports rtexprvalue-based
+ * attributes.</p>
  *
- * @author Shawn Bayern
  * @author Jan Luehe
  */
 
-public class BundleTag extends BundleSupport {
-
-    //*********************************************************************
-    // 'Private' state (implementation details)
-
-    private String basename_;                    // stores EL-based property
-    private String prefix_;		         // stores EL-based property
-
-
-    //*********************************************************************
-    // Constructor
-
-    /**
-     * Constructs a new BundleTag.  As with TagSupport, subclasses
-     * should not provide other constructors and are expected to call
-     * the superclass constructor
-     */
-    public BundleTag() {
-        super();
-        init();
-    }
-
-
-    //*********************************************************************
-    // Tag logic
-
-    // evaluates expression and chains to parent
-    public int doStartTag() throws JspException {
-
-        // evaluate any expressions we were passed, once per invocation
-        evaluateExpressions();
-
-	// chain to the parent implementation
-	return super.doStartTag();
-    }
-
-    // Releases any resources we may have (or inherit)
-    public void release() {
-        super.release();
-        init();
-    }
-
+public class SetBundleTag extends SetBundleSupport {
 
     //*********************************************************************
     // Accessor methods
 
-    // for EL-based attribute
-    public void setBasename(String basename_) {
-        this.basename_ = basename_;
-    }
-
-    // for EL-based attribute
-    public void setPrefix(String prefix_) {
-        this.prefix_ = prefix_;
-    }
-
-
-    //*********************************************************************
-    // Private (utility) methods
-
-    // (re)initializes state (during release() or construction)
-    private void init() {
-        // null implies "no expression"
-	basename_ = prefix_ = null;
-    }
-
-    // Evaluates expressions as necessary
-    private void evaluateExpressions() throws JspException {
-	if (basename_ != null) {
-	    basename = (String) ExpressionEvaluatorManager.evaluate(
-	        "basename", basename_, String.class, this, pageContext);
-	}
-
-	if (prefix_ != null) {
-	    prefix = (String) ExpressionEvaluatorManager.evaluate(
-	        "prefix", prefix_, String.class, this, pageContext);
-	}
+    // for tag attribute
+    public void setBasename(String basename) throws JspTagException {
+        this.basename = basename;
     }
 }

@@ -56,9 +56,7 @@
 package org.apache.taglibs.standard.tag.common.fmt;
 
 import java.util.*;
-import java.text.*;
-import java.io.IOException;
-import javax.servlet.ServletContext;
+import javax.servlet.ServletResponse;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
 import javax.servlet.jsp.jstl.core.Config;
@@ -66,48 +64,50 @@ import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.resources.Resources;
 
 /**
- * Support for tag handlers for &lt;message&gt;, the message formatting tag
- * in JSTL 1.0.
+ * Support for tag handlers for &lt;setBundle&gt;, the JSTL 1.0 tag that loads
+ * a resource bundle and stores it in a scoped variable.
  *
  * @author Jan Luehe
  */
 
-public abstract class MessageSupport extends BodyTagSupport {
+public abstract class SetBundleSupport extends TagSupport {
 
+    
     //*********************************************************************
-    // Public constants
+    // Package-scoped constants
 
-    public static final String UNDEFINED_KEY = "???";
+    private static final ResourceBundle EMPTY_BUNDLE =
+	new ListResourceBundle() {
+		public Object[][] getContents() {
+		    return new Object[][] { { "", "" } };
+		}
+	    };
 
 
     //*********************************************************************
     // Protected state
 
-    protected String key;                         // 'key' attribute
-    protected ResourceBundle bundle;              // 'bundle' attribute
+    protected String basename;                  // 'basename' attribute
 
 
     //*********************************************************************
     // Private state
 
-    private String var;                           // 'var' attribute
-    private int scope;                            // 'scope' attribute
-    private List params;
+    private String scope;                       // 'scope' attribute
+    private String var;                         // 'var' attribute
 
 
     //*********************************************************************
     // Constructor and initialization
 
-    public MessageSupport() {
+    public SetBundleSupport() {
 	super();
-	params = new ArrayList();
 	init();
     }
 
     private void init() {
-	key = var = null;
-	bundle = null;
-	scope = PageContext.PAGE_SCOPE;
+	basename = null;
+	scope = "page";
     }
 
 
@@ -119,95 +119,34 @@ public abstract class MessageSupport extends BodyTagSupport {
     }
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
-    }
-
-
-    //*********************************************************************
-    // Collaboration with subtags
-
-    /**
-     * Adds an argument (for parametric replacement) to this tag's message.
-     *
-     * @see ParamSupport
-     */
-    public void addParam(Object arg) {
-	params.add(arg);
+	this.scope = scope;
     }
 
 
     //*********************************************************************
     // Tag logic
 
-    public int doStartTag() throws JspException {
-	params.clear();
-	return EVAL_BODY_BUFFERED;
-    }
-
     public int doEndTag() throws JspException {
-	if (key == null) {
-	    BodyContent bc = null;
-	    String bcs = null;
-	    if (((bc = getBodyContent()) != null)
-		    && ((bcs = bc.getString()) != null)) {
-		key = bcs.trim();
-	    }
-	    if ((key == null) || key.equals("")) {
-		try {
-		    pageContext.getOut().print("??????");
-		} catch (IOException ioe) {
-		    throw new JspTagException(ioe.getMessage());
-		}
-		return EVAL_PAGE;
-	    }
+	ResourceBundle bundle = null;
+
+	if ((basename == null) || basename.equals("")) {
+	    basename = (String) Config.find(pageContext, Config.FMT_BASENAME);
 	}
 
-	String prefix = null;
-	if (bundle == null) {
-	    Tag t = findAncestorWithClass(this, BundleSupport.class);
-	    if (t != null) {
-		// use resource bundle from parent <bundle> tag
-		BundleSupport parent = (BundleSupport) t;
-		bundle = parent.getBundle();
-		prefix = parent.getPrefix();
-	    } else {
-		bundle = (ResourceBundle) Config.find(pageContext,
-						      Config.FMT_BUNDLE);
-	    }
-	} else {
-	    LocaleSupport.setResponseLocale(pageContext, bundle.getLocale());
+	if ((basename != null) && !basename.equals("")) {
+	    bundle = BundleSupport.getBundle(pageContext, basename);
 	}
 
-	String message = null;
 	if (bundle == null) {
-	    message = UNDEFINED_KEY + key + UNDEFINED_KEY;
-	} else {
-	    try {
-		// prepend 'prefix' attribute from parent bundle
-		if (prefix != null)
-		    key = prefix + key;
-		message = bundle.getString(key);
-		// Perform parametric replacement if required
-		if (!params.isEmpty()) {
-		    Object[] messageArgs = params.toArray();
-		    MessageFormat formatter = new MessageFormat("");
-		    formatter.setLocale(bundle.getLocale());
-		    formatter.applyPattern(message);
-		    message = formatter.format(messageArgs);
-		}
-	    } catch (MissingResourceException mre) {
-		message = UNDEFINED_KEY + key + UNDEFINED_KEY;
-	    }
+	    // storing "null" in a scoped variable would cause a NPE
+	    bundle = EMPTY_BUNDLE;
 	}
 
 	if (var != null) {
-	    pageContext.setAttribute(var, message, scope);	
+	    pageContext.setAttribute(var, bundle, Util.getScope(scope));
 	} else {
-	    try {
-		pageContext.getOut().print(message);
-	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.getMessage());
-	    }
+	    Config.set(pageContext, Config.FMT_BUNDLE, bundle,
+		       Util.getScope(scope));
 	}
 
 	return EVAL_PAGE;

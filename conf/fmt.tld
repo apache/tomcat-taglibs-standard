@@ -23,6 +23,7 @@
 	    timeZone:value
 	    bundle:basename
 	    bundle:prefix
+            setBundle:basename
 	    message:key
 	    message:bundle
 	    param:value
@@ -127,15 +128,30 @@
     <tag-class>org.apache.taglibs.standard.tag.el.fmt.BundleTag</tag-class>
     <body-content>JSP</body-content>
     <description>
-        Loads a resource bundle containing localized messages
+        Loads a resource bundle to be used by its tag body
     </description>
     <attribute>
         <name>basename</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
         <name>prefix</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>setBundle</name>
+    <tag-class>org.apache.taglibs.standard.tag.el.fmt.SetBundleTag</tag-class>
+    <body-content>EMPTY</body-content>
+    <description>
+        Loads a resource bundle and stores it in the named scoped variable or
+        the bundle configuration variable
+    </description>
+    <attribute>
+        <name>basename</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>

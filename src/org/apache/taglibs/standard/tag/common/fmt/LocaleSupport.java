@@ -257,7 +257,8 @@ public abstract class LocaleSupport extends TagSupport {
 	if (parent != null) {
 	    // use locale from parent <fmt:bundle> tag
 	    match = ((BundleSupport) parent).getBundle().getLocale();
-	} else if ((bundle = BundleSupport.getDefaultBundle(pc)) != null) {
+	} else if ((bundle = (ResourceBundle)
+		    Config.find(pc, Config.FMT_BUNDLE)) != null) {
 	    // Use locale associated with default bundle base name.
 	    match = bundle.getLocale();
 	} else {
