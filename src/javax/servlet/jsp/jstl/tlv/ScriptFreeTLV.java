@@ -255,12 +255,14 @@ public class ScriptFreeTLV extends TagLibraryValidator {
 	  results.append(Integer.toString(expressionCount));
 	  results.append(" expression");
 	  if (expressionCount > 1) results.append('s');
+	  first = false;
 	}
 	if (rtExpressionCount > 0) {
 	  if (! first) results.append(", ");
 	  results.append(Integer.toString(rtExpressionCount));
 	  results.append(" request-time attribute value");
 	  if (rtExpressionCount > 1) results.append('s');
+	  first = false;
 	}
 	results.append(".");
 	return vmFromString(results.toString());
