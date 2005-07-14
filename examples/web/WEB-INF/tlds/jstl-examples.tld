@@ -23,7 +23,7 @@
     <body-content>JSP</body-content>
     <attribute>
         <name>var</name>
-        <required>required</required>
+        <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
