@@ -201,6 +201,7 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
 			    String matchUri,
 			    String matchLn) {
 	if (tagUri == null
+                || tagUri.length() == 0
 	        || tagLn == null
 		|| matchUri == null
 		|| matchLn == null)
