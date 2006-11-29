@@ -344,6 +344,7 @@
       <batchtest>
         <fileset dir="${src.test.dir}">
           <include name="**/tag/**/Test*.java"/>
+          <include name="**/functions/**/Test*.java"/>
           <exclude name="**/testutil/*.java"/>
         </fileset>
       </batchtest>
