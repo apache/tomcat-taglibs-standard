@@ -22,7 +22,6 @@ import org.apache.taglibs.standard.testutil.TestUtil;
 
 public class TestEndsWith
     extends JspTestCase {
-//    private SetTag setTag = null;
 
     public TestEndsWith(String name) {
         super(name);
