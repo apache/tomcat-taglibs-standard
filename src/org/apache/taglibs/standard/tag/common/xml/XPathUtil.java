@@ -633,7 +633,8 @@ public class XPathUtil {
         boolean whetherOrigXPath = true;
         
         // If contextNode is not null then  just pass the values to Xalan XPath
-        if ( n != null ) {
+        // unless this is an expression that starts off with an xml document 
+        if ( n != null && !xpath.startsWith("$") ) {
             return n;
         }
         
