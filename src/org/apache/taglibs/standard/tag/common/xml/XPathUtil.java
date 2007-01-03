@@ -97,17 +97,24 @@ public class XPathUtil {
             variableVector.addElement( new QName(null, varName ) );
             globalVarSize++;
         }
-        enum_ = pageContext.getAttributeNamesInScope( 
-            PageContext.SESSION_SCOPE );
-        while ( enum_.hasMoreElements() ) {
-            String varName = (String)enum_.nextElement();
-            QName varQName = new QName ( SESSION_NS_URL, SESSION_P,varName); 
-            //Adding both namespace qualified QName and just localName
-            variableVector.addElement( varQName );
-            globalVarSize++;
-            variableVector.addElement( new QName(null, varName ) );
-            globalVarSize++;
+
+        if (pageContext.getSession() != null) {
+            // we may have a page directive preventing session creation/access
+            // do not attempt to retrieve attribute names in session scope
+            // @see [ http://issues.apache.org/bugzilla/show_bug.cgi?id=35216 ]
+            enum_ = pageContext.getAttributeNamesInScope( 
+                PageContext.SESSION_SCOPE );
+            while ( enum_.hasMoreElements() ) {
+                String varName = (String)enum_.nextElement();
+                QName varQName = new QName ( SESSION_NS_URL, SESSION_P,varName); 
+                //Adding both namespace qualified QName and just localName
+                variableVector.addElement( varQName );
+                globalVarSize++;
+                variableVector.addElement( new QName(null, varName ) );
+                globalVarSize++;
+            }
         }
+
         enum_ = pageContext.getAttributeNamesInScope( 
             PageContext.APPLICATION_SCOPE );
         while ( enum_.hasMoreElements() ) {
