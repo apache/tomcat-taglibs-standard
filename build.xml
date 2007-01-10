@@ -24,6 +24,8 @@
     
   <property name="taglib.name"    value="standard"/>
 
+  <property name="java.runtime.jar" value="${java.home}/lib/rt.jar"/>
+
   <!--
         These property values are derived from the previously defined values,
 	and should not normally be overridden from the command line.
@@ -170,7 +172,7 @@
     <javac 
       srcdir="${library.src}" 
       destdir="${build.library}/classes"
-      bootclasspath="${xalan.jar}:${java.home}/lib/rt.jar"
+      bootclasspath="${xalan.jar}:${java.runtime.jar}"
       classpath="${servlet24.jar}:${jsp20.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}"
       excludes="org/apache/taglibs/standard/lang/jstl/parser/jsp20/* org/apache/taglibs/standard/lang/jpath/** org/apache/taglibs/standard/lang/spel/**"
       debug="${compile.debug}"
