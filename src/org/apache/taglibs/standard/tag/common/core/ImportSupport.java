@@ -36,6 +36,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.JspException;
@@ -291,9 +292,13 @@ public abstract class ImportSupport extends BodyTagSupport
 		new ImportResponseWrapper(
 		    (HttpServletResponse) pageContext.getResponse());
 
+            ImportRequestWrapper wrappedRequest = 
+		new ImportRequestWrapper(
+		    (HttpServletRequest) pageContext.getRequest());
+
 	    // spec mandates specific error handling form include()
 	    try {
-	        rd.include(pageContext.getRequest(), irw);
+	        rd.include(wrappedRequest, irw);
 	    } catch (IOException ex) {
 		throw new JspException(ex);
 	    } catch (RuntimeException ex) {
@@ -311,6 +316,8 @@ public abstract class ImportSupport extends BodyTagSupport
 		throw new JspTagException(irw.getStatus() + " " +
 		    stripSession(targetUrl));
 	    }
+
+System.err.println("RETURN: " + irw.getString());
 
 	    // recover the response String from our wrapper
 	    return irw.getString();
@@ -368,6 +375,19 @@ public abstract class ImportSupport extends BodyTagSupport
                     Resources.getMessage("IMPORT_ABS_ERROR", target, ex), ex);
 	    }
 	}
+    }
+
+    /** Wraps requests to allow us to enforce the method to be GET */
+    private class ImportRequestWrapper extends HttpServletRequestWrapper {
+
+        public ImportRequestWrapper(HttpServletRequest request) {
+            super(request);
+        }
+        
+        public String getMethod() {
+            return "GET";
+        }
+
     }
 
     /** Wraps responses to allow us to retrieve results as Strings. */
