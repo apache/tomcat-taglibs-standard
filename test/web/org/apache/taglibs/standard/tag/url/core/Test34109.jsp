@@ -1,0 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="genurl" scope="application">
+  <c:url context="/foo/" value="/test.jsp"/>
+</c:set>

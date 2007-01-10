@@ -152,11 +152,12 @@ public abstract class UrlSupport extends BodyTagSupport
                 throw new JspTagException(
                     Resources.getMessage("IMPORT_BAD_RELATIVE"));
             }
-            if (context.equals("/")) {
+            if (context.endsWith("/") && url.startsWith("/")) {
                 // Don't produce string starting with '//', many
                 // browsers interpret this as host name, not as
-                // path on same host.
-                return url;
+                // path on same host. Bug 22860
+                // Also avoid // inside the url. Bug 34109
+                return (context.substring(0, context.length() - 1) + url);
             } else {
                 return (context + url);
             }
