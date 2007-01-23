@@ -211,21 +211,48 @@ public abstract class QueryTagSupport extends BodyTagSupport
          * if it was from the ResultSet.
          */
         PreparedStatement ps = null;
+        ResultSet rs = null;
+        Throwable queryError = null;
         try {
             ps = conn.prepareStatement(sqlStatement);
             setParameters(ps, parameters);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             result = new ResultImpl(rs, startRow, maxRows);
-        }
-        catch (Throwable e) {
-            throw new JspException(sqlStatement + ": " + e.getMessage(), e);
+        } catch (Throwable e) {
+            queryError = e;
         } finally {
+            // don't blindly throw wrapped rsCloseExc or psCloseExc from
+            // this block since both close methods must be called and they
+            // may also "hide" queryError
+            // it's still possible that some random Throwable (Error or RuntimeException)
+            // could "escape" and hide queryError
+            SQLException rsCloseExc = null;
+            SQLException psCloseExc = null;
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException sqe) {
+                    rsCloseExc = sqe;
+                }
+            }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (SQLException sqe) {
-                    throw new JspException(sqe.getMessage(), sqe);
+                    psCloseExc = sqe;
                 }
+            }
+
+            // need to capture info about the possible exceptions
+            // all exceptions have been saved, so this logic can be easily changed
+            if (queryError != null) {
+                // ignore rsCloseExc and psCloseExc
+                throw new JspException(sqlStatement + ": " + queryError.getMessage(), queryError);
+            } else if (rsCloseExc != null) {
+                // ignore psCloseExc (could add psCloseExec to end of "chain")
+                throw new JspException(rsCloseExc.getMessage(), rsCloseExc);
+            } else if (psCloseExc != null) {
+                throw new JspException(psCloseExc.getMessage(), psCloseExc);
             }
         }
         pageContext.setAttribute(var, result, scope);
