@@ -14,7 +14,7 @@
  * limitations under the License.                                              
  */
 
-package org.apache.taglibs.standard.tag.url.core;
+package org.apache.taglibs.standard.tag.el.core;
 
 import javax.servlet.jsp.*;
 import org.apache.cactus.*;

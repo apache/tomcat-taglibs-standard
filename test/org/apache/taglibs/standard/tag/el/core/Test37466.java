@@ -14,7 +14,7 @@
  * limitations under the License.                                              
  */
 
-package org.apache.taglibs.standard.tag.ImportTagTest.core;
+package org.apache.taglibs.standard.tag.el.core;
 
 import java.net.*;
 import javax.servlet.jsp.*;
