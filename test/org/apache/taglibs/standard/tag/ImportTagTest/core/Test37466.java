@@ -38,7 +38,7 @@ public class Test37466 extends JspTestCase {
 
     public void test37466() throws Exception {
 	String serverName = pageContext.getRequest().getServerName();
-	Integer serverPort = pageContext.getRequest().getServerPort();
+	int serverPort = pageContext.getRequest().getServerPort();
 	String contextPath = ( (HttpServletRequest) pageContext.getRequest() ).getContextPath();
 	String jspPath = TestUtil.getTestJsp(this);
 	String testPath = "http://" + serverName + ":" + serverPort + contextPath + jspPath;;
