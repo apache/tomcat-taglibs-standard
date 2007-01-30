@@ -246,6 +246,7 @@
     <copy file="${cactus.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
     <copy file="${httpclient.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
     <copy file="${aspectjrt.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+    <copy file="${derby.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
 
     <!-- copy the all important web.xml -->
     <echo message="out.test.dir ${out.test.dir}" />
