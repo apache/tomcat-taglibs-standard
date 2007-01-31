@@ -317,8 +317,6 @@ public abstract class ImportSupport extends BodyTagSupport
 		    stripSession(targetUrl));
 	    }
 
-System.err.println("RETURN: " + irw.getString());
-
 	    // recover the response String from our wrapper
 	    return irw.getString();
 	}
