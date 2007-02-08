@@ -70,15 +70,12 @@ public abstract class TransactionTagSupport extends TagSupport
 
     public TransactionTagSupport() {
 	super();
-	init();
-    }
-
-    private void init() {
 	conn = null;
 	dataSourceSpecified = false;
 	rawDataSource = null;
 	isolation = Connection.TRANSACTION_NONE;
     }
+
 
 
     //*********************************************************************
@@ -166,11 +163,13 @@ public abstract class TransactionTagSupport extends TagSupport
 	    }
 	}
 	conn = null;
+	isolation = Connection.TRANSACTION_NONE;
     }
 
     // Releases any resources we may have (or inherit)
     public void release() {
-	init();
+	dataSourceSpecified = false;
+	rawDataSource = null;
     }
 
 
