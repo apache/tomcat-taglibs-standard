@@ -19,16 +19,20 @@ package org.apache.taglibs.standard.tag.common.core;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
+
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.ExpressionEvaluator;
 import javax.servlet.jsp.el.VariableResolver;
+
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.taglibs.standard.resources.Resources;
@@ -43,13 +47,13 @@ public class SetSupport extends BodyTagSupport {
     //*********************************************************************
     // Internal state
 
-    protected Object value;                             // tag attribute
-    protected boolean valueSpecified;			// status
-    protected Object target;                            // tag attribute
-    protected String property;                          // tag attribute
-    private String var;					// tag attribute
-    private int scope;					// tag attribute
-    private boolean scopeSpecified;			// status
+    protected Object value;             // tag attribute
+    protected boolean valueSpecified;   // status
+    protected Object target;            // tag attribute
+    protected String property;          // tag attribute
+    private String var;                 // tag attribute
+    private int scope;                  // tag attribute
+    private boolean scopeSpecified;     // status
 
     //*********************************************************************
     // Construction and initialization
@@ -67,8 +71,8 @@ public class SetSupport extends BodyTagSupport {
     // resets local state
     private void init() {
         value = var = null;
-	scopeSpecified = valueSpecified = false;
-	scope = PageContext.PAGE_SCOPE;
+        scopeSpecified = valueSpecified = false;
+        scope = PageContext.PAGE_SCOPE;
     }
 
     // Releases any resources we may have (or inherit)
@@ -83,115 +87,106 @@ public class SetSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 
-        Object result;		// what we'll store in scope:var
+        Object result;      // what we'll store in scope:var
 
         // determine the value by...
         if (value != null) {
-	    // ... reading our attribute
-	    result = value;
-  	} else if (valueSpecified) {
-	    // ... accepting an explicit null
-	    result = null;
-	} else {
-	    // ... retrieving and trimming our body
-	    if (bodyContent == null || bodyContent.getString() == null)
-		result = "";
-	    else
-	        result = bodyContent.getString().trim();
-	}
+            // ... reading our attribute
+            result = value;
+        } else if (valueSpecified) {
+            // ... accepting an explicit null
+            result = null;
+        } else {
+            // ... retrieving and trimming our body
+            if (bodyContent == null || bodyContent.getString() == null)
+                result = "";
+            else
+                result = bodyContent.getString().trim();
+        }
 
-	// decide what to do with the result
-	if (var != null) {
+        // decide what to do with the result
+        if (var != null) {
 
-	    /*
+            /*
              * Store the result, letting an IllegalArgumentException
              * propagate back if the scope is invalid (e.g., if an attempt
              * is made to store something in the session without any
-	     * HttpSession existing).
+             * HttpSession existing).
              */
-	    if (result != null) {
-	        pageContext.setAttribute(var, result, scope);
-	    } else {
-		if (scopeSpecified)
-		    pageContext.removeAttribute(var, scope);
-		else
-		    pageContext.removeAttribute(var);
-	    }
+            if (result != null) {
+                pageContext.setAttribute(var, result, scope);
+            } else {
+                if (scopeSpecified)
+                    pageContext.removeAttribute(var, scope);
+                else
+                    pageContext.removeAttribute(var);
+            }
 
-	} else if (target != null) {
+        } else if (target != null) {
 
-	    // save the result to target.property
-	    if (target instanceof Map) {
-		// ... treating it as a Map entry
-		if (result == null)
-		    ((Map) target).remove(property);
-		else
-		    ((Map) target).put(property, result);
-	    } else {
-		// ... treating it as a bean property
-		try {
-                    PropertyDescriptor pd[] =
-                        Introspector.getBeanInfo(target.getClass())
-			    .getPropertyDescriptors();
-		    boolean succeeded = false;
+            // save the result to target.property
+            if (target instanceof Map) {
+                // ... treating it as a Map entry
+                if (result == null)
+                    ((Map)target).remove(property);
+                else
+                    ((Map)target).put(property, result);
+            } else {
+                // ... treating it as a bean property
+                try {
+                    PropertyDescriptor pd[] = Introspector.getBeanInfo(target.getClass()).getPropertyDescriptors();
+                    boolean succeeded = false;
                     for (int i = 0; i < pd.length; i++) {
                         if (pd[i].getName().equals(property)) {
-			    Method m = pd[i].getWriteMethod();
+                            Method m = pd[i].getWriteMethod();
                             if (m == null) {
-                                throw new JspException(
-                                    Resources.getMessage("SET_NO_SETTER_METHOD",
-				        property));
+                                throw new JspException(Resources.getMessage("SET_NO_SETTER_METHOD", property));
                             }
-			    if (result != null) {  
+                            if (result != null) {  
                                 try {
-			        m.invoke(target,
-			             new Object[] { 
-                                         convertToExpectedType(result, m.getParameterTypes()[0])});
-                                } catch (javax.servlet.jsp.el.ELException ex) {
+                                    m.invoke(target, new Object[] { convertToExpectedType(result, m.getParameterTypes()[0]) });
+                                } catch (ELException ex) {
                                     throw new JspTagException(ex);
                                 }
-			    } else {
-				m.invoke(target, new Object[] { null });
-			    }
-			    succeeded = true;
-			}
-		    }
-		    if (!succeeded) {
-			throw new JspTagException(
-			    Resources.getMessage("SET_INVALID_PROPERTY",
-				property));
-		    }
-		} catch (IllegalAccessException ex) {
-		    throw new JspException(ex);
-		} catch (IntrospectionException ex) {
-		    throw new JspException(ex);
-		} catch (InvocationTargetException ex) {
-		    throw new JspException(ex);
-		}
-	    }
-	} else {
-	    // should't ever occur because of validation in TLV and setters
-	    throw new JspTagException();
-	}
+                            } else {
+                                m.invoke(target, new Object[] { null });
+                            }
+                            succeeded = true;
+                        }
+                    }
+                    if (!succeeded) {
+                        throw new JspTagException(Resources.getMessage("SET_INVALID_PROPERTY", property));
+                    }
+                } catch (IllegalAccessException ex) {
+                    throw new JspException(ex);
+                } catch (IntrospectionException ex) {
+                    throw new JspException(ex);
+                } catch (InvocationTargetException ex) {
+                    throw new JspException(ex);
+                }
+            }
+        } else {
+            // should't ever occur because of validation in TLV and setters
+            throw new JspTagException();
+        }
 
-	return EVAL_PAGE;
+        return EVAL_PAGE;
     }
     
     /**
      * Convert an object to an expected type according to the conversion
      * rules of the Expression Language.
      */
-    private Object convertToExpectedType( final Object value,
-    Class expectedType )
-    throws javax.servlet.jsp.el.ELException {
+    private Object convertToExpectedType(final Object value, Class expectedType) throws ELException {
         ExpressionEvaluator evaluator = pageContext.getExpressionEvaluator();
-        return evaluator.evaluate( "${result}", expectedType,
-        new VariableResolver() {
-            public Object resolveVariable( String pName )
-            throws ELException {
-                return value;
-            }
-        }, null );
+        return evaluator.evaluate( "${result}",
+                                   expectedType,
+                                   new VariableResolver() {
+                                       public Object resolveVariable(String pName) throws ELException {
+                                           return value;
+                                       }
+                                   },
+                                   null);
     }
 
     //*********************************************************************
@@ -199,12 +194,12 @@ public class SetSupport extends BodyTagSupport {
 
     // for tag attribute
     public void setVar(String var) {
-	this.var = var;
+        this.var = var;
     }
 
     // for tag attribute
     public void setScope(String scope) {
         this.scope = Util.getScope(scope);
-	this.scopeSpecified = true;
+        this.scopeSpecified = true;
     }
 }
