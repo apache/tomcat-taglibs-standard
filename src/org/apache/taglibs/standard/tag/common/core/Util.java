@@ -278,6 +278,12 @@ public class Util {
      */
     public static Enumeration getRequestLocales(HttpServletRequest request) {        
         Enumeration values = request.getHeaders("accept-language");
+        if (values == null) {
+            // No header for "accept-language". Simply return
+            // a new empty enumeration.
+            // System.out.println("Null accept-language");
+            return new Vector().elements();
+        } else
         if (values.hasMoreElements()) {
             // At least one "accept-language". Simply return
             // the enumeration returned by request.getLocales().
