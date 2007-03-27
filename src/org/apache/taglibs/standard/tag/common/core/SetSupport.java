@@ -70,15 +70,15 @@ public class SetSupport extends BodyTagSupport {
 
     // resets local state
     private void init() {
-        value = var = null;
+        value = target = property = var = null;
         scopeSpecified = valueSpecified = false;
         scope = PageContext.PAGE_SCOPE;
     }
 
     // Releases any resources we may have (or inherit)
     public void release() {
-        super.release();
         init();
+        super.release();
     }
 
 
