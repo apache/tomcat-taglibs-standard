@@ -21,6 +21,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.apache.taglibs.standard.extra.commons.collections.BoundedMap;
+
 /**
  * A <code>Map</code> implementation with a fixed maximum size which removes
  * the least recently used entry if an entry is added when full.
@@ -48,7 +50,7 @@ import java.util.Map;
  * @author Mario Ivankovits
  */
 public class LRUMap
-        extends AbstractLinkedMap implements Serializable, Cloneable {
+        extends AbstractLinkedMap implements BoundedMap, Serializable, Cloneable {
     
     /** Serialisation version */
     static final long serialVersionUID = -612114643488955218L;
