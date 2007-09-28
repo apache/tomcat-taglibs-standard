@@ -27,6 +27,10 @@ import org.apache.taglibs.standard.lang.jstl.parser.ELParser;
 import org.apache.taglibs.standard.lang.jstl.parser.ParseException;
 import org.apache.taglibs.standard.lang.jstl.parser.Token;
 import org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError;
+import org.apache.taglibs.standard.extra.commons.collections.map.LRUMap;
+
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.jstl.core.Config;
 
 /**
  *
@@ -89,14 +93,30 @@ public class ELEvaluator
   // Member variables
   //-------------------------------------
 
+  /**
+   * Name of configuration setting for maximum number of entries in the
+   * cached expression string map
+   */
+  private static final String EXPR_CACHE_PARAM
+    = "org.apache.taglibs.standard.lang.jstl.exprCacheSize";
+  /**
+   * Default maximum  cache size
+   */
+  private static final int MAX_SIZE = 100;
+
   /** The mapping from expression String to its parsed form (String,
-      Expression, or ExpressionString) **/
-  static Map sCachedExpressionStrings = 
-    Collections.synchronizedMap (new HashMap ());
+   *  Expression, or ExpressionString)
+   *
+   *  Using LRU Map with a maximum capacity to avoid out of bound map
+   *  growth.
+   *
+   *  NOTE: use LinkedHashmap if a dependency on J2SE 1.4+ is ok
+   */
+  static Map sCachedExpressionStrings = null;
 
   /** The mapping from ExpectedType to Maps mapping literal String to
       parsed value **/
-  static Map sCachedExpectedTypes = new HashMap ();
+  static Map sCachedExpectedTypes = new HashMap();
 
   /** The static Logger **/
   static Logger sLogger = new Logger (System.out);
@@ -106,6 +126,10 @@ public class ELEvaluator
 
   /** Flag if the cache should be bypassed **/
   boolean mBypassCache;
+
+  /** The PageContext **/
+  PageContext pageContext;
+
 
   //-------------------------------------
   /**
@@ -123,20 +147,11 @@ public class ELEvaluator
 
   //-------------------------------------
   /**
+   * Enable cache bypass
    *
-   * Constructor
-   *
-   * @param pResolver the object that should be used to resolve
-   * variable names encountered in expressions.  If null, all variable
-   * references will resolve to null.
-   *
-   * @param pBypassCache flag indicating if the cache should be
-   * bypassed
+   * @param pBypassCache flag indicating cache should be bypassed
    **/
-  public ELEvaluator (VariableResolver pResolver,
-		      boolean pBypassCache)
-  {
-    mResolver = pResolver;
+  public void setBypassCache(boolean pBypassCache) {
     mBypassCache = pBypassCache;
   }
 
@@ -186,6 +201,9 @@ public class ELEvaluator
       throw new ELException
 	(Constants.NULL_EXPRESSION_STRING);
     }
+
+    // Set the PageContext;
+    pageContext = (PageContext) pContext;
 
     // Get the parsed version of the expression string
     Object parsedValue = parseExpressionString (pExpressionString);
@@ -247,6 +265,10 @@ public class ELEvaluator
       return "";
     }
 
+    if (!(mBypassCache) && (sCachedExpressionStrings == null)) {
+      createExpressionStringMap();
+    }
+
     // See if it's in the cache
     Object ret = 
       mBypassCache ?
@@ -259,7 +281,9 @@ public class ELEvaluator
       ELParser parser = new ELParser (r);
       try {
 	ret = parser.ExpressionString ();
-	sCachedExpressionStrings.put (pExpressionString, ret);
+        if (!mBypassCache) {
+	  sCachedExpressionStrings.put (pExpressionString, ret);
+        }
       }
       catch (ParseException exc) {
 	throw new ELException 
@@ -339,6 +363,30 @@ public class ELEvaluator
       }
       return ret;
     }
+  }
+
+  //-------------------------------------
+  /**
+   *
+   * Creates LRU map of expression strings. If context parameter
+   * specifying cache size is present use that as the maximum size
+   * of the LRU map otherwise use default.
+   **/
+  private synchronized void createExpressionStringMap () {
+      if (sCachedExpressionStrings != null) {
+        return;
+      }
+
+      String value = pageContext.getServletContext().
+                     getInitParameter(EXPR_CACHE_PARAM);
+      if (value != null) {
+        sCachedExpressionStrings = 
+          Collections.synchronizedMap(new LRUMap(Integer.parseInt(value)));
+      }
+      else {
+        sCachedExpressionStrings = 
+          Collections.synchronizedMap(new LRUMap(MAX_SIZE));
+      }
   }
 
   //-------------------------------------

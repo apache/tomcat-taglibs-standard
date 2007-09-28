@@ -68,7 +68,9 @@ public class Evaluator
 			  String pAttributeValue)
   {
     try {
+      sEvaluator.setBypassCache(true);
       sEvaluator.parseExpressionString (pAttributeValue);
+      sEvaluator.setBypassCache(false);
       return null;
     }
     catch (ELException exc) {
