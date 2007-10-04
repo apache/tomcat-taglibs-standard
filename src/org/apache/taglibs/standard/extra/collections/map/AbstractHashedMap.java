@@ -1,5 +1,5 @@
 /*
- *  Copyright 2003-2004 The Apache Software Foundation
+ *  Copyright 2003-2005 The Apache Software Foundation
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -52,10 +52,11 @@ import org.apache.taglibs.standard.extra.commons.collections.iterators.EmptyMapI
  * This extends clause will be removed in v4.0.
  * 
  * @since Commons Collections 3.0
- * @version $Revision: 218351 $ $Date: 2004-10-20 17:58:23 -0700 (Wed, 20 Oct 2004) $
+ * @version $Revision: 171349 $ $Date: 2005-05-22 18:48:56 +0100 (Sun, 22 May 2005) $
  *
  * @author java util HashMap
  * @author Stephen Colebourne
+ * @author Christian Siefkes
  */
 public class AbstractHashedMap extends AbstractMap implements IterableMap {
     
@@ -145,8 +146,8 @@ public class AbstractHashedMap extends AbstractMap implements IterableMap {
             throw new IllegalArgumentException("Load factor must be greater than 0");
         }
         this.loadFactor = loadFactor;
-        this.threshold = calculateThreshold(initialCapacity, loadFactor);
         initialCapacity = calculateNewCapacity(initialCapacity);
+        this.threshold = calculateThreshold(initialCapacity, loadFactor);
         this.data = new HashEntry[initialCapacity];
         init();
     }
@@ -1204,13 +1205,13 @@ public class AbstractHashedMap extends AbstractMap implements IterableMap {
         int capacity = in.readInt();
         int size = in.readInt();
         init();
+        threshold = calculateThreshold(capacity, loadFactor);
         data = new HashEntry[capacity];
         for (int i = 0; i < size; i++) {
             Object key = in.readObject();
             Object value = in.readObject();
             put(key, value);
         }
-        threshold = calculateThreshold(data.length, loadFactor);
     }
     
     //-----------------------------------------------------------------------

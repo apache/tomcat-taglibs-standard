@@ -57,7 +57,7 @@ import org.apache.taglibs.standard.extra.commons.collections.iterators.EmptyOrde
  * methods exposed.
  * 
  * @since Commons Collections 3.0
- * @version $Revision: 218351 $ $Date: 2004-10-20 17:58:23 -0700 (Wed, 20 Oct 2004) $
+ * @version $Revision: 158688 $ $Date: 2005-03-22 22:14:15 +0000 (Tue, 22 Mar 2005) $
  *
  * @author java util LinkedHashMap
  * @author Stephen Colebourne
@@ -120,9 +120,13 @@ public class AbstractLinkedMap extends AbstractHashedMap implements OrderedMap {
 
     /**
      * Initialise this subclass during construction.
+     * <p>
+     * NOTE: As from v3.2 this method calls
+     * {@link #createEntry(HashEntry, int, Object, Object)} to create
+     * the map entry object.
      */
     protected void init() {
-        header = new LinkEntry(null, -1, null, null);
+        header = (LinkEntry) createEntry(null, -1, null, null);
         header.before = header.after = header;
     }
 

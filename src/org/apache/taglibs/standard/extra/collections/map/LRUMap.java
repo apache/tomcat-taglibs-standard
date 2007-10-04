@@ -1,5 +1,5 @@
 /*
- *  Copyright 2001-2004 The Apache Software Foundation
+ *  Copyright 2001-2005 The Apache Software Foundation
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -39,9 +39,15 @@ import org.apache.taglibs.standard.extra.commons.collections.BoundedMap;
  * <p>
  * All the available iterators can be reset back to the start by casting to
  * <code>ResettableIterator</code> and calling <code>reset()</code>.
- * 
+ * <p>
+ * <strong>Note that LRUMap is not synchronized and is not thread-safe.</strong>
+ * If you wish to use this map from multiple threads concurrently, you must use
+ * appropriate synchronization. The simplest approach is to wrap this map
+ * using {@link java.util.Collections#synchronizedMap(Map)}. This class may throw 
+ * <code>NullPointerException</code>'s when accessed by concurrent threads.
+ *
  * @since Commons Collections 3.0 (previously in main package v1.0)
- * @version $Revision: 218351 $ $Date: 2004-10-20 17:58:23 -0700 (Wed, 20 Oct 2004) $
+ * @version $Revision: 348299 $ $Date: 2005-11-22 23:51:45 +0000 (Tue, 22 Nov 2005) $
  *
  * @author James Strachan
  * @author Morgan Delagrange
@@ -53,7 +59,7 @@ public class LRUMap
         extends AbstractLinkedMap implements BoundedMap, Serializable, Cloneable {
     
     /** Serialisation version */
-    static final long serialVersionUID = -612114643488955218L;
+    private static final long serialVersionUID = -612114643488955218L;
     /** Default maximum size */
     protected static final int DEFAULT_MAX_SIZE = 100;
     
@@ -191,6 +197,9 @@ public class LRUMap
             entry.before = header.before;
             header.before.after = entry;
             header.before = entry;
+        } else if (entry == header) {
+            throw new IllegalStateException("Can't move header to MRU" +
+                " (please report this to commons-dev@jakarta.apache.org)");
         }
     }
     
@@ -228,18 +237,32 @@ public class LRUMap
             LinkEntry reuse = header.after;
             boolean removeLRUEntry = false;
             if (scanUntilRemovable) {
-                while (reuse != header) {
+                while (reuse != header && reuse != null) {
                     if (removeLRU(reuse)) {
                         removeLRUEntry = true;
                         break;
                     }
                     reuse = reuse.after;
                 }
+                if (reuse == null) {
+                    throw new IllegalStateException(
+                        "Entry.after=null, header.after" + header.after + " header.before" + header.before +
+                        " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
+                        " Please check that your keys are immutable, and that you have used synchronization properly." +
+                        " If so, then please report this to commons-dev@jakarta.apache.org as a bug.");
+                }
             } else {
                 removeLRUEntry = removeLRU(reuse);
             }
             
             if (removeLRUEntry) {
+                if (reuse == null) {
+                    throw new IllegalStateException(
+                        "reuse=null, header.after=" + header.after + " header.before" + header.before +
+                        " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
+                        " Please check that your keys are immutable, and that you have used synchronization properly." +
+                        " If so, then please report this to commons-dev@jakarta.apache.org as a bug.");
+                }
                 reuseMapping(reuse, hashIndex, hashCode, key, value);
             } else {
                 super.addMapping(hashIndex, hashCode, key, value);
@@ -264,19 +287,35 @@ public class LRUMap
         // find the entry before the entry specified in the hash table
         // remember that the parameters (except the first) refer to the new entry,
         // not the old one
-        int removeIndex = hashIndex(entry.hashCode, data.length);
-        HashEntry loop = data[removeIndex];
-        HashEntry previous = null;
-        while (loop != entry) {
-            previous = loop;
-            loop = loop.next;
+        try {
+            int removeIndex = hashIndex(entry.hashCode, data.length);
+            HashEntry[] tmp = data;  // may protect against some sync issues
+            HashEntry loop = tmp[removeIndex];
+            HashEntry previous = null;
+            while (loop != entry && loop != null) {
+                previous = loop;
+                loop = loop.next;
+            }
+            if (loop == null) {
+                throw new IllegalStateException(
+                    "Entry.next=null, data[removeIndex]=" + data[removeIndex] + " previous=" + previous +
+                    " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
+                    " Please check that your keys are immutable, and that you have used synchronization properly." +
+                    " If so, then please report this to commons-dev@jakarta.apache.org as a bug.");
+            }
+            
+            // reuse the entry
+            modCount++;
+            removeEntry(entry, removeIndex, previous);
+            reuseEntry(entry, hashIndex, hashCode, key, value);
+            addEntry(entry, hashIndex);
+        } catch (NullPointerException ex) {
+            throw new IllegalStateException(
+                    "NPE, entry=" + entry + " entryIsHeader=" + (entry==header) +
+                    " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
+                    " Please check that your keys are immutable, and that you have used synchronization properly." +
+                    " If so, then please report this to commons-dev@jakarta.apache.org as a bug.");
         }
-        
-        // reuse the entry
-        modCount++;
-        removeEntry(entry, removeIndex, previous);
-        reuseEntry(entry, hashIndex, hashCode, key, value);
-        addEntry(entry, hashIndex);
     }
     
     /**

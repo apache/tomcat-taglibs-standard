@@ -27,7 +27,7 @@ import org.apache.taglibs.standard.extra.commons.collections.ResettableIterator;
  * 2.1.1 and 3.1 due to issues with <code>IteratorUtils</code>.
  *
  * @since Commons Collections 2.1.1 and 3.1
- * @version $Revision: 218351 $ $Date: 2004-10-20 17:58:23 -0700 (Wed, 20 Oct 2004) $
+ * @version $Revision: 155406 $ $Date: 2005-02-26 12:55:26 +0000 (Sat, 26 Feb 2005) $
  * 
  * @author Stephen Colebourne
  */
