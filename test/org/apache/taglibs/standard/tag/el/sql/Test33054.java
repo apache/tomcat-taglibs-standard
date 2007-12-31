@@ -62,8 +62,8 @@ public class Test33054 extends JspTestCase {
 
         String data = (String) pageContext.getAttribute("bug33054", PageContext.APPLICATION_SCOPE);
 
-	// This fails and isn't something that can easily be fixed. 
-	// See: http://issues.apache.org/bugzilla/show_bug.cgi?id=33054
+        // This fails and isn't something that can easily be fixed. 
+        // See: http://issues.apache.org/bugzilla/show_bug.cgi?id=33054
         //assertEquals( "ID=1NAME=1" + "ID1=1NAME1=a" + "ID2=1NAME2=a", data );
     }
 }
