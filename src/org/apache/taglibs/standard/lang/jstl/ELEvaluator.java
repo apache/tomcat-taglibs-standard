@@ -378,16 +378,18 @@ public class ELEvaluator
         return;
       }
 
-      String value = pageContext.getServletContext().
-                     getInitParameter(EXPR_CACHE_PARAM);
-      if (value != null) {
-        sCachedExpressionStrings = 
-          Collections.synchronizedMap(new LRUMap(Integer.parseInt(value)));
+      if( (pageContext != null) && (pageContext.getServletContext() != null) ) {
+
+          String value = pageContext.getServletContext().getInitParameter(EXPR_CACHE_PARAM);
+          if (value != null) {
+            sCachedExpressionStrings = Collections.synchronizedMap(new LRUMap(Integer.parseInt(value)));
+            return;
+          }
+
       }
-      else {
-        sCachedExpressionStrings = 
-          Collections.synchronizedMap(new LRUMap(MAX_SIZE));
-      }
+
+      // fall through if it couldn't find the parameter
+      sCachedExpressionStrings = Collections.synchronizedMap(new LRUMap(MAX_SIZE));
   }
 
   //-------------------------------------
