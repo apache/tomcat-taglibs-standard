@@ -68,7 +68,7 @@ class ResultImpl implements Result, Serializable {
         // Create the column name array
         columnNames = new String[noOfColumns];
         for (int i = 1; i <= noOfColumns; i++) {
-            columnNames[i-1] = rsmd.getColumnName(i);
+            columnNames[i-1] = rsmd.getColumnLabel(i);
         }
 
         // Throw away all rows upto startRow
