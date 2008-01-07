@@ -344,6 +344,8 @@
       <!-- Suite of Cactus tests to be executed -->
       <batchtest>
         <fileset dir="${src.test.dir}">
+<!--          <include name="**/lang/jstl/test/*Test.java"/> -->
+          <include name="**/lang/jstl/test/*Tests.java"/>
           <include name="**/tag/**/Test*.java"/>
           <include name="**/functions/**/Test*.java"/>
           <exclude name="**/testutil/*.java"/>
