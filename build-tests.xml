@@ -362,6 +362,8 @@
       <!-- uncomment the below line to enable attaching a debugger -->
       <jvmarg line="${debug.jvm.args}"/>
 
+      <sysproperty key="javax.servlet.jsp.functions.allowed" value="true" />
+
       <classpath>
         <pathelement path="${java.class.path}"/>
         <pathelement location="${out.test.dir}/WEB-INF/classes"/>
@@ -373,6 +375,9 @@
       <batchtest>
         <fileset dir="${src.test.dir}">
           <include name="**/TestVersion.java"/>
+          <include name="**/StaticFunctionTests.java"/>
+          <include name="**/ParserTest.java"/>
+          <exclude name="**/EvaluationTest.java"/>
           <exclude name="**/testutil/*.java"/>
         </fileset>
       </batchtest>

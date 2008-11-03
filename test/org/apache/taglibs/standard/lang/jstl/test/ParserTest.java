@@ -31,6 +31,8 @@ import javax.servlet.jsp.JspException;
 
 import org.apache.taglibs.standard.lang.jstl.Evaluator;
 
+import junit.framework.TestCase;
+
 /**
  *
  * <p>This runs a series of tests specifically for the parser.  It
@@ -48,8 +50,8 @@ import org.apache.taglibs.standard.lang.jstl.Evaluator;
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  **/
 
-public class ParserTest
-{
+public class ParserTest extends TestCase {
+
   //-------------------------------------
   // Properties
   //-------------------------------------
@@ -149,7 +151,7 @@ public class ParserTest
    * Performs a line-by-line comparison of the two files, returning
    * true if the files are different, false if not.
    **/
-  public static boolean isDifferentFiles (DataInput pIn1,
+  public static boolean isDifferentStreams (DataInput pIn1,
 					  DataInput pIn2)
     throws IOException
   {
@@ -178,7 +180,7 @@ public class ParserTest
    * Performs a line-by-line comparison of the two files, returning
    * true if the files are different, false if not.
    **/
-  public static boolean isDifferentFiles (File pFile1,
+  public static void assertDifferentFiles (File pFile1,
 					  File pFile2)
     throws IOException
   {
@@ -194,7 +196,9 @@ public class ParserTest
 	BufferedInputStream bin2 = new BufferedInputStream (fin2);
 	DataInputStream din2 = new DataInputStream (bin2);
 
-	return isDifferentFiles (din1, din2);
+	if(isDifferentStreams (din1, din2)) {
+        fail("Files are different");
+    }
       }
       finally {
 	if (fin2 != null) {
@@ -216,32 +220,21 @@ public class ParserTest
    *
    * Runs the parser test
    **/
-  public static void main (String [] pArgs)
+  public void testParser()
     throws IOException
   {
-    if (pArgs.length != 2 &&
-	pArgs.length != 3) {
-      usage ();
-      System.exit (1);
-    }
 
-    File in = new File (pArgs [0]);
-    File out = new File (pArgs [1]);
+    String input = "test/org/apache/taglibs/standard/lang/jstl/test/parserTests.txt";
+    String output = "/tmp/parserTestsOutput.txt";
+    String compareName = "test/org/apache/taglibs/standard/lang/jstl/test/parserTestsOutput.txt";
+
+    File in = new File (input);
+    File out = new File (output);
 
     runTests (in, out);
 
-    if (pArgs.length > 2) {
-      File compare = new File (pArgs [2]);
-      if (isDifferentFiles (out, compare)) {
-	System.out.println ("Test failure - output file " +
-			    out +
-			    " differs from expected output file " +
-			    compare);
-      }
-      else {
-	System.out.println ("tests passed");
-      }
-    }
+      File compare = new File (compareName);
+      assertDifferentFiles(out, compare);
   }
 
   //-------------------------------------
