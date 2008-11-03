@@ -17,6 +17,9 @@
 
 package org.apache.taglibs.standard.testutil;
 
+/**
+ * Helper class for Cactus tests
+ */
 public class TestUtil {
     
     private TestUtil() {}
