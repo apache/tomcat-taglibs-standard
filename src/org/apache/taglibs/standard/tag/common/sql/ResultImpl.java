@@ -47,6 +47,29 @@ public class ResultImpl implements Result {
     private boolean isLimited;
 
     /**
+     * Build a <code>Result</code> object from a <code>ResultSet</code> object.
+     *
+     * @param rs an open <tt>ResultSet</tt>, positioned before the first row
+     * @exception if a database error occurs
+     */
+    public ResultImpl(ResultSet rs) throws SQLException {
+        this(rs, -1, -1);
+    }
+
+    /**
+     * Build a <code>Result</code> object from a <code>ResultSet</code> object.
+     *
+     * @param rs an open <tt>ResultSet</tt>, positioned before the first row
+     * @param maxRows, query maximum rows limit
+     * @exception if a database error occurs
+     */
+    public ResultImpl(ResultSet rs, int maxRows) throws SQLException {
+        // Matching API in ResultSupport - apologies for the bad 
+        // order of default parameters
+        this(rs, -1, maxRows);
+    }
+
+    /**
      * This constructor reads the ResultSet and saves a cached
      * copy.
      *

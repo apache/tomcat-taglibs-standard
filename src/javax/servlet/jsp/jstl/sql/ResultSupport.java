@@ -26,8 +26,11 @@ import java.sql.SQLException;
  * easier for page authors to access and manipulate the data resulting 
  * from a SQL query.</p>
  *
- * @author Justyna Horwat
+ * Note that these methods hide any SQLExceptions that are caused and return 
+ * null - to work around that 
+ * use org.apache.taglibs.standard.tag.common.sql.ResultImpl directly.
  *
+ * @author Justyna Horwat
  */
 public class ResultSupport {
 
