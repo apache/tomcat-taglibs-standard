@@ -40,12 +40,24 @@ public class DataSourceWrapper implements DataSource {
     private String password;
 
     public void setDriverClassName(String driverClassName) 
-	throws ClassNotFoundException, InstantiationException, 
-	       IllegalAccessException {
+        throws ClassNotFoundException, InstantiationException, 
+            IllegalAccessException {
 
-	this.driverClassName = driverClassName;
-        Class.forName(driverClassName, true, 
-            Thread.currentThread().getContextClassLoader()).newInstance();
+        this.driverClassName = driverClassName;
+
+        //get the classloader
+        ClassLoader cl;
+        SecurityManager sm = System.getSecurityManager();
+        if (sm == null) {
+            cl = Thread.currentThread().getContextClassLoader();
+        } else {
+            cl = java.security.AccessController.doPrivileged(
+                    new java.security.PrivilegedAction<ClassLoader>() 
+                    {public ClassLoader run() {return Thread.currentThread().getContextClassLoader();}});
+        }
+        //done getting classloader
+    
+        Class.forName(driverClassName, true, cl).newInstance();
     }
 
     public void setJdbcURL(String jdbcURL) {
@@ -111,6 +123,13 @@ public class DataSourceWrapper implements DataSource {
     public synchronized void setLogWriter(PrintWriter out) throws SQLException {
         throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
     }
+    
+    public synchronized boolean isWrapperFor(Class c) throws SQLException {
+        throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
+    }
 
+    public synchronized Object unwrap(Class c) throws SQLException {
+        throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
+    }
 
 }

@@ -24,7 +24,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.jstl.core.IndexedValueExpression;
+import javax.servlet.jsp.jstl.core.IteratedExpression;
+import javax.servlet.jsp.jstl.core.IteratedValueExpression;
 import javax.servlet.jsp.jstl.core.LoopTagSupport;
 
 import org.apache.taglibs.standard.resources.Resources;
@@ -109,7 +115,133 @@ public abstract class ForEachSupport extends LoopTagSupport {
             return i.next();
         }
     }
+    
+    protected class DeferredForEachIterator implements ForEachIterator {
 
+        private ValueExpression itemsValueExpression;
+        private IteratedExpression itemsValueIteratedExpression;
+        private int length = -1;
+        private int currentIndex = 0;
+        private boolean isIndexedValueExpression = false;
+        private boolean anIterator = false;
+        private Iterator myIterator;
+        private boolean anEnumeration = false;
+        private Enumeration myEnumeration;
+        public DeferredForEachIterator(ValueExpression o) throws JspTagException {
+            itemsValueExpression = o;
+            determineLengthAndType();
+        }
+        public boolean hasNext() throws JspTagException {
+            if (isIndexedValueExpression) {
+                if (currentIndex<length) {
+                    return true;
+                } else {
+                    return false;
+                }                
+            } else {
+                if (length!=-1) {
+                    //a Collection, Map, or StringTokenizer 
+                    if (currentIndex<length) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    if (anIterator) {
+                        return myIterator.hasNext();
+                    } else if (anEnumeration) {
+                        return myEnumeration.hasMoreElements();
+                    } else {
+                        //don't know what this is
+                        return false;
+                    }
+                }
+            }
+        }
+        public Object next() throws JspTagException {
+            ValueExpression nextValue = null;
+            if (isIndexedValueExpression) {
+                nextValue = new IndexedValueExpression(itemsValueExpression, currentIndex);
+                currentIndex++;
+            } else {
+                if (itemsValueIteratedExpression==null) {
+                    itemsValueIteratedExpression = new IteratedExpression(itemsValueExpression, getDelims());
+                }
+                nextValue = new IteratedValueExpression(itemsValueIteratedExpression, currentIndex);
+                currentIndex++;
+                if (length!=-1) {
+                    //a Collection, Map, or StringTokenizer
+                    //nothing else needed
+                } else {
+                    //need to increment these guys
+                    if (anIterator) {
+                        myIterator.next();
+                    } else if (anEnumeration) {
+                        myEnumeration.nextElement();
+                    }
+                }
+            }
+            return nextValue;
+        }
+        private void determineLengthAndType() throws JspTagException {
+            ELContext myELContext = pageContext.getELContext();
+            Object o = itemsValueExpression.getValue(myELContext);
+            if (o instanceof Object[]) {
+                length = ((Object[])o).length;
+                isIndexedValueExpression = true;
+            } else if (o instanceof boolean[]) {
+                length = ((boolean[])o).length;
+                isIndexedValueExpression = true;
+            } else if (o instanceof byte[]) {
+                length = ((byte[])o).length;
+                isIndexedValueExpression = true;
+            } else if (o instanceof char[]) {
+                length = ((char[])o).length;
+                isIndexedValueExpression = true;
+            } else if (o instanceof short[]) {
+                length = ((short[])o).length;
+                isIndexedValueExpression = true;
+            } else if (o instanceof int[]) {
+                length = ((int[])o).length;
+                isIndexedValueExpression = true;
+            } else if (o instanceof long[]) {
+                length = ((long[])o).length;
+                isIndexedValueExpression = true;
+            } else if (o instanceof float[]) {
+                length = ((float[])o).length;
+                isIndexedValueExpression = true;
+            } else if (o instanceof double[]) {
+                length = ((double[])o).length;
+                isIndexedValueExpression = true;
+            } else if (o instanceof Collection) {
+                length = ((Collection)o).size();
+                isIndexedValueExpression = false;
+            } else if (o instanceof Iterator) {
+                //have to reproduce iterator here so we can determine the size
+                isIndexedValueExpression = false;
+                anIterator = true;
+                myIterator = (Iterator)o;
+            } else if (o instanceof Enumeration) {
+                isIndexedValueExpression = false;
+                anEnumeration=true;
+                myEnumeration = (Enumeration)o;
+            } else if (o instanceof Map) {
+                length = ((Map)o).size();
+                isIndexedValueExpression = false;
+            //
+            //else if (o instanceof ResultSet)
+            //    items = toForEachIterator((ResultSet) o);
+            //
+            } else if (o instanceof String) {
+                StringTokenizer st = new StringTokenizer((String)o, ",");
+                length = st.countTokens();
+                isIndexedValueExpression = false;
+            } else {
+                //What does this mean if we get here???
+                length=0;
+            }
+        }
+    }
 
     //*********************************************************************
     // ForEach-specifc state (protected)
@@ -134,8 +266,17 @@ public abstract class ForEachSupport extends LoopTagSupport {
     protected void prepare() throws JspTagException {
         // produce the right sort of ForEachIterator
         if (rawItems != null) {
-            // extract an iterator over the 'items' we've got
-            items = supportedTypeForEachIterator(rawItems);
+            if (rawItems instanceof ValueExpression) {
+                deferredExpression = (ValueExpression)rawItems;
+                ELContext myELContext = pageContext.getELContext();
+                VariableMapper vm = myELContext.getVariableMapper();
+                //String itemsName=deferredExpression.getExpressionString();
+                //vm.setVariable(itemsName, deferredExpression);
+                items = toDeferredForEachIterator(deferredExpression);
+            } else {
+                // extract an iterator over the 'items' we've got
+                items = supportedTypeForEachIterator(rawItems);
+            }
         } else {
             // no 'items', so use 'begin' and 'end'
             items = beginEndForEachIterator();
@@ -165,6 +306,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
     // Private generation methods for the ForEachIterators we produce
 
     /* Extracts a ForEachIterator given an object of a supported type. */
+    //This should not be called for a deferred ValueExpression
     protected ForEachIterator supportedTypeForEachIterator(Object o)
             throws JspTagException {
 
@@ -250,6 +392,10 @@ public abstract class ForEachSupport extends LoopTagSupport {
     //*********************************************************************
     // Private conversion methods to handle the various types we support
 
+    protected ForEachIterator toDeferredForEachIterator(ValueExpression o) throws JspTagException {
+        return new DeferredForEachIterator(o);
+    }
+    
     // catch-all method whose invocation currently signals a 'matching error'
     protected ForEachIterator toForEachIterator(Object o)
             throws JspTagException {

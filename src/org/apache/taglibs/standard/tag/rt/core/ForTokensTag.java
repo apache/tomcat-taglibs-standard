@@ -59,8 +59,8 @@ public class ForTokensTag
         validateStep();
     }
 
-    // stores the 'items' String we're passed
-    public void setItems(String s) throws JspTagException {
+    // stores the 'items' Object we're passed
+    public void setItems(Object s) throws JspTagException {
         items = s;
 	// use the empty string to indicate "no iteration"
         if (s == null)

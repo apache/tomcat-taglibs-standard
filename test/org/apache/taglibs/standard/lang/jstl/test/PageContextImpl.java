@@ -32,6 +32,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.el.ExpressionEvaluator;
 import javax.servlet.jsp.el.VariableResolver;
+import javax.el.ELContext;
 
 /**
  *
@@ -299,4 +300,5 @@ public class PageContextImpl
   public ExpressionEvaluator getExpressionEvaluator() { return null; }
   public VariableResolver getVariableResolver() { return null; }  
   
+  public ELContext getELContext() { return null; }
 }

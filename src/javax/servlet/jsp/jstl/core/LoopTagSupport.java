@@ -17,6 +17,9 @@
 
 package javax.servlet.jsp.jstl.core;
 
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
@@ -105,6 +108,7 @@ public abstract class LoopTagSupport
     /** Attribute-exposing control */
     protected String itemId, statusId;
 
+    protected ValueExpression deferredExpression=null;
 
     //*********************************************************************
     // 'Private' state (implementation details)
@@ -501,28 +505,33 @@ public abstract class LoopTagSupport
      */
     private void exposeVariables() throws JspTagException {
 
-        /*
-         * We need to support null items returned from next(); we
-         * do this simply by passing such non-items through to the
-         * scoped variable as effectively 'null' (that is, by calling
-         * removeAttribute()).
-         *
-         * Also, just to be defensive, we handle the case of a null
-         * 'status' object as well.
-         *
-         * We call getCurrent() and getLoopStatus() (instead of just using
-         * 'item' and 'status') to bridge to subclasses correctly.
-         * A subclass can override getCurrent() or getLoopStatus() but still
-         * depend on our doStartTag() and doAfterBody(), which call this
-         * method (exposeVariables()), to expose 'item' and 'status'
-         * correctly.
-         */
-
-        if (itemId != null) {
-            if (getCurrent() == null)
-                pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
-            else
-                pageContext.setAttribute(itemId, getCurrent());
+        if (deferredExpression==null) {
+            /*
+             * We need to support null items returned from next(); we
+             * do this simply by passing such non-items through to the
+             * scoped variable as effectively 'null' (that is, by calling
+             * removeAttribute()).
+             *
+             * Also, just to be defensive, we handle the case of a null
+             * 'status' object as well.
+             *
+             * We call getCurrent() and getLoopStatus() (instead of just using
+             * 'item' and 'status') to bridge to subclasses correctly.
+             * A subclass can override getCurrent() or getLoopStatus() but still
+             * depend on our doStartTag() and doAfterBody(), which call this
+             * method (exposeVariables()), to expose 'item' and 'status'
+             * correctly.
+             */
+            if (itemId != null) {
+                if (getCurrent() == null)
+                    pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
+                else
+                    pageContext.setAttribute(itemId, getCurrent());
+            }
+        } else { //this is using a DeferredExpression
+            ELContext myELContext = pageContext.getELContext();
+            VariableMapper vm = myELContext.getVariableMapper();
+            vm.setVariable(itemId, (ValueExpression)getCurrent());
         }
         if (statusId != null) {
             if (getLoopStatus() == null)
@@ -538,9 +547,16 @@ public abstract class LoopTagSupport
      * restores them to their prior values (and scopes).
      */
     private void unExposeVariables() {
-        // "nested" variables are now simply removed
-	if (itemId != null)
-            pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
+        if (deferredExpression==null) {
+            // "nested" variables are now simply removed
+        	if (itemId != null)
+                    pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
+        } else {
+            //we're deferred ... remove variable mapping
+            ELContext myELContext = pageContext.getELContext();
+            VariableMapper vm = myELContext.getVariableMapper();
+            vm.setVariable(itemId, null);
+        }
 	if (statusId != null)
 	    pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
     }
@@ -589,5 +605,12 @@ public abstract class LoopTagSupport
      */
     private boolean atEnd() {
         return ((end != -1) && (begin + index >= end));
+    }
+    /**
+     * Get the delimiter for string tokens. Used only for constructing
+     * the deferred expression for it.
+     */
+    protected String getDelims() {
+        return ",";
     }
 }

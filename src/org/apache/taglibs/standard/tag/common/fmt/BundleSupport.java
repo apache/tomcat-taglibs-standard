@@ -201,8 +201,8 @@ public abstract class BundleSupport extends BodyTagSupport {
 	if (locCtxt == null) {
 	    // try using the root resource bundle with the given basename
 	    try {
-		bundle = ResourceBundle.getBundle(basename, EMPTY_LOCALE,
-						  Thread.currentThread().getContextClassLoader());
+	        ClassLoader cl = getClassLoaderCheckingPrivilege();
+            bundle = ResourceBundle.getBundle(basename, EMPTY_LOCALE, cl);
 		if (bundle != null) {
 		    locCtxt = new LocalizationContext(bundle, null);
 		}
@@ -279,9 +279,8 @@ public abstract class BundleSupport extends BodyTagSupport {
 	ResourceBundle match = null;
 
 	try {
-	    ResourceBundle bundle =
-		ResourceBundle.getBundle(basename, pref,
-					 Thread.currentThread().getContextClassLoader());
+	    ClassLoader cl = getClassLoaderCheckingPrivilege();
+        ResourceBundle bundle = ResourceBundle.getBundle(basename, pref, cl);
 	    Locale avail = bundle.getLocale();
 	    if (pref.equals(avail)) {
 		// Exact match
@@ -325,5 +324,18 @@ public abstract class BundleSupport extends BodyTagSupport {
 	}
 
 	return match;
+    }
+    
+    private static ClassLoader getClassLoaderCheckingPrivilege() {
+        ClassLoader cl;
+        SecurityManager sm = System.getSecurityManager();
+        if (sm == null) {
+            cl = Thread.currentThread().getContextClassLoader();
+        } else {
+            cl = java.security.AccessController.doPrivileged(
+                new java.security.PrivilegedAction<ClassLoader>() 
+                {public ClassLoader run() {return Thread.currentThread().getContextClassLoader();}});
+        }
+        return cl;
     }
 }

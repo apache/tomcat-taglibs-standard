@@ -27,12 +27,15 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspFactory;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 
-import javax.servlet.jsp.el.ELException;
-import javax.servlet.jsp.el.ExpressionEvaluator;
-import javax.servlet.jsp.el.VariableResolver;
+import javax.el.ELException;
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
+import javax.el.ExpressionFactory;
 
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
@@ -114,9 +117,30 @@ public class SetSupport extends BodyTagSupport {
              * is made to store something in the session without any
              * HttpSession existing).
              */
+            ELContext myELContext = pageContext.getELContext();
+            VariableMapper vm = myELContext.getVariableMapper();
             if (result != null) {
-                pageContext.setAttribute(var, result, scope);
+                //check for instanceof valueExpression
+                if (result instanceof ValueExpression) {
+                    if (scope!=PageContext.PAGE_SCOPE) {
+                        throw new JspException("Incorrect scope for ValueExpression.  PageScope is required.");
+                    }
+                    //set variable in var Mapper
+                    vm.setVariable(var, (ValueExpression)result);
+                } else {
+                    /*
+                    //else if not valueExpression - make sure to remove it from the Var mapper
+                    //if the scope is page, should I remove this?
+                    if (vm.resolveVariable(var)!=null) {
+                        vm.setVariable(var, null);
+                    }*/
+                    pageContext.setAttribute(var, result, scope);
+                }
             } else {
+                //make sure to remove it from the Var mapper
+                if (vm.resolveVariable(var)!=null) {
+                    vm.setVariable(var, null);
+                }
                 if (scopeSpecified)
                     pageContext.removeAttribute(var, scope);
                 else
@@ -179,15 +203,9 @@ public class SetSupport extends BodyTagSupport {
      * rules of the Expression Language.
      */
     private Object convertToExpectedType(final Object value, Class expectedType) throws ELException {
-        ExpressionEvaluator evaluator = pageContext.getExpressionEvaluator();
-        return evaluator.evaluate( "${result}",
-                                   expectedType,
-                                   new VariableResolver() {
-                                       public Object resolveVariable(String pName) throws ELException {
-                                           return value;
-                                       }
-                                   },
-                                   null);
+        JspFactory jspFactory = JspFactory.getDefaultFactory();
+        ExpressionFactory expressionFactory = jspFactory.getJspApplicationContext(pageContext.getServletContext()).getExpressionFactory();
+        return expressionFactory.coerceToType(value, expectedType);
     }
 
     //*********************************************************************

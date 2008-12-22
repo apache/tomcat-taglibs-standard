@@ -20,8 +20,9 @@
         jstl.jar                      JSTL API jar file
         standard.jar                  JSTL implementation jar file
 
-        servlet24.jar                 Servlet 2.4 jar
-        jsp20.jar                     JSP 2.0 jar
+        servlet25.jar                 Servlet 2.5 jar
+        jsp21.jar                     JSP 2.1 jar
+        el.jar                        Unified EL jar
 
         junit.jar                     JUnit jar
 
@@ -99,6 +100,9 @@
   <property name="junit.jar" 
             value="${tomcat.home}/../junit3.8.1/junit.jar"/>
 
+  <property name="commons-logging.jar" 
+            value="${cactus.home}/lib/commons-logging-1.0.4.jar"/>
+
   <property name="standard.jar" 
             value="${tomcat.home}/jstl/lib/standard.jar"/>
     
@@ -125,9 +129,11 @@
     <echo>optimize: ${compile.optimize}</echo>
     <echo>---------- Dependencies ---------------------</echo>
     <echo>tomcat.home=${tomcat.home}</echo>
-    <echo>servlet24.jar: ${servlet24.jar}</echo>
-    <echo>jsp20.jar: ${jsp20.jar}</echo>
+    <echo>servlet25.jar: ${servlet25.jar}</echo>
+    <echo>jsp21.jar: ${jsp21.jar}</echo>
+    <echo>el.jar: ${el.jar}</echo>
     <echo>junit.jar: ${junit.jar}</echo>
+    <echo>commons-logging.jar: ${commons-logging.jar}</echo>
     <echo>cactus.home: ${cactus.home}</echo>
     <echo>cactus.ant.jar: ${cactus.ant.jar}</echo>
     <echo>cactus.jar: ${cactus.jar}</echo>
@@ -150,9 +156,11 @@
   <path id="compile.classpath">
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${standard.jar}"/>
-    <pathelement location="${servlet24.jar}"/>
-    <pathelement location="${jsp20.jar}"/>
+    <pathelement location="${servlet25.jar}"/>
+    <pathelement location="${jsp21.jar}"/>
+    <pathelement location="${el.jar}"/>
     <pathelement location="${junit.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${cactus.jar}"/>
     <pathelement location="${httpclient.jar}"/>
     <pathelement location="${aspectjrt.jar}"/>
@@ -243,6 +251,7 @@
     <copy file="${jstl.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
     <copy file="${standard.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
     <copy file="${junit.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+    <copy file="${commons-logging.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
     <copy file="${cactus.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
     <copy file="${httpclient.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
     <copy file="${aspectjrt.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
@@ -377,7 +386,7 @@
           <include name="**/TestVersion.java"/>
           <include name="**/StaticFunctionTests.java"/>
           <include name="**/ParserTest.java"/>
-          <exclude name="**/EvaluationTest.java"/>
+          <include name="**/EvaluationTest.java"/>
           <exclude name="**/testutil/*.java"/>
         </fileset>
       </batchtest>

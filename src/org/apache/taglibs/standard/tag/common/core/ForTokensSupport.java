@@ -19,7 +19,12 @@ package org.apache.taglibs.standard.tag.common.core;
 
 import java.util.StringTokenizer;
 
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.jstl.core.IteratedExpression;
+import javax.servlet.jsp.jstl.core.IteratedValueExpression;
 import javax.servlet.jsp.jstl.core.LoopTagSupport;
 
 /**
@@ -50,9 +55,11 @@ public abstract class ForTokensSupport extends LoopTagSupport {
     //*********************************************************************
     // ForEachTokens-specific state (protected)
 
-    protected String items;                       // 'items' attribute
+    protected Object items;                       // 'items' attribute
     protected String delims;                      // 'delims' attribute
     protected StringTokenizer st;                 // digested tokenizer
+    protected int currentIndex = 0;
+    private IteratedExpression itemsValueIteratedExpression;
 
 
     //*********************************************************************
@@ -64,7 +71,18 @@ public abstract class ForTokensSupport extends LoopTagSupport {
      */
 
     protected void prepare() throws JspTagException {
-      st = new StringTokenizer(items, delims);
+        if (items instanceof ValueExpression) {
+            deferredExpression = (ValueExpression) items;
+            ELContext myELContext = pageContext.getELContext();
+            Object originalValue = deferredExpression.getValue(myELContext);
+            if (originalValue instanceof String) {
+                st = new StringTokenizer((String)originalValue, delims);
+            } else {
+                throw new JspTagException();
+            }
+        } else {
+            st = new StringTokenizer((String)items, delims);
+        }
     }
 
     protected boolean hasNext() throws JspTagException {
@@ -72,7 +90,17 @@ public abstract class ForTokensSupport extends LoopTagSupport {
     }
 
     protected Object next() throws JspTagException {
-        return st.nextElement();
+        if (deferredExpression!=null) {
+            st.nextElement();
+            if (itemsValueIteratedExpression==null) {
+                itemsValueIteratedExpression = new IteratedExpression(deferredExpression, getDelims());
+            }
+            ValueExpression nextValue = new IteratedValueExpression(itemsValueIteratedExpression, currentIndex);
+            currentIndex++;
+            return nextValue;
+        } else {
+            return st.nextElement();
+        }
     }
 
 
@@ -87,4 +115,11 @@ public abstract class ForTokensSupport extends LoopTagSupport {
         st = null;
     }
 
+    /**
+     * Get the delimiter for string tokens. Used only for constructing
+     * the deferred expression for it.
+     */
+    protected String getDelims() {
+        return delims;
+    }
 }

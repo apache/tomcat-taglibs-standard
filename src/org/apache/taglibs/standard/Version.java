@@ -90,7 +90,7 @@ public class Version
    */
   public static int getReleaseVersionNum()
   {
-    return 1;
+    return 2;
   }
 
   /**
@@ -104,7 +104,7 @@ public class Version
    */
   public static int getMaintenanceVersionNum()
   {
-    return 2;
+    return 0;
   }
 
   /**

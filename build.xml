@@ -4,7 +4,7 @@
   <!-- Version Number                                                      -->
   <!-- =================================================================== -->
 
-  <property name="standard-version" value="1.1.2" />
+  <property name="standard-version" value="1.2.0" />
   <property name="release.name" value="jakarta-taglibs-standard-${standard-version}" />
   <property name="release.pre" value="nop" />
   <property name="release.post" value="nop" />
@@ -54,8 +54,9 @@
     <echo>deprecation: ${compile.deprecation}</echo>
     <echo>optimize: ${optimize.debug}</echo>
     <echo>---------- Dependencies ---------------------</echo>
-    <echo>servlet24.jar: ${servlet24.jar}</echo>
-    <echo>jsp20.jar: ${jsp20.jar}</echo>
+    <echo>servlet25.jar: ${servlet25.jar}</echo>
+    <echo>jsp21.jar: ${jsp21.jar}</echo>
+    <echo>el.jar: ${el.jar}</echo>
     <echo>jdbc2_0-stdext.jar: ${jdbc2_0-stdext.jar}</echo>
     <echo>jaxp-api.jar: ${jaxp-api.jar}</echo>
     <echo>dom.jar: ${dom.jar}</echo>
@@ -78,15 +79,21 @@
     <!-- Check the build/runtime dependencies -->
 
     <antcall target="requiredJar">
-       <param name="prop" value="servlet24.jar"/>
-       <param name="file" value="${servlet24.jar}"/>
-       <param name="desc" value="Servlet 2.4 API classes"/>
+       <param name="prop" value="servlet25.jar"/>
+       <param name="file" value="${servlet25.jar}"/>
+       <param name="desc" value="Servlet 2.5 API classes"/>
     </antcall>
 
     <antcall target="requiredJar">
-       <param name="prop" value="jsp20.jar"/>
-       <param name="file" value="${jsp20.jar}"/>
-       <param name="desc" value="JSP 2.0 API classes"/>
+       <param name="prop" value="jsp21.jar"/>
+       <param name="file" value="${jsp21.jar}"/>
+       <param name="desc" value="JSP 2.1 API classes"/>
+    </antcall>
+
+    <antcall target="requiredJar">
+       <param name="prop" value="el.jar"/>
+       <param name="file" value="${el.jar}"/>
+       <param name="desc" value="Unified EL API classes"/>
     </antcall>
 
     <antcall target="processIfPropSet">
@@ -173,7 +180,7 @@
       srcdir="${library.src}" 
       destdir="${build.library}/classes"
       bootclasspath="${xalan.jar}:${java.runtime.jar}"
-      classpath="${servlet24.jar}:${jsp20.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}"
+      classpath="${servlet25.jar}:${jsp21.jar}:${el.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}"
       excludes="org/apache/taglibs/standard/lang/jstl/parser/jsp20/* org/apache/taglibs/standard/lang/jpath/** org/apache/taglibs/standard/lang/spel/**"
       debug="${compile.debug}"
       deprecation="${compile.deprecation}"
@@ -276,7 +283,7 @@
 
     <!-- Compile the examples source code -->
     <javac srcdir="${examples.src}" destdir="${build.examples}/WEB-INF/classes"
-           classpath="${servlet24.jar}:${jsp20.jar}:${build.library}/classes"
+           classpath="${servlet25.jar}:${jsp21.jar}:${el.jar}:${build.library}/classes"
            debug="${compile.debug}"
            deprecation="${compile.deprecation}"
            optimize="${compile.optimize}"/>
@@ -362,7 +369,7 @@
   <target name="javadoc-dist" depends="prepare-dist">
    <javadoc packagenames="javax.servlet.jsp.jstl.*"
             sourcepath="src"
-            classpath="${servlet24.jar}:${jsp20.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}"
+            classpath="${servlet25.jar}:${jsp21.jar}:${el.jar}:${jdbc2_0-stdext.jar}:${jaxp-api.jar}:${dom.jar}:${sax.jar}:${xercesImpl.jar}:${xalan.jar}"
             destdir="${dist.library}/javadoc"
             bottom='&lt;font size="-1"&gt;Copyright 2003 Sun Microsystems, Inc. All Rights Reserved.&lt;/font&gt;'/>
   </target>

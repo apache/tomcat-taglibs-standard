@@ -77,7 +77,7 @@ public class ScriptFreeTLV extends TagLibraryValidator {
    * @param initParms a mapping from the names of the initialization parameters
    * to their values, as specified in the TLD.
    */
-  public void setInitParameters (Map initParms) {
+  public void setInitParameters (Map<java.lang.String, java.lang.Object> initParms) {
     super.setInitParameters(initParms);
     String declarationsParm = (String) initParms.get("allowDeclarations");
     String scriptletsParm = (String) initParms.get("allowScriptlets");

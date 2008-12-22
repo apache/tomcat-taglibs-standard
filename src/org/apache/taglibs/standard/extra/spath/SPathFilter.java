@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
 
-import org.apache.xalan.serialize.Serializer;
-import org.apache.xalan.serialize.SerializerFactory;
-import org.apache.xalan.templates.OutputProperties;
+import org.apache.xml.serializer.Serializer;
+import org.apache.xml.serializer.SerializerFactory;
+import org.apache.xml.serializer.OutputPropertiesFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -77,7 +77,7 @@ System.setProperty("org.xml.sax.driver", "org.apache.xerces.parsers.SAXParser");
 	f1.setParent(r);
 	f2.setParent(f1);
 	Serializer sz = SerializerFactory.getSerializer
-	    (OutputProperties.getDefaultMethodProperties("xml"));
+	    (OutputPropertiesFactory.getDefaultMethodProperties("xml"));
 	sz.setOutputStream(System.out);
 	f2.setContentHandler(sz.asContentHandler());
 

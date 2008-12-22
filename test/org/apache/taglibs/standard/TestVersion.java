@@ -48,7 +48,7 @@ public class TestVersion
     }
 
     public void testGetMaintenanceVersionNum() {
-        int expectedReturn = 2;
+        int expectedReturn = 0;
         int actualReturn = version.getMaintenanceVersionNum();
         assertEquals("return value", expectedReturn, actualReturn);
     }
@@ -66,13 +66,13 @@ public class TestVersion
     }
 
     public void testGetReleaseVersionNum() {
-        int expectedReturn = 1;
+        int expectedReturn = 2;
         int actualReturn = version.getReleaseVersionNum();
         assertEquals("return value", expectedReturn, actualReturn);
     }
 
     public void testGetVersion() {
-        String expectedReturn = "standard-taglib 1.1.2";
+        String expectedReturn = "standard-taglib 1.2.0";
         String actualReturn = version.getVersion();
         assertEquals("return value", expectedReturn, actualReturn);
     }
