@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.taglibs</groupId>
+    <artifactId>taglibs-parent</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>taglibs-standard-test</artifactId>
+  <version>1.2-SNAPSHOT</version>
+  <name>Jakarta Standard Taglib Cactus Tests</name>
+  <packaging>war</packaging>
+
+  <inceptionYear>2003</inceptionYear>
+  <description>
+    The Cactus tests for the Jakarta Standard JSTL implementation
+  </description>
+
+  <url>http://jakarta.apache.org/taglibs/standard/</url>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/taglibs/proper/standard/trunk/standard-test</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jakarta/taglibs/proper/standard/trunk/standard-test</developerConnection>
+    <url>http://svn.apache.org/viewvc/jakarta/taglibs/proper/standard/trunk/standard-test</url>
+  </scm>
+
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <name>Apache Website</name>
+      <url>scpexe://people.apache.org/www/jakarta.apache.org/taglibs/standard/standard-test/</url>
+    </site>
+  </distributionManagement>
+
+  <developers>
+    <developer><name>Henri Yandell</name></developer>
+    <developer><name>Bjorn Townsend</name></developer>
+  </developers>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.el</groupId>
+      <artifactId>el-api</artifactId>
+      <version>1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.cactus</groupId>
+      <artifactId>cactus.core.framework.javaEE.12-13-14</artifactId>
+      <version>1.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies> 
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.cactus</groupId>
+        <artifactId>cactus.integration.maven2</artifactId>
+        <version>1.8.1</version>
+        <configuration>
+          <srcFile>target/taglibs-standard-test-1.2-SNAPSHOT.war</srcFile>
+          <destFile>cactifiedByMaven2.war</destFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>cactus-cactifywar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>cactifywar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven2-plugin</artifactId>
+        <version>1.0-beta-2</version>
+        <executions>
+          <execution>
+            <id>start-container</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>start</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>stop-container</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <wait>false</wait>
+          <timeout>20000</timeout>
+          <container>
+            <containerId>tomcat5x</containerId>
+            <zipUrlInstaller>
+              <url>http://apache.speedbone.de/tomcat/tomcat-5/v5.5.25/bin/apache-tomcat-5.5.25.zip</url>
+              <installDir>${basedir}/install</installDir>
+            </zipUrlInstaller>
+          </container>
+          <configuration>
+             <deployables>
+              <deployable>
+                 <location>cactifiedByMaven2.war</location>
+                 <pingURL>http://localhost:8080/jstl_test/</pingURL>
+                 <properties>
+                    <context>/jstl_test</context>
+                 </properties>
+              </deployable>
+            </deployables>
+          </configuration>
+        </configuration> 
+      </plugin>
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      <!--
+        <executions>
+          <execution>
+            <id>surefire-it</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <skip>false</skip>
+              <systemProperties>
+                <property>
+                  <name>cactus.contextURL</name>
+                  <value>http://localhost:8080/taglibs-standard-test/</value>
+                </property>
+              </systemProperties>
+            </configuration>
+          </execution>
+        </executions>
+      -->
+      </plugin>
+
+      <!--
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <configuration>
+          <scanIntervalSeconds>10</scanIntervalSeconds>
+          <connectors>
+            <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+              <port>8080</port>
+              <maxIdleTime>60000</maxIdleTime>
+            </connector>
+          </connectors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>start-jetty</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <scanIntervalSeconds>0</scanIntervalSeconds>
+              <daemon>true</daemon>
+            </configuration>
+          </execution>
+          <execution>
+            <id>stop-jetty</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      -->
+
+    </plugins>
+  </build>
+
+
+</project>
