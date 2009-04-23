@@ -127,6 +127,25 @@
           <target>1.5</target>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>org/apache/taglibs/standard/functions/TestEndsWith.java</exclude>
+            <exclude>org/apache/taglibs/standard/tag/el/core/Test34109.java</exclude>
+            <exclude>org/apache/taglibs/standard/tag/el/core/Test37466.java</exclude>
+            <exclude>org/apache/taglibs/standard/tag/el/core/TestSetTag.java</exclude>
+            <exclude>org/apache/taglibs/standard/tag/el/fmt/TestDateTag.java</exclude>
+            <exclude>org/apache/taglibs/standard/tag/el/sql/Test33054.java</exclude>
+            <exclude>org/apache/taglibs/standard/tag/el/sql/Test43831.java</exclude>
+            <exclude>org/apache/taglibs/standard/tag/el/xml/Test30068.java</exclude>
+            <exclude>org/apache/taglibs/standard/tag/el/xml/Test35216.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+
 </project>
