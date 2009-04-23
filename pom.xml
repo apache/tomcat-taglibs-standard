@@ -123,6 +123,10 @@
         <directory>src</directory>
         <targetPath>.</targetPath>
       </resource>
+      <resource>
+        <directory>conf</directory>
+        <targetPath>META-INF</targetPath>
+      </resource>
     </resources>
     <plugins>
       <plugin>
