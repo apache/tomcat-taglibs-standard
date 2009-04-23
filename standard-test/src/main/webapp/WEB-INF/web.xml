@@ -17,7 +17,6 @@
         <filter-name>FilterRedirector</filter-name>
         <url-pattern>/FilterRedirector</url-pattern>
     </filter-mapping>
--->
 
     <servlet>
         <servlet-name>ServletRedirector</servlet-name>
@@ -30,7 +29,9 @@
         <servlet-name>JspRedirector</servlet-name>
         <jsp-file>/jspRedirector.jsp</jsp-file>
     </servlet>
+-->
     
+    <!--
     <servlet-mapping>
         <servlet-name>ServletRedirector</servlet-name>
         <url-pattern>/ServletRedirector</url-pattern>
@@ -40,5 +41,6 @@
         <servlet-name>JspRedirector</servlet-name>
         <url-pattern>/JspRedirector</url-pattern>
     </servlet-mapping>
+    -->
     
 </web-app>
