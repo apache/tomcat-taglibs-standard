@@ -1,1 +1,7 @@
+Apache Jakarta Standards Taglib
+Copyright 2001-2008 The Apache Software Foundation
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
+
 Includes code from Commons Collections (LRUMap and the classes/interfaces it requires).
