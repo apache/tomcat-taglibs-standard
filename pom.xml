@@ -34,7 +34,7 @@
   <version>1.2-SNAPSHOT</version>
   <name>Jakarta Standard Taglib</name>
 
-  <inceptionYear>2003</inceptionYear>
+  <inceptionYear>2001</inceptionYear>
   <description>
     An implementation of the JSP Standard Tag Library (JSTL).
   </description>
