@@ -17,14 +17,19 @@
 
 package javax.servlet.jsp.jstl.fmt;
 
+import java.util.Enumeration;
+import java.util.Locale;
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
+import javax.servlet.ServletResponse;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
-
-import org.apache.taglibs.standard.tag.common.fmt.BundleSupport;
-import org.apache.taglibs.standard.tag.common.fmt.MessageSupport;
+import javax.servlet.jsp.jstl.core.Config;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 /**
  * Class which exposes the locale-determination logic for resource bundles
@@ -135,13 +140,12 @@ public class LocaleSupport {
                                              Object[] args, 
                                              String basename) {
 	LocalizationContext locCtxt = null;
-	String message = MessageSupport.UNDEFINED_KEY + key
-	    + MessageSupport.UNDEFINED_KEY;
+	String message = JakartaInline.UNDEFINED_KEY + key + JakartaInline.UNDEFINED_KEY;
 
 	if (basename != null) {
-	    locCtxt = BundleSupport.getLocalizationContext(pageContext, basename);
+	    locCtxt = JakartaInline.getLocalizationContext(pageContext, basename);
 	} else {
-	    locCtxt = BundleSupport.getLocalizationContext(pageContext);
+	    locCtxt = JakartaInline.getLocalizationContext(pageContext);
 	}
 
 	if (locCtxt != null) {
@@ -165,4 +169,3 @@ public class LocaleSupport {
 	return message;
     }
 }
-
