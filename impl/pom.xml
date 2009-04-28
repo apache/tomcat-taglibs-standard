@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!-- TODO:
+    Generate the examples war
+    Enable Cactus tests
+-->
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.taglibs</groupId>
+    <artifactId>taglibs-parent</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>taglibs-standard-impl</artifactId>
+  <version>1.2-SNAPSHOT</version>
+  <name>Jakarta Standard Taglib - JSTL Implementation</name>
+
+  <inceptionYear>2001</inceptionYear>
+  <description>
+    An implementation of the JSP Standard Tag Library (JSTL).
+  </description>
+
+  <url>http://jakarta.apache.org/taglibs/standard/</url>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/taglibs/proper/standard/trunk/impl</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jakarta/taglibs/proper/standard/trunk/impl</developerConnection>
+    <url>http://svn.apache.org/viewvc/jakarta/taglibs/proper/standard/trunk/impl</url>
+  </scm>
+
+  <developers>
+    <developer><name>Pierre Delisle</name></developer>
+    <developer><name>Shawn Bayern</name></developer>
+    <developer><name>Nathan Abramson</name></developer>
+    <developer><name>Hans Bergsten</name></developer>
+    <developer><name>Scott Hasse</name></developer>
+    <developer><name>Justyna Horwat</name></developer>
+    <developer><name>Mark Kolb</name></developer>
+    <developer><name>Jan Luehe</name></developer>
+    <developer><name>Glenn Nielsen</name></developer>
+    <developer><name>Dmitri Plotnikov</name></developer>
+    <developer><name>Felipe Leme</name></developer>
+    <developer><name>Henri Yandell</name></developer>
+    <developer><name>Bjorn Townsend</name></developer>
+  </developers>
+
+  <contributors>
+    <contributor><name>Robert Goff</name></contributor>
+  </contributors>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.taglibs</groupId>
+      <artifactId>taglibs-standard-spec</artifactId>
+      <version>1.2-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.el</groupId>
+      <artifactId>el-api</artifactId>
+      <version>1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies> 
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src</directory>
+        <targetPath>.</targetPath>
+      </resource>
+      <resource>
+        <directory>conf</directory>
+        <targetPath>META-INF</targetPath>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>org/apache/taglibs/standard/lang/jstl/test/StaticFunctionTests.java</include>
+            <include>org/apache/taglibs/standard/TestVersion.java</include>
+          </includes>
+          <excludes>
+            <!-- Old tests -->
+            <!-- Started failing for JSTL 1.2 -->
+            <exclude>org/apache/taglibs/standard/lang/jstl/test/EvaluationTest.java</exclude>
+            <!-- May never have passed -->
+            <exclude>org/apache/taglibs/standard/lang/jstl/test/ParserTest.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
