@@ -65,66 +65,80 @@
     </dependency>
 
     <!-- dependencies of the above - consider cleaning -->
+    <!--
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
-<!--      <scope>provided</scope>  -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.servlet.jsp</groupId>
       <artifactId>jsp-api</artifactId>
       <version>2.1</version>
-<!--      <scope>provided</scope>  -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.el</groupId>
       <artifactId>el-api</artifactId>
       <version>1.0</version>
-<!--      <scope>provided</scope>  -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>xalan</groupId>
       <artifactId>xalan</artifactId>
       <version>2.7.1</version>
-<!--      <scope>provided</scope>  -->
+      <scope>provided</scope>
     </dependency>
+    -->
 
     <dependency>
       <groupId>org.apache.cactus</groupId>
       <artifactId>cactus.core.framework.javaEE.13-14</artifactId>
       <version>1.8.1</version>
-    <!--  <scope>test</scope>  -->
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.cactus</groupId>
       <artifactId>cactus.core.framework.wrapper.javaEE.14</artifactId>
       <version>1.8.1</version>
-    <!--  <scope>test</scope>  -->
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.cactus</groupId>
       <artifactId>cactus.integration.shared.api</artifactId>
       <version>1.8.1</version>
-    <!--  <scope>test</scope>  -->
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
       <version>10.4.2.0</version>
-<!--      <scope>test</scope>  -->
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.2</version>
-<!--      <scope>test</scope>  -->
+      <scope>test</scope>
     </dependency>
   </dependencies> 
 
   <build>
-    <sourceDirectory>src/test/java</sourceDirectory>
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <webResources>
+            <resource>
+              <targetPath>WEB-INF/classes</targetPath>
+              <directory>target/test-classes</directory>
+            </resource>
+          </webResources>
+        </configuration>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.cactus</groupId>
