@@ -114,7 +114,7 @@
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
       <version>10.4.2.0</version>
-      <scope>test</scope>
+      <!-- <scope>test</scope> -->  <!-- While test, we want it in the war -->
     </dependency>
     <dependency>
       <groupId>junit</groupId>
