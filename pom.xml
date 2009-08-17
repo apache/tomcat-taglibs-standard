@@ -34,7 +34,7 @@
 
   <artifactId>taglibs-standard</artifactId>
   <version>1.2-SNAPSHOT</version>
-  <name>Jakarta Standard Taglib</name>
+  <name>Apache Standard Taglib</name>
 
   <inceptionYear>2001</inceptionYear>
   <description>
