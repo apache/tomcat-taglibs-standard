@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+  Copyright 1999-2009 The Apache Software Foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document url="./intro.xml">
+
+ <properties>
+   <title>Apache Standard Taglib: JSP[tm] Standard Tag Library (JSTL 1.0/1.1) implementation</title>
+ </properties>
+
+ <body>
+
+  <section name="Standard Taglib">
+
+    <big><b>JSP(tm) Standard Tag Library implementation</b></big>
+
+    <p>Apache hosts the Standard Taglib 1.1, an implementation of
+      the <a href="http://java.sun.com/products/jsp/jstl">JSP Standard Tag
+      Library (JSTL)</a> specification. 
+    </p>
+
+    <p>Currently available are implementations of the 1.0 and 1.1 versions of the specification:</p>
+    <ul>
+      <li>Standard-1.1 (JSTL 1.1) requires a JSP container that supports
+      the Java Servlet 2.4 and JavaServer Pages 2.0 specifications.
+      Jakarta <a href="http://jakarta.apache.org/tomcat/">
+      Tomcat 5</a> supports the new specifications. </li>
+      <li>Standard-1.0 (JSTL 1.0) requires a JSP container that supports
+      the Java Servlet 2.3 and JavaServer Pages 1.2 specifications.
+      Jakarta <a href="http://jakarta.apache.org/tomcat/">
+      Tomcat 4</a> supports these specifications. </li>
+    </ul>
+
+  </section>
+
+  <section name="News">
+    <table>
+      <tr>
+        <td>Date</td>
+        <td>Item</td>
+      </tr>
+      <tr>
+        <td>2009/04/22</td>
+        <td>Moved to a Maven based build system. </td>
+      </tr>
+      <tr>
+        <td>2008/12/21</td>
+        <td>A patch  from Robert Goff has moved the trunk of the Standard Taglib up towards JSTL 1.2 level. </td>
+      </tr>
+      <tr>
+      <td>10/25/2004</td>
+      <td>Standard Taglib version 1.1.2 - A minor bug fix update - is now available. </td>
+      </tr>
+      <tr>
+      <td>07/20/2004</td>
+      <td>Standard Taglib version 1.1.1 released - A minor bug fix update - is now available. </td>
+      </tr>
+      <tr>
+      <td>01/30/2004</td>
+      <td>Standard Taglib version 1.1.0 - First official release of our implementation of JSTL 1.1 - is now available. </td>
+      </tr>
+      <tr>
+      <td>09/25/2003</td>
+      <td>Standard Taglib version 1.1.0-B1 - early access (Beta 1) of our implementation of JSTL 1.1 - is now available. </td>
+      </tr>
+    </table>
+
+  </section>
+
+  <section name="JSTL Books" href="Books">
+
+    <p>The following books about JSTL are available:</p>
+
+    <ul>
+      <li><a href="http://jstlbook.com/"><i>JSTL in Action</i></a>, Shawn Bayern, Manning</li>
+      <li><a href="http://TheJSPBook.com/"><i>JavaServer Pages</i></a>, Hans Bergsten, O'Reilly</li>
+      <li><a href="http://www.core-jstl.com"><i>Core JSTL: Mastering the JSP Standard Tag Library</i></a>, David Geary, Sun Microsystems Press</li>
+    </ul>
+
+  </section>
+
+  </body>
+
+</document>
