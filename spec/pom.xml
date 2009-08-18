@@ -38,9 +38,9 @@
   <url>http://jakarta.apache.org/taglibs/standard/</url>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/jakarta/taglibs/proper/standard/trunk/spec</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jakarta/taglibs/proper/standard/trunk/spec</developerConnection>
-    <url>http://svn.apache.org/viewvc/jakarta/taglibs/proper/standard/trunk/spec</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec</developerConnection>
+    <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk/spec</url>
   </scm>
 
   <developers>
