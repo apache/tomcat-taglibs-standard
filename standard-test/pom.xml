@@ -36,7 +36,7 @@
     The Cactus tests for the Jakarta Standard JSTL implementation
   </description>
 
-  <url>http://jakarta.apache.org/taglibs/standard/</url>
+  <url>http://tomcat.apache.org/taglibs/standard/</url>
 
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/standard-test</connection>
@@ -48,7 +48,7 @@
     <site>
       <id>apache.website</id>
       <name>Apache Website</name>
-      <url>scpexe://people.apache.org/www/jakarta.apache.org/taglibs/standard/standard-test/</url>
+      <url>scpexe://people.apache.org/www/tomcat.apache.org/taglibs/standard/standard-test/</url>
     </site>
   </distributionManagement>
 
