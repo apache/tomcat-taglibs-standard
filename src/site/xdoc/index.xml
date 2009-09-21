@@ -26,7 +26,7 @@
 
     <big><b>JSP(tm) Standard Tag Library implementation</b></big>
 
-    <p>Apache hosts the Standard Taglib 1.1, an implementation of
+    <p>Apache hosts the Apache Standard Taglib, an implementation of
       the <a href="http://java.sun.com/products/jsp/jstl">JSP Standard Tag
       Library (JSTL)</a> specification. 
     </p>
