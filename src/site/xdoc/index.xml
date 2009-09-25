@@ -17,39 +17,54 @@
 <document url="./intro.xml">
 
  <properties>
-   <title>Apache Standard Taglib: JSP[tm] Standard Tag Library (JSTL 1.0/1.1) implementation</title>
+   <title>Apache Standard Taglib: JSP[tm] Standard Tag Library (JSTL) implementations</title>
  </properties>
 
  <body>
 
   <section name="Standard Taglib">
 
-    <big><b>JSP(tm) Standard Tag Library implementation</b></big>
+    <big><b>JSP(tm) Standard Tag Library implementations</b></big>
 
     <p>Apache hosts the Apache Standard Taglib, an implementation of
       the <a href="http://java.sun.com/products/jsp/jstl">JSP Standard Tag
-      Library (JSTL)</a> specification. 
+      Library (JSTL)</a> specification. Various versions are available.
     </p>
 
-    <p>Currently available are implementations of the 1.0 and 1.1 versions of the specification:</p>
-    <ul>
-      <li>Standard-1.1 (JSTL 1.1) requires a JSP container that supports
-      the Java Servlet 2.4 and JavaServer Pages 2.0 specifications.
-      Jakarta <a href="http://jakarta.apache.org/tomcat/">
-      Tomcat 5</a> supports the new specifications. </li>
-      <li>Standard-1.0 (JSTL 1.0) requires a JSP container that supports
-      the Java Servlet 2.3 and JavaServer Pages 1.2 specifications.
-      Jakarta <a href="http://jakarta.apache.org/tomcat/">
-      Tomcat 4</a> supports these specifications. </li>
-    </ul>
+    <table>
+      <tr>
+        <td><b>Version</b></td>
+        <td><b>JSTL version</b></td>
+        <td><b>Requirements</b></td>
+        <td><b>Getting the Taglib</b></td>
+      </tr>
+      <tr>
+        <td>Standard 1.2</td>
+        <td>JSTL 1.2 (not yet JCP approved)</td>
+        <td>Servlet 2.5, JavaServer Pages 2.1</td>
+        <td><a href="http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/">svn</a></td>
+      </tr>
+      <tr>
+        <td>Standard 1.1</td>
+        <td>JSTL 1.1</td>
+        <td>Servlet 2.4, JavaServer Pages 2.0</td>
+        <td><a href="http://jakarta.apache.org/site/downloads/downloads_taglibs-standard.cgi">download</a></td>
+      </tr>
+      <tr>
+        <td>Standard 1.0</td>
+        <td>JSTL 1.0</td>
+        <td>Servlet 2.3, JavaServer Pages 1.2</td>
+        <td><a href="http://jakarta.apache.org/site/downloads/downloads_taglibs-standard-1.0.cgi">download</a></td>
+      </tr>
+    </table>
 
   </section>
 
   <section name="News">
     <table>
       <tr>
-        <td>Date</td>
-        <td>Item</td>
+        <td><b>Date</b></td>
+        <td><b>Item</b></td>
       </tr>
       <tr>
         <td>2009/04/22</td>
