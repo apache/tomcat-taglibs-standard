@@ -109,16 +109,6 @@
   </dependencies> 
 
   <build>
-    <resources>
-      <resource>
-        <directory>src</directory>
-        <targetPath>.</targetPath>
-      </resource>
-      <resource>
-        <directory>conf</directory>
-        <targetPath>META-INF</targetPath>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
