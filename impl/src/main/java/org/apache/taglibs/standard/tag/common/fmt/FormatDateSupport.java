@@ -20,11 +20,7 @@ package org.apache.taglibs.standard.tag.common.fmt;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -33,8 +29,6 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.taglibs.standard.resources.Resources;
 import org.apache.taglibs.standard.tag.common.core.Util;
-
-import org.apache.taglibs.standard.extra.commons.collections.map.LRUMap;
 
 /**
  * Support for tag handlers for &lt;formatDate&gt;, the date and time
@@ -194,14 +188,16 @@ public abstract class FormatDateSupport extends TagSupport {
 	DateFormat formatter = null;
 
 	// lazy initialization of cache
-	if (dateFormatCache == null) {
-		String value = pageContext.getServletContext().getInitParameter(DATE_CACHE_PARAM);
-		if (value != null) {
-			dateFormatCache = Collections.synchronizedMap(new LRUMap(Integer.parseInt(value)));
-		} else {
-			dateFormatCache = Collections.synchronizedMap(new LRUMap(MAX_SIZE));
-		}
-	}
+    if (dateFormatCache == null) {
+        String value = pageContext.getServletContext().getInitParameter(DATE_CACHE_PARAM);
+        final int maxSize = (value != null) ? Integer.parseInt(value) : MAX_SIZE;
+        dateFormatCache = Collections.synchronizedMap(new LinkedHashMap() {
+          @Override
+            protected boolean removeEldestEntry(Map.Entry eldest) {
+            return size() > maxSize;
+            }
+       });
+    }
 
 	// Apply pattern, if present
 	if (pattern != null) {

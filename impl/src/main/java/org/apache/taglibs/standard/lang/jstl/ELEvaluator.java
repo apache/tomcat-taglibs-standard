@@ -22,16 +22,15 @@ import java.io.StringReader;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.taglibs.standard.lang.jstl.parser.ELParser;
 import org.apache.taglibs.standard.lang.jstl.parser.ParseException;
 import org.apache.taglibs.standard.lang.jstl.parser.Token;
 import org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError;
-import org.apache.taglibs.standard.extra.commons.collections.map.LRUMap;
 
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.core.Config;
 
 /**
  *
@@ -378,18 +377,25 @@ public class ELEvaluator
         return;
       }
 
+      final int maxSize;
       if( (pageContext != null) && (pageContext.getServletContext() != null) ) {
-
           String value = pageContext.getServletContext().getInitParameter(EXPR_CACHE_PARAM);
           if (value != null) {
-            sCachedExpressionStrings = Collections.synchronizedMap(new LRUMap(Integer.parseInt(value)));
-            return;
+              maxSize = Integer.valueOf(value);
+          } else {
+              maxSize = MAX_SIZE;
           }
-
+      } else {
+          maxSize = MAX_SIZE;
       }
 
       // fall through if it couldn't find the parameter
-      sCachedExpressionStrings = Collections.synchronizedMap(new LRUMap(MAX_SIZE));
+      sCachedExpressionStrings = Collections.synchronizedMap(new LinkedHashMap() {
+          @Override
+          protected boolean removeEldestEntry(Map.Entry eldest) {
+              return size() > maxSize;
+          }
+      });
   }
 
   //-------------------------------------
