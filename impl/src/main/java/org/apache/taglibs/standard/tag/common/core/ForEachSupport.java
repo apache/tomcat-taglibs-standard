@@ -26,7 +26,6 @@ import java.util.StringTokenizer;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;
-import javax.el.VariableMapper;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.IndexedValueExpression;
 import javax.servlet.jsp.jstl.core.IteratedExpression;
@@ -237,8 +236,8 @@ public abstract class ForEachSupport extends LoopTagSupport {
                 length = st.countTokens();
                 isIndexedValueExpression = false;
             } else {
-                //What does this mean if we get here???
-                length=0;
+                // unrecognized type
+                throw new JspTagException(Resources.getMessage("FOREACH_BAD_ITEMS"));
             }
         }
     }
@@ -268,10 +267,6 @@ public abstract class ForEachSupport extends LoopTagSupport {
         if (rawItems != null) {
             if (rawItems instanceof ValueExpression) {
                 deferredExpression = (ValueExpression)rawItems;
-                ELContext myELContext = pageContext.getELContext();
-                VariableMapper vm = myELContext.getVariableMapper();
-                //String itemsName=deferredExpression.getExpressionString();
-                //vm.setVariable(itemsName, deferredExpression);
                 items = toDeferredForEachIterator(deferredExpression);
             } else {
                 // extract an iterator over the 'items' we've got
