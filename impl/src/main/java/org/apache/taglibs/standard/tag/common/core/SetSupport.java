@@ -128,12 +128,10 @@ public class SetSupport extends BodyTagSupport {
                     //set variable in var Mapper
                     vm.setVariable(var, (ValueExpression)result);
                 } else {
-                    /*
-                    //else if not valueExpression - make sure to remove it from the Var mapper
-                    //if the scope is page, should I remove this?
-                    if (vm.resolveVariable(var)!=null) {
+                    // make sure to remove it from the VariableMapper if we will be setting into page scope 
+                    if (scope == PageContext.PAGE_SCOPE && vm.resolveVariable(var) != null) {
                         vm.setVariable(var, null);
-                    }*/
+                    }
                     pageContext.setAttribute(var, result, scope);
                 }
             } else {
