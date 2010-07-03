@@ -195,6 +195,8 @@
         <version>6.1.10</version>   <!-- appears to be required to enable daemon=true behaviour -->
         <configuration>
           <scanIntervalSeconds>10</scanIntervalSeconds>
+          <stopPort>9999</stopPort>
+          <stopKey>stop</stopKey>
           <connectors>
             <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
               <port>8080</port>
