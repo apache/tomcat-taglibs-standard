@@ -60,7 +60,12 @@
   <dependencies>
     <dependency>
       <groupId>org.apache.taglibs</groupId>
-      <artifactId>taglibs-standard</artifactId>
+      <artifactId>taglibs-standard-impl</artifactId>
+      <version>1.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.taglibs</groupId>
+      <artifactId>taglibs-standard-spec</artifactId>
       <version>1.2-SNAPSHOT</version>
     </dependency>
 
