@@ -30,6 +30,9 @@ import java.util.Vector;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 
+/**
+ * Helper class for accessing members of a deferred expression result by index.
+ */
 public final class IteratedExpression {
     protected final ValueExpression orig;
     protected final String delims;
@@ -38,12 +41,25 @@ public final class IteratedExpression {
     private int currentIndex=0;
     private enum TypesEnum {Undefined, ACollection, AnIterator, AnEnumeration, AMap, AString};
     private TypesEnum type = TypesEnum.Undefined;
-    
-    public IteratedExpression(ValueExpression valueExpression, String stringTokenSeparator) {
-        orig = valueExpression;
-        delims = stringTokenSeparator;
+
+    /**
+     * Constructor specifying the expression to access.
+     * If the expression evaluates to a String, then it will be split using the specified delimiters.
+     * @param orig the original expression to be accessed
+     * @param delims delimiters to be used to split a String result
+     */
+    public IteratedExpression(ValueExpression orig, String delims) {
+        this.orig = orig;
+        this.delims = delims;
     }
-    
+
+    /**
+     * Iterates the original expression and returns the value at the index.
+     *
+     * @param context against which the expression should be evaluated
+     * @param i the index of the value to return
+     * @return the value at the index
+     */
     public Object getItem(ELContext context, int i) {
         if (originalListObject == null) {
             originalListObject = orig.getValue(context);
@@ -77,7 +93,12 @@ public final class IteratedExpression {
         }
         return currentObject;
     }
-    
+
+    /**
+     * Returns the original expression.
+     *
+     * @return the original expression
+     */
     public ValueExpression getValueExpression() {
         return orig;
     }
