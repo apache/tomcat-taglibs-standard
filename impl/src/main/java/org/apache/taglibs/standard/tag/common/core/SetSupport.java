@@ -91,22 +91,8 @@ public class SetSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 
-        Object result;      // what we'll store in scope:var
-
-        // determine the value by...
-        if (value != null) {
-            // ... reading our attribute
-            result = value;
-        } else if (valueSpecified) {
-            // ... accepting an explicit null
-            result = null;
-        } else {
-            // ... retrieving and trimming our body
-            if (bodyContent == null || bodyContent.getString() == null)
-                result = "";
-            else
-                result = bodyContent.getString().trim();
-        }
+        // what we'll store in scope:var
+        Object result = getResult();
 
         // decide what to do with the result
         if (var != null) {
@@ -194,6 +180,27 @@ public class SetSupport extends BodyTagSupport {
         }
 
         return EVAL_PAGE;
+    }
+    
+    Object getResult() {
+        Object result;      // what we'll store in scope:var
+
+        // determine the value by...
+        if (value != null) {
+            // ... reading our attribute
+            result = value;
+        } else if (valueSpecified) {
+            // ... accepting an explicit null
+            result = null;
+        } else {
+            // ... retrieving and trimming our body
+            if (bodyContent == null || bodyContent.getString() == null)
+                result = "";
+            else
+                result = bodyContent.getString().trim();
+        }
+
+        return result;
     }
     
     /**

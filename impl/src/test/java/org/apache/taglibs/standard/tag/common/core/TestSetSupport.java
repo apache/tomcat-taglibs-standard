@@ -16,6 +16,7 @@
  */
 package org.apache.taglibs.standard.tag.common.core;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,6 +25,7 @@ import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.BodyContent;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -31,6 +33,8 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
 public class TestSetSupport {
+    private static String VALUE = "Hello";
+    private static final String VAR = "x";
 
     private PageContext pageContext;
     private ELContext elContext;
@@ -39,13 +43,15 @@ public class TestSetSupport {
 
     @Before
     public void setup() {
-        tag = new SetSupport();
         pageContext = createMock(PageContext.class);
         elContext = createMock(ELContext.class);
         vm = createMock(VariableMapper.class);
 
         expect(pageContext.getELContext()).andStubReturn(elContext);
         expect(elContext.getVariableMapper()).andStubReturn(vm);
+
+        tag = new SetSupport();
+        tag.setPageContext(pageContext);
     }
 
     /**
@@ -55,13 +61,12 @@ public class TestSetSupport {
      */
     @Test
     public void test49526WhenNotMapped() throws JspException {
-        tag.setPageContext(pageContext);
-        tag.setVar("x");
-        tag.value = "Hello";
+        tag.setVar(VAR);
+        tag.value = VALUE;
 
         // verify mapper is checked but that no action is taken
-        expect(vm.resolveVariable("x")).andReturn(null);
-        pageContext.setAttribute("x", "Hello", PageContext.PAGE_SCOPE);
+        expect(vm.resolveVariable(VAR)).andReturn(null);
+        pageContext.setAttribute(VAR, VALUE, PageContext.PAGE_SCOPE);
         replay(pageContext, elContext, vm);
         tag.doEndTag();
         verify(pageContext, elContext, vm);
@@ -74,15 +79,14 @@ public class TestSetSupport {
      */
     @Test
     public void test49526WhenAlreadyMapped() throws JspException {
-        tag.setPageContext(pageContext);
-        tag.setVar("x");
-        tag.value = "Hello";
+        tag.setVar(VAR);
+        tag.value = VALUE;
 
         // verify mapper is checked and the mapped variable removed
         ValueExpression ve = createMock(ValueExpression.class);
-        expect(vm.resolveVariable("x")).andReturn(ve);
-        expect(vm.setVariable("x", null)).andReturn(ve);
-        pageContext.setAttribute("x", "Hello", PageContext.PAGE_SCOPE);
+        expect(vm.resolveVariable(VAR)).andReturn(ve);
+        expect(vm.setVariable(VAR, null)).andReturn(ve);
+        pageContext.setAttribute(VAR, VALUE, PageContext.PAGE_SCOPE);
         replay(pageContext, elContext, vm, ve);
         tag.doEndTag();
         verify(pageContext, elContext, vm, ve);
@@ -95,15 +99,53 @@ public class TestSetSupport {
      */
     @Test
     public void test49526WhenNotUsingPageContext() throws JspException {
-        tag.setPageContext(pageContext);
-        tag.setVar("x");
-        tag.value = "Hello";
+        tag.setVar(VAR);
+        tag.value = VALUE;
         tag.setScope("request");
 
         // verify mapper is not checked
-        pageContext.setAttribute("x", "Hello", PageContext.REQUEST_SCOPE);
+        pageContext.setAttribute(VAR, VALUE, PageContext.REQUEST_SCOPE);
         replay(pageContext, elContext, vm);
         tag.doEndTag();
         verify(pageContext, elContext, vm);
+    }
+
+    @Test
+    public void testResultFromValueAttribute() {
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+        Assert.assertSame(VALUE, tag.getResult());
+    }
+
+    @Test
+    public void testResultFromNullValueAttribute() {
+        tag.valueSpecified = true;
+        tag.value = null;
+        Assert.assertNull(tag.getResult());
+    }
+
+    @Test
+    public void testResultFromBodyContent() {
+        tag.valueSpecified = false;
+        BodyContent bodyContent = createMock(BodyContent.class);
+        expect(bodyContent.getString()).andStubReturn("  Hello  ");
+        replay(bodyContent);
+        tag.setBodyContent(bodyContent);
+        Assert.assertEquals(VALUE, tag.getResult());
+    }
+
+    @Test
+    public void testResultFromNullBodyContent() {
+        tag.valueSpecified = false;
+        tag.setBodyContent(null);
+        Assert.assertEquals("", tag.getResult());
+    }
+
+    @Test
+    public void testResultFromEmptyBodyContent() {
+        tag.valueSpecified = false;
+        BodyContent bodyContent = createMock(BodyContent.class);
+        expect(bodyContent.getString()).andStubReturn(null);
+        Assert.assertEquals("", tag.getResult());
     }
 }
