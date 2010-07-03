@@ -22,26 +22,29 @@ package javax.servlet.jsp.jstl.core;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 
+/**
+ * ValueExpression that refers to a specific member of an indexed variable backed by an IteratedExpression.
+ * This allows individual members of an indexed collection to be used as lvalues.
+ */
 public final class IteratedValueExpression extends ValueExpression {
+    // serialVersionUID value defined by specification JavaDoc
+    private static final long serialVersionUID = 1L;
 
-    private static final long serialVersionUID = 2771035360633553883L;
-    //IteratedExpression is not serializable
-    protected final IteratedExpression iteratedExpression;
     protected final int i;
-    
-    public IteratedValueExpression(IteratedExpression _iteratedExpression, int _i) {
-        iteratedExpression = _iteratedExpression;
-        i = _i;
+    // TODO: IteratedExpression is not serializable - should this be ignored?
+    protected final IteratedExpression iteratedExpression;
+
+    public IteratedValueExpression(IteratedExpression _iteratedExpr, int i) {
+        iteratedExpression = _iteratedExpr;
+        this.i = i;
     }
     
-    public boolean equals(Object arg0) {
-        if (arg0==null) {
-            return false;
-        }
-        if (iteratedExpression.getValueExpression().equals(arg0)) {
-            return true;
-        }
-        return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        IteratedValueExpression that = (IteratedValueExpression) obj;
+        return i == that.i && iteratedExpression.equals(that.iteratedExpression);
     }
 
     public Class getExpectedType() {

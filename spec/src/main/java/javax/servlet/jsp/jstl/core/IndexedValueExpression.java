@@ -24,25 +24,41 @@ import java.io.Serializable;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 
+/**
+ * ValueExpression that refers to a specific member of an indexed variable.
+ * This allows individual members of an indexed collection to be used as lvalues.
+ */
 public final class IndexedValueExpression extends ValueExpression implements Serializable {
+    // serialVersionUID value defined by specification JavaDoc
+    private static final long serialVersionUID = 1L;
 
-    private static final long serialVersionUID = -7300711701036452952L;
+    /**
+     * The index variable.
+     */
     protected final Integer i;
+
+    /**
+     * The indexed variable.
+     */
     protected final ValueExpression orig;
-    
-    public IndexedValueExpression(ValueExpression valueExpression, int _i) {
+
+    /**
+     * Constructor specifying indexed variable and index.
+     *
+     * @param valueExpression that evaluates to the indexed variable
+     * @param i index specifying the member
+     */
+    public IndexedValueExpression(ValueExpression valueExpression, int i) {
         orig = valueExpression;
-        i=_i;
+        this.i = i;
     }
-    
-    public boolean equals(Object arg0) {
-        boolean rc=false;
-        if (arg0!=null) {
-            if (arg0.equals(orig)) {
-                rc = true;
-            }
-        }
-        return rc;
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IndexedValueExpression that = (IndexedValueExpression) o;
+        return i.equals(that.i) && orig.equals(that.orig);
     }
 
     public Class getExpectedType() {
