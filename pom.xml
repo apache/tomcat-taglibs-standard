@@ -80,7 +80,7 @@
   <modules>
     <module>spec</module>
     <module>impl</module>
-    <!--<module>standard-test</module>-->
+    <module>standard-test</module>
   </modules>
 
 </project>
