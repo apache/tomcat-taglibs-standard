@@ -62,6 +62,7 @@ public class TestSetSupport {
     @Test
     public void test49526WhenNotMapped() throws JspException {
         tag.setVar(VAR);
+        tag.valueSpecified = true;
         tag.value = VALUE;
 
         // verify mapper is checked but that no action is taken
@@ -80,6 +81,7 @@ public class TestSetSupport {
     @Test
     public void test49526WhenAlreadyMapped() throws JspException {
         tag.setVar(VAR);
+        tag.valueSpecified = true;
         tag.value = VALUE;
 
         // verify mapper is checked and the mapped variable removed
@@ -100,6 +102,7 @@ public class TestSetSupport {
     @Test
     public void test49526WhenNotUsingPageContext() throws JspException {
         tag.setVar(VAR);
+        tag.valueSpecified = true;
         tag.value = VALUE;
         tag.setScope("request");
 

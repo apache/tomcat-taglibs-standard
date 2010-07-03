@@ -44,6 +44,11 @@ import org.apache.taglibs.standard.resources.Resources;
 /**
  * <p>Support for handlers of the &lt;set&gt; tag.</p>
  *
+ * <p>The protected <code>value</code> and <code>valueSpecified</code>
+ * attributes must be set in sync. That is, if you set the value then 
+ * you should set <code>valueSpecified</code> to <code>true<code>, if you unset the value, then 
+ * you should set <code>valueSpecified</code> to <code>false<code>. </p>
+ *
  * @author Shawn Bayern
  */
 public class SetSupport extends BodyTagSupport {
@@ -183,24 +188,18 @@ public class SetSupport extends BodyTagSupport {
     }
     
     Object getResult() {
-        Object result;      // what we'll store in scope:var
-
-        // determine the value by...
-        if (value != null) {
-            // ... reading our attribute
-            result = value;
-        } else if (valueSpecified) {
-            // ... accepting an explicit null
-            result = null;
+        if (valueSpecified) {
+            return value;
+        } else if (bodyContent == null) {
+            return "";
         } else {
-            // ... retrieving and trimming our body
-            if (bodyContent == null || bodyContent.getString() == null)
-                result = "";
-            else
-                result = bodyContent.getString().trim();
+            String content = bodyContent.getString();
+            if (content == null) {
+                return "";
+            } else {
+                return content.trim();
+            }
         }
-
-        return result;
     }
     
     /**
