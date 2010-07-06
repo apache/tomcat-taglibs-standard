@@ -21,7 +21,6 @@ import java.util.StringTokenizer;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;
-import javax.el.VariableMapper;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.IteratedExpression;
 import javax.servlet.jsp.jstl.core.IteratedValueExpression;
