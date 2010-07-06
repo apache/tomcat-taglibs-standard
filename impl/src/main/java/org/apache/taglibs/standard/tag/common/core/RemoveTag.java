@@ -30,16 +30,6 @@ import javax.servlet.jsp.tagext.TagSupport;
 public class RemoveTag extends TagSupport {
 
     //*********************************************************************
-    // Constants
-
-    /* We support these 'scopes'. */
-
-    private final String APPLICATION = "application";
-    private final String SESSION = "session";
-    private final String REQUEST = "request";
-    private final String PAGE = "page";
-
-    //*********************************************************************
     // Internal state
 
     private int scope;					// tag attribute
