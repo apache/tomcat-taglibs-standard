@@ -61,8 +61,7 @@ public class SetSupport extends BodyTagSupport {
     protected Object target;            // tag attribute
     protected String property;          // tag attribute
     private String var;                 // tag attribute
-    private int scope;                  // tag attribute
-    private boolean scopeSpecified;     // status
+    private String scope;               // tag attribute
 
     //*********************************************************************
     // Construction and initialization
@@ -79,9 +78,8 @@ public class SetSupport extends BodyTagSupport {
 
     // resets local state
     private void init() {
-        value = target = property = var = null;
-        scopeSpecified = valueSpecified = false;
-        scope = PageContext.PAGE_SCOPE;
+        value = target = property = var = scope = null;
+        valueSpecified = false;
     }
 
     // Releases any resources we may have (or inherit)
@@ -101,92 +99,19 @@ public class SetSupport extends BodyTagSupport {
 
         // decide what to do with the result
         if (var != null) {
-
-            /*
-             * Store the result, letting an IllegalArgumentException
-             * propagate back if the scope is invalid (e.g., if an attempt
-             * is made to store something in the session without any
-             * HttpSession existing).
-             */
-            ELContext myELContext = pageContext.getELContext();
-            VariableMapper vm = myELContext.getVariableMapper();
-            if (result != null) {
-                //check for instanceof valueExpression
-                if (result instanceof ValueExpression) {
-                    if (scope!=PageContext.PAGE_SCOPE) {
-                        throw new JspException("Incorrect scope for ValueExpression.  PageScope is required.");
-                    }
-                    //set variable in var Mapper
-                    vm.setVariable(var, (ValueExpression)result);
-                } else {
-                    // make sure to remove it from the VariableMapper if we will be setting into page scope 
-                    if (scope == PageContext.PAGE_SCOPE && vm.resolveVariable(var) != null) {
-                        vm.setVariable(var, null);
-                    }
-                    pageContext.setAttribute(var, result, scope);
-                }
-            } else {
-                //make sure to remove it from the Var mapper
-                if (vm.resolveVariable(var)!=null) {
-                    vm.setVariable(var, null);
-                }
-                if (scopeSpecified)
-                    pageContext.removeAttribute(var, scope);
-                else
-                    pageContext.removeAttribute(var);
-            }
-
-        } else if (target != null) {
-
-            // save the result to target.property
-            if (target instanceof Map) {
-                // ... treating it as a Map entry
-                if (result == null)
-                    ((Map)target).remove(property);
-                else
-                    ((Map)target).put(property, result);
-            } else {
-                // ... treating it as a bean property
-                try {
-                    PropertyDescriptor pd[] = Introspector.getBeanInfo(target.getClass()).getPropertyDescriptors();
-                    boolean succeeded = false;
-                    for (int i = 0; i < pd.length; i++) {
-                        if (pd[i].getName().equals(property)) {
-                            Method m = pd[i].getWriteMethod();
-                            if (m == null) {
-                                throw new JspException(Resources.getMessage("SET_NO_SETTER_METHOD", property));
-                            }
-                            if (result != null) {  
-                                try {
-                                    m.invoke(target, new Object[] { convertToExpectedType(result, m.getParameterTypes()[0]) });
-                                } catch (ELException ex) {
-                                    throw new JspTagException(ex);
-                                }
-                            } else {
-                                m.invoke(target, new Object[] { null });
-                            }
-                            succeeded = true;
-                        }
-                    }
-                    if (!succeeded) {
-                        throw new JspTagException(Resources.getMessage("SET_INVALID_PROPERTY", property));
-                    }
-                } catch (IllegalAccessException ex) {
-                    throw new JspException(ex);
-                } catch (IntrospectionException ex) {
-                    throw new JspException(ex);
-                } catch (InvocationTargetException ex) {
-                    throw new JspException(ex);
-                }
-            }
+            exportToVariable(result);
+        } else if (target == null) {
+            // can happen if target evaluates to null
+            throw new JspTagException(Resources.getMessage("SET_INVALID_TARGET"));
+        } else if (target instanceof Map) {
+            exportToMapProperty(result);
         } else {
-            // should't ever occur because of validation in TLV and setters
-            throw new JspTagException();
+            exportToBeanProperty(result);
         }
 
         return EVAL_PAGE;
     }
-    
+
     Object getResult() {
         if (valueSpecified) {
             return value;
@@ -201,12 +126,114 @@ public class SetSupport extends BodyTagSupport {
             }
         }
     }
-    
+
     /**
-     * Convert an object to an expected type according to the conversion
-     * rules of the Expression Language.
+     * Export the result into a scoped variable.
+     *
+     * @param result the value to export
+     * @throws JspTagException if there was a problem exporting the result
      */
-    private Object convertToExpectedType(final Object value, Class expectedType) throws ELException {
+    void exportToVariable(Object result) throws JspTagException {
+        /*
+        * Store the result, letting an IllegalArgumentException
+        * propagate back if the scope is invalid (e.g., if an attempt
+        * is made to store something in the session without any
+        * HttpSession existing).
+        */
+        int scopeValue = Util.getScope(scope);
+        ELContext myELContext = pageContext.getELContext();
+        VariableMapper vm = myELContext.getVariableMapper();
+        if (result != null) {
+            // if the result is a ValueExpression we just export to the mapper
+            if (result instanceof ValueExpression) {
+                if (scopeValue != PageContext.PAGE_SCOPE) {
+                    throw new JspTagException(Resources.getMessage("SET_BAD_DEFERRED_SCOPE", scope));
+                }
+                vm.setVariable(var, (ValueExpression)result);
+            } else {
+                // make sure to remove it from the VariableMapper if we will be setting into page scope
+                if (scopeValue == PageContext.PAGE_SCOPE && vm.resolveVariable(var) != null) {
+                    vm.setVariable(var, null);
+                }
+                pageContext.setAttribute(var, result, scopeValue);
+            }
+        } else {
+            //make sure to remove it from the Var mapper
+            if (vm.resolveVariable(var)!=null) {
+                vm.setVariable(var, null);
+            }
+            if (scope != null) {
+                pageContext.removeAttribute(var, Util.getScope(scope));
+            } else {
+                pageContext.removeAttribute(var);
+            }
+        }
+    }
+
+    /**
+     * Export the result into a Map.
+     *
+     * @param result the value to export
+     */
+    void exportToMapProperty(Object result) {
+        @SuppressWarnings("unchecked")
+        Map<Object, Object> map = (Map<Object, Object>) target;
+        if (result == null) {
+            map.remove(property);
+        } else {
+            map.put(property, result);
+        }
+    }
+
+    /**
+     * Export the result into a bean property.
+     *
+     * @param result the value to export
+     * @throws JspTagException if there was a problem exporting the result
+     */
+    void exportToBeanProperty(Object result) throws JspTagException {
+        PropertyDescriptor[] descriptors;
+        try {
+            descriptors = Introspector.getBeanInfo(target.getClass()).getPropertyDescriptors();
+        } catch (IntrospectionException ex) {
+            throw new JspTagException(ex);
+        }
+
+        for (PropertyDescriptor pd : descriptors) {
+            if (pd.getName().equals(property)) {
+                Method m = pd.getWriteMethod();
+                if (m == null) {
+                    throw new JspTagException(Resources.getMessage("SET_NO_SETTER_METHOD", property));
+                }
+                try {
+                    m.invoke(target, convertToExpectedType(result, m));
+                } catch (ELException ex) {
+                    throw new JspTagException(ex);
+                } catch (IllegalAccessException ex) {
+                    throw new JspTagException(ex);
+                } catch (InvocationTargetException ex) {
+                    throw new JspTagException(ex);
+                }
+                return;
+            }
+        }
+        throw new JspTagException(Resources.getMessage("SET_INVALID_PROPERTY", property));
+    }
+
+    /**
+     * Convert an object to an expected type of the method parameter according to the conversion
+     * rules of the Expression Language.
+     *
+     * @param value the value to convert
+     * @param m the setter method
+     * @return value converted to an instance of the expected type; will be null if value was null
+     * @throws javax.el.ELException if there was a problem coercing the value
+     */
+    private Object convertToExpectedType(final Object value, Method m) throws ELException {
+        if (value == null) {
+            return null;
+        }
+        Class<?> expectedType = m.getParameterTypes()[0];
         JspFactory jspFactory = JspFactory.getDefaultFactory();
         ExpressionFactory expressionFactory = jspFactory.getJspApplicationContext(pageContext.getServletContext()).getExpressionFactory();
         return expressionFactory.coerceToType(value, expectedType);
@@ -215,14 +242,23 @@ public class SetSupport extends BodyTagSupport {
     //*********************************************************************
     // Accessor methods
 
-    // for tag attribute
+    /**
+     * Name of the exported scoped variable to hold the value specified in the action.
+     * The type of the scoped variable is whatever type the value expression evaluates to.
+     *
+     * @param var name of the exported scoped variable
+     */
     public void setVar(String var) {
         this.var = var;
     }
 
-    // for tag attribute
+    /**
+     * Scope for var.
+     * Values are verified by TLV.
+     *
+     * @param scope the variable scope
+     */
     public void setScope(String scope) {
-        this.scope = Util.getScope(scope);
-        this.scopeSpecified = true;
+        this.scope = scope;
     }
 }
