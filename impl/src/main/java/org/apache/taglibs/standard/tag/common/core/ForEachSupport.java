@@ -405,8 +405,9 @@ public abstract class ForEachSupport extends LoopTagSupport {
     // returns an iterator over a boolean[] array, wrapping items in Boolean
     protected ForEachIterator toForEachIterator(boolean[] a) {
         Boolean[] wrapped = new Boolean[a.length];
-        for (int i = 0; i < a.length; i++)
-            wrapped[i] = new Boolean(a[i]);
+        for (int i = 0; i < a.length; i++) {
+            wrapped[i] = a[i] ? Boolean.TRUE : Boolean.FALSE;
+        }
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
