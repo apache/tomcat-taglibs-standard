@@ -17,6 +17,8 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -86,11 +88,12 @@ public abstract class ParamSupport extends BodyTagSupport {
 		value = bodyContent.getString().trim();
 	}
         if (encode) {
-            // FIXME: revert to java.net.URLEncoder.encode(s, enc) once
-            // we have a dependency on J2SE 1.4+.
             String enc = pageContext.getResponse().getCharacterEncoding();
-            parent.addParameter(
-            Util.URLEncode(name, enc), Util.URLEncode(value, enc));
+            try {
+                parent.addParameter(URLEncoder.encode(name, enc), URLEncoder.encode(value, enc));
+            } catch (UnsupportedEncodingException e) {
+                throw new JspTagException(e);
+            }
         } else {
             parent.addParameter(name, value);
         }
