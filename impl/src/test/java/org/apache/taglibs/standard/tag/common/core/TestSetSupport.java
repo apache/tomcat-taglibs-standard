@@ -16,16 +16,24 @@
  */
 package org.apache.taglibs.standard.tag.common.core;
 
+import org.apache.taglibs.standard.resources.Resources;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.el.ELContext;
+import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
+import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspFactory;
+import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyContent;
+
+import java.util.Map;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -33,12 +41,15 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
 public class TestSetSupport {
+    private static String PROPERTY = "property";
     private static String VALUE = "Hello";
     private static final String VAR = "x";
 
     private PageContext pageContext;
     private ELContext elContext;
     private VariableMapper vm;
+    private Bean bean;
+
     private SetSupport tag;
 
     @Before
@@ -48,10 +59,225 @@ public class TestSetSupport {
         vm = createMock(VariableMapper.class);
 
         expect(pageContext.getELContext()).andStubReturn(elContext);
+        expect(pageContext.getServletContext()).andStubReturn(null);
         expect(elContext.getVariableMapper()).andStubReturn(vm);
+
+        bean = new Bean();
 
         tag = new SetSupport();
         tag.setPageContext(pageContext);
+
+        ExpressionFactory expressionFactory = createMock(ExpressionFactory.class);
+        JspApplicationContext applicationContext = createMock(JspApplicationContext.class);
+        JspFactory jspFactory = createMock(JspFactory.class);
+        expect(expressionFactory.coerceToType(VALUE, String.class)).andStubReturn(VALUE);
+        expect(expressionFactory.coerceToType(null, String.class)).andStubReturn(null);
+        expect(applicationContext.getExpressionFactory()).andStubReturn(expressionFactory);
+        expect(jspFactory.getJspApplicationContext(null)).andStubReturn(applicationContext);
+        replay(jspFactory, applicationContext, expressionFactory);
+        JspFactory.setDefaultFactory(jspFactory);
+    }
+
+    @After
+    public void teardown() {
+        JspFactory.setDefaultFactory(null);
+    }
+
+    @Test
+    public void testSyntax1WithNoScope() throws JspException {
+        tag.setVar(VAR);
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+
+        // verify mapper is checked but that no action is taken
+        expect(vm.resolveVariable(VAR)).andReturn(null);
+        pageContext.setAttribute(VAR, VALUE, PageContext.PAGE_SCOPE);
+        replay(pageContext, elContext, vm);
+        tag.doEndTag();
+        verify(pageContext, elContext, vm);
+    }
+
+    @Test
+    public void testSyntax1WithNullScope() throws JspException {
+        tag.setVar(VAR);
+        tag.setScope(null);
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+
+        // verify mapper is checked but that no action is taken
+        expect(vm.resolveVariable(VAR)).andReturn(null);
+        pageContext.setAttribute(VAR, VALUE, PageContext.PAGE_SCOPE);
+        replay(pageContext, elContext, vm);
+        tag.doEndTag();
+        verify(pageContext, elContext, vm);
+    }
+
+    @Test
+    public void testSyntax1WithPageScope() throws JspException {
+        tag.setVar(VAR);
+        tag.setScope("page");
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+
+        // verify mapper is checked but that no action is taken
+        expect(vm.resolveVariable(VAR)).andReturn(null);
+        pageContext.setAttribute(VAR, VALUE, PageContext.PAGE_SCOPE);
+        replay(pageContext, elContext, vm);
+        tag.doEndTag();
+        verify(pageContext, elContext, vm);
+    }
+
+    @Test
+    public void testSyntax1WithNonPageScope() throws JspException {
+        tag.setVar(VAR);
+        tag.setScope("request");
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+
+        // verify mapper is not checked
+        pageContext.setAttribute(VAR, VALUE, PageContext.REQUEST_SCOPE);
+        replay(pageContext, elContext, vm);
+        tag.doEndTag();
+        verify(pageContext, elContext, vm);
+    }
+
+    @Test
+    public void testSyntax1WithNullValueAndNoScope() throws JspException {
+        tag.setVar(VAR);
+        tag.valueSpecified = true;
+        tag.value = null;
+
+        // verify mapper is checked but that no action is taken
+        expect(vm.resolveVariable(VAR)).andReturn(null);
+        pageContext.removeAttribute(VAR);
+        replay(pageContext, elContext, vm);
+        tag.doEndTag();
+        verify(pageContext, elContext, vm);
+    }
+
+    @Test
+    public void testSyntax1WithNullValueAndNonPageScope() throws JspException {
+        tag.setVar(VAR);
+        tag.setScope("request");
+        tag.valueSpecified = true;
+        tag.value = null;
+
+        // verify mapper is checked but that no action is taken
+        expect(vm.resolveVariable(VAR)).andReturn(null);
+        pageContext.removeAttribute(VAR, PageContext.REQUEST_SCOPE);
+        replay(pageContext, elContext, vm);
+        tag.doEndTag();
+        verify(pageContext, elContext, vm);
+    }
+
+    @Test
+    public void testSyntax3WithMap() throws JspException {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> target = createMock(Map.class);
+        tag.target = target;
+        tag.property = PROPERTY;
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+        
+        expect(target.put(PROPERTY, VALUE)).andStubReturn(null);
+        replay(target);
+        tag.doEndTag();
+        verify(target);
+    }
+
+    @Test
+    public void testSyntax3WithMapWhenPropertyIsNull() throws JspException {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> target = createMock(Map.class);
+        tag.target = target;
+        tag.property = null;
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+
+        expect(target.put(null, VALUE)).andStubReturn(null);
+        replay(target);
+        tag.doEndTag();
+        verify(target);
+    }
+
+    @Test
+    public void testSyntax3WithMapWhenValueIsNull() throws JspException {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> target = createMock(Map.class);
+        tag.target = target;
+        tag.property = PROPERTY;
+        tag.valueSpecified = true;
+        tag.value = null;
+
+        expect(target.remove(PROPERTY)).andStubReturn(null);
+        replay(target);
+        tag.doEndTag();
+        verify(target);
+    }
+
+    @Test
+    public void testSyntax3WithBean() throws JspException {
+        tag.target = bean;
+        tag.property = PROPERTY;
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+
+        tag.doEndTag();
+        Assert.assertEquals(VALUE, bean.getProperty());
+    }
+
+    @Test
+    public void testSyntax3WithBeanAndNullValue() throws JspException {
+        tag.target = bean;
+        tag.property = PROPERTY;
+        tag.valueSpecified = true;
+        tag.value = null;
+
+        tag.doEndTag();
+        Assert.assertNull(bean.getProperty());
+    }
+
+    @Test
+    public void testSyntax3WithBeanAndUndefinedProperty() throws JspException {
+        tag.target = bean;
+        tag.property = "undefined";
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+
+        try {
+            tag.doEndTag();
+        } catch (JspTagException e) {
+            Assert.assertEquals(e.getMessage(), Resources.getMessage("SET_INVALID_PROPERTY", "undefined"));
+        }
+    }
+
+    @Test
+    public void testSyntax3WithBeanAndReadOnlyProperty() throws JspException {
+        tag.target = bean;
+        tag.property = "readOnly";
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+
+        try {
+            tag.doEndTag();
+        } catch (JspException e) {
+            Assert.assertEquals(e.getMessage(), Resources.getMessage("SET_NO_SETTER_METHOD", "readOnly"));
+        }
+    }
+
+    @Test
+    public void testSyntax3WhenTargetIsNull() throws JspException {
+        tag.target = null;
+        tag.property = PROPERTY;
+        tag.valueSpecified = true;
+        tag.value = VALUE;
+
+        try {
+            tag.doEndTag();
+            Assert.fail();
+        } catch (JspTagException e) {
+            Assert.assertEquals(e.getMessage(), Resources.getMessage("SET_INVALID_TARGET"));
+        }
     }
 
     /**
@@ -150,5 +376,21 @@ public class TestSetSupport {
         BodyContent bodyContent = createMock(BodyContent.class);
         expect(bodyContent.getString()).andStubReturn(null);
         Assert.assertEquals("", tag.getResult());
+    }
+
+    public static class Bean {
+        private String property;
+
+        public String getProperty() {
+            return property;
+        }
+
+        public void setProperty(String property) {
+            this.property = property;
+        }
+
+        public boolean isReadOnly() {
+            return true;
+        }
     }
 }
