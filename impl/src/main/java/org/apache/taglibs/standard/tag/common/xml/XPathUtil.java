@@ -281,7 +281,7 @@ public class XPathUtil {
                 return newXObject;
                // myvs.setGlobalVariable( i, newXObject );
             } catch ( ClassNotFoundException cnfe ) {
-                // This shouldn't happen (FIXME: LOG)
+                // This shouldn't happen (TODO: LOG)
                 System.out.println("CLASS NOT FOUND EXCEPTION :" + cnfe );
             } 
             //System.out.println("*****getVariableOrParam returning *null*" );
@@ -748,7 +748,7 @@ public class XPathUtil {
                     
                 }
             } catch ( UnresolvableException ue ) {
-                // FIXME: LOG
+                // TODO: LOG
                 System.out.println("Variable Unresolvable :" + ue.getMessage());
                 ue.printStackTrace();
             } catch ( ClassNotFoundException cnf ) {
