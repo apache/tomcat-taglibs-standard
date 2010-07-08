@@ -17,12 +17,16 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
+import org.apache.taglibs.standard.util.EscapeXML;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
- * <p>Tag handler for &lt;expr&gt; in JSTL's XML library.</p>
+ * <p>Tag handler for &lt;out&gt; in JSTL's XML library.</p>
+ *
+ * TODO: should we rename this to OutSupport to match the tag name?
  *
  * @author Shawn Bayern
  */
@@ -61,13 +65,12 @@ public abstract class ExprSupport extends TagSupport {
     // applies XPath expression from 'select' and prints the result
     public int doStartTag() throws JspException {
         try {
-	    XPathUtil xu = new XPathUtil(pageContext);
-	    String result = xu.valueOf(XPathUtil.getContext(this), select);
-	    org.apache.taglibs.standard.tag.common.core.OutSupport.out(
-              pageContext, escapeXml, result);
-	    return SKIP_BODY;
+            XPathUtil xu = new XPathUtil(pageContext);
+            String result = xu.valueOf(XPathUtil.getContext(this), select);
+            EscapeXML.emit(result, escapeXml, pageContext.getOut());
+    	    return SKIP_BODY;
         } catch (java.io.IOException ex) {
-	    throw new JspTagException(ex.toString(), ex);
+            throw new JspTagException(ex.toString(), ex);
         }
     }
 

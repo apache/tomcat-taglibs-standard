@@ -17,6 +17,11 @@
 
 package org.apache.taglibs.standard.testutil;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
 /**
  * Helper class for Cactus tests
  */
@@ -35,4 +40,21 @@ public class TestUtil {
          String baseName = className.replace('.', '/');
          return "/" + baseName + ".jsp";
      }
+
+    public static String loadResource(Object obj) throws IOException {
+        Class clazz = obj.getClass();
+        InputStream is = clazz.getResourceAsStream(clazz.getSimpleName() + ".txt");
+        Reader reader = new InputStreamReader(is);
+        try {
+            char[] buffer = new char[1024];
+            StringBuilder s = new StringBuilder();
+            int count;
+            while ((count = reader.read(buffer)) > 0) {
+                s.append(buffer, 0, count);
+            }
+            return s.toString();        
+        } finally {
+            reader.close();
+        }
+    }
 }

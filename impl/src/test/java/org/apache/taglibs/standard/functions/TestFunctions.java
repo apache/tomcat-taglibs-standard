@@ -111,4 +111,12 @@ public class TestFunctions {
             Assert.assertEquals(Resources.getMessage("PARAM_BAD_VALUE"), e.getMessage());
         }
     }
+
+    @Test
+    public void testEscapeXML() {
+        Assert.assertEquals("Hello", escapeXml("Hello"));
+        Assert.assertEquals("&lt;Hello msg=&#034;world&#034;/&gt;", escapeXml("<Hello msg=\"world\"/>"));
+        Assert.assertEquals("&lt;Hello msg=&#039;world&#039;/&gt;", escapeXml("<Hello msg='world'/>"));
+        Assert.assertEquals("cats &amp; dogs", escapeXml("cats & dogs"));
+    }
 }

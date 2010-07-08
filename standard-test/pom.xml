@@ -69,8 +69,7 @@
       <version>1.2-SNAPSHOT</version>
     </dependency>
 
-    <!-- dependencies of the above - consider cleaning -->
-    <!--
+    <!-- dependencies of the above -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
@@ -89,7 +88,7 @@
       <version>1.0</version>
       <scope>provided</scope>
     </dependency>
-    -->
+      
     <dependency>
       <groupId>xalan</groupId>
       <artifactId>xalan</artifactId>
@@ -192,7 +191,7 @@
       <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
-        <version>6.1.10</version>   <!-- appears to be required to enable daemon=true behaviour -->
+        <version>6.1.24</version>   <!-- appears to be required to enable daemon=true behaviour -->
         <configuration>
           <scanIntervalSeconds>10</scanIntervalSeconds>
           <stopPort>9999</stopPort>

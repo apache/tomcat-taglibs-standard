@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
 import javax.servlet.jsp.JspTagException;
 
 import org.apache.taglibs.standard.resources.Resources;
-import org.apache.taglibs.standard.tag.common.core.Util;
+import org.apache.taglibs.standard.util.EscapeXML;
 
 /**
  * Static functions that extend the Expression Language with standardized behaviour
@@ -207,7 +207,7 @@ public class Functions {
      * @return escaped string
      */
     public static String escapeXml(String input) {
-        return Util.escapeXml(input);
+        return EscapeXML.escape(input);
     }
 
     /**
