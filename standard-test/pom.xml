@@ -154,7 +154,7 @@
         <executions>
           <execution>
             <id>cactus-cactifywar</id>
-            <phase>package</phase>
+            <phase>pre-integration-test</phase>
             <goals>
               <goal>cactifywar</goal>
             </goals>
