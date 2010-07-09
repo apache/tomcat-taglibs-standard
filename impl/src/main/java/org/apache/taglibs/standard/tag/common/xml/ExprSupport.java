@@ -54,7 +54,7 @@ public abstract class ExprSupport extends TagSupport {
 
     // resets local state
     private void init() {
-	    select = null;
+	select = null;
         escapeXml = true;
     }
 
@@ -85,6 +85,6 @@ public abstract class ExprSupport extends TagSupport {
     // Attribute accessors
 
     public void setSelect(String select) {
-	    this.select = select;
+	this.select = select;
     }
 }
