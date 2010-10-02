@@ -134,6 +134,10 @@
                   <include>**/*.properties</include>
               </includes>
           </resource>
+          <resource>
+            <directory>src/main/resources/META-INF/tlds</directory>
+            <targetPath>META-INF</targetPath>
+          </resource>
       </resources>
     <plugins>
       <plugin>
