@@ -37,12 +37,13 @@ public class TransformTag extends TransformSupport {
     // Deprecated as of JSTL 1.1
     // for tag attribute
     public void setXml(Object xml) throws JspTagException {
-        this.xml = xml;
+        setDoc(xml);
     }
 
     // 'doc' replaces 'xml' as of JSTL 1.1
     public void setDoc(Object xml) throws JspTagException {
         this.xml = xml;
+        this.xmlSpecified = true;
     }
 
     // Deprecated as of JSTL 1.1
