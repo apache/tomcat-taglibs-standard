@@ -306,6 +306,9 @@ public abstract class ImportSupport extends BodyTagSupport
 		throw new JspException(ex);
 	    } catch (ServletException ex) {
 		Throwable rc = ex.getRootCause();
+        while (rc instanceof ServletException) {
+            rc = ((ServletException) rc).getRootCause();
+        }
 		if (rc == null)
 		    throw new JspException(ex);
 		else
