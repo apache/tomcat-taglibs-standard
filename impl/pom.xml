@@ -156,6 +156,7 @@
           <includes>
             <include>org/apache/taglibs/standard/lang/jstl/test/StaticFunctionTests.java</include>
             <include>org/apache/taglibs/standard/TestVersion.java</include>
+            <include>org/apache/taglibs/standard/resources/TestResources.java</include>
             <include>org/apache/taglibs/standard/tag/common/core/TestSetSupport.java</include>
             <include>org/apache/taglibs/standard/tag/common/xml/TestTransformSupport.java</include>
           </includes>
