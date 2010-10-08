@@ -30,6 +30,11 @@ import static org.apache.taglibs.standard.functions.Functions.*;
 public class TestFunctions {
 
     @Test
+    public void testEndsWith() {
+        Assert.assertTrue(endsWith("00", "0")); // verify bug 50057 was fixed
+    }
+
+    @Test
     public void testSubstring() {
         Assert.assertEquals("el", substring("Hello", 1, 3));
         Assert.assertEquals("", substring("Hello", 10, 0));
