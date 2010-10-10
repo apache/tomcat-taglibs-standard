@@ -253,8 +253,3 @@ Attribute value: ${a(b)[c]}
 Parses to: ${a(b)[c]}
 Attribute value: ${a[b()]}
 Parses to: ${a[b()]}
-
-# non-ascii input - the parser automatically translates the @@non-ascii
-# into a UNICODE string with value \u1111
-Attribute value: ?
-Parses to: ?

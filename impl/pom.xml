@@ -130,8 +130,6 @@
             <!-- Old tests -->
             <!-- Started failing for JSTL 1.2 -->
             <exclude>org/apache/taglibs/standard/lang/jstl/test/EvaluationTest.java</exclude>
-            <!-- May never have passed -->
-            <exclude>org/apache/taglibs/standard/lang/jstl/test/ParserTest.java</exclude>
           </excludes>
         </configuration>
       </plugin>

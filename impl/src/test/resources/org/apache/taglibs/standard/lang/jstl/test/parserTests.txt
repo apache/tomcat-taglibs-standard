@@ -142,7 +142,3 @@ ${a:b(c,d,e)}
 ${a(b).c}
 ${a(b)[c]}
 ${a[b()]}
-
-# non-ascii input - the parser automatically translates the @@non-ascii
-# into a UNICODE string with value \u1111
-@@non-ascii
