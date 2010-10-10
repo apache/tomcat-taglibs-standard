@@ -111,7 +111,8 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     // Releases any resources we may have (or inherit)
     public void release() {
-	init();
+        super.release();
+    	init();
     }
 
 
