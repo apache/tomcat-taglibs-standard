@@ -19,11 +19,11 @@ package org.apache.taglibs.standard;
 
 import junit.framework.*;
 
-public class TestVersion
+public class VersionTest
     extends TestCase {
     private Version version = null;
 
-    public TestVersion(String name) {
+    public VersionTest(String name) {
         super(name);
     }
 

@@ -14,27 +14,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.taglibs.standard.resources;
+package org.apache.taglibs.standard.tag.common.xml;
 
+import javax.servlet.jsp.JspException;
+
+import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-public class TestResources {
+/**
+ */
+public class TransformSupportTest {
+    private TransformSupport tag;
 
-    @Test
-    public void testMessageNoArguments() {
-        assertEquals("test no arguments", Resources.getMessage("TEST_NO_ARGUMENTS"));
+    @Before
+    public void setup() {
+        tag = new TransformSupport() {
+        };
     }
 
     @Test
-    public void testMessageOneArgument() {
-        assertEquals("test argument one", Resources.getMessage("TEST_ONE_ARGUMENT", "one"));
+    public void testNullTransform() {
+        tag.xslt = null;
+        try {
+            tag.doStartTag();
+            fail();
+        } catch (JspException e) {
+            // expected
+        }
     }
 
     @Test
-    public void testMessageMultipleArguments() {
-        assertEquals("test argument one 2", Resources.getMessage("TEST_MULTIPLE_ARGUMENT", "one", 2));
+    public void testEmptyTransform() {
+        tag.xslt = "";
+        try {
+            tag.doStartTag();
+            fail();
+        } catch (JspException e) {
+            // expected
+        }
     }
-
 }

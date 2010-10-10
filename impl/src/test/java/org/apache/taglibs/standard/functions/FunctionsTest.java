@@ -27,7 +27,7 @@ import java.util.Collections;
 import static org.apache.taglibs.standard.functions.Functions.*;
 /**
  */
-public class TestFunctions {
+public class FunctionsTest {
 
     @Test
     public void testEndsWith() {

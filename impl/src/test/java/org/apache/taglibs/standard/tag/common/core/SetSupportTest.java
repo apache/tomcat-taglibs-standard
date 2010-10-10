@@ -40,7 +40,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-public class TestSetSupport {
+public class SetSupportTest {
     private static String PROPERTY = "property";
     private static String VALUE = "Hello";
     private static final String VAR = "x";

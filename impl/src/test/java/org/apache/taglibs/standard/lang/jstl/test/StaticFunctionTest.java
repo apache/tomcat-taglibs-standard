@@ -28,7 +28,7 @@ import junit.framework.TestCase;
  * 
  * @author Shawn Bayern
  */
-public class StaticFunctionTests extends TestCase {
+public class StaticFunctionTest extends TestCase {
 
   public void testFunctions() throws Exception {
 
@@ -86,7 +86,7 @@ public class StaticFunctionTests extends TestCase {
 
   public static Map getSampleMethodMap() throws Exception {
     Map m = new HashMap();
-    Class c = StaticFunctionTests.class;
+    Class c = StaticFunctionTest.class;
     m.put("foo:add", c.getMethod("add", new Class[] { Integer.TYPE, Integer.TYPE }));
     m.put("foo:multiply", c.getMethod("multiply", new Class[] { Integer.TYPE, Integer.TYPE }));
     m.put("foo:getInt", c.getMethod("getInt", new Class[] { Integer.class }));
