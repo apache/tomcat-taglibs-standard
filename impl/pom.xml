@@ -32,7 +32,7 @@
 
   <artifactId>taglibs-standard-impl</artifactId>
   <version>1.2-SNAPSHOT</version>
-  <name>Jakarta Standard Taglib - JSTL Implementation</name>
+  <name>Apache Standard Taglib - JSTL Implementation</name>
 
   <inceptionYear>2001</inceptionYear>
   <description>
