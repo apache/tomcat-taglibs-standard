@@ -59,7 +59,7 @@ public class ParserTest extends TestCase {
             CharArrayWriter writer = new CharArrayWriter();
             PrintWriter out = new PrintWriter(writer);
 
-            x(in, out);
+            runTests(in, out);
             out.close();
             in.close();
 
@@ -78,7 +78,7 @@ public class ParserTest extends TestCase {
      * Runs the tests, reading expressions from pIn and writing the
      * results to pOut.
      */
-    public static void x(BufferedReader pIn, PrintWriter pOut)
+    public static void runTests(BufferedReader pIn, PrintWriter pOut)
             throws IOException {
         while (true) {
             String str = pIn.readLine();
@@ -87,12 +87,6 @@ public class ParserTest extends TestCase {
                     "".equals(str.trim())) {
                 pOut.println(str);
             } else {
-                // For testing non-ASCII values, the string @@non-ascii gets
-                // converted internally to '\u1111'
-                if ("@@non-ascii".equals(str)) {
-                    str = "\u1111";
-                }
-
                 pOut.println("Attribute value: " + str);
                 try {
                     String result = Evaluator.parseAndRender(str);
