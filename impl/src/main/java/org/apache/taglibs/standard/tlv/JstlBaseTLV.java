@@ -26,7 +26,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.PageData;
 import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagLibraryValidator;
@@ -35,8 +34,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluator;
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.resources.Resources;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -174,26 +171,12 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     // Protected utility functions
 
     // delegate validation to the appropriate expression language
+    // TODO refactor this into EL tag specific functionality
+    @Deprecated
     protected String validateExpression(
 	    String elem, String att, String expr) {
 
-	// let's just use the cache kept by the ExpressionEvaluatorManager
-	ExpressionEvaluator current;
-	try {
-	    current =
-	        ExpressionEvaluatorManager.getEvaluatorByName(
-                  ExpressionEvaluatorManager.EVALUATOR_CLASS);
-	} catch (JspException ex) {
-	    // (using JspException here feels ugly, but it's what EEM uses)
-	    return ex.getMessage();
-	}
-	
-	String response = current.validate(att, expr);
-	if (response == null)
-	    return response;
-	else
-	    return "tag = '" + elem + "' / attribute = '" + att + "': "
-		+ response;
+        return null;
     }
 
     // utility methods to help us match elements in our tagset
