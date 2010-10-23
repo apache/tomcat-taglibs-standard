@@ -64,8 +64,6 @@ public class SetSupportTest {
 
         bean = new Bean();
 
-        tag = new SetSupport();
-        tag.setPageContext(pageContext);
 
         ExpressionFactory expressionFactory = createMock(ExpressionFactory.class);
         JspApplicationContext applicationContext = createMock(JspApplicationContext.class);
@@ -85,9 +83,9 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax1WithNoScope() throws JspException {
+        tag = new MockSetSupport(VALUE);
+        tag.setPageContext(pageContext);
         tag.setVar(VAR);
-        tag.valueSpecified = true;
-        tag.value = VALUE;
 
         // verify mapper is checked but that no action is taken
         expect(vm.resolveVariable(VAR)).andReturn(null);
@@ -99,10 +97,10 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax1WithNullScope() throws JspException {
+        tag = new MockSetSupport(VALUE);
+        tag.setPageContext(pageContext);
         tag.setVar(VAR);
         tag.setScope(null);
-        tag.valueSpecified = true;
-        tag.value = VALUE;
 
         // verify mapper is checked but that no action is taken
         expect(vm.resolveVariable(VAR)).andReturn(null);
@@ -114,10 +112,10 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax1WithPageScope() throws JspException {
+        tag = new MockSetSupport(VALUE);
+        tag.setPageContext(pageContext);
         tag.setVar(VAR);
         tag.setScope("page");
-        tag.valueSpecified = true;
-        tag.value = VALUE;
 
         // verify mapper is checked but that no action is taken
         expect(vm.resolveVariable(VAR)).andReturn(null);
@@ -129,10 +127,10 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax1WithNonPageScope() throws JspException {
+        tag = new MockSetSupport(VALUE);
+        tag.setPageContext(pageContext);
         tag.setVar(VAR);
         tag.setScope("request");
-        tag.valueSpecified = true;
-        tag.value = VALUE;
 
         // verify mapper is not checked
         pageContext.setAttribute(VAR, VALUE, PageContext.REQUEST_SCOPE);
@@ -143,9 +141,9 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax1WithNullValueAndNoScope() throws JspException {
+        tag = new MockSetSupport(null);
+        tag.setPageContext(pageContext);
         tag.setVar(VAR);
-        tag.valueSpecified = true;
-        tag.value = null;
 
         // verify mapper is checked but that no action is taken
         expect(vm.resolveVariable(VAR)).andReturn(null);
@@ -157,10 +155,10 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax1WithNullValueAndNonPageScope() throws JspException {
+        tag = new MockSetSupport(null);
+        tag.setPageContext(pageContext);
         tag.setVar(VAR);
         tag.setScope("request");
-        tag.valueSpecified = true;
-        tag.value = null;
 
         // verify mapper is checked but that no action is taken
         expect(vm.resolveVariable(VAR)).andReturn(null);
@@ -174,11 +172,9 @@ public class SetSupportTest {
     public void testSyntax3WithMap() throws JspException {
         @SuppressWarnings("unchecked")
         Map<String, Object> target = createMock(Map.class);
-        tag.target = target;
-        tag.property = PROPERTY;
-        tag.valueSpecified = true;
-        tag.value = VALUE;
-        
+        tag = new MockSetSupport(VALUE, target, PROPERTY);
+        tag.setPageContext(pageContext);
+
         expect(target.put(PROPERTY, VALUE)).andStubReturn(null);
         replay(target);
         tag.doEndTag();
@@ -189,10 +185,8 @@ public class SetSupportTest {
     public void testSyntax3WithMapWhenPropertyIsNull() throws JspException {
         @SuppressWarnings("unchecked")
         Map<String, Object> target = createMock(Map.class);
-        tag.target = target;
-        tag.property = null;
-        tag.valueSpecified = true;
-        tag.value = VALUE;
+        tag = new MockSetSupport(VALUE, target, null);
+        tag.setPageContext(pageContext);
 
         expect(target.put(null, VALUE)).andStubReturn(null);
         replay(target);
@@ -204,10 +198,8 @@ public class SetSupportTest {
     public void testSyntax3WithMapWhenValueIsNull() throws JspException {
         @SuppressWarnings("unchecked")
         Map<String, Object> target = createMock(Map.class);
-        tag.target = target;
-        tag.property = PROPERTY;
-        tag.valueSpecified = true;
-        tag.value = null;
+        tag = new MockSetSupport(null, target, PROPERTY);
+        tag.setPageContext(pageContext);
 
         expect(target.remove(PROPERTY)).andStubReturn(null);
         replay(target);
@@ -217,10 +209,8 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax3WithBean() throws JspException {
-        tag.target = bean;
-        tag.property = PROPERTY;
-        tag.valueSpecified = true;
-        tag.value = VALUE;
+        tag = new MockSetSupport(VALUE, bean, PROPERTY);
+        tag.setPageContext(pageContext);
 
         tag.doEndTag();
         Assert.assertEquals(VALUE, bean.getProperty());
@@ -228,10 +218,8 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax3WithBeanAndNullValue() throws JspException {
-        tag.target = bean;
-        tag.property = PROPERTY;
-        tag.valueSpecified = true;
-        tag.value = null;
+        tag = new MockSetSupport(null, bean, PROPERTY);
+        tag.setPageContext(pageContext);
 
         tag.doEndTag();
         Assert.assertNull(bean.getProperty());
@@ -239,10 +227,8 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax3WithBeanAndUndefinedProperty() throws JspException {
-        tag.target = bean;
-        tag.property = "undefined";
-        tag.valueSpecified = true;
-        tag.value = VALUE;
+        tag = new MockSetSupport(VALUE, bean, "undefined");
+        tag.setPageContext(pageContext);
 
         try {
             tag.doEndTag();
@@ -253,10 +239,8 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax3WithBeanAndReadOnlyProperty() throws JspException {
-        tag.target = bean;
-        tag.property = "readOnly";
-        tag.valueSpecified = true;
-        tag.value = VALUE;
+        tag = new MockSetSupport(VALUE, bean, "readOnly");
+        tag.setPageContext(pageContext);
 
         try {
             tag.doEndTag();
@@ -267,10 +251,8 @@ public class SetSupportTest {
 
     @Test
     public void testSyntax3WhenTargetIsNull() throws JspException {
-        tag.target = null;
-        tag.property = PROPERTY;
-        tag.valueSpecified = true;
-        tag.value = VALUE;
+        tag = new MockSetSupport(VALUE, null, PROPERTY);
+        tag.setPageContext(pageContext);
 
         try {
             tag.doEndTag();
@@ -287,9 +269,9 @@ public class SetSupportTest {
      */
     @Test
     public void test49526WhenNotMapped() throws JspException {
+        tag = new MockSetSupport(VALUE);
+        tag.setPageContext(pageContext);
         tag.setVar(VAR);
-        tag.valueSpecified = true;
-        tag.value = VALUE;
 
         // verify mapper is checked but that no action is taken
         expect(vm.resolveVariable(VAR)).andReturn(null);
@@ -306,9 +288,9 @@ public class SetSupportTest {
      */
     @Test
     public void test49526WhenAlreadyMapped() throws JspException {
+        tag = new MockSetSupport(VALUE);
+        tag.setPageContext(pageContext);
         tag.setVar(VAR);
-        tag.valueSpecified = true;
-        tag.value = VALUE;
 
         // verify mapper is checked and the mapped variable removed
         ValueExpression ve = createMock(ValueExpression.class);
@@ -327,9 +309,9 @@ public class SetSupportTest {
      */
     @Test
     public void test49526WhenNotUsingPageContext() throws JspException {
+        tag = new MockSetSupport(VALUE);
+        tag.setPageContext(pageContext);
         tag.setVar(VAR);
-        tag.valueSpecified = true;
-        tag.value = VALUE;
         tag.setScope("request");
 
         // verify mapper is not checked
@@ -340,22 +322,20 @@ public class SetSupportTest {
     }
 
     @Test
-    public void testResultFromValueAttribute() {
-        tag.valueSpecified = true;
-        tag.value = VALUE;
+    public void testResultFromValueAttribute() throws JspException {
+        tag = new MockSetSupport(VALUE);
         Assert.assertSame(VALUE, tag.getResult());
     }
 
     @Test
-    public void testResultFromNullValueAttribute() {
-        tag.valueSpecified = true;
-        tag.value = null;
+    public void testResultFromNullValueAttribute() throws JspException {
+        tag = new MockSetSupport(null);
         Assert.assertNull(tag.getResult());
     }
 
     @Test
-    public void testResultFromBodyContent() {
-        tag.valueSpecified = false;
+    public void testResultFromBodyContent() throws JspException {
+        tag = new MockSetSupport();
         BodyContent bodyContent = createMock(BodyContent.class);
         expect(bodyContent.getString()).andStubReturn("  Hello  ");
         replay(bodyContent);
@@ -364,18 +344,66 @@ public class SetSupportTest {
     }
 
     @Test
-    public void testResultFromNullBodyContent() {
-        tag.valueSpecified = false;
+    public void testResultFromNullBodyContent() throws JspException {
+        tag = new MockSetSupport();
         tag.setBodyContent(null);
-        Assert.assertEquals("", tag.getResult());
+        Assert.assertEquals(tag.getResult(), "");
     }
 
     @Test
-    public void testResultFromEmptyBodyContent() {
-        tag.valueSpecified = false;
+    public void testResultFromEmptyBodyContent() throws JspException {
+        tag = new MockSetSupport();
         BodyContent bodyContent = createMock(BodyContent.class);
         expect(bodyContent.getString()).andStubReturn(null);
         Assert.assertEquals("", tag.getResult());
+    }
+
+    public static class MockSetSupport extends SetSupport {
+        private final boolean valueSpecified;
+        private final Object value;
+        private final Object target;
+        private final String property;
+
+        public MockSetSupport() {
+            this.value = null;
+            this.valueSpecified = false;
+            this.target = null;
+            this.property = null;
+        }
+
+        public MockSetSupport(Object value, Object target, String property) {
+            this.value = value;
+            this.valueSpecified = true;
+            this.target = target;
+            this.property = property;
+        }
+
+        public MockSetSupport(Object value) {
+            this.value = value;
+            this.valueSpecified = true;
+            this.target = null;
+            this.property = null;
+        }
+
+        @Override
+        protected boolean isValueSpecified() {
+            return valueSpecified;
+        }
+
+        @Override
+        protected Object evalValue() {
+            return value;
+        }
+
+        @Override
+        protected Object evalTarget() {
+            return target;
+        }
+
+        @Override
+        protected String evalProperty() {
+            return property;
+        }
     }
 
     public static class Bean {

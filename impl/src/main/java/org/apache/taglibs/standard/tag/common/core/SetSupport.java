@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 
 import java.util.Map;
 
+import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspFactory;
 import javax.servlet.jsp.JspTagException;
@@ -44,22 +45,13 @@ import org.apache.taglibs.standard.resources.Resources;
 /**
  * <p>Support for handlers of the &lt;set&gt; tag.</p>
  *
- * <p>The protected <code>value</code> and <code>valueSpecified</code>
- * attributes must be set in sync. That is, if you set the value then 
- * you should set <code>valueSpecified</code> to <code>true<code>, if you unset the value, then 
- * you should set <code>valueSpecified</code> to <code>false<code>. </p>
- *
  * @author Shawn Bayern
  */
-public class SetSupport extends BodyTagSupport {
+public abstract class SetSupport extends BodyTagSupport {
 
     //*********************************************************************
     // Internal state
 
-    protected Object value;             // tag attribute
-    protected boolean valueSpecified;   // status
-    protected Object target;            // tag attribute
-    protected String property;          // tag attribute
     private String var;                 // tag attribute
     private String scope;               // tag attribute
 
@@ -71,20 +63,14 @@ public class SetSupport extends BodyTagSupport {
      * not provide other constructors and are expected to call the
      * superclass constructor.
      */
-    public SetSupport() {
+    protected SetSupport() {
         super();
-        init();
-    }
-
-    // resets local state
-    private void init() {
-        value = target = property = var = scope = null;
-        valueSpecified = false;
     }
 
     // Releases any resources we may have (or inherit)
     public void release() {
-        init();
+        var = null;
+        scope = null;
         super.release();
     }
 
@@ -94,27 +80,30 @@ public class SetSupport extends BodyTagSupport {
 
     public int doEndTag() throws JspException {
 
-        // what we'll store in scope:var
-        Object result = getResult();
-
         // decide what to do with the result
         if (var != null) {
-            exportToVariable(result);
-        } else if (target == null) {
-            // can happen if target evaluates to null
-            throw new JspTagException(Resources.getMessage("SET_INVALID_TARGET"));
-        } else if (target instanceof Map) {
-            exportToMapProperty(result);
+            exportToVariable(getResult());
         } else {
-            exportToBeanProperty(result);
+            Object target = evalTarget();
+            if (target == null) {
+                // can happen if target evaluates to null
+                throw new JspTagException(Resources.getMessage("SET_INVALID_TARGET"));
+            }
+
+            String property = evalProperty();
+            if (target instanceof Map) {
+                exportToMapProperty(target, property, getResult());
+            } else {
+                exportToBeanProperty(target, property, getResult());
+            }
         }
 
         return EVAL_PAGE;
     }
 
-    Object getResult() {
-        if (valueSpecified) {
-            return value;
+    Object getResult() throws JspException {
+        if (isValueSpecified()) {
+            return evalValue();
         } else if (bodyContent == null) {
             return "";
         } else {
@@ -126,6 +115,38 @@ public class SetSupport extends BodyTagSupport {
             }
         }
     }
+
+    /**
+     * Indicates that the value attribute was specified.
+     * If no value attribute is supplied then the value is taken from the tag's body content.
+     *
+     * @return true if the value attribute was specified
+     */
+    protected abstract boolean isValueSpecified();
+
+    /**
+     * Evaluate the value attribute.
+     *
+     * @return the result of evaluating the value attribute
+     * @throws JspException if there was a problem evaluating the expression
+     */
+    protected abstract Object evalValue() throws JspException;
+
+    /**
+     * Evaluate the target attribute.
+     *
+     * @return the result of evaluating the target attribute
+     * @throws JspException if there was a problem evaluating the expression
+     */
+    protected abstract Object evalTarget() throws JspException;
+
+    /**
+     * Evaluate the property attribute.
+     *
+     * @return the result of evaluating the property attribute
+     * @throws JspException if there was a problem evaluating the expression
+     */
+    protected abstract String evalProperty() throws JspException;
 
     /**
      * Export the result into a scoped variable.
@@ -173,9 +194,11 @@ public class SetSupport extends BodyTagSupport {
     /**
      * Export the result into a Map.
      *
+     * @param target the Map to export into
+     * @param property the key to export into
      * @param result the value to export
      */
-    void exportToMapProperty(Object result) {
+    void exportToMapProperty(Object target, String property, Object result) {
         @SuppressWarnings("unchecked")
         Map<Object, Object> map = (Map<Object, Object>) target;
         if (result == null) {
@@ -188,10 +211,12 @@ public class SetSupport extends BodyTagSupport {
     /**
      * Export the result into a bean property.
      *
+     * @param target the bean to export into
+     * @param property the bean property to set
      * @param result the value to export
      * @throws JspTagException if there was a problem exporting the result
      */
-    void exportToBeanProperty(Object result) throws JspTagException {
+    void exportToBeanProperty(Object target, String property, Object result) throws JspTagException {
         PropertyDescriptor[] descriptors;
         try {
             descriptors = Introspector.getBeanInfo(target.getClass()).getPropertyDescriptors();
@@ -234,9 +259,12 @@ public class SetSupport extends BodyTagSupport {
             return null;
         }
         Class<?> expectedType = m.getParameterTypes()[0];
-        JspFactory jspFactory = JspFactory.getDefaultFactory();
-        ExpressionFactory expressionFactory = jspFactory.getJspApplicationContext(pageContext.getServletContext()).getExpressionFactory();
-        return expressionFactory.coerceToType(value, expectedType);
+        return getExpressionFactory().coerceToType(value, expectedType);
+    }
+
+    protected ExpressionFactory getExpressionFactory() {
+        JspApplicationContext appContext = JspFactory.getDefaultFactory().getJspApplicationContext(pageContext.getServletContext());
+        return appContext.getExpressionFactory();
     }
 
     //*********************************************************************

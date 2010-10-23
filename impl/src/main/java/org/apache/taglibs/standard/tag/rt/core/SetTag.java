@@ -20,29 +20,59 @@ package org.apache.taglibs.standard.tag.rt.core;
 import org.apache.taglibs.standard.tag.common.core.SetSupport;
 
 /**
- * <p>Tag handler for &lt;set&gt; in JSTL's rtexprvalue library.</p>
+ * JSTL 1.1 compatible version of &lt;set&gt; that accepts expression results for attribute values.
  *
  * @author Shawn Bayern
  */
 
 public class SetTag extends SetSupport {
+    private boolean valueSpecified;
+    private Object value;
+    private Object target;
+    private String property;
 
-    //*********************************************************************
-    // Accessors
+    public SetTag() {
+    }
 
-    // for tag attribute
     public void setValue(Object value) {
         this.value = value;
         this.valueSpecified = true;
     }
 
-    // for tag attribute
     public void setTarget(Object target) {
         this.target = target;
     }
 
-    // for tag attribute
     public void setProperty(String property) {
         this.property = property;
+    }
+
+    @Override
+    public void release() {
+        value = null;
+        target = null;
+        property = null;
+        valueSpecified = false;
+        super.release();
+    }
+
+    @Override
+    protected boolean isValueSpecified() {
+        return valueSpecified;
+    }
+
+    @Override
+    protected Object evalValue() {
+        return value;
+    }
+
+    @Override
+    protected Object evalTarget() {
+        return target;
+    }
+
+    @Override
+    protected String evalProperty() {
+        return property;
     }
 }

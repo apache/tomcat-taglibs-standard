@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.core;
 
@@ -23,108 +23,70 @@ import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 import org.apache.taglibs.standard.tag.common.core.SetSupport;
 
 /**
- * <p>A handler for &lt;set&gt;, which redirects the browser to a
- * new URL.
+ * JSTL 1.0 compatible version of &lt;set&gt; that accepts expressions for attribute values.
  *
  * @author Shawn Bayern
  */
 
 public class SetTag extends SetSupport {
 
-    //*********************************************************************
-    // 'Private' state (implementation details)
-
-    private String value_;			// stores EL-based property
-    private String target_;			// stores EL-based property
-    private String property_;			// stores EL-based property
-
-
-    //*********************************************************************
-    // Constructor
+    private boolean valueSpecified;
+    private String valueExpression;
+    private String targetExpression;
+    private String propertyExpression;
 
     public SetTag() {
-        super();
-        init();
     }
 
-
-    //*********************************************************************
-    // Tag logic
-
-    // evaluates expression and chains to parent
-    public int doStartTag() throws JspException {
-
-        // evaluate any expressions we were passed, once per invocation
-        evaluateExpressions();
-
-	// chain to the parent implementation
-	return super.doStartTag();
+    public void setValue(String value) {
+        this.valueExpression = value;
+        this.valueSpecified = true;
     }
 
+    public void setTarget(String target) {
+        this.targetExpression = target;
+    }
 
-    // Releases any resources we may have (or inherit)
+    public void setProperty(String property) {
+        this.propertyExpression = property;
+    }
+
+    @Override
     public void release() {
+        valueExpression = null;
+        targetExpression = null;
+        propertyExpression = null;
+        valueSpecified = false;
         super.release();
-        init();
     }
 
-
-    //*********************************************************************
-    // Accessor methods
-
-    public void setValue(String value_) {
-        this.value_ = value_;
-	this.valueSpecified = true;
+    @Override
+    protected boolean isValueSpecified() {
+        return valueSpecified;
     }
 
-    public void setTarget(String target_) {
-        this.target_ = target_;
+    @Override
+    protected Object evalValue() throws JspException {
+        try {
+            return ExpressionUtil.evalNotNull("set", "value", valueExpression, Object.class, this, pageContext);
+        } catch (NullAttributeException ex) {
+            // explicitly let 'value' be null
+            return null;
+        }
     }
 
-    public void setProperty(String property_) {
-        this.property_ = property_;
+    @Override
+    protected Object evalTarget() throws JspException {
+        return ExpressionUtil.evalNotNull("set", "target", targetExpression, Object.class, this, pageContext);
     }
 
-
-    //*********************************************************************
-    // Private (utility) methods
-
-    // (re)initializes state (during release() or construction)
-    private void init() {
-        // null implies "no expression"
-	value_ = target_ = property_ = null;
-    }
-
-    /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
-        /* 
-         * Note: we don't check for type mismatches here; we assume
-         * the expression evaluator will return the expected type
-         * (by virtue of knowledge we give it about what that type is).
-         * A ClassCastException here is truly unexpected, so we let it
-         * propagate up.
-         */
-
-	// 'value'
-	try {
-	    value = ExpressionUtil.evalNotNull(
-	        "set", "value", value_, Object.class, this, pageContext);
-	} catch (NullAttributeException ex) {
-	    // explicitly let 'value' be null
-	    value = null;
-	}
-
-	// 'target'
-	target = ExpressionUtil.evalNotNull(
-	    "set", "target", target_, Object.class, this, pageContext);
-
-	// 'property'
-	try {
-	    property = (String) ExpressionUtil.evalNotNull(
-	         "set", "property", property_, String.class, this, pageContext);
+    @Override
+    protected String evalProperty() throws JspException {
+        try {
+            return (String) ExpressionUtil.evalNotNull("set", "property", propertyExpression, String.class, this, pageContext);
         } catch (NullAttributeException ex) {
             // explicitly let 'property' be null
-            property = null;
+            return null;
         }
     }
 }
