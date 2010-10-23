@@ -81,6 +81,8 @@
   <modules>
     <module>spec</module>
     <module>impl</module>
+    <module>compat</module>
+    <module>jstlel</module>
 <!--
     <module>standard-test</module>
 -->
