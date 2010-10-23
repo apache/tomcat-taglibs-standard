@@ -19,7 +19,7 @@ package org.apache.taglibs.standard.tag.el.core;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.tag.common.core.SetSupport;
 
 /**
@@ -67,26 +67,16 @@ public class SetTag extends SetSupport {
 
     @Override
     protected Object evalValue() throws JspException {
-        try {
-            return ExpressionUtil.evalNotNull("set", "value", valueExpression, Object.class, this, pageContext);
-        } catch (NullAttributeException ex) {
-            // explicitly let 'value' be null
-            return null;
-        }
+        return ExpressionEvaluatorManager.evaluate("value", valueExpression, Object.class, this, pageContext);
     }
 
     @Override
     protected Object evalTarget() throws JspException {
-        return ExpressionUtil.evalNotNull("set", "target", targetExpression, Object.class, this, pageContext);
+        return ExpressionEvaluatorManager.evaluate("target", targetExpression, Object.class, this, pageContext);
     }
 
     @Override
     protected String evalProperty() throws JspException {
-        try {
-            return (String) ExpressionUtil.evalNotNull("set", "property", propertyExpression, String.class, this, pageContext);
-        } catch (NullAttributeException ex) {
-            // explicitly let 'property' be null
-            return null;
-        }
+        return (String) ExpressionEvaluatorManager.evaluate("property", propertyExpression, String.class, this, pageContext);
     }
 }
