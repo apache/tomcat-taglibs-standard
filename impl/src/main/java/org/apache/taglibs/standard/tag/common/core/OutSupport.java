@@ -34,7 +34,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * @author Shawn Bayern
  */
-public class OutSupport extends BodyTagSupport {
+public abstract class OutSupport extends BodyTagSupport {
 
     /*
      * (One almost wishes XML and JSP could support "anonymous tags,"
@@ -44,9 +44,6 @@ public class OutSupport extends BodyTagSupport {
     //*********************************************************************
     // Internal state
 
-    protected Object value;                     // tag attribute
-    protected String def;			// tag attribute
-    protected boolean escapeXml;		// tag attribute
     private Object output;
 
     //*********************************************************************
@@ -59,20 +56,12 @@ public class OutSupport extends BodyTagSupport {
      */
     public OutSupport() {
         super();
-        init();
-    }
-
-    // resets local state
-    private void init() {
-        value = def = null;
-        output = null;
-        escapeXml = true;
     }
 
     // Releases any resources we may have (or inherit)
     public void release() {
+        output = null;
         super.release();
-        init();
     }
 
 
@@ -85,14 +74,14 @@ public class OutSupport extends BodyTagSupport {
         this.bodyContent = null;  // clean-up body (just in case container is pooling tag handlers)
 
         // output value if not null
-        if (value != null) {
-            output = value;
+        output = evalValue();
+        if (output != null) {
             return SKIP_BODY;
         }
 
         // output default if supplied
-        if (def != null ) {
-            output = def;
+        output = evalDefault();
+        if (output != null ) {
             return SKIP_BODY;
         }
 
@@ -101,6 +90,30 @@ public class OutSupport extends BodyTagSupport {
         // TODO: to avoid buffering, can we wrap out in a filter that performs escaping and use EVAL_BODY_INCLUDE?
         return EVAL_BODY_BUFFERED;
     }
+
+    /**
+     * Evaluates the "value" attribute.
+     *
+     * @return the actual value of the "value" attribute
+     * @throws JspException if there was a problem evaluating the expression
+     */
+    protected abstract Object evalValue() throws JspException;
+
+    /**
+     * Evaluates the "default" attribute.
+     *
+     * @return the actual value of the "default" attribute
+     * @throws JspException if there was a problem evaluating the expression
+     */
+    protected abstract String evalDefault() throws JspException;
+
+    /**
+     * Evaluates the "escapeXml" attribute.
+     *
+     * @return the actual value of the "escapeXml" attribute
+     * @throws JspException if there was a problem evaluating the expression
+     */
+    protected abstract boolean evalEscapeXml() throws JspException;
 
     @Override
     public int doAfterBody() throws JspException {
@@ -111,9 +124,12 @@ public class OutSupport extends BodyTagSupport {
     @Override
     public int doEndTag() throws JspException {
         try {
+            boolean escapeXml = evalEscapeXml();
             EscapeXML.emit(output, escapeXml, pageContext.getOut());
         } catch (IOException e) {
             throw new JspTagException(e);
+        } finally {
+            output = null;
         }
         return EVAL_PAGE;
     }

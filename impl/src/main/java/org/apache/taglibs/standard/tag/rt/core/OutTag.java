@@ -27,9 +27,21 @@ import org.apache.taglibs.standard.tag.common.core.OutSupport;
 
 public class OutTag extends OutSupport {
 
+    private Object value;
+    private String def;
+    private boolean escapeXml;
+
     //*********************************************************************
     // Accessors
-       
+
+    @Override
+    public void release() {
+        value = null;
+        def = null;
+        escapeXml = false;
+        super.release();
+    }
+
     // for tag attribute
     public void setValue(Object value) {
         this.value = value;
@@ -43,5 +55,20 @@ public class OutTag extends OutSupport {
     // for tag attribute
     public void setEscapeXml(boolean escapeXml) {
         this.escapeXml = escapeXml;
+    }
+
+    @Override
+    protected Object evalValue() {
+        return value;
+    }
+
+    @Override
+    protected String evalDefault() {
+        return def;
+    }
+
+    @Override
+    protected boolean evalEscapeXml() {
+        return escapeXml;
     }
 }

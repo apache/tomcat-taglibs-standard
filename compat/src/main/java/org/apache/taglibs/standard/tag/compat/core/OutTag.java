@@ -13,35 +13,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
+package org.apache.taglibs.standard.tag.compat.core;
 
-package org.apache.taglibs.standard.tag.el.core;
-
+import javax.el.ValueExpression;
 import javax.servlet.jsp.JspException;
 
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
-import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 import org.apache.taglibs.standard.tag.common.core.OutSupport;
+import org.apache.taglibs.standard.util.ExpressionUtil;
 
 /**
- * <p>A handler for &lt;out&gt;, which redirects the browser to a
- * new URL.
- *
- * @author Shawn Bayern
  */
-
 public class OutTag extends OutSupport {
 
-    //*********************************************************************
-    // 'Private' state (implementation details)
-
-    private String valueExpression;			// stores EL-based property
-    private String defaultExpression;			// stores EL-based property
-    private String escapeXmlExpression;			// stores EL-based property
-
-
-    //*********************************************************************
-    // Constructor
+    private ValueExpression valueExpression;
+    private ValueExpression defaultExpression;
+    private ValueExpression escapeXmlExpression;
 
     public OutTag() {
     }
@@ -55,15 +42,15 @@ public class OutTag extends OutSupport {
     }
 
     public void setValue(String value) {
-        this.valueExpression = value;
+        valueExpression = ExpressionUtil.createValueExpression(pageContext, value, Object.class);
     }
 
     public void setDefault(String def) {
-        this.defaultExpression = def;
+        defaultExpression = ExpressionUtil.createValueExpression(pageContext, def, String.class);
     }
 
     public void setEscapeXml(String escapeXml) {
-        this.escapeXmlExpression = escapeXml;
+        escapeXmlExpression = ExpressionUtil.createValueExpression(pageContext, escapeXml, Boolean.TYPE);
     }
 
     @Override
@@ -71,7 +58,7 @@ public class OutTag extends OutSupport {
         if (valueExpression == null) {
             return null;
         }
-        return ExpressionEvaluatorManager.evaluate("value", valueExpression, Object.class, this, pageContext);
+        return valueExpression.getValue(pageContext.getELContext());
     }
 
     @Override
@@ -79,7 +66,7 @@ public class OutTag extends OutSupport {
         if (defaultExpression == null) {
             return null;
         }
-        return (String) ExpressionEvaluatorManager.evaluate("default", defaultExpression, String.class, this, pageContext);
+        return (String) defaultExpression.getValue(pageContext.getELContext());
     }
 
     @Override
@@ -87,10 +74,6 @@ public class OutTag extends OutSupport {
         if (escapeXmlExpression == null) {
             return true;
         }
-        Boolean result = (Boolean) ExpressionEvaluatorManager.evaluate("escapeXml", escapeXmlExpression, Boolean.class, this, pageContext);
-        if (result == null) {
-            return true;
-        }
-        return result;
+        return (Boolean) escapeXmlExpression.getValue(pageContext.getELContext());
     }
 }
