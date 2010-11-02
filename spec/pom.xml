@@ -28,7 +28,6 @@
 
   <artifactId>taglibs-standard-spec</artifactId>
   <version>1.2-SNAPSHOT</version>
-  <packaging>bundle</packaging>
   
   <name>Apache Standard Taglib - JSTL Specification API</name>
 
