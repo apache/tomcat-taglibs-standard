@@ -32,6 +32,7 @@
 
   <artifactId>taglibs-standard-compat</artifactId>
   <version>1.2-SNAPSHOT</version>
+  <packaging>bundle</packaging>
 
   <name>Apache Standard Taglib - JSTL 1.0 Compatibility</name>
 
