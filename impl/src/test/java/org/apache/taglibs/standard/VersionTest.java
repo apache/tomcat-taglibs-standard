@@ -27,11 +27,13 @@ public class VersionTest
         super(name);
     }
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         version = new Version();
     }
 
+    @Override
     protected void tearDown() throws Exception {
         version = null;
         super.tearDown();

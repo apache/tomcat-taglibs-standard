@@ -85,6 +85,7 @@ public class SetDataSourceTagSupport extends TagSupport {
     //*********************************************************************
     // Tag logic
 
+    @Override
     public int doStartTag() throws JspException {
         DataSource ds;
 
@@ -124,6 +125,7 @@ public class SetDataSourceTagSupport extends TagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
     }

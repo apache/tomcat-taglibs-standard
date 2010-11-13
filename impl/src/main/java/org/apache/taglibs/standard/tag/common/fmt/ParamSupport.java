@@ -60,6 +60,7 @@ public abstract class ParamSupport extends BodyTagSupport {
     // Tag logic
 
     // Supply our value to our parent <fmt:message> tag
+    @Override
     public int doEndTag() throws JspException {
 	Tag t = findAncestorWithClass(this, MessageSupport.class);
 	if (t == null) {
@@ -89,6 +90,7 @@ public abstract class ParamSupport extends BodyTagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
     }

@@ -58,6 +58,7 @@ public abstract class ParamSupport extends BodyTagSupport {
     // Tag logic
 
     // simply send our name and value to our parent <transform> tag
+    @Override
     public int doEndTag() throws JspException {
 	Tag t = findAncestorWithClass(this, TransformSupport.class);
 	if (t == null)
@@ -77,6 +78,7 @@ public abstract class ParamSupport extends BodyTagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
     }

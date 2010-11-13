@@ -77,7 +77,8 @@ public class ScriptFreeTLV extends TagLibraryValidator {
    * @param initParms a mapping from the names of the initialization parameters
    * to their values, as specified in the TLD.
    */
-  public void setInitParameters (Map<java.lang.String, java.lang.Object> initParms) {
+  @Override
+public void setInitParameters (Map<java.lang.String, java.lang.Object> initParms) {
     super.setInitParameters(initParms);
     String declarationsParm = (String) initParms.get("allowDeclarations");
     String scriptletsParm = (String) initParms.get("allowScriptlets");
@@ -101,7 +102,8 @@ public class ScriptFreeTLV extends TagLibraryValidator {
    * @return null, if the page is valid; otherwise, a ValidationMessage[]
    * containing one or more messages indicating why the page is not valid.
    */
-  public ValidationMessage[] validate
+  @Override
+public ValidationMessage[] validate
       (String prefix, String uri, PageData page) {
     InputStream in = null;
     SAXParser parser;
@@ -150,6 +152,7 @@ public class ScriptFreeTLV extends TagLibraryValidator {
      * which attributes actually support request-time attribute values
      * and checking only those is far more trouble than it's worth.)
      */
+    @Override
     public void startElement (String namespaceUri, 
 			      String localName, String qualifiedName,
 			      Attributes atts) {

@@ -39,6 +39,7 @@ public final class IteratedValueExpression extends ValueExpression {
         this.i = i;
     }
     
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -47,34 +48,42 @@ public final class IteratedValueExpression extends ValueExpression {
         return i == that.i && iteratedExpression.equals(that.iteratedExpression);
     }
 
+    @Override
     public Class getExpectedType() {
         return iteratedExpression.getValueExpression().getExpectedType();
     }
 
+    @Override
     public String getExpressionString() {
         return iteratedExpression.getValueExpression().getExpressionString();
     }
 
+    @Override
     public Class getType(ELContext elContext) {
         return iteratedExpression.getValueExpression().getType(elContext); 
     }
 
+    @Override
     public Object getValue(ELContext elContext) {
         return iteratedExpression.getItem(elContext, i); 
     }
 
+    @Override
     public int hashCode() {
         return iteratedExpression.hashCode()+i;
     }
 
+    @Override
     public boolean isLiteralText() {
         return false;
     }
 
+    @Override
     public boolean isReadOnly(ELContext elContext) {
         return true;
     }
 
+    @Override
     public void setValue(ELContext elContext, Object arg1) {
     }
 

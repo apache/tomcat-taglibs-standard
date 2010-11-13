@@ -113,12 +113,14 @@ public abstract class TransformSupport extends BodyTagSupport {
     //*********************************************************************
     // Tag logic
 
+    @Override
     public int doStartTag() throws JspException {
         // set up transformer in the start tag so that nested <param> tags can set parameters directly
         t = getTransformer(xslt, xsltSystemId);
         return EVAL_BODY_BUFFERED;
     }
 
+    @Override
     public int doEndTag() throws JspException {
         Source source = xmlSpecified ? getSourceFromXmlAttribute() : getDocumentFromBodyContent();
 
@@ -148,6 +150,7 @@ public abstract class TransformSupport extends BodyTagSupport {
 
     // Releases any resources we may have (or inherit)
 
+    @Override
     public void release() {
         super.release();
         init();
@@ -339,12 +342,15 @@ public abstract class TransformSupport extends BodyTagSupport {
             this.w = w;
         }
 
+        @Override
         public void close() {
         }
 
+        @Override
         public void flush() {
         }
 
+        @Override
         public void write(char[] cbuf, int off, int len) throws IOException {
             w.write(cbuf, off, len);
         }

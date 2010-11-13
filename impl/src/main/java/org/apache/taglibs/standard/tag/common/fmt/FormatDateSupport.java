@@ -114,6 +114,7 @@ public abstract class FormatDateSupport extends TagSupport {
     /*
      * Formats the given date and time.
      */
+    @Override
     public int doEndTag() throws JspException {
 
 	String formatted = null;
@@ -176,6 +177,7 @@ public abstract class FormatDateSupport extends TagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
     }

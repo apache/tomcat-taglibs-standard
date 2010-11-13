@@ -28,6 +28,7 @@ public class Test33054 extends JspTestCase {
         super(name);
     }
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -47,6 +48,7 @@ public class Test33054 extends JspTestCase {
         conn.close();
     }
 
+    @Override
     protected void tearDown() throws Exception {
         super.tearDown();
         Connection conn = DriverManager.getConnection("jdbc:derby:cactustest");

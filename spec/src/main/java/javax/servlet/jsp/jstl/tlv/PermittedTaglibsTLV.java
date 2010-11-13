@@ -84,6 +84,7 @@ public class PermittedTaglibsTLV extends TagLibraryValidator {
 	permittedTaglibs = null;
     }
 
+    @Override
     public void release() {
 	super.release();
 	init();
@@ -93,6 +94,7 @@ public class PermittedTaglibsTLV extends TagLibraryValidator {
     //*********************************************************************
     // Validation entry point
 
+    @Override
     public synchronized ValidationMessage[] validate(
 	    String prefix, String uri, PageData page) {
 	try {
@@ -164,6 +166,7 @@ public class PermittedTaglibsTLV extends TagLibraryValidator {
     private class PermittedTaglibsHandler extends DefaultHandler {
 
         // if the element is <jsp:root>, check its "xmlns:" attributes
+        @Override
         public void startElement(
                 String ns, String ln, String qn, Attributes a) {
 

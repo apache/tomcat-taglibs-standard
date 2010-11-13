@@ -64,6 +64,7 @@ public class SetTag extends TagSupport {
     // Tag logic
 
     // applies XPath expression from 'select' and stores the result in 'var'
+    @Override
     public int doStartTag() throws JspException {
         // process the query
         XPathUtil xu = new XPathUtil(pageContext);
@@ -85,6 +86,7 @@ public class SetTag extends TagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
         super.release();
         init();

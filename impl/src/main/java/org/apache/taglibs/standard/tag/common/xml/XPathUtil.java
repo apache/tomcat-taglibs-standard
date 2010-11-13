@@ -218,6 +218,7 @@ public class XPathUtil {
          *  (from xalan: which must be passed in order to lazy evaluate variables.)
          * @param qname The qualified name of the variable.
          */
+        @Override
         public XObject getVariableOrParam(
         XPathContext xctxt, 
         org.apache.xml.utils.QName qname)
@@ -867,10 +868,12 @@ class JSTLNodeList extends Vector implements NodeList   {
         return (Node)nodeVector.elementAt( index );
     }
 
+    @Override
     public Object elementAt ( int index ) {
         return nodeVector.elementAt( index );
     }
 
+    @Override
     public Object get ( int index ) {
         return nodeVector.get( index );
     }
@@ -879,6 +882,7 @@ class JSTLNodeList extends Vector implements NodeList   {
         return nodeVector.size( );
     }
 
+    @Override
     public int size (  ) {
         //System.out.println("JSTL node list size => " + nodeVector.size() );
         return nodeVector.size( );

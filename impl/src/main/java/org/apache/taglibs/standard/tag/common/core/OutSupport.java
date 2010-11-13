@@ -59,6 +59,7 @@ public abstract class OutSupport extends BodyTagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
         output = null;
         super.release();

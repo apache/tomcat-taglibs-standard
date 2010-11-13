@@ -45,16 +45,19 @@ public class ForEachTag extends LoopTagSupport {
 
     // (We inherit semantics and Javadoc from LoopTagSupport.) 
 
+    @Override
     protected void prepare() throws JspTagException {
         nodesIndex = 0;
         XPathUtil xu = new XPathUtil(pageContext);
         nodes = xu.selectNodes(XPathUtil.getContext(this), select);
     }
 
+    @Override
     protected boolean hasNext() throws JspTagException {
         return (nodesIndex < nodes.size());
     }
 
+    @Override
     protected Object next() throws JspTagException {
 	Object o = nodes.get(nodesIndex++);
 	if (!(o instanceof org.w3c.dom.Node))
@@ -69,6 +72,7 @@ public class ForEachTag extends LoopTagSupport {
     // Tag logic and lifecycle management
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
         super.release();

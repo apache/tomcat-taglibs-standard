@@ -122,6 +122,7 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
     //*********************************************************************
     // Tag logic
 
+    @Override
     public int doEndTag() throws JspException {
 	String formatted = null;
         Object input = null;
@@ -212,6 +213,7 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
     }

@@ -77,6 +77,7 @@ public abstract class SetBundleSupport extends TagSupport {
     //*********************************************************************
     // Tag logic
 
+    @Override
     public int doEndTag() throws JspException {
 	LocalizationContext locCtxt =
 	    BundleSupport.getLocalizationContext(pageContext, basename);
@@ -92,6 +93,7 @@ public abstract class SetBundleSupport extends TagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
     }

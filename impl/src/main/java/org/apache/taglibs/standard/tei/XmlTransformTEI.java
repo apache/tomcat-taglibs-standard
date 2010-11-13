@@ -32,6 +32,7 @@ public class XmlTransformTEI extends TagExtraInfo {
     final private static String RESULT = "result";
     final private static String VAR = "var";
 
+    @Override
     public boolean isValid(TagData us) {
 	// require XSLT
 	if (!Util.isSpecified(us, XSLT))

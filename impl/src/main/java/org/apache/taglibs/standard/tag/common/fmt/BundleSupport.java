@@ -92,11 +92,13 @@ public abstract class BundleSupport extends BodyTagSupport {
     //*********************************************************************
     // Tag logic
 
+    @Override
     public int doStartTag() throws JspException {
 	locCtxt = getLocalizationContext(pageContext, basename);
 	return EVAL_BODY_BUFFERED;
     }
 
+    @Override
     public int doEndTag() throws JspException {
 	if (bodyContent != null) {
 	    try {
@@ -110,6 +112,7 @@ public abstract class BundleSupport extends BodyTagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
         super.release();
     	init();

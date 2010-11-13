@@ -39,6 +39,7 @@ public class WhenTag extends WhenTagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
         super.release();
         init();
@@ -48,6 +49,7 @@ public class WhenTag extends WhenTagSupport {
     //*********************************************************************
     // Supplied conditional logic
 
+    @Override
     protected boolean condition() throws JspTagException {
         XPathUtil xu = new XPathUtil(pageContext);
         return (xu.booleanValueOf(XPathUtil.getContext(this), select));

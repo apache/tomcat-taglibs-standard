@@ -110,6 +110,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      * Prepares for execution by setting the initial state, such as
      * getting the <code>Connection</code>
      */
+    @Override
     public int doStartTag() throws JspException {
 
 	try {
@@ -134,6 +135,7 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      * element, or is retrieved from a JSP scope  attribute
      * named <code>javax.servlet.jsp.jstl.sql.dataSource</code>.
      */
+    @Override
     public int doEndTag() throws JspException {
 	/*
 	 * Use the SQL statement specified by the sql attribute, if any,

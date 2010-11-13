@@ -92,6 +92,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
 
     //*********************************************************************
     // set its type and delegate validation to super-class
+    @Override
     public  ValidationMessage[] validate(
 	    String prefix, String uri, PageData page) {
 	return super.validate( TYPE_FMT, prefix, uri, page );
@@ -101,6 +102,7 @@ public class JstlFmtTLV extends JstlBaseTLV {
     //*********************************************************************
     // Contract fulfillment
 
+    @Override
     protected DefaultHandler getHandler() {
 	return new Handler();
     }
@@ -120,7 +122,8 @@ public class JstlFmtTLV extends JstlBaseTLV {
 	private boolean bodyIllegal = false;
 
 	// process under the existing context (state), then modify it
-	public void startElement(
+	@Override
+    public void startElement(
 	        String ns, String ln, String qn, Attributes a) {
 
             // substitute our own parsed 'ln' if it's not provided
@@ -217,7 +220,8 @@ public class JstlFmtTLV extends JstlBaseTLV {
 	    depth++;
 	}
 
-	public void characters(char[] ch, int start, int length) {
+	@Override
+    public void characters(char[] ch, int start, int length) {
 
 	    bodyNecessary = false;		// body is no longer necessary!
 
@@ -232,7 +236,8 @@ public class JstlFmtTLV extends JstlBaseTLV {
 					  lastElementName));
 	}
 
-	public void endElement(String ns, String ln, String qn) {
+	@Override
+    public void endElement(String ns, String ln, String qn) {
 
 	    // consistently, we ignore JSP_TEXT
 	    if (qn.equals(JSP_TEXT))

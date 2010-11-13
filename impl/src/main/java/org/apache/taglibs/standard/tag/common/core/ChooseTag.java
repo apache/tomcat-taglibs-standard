@@ -46,6 +46,7 @@ public class ChooseTag extends TagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
         super.release();
         init();
@@ -87,6 +88,7 @@ public class ChooseTag extends TagSupport {
     // Tag logic
 
     // always include body
+    @Override
     public int doStartTag() throws JspException {
         subtagGateClosed = false;	// when we start, no children have run
         return EVAL_BODY_INCLUDE;

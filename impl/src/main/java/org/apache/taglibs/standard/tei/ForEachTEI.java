@@ -37,6 +37,7 @@ public class ForEachTEI extends TagExtraInfo {
      * 
      * - If 'items' is not specified, 'begin' and 'end' must be
      */
+    @Override
     public boolean isValid(TagData us) {
         if (!Util.isSpecified(us, ITEMS))
             if (!Util.isSpecified(us, BEGIN) || !(Util.isSpecified(us, END)))

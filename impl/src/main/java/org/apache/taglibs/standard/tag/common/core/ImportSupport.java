@@ -118,6 +118,7 @@ public abstract class ImportSupport extends BodyTagSupport
     // Tag logic
 
     // determines what kind of import and variable exposure to perform 
+    @Override
     public int doStartTag() throws JspException {
 	// Sanity check
 	if (context != null
@@ -151,6 +152,7 @@ public abstract class ImportSupport extends BodyTagSupport
     }
 
     // manages connections as necessary (creating or destroying)
+    @Override
     public int doEndTag() throws JspException {
         try {
 	    // If we didn't expose a Reader earlier...
@@ -189,6 +191,7 @@ public abstract class ImportSupport extends BodyTagSupport
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
         super.release();
@@ -386,6 +389,7 @@ public abstract class ImportSupport extends BodyTagSupport
             super(request);
         }
         
+        @Override
         public String getMethod() {
             return "GET";
         }
@@ -428,7 +432,8 @@ public abstract class ImportSupport extends BodyTagSupport
 
 	/** A ServletOutputStream we convey, tied to this Writer. */
 	private ServletOutputStream sos = new ServletOutputStream() {
-	    public void write(int b) throws IOException {
+	    @Override
+        public void write(int b) throws IOException {
 		bos.write(b);
 	    }
 	};
@@ -451,7 +456,8 @@ public abstract class ImportSupport extends BodyTagSupport
 	}
 	
 	/** Returns a Writer designed to buffer the output. */
-	public PrintWriter getWriter() {
+	@Override
+    public PrintWriter getWriter() {
 	    if (isStreamUsed)
 		throw new IllegalStateException(
 		    Resources.getMessage("IMPORT_ILLEGAL_STREAM"));
@@ -460,7 +466,8 @@ public abstract class ImportSupport extends BodyTagSupport
 	}
 	
 	/** Returns a ServletOutputStream designed to buffer the output. */
-	public ServletOutputStream getOutputStream() {
+	@Override
+    public ServletOutputStream getOutputStream() {
 	    if (isWriterUsed)
 		throw new IllegalStateException(
 		    Resources.getMessage("IMPORT_ILLEGAL_WRITER"));
@@ -469,16 +476,19 @@ public abstract class ImportSupport extends BodyTagSupport
 	}
 
 	/** Has no effect. */
-	public void setContentType(String x) {
+	@Override
+    public void setContentType(String x) {
 	    // ignore
 	}
 
 	/** Has no effect. */
-	public void setLocale(Locale x) {
+	@Override
+    public void setLocale(Locale x) {
 	    // ignore
 	}
 
-	public void setStatus(int status) {
+	@Override
+    public void setStatus(int status) {
 	    this.status = status;
 	}
 

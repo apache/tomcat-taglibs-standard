@@ -90,6 +90,7 @@ public abstract class SetLocaleSupport extends TagSupport {
     //*********************************************************************
     // Tag logic
 
+    @Override
     public int doEndTag() throws JspException {
 	Locale locale = null;
 
@@ -112,6 +113,7 @@ public abstract class SetLocaleSupport extends TagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
     }

@@ -209,6 +209,7 @@ public abstract class LoopTagSupport
     /**
      * Releases any resources this LoopTagSupport may have (or inherit).
      */
+    @Override
     public void release() {
         super.release();
         init();
@@ -217,6 +218,7 @@ public abstract class LoopTagSupport
     /**
      * Begins iterating by processing the first item.
      */
+    @Override
     public int doStartTag() throws JspException {
         if (end != -1 && begin > end) {
             // JSTL 1.1. We simply do not execute the loop.
@@ -257,6 +259,7 @@ public abstract class LoopTagSupport
      * Continues the iteration when appropriate -- that is, if we (a) have
      * more items and (b) don't run over our 'end' (given our 'step').
      */
+    @Override
     public int doAfterBody() throws JspException {
 
         // re-sync the index, given our prior behind-the-scenes 'step'

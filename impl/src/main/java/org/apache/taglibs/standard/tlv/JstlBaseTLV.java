@@ -111,6 +111,7 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
 	config = null;
     }
 
+    @Override
     public void release() {
 	super.release();
 	init();

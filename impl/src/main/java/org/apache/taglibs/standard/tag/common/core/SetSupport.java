@@ -68,6 +68,7 @@ public abstract class SetSupport extends BodyTagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
         var = null;
         scope = null;
@@ -78,6 +79,7 @@ public abstract class SetSupport extends BodyTagSupport {
     //*********************************************************************
     // Tag logic
 
+    @Override
     public int doEndTag() throws JspException {
 
         // decide what to do with the result

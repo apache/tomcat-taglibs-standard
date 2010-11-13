@@ -254,14 +254,17 @@ public abstract class ForEachSupport extends LoopTagSupport {
 
     // (We inherit semantics and Javadoc from LoopTagSupport.)
 
+    @Override
     protected boolean hasNext() throws JspTagException {
         return items.hasNext();
     }
 
+    @Override
     protected Object next() throws JspTagException {
         return items.next();
     }
 
+    @Override
     protected void prepare() throws JspTagException {
         // produce the right sort of ForEachIterator
         if (rawItems != null) {
@@ -290,6 +293,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
     // Tag logic and lifecycle management
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
         super.release();
         items = null;

@@ -44,10 +44,12 @@ public class TransactionTag extends TransactionTagSupport {
     /**
      * Setter method for the Transaction Isolation level.
      */
+    @Override
     public void setIsolation(String isolation) {
 	this.isolationRT = isolation;
     }
 
+    @Override
     public int doStartTag() throws JspException {
 	if (isolationRT != null)
           super.setIsolation(isolationRT);

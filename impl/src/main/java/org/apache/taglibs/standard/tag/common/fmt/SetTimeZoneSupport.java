@@ -79,6 +79,7 @@ public abstract class SetTimeZoneSupport extends TagSupport {
     //*********************************************************************
     // Tag logic
 
+    @Override
     public int doEndTag() throws JspException {
 	TimeZone timeZone = null;
 
@@ -104,6 +105,7 @@ public abstract class SetTimeZoneSupport extends TagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+    @Override
     public void release() {
 	init();
     }
