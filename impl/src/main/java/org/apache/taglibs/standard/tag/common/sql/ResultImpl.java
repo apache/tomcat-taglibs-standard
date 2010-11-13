@@ -50,7 +50,7 @@ public class ResultImpl implements Result {
      * Build a <code>Result</code> object from a <code>ResultSet</code> object.
      *
      * @param rs an open <tt>ResultSet</tt>, positioned before the first row
-     * @exception if a database error occurs
+     * @exception SQLException if a database error occurs
      */
     public ResultImpl(ResultSet rs) throws SQLException {
         this(rs, -1, -1);
@@ -60,8 +60,8 @@ public class ResultImpl implements Result {
      * Build a <code>Result</code> object from a <code>ResultSet</code> object.
      *
      * @param rs an open <tt>ResultSet</tt>, positioned before the first row
-     * @param maxRows, query maximum rows limit
-     * @exception if a database error occurs
+     * @param maxRows query maximum rows limit
+     * @exception SQLException if a database error occurs
      */
     public ResultImpl(ResultSet rs, int maxRows) throws SQLException {
         // Matching API in ResultSupport - apologies for the bad 
@@ -75,9 +75,9 @@ public class ResultImpl implements Result {
      *
      * @param rs an open <tt>ResultSet</tt>, positioned before the first
      * row
-     * @param startRow, beginning row to be cached
-     * @param maxRows, query maximum rows limit
-     * @exception if a database error occurs
+     * @param startRow beginning row to be cached
+     * @param maxRows  query maximum rows limit
+     * @exception SQLException if a database error occurs
      */
     public ResultImpl(ResultSet rs, int startRow, int maxRows)
         throws SQLException 

@@ -19,7 +19,6 @@ package javax.servlet.jsp.jstl.fmt;
 
 import java.util.Enumeration;
 import java.util.Locale;
-import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Vector;

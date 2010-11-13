@@ -1,12 +1,8 @@
 package org.apache.taglibs.standard.tag.compat.core;
 
 import java.util.Collections;
-import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
-import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspFactory;
-
 import org.apache.taglibs.standard.tag.common.core.ForEachSupport;
 import org.apache.taglibs.standard.util.ExpressionUtil;
 
