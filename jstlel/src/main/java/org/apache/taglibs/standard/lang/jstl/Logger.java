@@ -76,14 +76,16 @@ public class Logger
     throws ELException
   {
     if (isLoggingWarning ()) {
-      if (pMessage == null) {
-	System.out.println (pRootCause);
-      }
-      else if (pRootCause == null) {
-	System.out.println (pMessage);
-      }
-      else {
-	System.out.println (pMessage + ": " + pRootCause);
+      if(mOut != null) {
+        if (pMessage == null) {
+	  mOut.println (pRootCause);
+        }
+        else if (pRootCause == null) {
+	  mOut.println (pMessage);
+        }
+        else {
+	  mOut.println (pMessage + ": " + pRootCause);
+        }
       }
     }
   }
