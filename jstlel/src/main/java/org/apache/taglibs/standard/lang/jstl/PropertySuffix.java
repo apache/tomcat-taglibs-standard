@@ -13,84 +13,82 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.lang.jstl;
 
 import java.util.Map;
 
 /**
- *
  * <p>Represents an operator that obtains the value of another value's
  * property.  This is a specialization of ArraySuffix - a.b is
  * equivalent to a["b"]
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
+ */
 
 public class PropertySuffix
-  extends ArraySuffix
-{
-  //-------------------------------------
-  // Properties
-  //-------------------------------------
-  // property name
+        extends ArraySuffix {
+    //-------------------------------------
+    // Properties
+    //-------------------------------------
+    // property name
 
-  String mName;
-  public String getName ()
-  { return mName; }
-  public void setName (String pName)
-  { mName = pName; }
+    String mName;
 
-  //-------------------------------------
-  /**
-   *
-   * Constructor
-   **/
-  public PropertySuffix (String pName)
-  {
-    super (null);
-    mName = pName;
-  }
+    public String getName() {
+        return mName;
+    }
 
-  //-------------------------------------
-  /**
-   *
-   * Gets the value of the index
-   **/
-  Object evaluateIndex (Object pContext,
-                        VariableResolver pResolver,
-                        Map functions,
-                        String defaultPrefix,
-                        Logger pLogger)
-    throws ELException
-  {
-    return mName;
-  }
+    public void setName(String pName) {
+        mName = pName;
+    }
 
-  //-------------------------------------
-  /**
-   *
-   * Returns the operator symbol
-   **/
-  String getOperatorSymbol ()
-  {
-    return ".";
-  }
+    //-------------------------------------
 
-  //-------------------------------------
-  // ValueSuffix methods
-  //-------------------------------------
-  /**
-   *
-   * Returns the expression in the expression language syntax
-   **/
-  public String getExpressionString ()
-  {
-    return "." + StringLiteral.toIdentifierToken (mName);
-  }
+    /**
+     * Constructor
+     */
+    public PropertySuffix(String pName) {
+        super(null);
+        mName = pName;
+    }
 
-  //-------------------------------------
+    //-------------------------------------
+
+    /**
+     * Gets the value of the index
+     */
+    Object evaluateIndex(Object pContext,
+                         VariableResolver pResolver,
+                         Map functions,
+                         String defaultPrefix,
+                         Logger pLogger)
+            throws ELException {
+        return mName;
+    }
+
+    //-------------------------------------
+
+    /**
+     * Returns the operator symbol
+     */
+    String getOperatorSymbol() {
+        return ".";
+    }
+
+    //-------------------------------------
+    // ValueSuffix methods
+    //-------------------------------------
+
+    /**
+     * Returns the expression in the expression language syntax
+     */
+    public String getExpressionString() {
+        return "." + StringLiteral.toIdentifierToken(mName);
+    }
+
+    //-------------------------------------
 }

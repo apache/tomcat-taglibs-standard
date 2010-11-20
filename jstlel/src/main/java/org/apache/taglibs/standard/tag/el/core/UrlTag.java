@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.core;
 
@@ -33,8 +33,8 @@ public class UrlTag extends UrlSupport {
     //*********************************************************************
     // 'Private' state (implementation details)
 
-    private String value_;			// stores EL-based property
-    private String context_;			// stores EL-based property
+    private String value_;            // stores EL-based property
+    private String context_;            // stores EL-based property
 
 
     //*********************************************************************
@@ -55,17 +55,19 @@ public class UrlTag extends UrlSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -88,12 +90,14 @@ public class UrlTag extends UrlSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	value_ = null;
+        value_ = null;
     }
 
     /* Evaluates expressions as necessary */
+
     private void evaluateExpressions() throws JspException {
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -103,9 +107,9 @@ public class UrlTag extends UrlSupport {
          * propagate up.
          */
 
-	value = (String) ExpressionUtil.evalNotNull(
-	    "url", "value", value_, String.class, this, pageContext);
-	context = (String) ExpressionUtil.evalNotNull(
-	    "url", "context", context_, String.class, this, pageContext);
+        value = (String) ExpressionUtil.evalNotNull(
+                "url", "value", value_, String.class, this, pageContext);
+        context = (String) ExpressionUtil.evalNotNull(
+                "url", "context", context_, String.class, this, pageContext);
     }
 }

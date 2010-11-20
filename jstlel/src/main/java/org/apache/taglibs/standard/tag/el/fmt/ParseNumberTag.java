@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.fmt;
 
@@ -39,9 +39,9 @@ public class ParseNumberTag extends ParseNumberSupport {
 
     private String value_;                       // stores EL-based property
     private String type_;                        // stores EL-based property
-    private String pattern_;		         // stores EL-based property
-    private String parseLocale_;	         // stores EL-based property
-    private String integerOnly_;	         // stores EL-based property
+    private String pattern_;                 // stores EL-based property
+    private String parseLocale_;             // stores EL-based property
+    private String integerOnly_;             // stores EL-based property
 
 
     //*********************************************************************
@@ -62,16 +62,18 @@ public class ParseNumberTag extends ParseNumberSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -82,30 +84,35 @@ public class ParseNumberTag extends ParseNumberSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setValue(String value_) {
         this.value_ = value_;
-	this.valueSpecified = true;
+        this.valueSpecified = true;
     }
 
     // for EL-based attribute
+
     public void setType(String type_) {
         this.type_ = type_;
     }
 
     // for EL-based attribute
+
     public void setPattern(String pattern_) {
         this.pattern_ = pattern_;
     }
 
     // for EL-based attribute
+
     public void setParseLocale(String parseLocale_) {
         this.parseLocale_ = parseLocale_;
     }
 
     // for EL-based attribute
+
     public void setIntegerOnly(String integerOnly_) {
         this.integerOnly_ = integerOnly_;
-	this.integerOnlySpecified = true;
+        this.integerOnlySpecified = true;
     }
 
 
@@ -113,14 +120,16 @@ public class ParseNumberTag extends ParseNumberSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	value_ = type_ = pattern_ = parseLocale_ = integerOnly_ = null;
+        value_ = type_ = pattern_ = parseLocale_ = integerOnly_ = null;
     }
 
     // Evaluates expressions as necessary
+
     private void evaluateExpressions() throws JspException {
-	Object obj = null;
+        Object obj = null;
 
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -130,48 +139,48 @@ public class ParseNumberTag extends ParseNumberSupport {
          * propagate up.
          */
 
-	// 'value' attribute
-	if (value_ != null) {
-	    value = (String) ExpressionEvaluatorManager.evaluate(
-	        "value", value_, String.class, this, pageContext);
-	}
+        // 'value' attribute
+        if (value_ != null) {
+            value = (String) ExpressionEvaluatorManager.evaluate(
+                    "value", value_, String.class, this, pageContext);
+        }
 
-	// 'type' attribute
-	if (type_ != null) {
-	    type = (String) ExpressionEvaluatorManager.evaluate(
-	        "type", type_, String.class, this, pageContext);
-	}
+        // 'type' attribute
+        if (type_ != null) {
+            type = (String) ExpressionEvaluatorManager.evaluate(
+                    "type", type_, String.class, this, pageContext);
+        }
 
-	// 'pattern' attribute
-	if (pattern_ != null) {
-	    pattern = (String) ExpressionEvaluatorManager.evaluate(
-	        "pattern", pattern_, String.class, this, pageContext);
-	}
+        // 'pattern' attribute
+        if (pattern_ != null) {
+            pattern = (String) ExpressionEvaluatorManager.evaluate(
+                    "pattern", pattern_, String.class, this, pageContext);
+        }
 
-	// 'parseLocale' attribute
-	if (parseLocale_ != null) {
-	    obj = ExpressionEvaluatorManager.evaluate(
-	        "parseLocale", parseLocale_, Object.class, this, pageContext);
-	    if (obj != null) {
-		if (obj instanceof Locale) {
-		    parseLocale = (Locale) obj;
-		} else {
-		    String localeStr = (String) obj;
-		    if (!"".equals(localeStr)) {
-			parseLocale = SetLocaleSupport.parseLocale(localeStr);
-		    }
-		}
-	    }
-	}
+        // 'parseLocale' attribute
+        if (parseLocale_ != null) {
+            obj = ExpressionEvaluatorManager.evaluate(
+                    "parseLocale", parseLocale_, Object.class, this, pageContext);
+            if (obj != null) {
+                if (obj instanceof Locale) {
+                    parseLocale = (Locale) obj;
+                } else {
+                    String localeStr = (String) obj;
+                    if (!"".equals(localeStr)) {
+                        parseLocale = SetLocaleSupport.parseLocale(localeStr);
+                    }
+                }
+            }
+        }
 
-	// 'integerOnly' attribute
-	if (integerOnly_ != null) {
-	    obj = ExpressionEvaluatorManager.evaluate(
-	        "integerOnly", integerOnly_, Boolean.class, this, pageContext);
-	    if (obj != null) {
-		isIntegerOnly = ((Boolean) obj).booleanValue();
-	    }
-	}
+        // 'integerOnly' attribute
+        if (integerOnly_ != null) {
+            obj = ExpressionEvaluatorManager.evaluate(
+                    "integerOnly", integerOnly_, Boolean.class, this, pageContext);
+            if (obj != null) {
+                isIntegerOnly = ((Boolean) obj).booleanValue();
+            }
+        }
     }
 }
 

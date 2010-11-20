@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.fmt;
 
@@ -55,16 +55,18 @@ public class RequestEncodingTag extends RequestEncodingSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -75,6 +77,7 @@ public class RequestEncodingTag extends RequestEncodingSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setValue(String value_) {
         this.value_ = value_;
     }
@@ -84,12 +87,14 @@ public class RequestEncodingTag extends RequestEncodingSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	value_ = null;
+        value_ = null;
     }
 
     // Evaluates expressions as necessary
+
     private void evaluateExpressions() throws JspException {
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -99,9 +104,9 @@ public class RequestEncodingTag extends RequestEncodingSupport {
          * propagate up.
          */
 
-	if (value_ != null) {
-	    value = (String) ExpressionEvaluatorManager.evaluate(
-	        "value", value_, String.class, this, pageContext);
-	}
+        if (value_ != null) {
+            value = (String) ExpressionEvaluatorManager.evaluate(
+                    "value", value_, String.class, this, pageContext);
+        }
     }
 }

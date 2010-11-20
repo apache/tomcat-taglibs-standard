@@ -13,48 +13,44 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.lang.jstl;
 
 /**
- *
  * <p>An expression representing a null literal value
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
+ */
 
 public class NullLiteral
-  extends Literal
-{
-  //-------------------------------------
-  // Member variables
-  //-------------------------------------
+        extends Literal {
+    //-------------------------------------
+    // Member variables
+    //-------------------------------------
 
-  public static final NullLiteral SINGLETON = new NullLiteral ();
+    public static final NullLiteral SINGLETON = new NullLiteral();
 
-  //-------------------------------------
-  /**
-   *
-   * Constructor
-   **/
-  public NullLiteral ()
-  {
-    super (null);
-  }
+    //-------------------------------------
 
-  //-------------------------------------
-  // Expression methods
-  //-------------------------------------
-  /**
-   *
-   * Returns the expression in the expression language syntax
-   **/
-  public String getExpressionString ()
-  {
-    return "null";
-  }
+    /**
+     * Constructor
+     */
+    public NullLiteral() {
+        super(null);
+    }
 
-  //-------------------------------------
+    //-------------------------------------
+    // Expression methods
+    //-------------------------------------
+
+    /**
+     * Returns the expression in the expression language syntax
+     */
+    public String getExpressionString() {
+        return "null";
+    }
+
+    //-------------------------------------
 }

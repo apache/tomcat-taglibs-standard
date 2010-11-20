@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.core;
 
@@ -34,9 +34,9 @@ public class OutTag extends OutSupport {
     //*********************************************************************
     // 'Private' state (implementation details)
 
-    private String valueExpression;			// stores EL-based property
-    private String defaultExpression;			// stores EL-based property
-    private String escapeXmlExpression;			// stores EL-based property
+    private String valueExpression;            // stores EL-based property
+    private String defaultExpression;            // stores EL-based property
+    private String escapeXmlExpression;            // stores EL-based property
 
 
     //*********************************************************************

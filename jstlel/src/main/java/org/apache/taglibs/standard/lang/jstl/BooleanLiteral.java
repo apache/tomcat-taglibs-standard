@@ -13,62 +13,57 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.lang.jstl;
 
 /**
- *
  * <p>An expression representing a boolean literal value
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
+ */
 
 public class BooleanLiteral
-  extends Literal
-{
-  //-------------------------------------
-  // Member variables
-  //-------------------------------------
+        extends Literal {
+    //-------------------------------------
+    // Member variables
+    //-------------------------------------
 
-  public static final BooleanLiteral TRUE = new BooleanLiteral ("true");
-  public static final BooleanLiteral FALSE = new BooleanLiteral ("false");
+    public static final BooleanLiteral TRUE = new BooleanLiteral("true");
+    public static final BooleanLiteral FALSE = new BooleanLiteral("false");
 
-  //-------------------------------------
-  /**
-   *
-   * Constructor
-   **/
-  public BooleanLiteral (String pToken)
-  {
-    super (getValueFromToken (pToken));
-  }
+    //-------------------------------------
 
-  //-------------------------------------
-  /**
-   *
-   * Parses the given token into the literal value
-   **/
-  static Object getValueFromToken (String pToken)
-  {
-    return
-      ("true".equals (pToken)) ?
-      Boolean.TRUE :
-      Boolean.FALSE;
-  }
+    /**
+     * Constructor
+     */
+    public BooleanLiteral(String pToken) {
+        super(getValueFromToken(pToken));
+    }
 
-  //-------------------------------------
-  // Expression methods
-  //-------------------------------------
-  /**
-   *
-   * Returns the expression in the expression language syntax
-   **/
-  public String getExpressionString ()
-  {
-    return (getValue () == Boolean.TRUE) ? "true" : "false";
-  }
+    //-------------------------------------
 
-  //-------------------------------------
+    /**
+     * Parses the given token into the literal value
+     */
+    static Object getValueFromToken(String pToken) {
+        return
+                ("true".equals(pToken)) ?
+                        Boolean.TRUE :
+                        Boolean.FALSE;
+    }
+
+    //-------------------------------------
+    // Expression methods
+    //-------------------------------------
+
+    /**
+     * Returns the expression in the expression language syntax
+     */
+    public String getExpressionString() {
+        return (getValue() == Boolean.TRUE) ? "true" : "false";
+    }
+
+    //-------------------------------------
 }

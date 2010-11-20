@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+
 import javax.servlet.jsp.JspException;
 
 import junit.framework.TestCase;
@@ -82,7 +83,9 @@ public class ParserTest extends TestCase {
             throws IOException {
         while (true) {
             String str = pIn.readLine();
-            if (str == null) break;
+            if (str == null) {
+                break;
+            }
             if (str.startsWith("#") ||
                     "".equals(str.trim())) {
                 pOut.println(str);

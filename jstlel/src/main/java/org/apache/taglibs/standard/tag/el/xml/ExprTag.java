@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.xml;
 
@@ -54,17 +54,19 @@ public class ExprTag extends ExprSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -75,6 +77,7 @@ public class ExprTag extends ExprSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setEscapeXml(String escapeXml_) {
         this.escapeXml_ = escapeXml_;
     }
@@ -84,12 +87,14 @@ public class ExprTag extends ExprSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	escapeXml_ = null;
+        escapeXml_ = null;
     }
 
     /* Evaluates expressions as necessary */
+
     private void evaluateExpressions() throws JspException {
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -101,16 +106,17 @@ public class ExprTag extends ExprSupport {
 
         if (escapeXml_ != null) {
             Boolean b = (Boolean) ExpressionUtil.evalNotNull(
-                "out",
-                "escapeXml",
-                escapeXml_,
-                Boolean.class,
-                this,
-                pageContext);
-            if (b == null)
+                    "out",
+                    "escapeXml",
+                    escapeXml_,
+                    Boolean.class,
+                    this,
+                    pageContext);
+            if (b == null) {
                 escapeXml = false;
-            else
+            } else {
                 escapeXml = b.booleanValue();
+            }
         }
     }
 }

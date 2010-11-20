@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.fmt;
 
@@ -56,16 +56,18 @@ public class TimeZoneTag extends TimeZoneSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -76,6 +78,7 @@ public class TimeZoneTag extends TimeZoneSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setValue(String value_) {
         this.value_ = value_;
     }
@@ -85,16 +88,18 @@ public class TimeZoneTag extends TimeZoneSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	value_ = null;
+        value_ = null;
     }
 
     // Evaluates expressions as necessary
+
     private void evaluateExpressions() throws JspException {
 
-	// 'value' attribute (mandatory)
-	value = ExpressionEvaluatorManager.evaluate(
-	    "value", value_, Object.class, this, pageContext);
+        // 'value' attribute (mandatory)
+        value = ExpressionEvaluatorManager.evaluate(
+                "value", value_, Object.class, this, pageContext);
     }
 }

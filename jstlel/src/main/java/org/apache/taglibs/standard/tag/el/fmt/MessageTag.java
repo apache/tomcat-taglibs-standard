@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.fmt;
 
@@ -36,7 +36,7 @@ public class MessageTag extends MessageSupport {
     // Private state (implementation details)
 
     private String key_;                         // stores EL-based property
-    private String bundle_;		         // stores EL-based property
+    private String bundle_;                 // stores EL-based property
 
 
     //*********************************************************************
@@ -57,16 +57,18 @@ public class MessageTag extends MessageSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -77,12 +79,14 @@ public class MessageTag extends MessageSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setKey(String key_) {
         this.key_ = key_;
-	this.keySpecified = true;
+        this.keySpecified = true;
     }
 
     // for EL-based attribute
+
     public void setBundle(String bundle_) {
         this.bundle_ = bundle_;
         this.bundleSpecified = true;
@@ -93,12 +97,14 @@ public class MessageTag extends MessageSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	key_ = bundle_ = null;
+        key_ = bundle_ = null;
     }
 
     // Evaluates expressions as necessary
+
     private void evaluateExpressions() throws JspException {
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -108,16 +114,16 @@ public class MessageTag extends MessageSupport {
          * propagate up.
          */
 
-	if (keySpecified) {
-	    keyAttrValue = (String) ExpressionEvaluatorManager.evaluate(
-	        "key", key_, String.class, this, pageContext);
-	}
+        if (keySpecified) {
+            keyAttrValue = (String) ExpressionEvaluatorManager.evaluate(
+                    "key", key_, String.class, this, pageContext);
+        }
 
-	if (bundleSpecified) {
-	    bundleAttrValue = (LocalizationContext)
-		ExpressionEvaluatorManager.evaluate(
-	            "bundle", bundle_, LocalizationContext.class, this,
-		    pageContext);
-	} 
+        if (bundleSpecified) {
+            bundleAttrValue = (LocalizationContext)
+                    ExpressionEvaluatorManager.evaluate(
+                            "bundle", bundle_, LocalizationContext.class, this,
+                            pageContext);
+        }
     }
 }

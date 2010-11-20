@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.sql;
 
@@ -25,7 +25,6 @@ import org.apache.taglibs.standard.tag.common.sql.SetDataSourceTagSupport;
 /**
  * <p>Tag handler for &lt;SetDataSource&gt; in JSTL, used to create
  * a simple DataSource for prototyping.</p>
- * 
  */
 public class SetDataSourceTag extends SetDataSourceTagSupport {
 
@@ -39,24 +38,24 @@ public class SetDataSourceTag extends SetDataSourceTagSupport {
     // Accessor methods
 
     public void setDataSource(String dataSourceEL) {
-	this.dataSourceEL = dataSourceEL;
-	this.dataSourceSpecified = true;
+        this.dataSourceEL = dataSourceEL;
+        this.dataSourceSpecified = true;
     }
 
     public void setDriver(String driverClassNameEL) {
-	this.driverClassNameEL = driverClassNameEL;
+        this.driverClassNameEL = driverClassNameEL;
     }
 
     public void setUrl(String jdbcURLEL) {
-	this.jdbcURLEL = jdbcURLEL;
+        this.jdbcURLEL = jdbcURLEL;
     }
 
     public void setUser(String userNameEL) {
-	this.userNameEL = userNameEL;
+        this.userNameEL = userNameEL;
     }
 
     public void setPassword(String passwordEL) {
-	this.passwordEL = passwordEL;
+        this.passwordEL = passwordEL;
     }
 
     //*********************************************************************
@@ -73,30 +72,31 @@ public class SetDataSourceTag extends SetDataSourceTagSupport {
     // Private utility methods
 
     // Evaluates expressions as necessary
+
     private void evaluateExpressions() throws JspException {
         if (dataSourceEL != null) {
-                dataSource = ExpressionEvaluatorManager.evaluate
-                ("dataSource", dataSourceEL, Object.class, this, pageContext);
+            dataSource = ExpressionEvaluatorManager.evaluate
+                    ("dataSource", dataSourceEL, Object.class, this, pageContext);
         }
 
         if (driverClassNameEL != null) {
-                driverClassName = (String) ExpressionEvaluatorManager.evaluate
-                ("driver", driverClassNameEL, String.class, this, pageContext);
+            driverClassName = (String) ExpressionEvaluatorManager.evaluate
+                    ("driver", driverClassNameEL, String.class, this, pageContext);
         }
 
         if (jdbcURLEL != null) {
-                jdbcURL = (String) ExpressionEvaluatorManager.evaluate
-                ("url", jdbcURLEL, String.class, this, pageContext);
+            jdbcURL = (String) ExpressionEvaluatorManager.evaluate
+                    ("url", jdbcURLEL, String.class, this, pageContext);
         }
 
         if (userNameEL != null) {
-                userName = (String) ExpressionEvaluatorManager.evaluate
-                ("user", userNameEL, String.class, this, pageContext);
+            userName = (String) ExpressionEvaluatorManager.evaluate
+                    ("user", userNameEL, String.class, this, pageContext);
         }
 
         if (passwordEL != null) {
-                password = (String) ExpressionEvaluatorManager.evaluate
-                ("password", passwordEL, String.class, this, pageContext);
+            password = (String) ExpressionEvaluatorManager.evaluate
+                    ("password", passwordEL, String.class, this, pageContext);
         }
     }
 

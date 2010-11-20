@@ -25,24 +25,25 @@ import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
  */
 public class ValidationUtil {
     static String validateExpression(
-	    String elem, String att, String expr) {
+            String elem, String att, String expr) {
 
-	// let's just use the cache kept by the ExpressionEvaluatorManager
-	ExpressionEvaluator current;
-	try {
-	    current =
-	        ExpressionEvaluatorManager.getEvaluatorByName(
-                  ExpressionEvaluatorManager.EVALUATOR_CLASS);
-	} catch (JspException ex) {
-	    // (using JspException here feels ugly, but it's what EEM uses)
-	    return ex.getMessage();
-	}
+        // let's just use the cache kept by the ExpressionEvaluatorManager
+        ExpressionEvaluator current;
+        try {
+            current =
+                    ExpressionEvaluatorManager.getEvaluatorByName(
+                            ExpressionEvaluatorManager.EVALUATOR_CLASS);
+        } catch (JspException ex) {
+            // (using JspException here feels ugly, but it's what EEM uses)
+            return ex.getMessage();
+        }
 
-	String response = current.validate(att, expr);
-	if (response == null)
-	    return response;
-	else
-	    return "tag = '" + elem + "' / attribute = '" + att + "': "
-		+ response;
+        String response = current.validate(att, expr);
+        if (response == null) {
+            return response;
+        } else {
+            return "tag = '" + elem + "' / attribute = '" + att + "': "
+                    + response;
+        }
     }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.core;
 
@@ -32,9 +32,8 @@ import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
  * @author Shawn Bayern
  */
 public class ForTokensTag
-    extends ForTokensSupport
-    implements LoopTag, IterationTag
-{
+        extends ForTokensSupport
+        implements LoopTag, IterationTag {
 
     //*********************************************************************
     // 'Private' state (implementation details)
@@ -42,8 +41,8 @@ public class ForTokensTag
     private String begin_;                      // raw EL-based property
     private String end_;                        // raw EL-based property
     private String step_;                       // raw EL-based property
-    private String items_;			// raw EL-based property
-    private String delims_;			// raw EL-based property
+    private String items_;            // raw EL-based property
+    private String delims_;            // raw EL-based property
 
 
     //*********************************************************************
@@ -59,17 +58,19 @@ public class ForTokensTag
     // Tag logic
 
     /* Begins iterating by processing the first item. */
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -80,31 +81,36 @@ public class ForTokensTag
     // Accessor methods
 
     // for EL-based attribute
+
     public void setBegin(String begin_) {
         this.begin_ = begin_;
         this.beginSpecified = true;
     }
 
     // for EL-based attribute
+
     public void setEnd(String end_) {
         this.end_ = end_;
         this.endSpecified = true;
     }
 
     // for EL-based attribute
+
     public void setStep(String step_) {
         this.step_ = step_;
         this.stepSpecified = true;
     }
 
     // for EL-based attribute
+
     public void setItems(String items_) {
         this.items_ = items_;
     }
 
     // for EL-based attribute
+
     public void setDelims(String delims_) {
-	this.delims_ = delims_;
+        this.delims_ = delims_;
     }
 
 
@@ -112,16 +118,18 @@ public class ForTokensTag
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // defaults for interface with page author
         begin_ = null;          // (no expression)
         end_ = null;            // (no expression)
         step_ = null;           // (no expression)
-	items_ = null;		// (no expression)
-	delims_ = null;		// (no expression)
+        items_ = null;        // (no expression)
+        delims_ = null;        // (no expression)
     }
 
     /* Evaluates expressions as necessary */
+
     private void evaluateExpressions() throws JspException {
         /*
          * Note: we don't check for type mismatches here; we assume
@@ -131,47 +139,52 @@ public class ForTokensTag
          * propagate up.
          */
 
-       if (begin_ != null) {
+        if (begin_ != null) {
             Object r = ExpressionEvaluatorManager.evaluate(
-                "begin", begin_, Integer.class, this, pageContext);
-            if (r == null)
+                    "begin", begin_, Integer.class, this, pageContext);
+            if (r == null) {
                 throw new NullAttributeException("forTokens", "begin");
+            }
             begin = ((Integer) r).intValue();
             validateBegin();
         }
 
         if (end_ != null) {
             Object r = ExpressionEvaluatorManager.evaluate(
-                "end", end_, Integer.class, this, pageContext);
-            if (r == null)
+                    "end", end_, Integer.class, this, pageContext);
+            if (r == null) {
                 throw new NullAttributeException("forTokens", "end");
+            }
             end = ((Integer) r).intValue();
             validateEnd();
         }
 
         if (step_ != null) {
             Object r = ExpressionEvaluatorManager.evaluate(
-                "step", step_, Integer.class, this, pageContext);
-            if (r == null)
+                    "step", step_, Integer.class, this, pageContext);
+            if (r == null) {
                 throw new NullAttributeException("forTokens", "step");
+            }
             step = ((Integer) r).intValue();
             validateStep();
         }
 
         if (items_ != null) {
             items = (String) ExpressionEvaluatorManager.evaluate(
-                "items", items_, String.class, this, pageContext);
-	    // use the empty string to indicate "no iteration"
-	    if (items == null)
-		items = "";
-	}
+                    "items", items_, String.class, this, pageContext);
+            // use the empty string to indicate "no iteration"
+            if (items == null) {
+                items = "";
+            }
+        }
 
         if (delims_ != null) {
             delims = (String) ExpressionEvaluatorManager.evaluate(
-                "delims", delims_, String.class, this, pageContext);
-	    // use the empty string to cause monolithic tokenization
-	    if (delims == null)
-		delims = "";
-	}
+                    "delims", delims_, String.class, this, pageContext);
+            // use the empty string to cause monolithic tokenization
+            if (delims == null) {
+                delims = "";
+            }
+        }
     }
 }

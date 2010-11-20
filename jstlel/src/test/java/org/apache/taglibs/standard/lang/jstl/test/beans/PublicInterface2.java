@@ -13,19 +13,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.lang.jstl.test.beans;
 
 /**
- *
  * <p>A publicly-accessible interface
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author$
- **/
+ */
 
-public interface PublicInterface2
-{
-  public Object getValue ();
+public interface PublicInterface2 {
+    public Object getValue();
 }

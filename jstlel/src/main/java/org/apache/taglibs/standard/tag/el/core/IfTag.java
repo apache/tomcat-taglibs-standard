@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.core;
 
@@ -25,7 +25,7 @@ import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 
 /**
- * <p>Tag handler for &lt;if&gt; in JSTL's expression-evaluating library.  
+ * <p>Tag handler for &lt;if&gt; in JSTL's expression-evaluating library.
  * Because of the support provided by the ConditionalTagSupport class,
  * thistag is trivial enough not to require a separate base supporting
  * class common to both libraries.</p>
@@ -39,12 +39,14 @@ public class IfTag extends ConditionalTagSupport {
     // Constructor and lifecycle management
 
     // initialize inherited and local state
+
     public IfTag() {
         super();
         init();
     }
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -55,16 +57,17 @@ public class IfTag extends ConditionalTagSupport {
     // Supplied conditional logic
 
     protected boolean condition() throws JspTagException {
-	try {
+        try {
             Object r = ExpressionEvaluatorManager.evaluate(
-                "test", test, Boolean.class, this, pageContext);
-            if (r == null)
+                    "test", test, Boolean.class, this, pageContext);
+            if (r == null) {
                 throw new NullAttributeException("if", "test");
-	    else
-	        return (((Boolean) r).booleanValue());
+            } else {
+                return (((Boolean) r).booleanValue());
+            }
         } catch (JspException ex) {
-	    throw new JspTagException(ex.toString(), ex);
-	}
+            throw new JspTagException(ex.toString(), ex);
+        }
     }
 
 
@@ -78,6 +81,7 @@ public class IfTag extends ConditionalTagSupport {
     // Accessors
 
     // receives the tag's 'test' attribute
+
     public void setTest(String test) {
         this.test = test;
     }
@@ -87,6 +91,7 @@ public class IfTag extends ConditionalTagSupport {
     // Private utility methods
 
     // resets internal state
+
     private void init() {
         test = null;
     }

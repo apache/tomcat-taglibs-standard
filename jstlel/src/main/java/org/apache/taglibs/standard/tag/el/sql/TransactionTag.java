@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 package org.apache.taglibs.standard.tag.el.sql;
 
 import javax.servlet.jsp.JspException;
@@ -28,33 +28,33 @@ import org.apache.taglibs.standard.tag.common.sql.TransactionTagSupport;
  * @author Justyna Horwat
  */
 public class TransactionTag extends TransactionTagSupport {
-    
+
     private String dataSourceEL;
     private String isolationEL;
 
     public void setDataSource(String dataSourceEL) {
-	this.dataSourceEL = dataSourceEL;
-	this.dataSourceSpecified = true;
+        this.dataSourceEL = dataSourceEL;
+        this.dataSourceSpecified = true;
     }
 
     public void setIsolation(String isolationEL) {
-	this.isolationEL = isolationEL;
+        this.isolationEL = isolationEL;
     }
 
     public int doStartTag() throws JspException {
-	if (dataSourceEL != null) {
-	    rawDataSource = (Object) 
-		ExpressionEvaluatorManager.evaluate("dataSource", 
-		    dataSourceEL, Object.class, this, pageContext);
-	}
+        if (dataSourceEL != null) {
+            rawDataSource = (Object)
+                    ExpressionEvaluatorManager.evaluate("dataSource",
+                            dataSourceEL, Object.class, this, pageContext);
+        }
 
-	if (isolationEL != null) {
-	    isolationEL = (String) 
-		ExpressionEvaluatorManager.evaluate("isolation", 
-		    isolationEL, String.class, this, pageContext);
+        if (isolationEL != null) {
+            isolationEL = (String)
+                    ExpressionEvaluatorManager.evaluate("isolation",
+                            isolationEL, String.class, this, pageContext);
             super.setIsolation(isolationEL);
-	}
+        }
 
-	return super.doStartTag();
+        return super.doStartTag();
     }
 }

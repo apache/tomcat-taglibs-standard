@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.core;
 
@@ -33,25 +33,28 @@ import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 
 public class ExpressionUtil {
 
-    /** Evaluates an expression if present, but does not allow the expression
-     *  to evaluate to 'null', throwing a NullAttributeException if it
-     *  does.  The function <b>can</b> return null, however, if the
-     *  expression itself is null.
+    /**
+     * Evaluates an expression if present, but does not allow the expression
+     * to evaluate to 'null', throwing a NullAttributeException if it
+     * does.  The function <b>can</b> return null, however, if the
+     * expression itself is null.
      */
     public static Object evalNotNull(String tagName,
-				     String attributeName,
-	                             String expression,
-				     Class expectedType,
-				     Tag tag,
-	                             PageContext pageContext)
-	        throws JspException {
+                                     String attributeName,
+                                     String expression,
+                                     Class expectedType,
+                                     Tag tag,
+                                     PageContext pageContext)
+            throws JspException {
         if (expression != null) {
             Object r = ExpressionEvaluatorManager.evaluate(
-                attributeName, expression, expectedType, tag, pageContext);
-            if (r == null)
+                    attributeName, expression, expectedType, tag, pageContext);
+            if (r == null) {
                 throw new NullAttributeException(tagName, attributeName);
-	    return r;
-        } else
-	    return null;
+            }
+            return r;
+        } else {
+            return null;
+        }
     }
 }

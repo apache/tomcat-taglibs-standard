@@ -13,53 +13,48 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.lang.jstl;
 
 /**
- *
  * <p>An expression representing an integer literal value.  The value
  * is stored internally as a long.
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
+ */
 
 public class IntegerLiteral
-  extends Literal
-{
-  //-------------------------------------
-  /**
-   *
-   * Constructor
-   **/
-  public IntegerLiteral (String pToken)
-  {
-    super (getValueFromToken (pToken));
-  }
+        extends Literal {
+    //-------------------------------------
 
-  //-------------------------------------
-  /**
-   *
-   * Parses the given token into the literal value
-   **/
-  static Object getValueFromToken (String pToken)
-  {
-    return new Long (pToken);
-  }
+    /**
+     * Constructor
+     */
+    public IntegerLiteral(String pToken) {
+        super(getValueFromToken(pToken));
+    }
 
-  //-------------------------------------
-  // Expression methods
-  //-------------------------------------
-  /**
-   *
-   * Returns the expression in the expression language syntax
-   **/
-  public String getExpressionString ()
-  {
-    return getValue ().toString ();
-  }
+    //-------------------------------------
 
-  //-------------------------------------
+    /**
+     * Parses the given token into the literal value
+     */
+    static Object getValueFromToken(String pToken) {
+        return new Long(pToken);
+    }
+
+    //-------------------------------------
+    // Expression methods
+    //-------------------------------------
+
+    /**
+     * Returns the expression in the expression language syntax
+     */
+    public String getExpressionString() {
+        return getValue().toString();
+    }
+
+    //-------------------------------------
 }

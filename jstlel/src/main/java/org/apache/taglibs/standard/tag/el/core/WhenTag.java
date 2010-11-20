@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.core;
 
@@ -37,12 +37,14 @@ public class WhenTag extends WhenTagSupport {
     // Constructor and lifecycle management
 
     // initialize inherited and local state
+
     public WhenTag() {
         super();
         init();
     }
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -53,16 +55,17 @@ public class WhenTag extends WhenTagSupport {
     // Supplied conditional logic
 
     protected boolean condition() throws JspTagException {
-        try { 
+        try {
             Object r = ExpressionEvaluatorManager.evaluate(
-                "test", test, Boolean.class, this, pageContext);
-            if (r == null)
-	        throw new NullAttributeException("when", "test");
-            else
+                    "test", test, Boolean.class, this, pageContext);
+            if (r == null) {
+                throw new NullAttributeException("when", "test");
+            } else {
                 return (((Boolean) r).booleanValue());
-	} catch (JspException ex) {
-	    throw new JspTagException(ex.toString(), ex);
-	}
+            }
+        } catch (JspException ex) {
+            throw new JspTagException(ex.toString(), ex);
+        }
     }
 
 
@@ -76,6 +79,7 @@ public class WhenTag extends WhenTagSupport {
     // Accessors
 
     // receives the tag's 'test' attribute
+
     public void setTest(String test) {
         this.test = test;
     }
@@ -85,6 +89,7 @@ public class WhenTag extends WhenTagSupport {
     // Private utility methods
 
     // resets internal state
+
     private void init() {
         test = null;
     }

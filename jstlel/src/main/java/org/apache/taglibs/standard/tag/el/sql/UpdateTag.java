@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 package org.apache.taglibs.standard.tag.el.sql;
 
 import javax.servlet.jsp.JspException;
@@ -27,13 +27,13 @@ import org.apache.taglibs.standard.tag.common.sql.UpdateTagSupport;
  * @author Hans Bergsten
  */
 public class UpdateTag extends UpdateTagSupport {
-    
+
     private String dataSourceEL;
     private String sqlEL;
 
     public void setDataSource(String dataSourceEL) {
-	this.dataSourceEL = dataSourceEL;
-	this.dataSourceSpecified = true;
+        this.dataSourceEL = dataSourceEL;
+        this.dataSourceSpecified = true;
     }
 
     /**
@@ -43,19 +43,19 @@ public class UpdateTag extends UpdateTagSupport {
      * be set using nested value elements.
      */
     public void setSql(String sqlEL) {
-	this.sqlEL = sqlEL;
+        this.sqlEL = sqlEL;
     }
 
     public int doStartTag() throws JspException {
-	if (dataSourceEL != null) {
-	    rawDataSource = (Object) 
-		ExpressionEvaluatorManager.evaluate("dataSource", 
-		    dataSourceEL, Object.class, this, pageContext);
-	}
-	if (sqlEL != null) {
-	    sql = (String) ExpressionEvaluatorManager.evaluate("sql", sqlEL, 
-	        String.class, this, pageContext);
-	}
-	return super.doStartTag();
+        if (dataSourceEL != null) {
+            rawDataSource = (Object)
+                    ExpressionEvaluatorManager.evaluate("dataSource",
+                            dataSourceEL, Object.class, this, pageContext);
+        }
+        if (sqlEL != null) {
+            sql = (String) ExpressionEvaluatorManager.evaluate("sql", sqlEL,
+                    String.class, this, pageContext);
+        }
+        return super.doStartTag();
     }
 }

@@ -13,51 +13,52 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.lang.jstl.test;
 
 /**
- *
  * <p>This is a test bean that holds a single String
- * 
+ *
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
- **/
+ */
 
-public class Bean2
-{
-  //-------------------------------------
-  // Properties
-  //-------------------------------------
-  // property value
+public class Bean2 {
+    //-------------------------------------
+    // Properties
+    //-------------------------------------
+    // property value
 
-  String mValue;
-  public String getValue ()
-  { return mValue; }
-  public void setValue (String pValue)
-  { mValue = pValue; }
+    String mValue;
 
-  //-------------------------------------
-  // Member variables
-  //-------------------------------------
+    public String getValue() {
+        return mValue;
+    }
 
-  //-------------------------------------
-  /**
-   *
-   * Constructor
-   **/
-  public Bean2 (String pValue)
-  {
-    mValue = pValue;
-  }
+    public void setValue(String pValue) {
+        mValue = pValue;
+    }
 
-  //-------------------------------------
-  public String toString ()
-  {
-    return ("Bean2[" + mValue + "]");
-  }
+    //-------------------------------------
+    // Member variables
+    //-------------------------------------
 
-  //-------------------------------------
+    //-------------------------------------
+
+    /**
+     * Constructor
+     */
+    public Bean2(String pValue) {
+        mValue = pValue;
+    }
+
+    //-------------------------------------
+
+    public String toString() {
+        return ("Bean2[" + mValue + "]");
+    }
+
+    //-------------------------------------
 
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.fmt;
 
@@ -36,7 +36,7 @@ public class BundleTag extends BundleSupport {
     // 'Private' state (implementation details)
 
     private String basename_;                    // stores EL-based property
-    private String prefix_;		         // stores EL-based property
+    private String prefix_;                 // stores EL-based property
 
 
     //*********************************************************************
@@ -57,16 +57,18 @@ public class BundleTag extends BundleSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -77,11 +79,13 @@ public class BundleTag extends BundleSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setBasename(String basename_) {
         this.basename_ = basename_;
     }
 
     // for EL-based attribute
+
     public void setPrefix(String prefix_) {
         this.prefix_ = prefix_;
     }
@@ -91,22 +95,24 @@ public class BundleTag extends BundleSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	basename_ = prefix_ = null;
+        basename_ = prefix_ = null;
     }
 
     // Evaluates expressions as necessary
+
     private void evaluateExpressions() throws JspException {
 
-	// 'basename' attribute (mandatory)
-	basename = (String) ExpressionEvaluatorManager.evaluate(
-	    "basename", basename_, String.class, this, pageContext);
+        // 'basename' attribute (mandatory)
+        basename = (String) ExpressionEvaluatorManager.evaluate(
+                "basename", basename_, String.class, this, pageContext);
 
-	// 'prefix' attribute (optional)
-	if (prefix_ != null) {
-	    prefix = (String) ExpressionEvaluatorManager.evaluate(
-	        "prefix", prefix_, String.class, this, pageContext);
-	}
+        // 'prefix' attribute (optional)
+        if (prefix_ != null) {
+            prefix = (String) ExpressionEvaluatorManager.evaluate(
+                    "prefix", prefix_, String.class, this, pageContext);
+        }
     }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.xml;
 
@@ -36,9 +36,9 @@ public class TransformTag extends TransformSupport {
 
     private String xml_;                        // stores EL-based property
     private String xmlSystemId_;                // stores EL-based property
-    private String xslt_;			// stores EL-based property
-    private String xsltSystemId_;		// stores EL-based property
-    private String result_;			// stores EL-based property
+    private String xslt_;            // stores EL-based property
+    private String xsltSystemId_;        // stores EL-based property
+    private String result_;            // stores EL-based property
 
 
     //*********************************************************************
@@ -54,17 +54,19 @@ public class TransformTag extends TransformSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -75,22 +77,26 @@ public class TransformTag extends TransformSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setXml(String xml_) {
         this.xml_ = xml_;
         this.xmlSpecified = true;
     }
 
     // for EL-based attribute
+
     public void setXmlSystemId(String xmlSystemId_) {
         this.xmlSystemId_ = xmlSystemId_;
     }
 
     // for EL-based attribute
+
     public void setXslt(String xslt_) {
         this.xslt_ = xslt_;
     }
 
     // for EL-based attribute
+
     public void setXsltSystemId(String xsltSystemId_) {
         this.xsltSystemId_ = xsltSystemId_;
     }
@@ -103,6 +109,7 @@ public class TransformTag extends TransformSupport {
     */
 
     // for EL-based attribute
+
     public void setResult(String result_) {
         this.result_ = result_;
     }
@@ -112,12 +119,14 @@ public class TransformTag extends TransformSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	xml_ = xmlSystemId = xslt_ = xsltSystemId_ = result_ = null;
+        xml_ = xmlSystemId = xslt_ = xsltSystemId_ = result_ = null;
     }
 
     /* Evaluates expressions as necessary */
+
     private void evaluateExpressions() throws JspException {
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -127,19 +136,19 @@ public class TransformTag extends TransformSupport {
          * propagate up.
          */
 
-	xml = ExpressionUtil.evalNotNull(
-	    "transform", "xml", xml_, Object.class, this, pageContext);
-	xmlSystemId = (String) ExpressionUtil.evalNotNull(
-	    "transform", "xmlSystemId", xmlSystemId_, String.class,
-            this, pageContext);
-	xslt= ExpressionUtil.evalNotNull(
-	    "transform", "xslt", xslt_, Object.class, this,
-	    pageContext);
-	xsltSystemId = (String) ExpressionUtil.evalNotNull(
-	    "transform", "xsltSystemId", xsltSystemId_, String.class,
-	    this, pageContext);
-	result = (Result) ExpressionUtil.evalNotNull(
-	    "transform", "result", result_, Result.class, this, pageContext);
+        xml = ExpressionUtil.evalNotNull(
+                "transform", "xml", xml_, Object.class, this, pageContext);
+        xmlSystemId = (String) ExpressionUtil.evalNotNull(
+                "transform", "xmlSystemId", xmlSystemId_, String.class,
+                this, pageContext);
+        xslt = ExpressionUtil.evalNotNull(
+                "transform", "xslt", xslt_, Object.class, this,
+                pageContext);
+        xsltSystemId = (String) ExpressionUtil.evalNotNull(
+                "transform", "xsltSystemId", xsltSystemId_, String.class,
+                this, pageContext);
+        result = (Result) ExpressionUtil.evalNotNull(
+                "transform", "result", result_, Result.class, this, pageContext);
 
     }
 }

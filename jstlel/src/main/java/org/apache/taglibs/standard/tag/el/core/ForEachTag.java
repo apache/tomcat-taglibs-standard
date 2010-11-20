@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.core;
 
@@ -35,9 +35,8 @@ import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
  */
 
 public class ForEachTag
-    extends ForEachSupport
-    implements LoopTag, IterationTag
-{
+        extends ForEachSupport
+        implements LoopTag, IterationTag {
 
     //*********************************************************************
     // 'Private' state (implementation details)
@@ -45,7 +44,7 @@ public class ForEachTag
     private String begin_;                      // stores EL-based property
     private String end_;                        // stores EL-based property
     private String step_;                       // stores EL-based property
-    private String items_;			// stores EL-based property
+    private String items_;            // stores EL-based property
 
 
     //*********************************************************************
@@ -61,17 +60,19 @@ public class ForEachTag
     // Tag logic
 
     /* Begins iterating by processing the first item. */
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -82,18 +83,21 @@ public class ForEachTag
     // Accessor methods
 
     // for EL-based attribute
+
     public void setBegin(String begin_) {
         this.begin_ = begin_;
         this.beginSpecified = true;
     }
 
     // for EL-based attribute
+
     public void setEnd(String end_) {
         this.end_ = end_;
         this.endSpecified = true;
     }
 
     // for EL-based attribute
+
     public void setStep(String step_) {
         this.step_ = step_;
         this.stepSpecified = true;
@@ -107,15 +111,17 @@ public class ForEachTag
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // defaults for interface with page author
         begin_ = null;          // (no expression)
         end_ = null;            // (no expression)
         step_ = null;           // (no expression)
-	items_ = null;		// (no expression)
+        items_ = null;        // (no expression)
     }
 
     /* Evaluates expressions as necessary */
+
     private void evaluateExpressions() throws JspException {
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -127,37 +133,41 @@ public class ForEachTag
 
         if (begin_ != null) {
             Object r = ExpressionEvaluatorManager.evaluate(
-                "begin", begin_, Integer.class, this, pageContext);
-	    if (r == null)
-		throw new NullAttributeException("forEach", "begin");
+                    "begin", begin_, Integer.class, this, pageContext);
+            if (r == null) {
+                throw new NullAttributeException("forEach", "begin");
+            }
             begin = ((Integer) r).intValue();
             validateBegin();
         }
 
         if (end_ != null) {
             Object r = ExpressionEvaluatorManager.evaluate(
-                "end", end_, Integer.class, this, pageContext);
-	    if (r == null)
-		throw new NullAttributeException("forEach", "end");
+                    "end", end_, Integer.class, this, pageContext);
+            if (r == null) {
+                throw new NullAttributeException("forEach", "end");
+            }
             end = ((Integer) r).intValue();
             validateEnd();
         }
 
         if (step_ != null) {
             Object r = ExpressionEvaluatorManager.evaluate(
-                "step", step_, Integer.class, this, pageContext);
-	    if (r == null)
-		throw new NullAttributeException("forEach", "step");
+                    "step", step_, Integer.class, this, pageContext);
+            if (r == null) {
+                throw new NullAttributeException("forEach", "step");
+            }
             step = ((Integer) r).intValue();
             validateStep();
         }
 
-	if (items_ != null) {
+        if (items_ != null) {
             rawItems = ExpressionEvaluatorManager.evaluate(
-                "items", items_, Object.class, this, pageContext);
-	    // use an empty list to indicate "no iteration", if relevant
-	    if (rawItems == null)
-		rawItems = new ArrayList();
+                    "items", items_, Object.class, this, pageContext);
+            // use an empty list to indicate "no iteration", if relevant
+            if (rawItems == null) {
+                rawItems = new ArrayList();
+            }
         }
     }
 }

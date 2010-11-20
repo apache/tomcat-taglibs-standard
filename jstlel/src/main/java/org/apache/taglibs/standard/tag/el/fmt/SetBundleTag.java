@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.fmt;
 
@@ -56,16 +56,18 @@ public class SetBundleTag extends SetBundleSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -76,6 +78,7 @@ public class SetBundleTag extends SetBundleSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setBasename(String basename_) {
         this.basename_ = basename_;
     }
@@ -85,16 +88,18 @@ public class SetBundleTag extends SetBundleSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	basename_ = null;
+        basename_ = null;
     }
 
     // Evaluates expressions as necessary
+
     private void evaluateExpressions() throws JspException {
 
-	// 'basename' attribute (mandatory)
-	basename = (String) ExpressionEvaluatorManager.evaluate(
-	    "basename", basename_, String.class, this, pageContext);
+        // 'basename' attribute (mandatory)
+        basename = (String) ExpressionEvaluatorManager.evaluate(
+                "basename", basename_, String.class, this, pageContext);
     }
 }

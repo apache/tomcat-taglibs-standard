@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.xml;
 
@@ -36,8 +36,8 @@ public class ParseTag extends ParseSupport {
     // 'Private' state (implementation details)
 
     private String xml_;                    // stores EL-based property
-    private String systemId_;		    // stores EL-based property
-    private String filter_;		    // stores EL-based property
+    private String systemId_;            // stores EL-based property
+    private String filter_;            // stores EL-based property
 
 
     //*********************************************************************
@@ -58,17 +58,19 @@ public class ParseTag extends ParseSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -79,6 +81,7 @@ public class ParseTag extends ParseSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setFilter(String filter_) {
         this.filter_ = filter_;
     }
@@ -96,12 +99,14 @@ public class ParseTag extends ParseSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	filter_ = xml_ = systemId_ = null;
+        filter_ = xml_ = systemId_ = null;
     }
 
     /* Evaluates expressions as necessary */
+
     private void evaluateExpressions() throws JspException {
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -111,17 +116,17 @@ public class ParseTag extends ParseSupport {
          * propagate up.
          */
 
-	xml = ExpressionUtil.evalNotNull(
-	    "parse", "xml", xml_, Object.class, this, pageContext);
-	systemId = (String) ExpressionUtil.evalNotNull(
-	    "parse", "systemId", systemId_, String.class, this, pageContext);
+        xml = ExpressionUtil.evalNotNull(
+                "parse", "xml", xml_, Object.class, this, pageContext);
+        systemId = (String) ExpressionUtil.evalNotNull(
+                "parse", "systemId", systemId_, String.class, this, pageContext);
 
-	try {
-	    filter = (XMLFilter) ExpressionUtil.evalNotNull(
-	        "parse", "filter", filter_, XMLFilter.class, this, pageContext);
-	} catch (NullAttributeException ex) {
-	    // explicitly let 'filter' be null
-	    filter = null;
-	}
+        try {
+            filter = (XMLFilter) ExpressionUtil.evalNotNull(
+                    "parse", "filter", filter_, XMLFilter.class, this, pageContext);
+        } catch (NullAttributeException ex) {
+            // explicitly let 'filter' be null
+            filter = null;
+        }
     }
 }

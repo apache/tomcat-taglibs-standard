@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.el.xml;
 
@@ -35,7 +35,7 @@ public class ParamTag extends ParamSupport {
     // 'Private' state (implementation details)
 
     private String name_;                       // stores EL-based property
-    private String value_;			// stores EL-based property
+    private String value_;            // stores EL-based property
 
 
     //*********************************************************************
@@ -51,17 +51,19 @@ public class ParamTag extends ParamSupport {
     // Tag logic
 
     // evaluates expression and chains to parent
+
     public int doStartTag() throws JspException {
 
         // evaluate any expressions we were passed, once per invocation
         evaluateExpressions();
 
-	// chain to the parent implementation
-	return super.doStartTag();
+        // chain to the parent implementation
+        return super.doStartTag();
     }
 
 
     // Releases any resources we may have (or inherit)
+
     public void release() {
         super.release();
         init();
@@ -72,6 +74,7 @@ public class ParamTag extends ParamSupport {
     // Accessor methods
 
     // for EL-based attribute
+
     public void setName(String name_) {
         this.name_ = name_;
     }
@@ -85,12 +88,14 @@ public class ParamTag extends ParamSupport {
     // Private (utility) methods
 
     // (re)initializes state (during release() or construction)
+
     private void init() {
         // null implies "no expression"
-	name_ = value_ = null;
+        name_ = value_ = null;
     }
 
     /* Evaluates expressions as necessary */
+
     private void evaluateExpressions() throws JspException {
         /* 
          * Note: we don't check for type mismatches here; we assume
@@ -100,9 +105,9 @@ public class ParamTag extends ParamSupport {
          * propagate up.
          */
 
-	name = (String) ExpressionUtil.evalNotNull(
-	    "param", "name", name_, String.class, this, pageContext);
-	value = ExpressionUtil.evalNotNull(
-	    "param", "value", value_, Object.class, this, pageContext);
+        name = (String) ExpressionUtil.evalNotNull(
+                "param", "name", name_, String.class, this, pageContext);
+        value = ExpressionUtil.evalNotNull(
+                "param", "value", value_, Object.class, this, pageContext);
     }
 }
