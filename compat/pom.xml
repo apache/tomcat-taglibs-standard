@@ -158,7 +158,6 @@
                     <excludeDependencies>true</excludeDependencies>
                     <instructions>
                         <Export-Package>*;version="1.2"</Export-Package>
-                        <Import-Package>org.apache.x*;resolution:=optional,*</Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
