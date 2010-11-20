@@ -40,7 +40,6 @@ import org.apache.taglibs.standard.resources.Resources;
  * ForEach-specific functionality.  The rtexprvalue library and the
  * expression-evaluating library each have handlers that extend this
  * class.</p>
- * <p/>
  * <p>Localized here is the logic for handling the veritable smorgasbord
  * of types supported by &lt;forEach&gt;, including arrays,
  * Collections, and others.  To see how the actual iteration is controlled,
@@ -50,7 +49,6 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Shawn Bayern
  * @see javax.servlet.jsp.jstl.core.LoopTagSupport
  */
-
 public abstract class ForEachSupport extends LoopTagSupport {
 
     //*********************************************************************

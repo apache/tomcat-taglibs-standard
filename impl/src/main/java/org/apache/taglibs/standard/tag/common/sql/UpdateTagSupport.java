@@ -128,7 +128,6 @@ public abstract class UpdateTagSupport extends BodyTagSupport
      * named by the <code>var</code> attribute in the scope specified
      * by the <code>scope</code> attribute, as an object that implements
      * the Result interface.
-     * <p/>
      * <p>The connection used to execute the statement comes either
      * from the <code>DataSource</code> specified by the
      * <code>dataSource</code> attribute, provided by a parent action

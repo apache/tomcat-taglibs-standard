@@ -32,15 +32,13 @@ import org.apache.taglibs.standard.util.EscapeXML;
 /**
  * Static functions that extend the Expression Language with standardized behaviour
  * commonly used by page authors.
- * <p/>
- * <strong>Implementation Note:</strong> When passing a String parameter, section
+ * <p><strong>Implementation Note:</strong> When passing a String parameter, section
  * 1.18.2 of the EL specification requires the container to coerce a null value to an
  * empty string. These implementation assume such behaviour and do not check for null
  * parameters. Passing a null will generally trigger a NullPointerException.
  *
  * @author Pierre Delisle
  */
-
 public class Functions {
 
     //*********************************************************************
@@ -74,8 +72,7 @@ public class Functions {
     /**
      * Returns the index (0-based) withing a string of the first occurrence of a specified
      * substring according to the semantics of the method <code>String#indexOf()</code>.
-     * <p/>
-     * If <code>substring</code> is empty, this matches the beginning of the string and the
+     * <p>If <code>substring</code> is empty, this matches the beginning of the string and the
      * value returned is 0.
      *
      * @param input     the input string on which the function is applied
@@ -165,8 +162,7 @@ public class Functions {
 
     /**
      * Returns a subset of a string following the first occurrence of a specific substring.
-     * <p/>
-     * If the substring is empty, it matches the beginning of the input string and the
+     * <p>If the substring is empty, it matches the beginning of the input string and the
      * entire input string is returned. If the substring does not occur, an empty string is returned.
      *
      * @param input     the input string on which the substring function is applied
@@ -185,8 +181,7 @@ public class Functions {
 
     /**
      * Returns a subset of a string immediately before the first occurrence of a specific substring.
-     * <p/>
-     * If the substring is empty, it matches the beginning of the input string and an empty string is returned.
+     * <p>If the substring is empty, it matches the beginning of the input string and an empty string is returned.
      * If the substring does not occur, an empty string is returned.
      *
      * @param input     the input string on which the substring function is applied
@@ -267,8 +262,7 @@ public class Functions {
 
     /**
      * Joins all elements of an array into a string.
-     * <p/>
-     * <strong>Implementation Note</strong>: The specification does not define what happens when
+     * <p><strong>Implementation Note</strong>: The specification does not define what happens when
      * elements in the array are null. For compatibility with previous implementations, the string
      * "null" is used although EL conventions would suggest an empty string might be better.
      *

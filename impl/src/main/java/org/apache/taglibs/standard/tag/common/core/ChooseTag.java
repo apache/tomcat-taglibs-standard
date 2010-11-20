@@ -24,7 +24,7 @@ import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>Tag handler for &lt;choose&gt; in JSTL.</p>
- * <p/>
+ *
  * <p>&lt;choose&gt; is a very simple tag that acts primarily as a container;
  * it always includes its body and allows exactly one of its child
  * &lt;when&gt; tags to run.  Since this tag handler doesn't have any

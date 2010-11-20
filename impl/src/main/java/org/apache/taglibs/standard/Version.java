@@ -31,8 +31,7 @@ public class Version {
      * Get the basic version string for the current release.
      * Version String formatted like
      * <CODE>"<B>standard-taglib</B> v.r[.dd| <B>D</B>nn]"</CODE>.
-     * <p/>
-     * Futurework: have this read version info from jar manifest.
+     * <p>Futurework: have this read version info from jar manifest.
      *
      * @return String denoting our current version
      */
@@ -66,8 +65,7 @@ public class Version {
      * significant, externally apparent enhancement from
      * the previous release. 'n' represents the n'th
      * version.
-     * <p/>
-     * Clients should carefully consider the implications
+     * <p>Clients should carefully consider the implications
      * of new versions as external interfaces and behaviour
      * may have changed.
      */
@@ -105,15 +103,13 @@ public class Version {
      * Optional identifier designates development drop of
      * a specific release. D01 is the first development drop
      * of a new release.
-     * <p/>
-     * Development drops are works in progress towards a
+     * <p>Development drops are works in progress towards a
      * compeleted, final release. A specific development drop
      * may not completely implement all aspects of a new
      * feature, which may take several development drops to
      * complete. At the point of the final drop for the
      * release, the D suffix will be omitted.
-     * <p/>
-     * Each 'D' drops can contain functional enhancements as
+     * <p>Each 'D' drops can contain functional enhancements as
      * well as defect fixes. 'D' drops may not be as stable as
      * the final releases.
      */

@@ -32,14 +32,12 @@ import javax.servlet.jsp.jstl.sql.Result;
  * It's represented as a <tt>Result</tt> implementation, capable of
  * returing an array of <tt>Row</tt> objects containing a <tt>Column</tt>
  * instance for each column in the row.</p>
- * <p/>
  * <p>Note -- this is a private copy for the RI to avoid making the
  * corresponding class in javax.servlet.* public.</p>
  *
  * @author Hans Bergsten
  * @author Justyna Horwat
  */
-
 public class ResultImpl implements Result {
     private List rowMap;
     private List rowByIndex;

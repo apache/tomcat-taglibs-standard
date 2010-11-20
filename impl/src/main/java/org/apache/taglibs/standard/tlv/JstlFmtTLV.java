@@ -30,7 +30,6 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * <p>A SAX-based TagLibraryValidator for the JSTL i18n-capable formatting
  * library. Currently implements the following checks:</p>
- * <p/>
  * <ul>
  * <li>Expression syntax validation.
  * <li>Tag bodies that must either be empty or non-empty given

@@ -134,8 +134,7 @@ public abstract class SetLocaleSupport extends TagSupport {
      * Parses the given locale string into its language and (optionally)
      * country components, and returns the corresponding
      * <tt>java.util.Locale</tt> object.
-     * <p/>
-     * If the given locale string is null or empty, the runtime's default
+     * <p>If the given locale string is null or empty, the runtime's default
      * locale is returned.
      *
      * @param locale  the locale string to parse

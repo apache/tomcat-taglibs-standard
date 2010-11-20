@@ -32,8 +32,7 @@ import org.apache.taglibs.standard.resources.Resources;
 /**
  * <p>A simple <code>DataSource</code> utility for the standard
  * <code>DriverManager</code> class.
- * <p/>
- * TO DO: need to cache DataSource
+ * <p>TODO: need to cache DataSource
  *
  * @author Justyna Horwat
  */

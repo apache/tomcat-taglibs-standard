@@ -603,8 +603,7 @@ public class XPathUtil {
      * To evaluate an XPath expression using Xalan, we need
      * to create an XPath object, which wraps an expression object and provides
      * general services for execution of that expression.
-     * <p/>
-     * An XPath object can be instantiated with the following information:
+     * <p>An XPath object can be instantiated with the following information:
      * - XPath expression to evaluate
      * - SourceLocator
      * (reports where an error occurred in the XML source or
@@ -615,8 +614,7 @@ public class XPathUtil {
      * (one of SELECT or MATCH)
      * - ErrorListener
      * (customized error handling)
-     * <p/>
-     * Execution of the XPath expression represented by an XPath object
+     * <p>Execution of the XPath expression represented by an XPath object
      * is done via method execute which takes the following parameters:
      * - XPathContext
      * The execution context
@@ -625,8 +623,7 @@ public class XPathUtil {
      * - PrefixResolver namespaceContext
      * The context in which namespaces in the XPath are supposed to be
      * expanded.
-     * <p/>
-     * Given all of this, if no context node is set for the evaluation
+     * <p>Given all of this, if no context node is set for the evaluation
      * of the XPath expression, one must be set so Xalan
      * can successfully evaluate a JSTL XPath expression.
      * (it will not work if the context node is given as a varialbe

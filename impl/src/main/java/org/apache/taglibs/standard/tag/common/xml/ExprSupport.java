@@ -25,12 +25,10 @@ import org.apache.taglibs.standard.util.EscapeXML;
 
 /**
  * <p>Tag handler for &lt;out&gt; in JSTL's XML library.</p>
- * <p/>
- * TODO: should we rename this to OutSupport to match the tag name?
+ * <p>TODO: should we rename this to OutSupport to match the tag name?
  *
  * @author Shawn Bayern
  */
-
 public abstract class ExprSupport extends TagSupport {
 
     //*********************************************************************

@@ -23,7 +23,7 @@ import javax.servlet.jsp.tagext.TryCatchFinally;
 
 /**
  * <p>Tag handler for &lt;catch&gt; in JSTL 1.0.</p>
- * <p/>
+ *
  * <p>&lt;catch&gt; simply catches any Throwables that occur in its body
  * and optionally exposes them.
  *

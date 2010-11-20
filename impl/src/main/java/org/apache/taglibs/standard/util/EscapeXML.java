@@ -23,10 +23,8 @@ import javax.servlet.jsp.JspWriter;
 
 /**
  * Handles escaping of characters that could be interpreted as XML markup.
- * <p/>
- * The specification for <code>&lt;c:out&gt;</code> defines the following
+ * <p>The specification for <code>&lt;c:out&gt;</code> defines the following
  * character conversions to be applied:
- * <p/>
  * <table rules="all" frame="border">
  * <thead align="center">
  * <tr><th>Character</th><th>Character Entity Code</th></tr>

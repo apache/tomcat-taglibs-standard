@@ -24,18 +24,18 @@ import java.util.ResourceBundle;
 /**
  * <p>Provides locale-neutral access to string resources.  Only the
  * documentation and code are in English. :-)
- * <p/>
+ *
  * <p>The major goal, aside from globalization, is convenience.
  * Access to resources with no parameters is made in the form:</p>
  * <pre>
  *     Resources.getMessage(MESSAGE_NAME);
  * </pre>
- * <p/>
+ *
  * <p>Access to resources with one parameter works like</p>
  * <pre>
  *     Resources.getMessage(MESSAGE_NAME, arg1);
  * </pre>
- * <p/>
+ *
  * <p>... and so on.</p>
  *
  * @author Shawn Bayern

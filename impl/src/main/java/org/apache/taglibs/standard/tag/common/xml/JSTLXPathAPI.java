@@ -39,8 +39,7 @@ import org.w3c.dom.traversal.NodeIterator;
  * created for each evaluation.  A faster way is to precompile the
  * XPaths using the low-level API, and then just use the XPaths
  * over and over.
- * <p/>
- * NOTE: In particular, each call to this method will create a new
+ * <p>NOTE: In particular, each call to this method will create a new
  * XPathContext, a new DTMManager... and thus a new DTM. That's very
  * safe, since it guarantees that you're always processing against a
  * fully up-to-date view of your document. But it's also portentially

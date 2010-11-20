@@ -30,7 +30,6 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * <p>A SAX-based TagLibraryValidator for the core JSTL tag library.
  * Currently implements the following checks:</p>
- * <p/>
  * <ul>
  * <li>Expression syntax validation.
  * <li>Choose / when / otherwise constraints</li>

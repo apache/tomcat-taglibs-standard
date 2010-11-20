@@ -29,9 +29,7 @@ import org.apache.taglibs.standard.resources.Resources;
  * implementation of &lt;when&gt;-style tags in both the rtexprvalue
  * and expression-evaluating libraries.  It also supports
  * &lt;otherwise&gt;.</p>
- * <p/>
  * <p>In particular, this base class does the following:</p>
- * <p/>
  * <ul>
  * <li> overrides ConditionalTagSupport.doStartTag() to implement the
  * appropriate semantics of subtags of &lt;choose&gt; </li>
