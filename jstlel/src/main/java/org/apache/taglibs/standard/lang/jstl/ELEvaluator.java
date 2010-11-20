@@ -41,12 +41,10 @@ import org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError;
  * expressions and any intervening non-expression text, then
  * converting the resulting String to the expected type using the
  * PropertyEditor mechanism.
- * <p/>
  * <p>In the special case where the expression String is a single
  * expression, the value of the expression String is determined by
  * evaluating the expression, without any intervening conversion to a
  * String.
- * <p/>
  * <p>The evaluator maintains a cache mapping expression Strings to
  * their parsed results.  For expression Strings containing no
  * expression elements, it maintains a cache mapping
@@ -55,7 +53,6 @@ import org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError;
  * time they are used.  All instances of the evaluator share the same
  * cache.  The cache may be bypassed by setting a flag on the
  * evaluator's constructor.
- * <p/>
  * <p>The evaluator must be passed a VariableResolver in its
  * constructor.  The VariableResolver is used to resolve variable
  * names encountered in expressions, and can also be used to implement
@@ -64,14 +61,12 @@ import org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError;
  * lookups and implicit objects - these differences can be
  * encapsulated in the VariableResolver passed to the evaluator's
  * constructor.
- * <p/>
  * <p>Most VariableResolvers will need to perform their resolution
  * against some context.  For example, a JSP environment needs a
  * PageContext to resolve variables.  The evaluate() method takes a
  * generic Object context which is eventually passed to the
  * VariableResolver - the VariableResolver is responsible for casting
  * the context to the proper type.
- * <p/>
  * <p>Once an evaluator instance has been constructed, it may be used
  * multiple times, and may be used by multiple simultaneous Threads.
  * In other words, an evaluator instance is well-suited for use as a
@@ -81,7 +76,6 @@ import org.apache.taglibs.standard.lang.jstl.parser.TokenMgrError;
  * @author Shawn Bayern
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  */
-
 public class ELEvaluator {
     //-------------------------------------
     // Properties
@@ -105,11 +99,9 @@ public class ELEvaluator {
     /**
      * The mapping from expression String to its parsed form (String,
      * Expression, or ExpressionString)
-     * <p/>
-     * Using LRU Map with a maximum capacity to avoid out of bound map
+     * <p>Using LRU Map with a maximum capacity to avoid out of bound map
      * growth.
-     * <p/>
-     * NOTE: use LinkedHashmap if a dependency on J2SE 1.4+ is ok
+     * <p>NOTE: use LinkedHashmap if a dependency on J2SE 1.4+ is ok
      */
     static Map sCachedExpressionStrings = null;
 

@@ -102,12 +102,12 @@ public class TokenMgrError extends Error {
 
     /**
      * You can also modify the body of this method to customize your error messages.
-     * For example, cases like LOOP_DETECTED and INVALID_LEXICAL_STATE are not
-     * of end-users concern, so you can return something like :
-     * <p/>
+     * <p>For example, cases like LOOP_DETECTED and INVALID_LEXICAL_STATE are not
+     * of end-users concern, so you can return something like
+     * the following from this method for such cases in the release version of your parser:<br>
+     * <code>
      * "Internal Error : Please file a bug report .... "
-     * <p/>
-     * from this method for such cases in the release version of your parser.
+     * </code>
      */
     public String getMessage() {
         return super.getMessage();

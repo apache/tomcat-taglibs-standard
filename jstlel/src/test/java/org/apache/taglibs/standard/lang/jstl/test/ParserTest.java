@@ -37,7 +37,6 @@ import org.junit.Test;
  * <p>This runs a series of tests specifically for the parser.  It
  * parses various expressions and prints out the canonical
  * representation of those parsed expressions.
- * <p/>
  * <p>The expressions are stored in an input text file, with one line
  * per expression.  Blank lines and lines that start with # are
  * ignored.  The results are written to an output file (blank lines
@@ -48,7 +47,6 @@ import org.junit.Test;
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  */
-
 public class ParserTest extends TestCase {
     private final Charset UTF8 = Charset.forName("UTF-8");
 

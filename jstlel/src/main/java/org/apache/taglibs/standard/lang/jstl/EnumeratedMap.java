@@ -27,7 +27,6 @@ import java.util.Set;
  * <p>This is a Map implementation driven by a data source that only
  * provides an enumeration of keys and a getValue(key) method.  This
  * class must be subclassed to implement those methods.
- * <p/>
  * <p>Some of the methods may incur a performance penalty that
  * involves enumerating the entire data source.  In these cases, the
  * Map will try to save the results of that enumeration, but only if
@@ -36,7 +35,6 @@ import java.util.Set;
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  */
-
 public abstract class EnumeratedMap
         implements Map {
     //-------------------------------------

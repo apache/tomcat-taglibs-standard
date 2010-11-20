@@ -25,7 +25,6 @@ import java.text.MessageFormat;
  * and expressions during evaluation.  They should use this to log any
  * warning or error messages that might come up.  This allows all of
  * our logging policies to be concentrated in one class.
- * <p/>
  * <p>Errors are conditions that are severe enough to abort operation.
  * Warnings are conditions through which the operation may continue,
  * but which should be reported to the developer.
@@ -33,7 +32,6 @@ import java.text.MessageFormat;
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  */
-
 public class Logger {
     //-------------------------------------
     // Member variables

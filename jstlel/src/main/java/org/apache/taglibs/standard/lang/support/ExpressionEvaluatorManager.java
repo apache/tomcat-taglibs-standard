@@ -29,7 +29,6 @@ import org.apache.taglibs.standard.lang.jstl.Logger;
 
 /**
  * <p>A conduit to the JSTL EL.  Based on...</p>
- * <p/>
  * <p>An implementation of the ExpressionEvaluatorManager called for by
  * the JSTL rev1 draft.  This class is responsible for delegating a
  * request for expression evaluating to the particular, "active"

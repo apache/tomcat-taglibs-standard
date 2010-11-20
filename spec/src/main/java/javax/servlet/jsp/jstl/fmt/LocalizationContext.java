@@ -22,10 +22,8 @@ import java.util.ResourceBundle;
 
 /**
  * Class representing an I18N localization context.
- * <p/>
  * <p> An I18N localization context has two components: a resource bundle and
  * the locale that led to the resource bundle match.
- * <p/>
  * <p> The resource bundle component is used by &lt;fmt:message&gt; for mapping
  * message keys to localized messages, and the locale component is used by the
  * &lt;fmt:message&gt;, &lt;fmt:formatNumber&gt;, &lt;fmt:parseNumber&gt;, &lt;fmt:formatDate&gt;,
@@ -53,7 +51,6 @@ public class LocalizationContext {
     /**
      * Constructs an I18N localization context from the given resource bundle
      * and locale.
-     * <p/>
      * <p> The specified locale is the application- or browser-based preferred
      * locale that led to the resource bundle match.
      *
@@ -67,7 +64,6 @@ public class LocalizationContext {
 
     /**
      * Constructs an I18N localization context from the given resource bundle.
-     * <p/>
      * <p> The localization context's locale is taken from the given
      * resource bundle.
      *

@@ -29,16 +29,13 @@ import javax.servlet.jsp.tagext.TryCatchFinally;
 
 /**
  * <p>Base support class to facilitate implementation of iteration tags.</p>
- * <p/>
  * <p>Since most iteration tags will behave identically with respect to
  * actual iterative behavior, JSTL provides this
  * base support class to facilitate implementation.  Many iteration tags
  * will extend this and merely implement the <tt>hasNext()</tt> and
  * <tt>next()</tt> methods
  * to provide contents for the handler to iterate over.</p>
- * <p/>
  * <p>In particular, this base class provides support for:</p>
- * <p/>
  * <ul>
  * <li> Iteration control, based on protected <tt>prepare()</tt>, <tt>next()</tt>,
  * and <tt>hasNext()</tt> methods
@@ -49,7 +46,6 @@ import javax.servlet.jsp.tagext.TryCatchFinally;
  * <li> status retrieval (<tt>LoopTagStatus</tt>)
  * <li> exposing attributes (set by <tt>var</tt> and <tt>varStatus</tt> attributes)
  * </ul>
- * <p/>
  * <p>In providing support for these tasks, <tt>LoopTagSupport</tt> contains
  * certain control variables that act to modify the iteration.  Accessors
  * are provided for these control variables when the variables represent
@@ -170,7 +166,6 @@ public abstract class LoopTagSupport
      * <p>Returns the next object over which the tag should iterate.  This
      * method must be provided by concrete subclasses of LoopTagSupport
      * to inform the base logic about what objects it should iterate over.</p>
-     * <p/>
      * <p>It is expected that this method will generally be backed by an
      * Iterator, but this will not always be the case.  In particular, if
      * retrieving the next object raises the possibility of an exception
@@ -192,7 +187,6 @@ public abstract class LoopTagSupport
      * over which to iterate.  This method must be provided by concrete
      * subclasses of LoopTagSupport to assist the iterative logic
      * provided by the supporting base class.</p>
-     * <p/>
      * <p>See <a href="#next()">next</a> for more information about the
      * purpose and expectations behind this tag.</p>
      *
@@ -305,7 +299,6 @@ public abstract class LoopTagSupport
 
     /**
      * Removes any attributes that this LoopTagSupport set.
-     * <p/>
      * <p> These attributes are intended to support scripting variables with
      * NESTED scope, so we don't want to pollute attribute space by leaving
      * them lying around.

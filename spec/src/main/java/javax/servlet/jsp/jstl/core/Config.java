@@ -83,7 +83,6 @@ public class Config {
 
     /**
      * Looks up a configuration variable in the given scope.
-     * <p/>
      * <p> The lookup of configuration variables is performed as if each scope
      * had its own name space, that is, the same configuration variable name
      * in one scope does not replace one stored in a different scope.
@@ -113,7 +112,6 @@ public class Config {
 
     /**
      * Looks up a configuration variable in the "request" scope.
-     * <p/>
      * <p> The lookup of configuration variables is performed as if each scope
      * had its own name space, that is, the same configuration variable name
      * in one scope does not replace one stored in a different scope.
@@ -130,7 +128,6 @@ public class Config {
 
     /**
      * Looks up a configuration variable in the "session" scope.
-     * <p/>
      * <p> The lookup of configuration variables is performed as if each scope
      * had its own name space, that is, the same configuration variable name
      * in one scope does not replace one stored in a different scope.</p>
@@ -155,7 +152,6 @@ public class Config {
 
     /**
      * Looks up a configuration variable in the "application" scope.
-     * <p/>
      * <p> The lookup of configuration variables is performed as if each scope
      * had its own name space, that is, the same configuration variable name
      * in one scope does not replace one stored in a different scope.
@@ -172,7 +168,6 @@ public class Config {
 
     /**
      * Sets the value of a configuration variable in the given scope.
-     * <p/>
      * <p> Setting the value of a configuration variable is performed as if
      * each scope had its own namespace, that is, the same configuration
      * variable name in one scope does not replace one stored in a different
@@ -205,7 +200,6 @@ public class Config {
 
     /**
      * Sets the value of a configuration variable in the "request" scope.
-     * <p/>
      * <p> Setting the value of a configuration variable is performed as if
      * each scope had its own namespace, that is, the same configuration
      * variable name in one scope does not replace one stored in a different
@@ -222,7 +216,6 @@ public class Config {
 
     /**
      * Sets the value of a configuration variable in the "session" scope.
-     * <p/>
      * <p> Setting the value of a configuration variable is performed as if
      * each scope had its own namespace, that is, the same configuration
      * variable name in one scope does not replace one stored in a different
@@ -239,7 +232,6 @@ public class Config {
 
     /**
      * Sets the value of a configuration variable in the "application" scope.
-     * <p/>
      * <p> Setting the value of a configuration variable is performed as if
      * each scope had its own namespace, that is, the same configuration
      * variable name in one scope does not replace one stored in a different
@@ -256,7 +248,6 @@ public class Config {
 
     /**
      * Removes a configuration variable from the given scope.
-     * <p/>
      * <p> Removing a configuration variable is performed as if each scope had
      * its own namespace, that is, the same configuration variable name in one
      * scope does not impact one stored in a different scope.
@@ -288,7 +279,6 @@ public class Config {
 
     /**
      * Removes a configuration variable from the "request" scope.
-     * <p/>
      * <p> Removing a configuration variable is performed as if each scope had
      * its own namespace, that is, the same configuration variable name in one
      * scope does not impact one stored in a different scope.
@@ -303,7 +293,6 @@ public class Config {
 
     /**
      * Removes a configuration variable from the "session" scope.
-     * <p/>
      * <p> Removing a configuration variable is performed as if each scope had
      * its own namespace, that is, the same configuration variable name in one
      * scope does not impact one stored in a different scope.
@@ -318,7 +307,6 @@ public class Config {
 
     /**
      * Removes a configuration variable from the "application" scope.
-     * <p/>
      * <p> Removing a configuration variable is performed as if each scope had
      * its own namespace, that is, the same configuration variable name in one
      * scope does not impact one stored in a different scope.
@@ -334,7 +322,6 @@ public class Config {
     /**
      * Finds the value associated with a specific configuration setting
      * identified by its context initialization parameter name.
-     * <p/>
      * <p> For each of the JSP scopes (page, request, session, application),
      * get the value of the configuration variable identified by <tt>name</tt>
      * using method <tt>get()</tt>. Return as soon as a non-null value is

@@ -24,7 +24,6 @@ package org.apache.taglibs.standard.lang.jstl;
  * notion of "implicit variables" which override any other variables.
  * An instance of this class should be passed to the evaluator's
  * constructor.
- * <p/>
  * <p>Whenever the evaluator is invoked, it is passed a "context"
  * Object from the application.  For example, in a JSP environment,
  * the "context" is a PageContext.  That context object is eventually
@@ -34,7 +33,6 @@ package org.apache.taglibs.standard.lang.jstl;
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  */
-
 public interface VariableResolver {
     //-------------------------------------
 

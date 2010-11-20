@@ -26,7 +26,6 @@ import javax.servlet.jsp.PageContext;
 /**
  * Class which exposes the locale-determination logic for resource bundles
  * through convenience methods.
- * <p/>
  * <p> This class may be useful to any tag handler implementation that needs
  * to produce localized messages. For example, this might be useful for
  * exception messages that are intended directly for user consumption on an
@@ -39,12 +38,10 @@ public class LocaleSupport {
 
     /**
      * Retrieves the localized message corresponding to the given key.
-     * <p/>
      * <p> The given key is looked up in the resource bundle of the default
      * I18N localization context, which is retrieved from the
      * <tt>javax.servlet.jsp.jstl.fmt.localizationContext</tt> configuration
      * setting.
-     * <p/>
      * <p> If the configuration setting is empty, or the default I18N
      * localization context does not contain any resource bundle, or the given
      * key is undefined in its resource bundle, the string "???&lt;key&gt;???" is
@@ -62,10 +59,8 @@ public class LocaleSupport {
 
     /**
      * Retrieves the localized message corresponding to the given key.
-     * <p/>
      * <p> The given key is looked up in the resource bundle with the given
      * base name.
-     * <p/>
      * <p> If no resource bundle with the given base name exists, or the given
      * key is undefined in the resource bundle, the string "???&lt;key&gt;???" is
      * returned, where "&lt;key&gt;" is replaced with the given key.
@@ -86,10 +81,8 @@ public class LocaleSupport {
      * Retrieves the localized message corresponding to the given key, and
      * performs parametric replacement using the arguments specified via
      * <tt>args</tt>.
-     * <p/>
      * <p> See the specification of the &lt;fmt:message&gt; action for a description
      * of how parametric replacement is implemented.
-     * <p/>
      * <p> The localized message is retrieved as in
      * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String) getLocalizedMessage(pageContext, key)}.
      *
@@ -109,10 +102,8 @@ public class LocaleSupport {
      * Retrieves the localized message corresponding to the given key, and
      * performs parametric replacement using the arguments specified via
      * <tt>args</tt>.
-     * <p/>
      * <p> See the specification of the &lt;fmt:message&gt; action for a description
      * of how parametric replacement is implemented.
-     * <p/>
      * <p> The localized message is retrieved as in
      * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String, java.lang.String) getLocalizedMessage(pageContext, key, basename)}.
      *

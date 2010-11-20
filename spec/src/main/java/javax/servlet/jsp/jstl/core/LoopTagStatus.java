@@ -25,7 +25,6 @@ package javax.servlet.jsp.jstl.core;
  * either the first or last in the iteration.  It also lets authors
  * use the status object to obtain information about the iteration range,
  * step, and current object.</p>
- * <p/>
  * <p>Environments that require more status can extend this interface.</p>
  *
  * @author Shawn Bayern
@@ -59,7 +58,6 @@ public interface LoopTagStatus {
      * count is a relative, 1-based sequence number identifying the
      * current "round" of iteration (in context with all rounds the
      * current iteration will perform).</p>
-     * <p/>
      * <p>As an example, an iteration with begin = 5, end = 15, and step =
      * 5 produces the counts 1, 2, and 3 in that order.</p>
      *

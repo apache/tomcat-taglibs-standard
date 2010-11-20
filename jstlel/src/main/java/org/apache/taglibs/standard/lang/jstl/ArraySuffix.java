@@ -26,8 +26,7 @@ import java.util.Map;
  * <p>Represents an operator that obtains a Map entry, an indexed
  * value, a property value, or an indexed property value of an object.
  * The following are the rules for evaluating this operator:
- * <p/>
- * <ul><pre>
+ * <pre>
  * Evaluating a[b] (assuming a.b == a["b"])
  *   a is null
  *     return null
@@ -49,17 +48,17 @@ import java.util.Map;
  *     a.get(b) or Array.get(a, b) throws other exception
  *       error
  *     return a.get(b) or Array.get(a, b)
- * <p/>
+ *
  *   coerce b to String
  *   b is a readable property of a
  *     getter throws an exception
  *       error
  *     otherwise
  *       return result of getter call
- * <p/>
+ *
  *   otherwise
  *     error
- * </pre></ul>
+ * </pre>
  *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern

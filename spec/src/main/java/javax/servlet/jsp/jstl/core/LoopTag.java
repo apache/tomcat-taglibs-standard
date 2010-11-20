@@ -25,7 +25,6 @@ import javax.servlet.jsp.tagext.Tag;
  * with <tt>javax.servlet.jsp.tagext.IterationTag</tt> as defined in JSP 1.2.
  * LoopTag establishes a mechanism for iteration tags to be recognized
  * and for type-safe implicit collaboration with custom subtags.
- * <p/>
  * <p>In most cases, it will not be necessary to implement this interface
  * manually, for a base support class (<tt>LoopTagSupport</tt>) is provided
  * to facilitate implementation.</p>

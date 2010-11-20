@@ -27,9 +27,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * where the boolean result is exposed as a JSP scoped variable. The
  * boolean result may then be used as the test condition in a &lt;c:when&gt;
  * action.</p>
- * <p/>
  * <p>This base class provides support for:</p>
- * <p/>
  * <ul>
  * <li> Conditional processing of the action's body based on the returned value
  * of the abstract method <tt>condition()</tt>.</li>
@@ -40,7 +38,6 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * @author Shawn Bayern
  */
-
 public abstract class ConditionalTagSupport
         extends TagSupport {
     //*********************************************************************

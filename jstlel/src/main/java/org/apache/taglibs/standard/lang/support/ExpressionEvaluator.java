@@ -25,7 +25,6 @@ import javax.servlet.jsp.tagext.Tag;
  * <p>The interface for an expression-language validator and evaluator.
  * Classes that implement an expression language expose their functionality
  * via this interface.</p>
- * <p/>
  * <p>The validate() and evaluate() methods must be thread-safe.  That is,
  * multiple threads may call these methods on the same ExpressionEvaluator
  * object simultaneously.  Implementations should synchronize access if
@@ -34,7 +33,6 @@ import javax.servlet.jsp.tagext.Tag;
  * instantiated; global caching should therefore be static.  No release()
  * mechanism or robust lifecycle is specified, for language-interpreter
  * pluggability is experimental in EA2.</p>
- * <p/>
  * <p><b>WARNING</b>:  This class supports experimentation for the EA2
  * release of JSTL; it is not expected to be part of the final RI or
  * specification.</p>

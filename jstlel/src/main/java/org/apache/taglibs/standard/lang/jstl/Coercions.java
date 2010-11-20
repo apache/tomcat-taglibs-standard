@@ -23,11 +23,9 @@ import java.beans.PropertyEditorManager;
 /**
  * <p>This class contains the logic for coercing data types before
  * operators are applied to them.
- * <p/>
  * <p>The following is the list of rules applied for various type
  * conversions.
- * <p/>
- * <ul><pre>
+ * <pre>
  * Applying arithmetic operator
  *   Binary operator - A {+,-,*} B
  *     if A and B are null
@@ -39,7 +37,7 @@ import java.beans.PropertyEditorManager;
  *       coerce both A and B to Long
  *       apply operator
  *     if operator results in exception (such as divide by 0), error
- * <p/>
+ *
  *   Binary operator - A {/,div} B
  *     if A and B are null
  *       return 0
@@ -47,7 +45,7 @@ import java.beans.PropertyEditorManager;
  *       coerce both A and B to Double
  *       apply operator
  *     if operator results in exception (such as divide by 0), error
- * <p/>
+ *
  *   Binary operator - A {%,mod} B
  *     if A and B are null
  *       return 0
@@ -58,7 +56,7 @@ import java.beans.PropertyEditorManager;
  *       coerce both A and B to Long
  *       apply operator
  *     if operator results in exception (such as divide by 0), error
- * <p/>
+ *
  *   Unary minus operator - -A
  *     if A is null
  *       return 0
@@ -72,7 +70,7 @@ import java.beans.PropertyEditorManager;
  *     if operator results in exception, error
  *     otherwise
  *       error
- * <p/>
+ *
  * Applying "empty" operator - empty A
  *   if A is null
  *     return true
@@ -86,7 +84,7 @@ import java.beans.PropertyEditorManager;
  *     return true
  *   otherwise
  *     return false
- * <p/>
+ *
  * Applying logical operators
  *   Binary operator - A {and,or} B
  *     coerce both A and B to Boolean, apply operator
@@ -94,7 +92,7 @@ import java.beans.PropertyEditorManager;
  *     A and B and C and D - if B is false, then only A and B is evaluated
  *   Unary not operator - not A
  *     coerce A to Boolean, apply operator
- * <p/>
+ *
  * Applying relational operator
  *   A {<,>,<=,>=,lt,gt,lte,gte} B
  *     if A==B
@@ -124,7 +122,7 @@ import java.beans.PropertyEditorManager;
  *         use result of B.compareTo(A)
  *     otherwise
  *       error
- * <p/>
+ *
  * Applying equality operator
  *   A {==,!=} B
  *     if A==B
@@ -146,9 +144,9 @@ import java.beans.PropertyEditorManager;
  *       if an error occurs while calling A.equals(B)
  *         error
  *       apply operator to result of A.equals(B)
- * <p/>
+ *
  * coercions
- * <p/>
+ *
  *   coerce A to String
  *     A is String
  *       return A
@@ -158,7 +156,7 @@ import java.beans.PropertyEditorManager;
  *       error
  *     otherwise
  *       return A.toString
- * <p/>
+ *
  *   coerce A to primitive Number type N
  *     A is null or ""
  *       return 0
@@ -178,7 +176,7 @@ import java.beans.PropertyEditorManager;
  *       return N.valueOf(A)
  *     otherwise
  *       error
- * <p/>
+ *
  *   coerce A to Character should be
  *     A is null or ""
  *       return (char) 0
@@ -194,7 +192,7 @@ import java.beans.PropertyEditorManager;
  *       return A.charAt (0)
  *     otherwise
  *       error
- * <p/>
+ *
  *   coerce A to Boolean
  *     A is null or ""
  *       return false
@@ -206,7 +204,7 @@ import java.beans.PropertyEditorManager;
  *       return Boolean.valueOf(A)
  *     otherwise
  *       error
- * <p/>
+ *
  *   coerce A to any other type T
  *     A is null
  *       return null
@@ -223,7 +221,7 @@ import java.beans.PropertyEditorManager;
  *         apply T's PropertyEditor
  *     otherwise
  *       error
- * </pre></ul>
+ * </pre>
  *
  * @author Nathan Abramson - Art Technology Group
  * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$

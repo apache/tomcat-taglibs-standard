@@ -22,8 +22,7 @@ import java.io.PrintWriter;
 /**
  * ServletResponseWrapper used for the the generation of
  * semi-dynamic pages.
- * <p/>
- * This 'wrapped' response object is passed as the second argument
+ * <p>This 'wrapped' response object is passed as the second argument
  * to the internal RequestDispatcher.include(). It channels
  * all output text into the PrintWriter specified in the
  * constructor (which is associated with the file where the
