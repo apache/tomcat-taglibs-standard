@@ -79,6 +79,7 @@
   </contributors>
 
   <modules>
+    <module>build-tools</module>
     <module>spec</module>
     <module>impl</module>
     <module>compat</module>
