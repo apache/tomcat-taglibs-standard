@@ -38,11 +38,15 @@ public final class IteratedValueExpression extends ValueExpression {
         iteratedExpression = _iteratedExpr;
         this.i = i;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
 
         IteratedValueExpression that = (IteratedValueExpression) obj;
         return i == that.i && iteratedExpression.equals(that.iteratedExpression);
@@ -60,17 +64,17 @@ public final class IteratedValueExpression extends ValueExpression {
 
     @Override
     public Class getType(ELContext elContext) {
-        return iteratedExpression.getValueExpression().getType(elContext); 
+        return iteratedExpression.getValueExpression().getType(elContext);
     }
 
     @Override
     public Object getValue(ELContext elContext) {
-        return iteratedExpression.getItem(elContext, i); 
+        return iteratedExpression.getItem(elContext, i);
     }
 
     @Override
     public int hashCode() {
-        return iteratedExpression.hashCode()+i;
+        return iteratedExpression.hashCode() + i;
     }
 
     @Override

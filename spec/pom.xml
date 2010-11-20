@@ -16,91 +16,121 @@
    limitations under the License.
 -->
 <project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.apache.taglibs</groupId>
-    <artifactId>taglibs-parent</artifactId>
-    <version>1-SNAPSHOT</version>
-  </parent>
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.apache.taglibs</groupId>
+        <artifactId>taglibs-parent</artifactId>
+        <version>1-SNAPSHOT</version>
+    </parent>
 
-  <artifactId>taglibs-standard-spec</artifactId>
-  <version>1.2-SNAPSHOT</version>
-  <packaging>bundle</packaging>
+    <artifactId>taglibs-standard-spec</artifactId>
+    <version>1.2-SNAPSHOT</version>
+    <packaging>bundle</packaging>
 
-  <name>Apache Standard Taglib - JSTL Specification API</name>
+    <name>Apache Standard Taglib - JSTL Specification API</name>
 
-  <inceptionYear>2001</inceptionYear>
-  <description>
-    An implementation of the JSP Standard Tag Library (JSTL) Specification API.
-  </description>
+    <inceptionYear>2001</inceptionYear>
+    <description>
+        An implementation of the JSP Standard Tag Library (JSTL) Specification API.
+    </description>
 
-  <url>http://tomcat.apache.org/taglibs/standard/</url>
+    <url>http://tomcat.apache.org/taglibs/standard/</url>
 
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec</developerConnection>
-    <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk/spec</url>
-  </scm>
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec
+        </developerConnection>
+        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk/spec</url>
+    </scm>
 
-  <developers>
-    <developer><name>Pierre Delisle</name></developer>
-    <developer><name>Shawn Bayern</name></developer>
-    <developer><name>Nathan Abramson</name></developer>
-    <developer><name>Hans Bergsten</name></developer>
-    <developer><name>Scott Hasse</name></developer>
-    <developer><name>Justyna Horwat</name></developer>
-    <developer><name>Mark Kolb</name></developer>
-    <developer><name>Jan Luehe</name></developer>
-    <developer><name>Glenn Nielsen</name></developer>
-    <developer><name>Dmitri Plotnikov</name></developer>
-    <developer><name>Felipe Leme</name></developer>
-    <developer><name>Henri Yandell</name></developer>
-    <developer><name>Bjorn Townsend</name></developer>
-  </developers>
+    <developers>
+        <developer>
+            <name>Pierre Delisle</name>
+        </developer>
+        <developer>
+            <name>Shawn Bayern</name>
+        </developer>
+        <developer>
+            <name>Nathan Abramson</name>
+        </developer>
+        <developer>
+            <name>Hans Bergsten</name>
+        </developer>
+        <developer>
+            <name>Scott Hasse</name>
+        </developer>
+        <developer>
+            <name>Justyna Horwat</name>
+        </developer>
+        <developer>
+            <name>Mark Kolb</name>
+        </developer>
+        <developer>
+            <name>Jan Luehe</name>
+        </developer>
+        <developer>
+            <name>Glenn Nielsen</name>
+        </developer>
+        <developer>
+            <name>Dmitri Plotnikov</name>
+        </developer>
+        <developer>
+            <name>Felipe Leme</name>
+        </developer>
+        <developer>
+            <name>Henri Yandell</name>
+        </developer>
+        <developer>
+            <name>Bjorn Townsend</name>
+        </developer>
+    </developers>
 
-  <contributors>
-    <contributor><name>Robert Goff</name></contributor>
-  </contributors>
+    <contributors>
+        <contributor>
+            <name>Robert Goff</name>
+        </contributor>
+    </contributors>
 
-  <dependencies>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet.jsp</groupId>
-      <artifactId>jsp-api</artifactId>
-      <version>2.1</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.el</groupId>
-      <artifactId>el-api</artifactId>
-      <version>1.0</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies> 
-  
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>${groupId}.${artifactId};singleton=true</Bundle-SymbolicName>
-            <Specification-Title>JSR-052 JavaServer Pages Standard Tag Library Specification</Specification-Title>
-            <Specification-Vendor>Sun Microsystems, Inc.</Specification-Vendor>
-            <Specification-Version>1.2</Specification-Version>
-            <Export-Package>javax.servlet.jsp.jstl*;version=1.2</Export-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${groupId}.${artifactId};singleton=true</Bundle-SymbolicName>
+                        <Specification-Title>JSR-052 JavaServer Pages Standard Tag Library Specification
+                        </Specification-Title>
+                        <Specification-Vendor>Sun Microsystems, Inc.</Specification-Vendor>
+                        <Specification-Version>1.2</Specification-Version>
+                        <Export-Package>javax.servlet.jsp.jstl*;version=1.2</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

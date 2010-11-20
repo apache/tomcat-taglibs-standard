@@ -13,23 +13,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package javax.servlet.jsp.jstl.fmt;
 
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 /**
  * Class which exposes the locale-determination logic for resource bundles
  * through convenience methods.
- *
+ * <p/>
  * <p> This class may be useful to any tag handler implementation that needs
- * to produce localized messages. For example, this might be useful for 
- * exception messages that are intended directly for user consumption on an 
+ * to produce localized messages. For example, this might be useful for
+ * exception messages that are intended directly for user consumption on an
  * error page.
  *
  * @author Jan Luehe
@@ -37,127 +37,123 @@ import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 public class LocaleSupport {
 
-    /** 
+    /**
      * Retrieves the localized message corresponding to the given key.
-     *
+     * <p/>
      * <p> The given key is looked up in the resource bundle of the default
      * I18N localization context, which is retrieved from the
      * <tt>javax.servlet.jsp.jstl.fmt.localizationContext</tt> configuration
      * setting.
-     *
+     * <p/>
      * <p> If the configuration setting is empty, or the default I18N
      * localization context does not contain any resource bundle, or the given
      * key is undefined in its resource bundle, the string "???&lt;key&gt;???" is
      * returned, where "&lt;key&gt;" is replaced with the given key.
-     * 
+     *
      * @param pageContext the page in which to get the localized message
-     * corresponding to the given key  
-     * @param key the message key
-     * 
-     * @return the localized message corresponding to the given key 
-     */ 
-    public static String getLocalizedMessage(PageContext pageContext, 
+     *                    corresponding to the given key
+     * @param key         the message key
+     * @return the localized message corresponding to the given key
+     */
+    public static String getLocalizedMessage(PageContext pageContext,
                                              String key) {
-	return getLocalizedMessage(pageContext, key, null, null);
+        return getLocalizedMessage(pageContext, key, null, null);
     }
 
-    /** 
+    /**
      * Retrieves the localized message corresponding to the given key.
-     *
+     * <p/>
      * <p> The given key is looked up in the resource bundle with the given
      * base name.
-     *
+     * <p/>
      * <p> If no resource bundle with the given base name exists, or the given
      * key is undefined in the resource bundle, the string "???&lt;key&gt;???" is
      * returned, where "&lt;key&gt;" is replaced with the given key.
-     * 
+     *
      * @param pageContext the page in which to get the localized message
-     * corresponding to the given key  
-     * @param key the message key
-     * @param basename the resource bundle base name 
-     * 
-     * @return the localized message corresponding to the given key 
-     */ 
-    public static String getLocalizedMessage(PageContext pageContext, 
-                                             String key, 
+     *                    corresponding to the given key
+     * @param key         the message key
+     * @param basename    the resource bundle base name
+     * @return the localized message corresponding to the given key
+     */
+    public static String getLocalizedMessage(PageContext pageContext,
+                                             String key,
                                              String basename) {
-	return getLocalizedMessage(pageContext, key, null, basename);
+        return getLocalizedMessage(pageContext, key, null, basename);
     }
 
     /**
      * Retrieves the localized message corresponding to the given key, and
      * performs parametric replacement using the arguments specified via
      * <tt>args</tt>.
-     *
+     * <p/>
      * <p> See the specification of the &lt;fmt:message&gt; action for a description
      * of how parametric replacement is implemented.
-     *
+     * <p/>
      * <p> The localized message is retrieved as in
      * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String) getLocalizedMessage(pageContext, key)}.
      *
      * @param pageContext the page in which to get the localized message
-     * corresponding to the given key  
-     * @param key the message key
-     * @param args the arguments for parametric replacement 
-     * 
-     * @return the localized message corresponding to the given key 
-     */ 
-    public static String getLocalizedMessage(PageContext pageContext, 
-                                             String key, 
+     *                    corresponding to the given key
+     * @param key         the message key
+     * @param args        the arguments for parametric replacement
+     * @return the localized message corresponding to the given key
+     */
+    public static String getLocalizedMessage(PageContext pageContext,
+                                             String key,
                                              Object[] args) {
-	return getLocalizedMessage(pageContext, key, args, null);
+        return getLocalizedMessage(pageContext, key, args, null);
     }
 
     /**
      * Retrieves the localized message corresponding to the given key, and
      * performs parametric replacement using the arguments specified via
      * <tt>args</tt>.
-     *
+     * <p/>
      * <p> See the specification of the &lt;fmt:message&gt; action for a description
      * of how parametric replacement is implemented.
-     *
+     * <p/>
      * <p> The localized message is retrieved as in
      * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String, java.lang.String) getLocalizedMessage(pageContext, key, basename)}.
-     * 
+     *
      * @param pageContext the page in which to get the localized message
-     * corresponding to the given key  
-     * @param key the message key
-     * @param args the arguments for parametric replacement 
-     * @param basename the resource bundle base name 
-     * 
-     * @return the localized message corresponding to the given key 
-     */ 
-    public static String getLocalizedMessage(PageContext pageContext, 
-                                             String key, 
-                                             Object[] args, 
+     *                    corresponding to the given key
+     * @param key         the message key
+     * @param args        the arguments for parametric replacement
+     * @param basename    the resource bundle base name
+     * @return the localized message corresponding to the given key
+     */
+    public static String getLocalizedMessage(PageContext pageContext,
+                                             String key,
+                                             Object[] args,
                                              String basename) {
-	LocalizationContext locCtxt = null;
-	String message = JakartaInline.UNDEFINED_KEY + key + JakartaInline.UNDEFINED_KEY;
+        LocalizationContext locCtxt = null;
+        String message = JakartaInline.UNDEFINED_KEY + key + JakartaInline.UNDEFINED_KEY;
 
-	if (basename != null) {
-	    locCtxt = JakartaInline.getLocalizationContext(pageContext, basename);
-	} else {
-	    locCtxt = JakartaInline.getLocalizationContext(pageContext);
-	}
+        if (basename != null) {
+            locCtxt = JakartaInline.getLocalizationContext(pageContext, basename);
+        } else {
+            locCtxt = JakartaInline.getLocalizationContext(pageContext);
+        }
 
-	if (locCtxt != null) {
-	    ResourceBundle bundle = locCtxt.getResourceBundle();
-	    if (bundle != null) {
-		try {
-		    message = bundle.getString(key);
-		    if (args != null) {
-			MessageFormat formatter = new MessageFormat("");
-			if (locCtxt.getLocale() != null) {
-			    formatter.setLocale(locCtxt.getLocale());
-			}
-			formatter.applyPattern(message);
-			message = formatter.format(args);
-		    }
-		} catch (MissingResourceException mre) {
-		}
-	    }
-	}
+        if (locCtxt != null) {
+            ResourceBundle bundle = locCtxt.getResourceBundle();
+            if (bundle != null) {
+                try {
+                    message = bundle.getString(key);
+                    if (args != null) {
+                        MessageFormat formatter = new MessageFormat("");
+                        if (locCtxt.getLocale() != null) {
+                            formatter.setLocale(locCtxt.getLocale());
+                        }
+                        formatter.applyPattern(message);
+                        message = formatter.format(args);
+                    }
+                } catch (MissingResourceException mre) {
+                }
+            }
+        }
 
-	return message;
+        return message;
     }
 }

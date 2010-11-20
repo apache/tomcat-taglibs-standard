@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package javax.servlet.jsp.jstl.core;
 
@@ -29,31 +29,31 @@ import javax.servlet.jsp.tagext.TryCatchFinally;
 
 /**
  * <p>Base support class to facilitate implementation of iteration tags.</p>
- *
+ * <p/>
  * <p>Since most iteration tags will behave identically with respect to
  * actual iterative behavior, JSTL provides this
  * base support class to facilitate implementation.  Many iteration tags
- * will extend this and merely implement the <tt>hasNext()</tt> and 
+ * will extend this and merely implement the <tt>hasNext()</tt> and
  * <tt>next()</tt> methods
  * to provide contents for the handler to iterate over.</p>
- *
+ * <p/>
  * <p>In particular, this base class provides support for:</p>
- * 
+ * <p/>
  * <ul>
- *  <li> Iteration control, based on protected <tt>prepare()</tt>, <tt>next()</tt>,
- *       and <tt>hasNext()</tt> methods
- *  <li> Subsetting (<tt>begin</tt>, <tt>end</tt>, <tt>step></tt>functionality, 
- *       including validation
- *       of subset parameters for sensibility)
- *  <li> item retrieval (<tt>getCurrent()</tt>)
- *  <li> status retrieval (<tt>LoopTagStatus</tt>)
- *  <li> exposing attributes (set by <tt>var</tt> and <tt>varStatus</tt> attributes)
+ * <li> Iteration control, based on protected <tt>prepare()</tt>, <tt>next()</tt>,
+ * and <tt>hasNext()</tt> methods
+ * <li> Subsetting (<tt>begin</tt>, <tt>end</tt>, <tt>step></tt>functionality,
+ * including validation
+ * of subset parameters for sensibility)
+ * <li> item retrieval (<tt>getCurrent()</tt>)
+ * <li> status retrieval (<tt>LoopTagStatus</tt>)
+ * <li> exposing attributes (set by <tt>var</tt> and <tt>varStatus</tt> attributes)
  * </ul>
- *
+ * <p/>
  * <p>In providing support for these tasks, <tt>LoopTagSupport</tt> contains
  * certain control variables that act to modify the iteration.  Accessors
  * are provided for these control variables when the variables represent
- * information needed or wanted at translation time (e.g., <tt>var</tt>, 
+ * information needed or wanted at translation time (e.g., <tt>var</tt>,
  * <tt>varStatus</tt>).  For
  * other variables, accessors cannot be provided here since subclasses
  * may differ on their implementations of how those accessors are received.
@@ -66,9 +66,8 @@ import javax.servlet.jsp.tagext.TryCatchFinally;
  */
 
 public abstract class LoopTagSupport
-    extends TagSupport
-    implements LoopTag, IterationTag, TryCatchFinally
-{
+        extends TagSupport
+        implements LoopTag, IterationTag, TryCatchFinally {
     //*********************************************************************
     // 'Protected' state 
 
@@ -82,7 +81,9 @@ public abstract class LoopTagSupport
      * is in the doStartTag() method of an EL-aware subclass.)
      */
 
-    /** Starting index ('begin' attribute) */
+    /**
+     * Starting index ('begin' attribute)
+     */
     protected int begin;
 
     /**
@@ -93,22 +94,32 @@ public abstract class LoopTagSupport
      */
     protected int end;
 
-    /** Iteration step ('step' attribute) */
+    /**
+     * Iteration step ('step' attribute)
+     */
     protected int step;
 
-    /** Boolean flag indicating whether 'begin' was specified. */
+    /**
+     * Boolean flag indicating whether 'begin' was specified.
+     */
     protected boolean beginSpecified;
 
-    /** Boolean flag indicating whether 'end' was specified. */
+    /**
+     * Boolean flag indicating whether 'end' was specified.
+     */
     protected boolean endSpecified;
 
-    /** Boolean flag indicating whether 'step' was specified. */
+    /**
+     * Boolean flag indicating whether 'step' was specified.
+     */
     protected boolean stepSpecified;
 
-    /** Attribute-exposing control */
+    /**
+     * Attribute-exposing control
+     */
     protected String itemId, statusId;
 
-    protected ValueExpression deferredExpression=null;
+    protected ValueExpression deferredExpression = null;
 
     //*********************************************************************
     // 'Private' state (implementation details)
@@ -159,7 +170,7 @@ public abstract class LoopTagSupport
      * <p>Returns the next object over which the tag should iterate.  This
      * method must be provided by concrete subclasses of LoopTagSupport
      * to inform the base logic about what objects it should iterate over.</p>
-     *
+     * <p/>
      * <p>It is expected that this method will generally be backed by an
      * Iterator, but this will not always be the case.  In particular, if
      * retrieving the next object raises the possibility of an exception
@@ -167,12 +178,12 @@ public abstract class LoopTagSupport
      * to the JSP container as a JspTagException; a standalone Iterator
      * would not be able to do this.  (This explains why LoopTagSupport
      * does not simply call for an Iterator from its subtags.)</p>
-     * 
+     *
      * @return the java.lang.Object to use in the next round of iteration
-     * @exception java.util.NoSuchElementException
-     *            if next() is called but no new elements are available
-     * @exception javax.servlet.jsp.JspTagException
-     *            for other, unexpected exceptions
+     * @throws java.util.NoSuchElementException
+     *          if next() is called but no new elements are available
+     * @throws javax.servlet.jsp.JspTagException
+     *          for other, unexpected exceptions
      */
     protected abstract Object next() throws JspTagException;
 
@@ -181,24 +192,26 @@ public abstract class LoopTagSupport
      * over which to iterate.  This method must be provided by concrete
      * subclasses of LoopTagSupport to assist the iterative logic
      * provided by the supporting base class.</p>
-     *  
+     * <p/>
      * <p>See <a href="#next()">next</a> for more information about the
      * purpose and expectations behind this tag.</p>
      *
      * @return <tt>true</tt> if there is at least one more item to iterate
      *         over, <tt>false</tt> otherwise
-     * @exception javax.servlet.jsp.JspTagException
+     * @throws javax.servlet.jsp.JspTagException
+     *
      * @see #next
      */
     protected abstract boolean hasNext() throws JspTagException;
 
     /**
      * <p>Prepares for a single tag invocation.  Specifically, allows
-     * subclasses to prepare for calls to hasNext() and next(). 
+     * subclasses to prepare for calls to hasNext() and next().
      * Subclasses can assume that prepare() will be called once for
      * each invocation of doStartTag() in the superclass.</p>
      *
-     * @exception javax.servlet.jsp.JspTagException
+     * @throws javax.servlet.jsp.JspTagException
+     *
      */
     protected abstract void prepare() throws JspTagException;
 
@@ -238,10 +251,12 @@ public abstract class LoopTagSupport
 
         // get the item we're interested in
         if (hasNext())
-            // index is 0-based, so we don't update it for the first item
+        // index is 0-based, so we don't update it for the first item
+        {
             item = next();
-        else
+        } else {
             return SKIP_BODY;
+        }
 
         /*
          * now discard anything we have to "step" over.
@@ -272,8 +287,9 @@ public abstract class LoopTagSupport
         if (hasNext() && !atEnd()) {
             index++;
             item = next();
-        } else
+        } else {
             return SKIP_BODY;
+        }
 
         /*
          * now discard anything we have to "step" over.
@@ -289,24 +305,24 @@ public abstract class LoopTagSupport
 
     /**
      * Removes any attributes that this LoopTagSupport set.
-     *
+     * <p/>
      * <p> These attributes are intended to support scripting variables with
      * NESTED scope, so we don't want to pollute attribute space by leaving
      * them lying around.
      */
     public void doFinally() {
-	/*
-	 * Make sure to un-expose variables, restoring them to their
-	 * prior values, if applicable.
-         */
-	unExposeVariables();
+        /*
+    * Make sure to un-expose variables, restoring them to their
+    * prior values, if applicable.
+        */
+        unExposeVariables();
     }
 
     /**
      * Rethrows the given Throwable.
      */
     public void doCatch(Throwable t) throws Throwable {
-	throw t;
+        throw t;
     }
 
     //*********************************************************************
@@ -325,6 +341,7 @@ public abstract class LoopTagSupport
      * Subclasses can override this if necessary, but such a need is
      * expected to be rare.)
      */
+
     public Object getCurrent() {
         return item;
     }
@@ -336,6 +353,7 @@ public abstract class LoopTagSupport
      * implementation of subclasses that are happy with reasonable default
      * behavior.)
      */
+
     public LoopTagStatus getLoopStatus() {
 
         // local implementation with reasonable default behavior
@@ -356,35 +374,45 @@ public abstract class LoopTagSupport
                  */
                 return (LoopTagSupport.this.getCurrent());
             }
+
             public int getIndex() {
                 return (index + begin);       // our 'index' isn't getIndex()
             }
+
             public int getCount() {
                 return (count);
             }
+
             public boolean isFirst() {
                 return (index == 0);          // our 'index' isn't getIndex()
             }
+
             public boolean isLast() {
                 return (last);                // use cached value
             }
+
             public Integer getBegin() {
-                if (beginSpecified)
+                if (beginSpecified) {
                     return (new Integer(begin));
-                else
+                } else {
                     return null;
+                }
             }
+
             public Integer getEnd() {
-                if (endSpecified)
+                if (endSpecified) {
                     return (new Integer(end));
-                else
+                } else {
                     return null;
+                }
             }
+
             public Integer getStep() {
-                if (stepSpecified)
+                if (stepSpecified) {
                     return (new Integer(step));
-                else
+                } else {
                     return null;
+                }
             }
         }
 
@@ -393,8 +421,9 @@ public abstract class LoopTagSupport
          * implementation, we just need one per instance, but I'd rather
          * not keep the reference around once release() has been called.
          */
-        if (status == null)
+        if (status == null) {
             status = new Status();
+        }
 
         return status;
     }
@@ -414,7 +443,7 @@ public abstract class LoopTagSupport
      * Sets the 'var' attribute.
      *
      * @param id Name of the exported scoped variable storing the current item
-     * of the iteration.
+     *           of the iteration.
      */
     public void setVar(String id) {
         this.itemId = id;
@@ -424,7 +453,7 @@ public abstract class LoopTagSupport
      * Sets the 'varStatus' attribute.
      *
      * @param statusId Name of the exported scoped variable storing the status
-     * of the iteration.
+     *                 of the iteration.
      */
     public void setVarStatus(String statusId) {
         this.statusId = statusId;
@@ -445,8 +474,9 @@ public abstract class LoopTagSupport
      * expected to propagate up if it isn't
      */
     protected void validateBegin() throws JspTagException {
-        if (begin < 0)
+        if (begin < 0) {
             throw new JspTagException("'begin' < 0");
+        }
     }
 
     /**
@@ -454,8 +484,9 @@ public abstract class LoopTagSupport
      * expected to propagate up if it isn't
      */
     protected void validateEnd() throws JspTagException {
-        if (end < 0)
+        if (end < 0) {
             throw new JspTagException("'end' < 0");
+        }
     }
 
     /**
@@ -463,15 +494,18 @@ public abstract class LoopTagSupport
      * expected to propagate up if it isn't
      */
     protected void validateStep() throws JspTagException {
-        if (step < 1)
+        if (step < 1) {
             throw new JspTagException("'step' <= 0");
+        }
     }
 
 
     //*********************************************************************
     // Private utility methods
 
-    /** (Re)initializes state (during release() or construction) */
+    /**
+     * (Re)initializes state (during release() or construction)
+     */
     private void init() {
         // defaults for internal bookkeeping
         index = 0;              // internal index always starts at 0
@@ -491,14 +525,16 @@ public abstract class LoopTagSupport
         statusId = null;        // when not specified, no variable exported
     }
 
-    /** Sets 'last' appropriately. */
+    /**
+     * Sets 'last' appropriately.
+     */
     private void calibrateLast() throws JspTagException {
         /*
          * the current round is the last one if (a) there are no remaining
          * elements, or (b) the next one is beyond the 'end'.
          */
         last = !hasNext() || atEnd() ||
-            (end != -1 && (begin + index + step > end));
+                (end != -1 && (begin + index + step > end));
     }
 
     /**
@@ -508,7 +544,7 @@ public abstract class LoopTagSupport
      */
     private void exposeVariables() throws JspTagException {
 
-        if (deferredExpression==null) {
+        if (deferredExpression == null) {
             /*
              * We need to support null items returned from next(); we
              * do this simply by passing such non-items through to the
@@ -526,21 +562,23 @@ public abstract class LoopTagSupport
              * correctly.
              */
             if (itemId != null) {
-                if (getCurrent() == null)
+                if (getCurrent() == null) {
                     pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
-                else
+                } else {
                     pageContext.setAttribute(itemId, getCurrent());
+                }
             }
         } else { //this is using a DeferredExpression
             ELContext myELContext = pageContext.getELContext();
             VariableMapper vm = myELContext.getVariableMapper();
-            vm.setVariable(itemId, (ValueExpression)getCurrent());
+            vm.setVariable(itemId, (ValueExpression) getCurrent());
         }
         if (statusId != null) {
-            if (getLoopStatus() == null)
+            if (getLoopStatus() == null) {
                 pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
-            else
+            } else {
                 pageContext.setAttribute(statusId, getLoopStatus());
+            }
         }
 
     }
@@ -550,18 +588,20 @@ public abstract class LoopTagSupport
      * restores them to their prior values (and scopes).
      */
     private void unExposeVariables() {
-        if (deferredExpression==null) {
+        if (deferredExpression == null) {
             // "nested" variables are now simply removed
-        	if (itemId != null)
-                    pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
+            if (itemId != null) {
+                pageContext.removeAttribute(itemId, PageContext.PAGE_SCOPE);
+            }
         } else {
             //we're deferred ... remove variable mapping
             ELContext myELContext = pageContext.getELContext();
             VariableMapper vm = myELContext.getVariableMapper();
             vm.setVariable(itemId, null);
         }
-	if (statusId != null)
-	    pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
+        if (statusId != null) {
+            pageContext.removeAttribute(statusId, PageContext.PAGE_SCOPE);
+        }
     }
 
     /**
@@ -596,8 +636,9 @@ public abstract class LoopTagSupport
      * don't want factor in the 'begin' value already.
      */
     private void discardIgnoreSubset(int n) throws JspTagException {
-	while (n-- > 0 && hasNext())
-	    next();
+        while (n-- > 0 && hasNext()) {
+            next();
+        }
     }
 
     /**
@@ -609,6 +650,7 @@ public abstract class LoopTagSupport
     private boolean atEnd() {
         return ((end != -1) && (begin + index >= end));
     }
+
     /**
      * Get the delimiter for string tokens. Used only for constructing
      * the deferred expression for it.

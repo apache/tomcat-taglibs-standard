@@ -46,7 +46,7 @@ public final class IndexedValueExpression extends ValueExpression implements Ser
      * Constructor specifying indexed variable and index.
      *
      * @param valueExpression that evaluates to the indexed variable
-     * @param i index specifying the member
+     * @param i               index specifying the member
      */
     public IndexedValueExpression(ValueExpression valueExpression, int i) {
         orig = valueExpression;
@@ -55,8 +55,12 @@ public final class IndexedValueExpression extends ValueExpression implements Ser
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         IndexedValueExpression that = (IndexedValueExpression) o;
         return i.equals(that.i) && orig.equals(that.orig);
@@ -84,7 +88,7 @@ public final class IndexedValueExpression extends ValueExpression implements Ser
 
     @Override
     public int hashCode() {
-        return orig.hashCode()+i;
+        return orig.hashCode() + i;
     }
 
     @Override

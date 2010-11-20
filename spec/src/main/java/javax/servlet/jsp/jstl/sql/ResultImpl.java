@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package javax.servlet.jsp.jstl.sql;
 
@@ -28,8 +28,8 @@ import java.util.TreeMap;
 
 /**
  * <p>This class creates a cached version of a <tt>ResultSet</tt>.
- * It's represented as a <tt>Result</tt> implementation, capable of 
- * returing an array of <tt>Row</tt> objects containing a <tt>Column</tt> 
+ * It's represented as a <tt>Result</tt> implementation, capable of
+ * returing an array of <tt>Row</tt> objects containing a <tt>Column</tt>
  * instance for each column in the row.   It is not part of the JSTL
  * API; it serves merely as a back-end to ResultSupport's static methods.
  * Thus, we scope its access to the package.
@@ -50,15 +50,14 @@ class ResultImpl implements Result, Serializable {
      * It's important to note that this object will be serializable only
      * if the objects returned by the ResultSet are serializable too.
      *
-     * @param rs an open <tt>ResultSet</tt>, positioned before the first
-     * row
+     * @param rs       an open <tt>ResultSet</tt>, positioned before the first
+     *                 row
      * @param startRow beginning row to be cached
-     * @param maxRows query maximum rows limit
-     * @exception java.sql.SQLException if a database error occurs
+     * @param maxRows  query maximum rows limit
+     * @throws java.sql.SQLException if a database error occurs
      */
     public ResultImpl(ResultSet rs, int startRow, int maxRows)
-        throws SQLException 
-    {
+            throws SQLException {
         rowMap = new ArrayList();
         rowByIndex = new ArrayList();
 
@@ -68,7 +67,7 @@ class ResultImpl implements Result, Serializable {
         // Create the column name array
         columnNames = new String[noOfColumns];
         for (int i = 1; i <= noOfColumns; i++) {
-            columnNames[i-1] = rsmd.getColumnLabel(i);
+            columnNames[i - 1] = rsmd.getColumnLabel(i);
         }
 
         // Throw away all rows upto startRow
@@ -80,21 +79,21 @@ class ResultImpl implements Result, Serializable {
         int processedRows = 0;
         while (rs.next()) {
             if ((maxRows != -1) && (processedRows == maxRows)) {
-                isLimited = true; 
+                isLimited = true;
                 break;
             }
             Object[] columns = new Object[noOfColumns];
-            SortedMap columnMap = 
-                new TreeMap(String.CASE_INSENSITIVE_ORDER);
+            SortedMap columnMap =
+                    new TreeMap(String.CASE_INSENSITIVE_ORDER);
 
             // JDBC uses 1 as the lowest index!
             for (int i = 1; i <= noOfColumns; i++) {
-                Object value =  rs.getObject(i);
+                Object value = rs.getObject(i);
                 if (rs.wasNull()) {
                     value = null;
                 }
-                columns[i-1] = value;
-                columnMap.put(columnNames[i-1], value);
+                columns[i - 1] = value;
+                columnMap.put(columnNames[i - 1], value);
             }
             rowMap.add(columnMap);
             rowByIndex.add(columns);
@@ -117,7 +116,7 @@ class ResultImpl implements Result, Serializable {
         }
 
         //should just be able to return SortedMap[] object
-        return (SortedMap []) rowMap.toArray(new SortedMap[0]);
+        return (SortedMap[]) rowMap.toArray(new SortedMap[0]);
     }
 
 
@@ -134,7 +133,7 @@ class ResultImpl implements Result, Serializable {
         }
 
         //should just be able to return Object[][] object
-        return (Object [][])rowByIndex.toArray(new Object[0][0]);
+        return (Object[][]) rowByIndex.toArray(new Object[0][0]);
     }
 
     /**
@@ -152,7 +151,7 @@ class ResultImpl implements Result, Serializable {
      * Returns the number of rows in the cached ResultSet
      *
      * @return the number of cached rows, or -1 if the Result could
-     *    not be initialized due to SQLExceptions
+     *         not be initialized due to SQLExceptions
      */
     public int getRowCount() {
         if (rowMap == null) {

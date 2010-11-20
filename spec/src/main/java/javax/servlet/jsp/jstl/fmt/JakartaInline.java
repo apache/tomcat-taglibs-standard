@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package javax.servlet.jsp.jstl.fmt;
 
@@ -24,11 +24,9 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.servlet.ServletResponse;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.jstl.core.Config;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 class JakartaInline {
 
@@ -55,142 +53,142 @@ class JakartaInline {
      * Gets the default I18N localization context.
      *
      * @param pc Page in which to look up the default I18N localization context
-     */    
+     */
     static LocalizationContext getLocalizationContext(PageContext pc) {
-	LocalizationContext locCtxt = null;
+        LocalizationContext locCtxt = null;
 
-	Object obj = Config.find(pc, Config.FMT_LOCALIZATION_CONTEXT);
-	if (obj == null) {
-	    return null;
-	}
+        Object obj = Config.find(pc, Config.FMT_LOCALIZATION_CONTEXT);
+        if (obj == null) {
+            return null;
+        }
 
-	if (obj instanceof LocalizationContext) {
-	    locCtxt = (LocalizationContext) obj;
-	} else {
-	    // localization context is a bundle basename
-	    locCtxt = getLocalizationContext(pc, (String) obj);
-	}
+        if (obj instanceof LocalizationContext) {
+            locCtxt = (LocalizationContext) obj;
+        } else {
+            // localization context is a bundle basename
+            locCtxt = getLocalizationContext(pc, (String) obj);
+        }
 
-	return locCtxt;
+        return locCtxt;
     }
 
     /**
      * Gets the resource bundle with the given base name, whose locale is
      * determined as follows:
-     *
+     * <p/>
      * Check if a match exists between the ordered set of preferred
      * locales and the available locales, for the given base name.
      * The set of preferred locales consists of a single locale
      * (if the <tt>javax.servlet.jsp.jstl.fmt.locale</tt> configuration
      * setting is present) or is equal to the client's preferred locales
      * determined from the client's browser settings.
-     *
+     * <p/>
      * <p> If no match was found in the previous step, check if a match
      * exists between the fallback locale (given by the
      * <tt>javax.servlet.jsp.jstl.fmt.fallbackLocale</tt> configuration
      * setting) and the available locales, for the given base name.
      *
      * @param pageContext Page in which the resource bundle with the
-     * given base name is requested
-     * @param basename Resource bundle base name
-     *
+     *                    given base name is requested
+     * @param basename    Resource bundle base name
      * @return Localization context containing the resource bundle with the
-     * given base name and the locale that led to the resource bundle match,
-     * or the empty localization context if no resource bundle match was found
+     *         given base name and the locale that led to the resource bundle match,
+     *         or the empty localization context if no resource bundle match was found
      */
     static LocalizationContext getLocalizationContext(PageContext pc,
-							     String basename) {
-	LocalizationContext locCtxt = null;
-	ResourceBundle bundle = null;
+                                                      String basename) {
+        LocalizationContext locCtxt = null;
+        ResourceBundle bundle = null;
 
-	if ((basename == null) || basename.equals("")) {
-	    return new LocalizationContext();
-	}
+        if ((basename == null) || basename.equals("")) {
+            return new LocalizationContext();
+        }
 
-	// Try preferred locales
-	Locale pref = getLocale(pc, Config.FMT_LOCALE);
-	if (pref != null) {
-	    // Preferred locale is application-based
-	    bundle = findMatch(basename, pref);
-	    if (bundle != null) {
-		locCtxt = new LocalizationContext(bundle, pref);
-	    }
-	} else {
-	    // Preferred locales are browser-based
-	    locCtxt = findMatch(pc, basename);
-	}
-	
-	if (locCtxt == null) {
-	    // No match found with preferred locales, try using fallback locale
-	    pref = getLocale(pc, Config.FMT_FALLBACK_LOCALE);
-	    if (pref != null) {
-		bundle = findMatch(basename, pref);
-		if (bundle != null) {
-		    locCtxt = new LocalizationContext(bundle, pref);
-		}
-	    }
-	}
+        // Try preferred locales
+        Locale pref = getLocale(pc, Config.FMT_LOCALE);
+        if (pref != null) {
+            // Preferred locale is application-based
+            bundle = findMatch(basename, pref);
+            if (bundle != null) {
+                locCtxt = new LocalizationContext(bundle, pref);
+            }
+        } else {
+            // Preferred locales are browser-based
+            locCtxt = findMatch(pc, basename);
+        }
 
-	if (locCtxt == null) {
-	    // try using the root resource bundle with the given basename
-	    try {
-	        ClassLoader cl = getClassLoaderCheckingPrivilege();
-            bundle = ResourceBundle.getBundle(basename, EMPTY_LOCALE, cl);
-		if (bundle != null) {
-		    locCtxt = new LocalizationContext(bundle, null);
-		}
-	    } catch (MissingResourceException mre) {
-		// do nothing
-	    }
-	}
-		 
-	if (locCtxt != null) {
-	    // set response locale
-	    if (locCtxt.getLocale() != null) {
-		setResponseLocale(pc, locCtxt.getLocale());
-	    }
-	} else {
-	    // create empty localization context
-	    locCtxt = new LocalizationContext();
-	}
+        if (locCtxt == null) {
+            // No match found with preferred locales, try using fallback locale
+            pref = getLocale(pc, Config.FMT_FALLBACK_LOCALE);
+            if (pref != null) {
+                bundle = findMatch(basename, pref);
+                if (bundle != null) {
+                    locCtxt = new LocalizationContext(bundle, pref);
+                }
+            }
+        }
 
-	return locCtxt;
+        if (locCtxt == null) {
+            // try using the root resource bundle with the given basename
+            try {
+                ClassLoader cl = getClassLoaderCheckingPrivilege();
+                bundle = ResourceBundle.getBundle(basename, EMPTY_LOCALE, cl);
+                if (bundle != null) {
+                    locCtxt = new LocalizationContext(bundle, null);
+                }
+            } catch (MissingResourceException mre) {
+                // do nothing
+            }
+        }
+
+        if (locCtxt != null) {
+            // set response locale
+            if (locCtxt.getLocale() != null) {
+                setResponseLocale(pc, locCtxt.getLocale());
+            }
+        } else {
+            // create empty localization context
+            locCtxt = new LocalizationContext();
+        }
+
+        return locCtxt;
     }
 
 
     //*********************************************************************
     // Private utility methods
-    
+
     /*
-     * Determines the client's preferred locales from the request, and compares
-     * each of the locales (in order of preference) against the available
-     * locales in order to determine the best matching locale.
-     *
-     * @param pageContext the page in which the resource bundle with the
-     * given base name is requested
-     * @param basename the resource bundle's base name
-     *
-     * @return the localization context containing the resource bundle with
-     * the given base name and best matching locale, or <tt>null</tt> if no
-     * resource bundle match was found
-     */
+    * Determines the client's preferred locales from the request, and compares
+    * each of the locales (in order of preference) against the available
+    * locales in order to determine the best matching locale.
+    *
+    * @param pageContext the page in which the resource bundle with the
+    * given base name is requested
+    * @param basename the resource bundle's base name
+    *
+    * @return the localization context containing the resource bundle with
+    * the given base name and best matching locale, or <tt>null</tt> if no
+    * resource bundle match was found
+    */
+
     private static LocalizationContext findMatch(PageContext pageContext,
-						 String basename) {
-	LocalizationContext locCtxt = null;
-	
-	// Determine locale from client's browser settings.
-        
-	for (Enumeration enum_ = getRequestLocales((HttpServletRequest)pageContext.getRequest());
-	     enum_.hasMoreElements(); ) {
-	    Locale pref = (Locale) enum_.nextElement();
-	    ResourceBundle match = findMatch(basename, pref);
-	    if (match != null) {
-		locCtxt = new LocalizationContext(match, pref);
-		break;
-	    }
-	}
-        	
-	return locCtxt;
+                                                 String basename) {
+        LocalizationContext locCtxt = null;
+
+        // Determine locale from client's browser settings.
+
+        for (Enumeration enum_ = getRequestLocales((HttpServletRequest) pageContext.getRequest());
+             enum_.hasMoreElements();) {
+            Locale pref = (Locale) enum_.nextElement();
+            ResourceBundle match = findMatch(basename, pref);
+            if (match != null) {
+                locCtxt = new LocalizationContext(match, pref);
+                break;
+            }
+        }
+
+        return locCtxt;
     }
 
     /*
@@ -208,17 +206,18 @@ class JakartaInline {
      * language-match between the preferred locale and the locale of
      * the bundle returned by java.util.ResourceBundle.getBundle().
      */
-    private static ResourceBundle findMatch(String basename, Locale pref) {
-	ResourceBundle match = null;
 
-	try {
-	    ClassLoader cl = getClassLoaderCheckingPrivilege();
-        ResourceBundle bundle = ResourceBundle.getBundle(basename, pref, cl);
-	    Locale avail = bundle.getLocale();
-	    if (pref.equals(avail)) {
-		// Exact match
-		match = bundle;
-	    } else {
+    private static ResourceBundle findMatch(String basename, Locale pref) {
+        ResourceBundle match = null;
+
+        try {
+            ClassLoader cl = getClassLoaderCheckingPrivilege();
+            ResourceBundle bundle = ResourceBundle.getBundle(basename, pref, cl);
+            Locale avail = bundle.getLocale();
+            if (pref.equals(avail)) {
+                // Exact match
+                match = bundle;
+            } else {
                 /*
                  * We have to make sure that the match we got is for
                  * the specified locale. The way ResourceBundle.getBundle()
@@ -234,31 +233,31 @@ class JakartaInline {
                  *       (the equality match might have failed on the variant)
 		 */
                 if (pref.getLanguage().equals(avail.getLanguage())
-		    && ("".equals(avail.getCountry()) || pref.getCountry().equals(avail.getCountry()))) {
-		    /*
-		     * Language match.
-		     * By making sure the available locale does not have a 
-		     * country and matches the preferred locale's language, we
-		     * rule out "matches" based on the container's default
-		     * locale. For example, if the preferred locale is 
-		     * "en-US", the container's default locale is "en-UK", and
-		     * there is a resource bundle (with the requested base
-		     * name) available for "en-UK", ResourceBundle.getBundle()
-		     * will return it, but even though its language matches
-		     * that of the preferred locale, we must ignore it,
-		     * because matches based on the container's default locale
-		     * are not portable across different containers with
-		     * different default locales.
-		     */
-		    match = bundle;
-		}
-	    }
-	} catch (MissingResourceException mre) {
-	}
+                        && ("".equals(avail.getCountry()) || pref.getCountry().equals(avail.getCountry()))) {
+                    /*
+                  * Language match.
+                  * By making sure the available locale does not have a
+                  * country and matches the preferred locale's language, we
+                  * rule out "matches" based on the container's default
+                  * locale. For example, if the preferred locale is
+                  * "en-US", the container's default locale is "en-UK", and
+                  * there is a resource bundle (with the requested base
+                  * name) available for "en-UK", ResourceBundle.getBundle()
+                  * will return it, but even though its language matches
+                  * that of the preferred locale, we must ignore it,
+                  * because matches based on the container's default locale
+                  * are not portable across different containers with
+                  * different default locales.
+                  */
+                    match = bundle;
+                }
+            }
+        } catch (MissingResourceException mre) {
+        }
 
-	return match;
+        return match;
     }
-    
+
     private static ClassLoader getClassLoaderCheckingPrivilege() {
         ClassLoader cl;
         SecurityManager sm = System.getSecurityManager();
@@ -266,8 +265,11 @@ class JakartaInline {
             cl = Thread.currentThread().getContextClassLoader();
         } else {
             cl = java.security.AccessController.doPrivileged(
-                new java.security.PrivilegedAction<ClassLoader>() 
-                {public ClassLoader run() {return Thread.currentThread().getContextClassLoader();}});
+                    new java.security.PrivilegedAction<ClassLoader>() {
+                        public ClassLoader run() {
+                            return Thread.currentThread().getContextClassLoader();
+                        }
+                    });
         }
         return cl;
     }
@@ -275,24 +277,24 @@ class JakartaInline {
 
     // impl/src/main/java/org/apache/taglibs/standard/tag/common/core/Util.java
     // === START OF COPY FROM Util TO SUPPORT BundleSupport ===
+
     /**
-     * HttpServletRequest.getLocales() returns the server's default locale 
+     * HttpServletRequest.getLocales() returns the server's default locale
      * if the request did not specify a preferred language.
      * We do not want this behavior, because it prevents us from using
-     * the fallback locale. 
-     * We therefore need to return an empty Enumeration if no preferred 
-     * locale has been specified. This way, the logic for the fallback 
+     * the fallback locale.
+     * We therefore need to return an empty Enumeration if no preferred
+     * locale has been specified. This way, the logic for the fallback
      * locale will be able to kick in.
      */
-    public static Enumeration getRequestLocales(HttpServletRequest request) {        
+    public static Enumeration getRequestLocales(HttpServletRequest request) {
         Enumeration values = request.getHeaders("accept-language");
         if (values == null) {
             // No header for "accept-language". Simply return
             // a new empty enumeration.
             // System.out.println("Null accept-language");
             return new Vector().elements();
-        } else
-        if (values.hasMoreElements()) {
+        } else if (values.hasMoreElements()) {
             // At least one "accept-language". Simply return
             // the enumeration returned by request.getLocales().
             // System.out.println("At least one accept-language");
@@ -328,18 +330,20 @@ class JakartaInline {
      * the given locale
      * @param locale the response locale
      */
+
     static void setResponseLocale(PageContext pc, Locale locale) {
-	// set response locale
-	ServletResponse response = pc.getResponse();
-	response.setLocale(locale);
-	
-	// get response character encoding and store it in session attribute
-	if (pc.getSession() != null) {
+        // set response locale
+        ServletResponse response = pc.getResponse();
+        response.setLocale(locale);
+
+        // get response character encoding and store it in session attribute
+        if (pc.getSession() != null) {
             try {
-	        pc.setAttribute(REQUEST_CHAR_SET, response.getCharacterEncoding(),
-			    PageContext.SESSION_SCOPE);
-            } catch (IllegalStateException ex) {} // invalidated session ignored
-	}
+                pc.setAttribute(REQUEST_CHAR_SET, response.getCharacterEncoding(),
+                        PageContext.SESSION_SCOPE);
+            } catch (IllegalStateException ex) {
+            } // invalidated session ignored
+        }
     }
 
     /*
@@ -360,76 +364,77 @@ class JakartaInline {
      * configuration parameter, or <tt>null</tt> if no scoped attribute or
      * configuration parameter with the given name exists
      */
+
     static Locale getLocale(PageContext pageContext, String name) {
-	Locale loc = null;
+        Locale loc = null;
 
-	Object obj = Config.find(pageContext, name);
-	if (obj != null) {
-	    if (obj instanceof Locale) {
-		loc = (Locale) obj;
-	    } else {
-		loc = parseLocale((String) obj, null);
-	    }
-	}
+        Object obj = Config.find(pageContext, name);
+        if (obj != null) {
+            if (obj instanceof Locale) {
+                loc = (Locale) obj;
+            } else {
+                loc = parseLocale((String) obj, null);
+            }
+        }
 
-	return loc;
+        return loc;
     }
 
     /**
      * Parses the given locale string into its language and (optionally)
      * country components, and returns the corresponding
      * <tt>java.util.Locale</tt> object.
-     *
+     * <p/>
      * If the given locale string is null or empty, the runtime's default
      * locale is returned.
      *
-     * @param locale the locale string to parse
+     * @param locale  the locale string to parse
      * @param variant the variant
-     *
      * @return <tt>java.util.Locale</tt> object corresponding to the given
-     * locale string, or the runtime's default locale if the locale string is
-     * null or empty
-     *
+     *         locale string, or the runtime's default locale if the locale string is
+     *         null or empty
      * @throws IllegalArgumentException if the given locale does not have a
-     * language component or has an empty country component
+     *                                  language component or has an empty country component
      */
     private static Locale parseLocale(String locale, String variant) {
 
-	Locale ret = null;
-	String language = locale;
-	String country = null;
-	int index = -1;
+        Locale ret = null;
+        String language = locale;
+        String country = null;
+        int index = -1;
 
-	if (((index = locale.indexOf(HYPHEN)) > -1)
-	        || ((index = locale.indexOf(UNDERSCORE)) > -1)) {
-	    language = locale.substring(0, index);
-	    country = locale.substring(index+1);
-	}
+        if (((index = locale.indexOf(HYPHEN)) > -1)
+                || ((index = locale.indexOf(UNDERSCORE)) > -1)) {
+            language = locale.substring(0, index);
+            country = locale.substring(index + 1);
+        }
 
-	if ((language == null) || (language.length() == 0)) {
-        // LOCALE_NO_LANGUAGE
-	    throw new IllegalArgumentException("Missing language component in 'value' attribute in &lt;setLocale&gt;");
-	}
+        if ((language == null) || (language.length() == 0)) {
+            // LOCALE_NO_LANGUAGE
+            throw new IllegalArgumentException("Missing language component in 'value' attribute in &lt;setLocale&gt;");
+        }
 
-	if (country == null) {
-	    if (variant != null)
-		ret = new Locale(language, "", variant);
-	    else
-		ret = new Locale(language, "");
-	} else if (country.length() > 0) {
-	    if (variant != null)
-		ret = new Locale(language, country, variant);
-	    else
-		ret = new Locale(language, country);
-	} else {
-        // LOCALE_EMPTY_COUNTRY
-	    throw new IllegalArgumentException("Empty country component in 'value' attribute in &lt;setLocale&gt;");
-	}
+        if (country == null) {
+            if (variant != null) {
+                ret = new Locale(language, "", variant);
+            } else {
+                ret = new Locale(language, "");
+            }
+        } else if (country.length() > 0) {
+            if (variant != null) {
+                ret = new Locale(language, country, variant);
+            } else {
+                ret = new Locale(language, country);
+            }
+        } else {
+            // LOCALE_EMPTY_COUNTRY
+            throw new IllegalArgumentException("Empty country component in 'value' attribute in &lt;setLocale&gt;");
+        }
 
-	return ret;
+        return ret;
     }
     // === END OF COPY FROM SetLocaleSupport TO SUPPORT BundleSupport ===
 
     static final String REQUEST_CHAR_SET =
-	"javax.servlet.jsp.jstl.fmt.request.charset";
+            "javax.servlet.jsp.jstl.fmt.request.charset";
 }

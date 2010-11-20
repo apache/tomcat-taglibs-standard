@@ -38,14 +38,20 @@ public final class IteratedExpression {
     protected final String delims;
     private Object originalListObject = null;
     private Iterator currentListObject = null;
-    private int currentIndex=0;
-    private enum TypesEnum {Undefined, ACollection, AnIterator, AnEnumeration, AMap, AString};
+    private int currentIndex = 0;
+
+    private enum TypesEnum {
+        Undefined, ACollection, AnIterator, AnEnumeration, AMap, AString
+    }
+
+    ;
     private TypesEnum type = TypesEnum.Undefined;
 
     /**
      * Constructor specifying the expression to access.
      * If the expression evaluates to a String, then it will be split using the specified delimiters.
-     * @param orig the original expression to be accessed
+     *
+     * @param orig   the original expression to be accessed
      * @param delims delimiters to be used to split a String result
      */
     public IteratedExpression(ValueExpression orig, String delims) {
@@ -57,36 +63,36 @@ public final class IteratedExpression {
      * Iterates the original expression and returns the value at the index.
      *
      * @param context against which the expression should be evaluated
-     * @param i the index of the value to return
+     * @param i       the index of the value to return
      * @return the value at the index
      */
     public Object getItem(ELContext context, int i) {
         if (originalListObject == null) {
             originalListObject = orig.getValue(context);
-            if (originalListObject instanceof Collection){
-                type=TypesEnum.ACollection;
+            if (originalListObject instanceof Collection) {
+                type = TypesEnum.ACollection;
             } else if (originalListObject instanceof Iterator) {
-                type=TypesEnum.AnIterator;
+                type = TypesEnum.AnIterator;
             } else if (originalListObject instanceof Enumeration) {
-                type=TypesEnum.AnEnumeration;
+                type = TypesEnum.AnEnumeration;
             } else if (originalListObject instanceof Map) {
-                type=TypesEnum.AMap;
+                type = TypesEnum.AMap;
             } else if (originalListObject instanceof String) { //StringTokens
-                type=TypesEnum.AString;
+                type = TypesEnum.AString;
             } else {
                 //it's of some other type ... should never get here
                 throw new RuntimeException("IteratedExpression.getItem: Object not of correct type.");
             }
             currentListObject = returnNewIterator(originalListObject, type);
         }
-        Object currentObject=null;
-        if (i<currentIndex) {
+        Object currentObject = null;
+        if (i < currentIndex) {
             currentListObject = returnNewIterator(originalListObject, type);
             currentIndex = 0;
-        } 
-        for (;currentIndex<=i;currentIndex++) {
+        }
+        for (; currentIndex <= i; currentIndex++) {
             if (currentListObject.hasNext()) {
-                currentObject= currentListObject.next();
+                currentObject = currentListObject.next();
             } else {
                 throw new RuntimeException("IteratedExpression.getItem: Index out of Bounds");
             }
@@ -106,52 +112,52 @@ public final class IteratedExpression {
     private Iterator returnNewIterator(Object o, TypesEnum type) {
         Iterator i = null;
         switch (type) {
-        case ACollection: 
-            i = ((Collection)o).iterator();
-            break;
-        case AnIterator: 
-            if (currentListObject==null) {
-                //first time through ... need to create Vector for originalListObject
-                Vector v = new Vector();
-                Iterator myI = (Iterator)o;
-                while (myI.hasNext()) {
-                    v.add(myI.next());
+            case ACollection:
+                i = ((Collection) o).iterator();
+                break;
+            case AnIterator:
+                if (currentListObject == null) {
+                    //first time through ... need to create Vector for originalListObject
+                    Vector v = new Vector();
+                    Iterator myI = (Iterator) o;
+                    while (myI.hasNext()) {
+                        v.add(myI.next());
+                    }
+                    originalListObject = v;
                 }
-                originalListObject = v;
-            }
-            i = ((Vector)originalListObject).iterator();
-            break;
-        case AnEnumeration: 
-            if (currentListObject==null) {
-                //first time through ... need to create Vector for originalListObject
-                Vector v = new Vector();
-                Enumeration myE = (Enumeration)o;
-                while (myE.hasMoreElements()) {
-                    v.add(myE.nextElement());
+                i = ((Vector) originalListObject).iterator();
+                break;
+            case AnEnumeration:
+                if (currentListObject == null) {
+                    //first time through ... need to create Vector for originalListObject
+                    Vector v = new Vector();
+                    Enumeration myE = (Enumeration) o;
+                    while (myE.hasMoreElements()) {
+                        v.add(myE.nextElement());
+                    }
+                    originalListObject = v;
                 }
-                originalListObject = v;
-            }
-            i = ((Vector)originalListObject).iterator();
-            break;
-        case AMap: 
-            Set s = ((Map)o).entrySet();
-            i = s.iterator();
-            break;
-        case AString: 
-            if (currentListObject==null) {
-                //first time through ... need to create Vector for originalListObject
-                Vector v = new Vector();
-                StringTokenizer st = new StringTokenizer((String)o, delims);
-                while (st.hasMoreElements()) {
-                    v.add(st.nextElement());
+                i = ((Vector) originalListObject).iterator();
+                break;
+            case AMap:
+                Set s = ((Map) o).entrySet();
+                i = s.iterator();
+                break;
+            case AString:
+                if (currentListObject == null) {
+                    //first time through ... need to create Vector for originalListObject
+                    Vector v = new Vector();
+                    StringTokenizer st = new StringTokenizer((String) o, delims);
+                    while (st.hasMoreElements()) {
+                        v.add(st.nextElement());
+                    }
+                    originalListObject = v;
                 }
-                originalListObject = v;
-            }
-            i = ((Vector)originalListObject).iterator();
-            break;
-        default: //do Nothing ... this is not possible 
-            break;
+                i = ((Vector) originalListObject).iterator();
+                break;
+            default: //do Nothing ... this is not possible
+                break;
         }
-        return i;        
+        return i;
     }
 }

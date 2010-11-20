@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package javax.servlet.jsp.jstl.core;
 
@@ -25,7 +25,7 @@ package javax.servlet.jsp.jstl.core;
  * either the first or last in the iteration.  It also lets authors
  * use the status object to obtain information about the iteration range,
  * step, and current object.</p>
- *
+ * <p/>
  * <p>Environments that require more status can extend this interface.</p>
  *
  * @author Shawn Bayern
@@ -59,7 +59,7 @@ public interface LoopTagStatus {
      * count is a relative, 1-based sequence number identifying the
      * current "round" of iteration (in context with all rounds the
      * current iteration will perform).</p>
-     *
+     * <p/>
      * <p>As an example, an iteration with begin = 5, end = 15, and step =
      * 5 produces the counts 1, 2, and 3 in that order.</p>
      *
@@ -74,9 +74,9 @@ public interface LoopTagStatus {
      * index of the current 'item' in the context of its underlying
      * collection.  It is always that case that a true result from
      * isFirst() implies getCount() == 1.
-     * 
+     *
      * @return <tt>true</tt> if the current round is the first in the
-     * iteration, <tt>false</tt> otherwise.
+     *         iteration, <tt>false</tt> otherwise.
      */
     public boolean isFirst();
 
@@ -87,9 +87,9 @@ public interface LoopTagStatus {
      * status of the underlying Iterator; it refers to whether or not
      * the current round will be the final round of iteration for the
      * tag associated with this LoopTagStatus.
-     * 
+     *
      * @return <tt>true</tt> if the current round is the last in the
-     * iteration, <tt>false</tt> otherwise.
+     *         iteration, <tt>false</tt> otherwise.
      */
     public boolean isLast();
 
@@ -98,7 +98,7 @@ public interface LoopTagStatus {
      * or null if no 'begin' attribute was specified.
      *
      * @return the 'begin' value for the associated tag, or null
-     * if no 'begin' attribute was specified
+     *         if no 'begin' attribute was specified
      */
     public Integer getBegin();
 
@@ -107,7 +107,7 @@ public interface LoopTagStatus {
      * or null if no 'end' attribute was specified.
      *
      * @return the 'end' value for the associated tag, or null
-     * if no 'end' attribute was specified
+     *         if no 'end' attribute was specified
      */
     public Integer getEnd();
 
@@ -116,7 +116,7 @@ public interface LoopTagStatus {
      * or null if no 'step' attribute was specified.
      *
      * @return the 'step' value for the associated tag, or null
-     * if no 'step' attribute was specified
+     *         if no 'step' attribute was specified
      */
     public Integer getStep();
 
