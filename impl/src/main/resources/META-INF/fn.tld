@@ -102,8 +102,7 @@
         </description>
         <name>replace</name>
         <function-class>org.apache.taglibs.standard.functions.Functions</function-class>
-        <function-signature>java.lang.String replace(java.lang.String, java.lang.String, java.lang.String)
-        </function-signature>
+        <function-signature>java.lang.String replace(java.lang.String, java.lang.String, java.lang.String)</function-signature>
         <example>
             ${fn:replace(text, "-", "&#149;")}
         </example>
