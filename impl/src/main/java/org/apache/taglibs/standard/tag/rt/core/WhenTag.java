@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.core;
 
@@ -31,12 +31,14 @@ public class WhenTag extends WhenTagSupport {
     // Constructor and lifecycle management
 
     // initialize inherited and local state
+
     public WhenTag() {
         super();
         init();
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
         super.release();
@@ -63,6 +65,7 @@ public class WhenTag extends WhenTagSupport {
     // Accessors
 
     // receives the tag's 'test' attribute
+
     public void setTest(boolean test) {
         this.test = test;
     }
@@ -72,6 +75,7 @@ public class WhenTag extends WhenTagSupport {
     // Private utility methods
 
     // resets internal state
+
     private void init() {
         test = false;
     }

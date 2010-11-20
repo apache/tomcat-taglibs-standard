@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
@@ -34,11 +34,13 @@ public class SetLocaleTag extends SetLocaleSupport {
     // Accessor methods
 
     // for tag attribute
+
     public void setValue(Object value) throws JspTagException {
         this.value = value;
     }
 
     // for tag attribute
+
     public void setVariant(String variant) throws JspTagException {
         this.variant = variant;
     }

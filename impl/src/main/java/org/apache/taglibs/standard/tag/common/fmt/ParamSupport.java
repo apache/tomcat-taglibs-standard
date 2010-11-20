@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
@@ -29,8 +29,8 @@ import org.apache.taglibs.standard.resources.Resources;
  * subtag in JSTL 1.0 which supplies an argument for parametric replacement
  * to its parent &lt;message&gt; tag.
  *
- * @see MessageSupport
  * @author Jan Luehe
+ * @see MessageSupport
  */
 
 public abstract class ParamSupport extends BodyTagSupport {
@@ -39,20 +39,20 @@ public abstract class ParamSupport extends BodyTagSupport {
     // Protected state
 
     protected Object value;                          // 'value' attribute
-    protected boolean valueSpecified;	             // status
+    protected boolean valueSpecified;                 // status
 
 
     //*********************************************************************
     // Constructor and initialization
 
     public ParamSupport() {
-	super();
-	init();
+        super();
+        init();
     }
 
     private void init() {
-	value = null;
-	valueSpecified = false;
+        value = null;
+        valueSpecified = false;
     }
 
 
@@ -60,38 +60,40 @@ public abstract class ParamSupport extends BodyTagSupport {
     // Tag logic
 
     // Supply our value to our parent <fmt:message> tag
+
     @Override
     public int doEndTag() throws JspException {
-	Tag t = findAncestorWithClass(this, MessageSupport.class);
-	if (t == null) {
-	    throw new JspTagException(Resources.getMessage(
-                            "PARAM_OUTSIDE_MESSAGE"));
-	}
-	MessageSupport parent = (MessageSupport) t;
+        Tag t = findAncestorWithClass(this, MessageSupport.class);
+        if (t == null) {
+            throw new JspTagException(Resources.getMessage(
+                    "PARAM_OUTSIDE_MESSAGE"));
+        }
+        MessageSupport parent = (MessageSupport) t;
 
-	/*
-	 * Get argument from 'value' attribute or body, as appropriate, and
-	 * add it to enclosing <fmt:message> tag, even if it is null or equal
-	 * to "".
-	 */
-	Object input = null;
+        /*
+       * Get argument from 'value' attribute or body, as appropriate, and
+       * add it to enclosing <fmt:message> tag, even if it is null or equal
+       * to "".
+       */
+        Object input = null;
         // determine the input by...
-	if (valueSpecified) {
-	    // ... reading 'value' attribute
-	    input = value;
-	} else {
-	    // ... retrieving and trimming our body (TLV has ensured that it's
-	    // non-empty)
-	    input = bodyContent.getString().trim();
-	}
-	parent.addParam(input);
+        if (valueSpecified) {
+            // ... reading 'value' attribute
+            input = value;
+        } else {
+            // ... retrieving and trimming our body (TLV has ensured that it's
+            // non-empty)
+            input = bodyContent.getString().trim();
+        }
+        parent.addParam(input);
 
-	return EVAL_PAGE;
+        return EVAL_PAGE;
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
     }
 }

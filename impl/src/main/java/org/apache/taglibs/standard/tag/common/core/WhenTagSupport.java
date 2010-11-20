@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
 
@@ -29,18 +29,17 @@ import org.apache.taglibs.standard.resources.Resources;
  * implementation of &lt;when&gt;-style tags in both the rtexprvalue
  * and expression-evaluating libraries.  It also supports
  * &lt;otherwise&gt;.</p>
- *
+ * <p/>
  * <p>In particular, this base class does the following:</p>
- * 
+ * <p/>
  * <ul>
- *  <li> overrides ConditionalTagSupport.doStartTag() to implement the
- *       appropriate semantics of subtags of &lt;choose&gt; </li>
+ * <li> overrides ConditionalTagSupport.doStartTag() to implement the
+ * appropriate semantics of subtags of &lt;choose&gt; </li>
  * </ul>
  *
  * @author Shawn Bayern
  */
-public abstract class WhenTagSupport extends ConditionalTagSupport
-{
+public abstract class WhenTagSupport extends ConditionalTagSupport {
     //*********************************************************************
     // Implementation of exclusive-conditional behavior
 
@@ -49,25 +48,29 @@ public abstract class WhenTagSupport extends ConditionalTagSupport
      * ChooseTag wants it to do so.  The condition will not even be
      * evaluated if ChooseTag instructs us not to run.
      */
+
     @Override
     public int doStartTag() throws JspException {
 
         Tag parent;
 
         // make sure we're contained properly
-        if (!((parent = getParent()) instanceof ChooseTag))
+        if (!((parent = getParent()) instanceof ChooseTag)) {
             throw new JspTagException(
-		Resources.getMessage("WHEN_OUTSIDE_CHOOSE"));
+                    Resources.getMessage("WHEN_OUTSIDE_CHOOSE"));
+        }
 
         // make sure our parent wants us to continue
-        if (!((ChooseTag) parent).gainPermission())
-            return SKIP_BODY;                   // we've been reeled in
+        if (!((ChooseTag) parent).gainPermission()) {
+            return SKIP_BODY;
+        }                   // we've been reeled in
 
         // handle conditional behavior
         if (condition()) {
             ((ChooseTag) parent).subtagSucceeded();
             return EVAL_BODY_INCLUDE;
-        } else
+        } else {
             return SKIP_BODY;
+        }
     }
 }

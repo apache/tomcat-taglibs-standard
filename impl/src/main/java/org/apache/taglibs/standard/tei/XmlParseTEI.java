@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tei;
 
@@ -35,19 +35,23 @@ public class XmlParseTEI extends TagExtraInfo {
 
     @Override
     public boolean isValid(TagData us) {
-	// must have no more than one of VAR and VAR_DOM ...
-	if (Util.isSpecified(us, VAR) && Util.isSpecified(us, VAR_DOM))
-	    return false;
+        // must have no more than one of VAR and VAR_DOM ...
+        if (Util.isSpecified(us, VAR) && Util.isSpecified(us, VAR_DOM)) {
+            return false;
+        }
 
-	// ... and must have no less than one of VAR and VAR_DOM
-	if (!(Util.isSpecified(us, VAR) || Util.isSpecified(us, VAR_DOM)))
-	    return false;
+        // ... and must have no less than one of VAR and VAR_DOM
+        if (!(Util.isSpecified(us, VAR) || Util.isSpecified(us, VAR_DOM))) {
+            return false;
+        }
 
-	// When either 'scope' is specified, its 'var' must be specified
-	if (Util.isSpecified(us, SCOPE) && !Util.isSpecified(us, VAR))
-	    return false;
-	if (Util.isSpecified(us, SCOPE_DOM) && !Util.isSpecified(us, VAR_DOM))
-	    return false;
+        // When either 'scope' is specified, its 'var' must be specified
+        if (Util.isSpecified(us, SCOPE) && !Util.isSpecified(us, VAR)) {
+            return false;
+        }
+        if (Util.isSpecified(us, SCOPE_DOM) && !Util.isSpecified(us, VAR_DOM)) {
+            return false;
+        }
 
         return true;
     }

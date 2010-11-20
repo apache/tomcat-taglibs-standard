@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
@@ -34,7 +34,7 @@ import org.apache.taglibs.standard.tag.common.core.Util;
 
 public abstract class SetBundleSupport extends TagSupport {
 
-    
+
     //*********************************************************************
     // Protected state
 
@@ -52,13 +52,13 @@ public abstract class SetBundleSupport extends TagSupport {
     // Constructor and initialization
 
     public SetBundleSupport() {
-	super();
-	init();
+        super();
+        init();
     }
 
     private void init() {
-	basename = null;
-	scope = PageContext.PAGE_SCOPE;
+        basename = null;
+        scope = PageContext.PAGE_SCOPE;
     }
 
 
@@ -70,7 +70,7 @@ public abstract class SetBundleSupport extends TagSupport {
     }
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
+        this.scope = Util.getScope(scope);
     }
 
 
@@ -79,22 +79,23 @@ public abstract class SetBundleSupport extends TagSupport {
 
     @Override
     public int doEndTag() throws JspException {
-	LocalizationContext locCtxt =
-	    BundleSupport.getLocalizationContext(pageContext, basename);
+        LocalizationContext locCtxt =
+                BundleSupport.getLocalizationContext(pageContext, basename);
 
-	if (var != null) {
-	    pageContext.setAttribute(var, locCtxt, scope);
-	} else {
-	    Config.set(pageContext, Config.FMT_LOCALIZATION_CONTEXT, locCtxt,
-		       scope);
-	}
+        if (var != null) {
+            pageContext.setAttribute(var, locCtxt, scope);
+        } else {
+            Config.set(pageContext, Config.FMT_LOCALIZATION_CONTEXT, locCtxt,
+                    scope);
+        }
 
-	return EVAL_PAGE;
+        return EVAL_PAGE;
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
     }
 }

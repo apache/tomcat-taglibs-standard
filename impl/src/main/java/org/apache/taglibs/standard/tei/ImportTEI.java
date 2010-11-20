@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tei;
 
@@ -33,9 +33,10 @@ public class ImportTEI extends TagExtraInfo {
 
     @Override
     public boolean isValid(TagData us) {
-	// don't allow both VAR and VAR_READER, together
-	if (Util.isSpecified(us, VAR) && Util.isSpecified(us, VAR_READER))
-	    return false;
+        // don't allow both VAR and VAR_READER, together
+        if (Util.isSpecified(us, VAR) && Util.isSpecified(us, VAR_READER)) {
+            return false;
+        }
 
         return true;
     }

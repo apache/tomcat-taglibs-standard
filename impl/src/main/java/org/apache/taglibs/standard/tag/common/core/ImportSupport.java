@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
 
@@ -56,60 +56,63 @@ import org.apache.taglibs.standard.resources.Resources;
  * @author Shawn Bayern
  */
 
-public abstract class ImportSupport extends BodyTagSupport 
+public abstract class ImportSupport extends BodyTagSupport
         implements TryCatchFinally, ParamParent {
 
     //*********************************************************************
     // Public constants
-    
-    /** <p>Valid characters in a scheme.</p>
-     *  <p>RFC 1738 says the following:</p>
-     *  <blockquote>
-     *   Scheme names consist of a sequence of characters. The lower
-     *   case letters "a"--"z", digits, and the characters plus ("+"),
-     *   period ("."), and hyphen ("-") are allowed. For resiliency,
-     *   programs interpreting URLs should treat upper case letters as
-     *   equivalent to lower case in scheme names (e.g., allow "HTTP" as
-     *   well as "http").
-     *  </blockquote>
+
+    /**
+     * <p>Valid characters in a scheme.</p>
+     * <p>RFC 1738 says the following:</p>
+     * <blockquote>
+     * Scheme names consist of a sequence of characters. The lower
+     * case letters "a"--"z", digits, and the characters plus ("+"),
+     * period ("."), and hyphen ("-") are allowed. For resiliency,
+     * programs interpreting URLs should treat upper case letters as
+     * equivalent to lower case in scheme names (e.g., allow "HTTP" as
+     * well as "http").
+     * </blockquote>
      * <p>We treat as absolute any URL that begins with such a scheme name,
      * followed by a colon.</p>
      */
     public static final String VALID_SCHEME_CHARS =
-	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+.-";
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+.-";
 
-    /** Default character encoding for response. */
+    /**
+     * Default character encoding for response.
+     */
     public static final String DEFAULT_ENCODING = "ISO-8859-1";
 
     //*********************************************************************
     // Protected state
 
     protected String url;                         // 'url' attribute
-    protected String context;			  // 'context' attribute
+    protected String context;              // 'context' attribute
     protected String charEncoding;                // 'charEncoding' attrib.
 
     //*********************************************************************
     // Private state (implementation details)
 
     private String var;                 // 'var' attribute
-    private int scope;			// processed 'scope' attribute
+    private int scope;            // processed 'scope' attribute
     private String varReader;           // 'varReader' attribute
-    private Reader r;	 		// exposed reader, if relevant
-    private boolean isAbsoluteUrl;	// is our URL absolute?
+    private Reader r;             // exposed reader, if relevant
+    private boolean isAbsoluteUrl;    // is our URL absolute?
     private ParamSupport.ParamManager params;    // parameters
-    private String urlWithParams;	// URL with parameters, if applicable
+    private String urlWithParams;    // URL with parameters, if applicable
 
     //*********************************************************************
     // Constructor and initialization
 
     public ImportSupport() {
-	super();
-	init();
+        super();
+        init();
     }
 
     private void init() {
-	url = var = varReader = context = charEncoding = urlWithParams = null;
-	params = null;
+        url = var = varReader = context = charEncoding = urlWithParams = null;
+        params = null;
         scope = PageContext.PAGE_SCOPE;
     }
 
@@ -118,82 +121,91 @@ public abstract class ImportSupport extends BodyTagSupport
     // Tag logic
 
     // determines what kind of import and variable exposure to perform 
+
     @Override
     public int doStartTag() throws JspException {
-	// Sanity check
-	if (context != null
-	        && (!context.startsWith("/") || !url.startsWith("/"))) {
-	    throw new JspTagException(
-		Resources.getMessage("IMPORT_BAD_RELATIVE"));
-	}
+        // Sanity check
+        if (context != null
+                && (!context.startsWith("/") || !url.startsWith("/"))) {
+            throw new JspTagException(
+                    Resources.getMessage("IMPORT_BAD_RELATIVE"));
+        }
 
-	// reset parameter-related state
-	urlWithParams = null;
-	params = new ParamSupport.ParamManager();
+        // reset parameter-related state
+        urlWithParams = null;
+        params = new ParamSupport.ParamManager();
 
-	// check the URL
-	if (url == null || url.equals(""))
-	    throw new NullAttributeException("import", "url");
+        // check the URL
+        if (url == null || url.equals("")) {
+            throw new NullAttributeException("import", "url");
+        }
 
-	// Record whether our URL is absolute or relative
-	isAbsoluteUrl = isAbsoluteUrl();
+        // Record whether our URL is absolute or relative
+        isAbsoluteUrl = isAbsoluteUrl();
 
-	try {
-	    // If we need to expose a Reader, we've got to do it right away
-	    if  (varReader != null) {
-	        r = acquireReader();
-	        pageContext.setAttribute(varReader, r);
-	    }
-	} catch (IOException ex) {
-	    throw new JspTagException(ex.toString(), ex);
-	}
+        try {
+            // If we need to expose a Reader, we've got to do it right away
+            if (varReader != null) {
+                r = acquireReader();
+                pageContext.setAttribute(varReader, r);
+            }
+        } catch (IOException ex) {
+            throw new JspTagException(ex.toString(), ex);
+        }
 
-	return EVAL_BODY_INCLUDE;
+        return EVAL_BODY_INCLUDE;
     }
 
     // manages connections as necessary (creating or destroying)
+
     @Override
     public int doEndTag() throws JspException {
         try {
-	    // If we didn't expose a Reader earlier...
-	    if (varReader == null) {
-	        // ... store it in 'var', if available ...
-	        if (var != null)
-	            pageContext.setAttribute(var, acquireString(), scope);
+            // If we didn't expose a Reader earlier...
+            if (varReader == null) {
+                // ... store it in 'var', if available ...
+                if (var != null) {
+                    pageContext.setAttribute(var, acquireString(), scope);
+                }
                 // ... or simply output it, if we have nowhere to expose it
-	        else
-	            pageContext.getOut().print(acquireString());
-	    }
-	    return EVAL_PAGE;
+                else {
+                    pageContext.getOut().print(acquireString());
+                }
+            }
+            return EVAL_PAGE;
         } catch (IOException ex) {
-	    throw new JspTagException(ex.toString(), ex);
+            throw new JspTagException(ex.toString(), ex);
         }
     }
 
     // simply rethrows its exception
+
     public void doCatch(Throwable t) throws Throwable {
-	throw t;
+        throw t;
     }
 
     // cleans up if appropriate
-    public void doFinally() { 
+
+    public void doFinally() {
         try {
-	    // If we exposed a Reader in doStartTag(), close it.
-	    if (varReader != null) {
-		// 'r' can be null if an exception was thrown...
-	        if (r != null)
-		    r.close();
-		pageContext.removeAttribute(varReader, PageContext.PAGE_SCOPE);
-	    }
+            // If we exposed a Reader in doStartTag(), close it.
+            if (varReader != null) {
+                // 'r' can be null if an exception was thrown...
+                if (r != null) {
+                    r.close();
+                }
+                pageContext.removeAttribute(varReader, PageContext.PAGE_SCOPE);
+            }
         } catch (IOException ex) {
-	    // ignore it; close() failed, but there's nothing more we can do
+            // ignore it; close() failed, but there's nothing more we can do
         }
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
         super.release();
     }
 
@@ -201,15 +213,15 @@ public abstract class ImportSupport extends BodyTagSupport
     // Tag attributes known at translation time
 
     public void setVar(String var) {
-	this.var = var;
+        this.var = var;
     }
 
     public void setVarReader(String varReader) {
-	this.varReader = varReader;
+        this.varReader = varReader;
     }
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
+        this.scope = Util.getScope(scope);
     }
 
 
@@ -217,8 +229,9 @@ public abstract class ImportSupport extends BodyTagSupport
     // Collaboration with subtags
 
     // inherit Javadoc
+
     public void addParameter(String name, String value) {
-	params.addParameter(name, value);
+        params.addParameter(name, value);
     }
 
     //*********************************************************************
@@ -241,118 +254,124 @@ public abstract class ImportSupport extends BodyTagSupport
      */
 
     private String acquireString() throws IOException, JspException {
-	if (isAbsoluteUrl) {
-	    // for absolute URLs, delegate to our peer
-	    BufferedReader r = new BufferedReader(acquireReader());
-	    StringBuffer sb = new StringBuffer();
-	    int i;
+        if (isAbsoluteUrl) {
+            // for absolute URLs, delegate to our peer
+            BufferedReader r = new BufferedReader(acquireReader());
+            StringBuffer sb = new StringBuffer();
+            int i;
 
-	    // under JIT, testing seems to show this simple loop is as fast
-	    // as any of the alternatives
-	    while ((i = r.read()) != -1)
-	        sb.append((char)i);
+            // under JIT, testing seems to show this simple loop is as fast
+            // as any of the alternatives
+            while ((i = r.read()) != -1) {
+                sb.append((char) i);
+            }
 
-	    return sb.toString();
-	} else { 
-	    // handle relative URLs ourselves
+            return sb.toString();
+        } else {
+            // handle relative URLs ourselves
 
-	    // URL is relative, so we must be an HTTP request
-	    if (!(pageContext.getRequest() instanceof HttpServletRequest
-		  && pageContext.getResponse() instanceof HttpServletResponse))
-		throw new JspTagException(
-		    Resources.getMessage("IMPORT_REL_WITHOUT_HTTP"));
+            // URL is relative, so we must be an HTTP request
+            if (!(pageContext.getRequest() instanceof HttpServletRequest
+                    && pageContext.getResponse() instanceof HttpServletResponse)) {
+                throw new JspTagException(
+                        Resources.getMessage("IMPORT_REL_WITHOUT_HTTP"));
+            }
 
-	    // retrieve an appropriate ServletContext
-	    ServletContext c = null;
-	    String targetUrl = targetUrl();
-	    if (context != null)
-	        c = pageContext.getServletContext().getContext(context);
-	    else {
-	        c = pageContext.getServletContext();
+            // retrieve an appropriate ServletContext
+            ServletContext c = null;
+            String targetUrl = targetUrl();
+            if (context != null) {
+                c = pageContext.getServletContext().getContext(context);
+            } else {
+                c = pageContext.getServletContext();
 
-		// normalize the URL if we have an HttpServletRequest
-		if (!targetUrl.startsWith("/")) {
-		    String sp = ((HttpServletRequest) 
-			pageContext.getRequest()).getServletPath();
-		    targetUrl = sp.substring(0, sp.lastIndexOf('/'))
-			+ '/' + targetUrl;
-		}
-	    }
+                // normalize the URL if we have an HttpServletRequest
+                if (!targetUrl.startsWith("/")) {
+                    String sp = ((HttpServletRequest)
+                            pageContext.getRequest()).getServletPath();
+                    targetUrl = sp.substring(0, sp.lastIndexOf('/'))
+                            + '/' + targetUrl;
+                }
+            }
 
             if (c == null) {
                 throw new JspTagException(
-                    Resources.getMessage(
-                        "IMPORT_REL_WITHOUT_DISPATCHER", context, targetUrl));
+                        Resources.getMessage(
+                                "IMPORT_REL_WITHOUT_DISPATCHER", context, targetUrl));
             }
 
-	    // from this context, get a dispatcher
-	    RequestDispatcher rd =
-                c.getRequestDispatcher(stripSession(targetUrl));
-	    if (rd == null)
-		throw new JspTagException(stripSession(targetUrl));
+            // from this context, get a dispatcher
+            RequestDispatcher rd =
+                    c.getRequestDispatcher(stripSession(targetUrl));
+            if (rd == null) {
+                throw new JspTagException(stripSession(targetUrl));
+            }
 
-	    // include the resource, using our custom wrapper
-	    ImportResponseWrapper irw = 
-		new ImportResponseWrapper(
-		    (HttpServletResponse) pageContext.getResponse());
+            // include the resource, using our custom wrapper
+            ImportResponseWrapper irw =
+                    new ImportResponseWrapper(
+                            (HttpServletResponse) pageContext.getResponse());
 
-            ImportRequestWrapper wrappedRequest = 
-		new ImportRequestWrapper(
-		    (HttpServletRequest) pageContext.getRequest());
+            ImportRequestWrapper wrappedRequest =
+                    new ImportRequestWrapper(
+                            (HttpServletRequest) pageContext.getRequest());
 
-	    // spec mandates specific error handling form include()
-	    try {
-	        rd.include(wrappedRequest, irw);
-	    } catch (IOException ex) {
-		throw new JspException(ex);
-	    } catch (RuntimeException ex) {
-		throw new JspException(ex);
-	    } catch (ServletException ex) {
-		Throwable rc = ex.getRootCause();
-        while (rc instanceof ServletException) {
-            rc = ((ServletException) rc).getRootCause();
+            // spec mandates specific error handling form include()
+            try {
+                rd.include(wrappedRequest, irw);
+            } catch (IOException ex) {
+                throw new JspException(ex);
+            } catch (RuntimeException ex) {
+                throw new JspException(ex);
+            } catch (ServletException ex) {
+                Throwable rc = ex.getRootCause();
+                while (rc instanceof ServletException) {
+                    rc = ((ServletException) rc).getRootCause();
+                }
+                if (rc == null) {
+                    throw new JspException(ex);
+                } else {
+                    throw new JspException(rc);
+                }
+            }
+
+            // disallow inappropriate response codes per JSTL spec
+            if (irw.getStatus() < 200 || irw.getStatus() > 299) {
+                throw new JspTagException(irw.getStatus() + " " +
+                        stripSession(targetUrl));
+            }
+
+            // recover the response String from our wrapper
+            return irw.getString();
         }
-		if (rc == null)
-		    throw new JspException(ex);
-		else
-		    throw new JspException(rc);
-	    }
-
-	    // disallow inappropriate response codes per JSTL spec
-	    if (irw.getStatus() < 200 || irw.getStatus() > 299) {
-		throw new JspTagException(irw.getStatus() + " " +
-		    stripSession(targetUrl));
-	    }
-
-	    // recover the response String from our wrapper
-	    return irw.getString();
-	}
     }
 
     private Reader acquireReader() throws IOException, JspException {
-	if (!isAbsoluteUrl) {
-	    // for relative URLs, delegate to our peer
-	    return new StringReader(acquireString());
-	} else {
+        if (!isAbsoluteUrl) {
+            // for relative URLs, delegate to our peer
+            return new StringReader(acquireString());
+        } else {
             // absolute URL
             String target = targetUrl();
-	    try {
-	        // handle absolute URLs ourselves, using java.net.URL
-	        URL u = new URL(target);
+            try {
+                // handle absolute URLs ourselves, using java.net.URL
+                URL u = new URL(target);
                 URLConnection uc = u.openConnection();
                 InputStream i = uc.getInputStream();
 
-	        // okay, we've got a stream; encode it appropriately
-	        Reader r = null;
-                String charSet; 
-	        if (charEncoding != null && !charEncoding.equals("")) {
+                // okay, we've got a stream; encode it appropriately
+                Reader r = null;
+                String charSet;
+                if (charEncoding != null && !charEncoding.equals("")) {
                     charSet = charEncoding;
                 } else {
                     // charSet extracted according to RFC 2045, section 5.1
-		    String contentType = uc.getContentType();
-		    if (contentType != null) {
+                    String contentType = uc.getContentType();
+                    if (contentType != null) {
                         charSet = Util.getContentTypeAttribute(contentType, "charset");
-                        if (charSet == null) charSet = DEFAULT_ENCODING;
+                        if (charSet == null) {
+                            charSet = DEFAULT_ENCODING;
+                        }
                     } else {
                         charSet = DEFAULT_ENCODING;
                     }
@@ -363,32 +382,35 @@ public abstract class ImportSupport extends BodyTagSupport
                     r = new InputStreamReader(i, DEFAULT_ENCODING);
                 }
 
-		// check response code for HTTP URLs before returning, per spec,
-		// before returning
-		if (uc instanceof HttpURLConnection) {
-		    int status = ((HttpURLConnection) uc).getResponseCode();
-		    if (status < 200 || status > 299)
-			throw new JspTagException(status + " " + target);
-		}
+                // check response code for HTTP URLs before returning, per spec,
+                // before returning
+                if (uc instanceof HttpURLConnection) {
+                    int status = ((HttpURLConnection) uc).getResponseCode();
+                    if (status < 200 || status > 299) {
+                        throw new JspTagException(status + " " + target);
+                    }
+                }
 
-	        return r;
-	    } catch (IOException ex) {
-		throw new JspException(
-                    Resources.getMessage("IMPORT_ABS_ERROR", target, ex), ex);
-	    } catch (RuntimeException ex) {  // because the spec makes us
-		throw new JspException(
-                    Resources.getMessage("IMPORT_ABS_ERROR", target, ex), ex);
-	    }
-	}
+                return r;
+            } catch (IOException ex) {
+                throw new JspException(
+                        Resources.getMessage("IMPORT_ABS_ERROR", target, ex), ex);
+            } catch (RuntimeException ex) {  // because the spec makes us
+                throw new JspException(
+                        Resources.getMessage("IMPORT_ABS_ERROR", target, ex), ex);
+            }
+        }
     }
 
-    /** Wraps requests to allow us to enforce the method to be GET */
+    /**
+     * Wraps requests to allow us to enforce the method to be GET
+     */
     private class ImportRequestWrapper extends HttpServletRequestWrapper {
 
         public ImportRequestWrapper(HttpServletRequest request) {
             super(request);
         }
-        
+
         @Override
         public String getMethod() {
             return "GET";
@@ -396,134 +418,165 @@ public abstract class ImportSupport extends BodyTagSupport
 
     }
 
-    /** Wraps responses to allow us to retrieve results as Strings. */
+    /**
+     * Wraps responses to allow us to retrieve results as Strings.
+     */
     private class ImportResponseWrapper extends HttpServletResponseWrapper {
 
-	//************************************************************
-	// Overview
+        //************************************************************
+        // Overview
 
-	/*
-	 * We provide either a Writer or an OutputStream as requested.
-	 * We actually have a true Writer and an OutputStream backing
-	 * both, since we don't want to use a character encoding both
-	 * ways (Writer -> OutputStream -> Writer).  So we use no
-	 * encoding at all (as none is relevant) when the target resource
-	 * uses a Writer.  And we decode the OutputStream's bytes
-	 * using OUR tag's 'charEncoding' attribute, or ISO-8859-1
-	 * as the default.  We thus ignore setLocale() and setContentType()
-	 * in this wrapper.
-	 *
-	 * In other words, the target's asserted encoding is used
-	 * to convert from a Writer to an OutputStream, which is typically
-	 * the medium through with the target will communicate its
-	 * ultimate response.  Since we short-circuit that mechanism
-	 * and read the target's characters directly if they're offered
-	 * as such, we simply ignore the target's encoding assertion.
-	 */
+        /*
+       * We provide either a Writer or an OutputStream as requested.
+       * We actually have a true Writer and an OutputStream backing
+       * both, since we don't want to use a character encoding both
+       * ways (Writer -> OutputStream -> Writer).  So we use no
+       * encoding at all (as none is relevant) when the target resource
+       * uses a Writer.  And we decode the OutputStream's bytes
+       * using OUR tag's 'charEncoding' attribute, or ISO-8859-1
+       * as the default.  We thus ignore setLocale() and setContentType()
+       * in this wrapper.
+       *
+       * In other words, the target's asserted encoding is used
+       * to convert from a Writer to an OutputStream, which is typically
+       * the medium through with the target will communicate its
+       * ultimate response.  Since we short-circuit that mechanism
+       * and read the target's characters directly if they're offered
+       * as such, we simply ignore the target's encoding assertion.
+       */
 
-	//************************************************************
-	// Data
+        //************************************************************
+        // Data
 
-	/** The Writer we convey. */
-	private StringWriter sw = new StringWriter();
-
-	/** A buffer, alternatively, to accumulate bytes. */
-	private ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-	/** A ServletOutputStream we convey, tied to this Writer. */
-	private ServletOutputStream sos = new ServletOutputStream() {
-	    @Override
-        public void write(int b) throws IOException {
-		bos.write(b);
-	    }
-	};
-
-	/** 'True' if getWriter() was called; false otherwise. */
-	private boolean isWriterUsed;
-
-	/** 'True if getOutputStream() was called; false otherwise. */
-	private boolean isStreamUsed;
-
-	/** The HTTP status set by the target. */
-	private int status = 200;
-	
-	//************************************************************
-	// Constructor and methods
-
-	/** Constructs a new ImportResponseWrapper. */
-	public ImportResponseWrapper(HttpServletResponse response) {
-	    super(response);
-	}
-	
-	/** Returns a Writer designed to buffer the output. */
-	@Override
-    public PrintWriter getWriter() {
-	    if (isStreamUsed)
-		throw new IllegalStateException(
-		    Resources.getMessage("IMPORT_ILLEGAL_STREAM"));
-	    isWriterUsed = true;
-	    return new PrintWriter(sw);
-	}
-	
-	/** Returns a ServletOutputStream designed to buffer the output. */
-	@Override
-    public ServletOutputStream getOutputStream() {
-	    if (isWriterUsed)
-		throw new IllegalStateException(
-		    Resources.getMessage("IMPORT_ILLEGAL_WRITER"));
-	    isStreamUsed = true;
-	    return sos;
-	}
-
-	/** Has no effect. */
-	@Override
-    public void setContentType(String x) {
-	    // ignore
-	}
-
-	/** Has no effect. */
-	@Override
-    public void setLocale(Locale x) {
-	    // ignore
-	}
-
-	@Override
-    public void setStatus(int status) {
-	    this.status = status;
-	}
-
-	public int getStatus() {
-	    return status;
-	}
-
-	/** 
-	 * Retrieves the buffered output, using the containing tag's 
-	 * 'charEncoding' attribute, or the tag's default encoding,
-	 * <b>if necessary</b>.
+        /**
+         * The Writer we convey.
          */
-	// not simply toString() because we need to throw
-	// UnsupportedEncodingException
-	public String getString() throws UnsupportedEncodingException {
-	    if (isWriterUsed)
-		return sw.toString();
-	    else if (isStreamUsed) {
-		if (charEncoding != null && !charEncoding.equals(""))
-		    return bos.toString(charEncoding);
-		else
-		    return bos.toString(DEFAULT_ENCODING);
-	    } else
-		return "";		// target didn't write anything
-	}
+        private StringWriter sw = new StringWriter();
+
+        /**
+         * A buffer, alternatively, to accumulate bytes.
+         */
+        private ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        /**
+         * A ServletOutputStream we convey, tied to this Writer.
+         */
+        private ServletOutputStream sos = new ServletOutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                bos.write(b);
+            }
+        };
+
+        /**
+         * 'True' if getWriter() was called; false otherwise.
+         */
+        private boolean isWriterUsed;
+
+        /**
+         * 'True if getOutputStream() was called; false otherwise.
+         */
+        private boolean isStreamUsed;
+
+        /**
+         * The HTTP status set by the target.
+         */
+        private int status = 200;
+
+        //************************************************************
+        // Constructor and methods
+
+        /**
+         * Constructs a new ImportResponseWrapper.
+         */
+        public ImportResponseWrapper(HttpServletResponse response) {
+            super(response);
+        }
+
+        /**
+         * Returns a Writer designed to buffer the output.
+         */
+        @Override
+        public PrintWriter getWriter() {
+            if (isStreamUsed) {
+                throw new IllegalStateException(
+                        Resources.getMessage("IMPORT_ILLEGAL_STREAM"));
+            }
+            isWriterUsed = true;
+            return new PrintWriter(sw);
+        }
+
+        /**
+         * Returns a ServletOutputStream designed to buffer the output.
+         */
+        @Override
+        public ServletOutputStream getOutputStream() {
+            if (isWriterUsed) {
+                throw new IllegalStateException(
+                        Resources.getMessage("IMPORT_ILLEGAL_WRITER"));
+            }
+            isStreamUsed = true;
+            return sos;
+        }
+
+        /**
+         * Has no effect.
+         */
+        @Override
+        public void setContentType(String x) {
+            // ignore
+        }
+
+        /**
+         * Has no effect.
+         */
+        @Override
+        public void setLocale(Locale x) {
+            // ignore
+        }
+
+        @Override
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        /**
+         * Retrieves the buffered output, using the containing tag's
+         * 'charEncoding' attribute, or the tag's default encoding,
+         * <b>if necessary</b>.
+         */
+        // not simply toString() because we need to throw
+        // UnsupportedEncodingException
+        public String getString() throws UnsupportedEncodingException {
+            if (isWriterUsed) {
+                return sw.toString();
+            } else if (isStreamUsed) {
+                if (charEncoding != null && !charEncoding.equals("")) {
+                    return bos.toString(charEncoding);
+                } else {
+                    return bos.toString(DEFAULT_ENCODING);
+                }
+            } else {
+                return "";
+            }        // target didn't write anything
+        }
     }
 
     //*********************************************************************
     // Some private utility methods
 
-    /** Returns our URL (potentially with parameters) */
+    /**
+     * Returns our URL (potentially with parameters)
+     */
     private String targetUrl() {
-	if (urlWithParams == null)
-	    urlWithParams = params.aggregateParams(url);
-	return urlWithParams;
+        if (urlWithParams == null) {
+            urlWithParams = params.aggregateParams(url);
+        }
+        return urlWithParams;
     }
 
     /**
@@ -543,23 +596,27 @@ public abstract class ImportSupport extends BodyTagSupport
      * <tt>false</tt> otherwise.
      */
     public static boolean isAbsoluteUrl(String url) {
-	// a null URL is not absolute, by our definition
-	if (url == null)
-	    return false;
+        // a null URL is not absolute, by our definition
+        if (url == null) {
+            return false;
+        }
 
-	// do a fast, simple check first
-	int colonPos;
-	if ((colonPos = url.indexOf(":")) == -1)
-	    return false;
+        // do a fast, simple check first
+        int colonPos;
+        if ((colonPos = url.indexOf(":")) == -1) {
+            return false;
+        }
 
-	// if we DO have a colon, make sure that every character
-	// leading up to it is a valid scheme character
-	for (int i = 0; i < colonPos; i++)
-	    if (VALID_SCHEME_CHARS.indexOf(url.charAt(i)) == -1)
-		return false;
+        // if we DO have a colon, make sure that every character
+        // leading up to it is a valid scheme character
+        for (int i = 0; i < colonPos; i++) {
+            if (VALID_SCHEME_CHARS.indexOf(url.charAt(i)) == -1) {
+                return false;
+            }
+        }
 
-	// if so, we've got an absolute url
-	return true;
+        // if so, we've got an absolute url
+        return true;
     }
 
     /**
@@ -569,14 +626,17 @@ public abstract class ImportSupport extends BodyTagSupport
      * and either EOS or a subsequent ';' (exclusive).
      */
     public static String stripSession(String url) {
-	StringBuffer u = new StringBuffer(url);
+        StringBuffer u = new StringBuffer(url);
         int sessionStart;
         while ((sessionStart = u.toString().indexOf(";jsessionid=")) != -1) {
             int sessionEnd = u.toString().indexOf(";", sessionStart + 1);
-            if (sessionEnd == -1)
-		sessionEnd = u.toString().indexOf("?", sessionStart + 1);
-	    if (sessionEnd == -1) 				// still
+            if (sessionEnd == -1) {
+                sessionEnd = u.toString().indexOf("?", sessionStart + 1);
+            }
+            if (sessionEnd == -1)                 // still
+            {
                 sessionEnd = u.length();
+            }
             u.delete(sessionStart, sessionEnd);
         }
         return u.toString();

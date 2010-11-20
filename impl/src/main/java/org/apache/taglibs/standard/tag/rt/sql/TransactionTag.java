@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 package org.apache.taglibs.standard.tag.rt.sql;
 
 import javax.servlet.jsp.JspException;
@@ -27,7 +27,7 @@ import org.apache.taglibs.standard.tag.common.sql.TransactionTagSupport;
  */
 public class TransactionTag extends TransactionTagSupport {
     private String isolationRT;
-    
+
     //*********************************************************************
     // Accessor methods
 
@@ -37,8 +37,8 @@ public class TransactionTag extends TransactionTagSupport {
      * a String or a DataSource object.
      */
     public void setDataSource(Object dataSource) {
-	this.rawDataSource = dataSource;
-	this.dataSourceSpecified = true;
+        this.rawDataSource = dataSource;
+        this.dataSourceSpecified = true;
     }
 
     /**
@@ -46,13 +46,14 @@ public class TransactionTag extends TransactionTagSupport {
      */
     @Override
     public void setIsolation(String isolation) {
-	this.isolationRT = isolation;
+        this.isolationRT = isolation;
     }
 
     @Override
     public int doStartTag() throws JspException {
-	if (isolationRT != null)
-          super.setIsolation(isolationRT);
+        if (isolationRT != null) {
+            super.setIsolation(isolationRT);
+        }
         return super.doStartTag();
     }
 }

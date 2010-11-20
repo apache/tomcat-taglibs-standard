@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
@@ -41,7 +41,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     // Protected state
 
     protected Object value;                      // 'value' attribute
-  
+
 
     //*********************************************************************
     // Private state
@@ -53,12 +53,12 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     // Constructor and initialization
 
     public TimeZoneSupport() {
-	super();
-	init();
+        super();
+        init();
     }
 
     private void init() {
-	value = null;
+        value = null;
     }
 
 
@@ -66,7 +66,7 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     // Collaboration with subtags
 
     public TimeZone getTimeZone() {
-	return timeZone;
+        return timeZone;
     }
 
 
@@ -76,36 +76,37 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
     @Override
     public int doStartTag() throws JspException {
 
-	if (value == null) {
-	    timeZone = TimeZone.getTimeZone("GMT");
-	} else if (value instanceof String) {
-	    if (((String) value).trim().equals("")) {
-		timeZone = TimeZone.getTimeZone("GMT");
-	    } else {
-		timeZone = TimeZone.getTimeZone((String) value);
-	    }
-	} else {
-	    timeZone = (TimeZone) value;
-	}
+        if (value == null) {
+            timeZone = TimeZone.getTimeZone("GMT");
+        } else if (value instanceof String) {
+            if (((String) value).trim().equals("")) {
+                timeZone = TimeZone.getTimeZone("GMT");
+            } else {
+                timeZone = TimeZone.getTimeZone((String) value);
+            }
+        } else {
+            timeZone = (TimeZone) value;
+        }
 
-	return EVAL_BODY_BUFFERED;
+        return EVAL_BODY_BUFFERED;
     }
 
     @Override
     public int doEndTag() throws JspException {
-	try {
-	    pageContext.getOut().print(bodyContent.getString());
-	} catch (IOException ioe) {
-	    throw new JspTagException(ioe.toString(), ioe);
-	}
+        try {
+            pageContext.getOut().print(bodyContent.getString());
+        } catch (IOException ioe) {
+            throw new JspTagException(ioe.toString(), ioe);
+        }
 
-	return EVAL_PAGE;
+        return EVAL_PAGE;
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
     }
 
 
@@ -131,26 +132,27 @@ public abstract class TimeZoneSupport extends BodyTagSupport {
      * nested inside a &lt;timeZone&gt; action and no time zone configuration
      * setting exists
      */
+
     static TimeZone getTimeZone(PageContext pc, Tag fromTag) {
-	TimeZone tz = null;
+        TimeZone tz = null;
 
-	Tag t = findAncestorWithClass(fromTag, TimeZoneSupport.class);
-	if (t != null) {
-	    // use time zone from parent <timeZone> tag
-	    TimeZoneSupport parent = (TimeZoneSupport) t;
-	    tz = parent.getTimeZone();
-	} else {
-	    // get time zone from configuration setting
-	    Object obj = Config.find(pc, Config.FMT_TIME_ZONE);
-	    if (obj != null) {
-		if (obj instanceof TimeZone) {
-		    tz = (TimeZone) obj;
-		} else {
-		    tz = TimeZone.getTimeZone((String) obj);
-		}
-	    }
-	}
+        Tag t = findAncestorWithClass(fromTag, TimeZoneSupport.class);
+        if (t != null) {
+            // use time zone from parent <timeZone> tag
+            TimeZoneSupport parent = (TimeZoneSupport) t;
+            tz = parent.getTimeZone();
+        } else {
+            // get time zone from configuration setting
+            Object obj = Config.find(pc, Config.FMT_TIME_ZONE);
+            if (obj != null) {
+                if (obj instanceof TimeZone) {
+                    tz = (TimeZone) obj;
+                } else {
+                    tz = TimeZone.getTimeZone((String) obj);
+                }
+            }
+        }
 
-	return tz;
+        return tz;
     }
 }

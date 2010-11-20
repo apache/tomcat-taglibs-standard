@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.xml;
 
@@ -34,11 +34,13 @@ public class ParamTag extends ParamSupport {
     // Accessor methods
 
     // for tag attribute
+
     public void setName(String name) throws JspTagException {
         this.name = name;
     }
 
     // for tag attribute
+
     public void setValue(Object value) throws JspTagException {
         this.value = value;
     }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.sql;
 
@@ -21,37 +21,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
-
 import javax.servlet.jsp.jstl.core.Config;
-
 import javax.servlet.jsp.jstl.sql.Result;
 import javax.servlet.jsp.jstl.sql.SQLExecutionTag;
-
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TryCatchFinally;
-
 import javax.sql.DataSource;
 
 import org.apache.taglibs.standard.resources.Resources;
-
 import org.apache.taglibs.standard.tag.common.core.Util;
 
 /**
- * <p>Tag handler for &lt;Query&gt; in JSTL.  
- * 
+ * <p>Tag handler for &lt;Query&gt; in JSTL.
+ *
  * @author Hans Bergsten
  * @author Justyna Horwat
  */
 
-public abstract class QueryTagSupport extends BodyTagSupport 
-    implements TryCatchFinally, SQLExecutionTag {
+public abstract class QueryTagSupport extends BodyTagSupport
+        implements TryCatchFinally, SQLExecutionTag {
 
     private String var;
     private int scope;
@@ -151,8 +145,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
                         maxRows = Integer.parseInt((String) obj);
                     } catch (NumberFormatException nfe) {
                         throw new JspException(Resources.getMessage("SQL_MAXROWS_PARSE_ERROR",
-                                                                    (String) obj),
-                                               nfe);
+                                (String) obj),
+                                nfe);
                     }
                 } else {
                     throw new JspException(Resources.getMessage("SQL_MAXROWS_INVALID"));
@@ -175,7 +169,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
      * named by the <code>var</code> attribute in the scope specified
      * by the <code>scope</code> attribute, as an object that implements
      * the Result interface.
-     *
+     * <p/>
      * <p>The connection used to execute the statement comes either
      * from the <code>DataSource</code> specified by the
      * <code>dataSource</code> attribute, provided by a parent action
@@ -191,8 +185,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
         String sqlStatement = null;
         if (sql != null) {
             sqlStatement = sql;
-        }
-        else if (bodyContent != null) {
+        } else if (bodyContent != null) {
             sqlStatement = bodyContent.getString();
         }
         if (sqlStatement == null || sqlStatement.trim().length() == 0) {
@@ -277,7 +270,8 @@ public abstract class QueryTagSupport extends BodyTagSupport
         if (conn != null && !isPartOfTransaction) {
             try {
                 conn.close();
-            } catch (SQLException e) {} // Not much we can do
+            } catch (SQLException e) {
+            } // Not much we can do
         }
 
         conn = null;
@@ -293,7 +287,7 @@ public abstract class QueryTagSupport extends BodyTagSupport
         Connection conn = null;
         isPartOfTransaction = false;
 
-        TransactionTagSupport parent = (TransactionTagSupport)findAncestorWithClass(this, TransactionTagSupport.class);
+        TransactionTagSupport parent = (TransactionTagSupport) findAncestorWithClass(this, TransactionTagSupport.class);
         if (parent != null) {
             if (dataSourceSpecified) {
                 throw new JspTagException(Resources.getMessage("ERROR_NESTED_DATASOURCE"));
@@ -305,21 +299,20 @@ public abstract class QueryTagSupport extends BodyTagSupport
                 throw new JspException(Resources.getMessage("SQL_DATASOURCE_NULL"));
             }
             DataSource dataSource = DataSourceUtil.getDataSource(rawDataSource,
-                                                                 pageContext);
+                    pageContext);
             try {
                 conn = dataSource.getConnection();
             } catch (Exception ex) {
-                throw new JspException(Resources.getMessage("DATASOURCE_INVALID", 
-                                                            ex.toString()));
+                throw new JspException(Resources.getMessage("DATASOURCE_INVALID",
+                        ex.toString()));
             }
         }
 
         return conn;
     }
 
-    private void setParameters(PreparedStatement ps, List parameters) 
-        throws SQLException
-    {
+    private void setParameters(PreparedStatement ps, List parameters)
+            throws SQLException {
         if (parameters != null) {
             for (int i = 0; i < parameters.size(); i++) {
                 /* The first parameter has index 1.  If a null

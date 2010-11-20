@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 package org.apache.taglibs.standard.tag.rt.sql;
 
 import java.util.Date;
@@ -26,12 +26,12 @@ import org.apache.taglibs.standard.tag.common.sql.DateParamTagSupport;
  * @author Justyna Horwat
  */
 public class DateParamTag extends DateParamTagSupport {
-    
+
     public void setValue(Date value) {
-	this.value = value;
+        this.value = value;
     }
 
     public void setType(String type) {
-	this.type = type;
+        this.type = type;
     }
 }

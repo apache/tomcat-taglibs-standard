@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.sql;
 
@@ -30,25 +30,25 @@ import org.apache.taglibs.standard.resources.Resources;
 
 
 /**
- * <p>Tag handler for &lt;Transaction&gt; in JSTL.  
- * 
+ * <p>Tag handler for &lt;Transaction&gt; in JSTL.
+ *
  * @author Hans Bergsten
  */
 
-public abstract class TransactionTagSupport extends TagSupport 
-    implements TryCatchFinally {
+public abstract class TransactionTagSupport extends TagSupport
+        implements TryCatchFinally {
 
     //*********************************************************************
     // Private constants
 
     private static final String TRANSACTION_READ_COMMITTED
-	= "read_committed";
+            = "read_committed";
     private static final String TRANSACTION_READ_UNCOMMITTED
-	= "read_uncommitted";
+            = "read_uncommitted";
     private static final String TRANSACTION_REPEATABLE_READ
-	= "repeatable_read";
+            = "repeatable_read";
     private static final String TRANSACTION_SERIALIZABLE
-	= "serializable";
+            = "serializable";
 
 
     //*********************************************************************
@@ -70,13 +70,12 @@ public abstract class TransactionTagSupport extends TagSupport
     // Constructor and initialization
 
     public TransactionTagSupport() {
-	super();
-	conn = null;
-	dataSourceSpecified = false;
-	rawDataSource = null;
-	isolation = Connection.TRANSACTION_NONE;
+        super();
+        conn = null;
+        dataSourceSpecified = false;
+        rawDataSource = null;
+        isolation = Connection.TRANSACTION_NONE;
     }
-
 
 
     //*********************************************************************
@@ -90,33 +89,33 @@ public abstract class TransactionTagSupport extends TagSupport
     @Override
     public int doStartTag() throws JspException {
 
-	if ((rawDataSource == null) && dataSourceSpecified) {
-	    throw new JspException(
-                Resources.getMessage("SQL_DATASOURCE_NULL"));
-	}
+        if ((rawDataSource == null) && dataSourceSpecified) {
+            throw new JspException(
+                    Resources.getMessage("SQL_DATASOURCE_NULL"));
+        }
 
         DataSource dataSource = DataSourceUtil.getDataSource(rawDataSource,
-							     pageContext);
+                pageContext);
 
-	try {
-	    conn = dataSource.getConnection();
-	    origIsolation = conn.getTransactionIsolation();
-	    if (origIsolation == Connection.TRANSACTION_NONE) {
-		throw new JspTagException(
-                    Resources.getMessage("TRANSACTION_NO_SUPPORT"));
-	    }
-	    if ((isolation != Connection.TRANSACTION_NONE)
-		    && (isolation != origIsolation)) {
-		conn.setTransactionIsolation(isolation);
-	    }
-	    conn.setAutoCommit(false);
-	} catch (SQLException e) {
-	    throw new JspTagException(
-                Resources.getMessage("ERROR_GET_CONNECTION",
-				     e.toString()), e);
-	} 
+        try {
+            conn = dataSource.getConnection();
+            origIsolation = conn.getTransactionIsolation();
+            if (origIsolation == Connection.TRANSACTION_NONE) {
+                throw new JspTagException(
+                        Resources.getMessage("TRANSACTION_NO_SUPPORT"));
+            }
+            if ((isolation != Connection.TRANSACTION_NONE)
+                    && (isolation != origIsolation)) {
+                conn.setTransactionIsolation(isolation);
+            }
+            conn.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new JspTagException(
+                    Resources.getMessage("ERROR_GET_CONNECTION",
+                            e.toString()), e);
+        }
 
-	return EVAL_BODY_INCLUDE;
+        return EVAL_BODY_INCLUDE;
     }
 
     /**
@@ -124,28 +123,28 @@ public abstract class TransactionTagSupport extends TagSupport
      */
     @Override
     public int doEndTag() throws JspException {
-	try {
-	    conn.commit();
-	} catch (SQLException e) {
-	    throw new JspTagException(
-                Resources.getMessage("TRANSACTION_COMMIT_ERROR",
-				     e.toString()), e);
-	}
-	return EVAL_PAGE;
+        try {
+            conn.commit();
+        } catch (SQLException e) {
+            throw new JspTagException(
+                    Resources.getMessage("TRANSACTION_COMMIT_ERROR",
+                            e.toString()), e);
+        }
+        return EVAL_PAGE;
     }
 
     /**
      * Rollbacks the transaction and rethrows the Throwable.
      */
     public void doCatch(Throwable t) throws Throwable {
-	if (conn != null) {
-	    try {
-		conn.rollback();
-	    } catch (SQLException e) {
-		// Ignore to not hide orignal exception
-	    }
-	}
-	throw t;
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (SQLException e) {
+                // Ignore to not hide orignal exception
+            }
+        }
+        throw t;
     }
 
     /**
@@ -153,27 +152,28 @@ public abstract class TransactionTagSupport extends TagSupport
      * closes it.
      */
     public void doFinally() {
-	if (conn != null) {
-	    try {
-		if ((isolation != Connection.TRANSACTION_NONE)
-		        && (isolation != origIsolation)) {
-		    conn.setTransactionIsolation(origIsolation);
-		}
-		conn.setAutoCommit(true);
-		conn.close();
-	    } catch (SQLException e) {
-		// Not much we can do
-	    }
-	}
-	conn = null;
-	isolation = Connection.TRANSACTION_NONE;
+        if (conn != null) {
+            try {
+                if ((isolation != Connection.TRANSACTION_NONE)
+                        && (isolation != origIsolation)) {
+                    conn.setTransactionIsolation(origIsolation);
+                }
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (SQLException e) {
+                // Not much we can do
+            }
+        }
+        conn = null;
+        isolation = Connection.TRANSACTION_NONE;
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	dataSourceSpecified = false;
-	rawDataSource = null;
+        dataSourceSpecified = false;
+        rawDataSource = null;
     }
 
 
@@ -185,18 +185,18 @@ public abstract class TransactionTagSupport extends TagSupport
      */
     public void setIsolation(String iso) throws JspTagException {
 
-	if (TRANSACTION_READ_COMMITTED.equals(iso)) {
-	    isolation = Connection.TRANSACTION_READ_COMMITTED;
-	} else if (TRANSACTION_READ_UNCOMMITTED.equals(iso)) {
-	    isolation = Connection.TRANSACTION_READ_UNCOMMITTED;
-	} else if (TRANSACTION_REPEATABLE_READ.equals(iso)) {
-	    isolation = Connection.TRANSACTION_REPEATABLE_READ;
-	} else if (TRANSACTION_SERIALIZABLE.equals(iso)) {
-	    isolation = Connection.TRANSACTION_SERIALIZABLE;
-	} else {
-	    throw new JspTagException(
-                Resources.getMessage("TRANSACTION_INVALID_ISOLATION"));
-	}
+        if (TRANSACTION_READ_COMMITTED.equals(iso)) {
+            isolation = Connection.TRANSACTION_READ_COMMITTED;
+        } else if (TRANSACTION_READ_UNCOMMITTED.equals(iso)) {
+            isolation = Connection.TRANSACTION_READ_UNCOMMITTED;
+        } else if (TRANSACTION_REPEATABLE_READ.equals(iso)) {
+            isolation = Connection.TRANSACTION_REPEATABLE_READ;
+        } else if (TRANSACTION_SERIALIZABLE.equals(iso)) {
+            isolation = Connection.TRANSACTION_SERIALIZABLE;
+        } else {
+            throw new JspTagException(
+                    Resources.getMessage("TRANSACTION_INVALID_ISOLATION"));
+        }
     }
 
     /**
@@ -204,6 +204,6 @@ public abstract class TransactionTagSupport extends TagSupport
      * the Connection.
      */
     public Connection getSharedConnection() {
-	return conn;
+        return conn;
     }
 }

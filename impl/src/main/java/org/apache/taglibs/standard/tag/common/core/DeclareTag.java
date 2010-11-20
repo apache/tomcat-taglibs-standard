@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
 
@@ -24,7 +24,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * essentially a runtime no-op as far as tag logic is concerned; the
  * only important functionality of the tag is to expose a scripting
  * variable for an existing scoped attribute.</p>
- * 
+ *
  * @author Shawn Bayern
  */
 
@@ -34,5 +34,7 @@ public class DeclareTag extends TagSupport {
      * We're not identical to TagSupport only because we need to
      * accept an additional "type" attribute.
      */
-    public void setType(String x) { }
+
+    public void setType(String x) {
+    }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
 
@@ -33,8 +33,8 @@ import javax.servlet.jsp.jstl.core.LoopTagSupport;
  * expression-evaluating libraries each have handlers that extend this
  * class.</p>
  *
- * @see javax.servlet.jsp.jstl.core.LoopTagSupport
  * @author Shawn Bayern
+ * @see javax.servlet.jsp.jstl.core.LoopTagSupport
  */
 
 public abstract class ForTokensSupport extends LoopTagSupport {
@@ -76,12 +76,12 @@ public abstract class ForTokensSupport extends LoopTagSupport {
             ELContext myELContext = pageContext.getELContext();
             Object originalValue = deferredExpression.getValue(myELContext);
             if (originalValue instanceof String) {
-                st = new StringTokenizer((String)originalValue, delims);
+                st = new StringTokenizer((String) originalValue, delims);
             } else {
                 throw new JspTagException();
             }
         } else {
-            st = new StringTokenizer((String)items, delims);
+            st = new StringTokenizer((String) items, delims);
         }
     }
 
@@ -92,9 +92,9 @@ public abstract class ForTokensSupport extends LoopTagSupport {
 
     @Override
     protected Object next() throws JspTagException {
-        if (deferredExpression!=null) {
+        if (deferredExpression != null) {
             st.nextElement();
-            if (itemsValueIteratedExpression==null) {
+            if (itemsValueIteratedExpression == null) {
                 itemsValueIteratedExpression = new IteratedExpression(deferredExpression, getDelims());
             }
             ValueExpression nextValue = new IteratedValueExpression(itemsValueIteratedExpression, currentIndex);
@@ -111,6 +111,7 @@ public abstract class ForTokensSupport extends LoopTagSupport {
 
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
         super.release();

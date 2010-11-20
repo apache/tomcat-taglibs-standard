@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
 
@@ -40,15 +40,15 @@ import org.apache.taglibs.standard.resources.Resources;
  * ForEach-specific functionality.  The rtexprvalue library and the
  * expression-evaluating library each have handlers that extend this
  * class.</p>
- *
+ * <p/>
  * <p>Localized here is the logic for handling the veritable smorgasbord
  * of types supported by &lt;forEach&gt;, including arrays,
  * Collections, and others.  To see how the actual iteration is controlled,
  * review the javax.servlet.jsp.jstl.core.LoopTagSupport class instead.
  * </p>
  *
- * @see javax.servlet.jsp.jstl.core.LoopTagSupport
  * @author Shawn Bayern
+ * @see javax.servlet.jsp.jstl.core.LoopTagSupport
  */
 
 public abstract class ForEachSupport extends LoopTagSupport {
@@ -92,8 +92,10 @@ public abstract class ForEachSupport extends LoopTagSupport {
      * instead of in advance, would involve changing only those methods that
      * handle primitive arrays.
      */
+
     protected static interface ForEachIterator {
         public boolean hasNext() throws JspTagException;
+
         public Object next() throws JspTagException;
     }
 
@@ -102,19 +104,23 @@ public abstract class ForEachSupport extends LoopTagSupport {
      * an Iterator.  This is appropriate for cases where hasNext() and
      * next() don't need to throw JspTagException.  Such cases are common.core.
      */
+
     protected class SimpleForEachIterator implements ForEachIterator {
         private Iterator i;
+
         public SimpleForEachIterator(Iterator i) {
             this.i = i;
         }
+
         public boolean hasNext() {
             return i.hasNext();
         }
+
         public Object next() {
             return i.next();
         }
     }
-    
+
     protected class DeferredForEachIterator implements ForEachIterator {
 
         private ValueExpression itemsValueExpression;
@@ -126,21 +132,23 @@ public abstract class ForEachSupport extends LoopTagSupport {
         private Iterator myIterator;
         private boolean anEnumeration = false;
         private Enumeration myEnumeration;
+
         public DeferredForEachIterator(ValueExpression o) throws JspTagException {
             itemsValueExpression = o;
             determineLengthAndType();
         }
+
         public boolean hasNext() throws JspTagException {
             if (isIndexedValueExpression) {
-                if (currentIndex<length) {
+                if (currentIndex < length) {
                     return true;
                 } else {
                     return false;
-                }                
+                }
             } else {
-                if (length!=-1) {
+                if (length != -1) {
                     //a Collection, Map, or StringTokenizer 
-                    if (currentIndex<length) {
+                    if (currentIndex < length) {
                         return true;
                     } else {
                         return false;
@@ -157,18 +165,19 @@ public abstract class ForEachSupport extends LoopTagSupport {
                 }
             }
         }
+
         public Object next() throws JspTagException {
             ValueExpression nextValue = null;
             if (isIndexedValueExpression) {
                 nextValue = new IndexedValueExpression(itemsValueExpression, currentIndex);
                 currentIndex++;
             } else {
-                if (itemsValueIteratedExpression==null) {
+                if (itemsValueIteratedExpression == null) {
                     itemsValueIteratedExpression = new IteratedExpression(itemsValueExpression, getDelims());
                 }
                 nextValue = new IteratedValueExpression(itemsValueIteratedExpression, currentIndex);
                 currentIndex++;
-                if (length!=-1) {
+                if (length != -1) {
                     //a Collection, Map, or StringTokenizer
                     //nothing else needed
                 } else {
@@ -182,57 +191,58 @@ public abstract class ForEachSupport extends LoopTagSupport {
             }
             return nextValue;
         }
+
         private void determineLengthAndType() throws JspTagException {
             ELContext myELContext = pageContext.getELContext();
             Object o = itemsValueExpression.getValue(myELContext);
             if (o instanceof Object[]) {
-                length = ((Object[])o).length;
+                length = ((Object[]) o).length;
                 isIndexedValueExpression = true;
             } else if (o instanceof boolean[]) {
-                length = ((boolean[])o).length;
+                length = ((boolean[]) o).length;
                 isIndexedValueExpression = true;
             } else if (o instanceof byte[]) {
-                length = ((byte[])o).length;
+                length = ((byte[]) o).length;
                 isIndexedValueExpression = true;
             } else if (o instanceof char[]) {
-                length = ((char[])o).length;
+                length = ((char[]) o).length;
                 isIndexedValueExpression = true;
             } else if (o instanceof short[]) {
-                length = ((short[])o).length;
+                length = ((short[]) o).length;
                 isIndexedValueExpression = true;
             } else if (o instanceof int[]) {
-                length = ((int[])o).length;
+                length = ((int[]) o).length;
                 isIndexedValueExpression = true;
             } else if (o instanceof long[]) {
-                length = ((long[])o).length;
+                length = ((long[]) o).length;
                 isIndexedValueExpression = true;
             } else if (o instanceof float[]) {
-                length = ((float[])o).length;
+                length = ((float[]) o).length;
                 isIndexedValueExpression = true;
             } else if (o instanceof double[]) {
-                length = ((double[])o).length;
+                length = ((double[]) o).length;
                 isIndexedValueExpression = true;
             } else if (o instanceof Collection) {
-                length = ((Collection)o).size();
+                length = ((Collection) o).size();
                 isIndexedValueExpression = false;
             } else if (o instanceof Iterator) {
                 //have to reproduce iterator here so we can determine the size
                 isIndexedValueExpression = false;
                 anIterator = true;
-                myIterator = (Iterator)o;
+                myIterator = (Iterator) o;
             } else if (o instanceof Enumeration) {
                 isIndexedValueExpression = false;
-                anEnumeration=true;
-                myEnumeration = (Enumeration)o;
+                anEnumeration = true;
+                myEnumeration = (Enumeration) o;
             } else if (o instanceof Map) {
-                length = ((Map)o).size();
+                length = ((Map) o).size();
                 isIndexedValueExpression = false;
-            //
-            //else if (o instanceof ResultSet)
-            //    items = toForEachIterator((ResultSet) o);
-            //
+                //
+                //else if (o instanceof ResultSet)
+                //    items = toForEachIterator((ResultSet) o);
+                //
             } else if (o instanceof String) {
-                StringTokenizer st = new StringTokenizer((String)o, ",");
+                StringTokenizer st = new StringTokenizer((String) o, ",");
                 length = st.countTokens();
                 isIndexedValueExpression = false;
             } else {
@@ -269,7 +279,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
         // produce the right sort of ForEachIterator
         if (rawItems != null) {
             if (rawItems instanceof ValueExpression) {
-                deferredExpression = (ValueExpression)rawItems;
+                deferredExpression = (ValueExpression) rawItems;
                 items = toDeferredForEachIterator(deferredExpression);
             } else {
                 // extract an iterator over the 'items' we've got
@@ -283,8 +293,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
         /* ResultSet no more supported in <c:forEach>
         // step must be 1 when ResultSet is passed in
         if (rawItems instanceof ResultSet && step != 1)
-            throw new JspTagException(
-		Resources.getMessage("FOREACH_STEP_NO_RESULTSET"));
+            throw new JspTagException(Resources.getMessage("FOREACH_STEP_NO_RESULTSET"));
         */
     }
 
@@ -293,6 +302,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
     // Tag logic and lifecycle management
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
         super.release();
@@ -306,6 +316,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
 
     /* Extracts a ForEachIterator given an object of a supported type. */
     //This should not be called for a deferred ValueExpression
+
     protected ForEachIterator supportedTypeForEachIterator(Object o)
             throws JspTagException {
 
@@ -325,40 +336,42 @@ public abstract class ForEachSupport extends LoopTagSupport {
 
         ForEachIterator items;
 
-        if (o instanceof Object[])
+        if (o instanceof Object[]) {
             items = toForEachIterator((Object[]) o);
-        else if (o instanceof boolean[])
+        } else if (o instanceof boolean[]) {
             items = toForEachIterator((boolean[]) o);
-        else if (o instanceof byte[])
+        } else if (o instanceof byte[]) {
             items = toForEachIterator((byte[]) o);
-        else if (o instanceof char[])
+        } else if (o instanceof char[]) {
             items = toForEachIterator((char[]) o);
-        else if (o instanceof short[])
+        } else if (o instanceof short[]) {
             items = toForEachIterator((short[]) o);
-        else if (o instanceof int[])
+        } else if (o instanceof int[]) {
             items = toForEachIterator((int[]) o);
-        else if (o instanceof long[])
+        } else if (o instanceof long[]) {
             items = toForEachIterator((long[]) o);
-        else if (o instanceof float[])
+        } else if (o instanceof float[]) {
             items = toForEachIterator((float[]) o);
-        else if (o instanceof double[])
+        } else if (o instanceof double[]) {
             items = toForEachIterator((double[]) o);
-        else if (o instanceof Collection)
+        } else if (o instanceof Collection) {
             items = toForEachIterator((Collection) o);
-        else if (o instanceof Iterator)
+        } else if (o instanceof Iterator) {
             items = toForEachIterator((Iterator) o);
-        else if (o instanceof Enumeration)
+        } else if (o instanceof Enumeration) {
             items = toForEachIterator((Enumeration) o);
-        else if (o instanceof Map)
+        } else if (o instanceof Map) {
             items = toForEachIterator((Map) o);
+        }
         /*
         else if (o instanceof ResultSet)
             items = toForEachIterator((ResultSet) o);
         */
-        else if (o instanceof String)
+        else if (o instanceof String) {
             items = toForEachIterator((String) o);
-        else
+        } else {
             items = toForEachIterator(o);
+        }
 
         return (items);
     }
@@ -368,6 +381,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
      * in support of cases where our tag handler isn't passed an
      * explicit collection over which to iterate.
      */
+
     private ForEachIterator beginEndForEachIterator() {
         /*
          * To plug into existing support, we need to keep 'begin', 'end',
@@ -382,8 +396,9 @@ public abstract class ForEachSupport extends LoopTagSupport {
          * wouldn't provide much benefit.)
          */
         Integer[] ia = new Integer[end + 1];
-        for (int i = 0; i <= end; i++)
+        for (int i = 0; i <= end; i++) {
             ia[i] = new Integer(i);
+        }
         return new SimpleForEachIterator(Arrays.asList(ia).iterator());
     }
 
@@ -394,19 +409,22 @@ public abstract class ForEachSupport extends LoopTagSupport {
     protected ForEachIterator toDeferredForEachIterator(ValueExpression o) throws JspTagException {
         return new DeferredForEachIterator(o);
     }
-    
+
     // catch-all method whose invocation currently signals a 'matching error'
+
     protected ForEachIterator toForEachIterator(Object o)
             throws JspTagException {
         throw new JspTagException(Resources.getMessage("FOREACH_BAD_ITEMS"));
     }
 
     // returns an iterator over an Object array (via List)
+
     protected ForEachIterator toForEachIterator(Object[] a) {
         return new SimpleForEachIterator(Arrays.asList(a).iterator());
     }
 
     // returns an iterator over a boolean[] array, wrapping items in Boolean
+
     protected ForEachIterator toForEachIterator(boolean[] a) {
         Boolean[] wrapped = new Boolean[a.length];
         for (int i = 0; i < a.length; i++) {
@@ -416,83 +434,103 @@ public abstract class ForEachSupport extends LoopTagSupport {
     }
 
     // returns an iterator over a byte[] array, wrapping items in Byte
+
     protected ForEachIterator toForEachIterator(byte[] a) {
         Byte[] wrapped = new Byte[a.length];
-        for (int i = 0; i < a.length; i++)
+        for (int i = 0; i < a.length; i++) {
             wrapped[i] = new Byte(a[i]);
+        }
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
     // returns an iterator over a char[] array, wrapping items in Character
+
     protected ForEachIterator toForEachIterator(char[] a) {
         Character[] wrapped = new Character[a.length];
-        for (int i = 0; i < a.length; i++)
+        for (int i = 0; i < a.length; i++) {
             wrapped[i] = new Character(a[i]);
+        }
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
     // returns an iterator over a short[] array, wrapping items in Short
+
     protected ForEachIterator toForEachIterator(short[] a) {
         Short[] wrapped = new Short[a.length];
-        for (int i = 0; i < a.length; i++)
+        for (int i = 0; i < a.length; i++) {
             wrapped[i] = new Short(a[i]);
+        }
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
     // returns an iterator over an int[] array, wrapping items in Integer
+
     protected ForEachIterator toForEachIterator(int[] a) {
         Integer[] wrapped = new Integer[a.length];
-        for (int i = 0; i < a.length; i++)
+        for (int i = 0; i < a.length; i++) {
             wrapped[i] = new Integer(a[i]);
+        }
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
     // returns an iterator over a long[] array, wrapping items in Long
+
     protected ForEachIterator toForEachIterator(long[] a) {
         Long[] wrapped = new Long[a.length];
-        for (int i = 0; i < a.length; i++)
+        for (int i = 0; i < a.length; i++) {
             wrapped[i] = new Long(a[i]);
+        }
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
     // returns an iterator over a float[] array, wrapping items in Float
+
     protected ForEachIterator toForEachIterator(float[] a) {
         Float[] wrapped = new Float[a.length];
-        for (int i = 0; i < a.length; i++)
+        for (int i = 0; i < a.length; i++) {
             wrapped[i] = new Float(a[i]);
+        }
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
     // returns an iterator over a double[] array, wrapping items in Double
+
     protected ForEachIterator toForEachIterator(double[] a) {
         Double[] wrapped = new Double[a.length];
-        for (int i = 0; i < a.length; i++)
+        for (int i = 0; i < a.length; i++) {
             wrapped[i] = new Double(a[i]);
+        }
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
     // retrieves an iterator from a Collection
+
     protected ForEachIterator toForEachIterator(Collection c) {
         return new SimpleForEachIterator(c.iterator());
     }
 
     // simply passes an Iterator through...
+
     protected ForEachIterator toForEachIterator(Iterator i) {
         return new SimpleForEachIterator(i);
     }
 
     // converts an Enumeration to an Iterator via a local adapter
+
     protected ForEachIterator toForEachIterator(Enumeration e) {
 
         // local adapter
         class EnumerationAdapter implements ForEachIterator {
             private Enumeration e;
+
             public EnumerationAdapter(Enumeration e) {
                 this.e = e;
             }
+
             public boolean hasNext() {
                 return e.hasMoreElements();
             }
+
             public Object next() {
                 return e.nextElement();
             }
@@ -502,6 +540,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
     }
 
     // retrieves an iterator over the Map.Entry items in a Map
+
     protected ForEachIterator toForEachIterator(Map m) {
         return new SimpleForEachIterator(m.entrySet().iterator());
     }
@@ -539,6 +578,7 @@ public abstract class ForEachSupport extends LoopTagSupport {
     */
 
     // tokenizes a String as a CSV and returns an iterator over it
+
     protected ForEachIterator toForEachIterator(String s) {
         StringTokenizer st = new StringTokenizer(s, ",");
         return toForEachIterator(st);           // convert from Enumeration

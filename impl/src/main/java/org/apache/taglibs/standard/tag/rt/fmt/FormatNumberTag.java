@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
@@ -34,60 +34,70 @@ public class FormatNumberTag extends FormatNumberSupport {
     // Accessor methods
 
     // 'value' attribute
+
     public void setValue(Object value) throws JspTagException {
         this.value = value;
-	this.valueSpecified = true;
+        this.valueSpecified = true;
     }
 
     // 'type' attribute
+
     public void setType(String type) throws JspTagException {
         this.type = type;
     }
 
     // 'pattern' attribute
+
     public void setPattern(String pattern) throws JspTagException {
         this.pattern = pattern;
     }
 
     // 'currencyCode' attribute
+
     public void setCurrencyCode(String currencyCode) throws JspTagException {
         this.currencyCode = currencyCode;
     }
 
     // 'currencySymbol' attribute
+
     public void setCurrencySymbol(String currencySymbol)
-	throws JspTagException {
+            throws JspTagException {
         this.currencySymbol = currencySymbol;
     }
 
     // 'groupingUsed' attribute
+
     public void setGroupingUsed(boolean isGroupingUsed)
-	throws JspTagException {
+            throws JspTagException {
         this.isGroupingUsed = isGroupingUsed;
-	this.groupingUsedSpecified = true;
+        this.groupingUsedSpecified = true;
     }
 
     // 'maxIntegerDigits' attribute
+
     public void setMaxIntegerDigits(int maxDigits) throws JspTagException {
         this.maxIntegerDigits = maxDigits;
-	this.maxIntegerDigitsSpecified = true;
+        this.maxIntegerDigitsSpecified = true;
     }
 
     // 'minIntegerDigits' attribute
+
     public void setMinIntegerDigits(int minDigits) throws JspTagException {
         this.minIntegerDigits = minDigits;
-	this.minIntegerDigitsSpecified = true;
+        this.minIntegerDigitsSpecified = true;
     }
 
     // 'maxFractionDigits' attribute
+
     public void setMaxFractionDigits(int maxDigits) throws JspTagException {
         this.maxFractionDigits = maxDigits;
-	this.maxFractionDigitsSpecified = true;
+        this.maxFractionDigitsSpecified = true;
     }
 
     // 'minFractionDigits' attribute
+
     public void setMinFractionDigits(int minDigits) throws JspTagException {
         this.minFractionDigits = minDigits;
-	this.minFractionDigitsSpecified = true;
+        this.minFractionDigitsSpecified = true;
     }
 }

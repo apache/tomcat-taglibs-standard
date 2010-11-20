@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.core;
 
@@ -31,14 +31,14 @@ import org.apache.taglibs.standard.tag.common.core.ForTokensSupport;
  */
 
 public class ForTokensTag
-    extends ForTokensSupport
-    implements LoopTag, IterationTag
-{
+        extends ForTokensSupport
+        implements LoopTag, IterationTag {
 
     //*********************************************************************
     // Accessor methods
 
     // for tag attribute
+
     public void setBegin(int begin) throws JspTagException {
         this.beginSpecified = true;
         this.begin = begin;
@@ -46,6 +46,7 @@ public class ForTokensTag
     }
 
     // for tag attribute
+
     public void setEnd(int end) throws JspTagException {
         this.endSpecified = true;
         this.end = end;
@@ -53,6 +54,7 @@ public class ForTokensTag
     }
 
     // for tag attribute
+
     public void setStep(int step) throws JspTagException {
         this.stepSpecified = true;
         this.step = step;
@@ -60,19 +62,23 @@ public class ForTokensTag
     }
 
     // stores the 'items' Object we're passed
+
     public void setItems(Object s) throws JspTagException {
         items = s;
-	// use the empty string to indicate "no iteration"
-        if (s == null)
-	    items = "";
+        // use the empty string to indicate "no iteration"
+        if (s == null) {
+            items = "";
+        }
     }
 
     // stores the 'delims' String we're passed
+
     public void setDelims(String s) throws JspTagException {
         delims = s;
-	// use the empty string to cause monolithic tokenization
-        if (s == null)
-	    delims = "";
+        // use the empty string to cause monolithic tokenization
+        if (s == null) {
+            delims = "";
+        }
     }
 
 }

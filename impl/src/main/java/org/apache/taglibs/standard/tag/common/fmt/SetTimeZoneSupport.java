@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
@@ -35,7 +35,7 @@ import org.apache.taglibs.standard.tag.common.core.Util;
 
 public abstract class SetTimeZoneSupport extends TagSupport {
 
-    
+
     //*********************************************************************
     // Protected state
 
@@ -53,22 +53,23 @@ public abstract class SetTimeZoneSupport extends TagSupport {
     // Constructor and initialization
 
     public SetTimeZoneSupport() {
-	super();
-	init();
+        super();
+        init();
     }
 
     // resets local state
+
     private void init() {
-	value = var = null;
-	scope = PageContext.PAGE_SCOPE;
+        value = var = null;
+        scope = PageContext.PAGE_SCOPE;
     }
 
 
-   //*********************************************************************
+    //*********************************************************************
     // Tag attributes known at translation time
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
+        this.scope = Util.getScope(scope);
     }
 
     public void setVar(String var) {
@@ -81,32 +82,33 @@ public abstract class SetTimeZoneSupport extends TagSupport {
 
     @Override
     public int doEndTag() throws JspException {
-	TimeZone timeZone = null;
+        TimeZone timeZone = null;
 
-	if (value == null) {
-	    timeZone = TimeZone.getTimeZone("GMT");
-	} else if (value instanceof String) {
-	    if (((String) value).trim().equals("")) {
-		timeZone = TimeZone.getTimeZone("GMT");
-	    } else {
-		timeZone = TimeZone.getTimeZone((String) value);
-	    }
-	} else {
-	    timeZone = (TimeZone) value;
-	}
+        if (value == null) {
+            timeZone = TimeZone.getTimeZone("GMT");
+        } else if (value instanceof String) {
+            if (((String) value).trim().equals("")) {
+                timeZone = TimeZone.getTimeZone("GMT");
+            } else {
+                timeZone = TimeZone.getTimeZone((String) value);
+            }
+        } else {
+            timeZone = (TimeZone) value;
+        }
 
-	if (var != null) {
-	    pageContext.setAttribute(var, timeZone, scope);
-	} else {
-	    Config.set(pageContext, Config.FMT_TIME_ZONE, timeZone, scope);
-	}
+        if (var != null) {
+            pageContext.setAttribute(var, timeZone, scope);
+        } else {
+            Config.set(pageContext, Config.FMT_TIME_ZONE, timeZone, scope);
+        }
 
-	return EVAL_PAGE;
+        return EVAL_PAGE;
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
     }
 }

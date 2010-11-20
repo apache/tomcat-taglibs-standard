@@ -16,15 +16,25 @@
  */
 package org.apache.taglibs.standard.functions;
 
+import java.util.Arrays;
+import java.util.Collections;
+
+import javax.servlet.jsp.JspTagException;
+
 import org.apache.taglibs.standard.resources.Resources;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.servlet.jsp.JspTagException;
-import java.util.Arrays;
-import java.util.Collections;
+import static org.apache.taglibs.standard.functions.Functions.endsWith;
+import static org.apache.taglibs.standard.functions.Functions.escapeXml;
+import static org.apache.taglibs.standard.functions.Functions.join;
+import static org.apache.taglibs.standard.functions.Functions.length;
+import static org.apache.taglibs.standard.functions.Functions.replace;
+import static org.apache.taglibs.standard.functions.Functions.split;
+import static org.apache.taglibs.standard.functions.Functions.substring;
+import static org.apache.taglibs.standard.functions.Functions.substringAfter;
+import static org.apache.taglibs.standard.functions.Functions.substringBefore;
 
-import static org.apache.taglibs.standard.functions.Functions.*;
 /**
  */
 public class FunctionsTest {
@@ -104,10 +114,10 @@ public class FunctionsTest {
     public void testLength() throws Exception {
         Assert.assertEquals(0, length(null));
         Assert.assertEquals(0, length(""));
-        Assert.assertEquals(3, length(new int[]{1,2,3}));
-        Assert.assertEquals(3, length(Arrays.asList(1,2,3)));
-        Assert.assertEquals(3, length(Arrays.asList(1,2,3).iterator()));
-        Assert.assertEquals(3, length(Collections.enumeration(Arrays.asList(1,2,3))));
+        Assert.assertEquals(3, length(new int[]{1, 2, 3}));
+        Assert.assertEquals(3, length(Arrays.asList(1, 2, 3)));
+        Assert.assertEquals(3, length(Arrays.asList(1, 2, 3).iterator()));
+        Assert.assertEquals(3, length(Collections.enumeration(Arrays.asList(1, 2, 3))));
         Assert.assertEquals(1, length(Collections.singletonMap("Hello", "World")));
         try {
             length(3);

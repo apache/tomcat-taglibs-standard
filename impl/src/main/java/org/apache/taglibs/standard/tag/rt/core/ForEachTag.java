@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.core;
 
@@ -33,14 +33,14 @@ import org.apache.taglibs.standard.tag.common.core.ForEachSupport;
  */
 
 public class ForEachTag
-    extends ForEachSupport
-    implements LoopTag, IterationTag
-{
+        extends ForEachSupport
+        implements LoopTag, IterationTag {
 
     //*********************************************************************
     // Accessor methods
 
     // for tag attribute
+
     public void setBegin(int begin) throws JspTagException {
         this.beginSpecified = true;
         this.begin = begin;
@@ -48,6 +48,7 @@ public class ForEachTag
     }
 
     // for tag attribute
+
     public void setEnd(int end) throws JspTagException {
         this.endSpecified = true;
         this.end = end;
@@ -55,6 +56,7 @@ public class ForEachTag
     }
 
     // for tag attribute
+
     public void setStep(int step) throws JspTagException {
         this.stepSpecified = true;
         this.step = step;
@@ -62,10 +64,11 @@ public class ForEachTag
     }
 
     public void setItems(Object o) throws JspTagException {
-	// for null items, simulate an empty list
-	if (o == null)
-	    rawItems = new ArrayList();
-        else
-	    rawItems = o;
+        // for null items, simulate an empty list
+        if (o == null) {
+            rawItems = new ArrayList();
+        } else {
+            rawItems = o;
+        }
     }
 }

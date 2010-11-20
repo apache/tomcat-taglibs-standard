@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.xml;
 
@@ -28,8 +28,8 @@ import org.apache.taglibs.standard.resources.Resources;
  * <p>Support for tag handlers for &lt;param&gt;, the XML parameter
  * subtag for &lt;transformt&lt;.</p>
  *
- * @see TransformSupport
  * @author Shawn Bayern
+ * @see TransformSupport
  */
 
 public abstract class ParamSupport extends BodyTagSupport {
@@ -44,13 +44,13 @@ public abstract class ParamSupport extends BodyTagSupport {
     // Constructor and initialization
 
     public ParamSupport() {
-	super();
-	init();
+        super();
+        init();
     }
 
     private void init() {
-	name = null;
-	value = null;
+        name = null;
+        value = null;
     }
 
 
@@ -58,28 +58,32 @@ public abstract class ParamSupport extends BodyTagSupport {
     // Tag logic
 
     // simply send our name and value to our parent <transform> tag
+
     @Override
     public int doEndTag() throws JspException {
-	Tag t = findAncestorWithClass(this, TransformSupport.class);
-	if (t == null)
-	    throw new JspTagException(
-		Resources.getMessage("PARAM_OUTSIDE_TRANSFORM"));
-	TransformSupport parent = (TransformSupport) t;
-
-	Object value = this.value;
-	if (value == null) {
-            if (bodyContent == null || bodyContent.getString() == null)
-                value = "";
-            else
-                value = bodyContent.getString().trim();
+        Tag t = findAncestorWithClass(this, TransformSupport.class);
+        if (t == null) {
+            throw new JspTagException(
+                    Resources.getMessage("PARAM_OUTSIDE_TRANSFORM"));
         }
-	parent.addParameter(name, value);
-	return EVAL_PAGE;
+        TransformSupport parent = (TransformSupport) t;
+
+        Object value = this.value;
+        if (value == null) {
+            if (bodyContent == null || bodyContent.getString() == null) {
+                value = "";
+            } else {
+                value = bodyContent.getString().trim();
+            }
+        }
+        parent.addParameter(name, value);
+        return EVAL_PAGE;
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
     }
 }

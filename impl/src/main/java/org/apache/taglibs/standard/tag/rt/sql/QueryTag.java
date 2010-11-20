@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 package org.apache.taglibs.standard.tag.rt.sql;
 
 import org.apache.taglibs.standard.tag.common.sql.QueryTagSupport;
@@ -40,10 +40,10 @@ public class QueryTag extends QueryTagSupport {
 
     //*********************************************************************
     // Accessor methods
-    
+
     public void setDataSource(Object dataSource) {
-	this.rawDataSource = dataSource;
-	this.dataSourceSpecified = true;
+        this.rawDataSource = dataSource;
+        this.dataSourceSpecified = true;
     }
 
     /**
@@ -60,7 +60,7 @@ public class QueryTag extends QueryTagSupport {
      */
     public void setMaxRows(int maxRows) {
         this.maxRows = maxRows;
-	this.maxRowsSpecified = true;
+        this.maxRowsSpecified = true;
     }
 
     /**
@@ -70,7 +70,7 @@ public class QueryTag extends QueryTagSupport {
      * be set using nested value elements.
      */
     public void setSql(String sql) {
-	this.sql = sql;
+        this.sql = sql;
     }
 
 }

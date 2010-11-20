@@ -13,19 +13,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.xml;
-
-import org.apache.taglibs.standard.util.EscapeXML;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import org.apache.taglibs.standard.util.EscapeXML;
+
 /**
  * <p>Tag handler for &lt;out&gt; in JSTL's XML library.</p>
- *
+ * <p/>
  * TODO: should we rename this to OutSupport to match the tag name?
  *
  * @author Shawn Bayern
@@ -37,7 +37,7 @@ public abstract class ExprSupport extends TagSupport {
     // Internal state
 
     private String select;                       // tag attribute
-    protected boolean escapeXml;		 // tag attribute
+    protected boolean escapeXml;         // tag attribute
 
     //*********************************************************************
     // Construction and initialization
@@ -53,8 +53,9 @@ public abstract class ExprSupport extends TagSupport {
     }
 
     // resets local state
+
     private void init() {
-	select = null;
+        select = null;
         escapeXml = true;
     }
 
@@ -63,19 +64,21 @@ public abstract class ExprSupport extends TagSupport {
     // Tag logic
 
     // applies XPath expression from 'select' and prints the result
+
     @Override
     public int doStartTag() throws JspException {
         try {
             XPathUtil xu = new XPathUtil(pageContext);
             String result = xu.valueOf(XPathUtil.getContext(this), select);
             EscapeXML.emit(result, escapeXml, pageContext.getOut());
-    	    return SKIP_BODY;
+            return SKIP_BODY;
         } catch (java.io.IOException ex) {
             throw new JspTagException(ex.toString(), ex);
         }
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
         super.release();
@@ -87,6 +90,6 @@ public abstract class ExprSupport extends TagSupport {
     // Attribute accessors
 
     public void setSelect(String select) {
-	this.select = select;
+        this.select = select;
     }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.xml;
 
@@ -36,22 +36,25 @@ public class ParseTag extends ParseSupport {
 
     // Deprecated as of JSTL 1.1
     // for tag attribute
+
     public void setXml(Object xml) throws JspTagException {
         this.xml = xml;
     }
 
     // 'doc' replaces 'xml' as of JSTL 1.1
+
     public void setDoc(Object xml) throws JspTagException {
         this.xml = xml;
     }
 
     public void setSystemId(String systemId) throws JspTagException {
-	this.systemId = systemId;
+        this.systemId = systemId;
     }
 
     // for tag attribute
+
     public void setFilter(XMLFilter filter) throws JspTagException {
-	this.filter = filter;
+        this.filter = filter;
     }
 
 }

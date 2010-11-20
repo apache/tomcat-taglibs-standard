@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.core;
 
@@ -34,16 +34,19 @@ public class ImportTag extends ImportSupport {
     // Accessor methods
 
     // for tag attribute
+
     public void setUrl(String url) throws JspTagException {
         this.url = url;
     }
 
     // for tag attribute
+
     public void setContext(String context) throws JspTagException {
         this.context = context;
     }
 
     // for tag attribute
+
     public void setCharEncoding(String charEncoding) throws JspTagException {
         this.charEncoding = charEncoding;
     }

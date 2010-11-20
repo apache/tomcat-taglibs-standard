@@ -13,31 +13,27 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import java.util.Map;
 
+import javax.el.ELContext;
+import javax.el.ELException;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspFactory;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
-
-import javax.el.ELException;
-import javax.el.ELContext;
-import javax.el.ValueExpression;
-import javax.el.VariableMapper;
-import javax.el.ExpressionFactory;
-
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.taglibs.standard.resources.Resources;
@@ -68,6 +64,7 @@ public abstract class SetSupport extends BodyTagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
         var = null;
@@ -172,7 +169,7 @@ public abstract class SetSupport extends BodyTagSupport {
                 if (scopeValue != PageContext.PAGE_SCOPE) {
                     throw new JspTagException(Resources.getMessage("SET_BAD_DEFERRED_SCOPE", scope));
                 }
-                vm.setVariable(var, (ValueExpression)result);
+                vm.setVariable(var, (ValueExpression) result);
             } else {
                 // make sure to remove it from the VariableMapper if we will be setting into page scope
                 if (scopeValue == PageContext.PAGE_SCOPE && vm.resolveVariable(var) != null) {
@@ -182,7 +179,7 @@ public abstract class SetSupport extends BodyTagSupport {
             }
         } else {
             //make sure to remove it from the Var mapper
-            if (vm.resolveVariable(var)!=null) {
+            if (vm.resolveVariable(var) != null) {
                 vm.setVariable(var, null);
             }
             if (scope != null) {
@@ -196,9 +193,9 @@ public abstract class SetSupport extends BodyTagSupport {
     /**
      * Export the result into a Map.
      *
-     * @param target the Map to export into
+     * @param target   the Map to export into
      * @param property the key to export into
-     * @param result the value to export
+     * @param result   the value to export
      */
     void exportToMapProperty(Object target, String property, Object result) {
         @SuppressWarnings("unchecked")
@@ -213,9 +210,9 @@ public abstract class SetSupport extends BodyTagSupport {
     /**
      * Export the result into a bean property.
      *
-     * @param target the bean to export into
+     * @param target   the bean to export into
      * @param property the bean property to set
-     * @param result the value to export
+     * @param result   the value to export
      * @throws JspTagException if there was a problem exporting the result
      */
     void exportToBeanProperty(Object target, String property, Object result) throws JspTagException {
@@ -252,7 +249,7 @@ public abstract class SetSupport extends BodyTagSupport {
      * rules of the Expression Language.
      *
      * @param value the value to convert
-     * @param m the setter method
+     * @param m     the setter method
      * @return value converted to an instance of the expected type; will be null if value was null
      * @throws javax.el.ELException if there was a problem coercing the value
      */

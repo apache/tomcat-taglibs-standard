@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
 
@@ -31,7 +31,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  */
 
 public abstract class RedirectSupport extends BodyTagSupport
-    implements ParamParent {
+        implements ParamParent {
 
     //*********************************************************************
     // Protected state
@@ -43,25 +43,25 @@ public abstract class RedirectSupport extends BodyTagSupport
     // Private state
 
     private String var;                          // 'var' attribute
-    private int scope;				 // processed 'scope' attr
-    private ParamSupport.ParamManager params;	 // added parameters
+    private int scope;                 // processed 'scope' attr
+    private ParamSupport.ParamManager params;     // added parameters
 
     //*********************************************************************
     // Constructor and initialization
 
     public RedirectSupport() {
-	super();
-	init();
+        super();
+        init();
     }
 
     private void init() {
-	url = var = null;
-	params = null;
-	scope = PageContext.PAGE_SCOPE;
+        url = var = null;
+        params = null;
+        scope = PageContext.PAGE_SCOPE;
     }
 
 
-   //*********************************************************************
+    //*********************************************************************
     // Tag attributes known at translation time
 
     public void setVar(String var) {
@@ -69,7 +69,7 @@ public abstract class RedirectSupport extends BodyTagSupport
     }
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
+        this.scope = Util.getScope(scope);
     }
 
 
@@ -77,8 +77,9 @@ public abstract class RedirectSupport extends BodyTagSupport
     // Collaboration with subtags
 
     // inherit Javadoc
+
     public void addParameter(String name, String value) {
-	params.addParameter(name, value);
+        params.addParameter(name, value);
     }
 
 
@@ -86,41 +87,45 @@ public abstract class RedirectSupport extends BodyTagSupport
     // Tag logic
 
     // resets any parameters that might be sent
+
     @Override
     public int doStartTag() throws JspException {
-	params = new ParamSupport.ParamManager();
-	return EVAL_BODY_BUFFERED;
+        params = new ParamSupport.ParamManager();
+        return EVAL_BODY_BUFFERED;
     }
 
 
     // gets the right value, encodes it, and prints or stores it
+
     @Override
     public int doEndTag() throws JspException {
-	String result;				// the eventual result
+        String result;                // the eventual result
 
-	// add (already encoded) parameters
+        // add (already encoded) parameters
         String baseUrl = UrlSupport.resolveUrl(url, context, pageContext);
         result = params.aggregateParams(baseUrl);
 
         // if the URL is relative, rewrite it with 'redirect' encoding rules
         HttpServletResponse response =
-            ((HttpServletResponse) pageContext.getResponse());
-        if (!ImportSupport.isAbsoluteUrl(result))
+                ((HttpServletResponse) pageContext.getResponse());
+        if (!ImportSupport.isAbsoluteUrl(result)) {
             result = response.encodeRedirectURL(result);
+        }
 
-	// redirect!
-	try {
-	    response.sendRedirect(result);
-	} catch (java.io.IOException ex) {
-	    throw new JspTagException(ex.toString(), ex);
-	}
+        // redirect!
+        try {
+            response.sendRedirect(result);
+        } catch (java.io.IOException ex) {
+            throw new JspTagException(ex.toString(), ex);
+        }
 
-	return SKIP_PAGE;
+        return SKIP_PAGE;
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
     }
 }

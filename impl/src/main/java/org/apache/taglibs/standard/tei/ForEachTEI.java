@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tei;
 
@@ -37,11 +37,14 @@ public class ForEachTEI extends TagExtraInfo {
      * 
      * - If 'items' is not specified, 'begin' and 'end' must be
      */
+
     @Override
     public boolean isValid(TagData us) {
-        if (!Util.isSpecified(us, ITEMS))
-            if (!Util.isSpecified(us, BEGIN) || !(Util.isSpecified(us, END)))
+        if (!Util.isSpecified(us, ITEMS)) {
+            if (!Util.isSpecified(us, BEGIN) || !(Util.isSpecified(us, END))) {
                 return false;
+            }
+        }
         return true;
     }
 

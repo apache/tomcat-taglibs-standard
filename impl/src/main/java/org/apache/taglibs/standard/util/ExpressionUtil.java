@@ -30,8 +30,8 @@ public class ExpressionUtil {
     /**
      * Create a value expression.
      *
-     * @param pageContext the context in which the expression will be parsed
-     * @param expression the expression
+     * @param pageContext  the context in which the expression will be parsed
+     * @param expression   the expression
      * @param expectedType the expected type of result
      * @return a parsed expression
      */

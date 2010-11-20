@@ -16,17 +16,18 @@
  */
 package org.apache.taglibs.standard.util;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import javax.servlet.jsp.JspWriter;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import static org.apache.taglibs.standard.util.EscapeXML.*;
+import javax.servlet.jsp.JspWriter;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.apache.taglibs.standard.util.EscapeXML.emit;
+import static org.apache.taglibs.standard.util.EscapeXML.escape;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;

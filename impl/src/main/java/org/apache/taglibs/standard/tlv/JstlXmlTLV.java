@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tlv;
 
@@ -30,15 +30,15 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * <p>A SAX-based TagLibraryValidator for the JSTL XML library.
  * Currently implements the following checks:</p>
- * 
+ * <p/>
  * <ul>
- *   <li>Expression syntax validation.
- *   <li>Choose / when / otherwise constraints</li>
- *   <li>Tag bodies that must either be empty or non-empty given
- *      particular attributes.</li>
- *   <li>Other minor constraints.</li>
+ * <li>Expression syntax validation.
+ * <li>Choose / when / otherwise constraints</li>
+ * <li>Tag bodies that must either be empty or non-empty given
+ * particular attributes.</li>
+ * <li>Other minor constraints.</li>
  * </ul>
- * 
+ *
  * @author Shawn Bayern
  */
 public class JstlXmlTLV extends JstlBaseTLV {
@@ -87,10 +87,11 @@ public class JstlXmlTLV extends JstlBaseTLV {
 
     //*********************************************************************
     // set its type and delegate validation to super-class
+
     @Override
-    public  ValidationMessage[] validate(
-	    String prefix, String uri, PageData page) {
-	return super.validate( TYPE_XML, prefix, uri, page );
+    public ValidationMessage[] validate(
+            String prefix, String uri, PageData page) {
+        return super.validate(TYPE_XML, prefix, uri, page);
     }
 
 
@@ -99,43 +100,49 @@ public class JstlXmlTLV extends JstlBaseTLV {
 
     @Override
     protected DefaultHandler getHandler() {
-	return new Handler();
+        return new Handler();
     }
 
 
     //*********************************************************************
     // SAX event handler
 
-    /** The handler that provides the base of our implementation. */
+    /**
+     * The handler that provides the base of our implementation.
+     */
     private class Handler extends DefaultHandler {
 
-	// parser state
-	private int depth = 0;
-	private Stack chooseDepths = new Stack();
-	private Stack chooseHasOtherwise = new Stack();
+        // parser state
+        private int depth = 0;
+        private Stack chooseDepths = new Stack();
+        private Stack chooseHasOtherwise = new Stack();
         private Stack chooseHasWhen = new Stack();
-	private String lastElementName = null;
-	private boolean bodyNecessary = false;
-	private boolean bodyIllegal = false;
-	private Stack transformWithSource = new Stack();
+        private String lastElementName = null;
+        private boolean bodyNecessary = false;
+        private boolean bodyIllegal = false;
+        private Stack transformWithSource = new Stack();
 
-	// process under the existing context (state), then modify it
-	@Override
-    public void startElement(
-	        String ns, String ln, String qn, Attributes a) {
+        // process under the existing context (state), then modify it
+
+        @Override
+        public void startElement(
+                String ns, String ln, String qn, Attributes a) {
 
             // substitute our own parsed 'ln' if it's not provided
-            if (ln == null)
+            if (ln == null) {
                 ln = getLocalPart(qn);
+            }
 
-	    // for simplicity, we can ignore <jsp:text> for our purposes
-	    // (don't bother distinguishing between it and its characters)
-	    if (qn.equals(JSP_TEXT))
-		return;
+            // for simplicity, we can ignore <jsp:text> for our purposes
+            // (don't bother distinguishing between it and its characters)
+            if (qn.equals(JSP_TEXT)) {
+                return;
+            }
 
-	    // check body-related constraint
-	    if (bodyIllegal)
-		fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
+            // check body-related constraint
+            if (bodyIllegal) {
+                fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
+            }
 
             // validate expression syntax if we need to
             Set expAtts;
@@ -145,166 +152,182 @@ public class JstlXmlTLV extends JstlBaseTLV {
                     String attName = a.getLocalName(i);
                     if (expAtts.contains(attName)) {
                         String vMsg =
-                            validateExpression(
-                                ln,
-                                attName,
-                                a.getValue(i));
-                        if (vMsg != null)
+                                validateExpression(
+                                        ln,
+                                        attName,
+                                        a.getValue(i));
+                        if (vMsg != null) {
                             fail(vMsg);
+                        }
                     }
                 }
             }
 
             // validate attributes
-            if (qn.startsWith(prefix + ":") && !hasNoInvalidScope(a))
+            if (qn.startsWith(prefix + ":") && !hasNoInvalidScope(a)) {
                 fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
-                    SCOPE, qn, a.getValue(SCOPE)));
-	    if (qn.startsWith(prefix + ":") && hasEmptyVar(a))
-		fail(Resources.getMessage("TLV_EMPTY_VAR", qn));
-            if (qn.startsWith(prefix + ":") && hasDanglingScope(a))
+                        SCOPE, qn, a.getValue(SCOPE)));
+            }
+            if (qn.startsWith(prefix + ":") && hasEmptyVar(a)) {
+                fail(Resources.getMessage("TLV_EMPTY_VAR", qn));
+            }
+            if (qn.startsWith(prefix + ":") && hasDanglingScope(a)) {
                 fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
+            }
 
-	    // check invariants for <choose>
-	    if (chooseChild()) {
+            // check invariants for <choose>
+            if (chooseChild()) {
                 // mark <choose> for the first the first <when>
                 if (isXmlTag(ns, ln, WHEN)) {
                     chooseHasWhen.pop();
                     chooseHasWhen.push(Boolean.TRUE);
                 }
 
-		// ensure <choose> has the right children
-		if(!isXmlTag(ns, ln, WHEN) && !isXmlTag(ns, ln, OTHERWISE)) {
-		    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
-			prefix, CHOOSE, qn));
-		}
+                // ensure <choose> has the right children
+                if (!isXmlTag(ns, ln, WHEN) && !isXmlTag(ns, ln, OTHERWISE)) {
+                    fail(Resources.getMessage("TLV_ILLEGAL_CHILD_TAG",
+                            prefix, CHOOSE, qn));
+                }
 
-		// make sure <otherwise> is the last tag
-		if (((Boolean) chooseHasOtherwise.peek()).booleanValue()) {
-		   fail(Resources.getMessage("TLV_ILLEGAL_ORDER",
-			qn, prefix, OTHERWISE, CHOOSE));
-		}
-		if (isXmlTag(ns, ln, OTHERWISE)) {
-		    chooseHasOtherwise.pop();
-		    chooseHasOtherwise.push(Boolean.TRUE);
-		}
+                // make sure <otherwise> is the last tag
+                if (((Boolean) chooseHasOtherwise.peek()).booleanValue()) {
+                    fail(Resources.getMessage("TLV_ILLEGAL_ORDER",
+                            qn, prefix, OTHERWISE, CHOOSE));
+                }
+                if (isXmlTag(ns, ln, OTHERWISE)) {
+                    chooseHasOtherwise.pop();
+                    chooseHasOtherwise.push(Boolean.TRUE);
+                }
 
-	    }
+            }
 
-	    // Specific check, directly inside <transform source="...">
-	    if (!transformWithSource.empty() &&
-		    topDepth(transformWithSource) == (depth - 1)) {
-		// only allow <param>
-		if (!isXmlTag(ns, ln, PARAM))
-		    fail(Resources.getMessage("TLV_ILLEGAL_BODY",
-			prefix + ":" + TRANSFORM));
+            // Specific check, directly inside <transform source="...">
+            if (!transformWithSource.empty() &&
+                    topDepth(transformWithSource) == (depth - 1)) {
+                // only allow <param>
+                if (!isXmlTag(ns, ln, PARAM)) {
+                    fail(Resources.getMessage("TLV_ILLEGAL_BODY",
+                            prefix + ":" + TRANSFORM));
+                }
 
-		// thus, if we get the opportunity to hit depth++,
-		// we know we've got a <param> subtag
-	    }
+                // thus, if we get the opportunity to hit depth++,
+                // we know we've got a <param> subtag
+            }
 
-	    // now, modify state
+            // now, modify state
 
-	    // we're a choose, so record new choose-specific state
-	    if (isXmlTag(ns, ln, CHOOSE)) {
-		chooseDepths.push(new Integer(depth));
+            // we're a choose, so record new choose-specific state
+            if (isXmlTag(ns, ln, CHOOSE)) {
+                chooseDepths.push(new Integer(depth));
                 chooseHasWhen.push(Boolean.FALSE);
-		chooseHasOtherwise.push(Boolean.FALSE);
-	    }
+                chooseHasOtherwise.push(Boolean.FALSE);
+            }
 
-	    // set up a check against illegal attribute/body combinations
-	    bodyIllegal = false;
-	    bodyNecessary = false;
-	    if (isXmlTag(ns, ln, PARSE)) {
-		if (hasAttribute(a, SOURCE))
-		    bodyIllegal = true;
-	    } else if (isXmlTag(ns, ln, PARAM)) {
-		if (hasAttribute(a, VALUE))
-		    bodyIllegal = true;
-		else
-		    bodyNecessary = true;
-	    } else if (isXmlTag(ns, ln, TRANSFORM)) {
-		if (hasAttribute(a, SOURCE))
-		    transformWithSource.push(new Integer(depth));
-	    }
+            // set up a check against illegal attribute/body combinations
+            bodyIllegal = false;
+            bodyNecessary = false;
+            if (isXmlTag(ns, ln, PARSE)) {
+                if (hasAttribute(a, SOURCE)) {
+                    bodyIllegal = true;
+                }
+            } else if (isXmlTag(ns, ln, PARAM)) {
+                if (hasAttribute(a, VALUE)) {
+                    bodyIllegal = true;
+                } else {
+                    bodyNecessary = true;
+                }
+            } else if (isXmlTag(ns, ln, TRANSFORM)) {
+                if (hasAttribute(a, SOURCE)) {
+                    transformWithSource.push(new Integer(depth));
+                }
+            }
 
-	    // record the most recent tag (for error reporting)
-	    lastElementName = qn;
+            // record the most recent tag (for error reporting)
+            lastElementName = qn;
             lastElementId = a.getValue("http://java.sun.com/JSP/Page", "id");
 
-	    // we're a new element, so increase depth
-	    depth++;
-	}
+            // we're a new element, so increase depth
+            depth++;
+        }
 
-	@Override
-    public void characters(char[] ch, int start, int length) {
+        @Override
+        public void characters(char[] ch, int start, int length) {
 
-	    bodyNecessary = false;		// body is no longer necessary!
+            bodyNecessary = false;        // body is no longer necessary!
 
-	    // ignore strings that are just whitespace
-	    String s = new String(ch, start, length).trim();
-	    if (s.equals(""))
-		return;
+            // ignore strings that are just whitespace
+            String s = new String(ch, start, length).trim();
+            if (s.equals("")) {
+                return;
+            }
 
-	    // check and update body-related constraints
-	    if (bodyIllegal)
-		fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
+            // check and update body-related constraints
+            if (bodyIllegal) {
+                fail(Resources.getMessage("TLV_ILLEGAL_BODY", lastElementName));
+            }
 
-	    // make sure <choose> has no non-whitespace text
-	    if (chooseChild()) {
-		String msg = 
-		    Resources.getMessage("TLV_ILLEGAL_TEXT_BODY",
-			prefix, CHOOSE,
-			(s.length() < 7 ? s : s.substring(0,7)));
-		fail(msg);
-	    }
+            // make sure <choose> has no non-whitespace text
+            if (chooseChild()) {
+                String msg =
+                        Resources.getMessage("TLV_ILLEGAL_TEXT_BODY",
+                                prefix, CHOOSE,
+                                (s.length() < 7 ? s : s.substring(0, 7)));
+                fail(msg);
+            }
 
             // Specific check, directly inside <transform source="...">
             if (!transformWithSource.empty()
-		    && topDepth(transformWithSource) == (depth - 1)) {
+                    && topDepth(transformWithSource) == (depth - 1)) {
                 fail(Resources.getMessage("TLV_ILLEGAL_BODY",
-                    prefix + ":" + TRANSFORM));
+                        prefix + ":" + TRANSFORM));
             }
-	}
+        }
 
-	@Override
-    public void endElement(String ns, String ln, String qn) {
+        @Override
+        public void endElement(String ns, String ln, String qn) {
 
-	    // consistently, we ignore JSP_TEXT
-	    if (qn.equals(JSP_TEXT))
-		return;
+            // consistently, we ignore JSP_TEXT
+            if (qn.equals(JSP_TEXT)) {
+                return;
+            }
 
-	    // handle body-related invariant
-	    if (bodyNecessary)
-		fail(Resources.getMessage("TLV_MISSING_BODY",
-		    lastElementName));
-	    bodyIllegal = false;	// reset: we've left the tag
+            // handle body-related invariant
+            if (bodyNecessary) {
+                fail(Resources.getMessage("TLV_MISSING_BODY",
+                        lastElementName));
+            }
+            bodyIllegal = false;    // reset: we've left the tag
 
-	    // update <choose>-related state
-	    if (isXmlTag(ns, ln, CHOOSE)) {
+            // update <choose>-related state
+            if (isXmlTag(ns, ln, CHOOSE)) {
                 Boolean b = (Boolean) chooseHasWhen.pop();
-                if (!b.booleanValue())
+                if (!b.booleanValue()) {
                     fail(Resources.getMessage("TLV_PARENT_WITHOUT_SUBTAG",
-                        CHOOSE, WHEN));
-		chooseDepths.pop();
-		chooseHasOtherwise.pop();
-	    }
+                            CHOOSE, WHEN));
+                }
+                chooseDepths.pop();
+                chooseHasOtherwise.pop();
+            }
 
-	    // update <transform source="...">-related state
-	    if (!transformWithSource.empty()
-		    && topDepth(transformWithSource) == (depth - 1))
-		transformWithSource.pop();
+            // update <transform source="...">-related state
+            if (!transformWithSource.empty()
+                    && topDepth(transformWithSource) == (depth - 1)) {
+                transformWithSource.pop();
+            }
 
-	    // update our depth
-	    depth--;
-	}
+            // update our depth
+            depth--;
+        }
 
-	// are we directly under a <choose>?
-	private boolean chooseChild() {
-	    return (!chooseDepths.empty()
-		&& (depth - 1) == ((Integer) chooseDepths.peek()).intValue());
-	}
+        // are we directly under a <choose>?
+
+        private boolean chooseChild() {
+            return (!chooseDepths.empty()
+                    && (depth - 1) == ((Integer) chooseDepths.peek()).intValue());
+        }
 
         // returns the top int depth (peeked at) from a Stack of Integer
+
         private int topDepth(Stack s) {
             return ((Integer) s.peek()).intValue();
         }

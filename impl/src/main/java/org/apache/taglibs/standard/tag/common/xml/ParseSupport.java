@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.xml;
 
@@ -60,15 +60,15 @@ public abstract class ParseSupport extends BodyTagSupport {
 
     protected Object xml;                          // 'xml' attribute
     protected String systemId;                     // 'systemId' attribute
-    protected XMLFilter filter;			   // 'filter' attribute
+    protected XMLFilter filter;               // 'filter' attribute
 
     //*********************************************************************
     // Private state
 
     private String var;                            // 'var' attribute
-    private String varDom;			   // 'varDom' attribute
-    private int scope;				   // processed 'scope' attr
-    private int scopeDom;			   // processed 'scopeDom' attr
+    private String varDom;               // 'varDom' attribute
+    private int scope;                   // processed 'scope' attr
+    private int scopeDom;               // processed 'scopeDom' attr
 
     // state in support of XML parsing...
     private DocumentBuilderFactory dbf;
@@ -81,21 +81,21 @@ public abstract class ParseSupport extends BodyTagSupport {
     // Constructor and initialization
 
     public ParseSupport() {
-	super();
-	init();
+        super();
+        init();
     }
 
     private void init() {
-	var = varDom = null;
-	xml = null;
-	systemId = null;
-	filter = null;
-	dbf = null;
-	db = null;
-	tf = null;
-	th = null;
-	scope = PageContext.PAGE_SCOPE;
-	scopeDom = PageContext.PAGE_SCOPE;
+        var = varDom = null;
+        xml = null;
+        systemId = null;
+        filter = null;
+        dbf = null;
+        db = null;
+        tf = null;
+        th = null;
+        scope = PageContext.PAGE_SCOPE;
+        scopeDom = PageContext.PAGE_SCOPE;
     }
 
 
@@ -103,87 +103,97 @@ public abstract class ParseSupport extends BodyTagSupport {
     // Tag logic
 
     // parse 'source' or body, storing result in 'var'
+
     @Override
     public int doEndTag() throws JspException {
-      try {
-	
-	// set up our DocumentBuilder
-        if (dbf == null) {
-            dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
-            dbf.setValidating(false);
-        }
-        db = dbf.newDocumentBuilder();
+        try {
 
-	// if we've gotten a filter, set up a transformer to support it
-	if (filter != null) {
-            if (tf == null)
-                tf = TransformerFactory.newInstance();
-            if (!tf.getFeature(SAXTransformerFactory.FEATURE))
+            // set up our DocumentBuilder
+            if (dbf == null) {
+                dbf = DocumentBuilderFactory.newInstance();
+                dbf.setNamespaceAware(true);
+                dbf.setValidating(false);
+            }
+            db = dbf.newDocumentBuilder();
+
+            // if we've gotten a filter, set up a transformer to support it
+            if (filter != null) {
+                if (tf == null) {
+                    tf = TransformerFactory.newInstance();
+                }
+                if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
+                    throw new JspTagException(
+                            Resources.getMessage("PARSE_NO_SAXTRANSFORMER"));
+                }
+                SAXTransformerFactory stf = (SAXTransformerFactory) tf;
+                th = stf.newTransformerHandler();
+            }
+
+            // produce a Document by parsing whatever the attributes tell us to use
+            Document d;
+            Object xmlText = this.xml;
+            if (xmlText == null) {
+                // if the attribute was specified, use the body as 'xml'
+                if (bodyContent != null && bodyContent.getString() != null) {
+                    xmlText = bodyContent.getString().trim();
+                } else {
+                    xmlText = "";
+                }
+            }
+            if (xmlText instanceof String) {
+                d = parseStringWithFilter((String) xmlText, filter);
+            } else if (xmlText instanceof Reader) {
+                d = parseReaderWithFilter((Reader) xmlText, filter);
+            } else {
                 throw new JspTagException(
-		    Resources.getMessage("PARSE_NO_SAXTRANSFORMER"));
-            SAXTransformerFactory stf = (SAXTransformerFactory) tf;
-            th = stf.newTransformerHandler();
-	}
+                        Resources.getMessage("PARSE_INVALID_SOURCE"));
+            }
 
-	// produce a Document by parsing whatever the attributes tell us to use
-	Document d;
-	Object xmlText = this.xml;
-	if (xmlText == null) {
-	    // if the attribute was specified, use the body as 'xml'
-	    if (bodyContent != null && bodyContent.getString() != null)
-		xmlText = bodyContent.getString().trim();
-	    else
-		xmlText = "";
-	}
-	if (xmlText instanceof String)
-	    d = parseStringWithFilter((String) xmlText, filter);
-	else if (xmlText instanceof Reader)
-	    d = parseReaderWithFilter((Reader) xmlText, filter);
-	else
-	    throw new JspTagException(
-	        Resources.getMessage("PARSE_INVALID_SOURCE"));
+            // we've got a Document object; store it out as appropriate
+            // (let any exclusivity or other constraints be enforced by TEI/TLV)
+            if (var != null) {
+                pageContext.setAttribute(var, d, scope);
+            }
+            if (varDom != null) {
+                pageContext.setAttribute(varDom, d, scopeDom);
+            }
 
-	// we've got a Document object; store it out as appropriate
-	// (let any exclusivity or other constraints be enforced by TEI/TLV)
-	if (var != null)
-	    pageContext.setAttribute(var, d, scope);
-	if (varDom != null)
-	    pageContext.setAttribute(varDom, d, scopeDom);
-
-	return EVAL_PAGE;
-      } catch (SAXException ex) {
-	throw new JspException(ex);
-      } catch (IOException ex) {
-	throw new JspException(ex);
-      } catch (ParserConfigurationException ex) {
-	throw new JspException(ex);
-      } catch (TransformerConfigurationException ex) {
-	throw new JspException(ex);
-      }
+            return EVAL_PAGE;
+        } catch (SAXException ex) {
+            throw new JspException(ex);
+        } catch (IOException ex) {
+            throw new JspException(ex);
+        } catch (ParserConfigurationException ex) {
+            throw new JspException(ex);
+        } catch (TransformerConfigurationException ex) {
+            throw new JspException(ex);
+        }
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
     }
 
 
     //*********************************************************************
     // Private utility methods
 
-    /** Parses the given InputSource after, applying the given XMLFilter. */
+    /**
+     * Parses the given InputSource after, applying the given XMLFilter.
+     */
     private Document parseInputSourceWithFilter(InputSource s, XMLFilter f)
             throws SAXException, IOException {
-	if (f != null) {
+        if (f != null) {
             // prepare an output Document
             Document o = db.newDocument();
 
             // use TrAX to adapt SAX events to a Document object
             th.setResult(new DOMResult(o));
             XMLReader xr = XMLReaderFactory.createXMLReader();
-	    xr.setEntityResolver(new JstlEntityResolver(pageContext));
+            xr.setEntityResolver(new JstlEntityResolver(pageContext));
             //   (note that we overwrite the filter's parent.  this seems
             //    to be expected usage.  we could cache and reset the old
             //    parent, but you can't setParent(null), so this wouldn't
@@ -192,107 +202,132 @@ public abstract class ParseSupport extends BodyTagSupport {
             f.setContentHandler(th);
             f.parse(s);
             return o;
-	} else
-	    return parseInputSource(s);	
+        } else {
+            return parseInputSource(s);
+        }
     }
 
-    /** Parses the given Reader after applying the given XMLFilter. */
+    /**
+     * Parses the given Reader after applying the given XMLFilter.
+     */
     private Document parseReaderWithFilter(Reader r, XMLFilter f)
             throws SAXException, IOException {
-	return parseInputSourceWithFilter(new InputSource(r), f);
+        return parseInputSourceWithFilter(new InputSource(r), f);
     }
 
-    /** Parses the given String after applying the given XMLFilter. */
+    /**
+     * Parses the given String after applying the given XMLFilter.
+     */
     private Document parseStringWithFilter(String s, XMLFilter f)
             throws SAXException, IOException {
         StringReader r = new StringReader(s);
         return parseReaderWithFilter(r, f);
     }
 
-    /** Parses the given Reader after applying the given XMLFilter. */
+    /**
+     * Parses the given Reader after applying the given XMLFilter.
+     */
     private Document parseURLWithFilter(String url, XMLFilter f)
             throws SAXException, IOException {
-	return parseInputSourceWithFilter(new InputSource(url), f);
+        return parseInputSourceWithFilter(new InputSource(url), f);
     }
 
-    /** Parses the given InputSource into a Document. */
+    /**
+     * Parses the given InputSource into a Document.
+     */
     private Document parseInputSource(InputSource s)
-	    throws SAXException, IOException {
-	db.setEntityResolver(new JstlEntityResolver(pageContext));
+            throws SAXException, IOException {
+        db.setEntityResolver(new JstlEntityResolver(pageContext));
 
         // normalize URIs so they can be processed consistently by resolver
-        if (systemId == null)
+        if (systemId == null) {
             s.setSystemId("jstl:");
-	else if (ImportSupport.isAbsoluteUrl(systemId))
+        } else if (ImportSupport.isAbsoluteUrl(systemId)) {
             s.setSystemId(systemId);
-        else
+        } else {
             s.setSystemId("jstl:" + systemId);
-	return db.parse(s);
+        }
+        return db.parse(s);
     }
 
-    /** Parses the given Reader into a Document. */
+    /**
+     * Parses the given Reader into a Document.
+     */
     private Document parseReader(Reader r) throws SAXException, IOException {
         return parseInputSource(new InputSource(r));
     }
 
-    /** Parses the given String into a Document. */
+    /**
+     * Parses the given String into a Document.
+     */
     private Document parseString(String s) throws SAXException, IOException {
         StringReader r = new StringReader(s);
         return parseReader(r);
     }
 
-    /** Parses the URL (passed as a String) into a Document. */
+    /**
+     * Parses the URL (passed as a String) into a Document.
+     */
     private Document parseURL(String url) throws SAXException, IOException {
-	return parseInputSource(new InputSource(url));
+        return parseInputSource(new InputSource(url));
     }
 
     //*********************************************************************
     // JSTL-specific EntityResolver class
 
-    /** Lets us resolve relative external entities. */
+    /**
+     * Lets us resolve relative external entities.
+     */
     public static class JstlEntityResolver implements EntityResolver {
-	private final PageContext ctx;
+        private final PageContext ctx;
+
         public JstlEntityResolver(PageContext ctx) {
             this.ctx = ctx;
         }
+
         public InputSource resolveEntity(String publicId, String systemId)
-	        throws FileNotFoundException {
+                throws FileNotFoundException {
 
-	    // pass if we don't have a systemId
-	    if (systemId == null)
-		return null;
+            // pass if we don't have a systemId
+            if (systemId == null) {
+                return null;
+            }
 
-	    // strip leading "jstl:" off URL if applicable
-	    if (systemId.startsWith("jstl:"))
-		systemId = systemId.substring(5);
+            // strip leading "jstl:" off URL if applicable
+            if (systemId.startsWith("jstl:")) {
+                systemId = systemId.substring(5);
+            }
 
-	    // we're only concerned with relative URLs
-	    if (ImportSupport.isAbsoluteUrl(systemId))
-		return null;
+            // we're only concerned with relative URLs
+            if (ImportSupport.isAbsoluteUrl(systemId)) {
+                return null;
+            }
 
-	    // for relative URLs, load and wrap the resource.
-	    // don't bother checking for 'null' since we specifically want
-	    // the parser to fail if the resource doesn't exist
-	    InputStream s;
-	    if (systemId.startsWith("/")) {
-	        s = ctx.getServletContext().getResourceAsStream(systemId);
-	        if (s == null)
-		    throw new FileNotFoundException(
-			Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
-			 systemId));
-	    } else {
-		String pagePath =
-		    ((HttpServletRequest) ctx.getRequest()).getServletPath();
-		String basePath =
-		    pagePath.substring(0, pagePath.lastIndexOf("/"));
-		s = ctx.getServletContext().getResourceAsStream(
-		      basePath + "/" + systemId);
-	        if (s == null)
-		    throw new FileNotFoundException(
-			Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
-			 systemId));
-	    }
-	    return new InputSource(s);
+            // for relative URLs, load and wrap the resource.
+            // don't bother checking for 'null' since we specifically want
+            // the parser to fail if the resource doesn't exist
+            InputStream s;
+            if (systemId.startsWith("/")) {
+                s = ctx.getServletContext().getResourceAsStream(systemId);
+                if (s == null) {
+                    throw new FileNotFoundException(
+                            Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
+                                    systemId));
+                }
+            } else {
+                String pagePath =
+                        ((HttpServletRequest) ctx.getRequest()).getServletPath();
+                String basePath =
+                        pagePath.substring(0, pagePath.lastIndexOf("/"));
+                s = ctx.getServletContext().getResourceAsStream(
+                        basePath + "/" + systemId);
+                if (s == null) {
+                    throw new FileNotFoundException(
+                            Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
+                                    systemId));
+                }
+            }
+            return new InputSource(s);
         }
     }
 
@@ -300,18 +335,18 @@ public abstract class ParseSupport extends BodyTagSupport {
     // Tag attributes
 
     public void setVar(String var) {
-	this.var = var;
+        this.var = var;
     }
 
     public void setVarDom(String varDom) {
-	this.varDom = varDom;
+        this.varDom = varDom;
     }
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
+        this.scope = Util.getScope(scope);
     }
 
     public void setScopeDom(String scopeDom) {
-	this.scopeDom = Util.getScope(scopeDom);
+        this.scopeDom = Util.getScope(scopeDom);
     }
 }

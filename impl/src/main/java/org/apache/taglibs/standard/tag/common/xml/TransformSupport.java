@@ -23,6 +23,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -130,9 +131,10 @@ public abstract class TransformSupport extends BodyTagSupport {
 
             // we can assume at most one of 'var' or 'result' is specified
             if (result != null)
-                // we can write directly to the Result
+            // we can write directly to the Result
+            {
                 t.transform(source, result);
-            else if (var != null) {
+            } else if (var != null) {
                 // we need a Document
                 Document d = db.newDocument();
                 Result doc = new DOMResult(d);
@@ -183,12 +185,13 @@ public abstract class TransformSupport extends BodyTagSupport {
      * the current directory in the filesystem.
      */
     private static String wrapSystemId(String systemId) {
-        if (systemId == null)
+        if (systemId == null) {
             return "jstl:";
-        else if (ImportSupport.isAbsoluteUrl(systemId))
+        } else if (ImportSupport.isAbsoluteUrl(systemId)) {
             return systemId;
-        else
+        } else {
             return ("jstl:" + systemId);
+        }
     }
 
     /**
@@ -271,6 +274,7 @@ public abstract class TransformSupport extends BodyTagSupport {
 
     /**
      * Return the Source for a document specified as body content.
+     *
      * @return the document Source
      * @throws JspTagException if there is a problem with the body content
      */
@@ -373,8 +377,9 @@ public abstract class TransformSupport extends BodyTagSupport {
                 throws TransformerException {
 
             // pass if we don't have a systemId
-            if (href == null)
+            if (href == null) {
                 return null;
+            }
 
             // remove "jstl" marker from 'base'
             // NOTE: how 'base' is determined varies among different Xalan
@@ -386,14 +391,16 @@ public abstract class TransformSupport extends BodyTagSupport {
 
             // we're only concerned with relative URLs
             if (ImportSupport.isAbsoluteUrl(href)
-                    || (base != null && ImportSupport.isAbsoluteUrl(base)))
+                    || (base != null && ImportSupport.isAbsoluteUrl(base))) {
                 return null;
+            }
 
             // base is relative; remove everything after trailing '/'
-            if (base == null || base.lastIndexOf("/") == -1)
+            if (base == null || base.lastIndexOf("/") == -1) {
                 base = "";
-            else
+            } else {
                 base = base.substring(0, base.lastIndexOf("/") + 1);
+            }
 
             // concatenate to produce the real URL we're interested in
             String target = base + href;
@@ -404,10 +411,11 @@ public abstract class TransformSupport extends BodyTagSupport {
             InputStream s;
             if (target.startsWith("/")) {
                 s = ctx.getServletContext().getResourceAsStream(target);
-                if (s == null)
+                if (s == null) {
                     throw new TransformerException(
                             Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
                                     href));
+                }
             } else {
                 String pagePath =
                         ((HttpServletRequest) ctx.getRequest()).getServletPath();
@@ -415,10 +423,11 @@ public abstract class TransformSupport extends BodyTagSupport {
                         pagePath.substring(0, pagePath.lastIndexOf("/"));
                 s = ctx.getServletContext().getResourceAsStream(
                         basePath + "/" + target);
-                if (s == null)
+                if (s == null) {
                     throw new TransformerException(
                             Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
                                     href));
+                }
             }
             return new StreamSource(s);
         }

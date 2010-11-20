@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.xml;
 
@@ -32,12 +32,14 @@ public class IfTag extends ConditionalTagSupport {
     // Constructor and lifecycle management
 
     // initialize inherited and local state
+
     public IfTag() {
         super();
         init();
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
         super.release();
@@ -73,6 +75,7 @@ public class IfTag extends ConditionalTagSupport {
     // Private utility methods
 
     // resets internal state
+
     private void init() {
         select = null;
     }

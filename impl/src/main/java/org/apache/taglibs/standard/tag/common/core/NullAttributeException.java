@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
 
@@ -38,6 +38,6 @@ public class NullAttributeException extends JspTagException {
      * @param att The attribute value for which the error occurred.
      */
     public NullAttributeException(String tag, String att) {
-	super(Resources.getMessage("TAG_NULL_ATTRIBUTE", att, tag));
+        super(Resources.getMessage("TAG_NULL_ATTRIBUTE", att, tag));
     }
 }

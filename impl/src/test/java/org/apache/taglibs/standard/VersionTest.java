@@ -17,10 +17,10 @@
 
 package org.apache.taglibs.standard;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class VersionTest
-    extends TestCase {
+        extends TestCase {
     private Version version = null;
 
     public VersionTest(String name) {

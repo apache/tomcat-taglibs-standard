@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tlv;
 
@@ -30,13 +30,13 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * <p>A SAX-based TagLibraryValidator for the JSTL i18n-capable formatting
  * library. Currently implements the following checks:</p>
- * 
+ * <p/>
  * <ul>
- *   <li>Expression syntax validation.
- *   <li>Tag bodies that must either be empty or non-empty given
- *      particular attributes.</li>
+ * <li>Expression syntax validation.
+ * <li>Tag bodies that must either be empty or non-empty given
+ * particular attributes.</li>
  * </ul>
- * 
+ *
  * @author Shawn Bayern
  * @author Jan Luehe
  */
@@ -92,10 +92,11 @@ public class JstlFmtTLV extends JstlBaseTLV {
 
     //*********************************************************************
     // set its type and delegate validation to super-class
+
     @Override
-    public  ValidationMessage[] validate(
-	    String prefix, String uri, PageData page) {
-	return super.validate( TYPE_FMT, prefix, uri, page );
+    public ValidationMessage[] validate(
+            String prefix, String uri, PageData page) {
+        return super.validate(TYPE_FMT, prefix, uri, page);
     }
 
 
@@ -104,41 +105,47 @@ public class JstlFmtTLV extends JstlBaseTLV {
 
     @Override
     protected DefaultHandler getHandler() {
-	return new Handler();
+        return new Handler();
     }
 
 
     //*********************************************************************
     // SAX event handler
 
-    /** The handler that provides the base of our implementation. */
+    /**
+     * The handler that provides the base of our implementation.
+     */
     private class Handler extends DefaultHandler {
 
-	// parser state
-	private int depth = 0;
-	private Stack messageDepths = new Stack();
-	private String lastElementName = null;
-	private boolean bodyNecessary = false;
-	private boolean bodyIllegal = false;
+        // parser state
+        private int depth = 0;
+        private Stack messageDepths = new Stack();
+        private String lastElementName = null;
+        private boolean bodyNecessary = false;
+        private boolean bodyIllegal = false;
 
-	// process under the existing context (state), then modify it
-	@Override
-    public void startElement(
-	        String ns, String ln, String qn, Attributes a) {
+        // process under the existing context (state), then modify it
+
+        @Override
+        public void startElement(
+                String ns, String ln, String qn, Attributes a) {
 
             // substitute our own parsed 'ln' if it's not provided
-            if (ln == null)
+            if (ln == null) {
                 ln = getLocalPart(qn);
+            }
 
-	    // for simplicity, we can ignore <jsp:text> for our purposes
-	    // (don't bother distinguishing between it and its characters)
-	    if (qn.equals(JSP_TEXT))
-		return;
+            // for simplicity, we can ignore <jsp:text> for our purposes
+            // (don't bother distinguishing between it and its characters)
+            if (qn.equals(JSP_TEXT)) {
+                return;
+            }
 
-	    // check body-related constraint
-	    if (bodyIllegal)
-		fail(Resources.getMessage("TLV_ILLEGAL_BODY",
-					  lastElementName));
+            // check body-related constraint
+            if (bodyIllegal) {
+                fail(Resources.getMessage("TLV_ILLEGAL_BODY",
+                        lastElementName));
+            }
 
             // validate expression syntax if we need to
             Set expAtts;
@@ -148,114 +155,123 @@ public class JstlFmtTLV extends JstlBaseTLV {
                     String attName = a.getLocalName(i);
                     if (expAtts.contains(attName)) {
                         String vMsg =
-                            validateExpression(
-                                ln,
-                                attName,
-                                a.getValue(i));
-                        if (vMsg != null)
+                                validateExpression(
+                                        ln,
+                                        attName,
+                                        a.getValue(i));
+                        if (vMsg != null) {
                             fail(vMsg);
+                        }
                     }
                 }
             }
 
             // validate attributes
-            if (qn.startsWith(prefix + ":") && !hasNoInvalidScope(a))
+            if (qn.startsWith(prefix + ":") && !hasNoInvalidScope(a)) {
                 fail(Resources.getMessage("TLV_INVALID_ATTRIBUTE",
-                    SCOPE, qn, a.getValue(SCOPE)));
-	    if (qn.startsWith(prefix + ":") && hasEmptyVar(a))
-		fail(Resources.getMessage("TLV_EMPTY_VAR", qn));
+                        SCOPE, qn, a.getValue(SCOPE)));
+            }
+            if (qn.startsWith(prefix + ":") && hasEmptyVar(a)) {
+                fail(Resources.getMessage("TLV_EMPTY_VAR", qn));
+            }
             if (qn.startsWith(prefix + ":")
-                && !isFmtTag(ns, ln, SETLOCALE) 
-		&& !isFmtTag(ns, ln, SETBUNDLE)
-		&& !isFmtTag(ns, ln, SETTIMEZONE)
-                && hasDanglingScope(a))
+                    && !isFmtTag(ns, ln, SETLOCALE)
+                    && !isFmtTag(ns, ln, SETBUNDLE)
+                    && !isFmtTag(ns, ln, SETTIMEZONE)
+                    && hasDanglingScope(a)) {
                 fail(Resources.getMessage("TLV_DANGLING_SCOPE", qn));
+            }
 
-	    /*
-	     * Make sure <fmt:param> is nested inside <fmt:message>. Note that
-	     * <fmt:param> does not need to be a direct child of <fmt:message>.
-	     * Otherwise, the following would not work:
-	     *
-	     *  <fmt:message key="..." bundle="...">
-	     *   <c:forEach var="arg" items="...">
-	     *    <fmt:param value="${arg}"/>
-	     *   </c:forEach>
-	     *  </fmt:message>
-	     */
-	    if (isFmtTag(ns, ln, MESSAGE_PARAM) && messageDepths.empty()) {
-		fail(Resources.getMessage("PARAM_OUTSIDE_MESSAGE"));
-	    }
+            /*
+            * Make sure <fmt:param> is nested inside <fmt:message>. Note that
+            * <fmt:param> does not need to be a direct child of <fmt:message>.
+            * Otherwise, the following would not work:
+            *
+            *  <fmt:message key="..." bundle="...">
+            *   <c:forEach var="arg" items="...">
+            *    <fmt:param value="${arg}"/>
+            *   </c:forEach>
+            *  </fmt:message>
+            */
+            if (isFmtTag(ns, ln, MESSAGE_PARAM) && messageDepths.empty()) {
+                fail(Resources.getMessage("PARAM_OUTSIDE_MESSAGE"));
+            }
 
-	    // now, modify state
+            // now, modify state
 
-	    // If we're in a <message>, record relevant state
-	    if (isFmtTag(ns, ln, MESSAGE)) {
-		messageDepths.push(new Integer(depth));
-	    }
+            // If we're in a <message>, record relevant state
+            if (isFmtTag(ns, ln, MESSAGE)) {
+                messageDepths.push(new Integer(depth));
+            }
 
-	    // set up a check against illegal attribute/body combinations
-	    bodyIllegal = false;
-	    bodyNecessary = false;
-	    if (isFmtTag(ns, ln, MESSAGE_PARAM)
-		    || isFmtTag(ns, ln, FORMAT_NUMBER)
-		    || isFmtTag(ns, ln, PARSE_NUMBER)
-		    || isFmtTag(ns, ln,  PARSE_DATE)) {
-		if (hasAttribute(a, VALUE))
-		    bodyIllegal = true;
-		else
-		    bodyNecessary = true;
-	    } else if (isFmtTag(ns, ln, MESSAGE)
-		    && !hasAttribute(a, MESSAGE_KEY)) {
-		bodyNecessary = true;
-	    } else if (isFmtTag(ns, ln, BUNDLE)
-		    && hasAttribute(a, BUNDLE_PREFIX)) {
-		bodyNecessary = true;
-	    }
+            // set up a check against illegal attribute/body combinations
+            bodyIllegal = false;
+            bodyNecessary = false;
+            if (isFmtTag(ns, ln, MESSAGE_PARAM)
+                    || isFmtTag(ns, ln, FORMAT_NUMBER)
+                    || isFmtTag(ns, ln, PARSE_NUMBER)
+                    || isFmtTag(ns, ln, PARSE_DATE)) {
+                if (hasAttribute(a, VALUE)) {
+                    bodyIllegal = true;
+                } else {
+                    bodyNecessary = true;
+                }
+            } else if (isFmtTag(ns, ln, MESSAGE)
+                    && !hasAttribute(a, MESSAGE_KEY)) {
+                bodyNecessary = true;
+            } else if (isFmtTag(ns, ln, BUNDLE)
+                    && hasAttribute(a, BUNDLE_PREFIX)) {
+                bodyNecessary = true;
+            }
 
-	    // record the most recent tag (for error reporting)
-	    lastElementName = qn;
+            // record the most recent tag (for error reporting)
+            lastElementName = qn;
             lastElementId = a.getValue(JSP, "id");
 
-	    // we're a new element, so increase depth
-	    depth++;
-	}
+            // we're a new element, so increase depth
+            depth++;
+        }
 
-	@Override
-    public void characters(char[] ch, int start, int length) {
+        @Override
+        public void characters(char[] ch, int start, int length) {
 
-	    bodyNecessary = false;		// body is no longer necessary!
+            bodyNecessary = false;        // body is no longer necessary!
 
-	    // ignore strings that are just whitespace
-	    String s = new String(ch, start, length).trim();
-	    if (s.equals(""))
-		return;
+            // ignore strings that are just whitespace
+            String s = new String(ch, start, length).trim();
+            if (s.equals("")) {
+                return;
+            }
 
-	    // check and update body-related constraints
-	    if (bodyIllegal)
-		fail(Resources.getMessage("TLV_ILLEGAL_BODY",
-					  lastElementName));
-	}
+            // check and update body-related constraints
+            if (bodyIllegal) {
+                fail(Resources.getMessage("TLV_ILLEGAL_BODY",
+                        lastElementName));
+            }
+        }
 
-	@Override
-    public void endElement(String ns, String ln, String qn) {
+        @Override
+        public void endElement(String ns, String ln, String qn) {
 
-	    // consistently, we ignore JSP_TEXT
-	    if (qn.equals(JSP_TEXT))
-		return;
+            // consistently, we ignore JSP_TEXT
+            if (qn.equals(JSP_TEXT)) {
+                return;
+            }
 
-	    // handle body-related invariant
-	    if (bodyNecessary)
-		fail(Resources.getMessage("TLV_MISSING_BODY",
-		    lastElementName));
-	    bodyIllegal = false;	// reset: we've left the tag
+            // handle body-related invariant
+            if (bodyNecessary) {
+                fail(Resources.getMessage("TLV_MISSING_BODY",
+                        lastElementName));
+            }
+            bodyIllegal = false;    // reset: we've left the tag
 
-	    // update <message>-related state
-	    if (isFmtTag(ns, ln, MESSAGE)) {
-		messageDepths.pop();
-	    }
+            // update <message>-related state
+            if (isFmtTag(ns, ln, MESSAGE)) {
+                messageDepths.pop();
+            }
 
-	    // update our depth
-	    depth--;
-	}
+            // update our depth
+            depth--;
+        }
     }
 }

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
@@ -34,6 +34,7 @@ public class SetBundleTag extends SetBundleSupport {
     // Accessor methods
 
     // for tag attribute
+
     public void setBasename(String basename) throws JspTagException {
         this.basename = basename;
     }

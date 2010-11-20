@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.sql;
 
@@ -32,9 +32,9 @@ import org.apache.taglibs.standard.resources.Resources;
 /**
  * <p>A simple <code>DataSource</code> utility for the standard
  * <code>DriverManager</code> class.
- *
+ * <p/>
  * TO DO: need to cache DataSource
- * 
+ *
  * @author Justyna Horwat
  */
 public class DataSourceUtil {
@@ -49,23 +49,22 @@ public class DataSourceUtil {
      * is
      */
     static DataSource getDataSource(Object rawDataSource, PageContext pc)
-	throws JspException
-    {
-	DataSource dataSource = null;
+            throws JspException {
+        DataSource dataSource = null;
 
         if (rawDataSource == null) {
             rawDataSource = Config.find(pc, Config.SQL_DATA_SOURCE);
         }
 
-	if (rawDataSource == null) {
-	    return null;
-	}
+        if (rawDataSource == null) {
+            return null;
+        }
 
         /*
-	 * If the 'dataSource' attribute's value resolves to a String
-	 * after rtexpr/EL evaluation, use the string as JNDI path to
-	 * a DataSource
-	 */
+         * If the 'dataSource' attribute's value resolves to a String
+         * after rtexpr/EL evaluation, use the string as JNDI path to
+         * a DataSource
+         */
         if (rawDataSource instanceof String) {
             try {
                 Context ctx = new InitialContext();
@@ -78,66 +77,64 @@ public class DataSourceUtil {
         } else if (rawDataSource instanceof DataSource) {
             dataSource = (DataSource) rawDataSource;
         } else {
-	    throw new JspException(
-                Resources.getMessage("SQL_DATASOURCE_INVALID_TYPE"));
-	}
+            throw new JspException(
+                    Resources.getMessage("SQL_DATASOURCE_INVALID_TYPE"));
+        }
 
-	return dataSource;
+        return dataSource;
     }
 
     /**
      * Parse JDBC parameters and setup dataSource appropriately
      */
     private static DataSource getDataSource(String params)
-	throws JspException
-    {
+            throws JspException {
         DataSourceWrapper dataSource = new DataSourceWrapper();
 
         String[] paramString = new String[4];
-        int escCount = 0; 
-        int aryCount = 0; 
+        int escCount = 0;
+        int aryCount = 0;
         int begin = 0;
 
-        for(int index=0; index < params.length(); index++) {
+        for (int index = 0; index < params.length(); index++) {
             char nextChar = params.charAt(index);
             if (TOKEN.indexOf(nextChar) != -1) {
                 if (escCount == 0) {
-                    paramString[aryCount] = params.substring(begin,index).trim();
+                    paramString[aryCount] = params.substring(begin, index).trim();
                     begin = index + 1;
                     if (++aryCount > 4) {
                         throw new JspTagException(
-                            Resources.getMessage("JDBC_PARAM_COUNT"));
+                                Resources.getMessage("JDBC_PARAM_COUNT"));
                     }
                 }
             }
             if (ESCAPE.indexOf(nextChar) != -1) {
                 escCount++;
-            }
-            else {
+            } else {
                 escCount = 0;
             }
         }
         paramString[aryCount] = params.substring(begin).trim();
 
-	// use the JDBC URL from the parameter string
+        // use the JDBC URL from the parameter string
         dataSource.setJdbcURL(paramString[0]);
 
-	// try to load a driver if it's present
+        // try to load a driver if it's present
         if (paramString[1] != null) {
             try {
                 dataSource.setDriverClassName(paramString[1]);
             } catch (Exception ex) {
                 throw new JspTagException(
-                    Resources.getMessage("DRIVER_INVALID_CLASS",
-					 ex.toString()), ex);
+                        Resources.getMessage("DRIVER_INVALID_CLASS",
+                                ex.toString()), ex);
             }
-	}
+        }
 
-	// set the username and password
+        // set the username and password
         dataSource.setUserName(paramString[2]);
         dataSource.setPassword(paramString[3]);
 
-	return dataSource;
+        return dataSource;
     }
 
 }

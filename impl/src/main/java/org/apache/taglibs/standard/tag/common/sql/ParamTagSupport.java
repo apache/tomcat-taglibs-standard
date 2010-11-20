@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 package org.apache.taglibs.standard.tag.common.sql;
 
 import javax.servlet.jsp.JspException;
@@ -27,7 +27,7 @@ import org.apache.taglibs.standard.resources.Resources;
 /**
  * <p>Tag handler for &lt;Param&gt; in JSTL, used to set
  * parameter values for a SQL statement.</p>
- * 
+ *
  * @author Hans Bergsten
  */
 
@@ -39,25 +39,24 @@ public abstract class ParamTagSupport extends BodyTagSupport {
 
     @Override
     public int doEndTag() throws JspException {
-	SQLExecutionTag parent = (SQLExecutionTag) 
-	    findAncestorWithClass(this, SQLExecutionTag.class);
-	if (parent == null) {
-	    throw new JspTagException(
-                Resources.getMessage("SQL_PARAM_OUTSIDE_PARENT"));
-	}
+        SQLExecutionTag parent = (SQLExecutionTag)
+                findAncestorWithClass(this, SQLExecutionTag.class);
+        if (parent == null) {
+            throw new JspTagException(
+                    Resources.getMessage("SQL_PARAM_OUTSIDE_PARENT"));
+        }
 
-	Object paramValue = null;
-	if (value != null) {
-	    paramValue = value;
-	}
-	else if (bodyContent != null) {
-	    paramValue = bodyContent.getString().trim();
-	    if (((String) paramValue).trim().length() == 0) {
-		paramValue = null;
-	    }
-	}
+        Object paramValue = null;
+        if (value != null) {
+            paramValue = value;
+        } else if (bodyContent != null) {
+            paramValue = bodyContent.getString().trim();
+            if (((String) paramValue).trim().length() == 0) {
+                paramValue = null;
+            }
+        }
 
-	parent.addSQLParameter(paramValue);
-	return EVAL_PAGE;
+        parent.addSQLParameter(paramValue);
+        return EVAL_PAGE;
     }
 }

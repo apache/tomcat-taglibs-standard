@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
@@ -53,7 +53,7 @@ public abstract class MessageSupport extends BodyTagSupport {
     // Protected state
 
     protected String keyAttrValue;       // 'key' attribute value
-    protected boolean keySpecified;	 // 'key' attribute specified
+    protected boolean keySpecified;     // 'key' attribute specified
     protected LocalizationContext bundleAttrValue; // 'bundle' attribute value
     protected boolean bundleSpecified;   // 'bundle' attribute specified?
 
@@ -70,18 +70,18 @@ public abstract class MessageSupport extends BodyTagSupport {
     // Constructor and initialization
 
     public MessageSupport() {
-	super();
-	params = new ArrayList();
-	init();
+        super();
+        params = new ArrayList();
+        init();
     }
 
     private void init() {
-	var = null;
-	scope = PageContext.PAGE_SCOPE;
-	keyAttrValue = null;
-	keySpecified = false;
-	bundleAttrValue = null;
-	bundleSpecified = false;
+        var = null;
+        scope = PageContext.PAGE_SCOPE;
+        keyAttrValue = null;
+        keySpecified = false;
+        bundleAttrValue = null;
+        bundleSpecified = false;
     }
 
 
@@ -93,7 +93,7 @@ public abstract class MessageSupport extends BodyTagSupport {
     }
 
     public void setScope(String scope) {
-	this.scope = Util.getScope(scope);
+        this.scope = Util.getScope(scope);
     }
 
 
@@ -106,7 +106,7 @@ public abstract class MessageSupport extends BodyTagSupport {
      * @see ParamSupport
      */
     public void addParam(Object arg) {
-	params.add(arg);
+        params.add(arg);
     }
 
 
@@ -115,71 +115,73 @@ public abstract class MessageSupport extends BodyTagSupport {
 
     @Override
     public int doStartTag() throws JspException {
-	params.clear();
-	return EVAL_BODY_BUFFERED;
+        params.clear();
+        return EVAL_BODY_BUFFERED;
     }
 
     @Override
     public int doEndTag() throws JspException {
 
         String key = null;
-	LocalizationContext locCtxt = null;
+        LocalizationContext locCtxt = null;
 
         // determine the message key by...
         if (keySpecified) {
-	    // ... reading 'key' attribute
-	    key = keyAttrValue;
-	} else {
-	    // ... retrieving and trimming our body
-	    if (bodyContent != null && bodyContent.getString() != null)
-	        key = bodyContent.getString().trim();
-	}
+            // ... reading 'key' attribute
+            key = keyAttrValue;
+        } else {
+            // ... retrieving and trimming our body
+            if (bodyContent != null && bodyContent.getString() != null) {
+                key = bodyContent.getString().trim();
+            }
+        }
 
-	if ((key == null) || key.equals("")) {
-	    try {
-		pageContext.getOut().print("??????");
-	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.toString(), ioe);
-	    }
-	    return EVAL_PAGE;
-	}
+        if ((key == null) || key.equals("")) {
+            try {
+                pageContext.getOut().print("??????");
+            } catch (IOException ioe) {
+                throw new JspTagException(ioe.toString(), ioe);
+            }
+            return EVAL_PAGE;
+        }
 
-	String prefix = null;
-	if (!bundleSpecified) {
-	    Tag t = findAncestorWithClass(this, BundleSupport.class);
-	    if (t != null) {
-		// use resource bundle from parent <bundle> tag
-		BundleSupport parent = (BundleSupport) t;
-		locCtxt = parent.getLocalizationContext();
-		prefix = parent.getPrefix();
-	    } else {
-		locCtxt = BundleSupport.getLocalizationContext(pageContext);
-	    }
-	} else {
-	    // localization context taken from 'bundle' attribute
-	    locCtxt = bundleAttrValue;
-	    if (locCtxt.getLocale() != null) {
-		SetLocaleSupport.setResponseLocale(pageContext,
-						   locCtxt.getLocale());
-	    }
-	}
-        
- 	String message = UNDEFINED_KEY + key + UNDEFINED_KEY;
-	if (locCtxt != null) {
-	    ResourceBundle bundle = locCtxt.getResourceBundle();
-	    if (bundle != null) {
-		try {
-		    // prepend 'prefix' attribute from parent bundle
-		    if (prefix != null)
-			key = prefix + key;
-		    message = bundle.getString(key);
-		    // Perform parametric replacement if required
-		    if (!params.isEmpty()) {
-			Object[] messageArgs = params.toArray();
-			MessageFormat formatter = new MessageFormat(""); // empty pattern, default Locale
-			if (locCtxt.getLocale() != null) {
-			    formatter.setLocale(locCtxt.getLocale());
-			} else {
+        String prefix = null;
+        if (!bundleSpecified) {
+            Tag t = findAncestorWithClass(this, BundleSupport.class);
+            if (t != null) {
+                // use resource bundle from parent <bundle> tag
+                BundleSupport parent = (BundleSupport) t;
+                locCtxt = parent.getLocalizationContext();
+                prefix = parent.getPrefix();
+            } else {
+                locCtxt = BundleSupport.getLocalizationContext(pageContext);
+            }
+        } else {
+            // localization context taken from 'bundle' attribute
+            locCtxt = bundleAttrValue;
+            if (locCtxt.getLocale() != null) {
+                SetLocaleSupport.setResponseLocale(pageContext,
+                        locCtxt.getLocale());
+            }
+        }
+
+        String message = UNDEFINED_KEY + key + UNDEFINED_KEY;
+        if (locCtxt != null) {
+            ResourceBundle bundle = locCtxt.getResourceBundle();
+            if (bundle != null) {
+                try {
+                    // prepend 'prefix' attribute from parent bundle
+                    if (prefix != null) {
+                        key = prefix + key;
+                    }
+                    message = bundle.getString(key);
+                    // Perform parametric replacement if required
+                    if (!params.isEmpty()) {
+                        Object[] messageArgs = params.toArray();
+                        MessageFormat formatter = new MessageFormat(""); // empty pattern, default Locale
+                        if (locCtxt.getLocale() != null) {
+                            formatter.setLocale(locCtxt.getLocale());
+                        } else {
                             // For consistency with the <fmt:formatXXX> actions,
                             // we try to get a locale that matches the user's preferences
                             // as well as the locales supported by 'date' and 'number'.
@@ -190,31 +192,32 @@ public abstract class MessageSupport extends BodyTagSupport {
                                 formatter.setLocale(locale);
                             }
                         }
-			formatter.applyPattern(message);
-			message = formatter.format(messageArgs);
-		    }
-		} catch (MissingResourceException mre) {
-		    message = UNDEFINED_KEY + key + UNDEFINED_KEY;
-		}
-	    }
-	}
+                        formatter.applyPattern(message);
+                        message = formatter.format(messageArgs);
+                    }
+                } catch (MissingResourceException mre) {
+                    message = UNDEFINED_KEY + key + UNDEFINED_KEY;
+                }
+            }
+        }
 
-	if (var != null) {
-	    pageContext.setAttribute(var, message, scope);	
-	} else {
-	    try {
-		pageContext.getOut().print(message);
-	    } catch (IOException ioe) {
-		throw new JspTagException(ioe.toString(), ioe);
-	    }
-	}
+        if (var != null) {
+            pageContext.setAttribute(var, message, scope);
+        } else {
+            try {
+                pageContext.getOut().print(message);
+            } catch (IOException ioe) {
+                throw new JspTagException(ioe.toString(), ioe);
+            }
+        }
 
-	return EVAL_PAGE;
+        return EVAL_PAGE;
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
     }
 }

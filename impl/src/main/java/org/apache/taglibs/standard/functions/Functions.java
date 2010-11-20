@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.functions;
 
@@ -32,12 +32,12 @@ import org.apache.taglibs.standard.util.EscapeXML;
 /**
  * Static functions that extend the Expression Language with standardized behaviour
  * commonly used by page authors.
- *
+ * <p/>
  * <strong>Implementation Note:</strong> When passing a String parameter, section
  * 1.18.2 of the EL specification requires the container to coerce a null value to an
  * empty string. These implementation assume such behaviour and do not check for null
  * parameters. Passing a null will generally trigger a NullPointerException.
- * 
+ *
  * @author Pierre Delisle
  */
 
@@ -67,18 +67,18 @@ public class Functions {
     public static String toLowerCase(String input) {
         return input.toLowerCase();
     }
-    
+
     //*********************************************************************
     // Substring processing
 
     /**
      * Returns the index (0-based) withing a string of the first occurrence of a specified
      * substring according to the semantics of the method <code>String#indexOf()</code>.
-     *
+     * <p/>
      * If <code>substring</code> is empty, this matches the beginning of the string and the
      * value returned is 0.
      *
-     * @param input the input string on which the function is applied
+     * @param input     the input string on which the function is applied
      * @param substring the substring to search for in the input string
      * @return the 0-based index of the first matching substring, or -1 if it does not occur
      */
@@ -89,23 +89,23 @@ public class Functions {
     /**
      * Tests if a string contains the specified substring.
      *
-     * @param input the input string on which the function is applied
+     * @param input     the input string on which the function is applied
      * @param substring the substring tested for
      * @return true if the character sequence represented by the substring
-     * exists in the string
+     *         exists in the string
      */
     public static boolean contains(String input, String substring) {
         return input.contains(substring);
-    }    
+    }
 
     /**
      * Tests if a string contains the specified substring in a case insensitive way.
      * Equivalent to <code>fn:contains(fn:toUpperCase(string), fn:toUpperCase(substring))</code>.
      *
-     * @param input the input string on which the function is applied
+     * @param input     the input string on which the function is applied
      * @param substring the substring tested for
      * @return true if the character sequence represented by the substring
-     * exists in the string
+     *         exists in the string
      */
     public static boolean containsIgnoreCase(String input, String substring) {
         return contains(input.toUpperCase(), substring.toUpperCase());
@@ -115,19 +115,19 @@ public class Functions {
      * Tests if a string starts with the specified prefix according to the semantics
      * of <code>String#startsWith()</code>.
      *
-     * @param input the input string on which the function is applied
+     * @param input  the input string on which the function is applied
      * @param prefix the prefix to be matched
      * @return true if the input string starts with the prefix
      */
     public static boolean startsWith(String input, String prefix) {
         return input.startsWith(prefix);
-    }    
-        
+    }
+
     /**
      * Tests if a string ends with the specified suffix according to the semantics
      * of <code>String#endsWith()</code>.
      *
-     * @param input the input string on which the function is applied
+     * @param input  the input string on which the function is applied
      * @param suffix the suffix to be matched
      * @return true if the input string ends with the suffix
      */
@@ -145,27 +145,33 @@ public class Functions {
      * <li>if <code>endIndex < beginIndex</code>, an empty string is returned</li>
      * </ul>
      *
-     * @param input the input string on which the substring function is applied
+     * @param input      the input string on which the substring function is applied
      * @param beginIndex the beginning index (0-based), inclusive
-     * @param endIndex the end index (0-based), exclusive
+     * @param endIndex   the end index (0-based), exclusive
      * @return a subset of string
      */
     public static String substring(String input, int beginIndex, int endIndex) {
-        if (beginIndex < 0) beginIndex = 0;
-        if (endIndex < 0 || endIndex > input.length()) endIndex = input.length();
-        if (endIndex < beginIndex) return "";
+        if (beginIndex < 0) {
+            beginIndex = 0;
+        }
+        if (endIndex < 0 || endIndex > input.length()) {
+            endIndex = input.length();
+        }
+        if (endIndex < beginIndex) {
+            return "";
+        }
         return input.substring(beginIndex, endIndex);
     }
 
     /**
      * Returns a subset of a string following the first occurrence of a specific substring.
-     *
+     * <p/>
      * If the substring is empty, it matches the beginning of the input string and the
      * entire input string is returned. If the substring does not occur, an empty string is returned.
      *
-     * @param input the input string on which the substring function is applied
+     * @param input     the input string on which the substring function is applied
      * @param substring the substring that delimits the beginning of the subset
-     * of the input string to be returned
+     *                  of the input string to be returned
      * @return a substring of the input string that starts at the first character after the specified substring
      */
     public static String substringAfter(String input, String substring) {
@@ -173,19 +179,19 @@ public class Functions {
         if (index == -1) {
             return "";
         } else {
-            return input.substring(index+substring.length());
+            return input.substring(index + substring.length());
         }
-    }    
-        
+    }
+
     /**
      * Returns a subset of a string immediately before the first occurrence of a specific substring.
-     *
+     * <p/>
      * If the substring is empty, it matches the beginning of the input string and an empty string is returned.
      * If the substring does not occur, an empty string is returned.
      *
-     * @param input the input string on which the substring function is applied
+     * @param input     the input string on which the substring function is applied
      * @param substring the substring that delimits the beginning of the subset
-     * of the input string to be returned
+     *                  of the input string to be returned
      * @return a substring of the input string that starts at the first character after the specified substring
      */
     public static String substringBefore(String input, String substring) {
@@ -195,7 +201,7 @@ public class Functions {
         } else {
             return input.substring(0, index);
         }
-    }    
+    }
 
     //*********************************************************************
     // Character replacement
@@ -224,13 +230,12 @@ public class Functions {
      * Returns a string resulting from replacing all occurrences of a "before" substring with an "after" substring.
      * The string is processed once and not reprocessed for further replacements.
      *
-     * @param input the string on which the replacement is to be applied
+     * @param input  the string on which the replacement is to be applied
      * @param before the substring to replace
-     * @param after the replacement substring
+     * @param after  the replacement substring
      * @return a string with before replaced with after
      */
-    public static String replace(String input, String before, String after)
-    {
+    public static String replace(String input, String before, String after) {
         if (before.length() == 0) {
             return input;
         }
@@ -242,14 +247,13 @@ public class Functions {
      * If the input string is empty, a single element array containing an empty string is returned.
      * If the delimiters are empty, a single element array containing the input string is returned.
      *
-     * @param input the string to split
+     * @param input      the string to split
      * @param delimiters characters used to split the string
      * @return an array of strings
      */
-    public static String[] split(String input, String delimiters)
-    {
+    public static String[] split(String input, String delimiters) {
         if (input.length() == 0 || delimiters.length() == 0) {
-            return new String[] { input };
+            return new String[]{input};
         }
 
         StringTokenizer tok = new StringTokenizer(input, delimiters);
@@ -263,12 +267,12 @@ public class Functions {
 
     /**
      * Joins all elements of an array into a string.
-     *
+     * <p/>
      * <strong>Implementation Note</strong>: The specification does not define what happens when
      * elements in the array are null. For compatibility with previous implementations, the string
      * "null" is used although EL conventions would suggest an empty string might be better.
      *
-     * @param array an array of strings to be joined
+     * @param array     an array of strings to be joined
      * @param separator used to separate the joined strings
      * @return all array elements joined into one string with the specified separator
      */
@@ -304,7 +308,7 @@ public class Functions {
         if (obj == null) {
             return 0;
         }
-        
+
         if (obj instanceof String) {
             return ((String) obj).length();
         }
@@ -316,15 +320,15 @@ public class Functions {
         }
         if (obj instanceof Iterator) {
             int count = 0;
-            Iterator iter = (Iterator)obj;
+            Iterator iter = (Iterator) obj;
             while (iter.hasNext()) {
                 count++;
                 iter.next();
             }
             return count;
-        }            
+        }
         if (obj instanceof Enumeration) {
-            Enumeration enum_ = (Enumeration)obj;
+            Enumeration enum_ = (Enumeration) obj;
             int count = 0;
             while (enum_.hasMoreElements()) {
                 count++;
@@ -336,5 +340,5 @@ public class Functions {
             return Array.getLength(obj);
         }
         throw new JspTagException(Resources.getMessage("PARAM_BAD_VALUE"));
-    }      
+    }
 }

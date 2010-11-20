@@ -16,16 +16,17 @@
  */
 package org.apache.taglibs.standard.util;
 
-import javax.servlet.jsp.JspWriter;
 import java.io.IOException;
 import java.io.Reader;
 
+import javax.servlet.jsp.JspWriter;
+
 /**
  * Handles escaping of characters that could be interpreted as XML markup.
- *
+ * <p/>
  * The specification for <code>&lt;c:out&gt;</code> defines the following
  * character conversions to be applied:
- *
+ * <p/>
  * <table rules="all" frame="border">
  * <thead align="center">
  * <tr><th>Character</th><th>Character Entity Code</th></tr>
@@ -42,6 +43,7 @@ import java.io.Reader;
 public class EscapeXML {
 
     private static final String[] ESCAPES;
+
     static {
         int size = '>' + 1; // '>' is the largest escaped value
         ESCAPES = new String[size];
@@ -100,9 +102,10 @@ public class EscapeXML {
 
     /**
      * Emit the supplied object to the specified writer, escaping characters if needed.
-     * @param src the object to write
+     *
+     * @param src       the object to write
      * @param escapeXml if true, escape unsafe characters before writing
-     * @param out the JspWriter to emit to
+     * @param out       the JspWriter to emit to
      * @throws IOException if there was a problem emitting the content
      */
     public static void emit(Object src, boolean escapeXml, JspWriter out) throws IOException {
@@ -115,9 +118,10 @@ public class EscapeXML {
 
     /**
      * Emit the supplied String to the specified writer, escaping characters if needed.
-     * @param src the String to write
+     *
+     * @param src       the String to write
      * @param escapeXml if true, escape unsafe characters before writing
-     * @param out the JspWriter to emit to
+     * @param out       the JspWriter to emit to
      * @throws IOException if there was a problem emitting the content
      */
     public static void emit(String src, boolean escapeXml, JspWriter out) throws IOException {
@@ -138,27 +142,27 @@ public class EscapeXML {
     public static void emit(String src, JspWriter out) throws IOException {
         int end = src.length();
         int from = 0;
-        for (int to = from ; to < end; to++) {
+        for (int to = from; to < end; to++) {
             String escape = getEscape(src.charAt(to));
             if (escape != null) {
                 if (to != from) {
-                    out.write(src, from, to-from);
+                    out.write(src, from, to - from);
                 }
                 out.write(escape);
                 from = to + 1;
             }
         }
         if (from != end) {
-            out.write(src, from, end-from);
+            out.write(src, from, end - from);
         }
     }
 
     /**
      * Copy the content of a Reader into the specified JSPWriter escaping characters if needed.
      *
-     * @param src the Reader to read from
+     * @param src       the Reader to read from
      * @param escapeXml if true, escape characters
-     * @param out the JspWriter to emit to
+     * @param out       the JspWriter to emit to
      * @throws IOException if there was a problem emitting the content
      */
     public static void emit(Reader src, boolean escapeXml, JspWriter out) throws IOException {
@@ -181,25 +185,25 @@ public class EscapeXML {
      * Emit escaped content into the specified JSPWriter.
      *
      * @param buffer characters to escape
-     * @param from start position in the buffer
-     * @param count number of characters to emit
-     * @param out the JspWriter to emit to
+     * @param from   start position in the buffer
+     * @param count  number of characters to emit
+     * @param out    the JspWriter to emit to
      * @throws IOException if there was a problem emitting the content
      */
     public static void emit(char[] buffer, int from, int count, JspWriter out) throws IOException {
         int end = from + count;
-        for (int to = from ; to < end; to++) {
+        for (int to = from; to < end; to++) {
             String escape = getEscape(buffer[to]);
             if (escape != null) {
                 if (to != from) {
-                    out.write(buffer, from, to-from);
+                    out.write(buffer, from, to - from);
                 }
                 out.write(escape);
                 from = to + 1;
             }
         }
         if (from != end) {
-            out.write(buffer, from, end-from);
+            out.write(buffer, from, end - from);
         }
     }
 }

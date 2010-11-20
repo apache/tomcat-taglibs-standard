@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
@@ -35,12 +35,14 @@ public class MessageTag extends MessageSupport {
     // Accessor methods
 
     // for tag attribute
+
     public void setKey(String key) throws JspTagException {
         this.keyAttrValue = key;
-	this.keySpecified = true;
+        this.keySpecified = true;
     }
 
     // for tag attribute
+
     public void setBundle(LocalizationContext locCtxt) throws JspTagException {
         this.bundleAttrValue = locCtxt;
         this.bundleSpecified = true;

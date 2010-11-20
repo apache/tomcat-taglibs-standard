@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
@@ -38,7 +38,7 @@ public abstract class RequestEncodingSupport extends TagSupport {
     // Package-scoped constants
 
     static final String REQUEST_CHAR_SET =
-	"javax.servlet.jsp.jstl.fmt.request.charset";
+            "javax.servlet.jsp.jstl.fmt.request.charset";
 
 
     //*********************************************************************
@@ -51,24 +51,24 @@ public abstract class RequestEncodingSupport extends TagSupport {
     // Tag attributes
 
     protected String value;             // 'value' attribute
-    
+
 
     //*********************************************************************
     // Derived information
-    
+
     protected String charEncoding;   // derived from 'value' attribute  
-    
+
 
     //*********************************************************************
     // Constructor and initialization
 
     public RequestEncodingSupport() {
-	super();
-	init();
+        super();
+        init();
     }
 
     private void init() {
-	value = null;
+        value = null;
     }
 
 
@@ -78,36 +78,37 @@ public abstract class RequestEncodingSupport extends TagSupport {
     @Override
     public int doEndTag() throws JspException {
         charEncoding = value;
-	if ((charEncoding == null)
-	        && (pageContext.getRequest().getCharacterEncoding() == null)) { 
+        if ((charEncoding == null)
+                && (pageContext.getRequest().getCharacterEncoding() == null)) {
             // Use charset from session-scoped attribute
-	    charEncoding = (String)
-		pageContext.getAttribute(REQUEST_CHAR_SET,
-					 PageContext.SESSION_SCOPE);
-	    if (charEncoding == null) {
-		// Use default encoding
-		charEncoding = DEFAULT_ENCODING;
-	    }
-	}
+            charEncoding = (String)
+                    pageContext.getAttribute(REQUEST_CHAR_SET,
+                            PageContext.SESSION_SCOPE);
+            if (charEncoding == null) {
+                // Use default encoding
+                charEncoding = DEFAULT_ENCODING;
+            }
+        }
 
-	/*
-	 * If char encoding was already set in the request, we don't need to 
-	 * set it again.
-	 */
-	if (charEncoding != null) {
-	    try {
-		pageContext.getRequest().setCharacterEncoding(charEncoding);
-	    } catch (UnsupportedEncodingException uee) {
-		throw new JspTagException(uee.toString(), uee);
-	    }
-	}
+        /*
+       * If char encoding was already set in the request, we don't need to
+       * set it again.
+       */
+        if (charEncoding != null) {
+            try {
+                pageContext.getRequest().setCharacterEncoding(charEncoding);
+            } catch (UnsupportedEncodingException uee) {
+                throw new JspTagException(uee.toString(), uee);
+            }
+        }
 
-	return EVAL_PAGE;
+        return EVAL_PAGE;
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
-	init();
+        init();
     }
 }

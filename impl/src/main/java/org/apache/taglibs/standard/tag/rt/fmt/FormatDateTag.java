@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
@@ -36,31 +36,37 @@ public class FormatDateTag extends FormatDateSupport {
     // Accessor methods
 
     // 'value' attribute
+
     public void setValue(Date value) throws JspTagException {
         this.value = value;
     }
 
     // 'type' attribute
+
     public void setType(String type) throws JspTagException {
         this.type = type;
     }
 
     // 'dateStyle' attribute
+
     public void setDateStyle(String dateStyle) throws JspTagException {
         this.dateStyle = dateStyle;
     }
 
     // 'timeStyle' attribute
+
     public void setTimeStyle(String timeStyle) throws JspTagException {
         this.timeStyle = timeStyle;
     }
 
     // 'pattern' attribute
+
     public void setPattern(String pattern) throws JspTagException {
         this.pattern = pattern;
     }
 
     // 'timeZone' attribute
+
     public void setTimeZone(Object timeZone) throws JspTagException {
         this.timeZone = timeZone;
     }

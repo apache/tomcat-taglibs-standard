@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tei;
 
@@ -34,13 +34,15 @@ public class XmlTransformTEI extends TagExtraInfo {
 
     @Override
     public boolean isValid(TagData us) {
-	// require XSLT
-	if (!Util.isSpecified(us, XSLT))
-	    return false;
+        // require XSLT
+        if (!Util.isSpecified(us, XSLT)) {
+            return false;
+        }
 
-	// disallow both VAR and RESULT
-	if (Util.isSpecified(us, VAR) && Util.isSpecified(us, RESULT))
-	    return false;
+        // disallow both VAR and RESULT
+        if (Util.isSpecified(us, VAR) && Util.isSpecified(us, RESULT)) {
+            return false;
+        }
         return true;
     }
 

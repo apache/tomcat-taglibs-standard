@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.sql;
 
@@ -22,7 +22,6 @@ import org.apache.taglibs.standard.tag.common.sql.SetDataSourceTagSupport;
 /**
  * <p>Tag handler for &lt;Driver&gt; in JSTL, used to create
  * a simple DataSource for prototyping.</p>
- * 
  */
 public class SetDataSourceTag extends SetDataSourceTagSupport {
 
@@ -30,24 +29,24 @@ public class SetDataSourceTag extends SetDataSourceTagSupport {
     // Accessor methods
 
     public void setDataSource(Object dataSource) {
-	this.dataSource = dataSource;
-	this.dataSourceSpecified = true;
+        this.dataSource = dataSource;
+        this.dataSourceSpecified = true;
     }
 
     public void setDriver(String driverClassName) {
-	this.driverClassName = driverClassName;
+        this.driverClassName = driverClassName;
     }
 
     public void setUrl(String jdbcURL) {
-	this.jdbcURL = jdbcURL;
+        this.jdbcURL = jdbcURL;
     }
 
     public void setUser(String userName) {
-	this.userName = userName;
+        this.userName = userName;
     }
 
     public void setPassword(String password) {
-	this.password = password;
+        this.password = password;
     }
 
 }

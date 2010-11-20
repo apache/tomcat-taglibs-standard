@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
 
@@ -32,9 +32,9 @@ public class RemoveTag extends TagSupport {
     //*********************************************************************
     // Internal state
 
-    private int scope;					// tag attribute
-    private boolean scopeSpecified;			// ... by tag attribute
-    private String var;					// tag attribute
+    private int scope;                    // tag attribute
+    private boolean scopeSpecified;            // ... by tag attribute
+    private String var;                    // tag attribute
 
 
     //*********************************************************************
@@ -51,6 +51,7 @@ public class RemoveTag extends TagSupport {
     }
 
     // resets local state
+
     private void init() {
         var = null;
         scope = PageContext.PAGE_SCOPE;
@@ -58,6 +59,7 @@ public class RemoveTag extends TagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
         super.release();
@@ -69,13 +71,15 @@ public class RemoveTag extends TagSupport {
     // Tag logic
 
     // removes the variable (from a specific scope, if specified)
+
     @Override
     public int doEndTag() throws JspException {
-        if (!scopeSpecified)
+        if (!scopeSpecified) {
             pageContext.removeAttribute(var);
-        else
+        } else {
             pageContext.removeAttribute(var, scope);
-	return EVAL_PAGE;
+        }
+        return EVAL_PAGE;
     }
 
 
@@ -83,13 +87,15 @@ public class RemoveTag extends TagSupport {
     // Accessor methods
 
     // for tag attribute
+
     public void setVar(String var) {
-	this.var = var;
+        this.var = var;
     }
 
     // for tag attribute
+
     public void setScope(String scope) {
         this.scope = Util.getScope(scope);
-	scopeSpecified = true;
+        scopeSpecified = true;
     }
 }

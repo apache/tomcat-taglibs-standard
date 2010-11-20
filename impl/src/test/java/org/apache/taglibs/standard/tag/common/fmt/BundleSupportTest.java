@@ -36,6 +36,7 @@ public class BundleSupportTest {
     }
 
     // test for bugzilla #49900 that bodyContent is not released
+
     @Test
     public void testBodyContentIsRelease() {
         BodyContent b = EasyMock.createMock(BodyContent.class);

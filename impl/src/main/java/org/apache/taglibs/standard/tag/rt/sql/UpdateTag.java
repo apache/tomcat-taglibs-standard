@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 package org.apache.taglibs.standard.tag.rt.sql;
 
 import org.apache.taglibs.standard.tag.common.sql.UpdateTagSupport;
@@ -28,14 +28,14 @@ public class UpdateTag extends UpdateTagSupport {
     //*********************************************************************
     // Accessor methods
 
-    
+
     /**
      * Setter method for the SQL DataSource. DataSource can be
      * a String or a DataSource object.
      */
     public void setDataSource(Object dataSource) {
-	this.rawDataSource = dataSource;
-	this.dataSourceSpecified = true;
+        this.rawDataSource = dataSource;
+        this.dataSourceSpecified = true;
     }
 
     /**
@@ -45,6 +45,6 @@ public class UpdateTag extends UpdateTagSupport {
      * be set using nested value elements.
      */
     public void setSql(String sql) {
-	this.sql = sql;
+        this.sql = sql;
     }
 }

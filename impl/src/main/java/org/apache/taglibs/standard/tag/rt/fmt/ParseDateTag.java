@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
@@ -37,47 +37,54 @@ public class ParseDateTag extends ParseDateSupport {
     // Accessor methods
 
     // 'value' attribute
+
     public void setValue(String value) throws JspTagException {
         this.value = value;
-	this.valueSpecified = true;
+        this.valueSpecified = true;
     }
 
     // 'type' attribute
+
     public void setType(String type) throws JspTagException {
         this.type = type;
     }
 
     // 'dateStyle' attribute
+
     public void setDateStyle(String dateStyle) throws JspTagException {
         this.dateStyle = dateStyle;
     }
 
     // 'timeStyle' attribute
+
     public void setTimeStyle(String timeStyle) throws JspTagException {
         this.timeStyle = timeStyle;
     }
 
     // 'pattern' attribute
+
     public void setPattern(String pattern) throws JspTagException {
         this.pattern = pattern;
     }
 
     // 'timeZone' attribute
+
     public void setTimeZone(Object timeZone) throws JspTagException {
         this.timeZone = timeZone;
     }
 
     // 'parseLocale' attribute
+
     public void setParseLocale(Object loc) throws JspTagException {
-	if (loc != null) {
-	    if (loc instanceof Locale) {
-		this.parseLocale = (Locale) loc;
-	    } else {
-		if (!"".equals((String) loc)) {
-		    this.parseLocale = SetLocaleSupport.parseLocale((String)
-								    loc);
-		}
-	    }
-	}
+        if (loc != null) {
+            if (loc instanceof Locale) {
+                this.parseLocale = (Locale) loc;
+            } else {
+                if (!"".equals((String) loc)) {
+                    this.parseLocale = SetLocaleSupport.parseLocale((String)
+                            loc);
+                }
+            }
+        }
     }
 }

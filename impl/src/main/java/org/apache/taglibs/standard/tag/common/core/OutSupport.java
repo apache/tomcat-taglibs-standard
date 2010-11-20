@@ -13,17 +13,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.common.core;
-
-import org.apache.taglibs.standard.util.EscapeXML;
 
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+
+import org.apache.taglibs.standard.util.EscapeXML;
 
 /**
  * <p>Support for handlers of the &lt;out&gt; tag, which simply evalutes and
@@ -59,6 +59,7 @@ public abstract class OutSupport extends BodyTagSupport {
     }
 
     // Releases any resources we may have (or inherit)
+
     @Override
     public void release() {
         output = null;
@@ -82,7 +83,7 @@ public abstract class OutSupport extends BodyTagSupport {
 
         // output default if supplied
         output = evalDefault();
-        if (output != null ) {
+        if (output != null) {
             return SKIP_BODY;
         }
 

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tag.rt.core;
 
@@ -43,16 +43,19 @@ public class OutTag extends OutSupport {
     }
 
     // for tag attribute
+
     public void setValue(Object value) {
         this.value = value;
     }
-      
+
     // for tag attribute
+
     public void setDefault(String def) {
         this.def = def;
     }
-        
+
     // for tag attribute
+
     public void setEscapeXml(boolean escapeXml) {
         this.escapeXml = escapeXml;
     }

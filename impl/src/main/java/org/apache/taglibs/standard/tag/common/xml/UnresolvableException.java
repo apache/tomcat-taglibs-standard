@@ -27,18 +27,20 @@ public class UnresolvableException extends XPathException {
     /**
      * Create an UnresolvableException object that holds
      * an error message.
+     *
      * @param message The error message.
      */
     public UnresolvableException(String message) {
         super(message);
     }
-    
+
     /**
      * Create an UnresolvableException object that holds
      * an error message, and another exception
      * that caused this exception.
+     *
      * @param message The error message.
-     * @param e The exception that caused this exception.
+     * @param e       The exception that caused this exception.
      */
     public UnresolvableException(String message, Exception e) {
         super(message, e);

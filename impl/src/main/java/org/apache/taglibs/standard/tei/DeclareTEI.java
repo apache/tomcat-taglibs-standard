@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.tei;
 
@@ -33,15 +33,16 @@ import javax.servlet.jsp.tagext.VariableInfo;
 public class DeclareTEI extends TagExtraInfo {
 
     // purposely inherit JavaDoc and semantics from TagExtraInfo
+
     @Override
     public VariableInfo[] getVariableInfo(TagData data) {
         // construct the relevant VariableInfo object
         VariableInfo id = new VariableInfo(
-            data.getAttributeString("id"),
-            data.getAttributeString("type") == null ?
-		"java.lang.Object" : data.getAttributeString("type"),
-            true,
-            VariableInfo.AT_END);
-        return new VariableInfo[] { id };
+                data.getAttributeString("id"),
+                data.getAttributeString("type") == null ?
+                        "java.lang.Object" : data.getAttributeString("type"),
+                true,
+                VariableInfo.AT_END);
+        return new VariableInfo[]{id};
     }
 }
