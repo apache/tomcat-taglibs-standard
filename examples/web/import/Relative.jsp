@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: I/O Support -- Relative URL Example</title>
+    <title>JSTL: I/O Support -- Relative URL Example</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Relative URL</h3>

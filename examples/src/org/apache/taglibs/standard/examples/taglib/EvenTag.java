@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.examples.taglib;
 
@@ -29,17 +29,17 @@ import javax.servlet.jsp.tagext.TagSupport;
  * @version $Revision$ $Date$
  */
 public class EvenTag extends TagSupport {
-    
+
     //*********************************************************************
     // TagSupport methods
-    
+
     public int doStartTag() throws JspException {
-        LoopTag iteratorTag = (LoopTag)findAncestorWithClass(
-        this, LoopTag.class);
+        LoopTag iteratorTag = (LoopTag) findAncestorWithClass(
+                this, LoopTag.class);
         if (iteratorTag == null) {
             throw new JspTagException("<even> must be nested within a LoopTag");
         }
-        
+
         int count = iteratorTag.getLoopStatus().getCount();
         return (count % 2 == 0) ? EVAL_BODY_INCLUDE : SKIP_BODY;
     }

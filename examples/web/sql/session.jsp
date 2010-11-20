@@ -2,7 +2,7 @@
 
 <html>
 <head>
-   <title>Jakarta DBTAGS Taglib Example</title>
+    <title>Jakarta DBTAGS Taglib Example</title>
 </head>
 <body bgcolor="white">
 

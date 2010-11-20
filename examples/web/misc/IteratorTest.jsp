@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: Miscellaneous -- Various Iterator Tests Example</title>
+    <title>JSTL: Miscellaneous -- Various Iterator Tests Example</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Various tests for Iterator tags</h3>
@@ -26,34 +26,34 @@
 <h4>Iteration with only begin specified (with items): begin="2"</h4>
 
 <c:forEach var="i" items="${customers}" begin="2" varStatus="status">
-  index: ${status.index} &#149; 
-  count: ${status.count} &#149; 
-  item: ${i}<br>
+    index: ${status.index} &#149;
+    count: ${status.count} &#149;
+    item: ${i}<br>
 </c:forEach>
 
 <h4>Iteration with only end specified (with items): end="1"</h4>
 
 <c:forEach var="i" items="${customers}" end="1" varStatus="status">
-  index: ${status.index} &#149; 
-  count: ${status.count} &#149; 
-  item:  ${i}><br>
+    index: ${status.index} &#149;
+    count: ${status.count} &#149;
+    item:  ${i}><br>
 </c:forEach>
 
 <h4>Iteration with begin > end</h4>
 <c:catch var="ex">
-  <c:forEach var="i" items="${customers}" begin="3" end="1" varStatus="status">
-    index: ${status.index} &#149; 
-    count: ${status.count} &#149; 
-    item:  ${i}<br>
-  </c:forEach>
-  <c:forTokens var="i" items="one,two,three,four,five" delims="," begin="3" end="1" varStatus="status">
-    index: ${status.index} &#149; 
-    count: ${status.count} &#149; 
-    item:  ${i}<br>
-  </c:forTokens>
+    <c:forEach var="i" items="${customers}" begin="3" end="1" varStatus="status">
+        index: ${status.index} &#149;
+        count: ${status.count} &#149;
+        item:  ${i}<br>
+    </c:forEach>
+    <c:forTokens var="i" items="one,two,three,four,five" delims="," begin="3" end="1" varStatus="status">
+        index: ${status.index} &#149;
+        count: ${status.count} &#149;
+        item:  ${i}<br>
+    </c:forTokens>
 </c:catch>
 <c:if test="${ex != null}">
-  Exception: ${ex}
+    Exception: ${ex}
 </c:if>
 
 </body>

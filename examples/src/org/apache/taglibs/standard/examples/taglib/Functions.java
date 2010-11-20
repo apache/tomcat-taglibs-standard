@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.examples.taglib;
 
@@ -23,7 +23,7 @@ import javax.servlet.jsp.JspTagException;
 
 /**
  * <p>Exmaples taglib Functions</p>
- * 
+ *
  * @author Pierre Delisle
  */
 
@@ -33,8 +33,12 @@ public class Functions {
      * Display the collection types supported by c:forEach.
      */
     public static String display(Object obj) throws JspTagException {
-        if (obj == null) return "";         
-        if (obj instanceof String) return obj.toString();
+        if (obj == null) {
+            return "";
+        }
+        if (obj instanceof String) {
+            return obj.toString();
+        }
         /*
         if (obj instanceof Collection) {
             return "FIXME";
@@ -60,12 +64,15 @@ public class Functions {
         try {
             StringBuffer buf = new StringBuffer();
             int count = Array.getLength(obj);
-            for (int i=0; i<count; i++) {
+            for (int i = 0; i < count; i++) {
                 buf.append(Array.get(obj, i).toString());
-                if (i<count-1) buf.append("<font color='red'> &#149; </font>");
+                if (i < count - 1) {
+                    buf.append("<font color='red'> &#149; </font>");
+                }
             }
             return buf.toString();
-        } catch (IllegalArgumentException ex) {}
-        throw new JspTagException("Bad Item");        
-    }      
+        } catch (IllegalArgumentException ex) {
+        }
+        throw new JspTagException("Bad Item");
+    }
 }

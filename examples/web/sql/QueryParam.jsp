@@ -3,15 +3,15 @@
 
 <html>
 <head>
-  <title>JSTL: SQL action examples</title>
+    <title>JSTL: SQL action examples</title>
 </head>
 <body bgcolor="#FFFFFF">
 
-<% request.setAttribute("newName", new String("Paul van Dyk")); %>
+    <% request.setAttribute("newName", new String("Paul van Dyk")); %>
 
 <h1>SQL Query Execution using parameters</h1>
-<p>Using parameter marker's to insert values in the SQL statements</p>
 
+<p>Using parameter marker's to insert values in the SQL statements</p>
 
 
 <!-- NOTE: the sql:setDataSource tag is for prototyping and simple applications. You should really use a DataSource object instead --!>

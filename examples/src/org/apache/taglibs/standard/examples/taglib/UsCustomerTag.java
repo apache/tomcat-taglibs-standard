@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.examples.taglib;
 
@@ -30,36 +30,38 @@ import org.apache.taglibs.standard.examples.beans.Customer;
  * @version $Revision$ $Date$
  */
 public class UsCustomerTag extends ConditionalTagSupport {
-    
+
     //*********************************************************************
     // Instance Variables
-    
-    /** Holds value of property customer. */
+
+    /**
+     * Holds value of property customer.
+     */
     private Customer customer;
-    
+
     //*********************************************************************
     // Constructor and lusCustomerecycle management
-    
+
     public UsCustomerTag() {
         super();
         init();
     }
-    
+
     private void init() {
         customer = null;
     }
-    
+
     //*********************************************************************
     // TagSupport methods
-    
+
     public void release() {
         super.release();
         init();
     }
-    
+
     //*********************************************************************
     // ConditionalTagSupport methods
-    
+
     protected boolean condition() throws JspTagException {
         try {
             if (customer == null) {
@@ -72,20 +74,22 @@ public class UsCustomerTag extends ConditionalTagSupport {
             throw new JspTagException(ex.toString());
         }
     }
-    
+
     //*********************************************************************
     // Accessors
-    
+
     /**
      * Getter for property customer.
+     *
      * @return Value of property customer.
      */
     public Customer getCustomer() {
         return customer;
     }
-    
+
     /**
      * Setter for property customer.
+     *
      * @param customer New value of property customer.
      */
     public void setCustomer(Customer customer) {

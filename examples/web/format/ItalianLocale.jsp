@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: Formatting/I18N Support -- Italian Locale Example</title>
+    <title>JSTL: Formatting/I18N Support -- Italian Locale Example</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Italian Locale</h3>

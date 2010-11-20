@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.examples.taglib;
 
@@ -34,72 +34,72 @@ import org.apache.taglibs.standard.examples.util.Util;
  * @version $Revision$ $Date$
  */
 public class EscapeHtmlTag extends BodyTagSupport {
-    
+
     //*********************************************************************
     // Instance variables
-    
+
     private Object reader;
     private Object writer;
-    
+
     //*********************************************************************
     // Constructors
-    
+
     public EscapeHtmlTag() {
         super();
         init();
     }
-    
+
     private void init() {
         reader = null;
         writer = null;
     }
-    
-    
+
+
     //*********************************************************************
     // Tag's properties
-    
+
     /**
      * Tag's 'reader' attribute
      */
     public void setReader(Object reader) {
         this.reader = reader;
     }
-    
+
     /**
      * Tag's 'writer' attribute
      */
     public void setWriter(Object writer) {
         this.writer = writer;
     }
-    
+
     //*********************************************************************
     // TagSupport methods
-    
+
     public int doEndTag() throws JspException {
         Reader in;
         Writer out;
-        
+
         if (reader == null) {
             String bcs = getBodyContent().getString().trim();
             if (bcs == null || bcs.equals("")) {
                 throw new JspTagException("In &lt;escapeHtml&gt;, 'reader' " +
-                "not specified and no non-whitespace content inside the tag.");
+                        "not specified and no non-whitespace content inside the tag.");
             }
             in = Util.castToReader(bcs);
         } else {
             in = Util.castToReader(reader);
         }
-        
+
         if (writer == null) {
             out = pageContext.getOut();
         } else {
             out = Util.castToWriter(writer);
         }
-        
+
         transform(in, out);
         return EVAL_PAGE;
     }
-    
+
     /**
      * Releases any resources we may have (or inherit)
      */
@@ -107,15 +107,15 @@ public class EscapeHtmlTag extends BodyTagSupport {
         super.release();
         init();
     }
-    
+
     //*********************************************************************
     // Tag's scific behavior methods
-    
+
     /**
      * Transform
      */
     public void transform(Reader reader, Writer writer)
-    throws JspException {
+            throws JspException {
         int c;
         try {
             writer.write("<pre>");
@@ -131,7 +131,7 @@ public class EscapeHtmlTag extends BodyTagSupport {
             writer.write("</pre>");
         } catch (IOException ex) {
             throw new JspException("EscapeHtml: " +
-            "error copying chars", ex);
+                    "error copying chars", ex);
         }
     }
 }

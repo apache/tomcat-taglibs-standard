@@ -7,7 +7,7 @@
   --%>
 
 <c:import url="http://localhost/foo" charEncoding="foo">
-  <c:param name="a" value="b"/>
-  <c:param name="c" value="d"/>
-  <c:param name="equals" value="="/>                      <%-- encoded --%>
+    <c:param name="a" value="b"/>
+    <c:param name="c" value="d"/>
+    <c:param name="equals" value="="/>                      <%-- encoded --%>
 </c:import>

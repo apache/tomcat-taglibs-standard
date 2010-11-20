@@ -13,11 +13,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.examples.util;
 
-import java.io.*;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+
 import javax.servlet.jsp.JspException;
 
 /**
@@ -31,30 +35,30 @@ public class IOBean {
     String content = null;
 
     public Reader getReader() throws JspException {
-	//p("getReader()");
-	if (content == null) {
-	    if (stringWriter == null) {
-		throw new JspException(
-		    "content must first be added to the bean via the writer");
-	    }
-	    content = stringWriter.toString();
-	}
-	return new StringReader(content);
+        //p("getReader()");
+        if (content == null) {
+            if (stringWriter == null) {
+                throw new JspException(
+                        "content must first be added to the bean via the writer");
+            }
+            content = stringWriter.toString();
+        }
+        return new StringReader(content);
     }
 
     public Writer getWriter() {
-	//p("getWriter()");
-	content = null;
-	stringWriter = new StringWriter();
-	return stringWriter;
+        //p("getWriter()");
+        content = null;
+        stringWriter = new StringWriter();
+        return stringWriter;
     }
 
     public void release() {
-	stringWriter = null;
-	content = null;
+        stringWriter = null;
+        content = null;
     }
 
     private void p(String s) {
-	System.out.println("[IOBean] " + s);
+        System.out.println("[IOBean] " + s);
     }
 }

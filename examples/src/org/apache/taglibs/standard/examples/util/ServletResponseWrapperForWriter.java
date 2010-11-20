@@ -13,21 +13,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.examples.util;
 
 import java.io.PrintWriter;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.jsp.*;
-
 /**
- * ServletResponseWrapper used for the the generation of 
+ * ServletResponseWrapper used for the the generation of
  * semi-dynamic pages.
- * <p>
- * This 'wrapped' response object is passed as the second argument 
+ * <p/>
+ * This 'wrapped' response object is passed as the second argument
  * to the internal RequestDispatcher.include(). It channels
  * all output text into the PrintWriter specified in the
  * constructor (which is associated with the file where the
@@ -37,27 +33,24 @@ import javax.servlet.jsp.*;
  * @version $Revision$ $Date$
  */
 public class ServletResponseWrapperForWriter
-    extends HttpServletResponseWrapper
-{
+        extends HttpServletResponseWrapper {
     /**
      * The writer that will get all the output of the response.
      */
     PrintWriter writer;
 
-    public ServletResponseWrapperForWriter(ServletResponse response, 
-					   PrintWriter writer) 
-    {
-	super((HttpServletResponse)response);
-	this.writer = writer;
+    public ServletResponseWrapperForWriter(ServletResponse response,
+                                           PrintWriter writer) {
+        super((HttpServletResponse) response);
+        this.writer = writer;
     }
 
     /**
      * Returns the Writer associated with the response.
      */
     public java.io.PrintWriter getWriter()
-	throws java.io.IOException 
-    {
-	return writer;
+            throws java.io.IOException {
+        return writer;
     }
 }
 

@@ -3,7 +3,7 @@
 
 <html>
 <head>
-  <title>JSTL: XML Support -- Parse / ForEach</title>
+    <title>JSTL: XML Support -- Parse / ForEach</title>
 </head>
 
 <body bgcolor="#FFFFFF">
@@ -15,46 +15,48 @@
 <x:parse var="document" doc="${docString}"/>
 
 <table border=1>
-  <tr>
-    <td valign="top"><pre><c:out value="${docString}"/></pre></td>
-    <td valign="top">
-      <table border=1>
-        <tr>
-          <th>Expression</th>
-          <th>Result</th>
-        </tr>
-        <tr>
-          <td><pre>
+    <tr>
+        <td valign="top">
+            <pre><c:out value="${docString}"/></pre>
+        </td>
+        <td valign="top">
+            <table border=1>
+                <tr>
+                    <th>Expression</th>
+                    <th>Result</th>
+                </tr>
+                <tr>
+                    <td><pre>
 &lt;x:forEach select="$document//a" varStatus="status">
   ${status.index}:  &lt;x:out select="."/> &lt;br>
 &lt;x:forEach>
 </pre>
-          </td>
-          <td>
-<x:forEach select="$document//a" varStatus="status">
-  ${status.index}:  <x:out select="."/>
-  <br />
-</x:forEach>
-</td>
-        </tr>
+                    </td>
+                    <td>
+                        <x:forEach select="$document//a" varStatus="status">
+                            ${status.index}: <x:out select="."/>
+                            <br/>
+                        </x:forEach>
+                    </td>
+                </tr>
 
-        <tr>
-          <td><pre>
+                <tr>
+                    <td><pre>
 &lt;x:forEach select="$document//a" begin="1" end="2" varStatus="status">
   -> &lt;x:out select="."/> &lt;br>
 &lt;x:forEach>
 </pre>
-          </td>
-          <td>
-<x:forEach select="$document//a" begin="1" end="2" varStatus="status">
-  ${status.index}: <x:out select="."/>
-  <br />
-</x:forEach>
-</td>
-        </tr>
-        
-        <tr>
-          <td><pre>
+                    </td>
+                    <td>
+                        <x:forEach select="$document//a" begin="1" end="2" varStatus="status">
+                            ${status.index}: <x:out select="."/>
+                            <br/>
+                        </x:forEach>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><pre>
 &lt;x:forEach select="$document//a" varStatus="status">
   ${status.index}:  
   &lt;x:if select=".//d">
@@ -63,20 +65,20 @@
   &lt;br>
 &lt;x:forEach>
 </pre>
-          </td>
-          <td>
-<x:forEach select="$document//a" varStatus="status">
-  ${status.index}:  
-  <x:if select=".//d">
-    &lt;d&gt; element present
-  </x:if>
-  <br />
-</x:forEach>
-</td>
-        </tr>      
-      </table>
-    </td>
-  </tr>
+                    </td>
+                    <td>
+                        <x:forEach select="$document//a" varStatus="status">
+                            ${status.index}:
+                            <x:if select=".//d">
+                                &lt;d&gt; element present
+                            </x:if>
+                            <br/>
+                        </x:forEach>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
 </table>
 
 </body>

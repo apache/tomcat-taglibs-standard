@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.examples.taglib;
 
@@ -31,13 +31,13 @@ import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
 
 public class DefaultLocaleTag extends ConditionalTagSupport {
 
-  private static final Locale defaultLocale = Locale.getDefault();
+    private static final Locale defaultLocale = Locale.getDefault();
 
-  public boolean condition() throws JspTagException {   
-    LocalesTag localesTag = (LocalesTag) findAncestorWithClass( this, LocalesTag.class );
-    if ( localesTag == null ) {
-      throw new JspTagException( "defaultLocale bust be inside locales");
+    public boolean condition() throws JspTagException {
+        LocalesTag localesTag = (LocalesTag) findAncestorWithClass(this, LocalesTag.class);
+        if (localesTag == null) {
+            throw new JspTagException("defaultLocale bust be inside locales");
+        }
+        return localesTag.getCurrent().equals(defaultLocale);
     }
-    return localesTag.getCurrent().equals( defaultLocale );
-   }
 }

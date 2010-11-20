@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.examples.taglib;
 
@@ -39,62 +39,63 @@ import org.apache.taglibs.standard.examples.util.ServletResponseWrapperForWriter
  * @version $Revision$ $Date$
  */
 public class ResourceTag extends TagSupport {
-    
+
     //*********************************************************************
     // Instance variables
-    
+
     private String id;
     private String resource;
-    
+
     private Reader reader;
-    
+
     //*********************************************************************
     // Constructors
-    
+
     public ResourceTag() {
         super();
         init();
     }
-    
+
     private void init() {
         id = null;
         resource = null;
     }
-    
+
     //*********************************************************************
     // Tag's properties
-    
+
     /**
      * Tag's 'id' attribute
      */
     public void setId(String id) {
         this.id = id;
     }
-    
+
     /**
      * Tag's 'resource' attribute
      */
     public void setResource(String resource) {
         this.resource = resource;
     }
-    
+
     //*********************************************************************
     // TagSupport methods
-    
+
     public int doStartTag() throws JspException {
         reader = getReaderFromResource(resource);
         exposeVariable(reader);
         return EVAL_BODY_INCLUDE;
     }
-    
+
     public int doEndTag() throws JspException {
         try {
             reader.close();
-        } catch (IOException ex) {}
+        } catch (IOException ex) {
+        }
         reader = null;
         return EVAL_PAGE;
     }
-    
+
     /**
      * Releases any resources we may have (or inherit)
      */
@@ -102,24 +103,24 @@ public class ResourceTag extends TagSupport {
         super.release();
         init();
     }
-    
+
     //*********************************************************************
     // Tag's scific behavior methods
-    
+
     private Reader getReaderFromResource(String name) throws JspException {
         HttpServletRequest request =
-        (HttpServletRequest)pageContext.getRequest();
+                (HttpServletRequest) pageContext.getRequest();
         HttpServletResponse response =
-        (HttpServletResponse)pageContext.getResponse();
+                (HttpServletResponse) pageContext.getResponse();
         RequestDispatcher rd = null;
-        
+
         // The response of the local URL becomes the reader that
         // we export. Need temporary storage.
         IOBean ioBean = new IOBean();
         Writer writer = ioBean.getWriter();
         ServletResponseWrapper responseWrapper =
-        new ServletResponseWrapperForWriter(
-        response, new PrintWriter(writer));
+                new ServletResponseWrapperForWriter(
+                        response, new PrintWriter(writer));
         rd = pageContext.getServletContext().getRequestDispatcher(name);
         try {
             rd.include(request, responseWrapper);
@@ -128,10 +129,10 @@ public class ResourceTag extends TagSupport {
             throw new JspException(ex);
         }
     }
-    
+
     //*********************************************************************
     // Utility methods
-        
+
     private void exposeVariable(Reader reader) {
         if (id != null) {
             pageContext.setAttribute(id, reader);

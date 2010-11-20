@@ -3,15 +3,18 @@
 
 <html>
 <head>
-  <title>JSTL: SQL action examples</title>
+    <title>JSTL: SQL action examples</title>
 </head>
 <body bgcolor="#FFFFFF">
 
 <h1>SQL Direct Query Execution</h1>
-<p>This example demonstrates how the row and columns can be directly accessed using various direct mechanisms.<p>
+
+<p>This example demonstrates how the row and columns can be directly accessed using various direct mechanisms.
+
+<p>
 
 
-<!-- NOTE: the sql:setDataSource tag is for prototyping and simple applications. You should really use a DataSource object instead --!>
+    <!-- NOTE: the sql:setDataSource tag is for prototyping and simple applications. You should really use a DataSource object instead --!>
 
 <sql:setDataSource
   var="example"

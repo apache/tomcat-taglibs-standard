@@ -3,7 +3,7 @@
 
 <html>
 <head>
-  <title>JSTL Functions &#149; Trim</title>
+    <title>JSTL Functions &#149; Trim</title>
 </head>
 <body bgcolor="#FFFFFF">
 
@@ -14,34 +14,42 @@
 
 <h4>fn:trim</h4>
 <table cellpadding="5" border="1">
-  <tr>
-    <th align="left">Input String</th>
-    <th>Result</th>
-  </tr>
-  <tr>
-    <td><pre>${custId} (whithout trim)</pre></td>
-    <td><c:url value="http://acme.com/cust"><c:param name="custId" value="${custId}"/></c:url></td>
-  </tr>
-  <tr>
-    <td><pre>${custId} (whith trim)</pre></td>
-    <td><c:url value="http://acme.com/cust"><c:param name="custId" value="${fn:trim(custId)}"/></c:url></td>
-  </tr>
-  <tr>
-    <td>${s1}</td>
-    <td>${fn:trim(s1)}</td>
-  </tr>
-  <tr>
-    <td><pre>    3 spaces before and after   </pre></td>
-    <td><pre>${fn:trim("    3 spaces before and after   ")}</pre></td>
-  </tr>
-  <tr>
-    <td>null</td>
-    <td>&nbsp;${fn:trim(undefined)}</td>
-  </tr>
-  <tr>
-    <td>empty string</td>
-    <td>&nbsp;${fn:trim("")}</td>
-  </tr>
+    <tr>
+        <th align="left">Input String</th>
+        <th>Result</th>
+    </tr>
+    <tr>
+        <td>
+            <pre>${custId} (whithout trim)</pre>
+        </td>
+        <td><c:url value="http://acme.com/cust"><c:param name="custId" value="${custId}"/></c:url></td>
+    </tr>
+    <tr>
+        <td>
+            <pre>${custId} (whith trim)</pre>
+        </td>
+        <td><c:url value="http://acme.com/cust"><c:param name="custId" value="${fn:trim(custId)}"/></c:url></td>
+    </tr>
+    <tr>
+        <td>${s1}</td>
+        <td>${fn:trim(s1)}</td>
+    </tr>
+    <tr>
+        <td>
+            <pre>    3 spaces before and after   </pre>
+        </td>
+        <td>
+            <pre>${fn:trim("    3 spaces before and after   ")}</pre>
+        </td>
+    </tr>
+    <tr>
+        <td>null</td>
+        <td>&nbsp;${fn:trim(undefined)}</td>
+    </tr>
+    <tr>
+        <td>empty string</td>
+        <td>&nbsp;${fn:trim("")}</td>
+    </tr>
 </table>
 
 </body>

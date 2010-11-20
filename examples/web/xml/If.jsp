@@ -2,41 +2,41 @@
 
 <html>
 <head>
-  <title>JSTL: XML Support -- Parse / If</title>
+    <title>JSTL: XML Support -- Parse / If</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Parse / If</h3>
 
 <x:parse var="a">
-  <a>
-   <b>
-    <c>
-     foo
-    </c>
-   </b>
-   <d>
-     bar
-   </d>
-  </a>
+    <a>
+        <b>
+            <c>
+                foo
+            </c>
+        </b>
+        <d>
+            bar
+        </d>
+    </a>
 </x:parse>
 
 <x:if select="$a//c">
-  $a//c exists
+    $a//c exists
 </x:if>
 
-<br />
+<br/>
 
 <x:if select="$a/a/d">
-  $a/a/d exists
+    $a/a/d exists
 </x:if>
 
-<br />
+<br/>
 
 <x:if select="$a/w/o/l">
-  $a/w/o/l exists
+    $a/w/o/l exists
 </x:if>
 
-<hr />
+<hr/>
 
 </body>
 </html>

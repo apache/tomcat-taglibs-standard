@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: I/O Support -- String exposure</title>
+    <title>JSTL: I/O Support -- String exposure</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>String exposure</h3>

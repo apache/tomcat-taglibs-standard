@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: I/O Support -- Malformed URL example</title>
+    <title>JSTL: I/O Support -- Malformed URL example</title>
 </head>
 <body bgcolor="#FFFFFF">
 

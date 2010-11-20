@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: I/O Support -- Context-relative URL example</title>
+    <title>JSTL: I/O Support -- Context-relative URL example</title>
 </head>
 <body bgcolor="#FFFFFF">
 Assuming you have the "examples" webapp installed, here's a file from it...

@@ -13,7 +13,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package org.apache.taglibs.standard.examples.i18n;
 
@@ -23,18 +23,18 @@ public class Resources_de extends ListResourceBundle {
     private static Object[][] contents;
 
     static {
-	contents = new Object[][] {
-	    { "greetingMorning", "Guten Morgen!" },
-	    { "greetingEvening", "Guten Abend!" },
-	    { "serverInfo", "Name/Version des Servlet Containers: {0}, "
-	                    + "Java Version: {1}" },
-	    { "currentTime", "Heutiges Datum und Uhrzeit: {0}" },
-	    { "com.acme.labels.cancel", "Abbrechen" },
-	    { "java.lang.ArithmeticException", "/ durch 0" }
-	};
+        contents = new Object[][]{
+                {"greetingMorning", "Guten Morgen!"},
+                {"greetingEvening", "Guten Abend!"},
+                {"serverInfo", "Name/Version des Servlet Containers: {0}, "
+                        + "Java Version: {1}"},
+                {"currentTime", "Heutiges Datum und Uhrzeit: {0}"},
+                {"com.acme.labels.cancel", "Abbrechen"},
+                {"java.lang.ArithmeticException", "/ durch 0"}
+        };
     }
 
     public Object[][] getContents() {
-	return contents;
+        return contents;
     }
 }

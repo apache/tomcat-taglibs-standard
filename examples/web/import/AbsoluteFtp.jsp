@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: I/O Support -- Absolute URL Example (non-HTTP)</title>
+    <title>JSTL: I/O Support -- Absolute URL Example (non-HTTP)</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Absolute URL (non-HTTP)</h3>

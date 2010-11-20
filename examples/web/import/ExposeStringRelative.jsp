@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: I/O Support -- String exposure for relative URL</title>
+    <title>JSTL: I/O Support -- String exposure for relative URL</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>String exposure for relative URL</h3>

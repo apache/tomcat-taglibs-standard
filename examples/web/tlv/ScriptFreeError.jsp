@@ -1,7 +1,7 @@
 <%@ taglib prefix="scriptfree" uri="http://jakarta.apache.org/taglibs/standard/scriptfree" %>
 <html>
 <head>
-  <title>JSTL: Tag Library Validator -- ScriptFree Error</title>
+    <title>JSTL: Tag Library Validator -- ScriptFree Error</title>
 </head>
 <body bgcolor="#FFFFFF">
 

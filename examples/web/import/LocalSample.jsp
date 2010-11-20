@@ -2,8 +2,8 @@
 
 <html>
 <head>
-  <title>JSTL: I/O Support -- Simple static example to be included
-   in other pages</title>
+    <title>JSTL: I/O Support -- Simple static example to be included
+        in other pages</title>
 </head>
 <body bgcolor="#FFFFFF">
 <h3>Local example target page</h3>

@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: Conditional Support -- Simple Conditional Execution Example</title>
+    <title>JSTL: Conditional Support -- Simple Conditional Execution Example</title>
 </head>
 <body bgcolor="#FFFFFF">
 
@@ -11,9 +11,9 @@
 <h4>Customers living in the USA</h4>
 
 <c:forEach var="customer" items="${customers}">
-  <c:if test="${customer.address.country == 'USA'}">
-    ${customer}<br>
-  </c:if>
+    <c:if test="${customer.address.country == 'USA'}">
+        ${customer}<br>
+    </c:if>
 </c:forEach>
 </body>
 </html>

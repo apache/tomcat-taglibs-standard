@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>JSTL: SQL action examples</title>
+    <title>JSTL: SQL action examples</title>
 </head>
 <body bgcolor="#FFFFFF">
 

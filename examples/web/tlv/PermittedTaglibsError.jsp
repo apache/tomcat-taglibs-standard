@@ -4,7 +4,7 @@
 
 <html>
 <head>
-  <title>JSTL: Tag Library Validator -- PermittedTaglibs Error</title>
+    <title>JSTL: Tag Library Validator -- PermittedTaglibs Error</title>
 </head>
 <body bgcolor="#FFFFFF">
 
@@ -13,13 +13,15 @@
 <h4>Using custom tags &lt;even&gt; and &lt;odd&gt;</h4>
 
 <table>
-<c:forEach var="customer" items="${customers}">
-  <tr>
-    <ex:odd><td bgcolor="#FFFF66"></ex:odd>
-    <ex:even><td bgcolor="#99FFCC"></ex:even>
-    <c:out value="${customer}"/></td>
-  </tr>
-</c:forEach> 
+    <c:forEach var="customer" items="${customers}">
+        <tr>
+            <ex:odd>
+            <td bgcolor="#FFFF66"></ex:odd>
+            <ex:even>
+            <td bgcolor="#99FFCC"></ex:even>
+                <c:out value="${customer}"/></td>
+        </tr>
+    </c:forEach>
 </table>
 
 </body>
