@@ -25,8 +25,7 @@ import java.sql.SQLException;
  * from a source java.sql.ResultSet object. A Result object makes it much
  * easier for page authors to access and manipulate the data resulting
  * from a SQL query.</p>
- * <p/>
- * Note that these methods hide any SQLExceptions that are caused and return
+ * <p>Note that these methods hide any SQLExceptions that are caused and return
  * null - to work around that
  * use org.apache.taglibs.standard.tag.common.sql.ResultImpl directly.
  *

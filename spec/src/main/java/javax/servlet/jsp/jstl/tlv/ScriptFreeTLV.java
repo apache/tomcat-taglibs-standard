@@ -201,8 +201,7 @@ public class ScriptFreeTLV extends TagLibraryValidator {
          * Returns null if no violations were found, making the result
          * of this method suitable for the return value of the
          * TagLibraryValidator.validate() method.
-         * <p/>
-         * TODO:  The update from 7/13/2001 merely makes this validator
+         * <p>TODO:  The update from 7/13/2001 merely makes this validator
          * compliant with the new TLV API, but does not fully take advantage
          * of this API.  In the future, we should do so... but because
          * of the possibility that anti-script checking will be incorporated

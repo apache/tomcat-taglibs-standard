@@ -37,7 +37,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * <p>A TagLibraryValidator class to allow a TLD to restrict what
  * taglibs (in addition to itself) may be imported on a page where it's
  * used.</p>
- * <p/>
  * <p>This TLV supports the following initialization parameter:</p>
  * <ul>
  * <li><b>permittedTaglibs</b>: A whitespace-separated list of URIs corresponding

@@ -23,7 +23,6 @@ import java.util.SortedMap;
  * <p>This interface represents the result of a &lt;sql:query&gt;
  * action. It provides access to the following information in the
  * query result:</p>
- * <p/>
  * <ul>
  * <li> The result rows (<tt>getRows()</tt> and <tt>getRowsByIndex()</tt>)
  * <li> The column names (<tt>getColumnNames()</tt>)
@@ -32,7 +31,6 @@ import java.util.SortedMap;
  * or just a subset that is limited by a maximum row setting
  * (<tt>isLimitedByMaxRows()</tt>)
  * </ul>
- * <p/>
  * <p>An implementation of the <tt>Result</tt> interface provides a
  * <i>disconnected</i> view into the result of a query.
  *
@@ -43,13 +41,11 @@ public interface Result {
     /**
      * <p>Returns the result of the query as an array of <code>SortedMap</code> objects.
      * Each item of the array represents a specific row in the query result.</p>
-     * <p/>
      * <p>A row is structured as a <code>SortedMap</code> object where the key is the column name,
      * and where the value is the value associated with the column identified by
      * the key. The column value is an Object of the Java type corresponding
      * to the mapping between column types and Java types defined by the JDBC
      * specification when the <code>ResultSet.getObject()</code> method is used.</p>
-     * <p/>
      * <p>The <code>SortedMap</code> must use the <code>Comparator</code>
      * <code>java.util.String.CASE_INSENSITIVE_ORDER</code>.
      * This makes it possible to access the key as a case insensitive representation
