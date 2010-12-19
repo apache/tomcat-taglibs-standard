@@ -29,7 +29,7 @@ public class OutTag extends OutSupport {
 
     private Object value;
     private String def;
-    private boolean escapeXml;
+    private boolean escapeXml = true;
 
     //*********************************************************************
     // Accessors
