@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.taglibs.standard.tlv;
+package org.apache.taglibs.standard.tlv.el;
 
 import javax.servlet.jsp.JspException;
 
