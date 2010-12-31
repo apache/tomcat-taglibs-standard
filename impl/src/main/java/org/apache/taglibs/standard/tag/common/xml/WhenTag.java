@@ -18,8 +18,11 @@
 package org.apache.taglibs.standard.tag.common.xml;
 
 import javax.servlet.jsp.JspTagException;
+import javax.xml.transform.TransformerException;
 
 import org.apache.taglibs.standard.tag.common.core.WhenTagSupport;
+import org.apache.xpath.XPath;
+import org.apache.xpath.XPathContext;
 
 /**
  * <p>Tag handler for &lt;if&gt; in JSTL's XML library.</p>
@@ -29,54 +32,29 @@ import org.apache.taglibs.standard.tag.common.core.WhenTagSupport;
 
 public class WhenTag extends WhenTagSupport {
 
-    //*********************************************************************
-    // Constructor and lifecycle management
-
-    // initialize inherited and local state
-
-    public WhenTag() {
-        super();
-        init();
-    }
-
-    // Releases any resources we may have (or inherit)
+    private XPath select;
 
     @Override
     public void release() {
         super.release();
-        init();
+        select = null;
     }
-
-
-    //*********************************************************************
-    // Supplied conditional logic
 
     @Override
     protected boolean condition() throws JspTagException {
-        XPathUtil xu = new XPathUtil(pageContext);
-        return (xu.booleanValueOf(XPathUtil.getContext(this), select));
+        XPathContext context = XalanUtil.getContext(this, pageContext);
+        try {
+            return select.bool(context, context.getCurrentNode(), null);
+        } catch (TransformerException e) {
+            throw new JspTagException(e);
+        }
     }
-
-    //*********************************************************************
-    // Private state
-
-    private String select;               // the value of the 'test' attribute
-
-
-    //*********************************************************************
-    // Attribute accessors
 
     public void setSelect(String select) {
-        this.select = select;
-    }
-
-
-    //*********************************************************************
-    // Private utility methods
-
-    // resets internal state
-
-    private void init() {
-        select = null;
+        try {
+            this.select = new XPath(select, null, null, XPath.SELECT);
+        } catch (TransformerException e) {
+            throw new AssertionError();
+        }
     }
 }

@@ -17,75 +17,86 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
-import java.util.List;
-
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.LoopTagSupport;
+import javax.xml.transform.TransformerException;
 
-import org.apache.taglibs.standard.resources.Resources;
+import org.apache.xml.dtm.DTMIterator;
+import org.apache.xpath.XPath;
+import org.apache.xpath.XPathContext;
+import org.apache.xpath.objects.XObject;
 
 /**
- * <p>Support for the XML library's &lt;forEach&gt; tag.</p>
+ * Implementation of &lt;x:forEach&gt; tag using low-level Xalan API.
  *
  * @author Shawn Bayern
  * @see javax.servlet.jsp.jstl.core.LoopTagSupport
  */
 public class ForEachTag extends LoopTagSupport {
 
-    //*********************************************************************
-    // Private state
+    private XPath select;
+    private XPathContext context;
 
-    private String select;                // tag attribute
-    private List nodes;                    // XPath result
-    private int nodesIndex;                // current index
-    private org.w3c.dom.Node current;            // current node
-
-    //*********************************************************************
-    // Iteration control methods
-
-    // (We inherit semantics and Javadoc from LoopTagSupport.) 
+    @Override
+    public void release() {
+        super.release();
+        select = null;
+        context = null;
+    }
 
     @Override
     protected void prepare() throws JspTagException {
-        nodesIndex = 0;
-        XPathUtil xu = new XPathUtil(pageContext);
-        nodes = xu.selectNodes(XPathUtil.getContext(this), select);
+        context = XalanUtil.getContext(this, pageContext);
+        try {
+            XObject nodes = select.execute(context, context.getCurrentNode(), null);
+
+            // create an iterator over the returned nodes and push into the context
+            DTMIterator iterator = nodes.iter();
+            context.pushContextNodeList(iterator);
+        } catch (TransformerException e) {
+            throw new JspTagException(e);
+        }
     }
 
     @Override
     protected boolean hasNext() throws JspTagException {
-        return (nodesIndex < nodes.size());
+        DTMIterator iterator = context.getContextNodeList();
+        return iterator.getCurrentPos() < iterator.getLength();
     }
 
     @Override
     protected Object next() throws JspTagException {
-        Object o = nodes.get(nodesIndex++);
-        if (!(o instanceof org.w3c.dom.Node)) {
-            throw new JspTagException(
-                    Resources.getMessage("FOREACH_NOT_NODESET"));
-        }
-        current = (org.w3c.dom.Node) o;
-        return current;
+        DTMIterator iterator = context.getContextNodeList();
+        int next = iterator.nextNode();
+        context.pushCurrentNode(next);
+        return iterator.getDTM(next).getNode(next);
     }
-
-
-    //*********************************************************************
-    // Tag logic and lifecycle management
-
-    // Releases any resources we may have (or inherit)
 
     @Override
-    public void release() {
-        init();
-        super.release();
+    public int doAfterBody() throws JspException {
+        // pop the context node after executing the body
+        context.popCurrentNode();
+        return super.doAfterBody();
     }
 
-
-    //*********************************************************************
-    // Attribute accessors
+    @Override
+    public void doFinally() {
+        // context might be null as prepare is not called if end < begin
+        if (context != null) {
+            // pop the list of nodes being iterated
+            context.popContextNodeList();
+            context = null;
+        }
+        super.doFinally();
+    }
 
     public void setSelect(String select) {
-        this.select = select;
+        try {
+            this.select = new XPath(select, null, null, XPath.SELECT);
+        } catch (TransformerException e) {
+            throw new AssertionError();
+        }
     }
 
     public void setBegin(int begin) throws JspTagException {
@@ -106,25 +117,13 @@ public class ForEachTag extends LoopTagSupport {
         validateStep();
     }
 
-    //*********************************************************************
-    // Public methods for subtags
-
-    /* Retrieves the current context. */
-
-    public org.w3c.dom.Node getContext() throws JspTagException {
-        // expose the current node as the context
-        return current;
-    }
-
-
-    //*********************************************************************
-    // Private utility methods
-
-    private void init() {
-        select = null;
-        nodes = null;
-        nodesIndex = 0;
-        current = null;
+    /**
+     * Return the current XPath context to support expression evaluation in nested tags.
+     *
+     * @return the current XPath context
+     */
+    XPathContext getContext() {
+        return context;
     }
 }
 
