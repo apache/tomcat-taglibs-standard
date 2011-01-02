@@ -20,11 +20,8 @@ package org.apache.taglibs.standard.tag.common.fmt;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.jsp.JspException;
@@ -47,24 +44,9 @@ public abstract class FormatDateSupport extends TagSupport {
     //*********************************************************************
     // Private constants
 
-    /**
-     * Name of configuration setting for maximum number of entries in the
-     * cached dateformat map
-     */
-    private static final String DATE_CACHE_PARAM =
-            "org.apache.taglibs.standard.tag.common.fmt.dateFormatCacheSize";
-
     private static final String DATE = "date";
     private static final String TIME = "time";
     private static final String DATETIME = "both";
-
-    private static Map dateFormatCache = null;
-
-    /**
-     * Default maximum  cache size
-     */
-    private static final int MAX_SIZE = 100;
-
 
     //*********************************************************************
     // Protected state
@@ -194,82 +176,23 @@ public abstract class FormatDateSupport extends TagSupport {
     // Private utility methods
 
     private DateFormat createFormatter(Locale loc, String pattern) throws JspException {
-        DateFormat formatter = null;
-
-        // lazy initialization of cache
-        if (dateFormatCache == null) {
-            String value = pageContext.getServletContext().getInitParameter(DATE_CACHE_PARAM);
-            final int maxSize = (value != null) ? Integer.parseInt(value) : MAX_SIZE;
-            dateFormatCache = Collections.synchronizedMap(new LinkedHashMap() {
-                @Override
-                protected boolean removeEldestEntry(Map.Entry eldest) {
-                    return size() > maxSize;
-                }
-            });
-        }
-
         // Apply pattern, if present
         if (pattern != null) {
-            if ((type == null) || DATE.equalsIgnoreCase(type)) {
-                String key = DATE + pattern + loc;
-                formatter = (DateFormat) dateFormatCache.get(key);
-                if (formatter == null) {
-                    formatter = new SimpleDateFormat(pattern, loc);
-                    dateFormatCache.put(key, formatter);
-                }
-            } else if (TIME.equalsIgnoreCase(type)) {
-                String key = TIME + pattern + loc;
-                formatter = (DateFormat) dateFormatCache.get(key);
-                if (formatter == null) {
-                    formatter = new SimpleDateFormat(pattern, loc);
-                    dateFormatCache.put(key, formatter);
-                }
-            } else if (DATETIME.equalsIgnoreCase(type)) {
-                String key = DATETIME + pattern + loc;
-                formatter = (DateFormat) dateFormatCache.get(key);
-                if (formatter == null) {
-                    formatter = new SimpleDateFormat(pattern, loc);
-                    dateFormatCache.put(key, formatter);
-                }
-            } else {
-                throw new JspException(
-                        Resources.getMessage("FORMAT_DATE_INVALID_TYPE",
-                                type));
-            }
-            return formatter;
+            return new SimpleDateFormat(pattern, loc);
         }
 
         if ((type == null) || DATE.equalsIgnoreCase(type)) {
             int style = Util.getStyle(dateStyle, "FORMAT_DATE_INVALID_DATE_STYLE");
-            String key = DATE + style + loc;
-            formatter = (DateFormat) dateFormatCache.get(key);
-            if (formatter == null) {
-                formatter = DateFormat.getDateInstance(style, loc);
-                dateFormatCache.put(key, formatter);
-            }
+            return DateFormat.getDateInstance(style, loc);
         } else if (TIME.equalsIgnoreCase(type)) {
             int style = Util.getStyle(timeStyle, "FORMAT_DATE_INVALID_TIME_STYLE");
-            String key = TIME + style + loc;
-            formatter = (DateFormat) dateFormatCache.get(key);
-            if (formatter == null) {
-                formatter = DateFormat.getTimeInstance(style, loc);
-                dateFormatCache.put(key, formatter);
-            }
+            return DateFormat.getTimeInstance(style, loc);
         } else if (DATETIME.equalsIgnoreCase(type)) {
             int style1 = Util.getStyle(dateStyle, "FORMAT_DATE_INVALID_DATE_STYLE");
             int style2 = Util.getStyle(timeStyle, "FORMAT_DATE_INVALID_TIME_STYLE");
-            String key = DATETIME + style1 + loc + style2;
-            formatter = (DateFormat) dateFormatCache.get(key);
-            if (formatter == null) {
-                formatter = DateFormat.getDateTimeInstance(style1, style2, loc);
-                dateFormatCache.put(key, formatter);
-            }
+            return DateFormat.getDateTimeInstance(style1, style2, loc);
         } else {
-            throw new JspException(
-                    Resources.getMessage("FORMAT_DATE_INVALID_TYPE",
-                            type));
+            throw new JspException(Resources.getMessage("FORMAT_DATE_INVALID_TYPE", type));
         }
-
-        return formatter;
     }
 }
