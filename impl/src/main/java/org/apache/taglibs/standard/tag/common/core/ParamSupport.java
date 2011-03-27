@@ -34,7 +34,8 @@ import org.apache.taglibs.standard.resources.Resources;
  * subtag for &lt;import&gt; in JSTL 1.0.</p>
  *
  * @author Shawn Bayern
- * @see ParamParent, ImportSupport, URLEncodeSupport
+ * @see ParamParent
+ * @see ImportSupport
  */
 
 public abstract class ParamSupport extends BodyTagSupport {
