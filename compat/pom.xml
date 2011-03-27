@@ -180,6 +180,7 @@
     <reporting>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
@@ -207,7 +208,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>1.2</version>
+                <version>2.3.1</version>
                 <configuration>
                     <threshold>Normal</threshold>
                     <effort>Default</effort>
