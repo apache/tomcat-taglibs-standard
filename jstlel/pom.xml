@@ -26,8 +26,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache.taglibs</groupId>
-        <artifactId>taglibs-parent</artifactId>
-        <version>1-SNAPSHOT</version>
+        <artifactId>taglibs-standard</artifactId>
+        <version>1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>taglibs-standard-jstlel</artifactId>
