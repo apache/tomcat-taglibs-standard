@@ -48,13 +48,13 @@
         <td>Standard 1.1</td>
         <td>JSTL 1.1</td>
         <td>Servlet 2.4, JavaServer Pages 2.0</td>
-        <td><a href="http://jakarta.apache.org/site/downloads/downloads_taglibs-standard.cgi">download</a></td>
+        <td><a href="http://archive.apache.org/dist/jakarta/taglibs/standard/">download</a></td>
       </tr>
       <tr>
         <td>Standard 1.0</td>
         <td>JSTL 1.0</td>
         <td>Servlet 2.3, JavaServer Pages 1.2</td>
-        <td><a href="http://jakarta.apache.org/site/downloads/downloads_taglibs-standard-1.0.cgi">download</a></td>
+        <td><a href="http://archive.apache.org/dist/jakarta/taglibs/standard/">download</a></td>
       </tr>
     </table>
 
