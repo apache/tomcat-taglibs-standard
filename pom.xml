@@ -27,7 +27,7 @@
   <parent>
     <groupId>org.apache.taglibs</groupId>
     <artifactId>taglibs-parent</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1</version>
     <relativePath>../taglibs-parent/pom.xml</relativePath>
   </parent>
 
