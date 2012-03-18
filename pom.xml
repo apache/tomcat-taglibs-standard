@@ -28,7 +28,6 @@
     <groupId>org.apache.taglibs</groupId>
     <artifactId>taglibs-parent</artifactId>
     <version>1</version>
-    <relativePath>../taglibs-parent/pom.xml</relativePath>
   </parent>
 
   <packaging>pom</packaging>
