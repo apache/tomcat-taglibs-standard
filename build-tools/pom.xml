@@ -32,7 +32,7 @@
 
     <artifactId>taglibs-build-tools</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <name>Apache Standard Taglib - Build Tools</name>
+    <name>Build Tools</name>
 
     <description>Build tool settings common to all Standard Taglib modules</description>
 

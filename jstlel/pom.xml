@@ -34,14 +34,12 @@
     <version>1.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>Apache Standard Taglib - JSTL 1.0 EL Support</name>
+    <name>JSTL 1.0 EL Support</name>
 
     <inceptionYear>2001</inceptionYear>
     <description>
-        An implementation of the JSP Standard Tag Library (JSTL).
+        Support JSTL 1.0 tags using the original EL implementation.
     </description>
-
-    <url>http://tomcat.apache.org/taglibs/standard/</url>
 
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/jstlel</connection>
@@ -51,51 +49,23 @@
     </scm>
 
     <developers>
-        <developer>
-            <name>Pierre Delisle</name>
-        </developer>
-        <developer>
-            <name>Shawn Bayern</name>
-        </developer>
-        <developer>
-            <name>Nathan Abramson</name>
-        </developer>
-        <developer>
-            <name>Hans Bergsten</name>
-        </developer>
-        <developer>
-            <name>Scott Hasse</name>
-        </developer>
-        <developer>
-            <name>Justyna Horwat</name>
-        </developer>
-        <developer>
-            <name>Mark Kolb</name>
-        </developer>
-        <developer>
-            <name>Jan Luehe</name>
-        </developer>
-        <developer>
-            <name>Glenn Nielsen</name>
-        </developer>
-        <developer>
-            <name>Dmitri Plotnikov</name>
-        </developer>
-        <developer>
-            <name>Felipe Leme</name>
-        </developer>
-        <developer>
-            <name>Henri Yandell</name>
-        </developer>
-        <developer>
-            <name>Bjorn Townsend</name>
-        </developer>
+        <developer><name>Pierre Delisle</name></developer>
+        <developer><name>Shawn Bayern</name></developer>
+        <developer><name>Nathan Abramson</name></developer>
+        <developer><name>Hans Bergsten</name></developer>
+        <developer><name>Scott Hasse</name></developer>
+        <developer><name>Justyna Horwat</name></developer>
+        <developer><name>Mark Kolb</name></developer>
+        <developer><name>Jan Luehe</name></developer>
+        <developer><name>Glenn Nielsen</name></developer>
+        <developer><name>Dmitri Plotnikov</name></developer>
+        <developer><name>Felipe Leme</name></developer>
+        <developer><name>Henri Yandell</name></developer>
+        <developer><name>Bjorn Townsend</name></developer>
     </developers>
 
     <contributors>
-        <contributor>
-            <name>Robert Goff</name>
-        </contributor>
+        <contributor><name>Robert Goff</name></contributor>
     </contributors>
 
     <dependencies>
