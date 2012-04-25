@@ -41,7 +41,7 @@
     An implementation of the JSP Standard Tag Library (JSTL).
   </description>
 
-  <url>http://tomcat.apache.org/taglibs/standard/</url>
+  <url>http://tomcat.apache.org/taglibs/standard-${project.version}</url>
 
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk</connection>
@@ -53,9 +53,14 @@
     <site>
       <id>apache.website</id>
       <name>Apache Website</name>
-      <url>scpexe://people.apache.org/www/tomcat.apache.org/taglibs/standard/</url>
+      <url>scpexe://people.apache.org/www/tomcat.apache.org/taglibs/standard-${project.version}/</url>
     </site>
   </distributionManagement>
+
+  <ciManagement>
+    <system>jenkins</system>
+    <url>https://builds.apache.org/job/taglib-standard/</url>
+  </ciManagement>
 
   <developers>
     <developer><name>Pierre Delisle</name></developer>
