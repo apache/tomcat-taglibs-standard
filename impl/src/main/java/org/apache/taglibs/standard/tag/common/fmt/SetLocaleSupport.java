@@ -19,9 +19,10 @@ package org.apache.taglibs.standard.tag.common.fmt;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -92,7 +93,7 @@ public abstract class SetLocaleSupport extends TagSupport {
 
     @Override
     public int doEndTag() throws JspException {
-        Locale locale = null;
+        Locale locale;
 
         if (value == null) {
             locale = Locale.getDefault();
@@ -147,10 +148,10 @@ public abstract class SetLocaleSupport extends TagSupport {
      */
     public static Locale parseLocale(String locale, String variant) {
 
-        Locale ret = null;
+        Locale ret;
         String language = locale;
         String country = null;
-        int index = -1;
+        int index;
 
         if (((index = locale.indexOf(HYPHEN)) > -1)
                 || ((index = locale.indexOf(UNDERSCORE)) > -1)) {
@@ -239,7 +240,7 @@ public abstract class SetLocaleSupport extends TagSupport {
                                       boolean format,
                                       Locale[] avail) {
 
-        LocalizationContext locCtxt = null;
+        LocalizationContext locCtxt;
 
         // Get formatting locale from enclosing <fmt:bundle>
         Tag parent = findAncestorWithClass(fromTag, BundleSupport.class);
@@ -272,7 +273,7 @@ public abstract class SetLocaleSupport extends TagSupport {
        * (in order of preference) against the available formatting
        * locales, and determining the best matching locale.
        */
-        Locale match = null;
+        Locale match;
         Locale pref = getLocale(pc, Config.FMT_LOCALE);
         if (pref != null) {
             // Preferred locale is application-based
@@ -304,22 +305,16 @@ public abstract class SetLocaleSupport extends TagSupport {
     static {
         Locale[] dateLocales = DateFormat.getAvailableLocales();
         Locale[] numberLocales = NumberFormat.getAvailableLocales();
-        Vector vec = new Vector(dateLocales.length);
-        for (int i = 0; i < dateLocales.length; i++) {
-            for (int j = 0; j < numberLocales.length; j++) {
-                if (dateLocales[i].equals(numberLocales[j])) {
-                    vec.add(dateLocales[i]);
+        List<Locale> locales = new ArrayList<Locale>(dateLocales.length);
+        for (Locale dateLocale : dateLocales) {
+            for (Locale numberLocale : numberLocales) {
+                if (dateLocale.equals(numberLocale)) {
+                    locales.add(dateLocale);
                     break;
                 }
             }
         }
-        availableFormattingLocales = new Locale[vec.size()];
-        availableFormattingLocales = (Locale[]) vec.toArray(availableFormattingLocales);
-        /*
-        for (int i=0; i<availableFormattingLocales.length; i++) {
-            System.out.println("AvailableLocale[" + i + "] " + availableFormattingLocales[i]);
-        }
-        */
+        availableFormattingLocales = locales.toArray(new Locale[locales.size()]);
     }
 
     /*
@@ -336,7 +331,7 @@ public abstract class SetLocaleSupport extends TagSupport {
        * (in order of preference) against the available formatting
        * locales, and determining the best matching locale.
        */
-        Locale match = null;
+        Locale match;
         Locale pref = getLocale(pc, Config.FMT_LOCALE);
         if (pref != null) {
             // Preferred locale is application-based
@@ -446,26 +441,26 @@ public abstract class SetLocaleSupport extends TagSupport {
     private static Locale findFormattingMatch(Locale pref, Locale[] avail) {
         Locale match = null;
         boolean langAndCountryMatch = false;
-        for (int i = 0; i < avail.length; i++) {
-            if (pref.equals(avail[i])) {
+        for (Locale locale : avail) {
+            if (pref.equals(locale)) {
                 // Exact match
-                match = avail[i];
+                match = locale;
                 break;
             } else if (
                     !"".equals(pref.getVariant()) &&
-                            "".equals(avail[i].getVariant()) &&
-                            pref.getLanguage().equals(avail[i].getLanguage()) &&
-                            pref.getCountry().equals(avail[i].getCountry())) {
+                            "".equals(locale.getVariant()) &&
+                            pref.getLanguage().equals(locale.getLanguage()) &&
+                            pref.getCountry().equals(locale.getCountry())) {
                 // Language and country match; different variant
-                match = avail[i];
+                match = locale;
                 langAndCountryMatch = true;
             } else if (
                     !langAndCountryMatch &&
-                            pref.getLanguage().equals(avail[i].getLanguage()) &&
-                            ("".equals(avail[i].getCountry()))) {
+                            pref.getLanguage().equals(locale.getLanguage()) &&
+                            ("".equals(locale.getCountry()))) {
                 // Language match
                 if (match == null) {
-                    match = avail[i];
+                    match = locale;
                 }
             }
         }
