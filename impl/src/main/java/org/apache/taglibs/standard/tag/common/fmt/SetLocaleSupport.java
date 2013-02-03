@@ -33,7 +33,6 @@ import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.apache.taglibs.standard.resources.Resources;
 import org.apache.taglibs.standard.tag.common.core.Util;
 
 /**
@@ -48,9 +47,6 @@ public abstract class SetLocaleSupport extends TagSupport {
 
     //*********************************************************************
     // Private constants
-
-    private static final char HYPHEN = '-';
-    private static final char UNDERSCORE = '_';
 
 
     //*********************************************************************
@@ -95,16 +91,12 @@ public abstract class SetLocaleSupport extends TagSupport {
     public int doEndTag() throws JspException {
         Locale locale;
 
-        if (value == null) {
-            locale = Locale.getDefault();
-        } else if (value instanceof String) {
-            if (((String) value).trim().equals("")) {
-                locale = Locale.getDefault();
-            } else {
-                locale = parseLocale((String) value, variant);
-            }
-        } else {
+        if (value instanceof Locale) {
             locale = (Locale) value;
+        } else if (value instanceof String && !"".equals(((String)value).trim())) {
+            locale = LocaleUtil.parseLocale((String) value, variant);
+        } else {
+            locale = Locale.getDefault();
         }
 
         Config.set(pageContext, Config.FMT_LOCALE, locale, scope);
@@ -123,66 +115,6 @@ public abstract class SetLocaleSupport extends TagSupport {
 
     //*********************************************************************
     // Public utility methods
-
-    /**
-     * See parseLocale(String, String) for details.
-     */
-    public static Locale parseLocale(String locale) {
-        return parseLocale(locale, null);
-    }
-
-    /**
-     * Parses the given locale string into its language and (optionally)
-     * country components, and returns the corresponding
-     * <tt>java.util.Locale</tt> object.
-     * <p>If the given locale string is null or empty, the runtime's default
-     * locale is returned.
-     *
-     * @param locale  the locale string to parse
-     * @param variant the variant
-     * @return <tt>java.util.Locale</tt> object corresponding to the given
-     *         locale string, or the runtime's default locale if the locale string is
-     *         null or empty
-     * @throws IllegalArgumentException if the given locale does not have a
-     *                                  language component or has an empty country component
-     */
-    public static Locale parseLocale(String locale, String variant) {
-
-        Locale ret;
-        String language = locale;
-        String country = null;
-        int index;
-
-        if (((index = locale.indexOf(HYPHEN)) > -1)
-                || ((index = locale.indexOf(UNDERSCORE)) > -1)) {
-            language = locale.substring(0, index);
-            country = locale.substring(index + 1);
-        }
-
-        if ((language == null) || (language.length() == 0)) {
-            throw new IllegalArgumentException(
-                    Resources.getMessage("LOCALE_NO_LANGUAGE"));
-        }
-
-        if (country == null) {
-            if (variant != null) {
-                ret = new Locale(language, "", variant);
-            } else {
-                ret = new Locale(language, "");
-            }
-        } else if (country.length() > 0) {
-            if (variant != null) {
-                ret = new Locale(language, country, variant);
-            } else {
-                ret = new Locale(language, country);
-            }
-        } else {
-            throw new IllegalArgumentException(
-                    Resources.getMessage("LOCALE_EMPTY_COUNTRY"));
-        }
-
-        return ret;
-    }
 
 
     //*********************************************************************
@@ -381,7 +313,7 @@ public abstract class SetLocaleSupport extends TagSupport {
             if (obj instanceof Locale) {
                 loc = (Locale) obj;
             } else {
-                loc = parseLocale((String) obj);
+                loc = LocaleUtil.parseLocale((String) obj);
             }
         }
 

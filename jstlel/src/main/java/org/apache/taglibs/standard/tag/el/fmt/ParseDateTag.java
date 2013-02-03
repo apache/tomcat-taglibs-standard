@@ -22,8 +22,8 @@ import java.util.Locale;
 import javax.servlet.jsp.JspException;
 
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+import org.apache.taglibs.standard.tag.common.fmt.LocaleUtil;
 import org.apache.taglibs.standard.tag.common.fmt.ParseDateSupport;
-import org.apache.taglibs.standard.tag.common.fmt.SetLocaleSupport;
 
 /**
  * <p>A handler for &lt;parseDate&gt; that accepts attributes as Strings
@@ -191,15 +191,9 @@ public class ParseDateTag extends ParseDateSupport {
         if (parseLocale_ != null) {
             Object obj = ExpressionEvaluatorManager.evaluate(
                     "parseLocale", parseLocale_, Object.class, this, pageContext);
-            if (obj != null) {
-                if (obj instanceof Locale) {
-                    parseLocale = (Locale) obj;
-                } else {
-                    String localeStr = (String) obj;
-                    if (!"".equals(localeStr)) {
-                        parseLocale = SetLocaleSupport.parseLocale(localeStr);
-                    }
-                }
+            Locale locale = LocaleUtil.parseLocale(obj);
+            if (locale != null) {
+                this.parseLocale = locale;
             }
         }
     }
