@@ -76,7 +76,7 @@ public class ParseDateTag extends ParseDateSupport {
     // 'parseLocale' attribute
 
     public void setParseLocale(Object loc) throws JspTagException {
-        Locale locale = LocaleUtil.parseLocale(loc);
+        Locale locale = LocaleUtil.parseLocaleAttributeValue(loc);
         if (loc != null) {
             this.parseLocale = locale;
         }

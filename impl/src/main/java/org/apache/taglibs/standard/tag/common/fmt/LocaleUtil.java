@@ -43,7 +43,7 @@ public class LocaleUtil {
      * @param stringOrLocale locale represented as an instance of Locale or as a String
      * @return the locale represented by the parameter, or null if the parameter is undefined
      */
-    public static Locale parseLocale(Object stringOrLocale) {
+    public static Locale parseLocaleAttributeValue(Object stringOrLocale) {
         if (stringOrLocale instanceof Locale) {
             return (Locale) stringOrLocale;
         } else if (stringOrLocale instanceof String) {

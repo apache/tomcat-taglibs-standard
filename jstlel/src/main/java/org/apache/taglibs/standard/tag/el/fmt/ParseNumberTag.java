@@ -161,7 +161,7 @@ public class ParseNumberTag extends ParseNumberSupport {
         if (parseLocale_ != null) {
             obj = ExpressionEvaluatorManager.evaluate(
                     "parseLocale", parseLocale_, Object.class, this, pageContext);
-            Locale locale = LocaleUtil.parseLocale(obj);
+            Locale locale = LocaleUtil.parseLocaleAttributeValue(obj);
             if (locale != null) {
                 this.parseLocale = locale;
             }

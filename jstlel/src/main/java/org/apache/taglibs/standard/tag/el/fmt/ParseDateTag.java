@@ -191,7 +191,7 @@ public class ParseDateTag extends ParseDateSupport {
         if (parseLocale_ != null) {
             Object obj = ExpressionEvaluatorManager.evaluate(
                     "parseLocale", parseLocale_, Object.class, this, pageContext);
-            Locale locale = LocaleUtil.parseLocale(obj);
+            Locale locale = LocaleUtil.parseLocaleAttributeValue(obj);
             if (locale != null) {
                 this.parseLocale = locale;
             }
