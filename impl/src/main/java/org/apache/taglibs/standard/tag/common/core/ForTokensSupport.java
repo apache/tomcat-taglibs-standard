@@ -19,7 +19,6 @@ package org.apache.taglibs.standard.tag.common.core;
 
 import java.util.StringTokenizer;
 
-import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.IteratedExpression;
@@ -57,7 +56,7 @@ public abstract class ForTokensSupport extends LoopTagSupport {
     protected Object items;                       // 'items' attribute
     protected String delims;                      // 'delims' attribute
     protected StringTokenizer st;                 // digested tokenizer
-    protected int currentIndex = 0;
+    protected int currentIndex;
     private IteratedExpression itemsValueIteratedExpression;
 
 
@@ -73,8 +72,10 @@ public abstract class ForTokensSupport extends LoopTagSupport {
     protected void prepare() throws JspTagException {
         if (items instanceof ValueExpression) {
             deferredExpression = (ValueExpression) items;
-            ELContext myELContext = pageContext.getELContext();
-            Object originalValue = deferredExpression.getValue(myELContext);
+            itemsValueIteratedExpression = new IteratedExpression(deferredExpression, getDelims());
+            currentIndex = 0;
+
+            Object originalValue = deferredExpression.getValue(pageContext.getELContext());
             if (originalValue instanceof String) {
                 st = new StringTokenizer((String) originalValue, delims);
             } else {
@@ -94,12 +95,7 @@ public abstract class ForTokensSupport extends LoopTagSupport {
     protected Object next() throws JspTagException {
         if (deferredExpression != null) {
             st.nextElement();
-            if (itemsValueIteratedExpression == null) {
-                itemsValueIteratedExpression = new IteratedExpression(deferredExpression, getDelims());
-            }
-            ValueExpression nextValue = new IteratedValueExpression(itemsValueIteratedExpression, currentIndex);
-            currentIndex++;
-            return nextValue;
+            return new IteratedValueExpression(itemsValueIteratedExpression, currentIndex++);
         } else {
             return st.nextElement();
         }

@@ -115,7 +115,7 @@ public abstract class LoopTagSupport
      */
     protected String itemId, statusId;
 
-    protected ValueExpression deferredExpression = null;
+    protected ValueExpression deferredExpression;
 
     //*********************************************************************
     // 'Private' state (implementation details)
@@ -509,6 +509,7 @@ public abstract class LoopTagSupport
         beginSpecified = false; // not specified until it's specified :-)
         endSpecified = false;   // (as above)
         stepSpecified = false;  // (as above)
+        deferredExpression = null;
 
         // defaults for interface with page author
         begin = 0;              // when not specified, 'begin' is 0 by spec.
