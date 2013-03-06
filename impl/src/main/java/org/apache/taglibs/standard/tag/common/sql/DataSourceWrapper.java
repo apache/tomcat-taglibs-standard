@@ -23,7 +23,7 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
+import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 import org.apache.taglibs.standard.resources.Resources;
@@ -118,6 +118,10 @@ public class DataSourceWrapper implements DataSource {
      */
     public int getLoginTimeout() throws SQLException {
         throw new SQLException(Resources.getMessage("NOT_SUPPORTED"));
+    }
+
+    public Logger getParentLogger() {
+        throw new UnsupportedOperationException(Resources.getMessage("NOT_SUPPORTED"));
     }
 
     /**
