@@ -15,19 +15,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<project
-        xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache.taglibs</groupId>
         <artifactId>taglibs-standard</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2.0-RC1</version>
     </parent>
 
     <artifactId>taglibs-standard-spec</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2.0-RC1</version>
     <packaging>bundle</packaging>
 
     <name>JSTL Specification API</name>
@@ -38,10 +35,10 @@
     </description>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec
+        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0-RC1/spec</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0-RC1/spec
         </developerConnection>
-        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk/spec</url>
+        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0-RC1/spec</url>
     </scm>
 
     <developers>
