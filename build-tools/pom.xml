@@ -24,20 +24,20 @@
     <parent>
         <groupId>org.apache.taglibs</groupId>
         <artifactId>taglibs-standard</artifactId>
-        <version>1.2.0-RC1</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>taglibs-build-tools</artifactId>
-    <version>1.2.0-RC1</version>
+    <version>1.2-SNAPSHOT</version>
     <name>Build Tools</name>
 
     <description>Build tool settings common to all Standard Taglib modules</description>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0-RC1/build-tools</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0-RC1/build-tools
+        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/build-tools</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/build-tools
         </developerConnection>
-        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0-RC1/build-tools</url>
+        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk/build-tools</url>
     </scm>
 
 </project>

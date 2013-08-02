@@ -20,11 +20,11 @@
     <parent>
         <groupId>org.apache.taglibs</groupId>
         <artifactId>taglibs-standard</artifactId>
-        <version>1.2.0-RC1</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>taglibs-standard-spec</artifactId>
-    <version>1.2.0-RC1</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>JSTL Specification API</name>
@@ -35,10 +35,10 @@
     </description>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0-RC1/spec</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0-RC1/spec
+        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/spec
         </developerConnection>
-        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0-RC1/spec</url>
+        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk/spec</url>
     </scm>
 
     <developers>
