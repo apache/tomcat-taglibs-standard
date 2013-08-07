@@ -1,7 +1,7 @@
 <html><!-- #BeginTemplate "/Templates/ExamplesTemplate.dwt" -->
 <head>
     <!-- #BeginEditable "doctitle" -->
-    <title>Untitled Document</title>
+    <title>JSTL: SQL Tags Examples</title>
     <!-- #EndEditable -->
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link rel="stylesheet" href="../global.css" type="text/css">
