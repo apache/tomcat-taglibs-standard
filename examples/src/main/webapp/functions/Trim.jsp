@@ -20,13 +20,13 @@
     </tr>
     <tr>
         <td>
-            <pre>${custId} (whithout trim)</pre>
+            <pre>${custId} (without trim)</pre>
         </td>
         <td><c:url value="http://acme.com/cust"><c:param name="custId" value="${custId}"/></c:url></td>
     </tr>
     <tr>
         <td>
-            <pre>${custId} (whith trim)</pre>
+            <pre>${custId} (with trim)</pre>
         </td>
         <td><c:url value="http://acme.com/cust"><c:param name="custId" value="${fn:trim(custId)}"/></c:url></td>
     </tr>
