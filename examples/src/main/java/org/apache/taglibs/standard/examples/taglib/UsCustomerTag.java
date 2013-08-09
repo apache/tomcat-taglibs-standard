@@ -27,7 +27,6 @@ import org.apache.taglibs.standard.examples.beans.Customer;
  * <p>Tag handler for &lt;usCustomer&gt;
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 public class UsCustomerTag extends ConditionalTagSupport {
 

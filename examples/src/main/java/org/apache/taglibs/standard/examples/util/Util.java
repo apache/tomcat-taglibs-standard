@@ -31,7 +31,6 @@ import javax.servlet.jsp.JspException;
  * <p>Utility class for examples webapp.
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 public class Util {
 

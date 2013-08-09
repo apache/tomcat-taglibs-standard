@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponseWrapper;
  * output of the JSP page has to be saved).
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 public class ServletResponseWrapperForWriter
         extends HttpServletResponseWrapper {

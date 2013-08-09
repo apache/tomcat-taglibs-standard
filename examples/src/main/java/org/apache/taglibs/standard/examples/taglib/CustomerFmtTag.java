@@ -29,7 +29,6 @@ import org.apache.taglibs.standard.examples.beans.Customer;
  * <p>Tag handler for &lt;customerFmt&gt;
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 public class CustomerFmtTag extends TagSupport {
 

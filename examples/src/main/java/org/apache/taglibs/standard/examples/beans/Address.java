@@ -21,7 +21,6 @@ package org.apache.taglibs.standard.examples.beans;
  * Object that represents a Customer.
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 
 public class Address {

@@ -35,7 +35,6 @@ import org.apache.taglibs.standard.lang.jstl.test.beans.Factory;
  * Tests for EL Evaluation based on previous golden files.
  *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author$
  */
 
 public class EvaluationTest extends TestCase {

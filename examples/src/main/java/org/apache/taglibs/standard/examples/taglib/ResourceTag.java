@@ -36,7 +36,6 @@ import org.apache.taglibs.standard.examples.util.ServletResponseWrapperForWriter
  * <p>Tag handler for &lt;resource&gt;
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 public class ResourceTag extends TagSupport {
 

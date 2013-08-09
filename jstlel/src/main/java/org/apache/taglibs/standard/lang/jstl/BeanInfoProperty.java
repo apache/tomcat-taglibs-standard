@@ -31,7 +31,6 @@ import java.lang.reflect.Method;
  * BeanInfoManager).
  *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author$
  */
 
 public class BeanInfoProperty {

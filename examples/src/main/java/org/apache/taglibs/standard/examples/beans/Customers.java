@@ -27,7 +27,6 @@ import java.util.Vector;
  * Customers Datastore.
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 
 public class Customers {

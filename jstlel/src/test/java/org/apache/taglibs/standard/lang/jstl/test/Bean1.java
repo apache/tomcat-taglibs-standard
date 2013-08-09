@@ -24,7 +24,6 @@ import java.util.Map;
  * <p>This is a test bean with a set of properties
  *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author$
  */
 
 public class Bean1 {

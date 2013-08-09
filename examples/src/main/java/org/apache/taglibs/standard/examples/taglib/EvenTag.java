@@ -26,7 +26,6 @@ import javax.servlet.jsp.tagext.TagSupport;
  * <p>Tag handler for &lt;odd&gt;
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 public class EvenTag extends TagSupport {
 

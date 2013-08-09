@@ -31,7 +31,6 @@ import org.apache.taglibs.standard.examples.util.Util;
  * <p>Tag handler for &lt;escapeHtml&gt;
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 public class EscapeHtmlTag extends BodyTagSupport {
 

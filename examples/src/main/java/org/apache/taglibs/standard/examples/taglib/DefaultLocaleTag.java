@@ -26,7 +26,6 @@ import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
  * <p>Tag handler for &lt;locales&gt;
  *
  * @author Felipe Leme <jstl@felipeal.net>
- * @version $Revision$ $Date$
  */
 
 public class DefaultLocaleTag extends ConditionalTagSupport {

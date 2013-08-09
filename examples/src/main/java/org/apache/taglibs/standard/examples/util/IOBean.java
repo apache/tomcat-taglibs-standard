@@ -28,7 +28,6 @@ import javax.servlet.jsp.JspException;
  * <p>String repository for Reader/Writer.
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 public class IOBean {
     StringWriter stringWriter = null;

@@ -21,7 +21,6 @@ package org.apache.taglibs.standard.lang.jstl.test.beans;
  * <p>A private implementation of a public interface
  *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author$
  */
 
 class PrivateBean2b

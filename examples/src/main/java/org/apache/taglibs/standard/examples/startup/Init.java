@@ -30,7 +30,6 @@ import org.apache.taglibs.standard.examples.beans.Customers;
  * used in the "examples" webapp.
  *
  * @author Pierre Delisle
- * @version $Revision$ $Date$
  */
 public class Init implements ServletContextListener {
 

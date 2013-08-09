@@ -22,7 +22,6 @@ package org.apache.taglibs.standard.lang.jstl.test.beans;
  * interface
  *
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181181 $$DateTime: 2001/06/26 09:55:09 $$Author$
  */
 
 class PrivateBean2c
