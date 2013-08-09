@@ -27,7 +27,7 @@
     <version>1.2.0-RC1</version>
     <packaging>war</packaging>
 
-    <name>JSTL Example WAR</name>
+    <name>Apache Standard Taglib Example WAR</name>
 
     <inceptionYear>2001</inceptionYear>
     <description>

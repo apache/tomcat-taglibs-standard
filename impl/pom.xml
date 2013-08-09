@@ -31,7 +31,7 @@
     <version>1.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>JSTL Implementation</name>
+    <name>Apache Standard Taglib Implementation</name>
 
     <inceptionYear>2001</inceptionYear>
     <description>

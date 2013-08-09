@@ -27,7 +27,7 @@
     <version>1.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>JSTL Specification API</name>
+    <name>Apache Standard Taglib Specification API</name>
 
     <inceptionYear>2001</inceptionYear>
     <description>

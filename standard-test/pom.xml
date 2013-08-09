@@ -28,7 +28,7 @@
 
   <artifactId>taglibs-standard-test</artifactId>
   <version>1.2-SNAPSHOT</version>
-  <name>Jakarta Standard Taglib Cactus Tests</name>
+  <name>Apache Standard Taglib Cactus Tests</name>
   <packaging>war</packaging>
 
   <inceptionYear>2003</inceptionYear>
