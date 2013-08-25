@@ -40,8 +40,8 @@ public class OddTag extends TagSupport {
         }
 
         int count = iteratorTag.getLoopStatus().getCount();
-        System.out.println("count: " + count);
-        System.out.println("count odd/even: " + (count % 2));
+//        System.out.println("count: " + count);
+//        System.out.println("count odd/even: " + (count % 2));
         return (count % 2 == 1) ? EVAL_BODY_INCLUDE : SKIP_BODY;
     }
 }
