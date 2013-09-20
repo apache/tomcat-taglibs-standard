@@ -16,7 +16,6 @@
    limitations under the License.
 -->
 <!-- TODO:
-    Generate the examples war
     Enable Cactus tests
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -107,6 +106,13 @@
                 </goals>
               </execution>
             </executions>
+            <configuration>
+              <excludes>
+                <exclude>standard-test/src/test/resources/org/apache/taglibs/standard/tag/el/core/TestOutTag.txt</exclude>
+                <exclude>README_bin.txt</exclude>
+                <exclude>README_src.txt</exclude>
+              </excludes>
+            </configuration>
           </plugin>
         </plugins>
       </build>
