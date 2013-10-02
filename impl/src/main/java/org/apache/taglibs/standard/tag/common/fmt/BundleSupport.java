@@ -95,20 +95,7 @@ public abstract class BundleSupport extends BodyTagSupport {
     @Override
     public int doStartTag() throws JspException {
         locCtxt = getLocalizationContext(pageContext, basename);
-        return EVAL_BODY_BUFFERED;
-    }
-
-    @Override
-    public int doEndTag() throws JspException {
-        if (bodyContent != null) {
-            try {
-                pageContext.getOut().print(bodyContent.getString());
-            } catch (IOException ioe) {
-                throw new JspTagException(ioe.toString(), ioe);
-            }
-        }
-
-        return EVAL_PAGE;
+        return EVAL_BODY_INCLUDE;
     }
 
     // Releases any resources we may have (or inherit)
