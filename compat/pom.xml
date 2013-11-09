@@ -24,11 +24,11 @@
     <parent>
         <groupId>org.apache.taglibs</groupId>
         <artifactId>taglibs-standard</artifactId>
-        <version>1.2.0</version>
+        <version>1.2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>taglibs-standard-compat</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>Apache Standard Taglib 1.0 Compatibility</name>
@@ -39,10 +39,10 @@
     </description>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0/compat</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0/compat
+        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/compat</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/compat
         </developerConnection>
-        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/tags/taglibs-standard-1.2.0/compat</url>
+        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk/compat</url>
     </scm>
 
     <developers>
@@ -69,12 +69,12 @@
         <dependency>
             <groupId>org.apache.taglibs</groupId>
             <artifactId>taglibs-standard-spec</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.taglibs</groupId>
             <artifactId>taglibs-standard-impl</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
