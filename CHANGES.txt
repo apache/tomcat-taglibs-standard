@@ -1,0 +1,63 @@
+Changes in 1.2.1 release
+- Documentation cleanup
+
+Major changes in 1.2.0 release
+- Transitioned project from Apache Jakarta to Apache Tomcat
+- Implementation of new functionality for JSTL 1.2; requires Java 1.5
+- Switched to Maven-based build
+- Renamed JARs and modified packaging structure; OSGI metadata added
+- XML processing performance improved by direct use of Xalan
+
+The following issues from Bugzilla (https://issues.apache.org/bugzilla) appear related.
+However, due to the time since the last 1.1 release some issues may be missing or misclassified.
+
+55608 fmt:bundle tag unnecessarily buffers body content
+54544 Loop vars are not reset for fortoken with deferred expression
+52637 Broken link
+50674 Some maven pom improvments
+50462 xalan import should not be optional in maven-bundle-plugin
+50461 out tag's escapeXml attribute should be set as true by default
+50414 tlv package cause another split package issue in impl and jstlel bundles
+50266 Javadoc and import corrections
+50265 FormatDateSupport.dateFormatCache lazy init is not safe
+50264 Missing @Override annotations
+50263 README_src.txt out of date
+50250 Split package issue in impl and jstlel bundles
+50064 bundle-ify the taglibs jars
+49900 BundleSupport.release() does not call super.release() to clear bodyContent
+49578 XPath handling only supports single reference to variable
+49565 Findbugs: Util.specialCharactersRepresentation should be both final and package protected
+49561 Remove proprietary URLEncoder
+49554 Clean up Functions
+49548 Refactoring SetSupport
+49547 Minor performance enhancement in set result evaluation
+49546 Add test cases for SetSupport
+49542 IteratedValueExpression and IndexedValueExpression implementation
+49534 ForEachSupport handles unsupported items inconsistently
+49526 c:set does not remove variables from ELContext VariableMapper
+49510 Remove dependency on classes copied from commons
+48848 fn:endsWith fails with repeated search string
+48773 DataSourceWrapper and DriverManager problems
+48772 Bad information in impl module pom.xml
+46086 javax.servlet.jsp.jstl.sql.ResultSupport.java silently swallows SQLException
+45197 Need to support the JSTL 1.2 specification
+45183 Starting from mysql JDBC connector 5.1.6 a wrong behavior
+43831 Unexpected Result with mysql jdbc 5.1.5, column aliases not reported
+43640 Move the tests package to JUnit
+43544 LRUCache implementation not updated to match latest collections code
+43393 x:out provokes an IllegalStateException if session is forbidden
+41343 Build fails on OS X.
+41221 Fix source headers in source
+39480 calling getContextClassLoader without doPriv
+39195 getRequestLocale could throw exception on JBOSS
+39284 fn:endsWith('abcda', 'a') returns false
+37466 c:import doesn't work with HEAD requests
+37029 TLD Validation error for HTML "param" element
+35216 x:forEach causes session scope exception
+34109 <c:url> doesn't merge slashes at the boundary of "context" and "value"
+33934 [standard] memory leak in jstl c:set tag
+32896 Invalid endsWith function
+30068 Wrong behaviour of x:out inside x:forEach
+27717 <x:forEach> very slow in JSTL 1.1
+17388 Result set created in query tag is never released + update tag
+14465 position() and last() are critical
