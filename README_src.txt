@@ -5,13 +5,13 @@ Thanks for downloading the source code for the Apache Software Foundation's
 implementation of the JavaServer Pages(tm)(JSP) Standard Tag Library (JSTL)
 specification. This code is licensed to you by the Apache Software
 Foundation and its contributors under the terms of the Apache License V2.0;
-please see the included NOTICE.txt and LICENSE.txt files for details.
+please see the included NOTICE and LICENSE files for details.
 
 ---------------------------------------------------------------------------
 BUILD ENVIRONMENT SETUP
 
 For the 1.2 release, the project migrated to the Apache Maven build system.
-Download and install version 2.2 or higher from http://maven.apache.org
+Download and install version 3.0 or higher from http://maven.apache.org
 
 The build requires a Java Development Kit Version 5 or higher.
 
@@ -23,7 +23,6 @@ normal Maven goals:
 
     $ mvn install   <-- builds all targets and installs in local repository
     $ mvn clean     <-- removes all build artifacts
-    $ mvn release   <-- builds all targets and releases to staging repo
 
 A typical build will use the 'install' goal that compiles all classes, runs
 all the unit tests, creates the target bundles, and installs them in the
@@ -35,10 +34,13 @@ repositories. You should be online when building.
 Information about the project can be found in the 'pom.xml' project
 descriptor.
 
+For information about performing a release at Apache, please refer to
+"Publishing Maven Artifacts" at http://www.apache.org/dev/publishing-maven-artifacts.html
+
 ---------------------------------------------------------------------------
 PROJECT MODULES
 
-There are four sub-modules:
+There are three primary sub-modules:
 
     spec            <-- contains Apache's implementation of the API classes
     impl            <-- contains the implementation of tags from the 1.1
@@ -46,6 +48,9 @@ There are four sub-modules:
     jstlel          <-- contains the implementation of tags from the 1.0
                         namespace http://java.sun.com/jstl/* and uses the
                         original JSTL 1.0 version of EL
+
+In addition, the following modules provide supporting functionality
+    build-tools     <-- build support such as checkstyle rules
     compat          <-- contains the implementation of tags from the 1.0
-                        namespace but uses the JSP container implementation
+                        namespace but uses the JSP container's implementation
                         of EL (which will be 2.1 or later).

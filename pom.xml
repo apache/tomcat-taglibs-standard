@@ -45,14 +45,6 @@
     <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk</url>
   </scm>
 
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <name>Apache Website</name>
-      <url>scpexe://people.apache.org/www/tomcat.apache.org/taglibs/standard-${project.version}/</url>
-    </site>
-  </distributionManagement>
-
   <ciManagement>
     <system>jenkins</system>
     <url>https://builds.apache.org/job/taglib-standard/</url>

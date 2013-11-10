@@ -1,16 +1,17 @@
 ---------------------------------------------------------------------------
-Standard Tag Library 1.1 -- BINARY DISTRIBUTION
+Apache Standard Tag Library 1.2 -- BINARY DISTRIBUTION
 ---------------------------------------------------------------------------
 Thanks for downloading this release of the Standard tag library, 
 an implementation of the JavaServer Pages(tm)(JSP) 
 Standard Tag Library (JSTL).
 
+This code is licensed to you by the Apache Software Foundation and its
+contributors under the terms of the Apache License V2.0;
+please see the included NOTICE and LICENSE files for details.
+
 JSTL is an effort of the Java Community Process (JCP) and
 comes out of the JSR-052 expert group. For more information on JSTL,
 please go to http://java.sun.com/products/jstl.
-
-We hope you find the tags, documents, and examples in this binary
-distribution of interest.
 
 ---------------------------------------------------------------------------
 LIBRARY DEPENDENCIES
@@ -18,91 +19,56 @@ LIBRARY DEPENDENCIES
 This version of the Standard Tag Library has the following runtime
 dependencies:
 
-   1. Dependencies provided by the JSP 2.0 container:
-      - Servlet 2.4
-      - JSP 2.0
+   1. Dependencies provided by a JSP 2.0 container:
+      - Java 1.5 or later
+      - Servlet 2.4 or later
+      - JSP 2.0 or later
 
-   2. Dependencies provided in newer J2SEs (1.4.2 and higher)
-      - JAXP 1.2 
-      - Xalan 2.5 
-      - JDBC Standard Extension 2.0
-
-Since all of the dependencies in (2) are included in Sun's
-distribution of J2SE 1.4.2 (and higher), this is therefore the J2SE
-version of choice to use the standard tag library.
-
-If the java platform under which you run your JSP container does not
-provide these dependencies, they must be made available either globally
-to all web-applications by your container, or individually within the
-WEB-INF/lib directory of your web-application.
-
-For convenience, these jar files have been included in directory 
-lib/old-dependencies of this distribution (assuming the build process
-of this distribution included them). If you would like to download
-these jar files yourself, instructions on where you can get them are 
-included below.
+   2. Additional dependencies
+      - The XML tag library requires Apache Xalan 2.7.1 or later
 
 ---
-JAXP 1.2
+Apache Xalan 2.7.1
 
-The JAXP 1.2 jar files can be obtained in the Java Web Services
-Developer Pack (JWSDP) available at 
-http://java.sun.com/products/jwsdp.
-
-  - jaxp-api.jar
-  - dom.jar
-  - sax.jar
-  - xercesImpl.jar
-
----
-Xalan 2.5
-
-The Xalan jar file can be obtained in the Java Web Services
-Developer Pack (JWSDP) available at 
-http://java.sun.com/products/jwsdp, as well as from 
-Apache at http://xml.apache.org/xalan-j.
-
-  - xalan.jar
-
-Please note that if you use Sun's distribution of J2SE 1.4.1, you must
-supersede the version of xalan.jar provided by the J2SE with version
-2.5 or higher of Xalan.  This newer version of xalan.jar must then be
-made available through the endorsed dirs mechanism.
-
----
-JDBC Standard Extension 2.0
-
-The JDBC 2.0 Optional Package can be obtained from:
-http://java.sun.com/products/jdbc/download.html
-
-  - jdbc2_0-stdext.jar
+To address performance issues with XSLT processing, this version relies on
+implementation specific functionality from Apache Xalan. The following
+libraries should be included in the classpath for your application:
+   - xalan-2.7.1.jar
+   - serializer-2.7.1.jar
 
 ---------------------------------------------------------------------------
-WAR Files
+ADD DEPENDENCIES TO A WEB APPLICATION
 
-The following two files are standalone web applications (WARs) that are
-designed to work out of the box in order to help you learn JSTL:
+To use this distribution with your own web applications, add the following JAR
+files to the '/WEB-INF/lib' directory of your application:
+   - taglibs-standard-spec-1.2.0.jar
+   - taglibs-standard-impl-1.2.0.jar
+   - taglibs-standard-jstlel-1.2.0.jar
+   - xalan-2.7.1.jar
+   - serializer-2.7.1.jar
 
-   standard-doc.war                Documentation
-   standard-examples.war           Simple examples of JSTL tags
+If you do not use JSTL 1.0 tags then the "taglibs-standard-jstlel" JAR may be
+omitted. If you do not use the XML library, then the Apache Xalan dependencies
+may also be omitted.
 
-Note that 'standard-examples.war' will work out-of-the-box as long 
-as the java platform under which you run your JSP container provides
-all the dependencies mentioned above (see Library Dependencies). 
-This is the case if using Sun's distribution of J2SE 1.4.2 (and higher).
+If you build you application with Maven, add the following dependencies to
+your pom.xml file:
 
-If not all dependencies are provided by your runtime, then they must 
-be made available to the web application as explained in section
-"Library Dependencies".
+    <dependency>
+      <groupId>org.apache.taglibs</groupId>
+      <artifactId>taglibs-standard-spec</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.taglibs</groupId>
+      <artifactId>taglibs-standard-impl</artifactId>
+      <version>1.2.0</version>
+    </dependency>
 
 ---------------------------------------------------------------------------
-USING THE STANDARD TAG LIBRARY
+USING JSTL TAGS FROM A JSP
 
-To use this distribution with your own web applications, simply copy the JAR
-files in the 'lib' directory (jstl.jar and standard.jar) to your application's 
-WEB-INF/lib directory (add the other dependencies as well if your runtime
-does not already provide them). Then, import JSTL into your pages with the 
-following directives:
+The JSTL tag library can be imported into your pages with the following directives:
 
   CORE LIBRARY
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -122,14 +88,14 @@ following directives:
 ---------------------------------------------------------------------------
 COMPATIBILITY
 
-The 1.1 version of the Standard Taglib has been tested under Tomcat 5.0.3
-and should work in any compliant JSP 2.0 container.
+The 1.2 version of the Standard Taglib has been tested under Tomcat 7.0.47
+and should work in any compliant JSP 2.0 (or later) container.
 
 ---------------------------------------------------------------------------
 COMMENTS AND QUESTIONS
 
-Please join the taglibs-user@jakarta.apache.org mailing list if you have
-general usage questions about JSTL.
+Please join the taglibs-user@tomcat.apache.org mailing list if you have
+general usage questions about Apache Taglibs.
 
 Comments about the JSTL specification itself should be sent to
 jsr-52-comments@jcp.org.
