@@ -101,6 +101,7 @@
             <configuration>
               <excludes>
                 <exclude>standard-test/src/test/resources/org/apache/taglibs/standard/tag/el/core/TestOutTag.txt</exclude>
+                <exclude>DEPENDENCIES</exclude>
                 <exclude>README_bin.txt</exclude>
                 <exclude>README_src.txt</exclude>
               </excludes>

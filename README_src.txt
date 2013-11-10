@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------
-Apache Standard Tag Library 1.2 -- SOURCE DISTRIBUTION
+Apache Standard Tag Library 1.2.1 -- SOURCE DISTRIBUTION
 ---------------------------------------------------------------------------
 Thanks for downloading the source code for the Apache Software Foundation's
 implementation of the JavaServer Pages(tm)(JSP) Standard Tag Library (JSTL)
@@ -36,6 +36,9 @@ descriptor.
 
 For information about performing a release at Apache, please refer to
 "Publishing Maven Artifacts" at http://www.apache.org/dev/publishing-maven-artifacts.html
+To rebuild the released artifacts locally from this source distribution
+or from a SVN tag, run:
+    $ mvn -Papache-release install
 
 ---------------------------------------------------------------------------
 PROJECT MODULES
