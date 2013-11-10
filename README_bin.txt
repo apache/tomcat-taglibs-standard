@@ -21,7 +21,7 @@ dependencies:
 
    1. Dependencies provided by a JSP 2.0 container:
       - Java 1.5 or later
-      - Servlet 2.4 or later
+      - Servlet 2.5 or later
       - JSP 2.0 or later
 
    2. Additional dependencies
