@@ -19,10 +19,10 @@ LIBRARY DEPENDENCIES
 This version of the Standard Tag Library has the following runtime
 dependencies:
 
-   1. Dependencies provided by a JSP 2.0 container:
+   1. Dependencies provided by a JSP 2.1 container:
       - Java 1.5 or later
       - Servlet 2.5 or later
-      - JSP 2.0 or later
+      - JSP 2.1 or later
 
    2. Additional dependencies
       - The XML tag library requires Apache Xalan 2.7.1 or later
@@ -89,7 +89,7 @@ The JSTL tag library can be imported into your pages with the following directiv
 COMPATIBILITY
 
 The 1.2 version of the Standard Taglib has been tested under Tomcat 7.0.47
-and should work in any compliant JSP 2.0 (or later) container.
+and should work in any compliant JSP 2.1 (or later) container.
 
 ---------------------------------------------------------------------------
 COMMENTS AND QUESTIONS
