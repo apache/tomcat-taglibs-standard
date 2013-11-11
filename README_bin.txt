@@ -11,7 +11,7 @@ please see the included NOTICE and LICENSE files for details.
 
 JSTL is an effort of the Java Community Process (JCP) and
 comes out of the JSR-052 expert group. For more information on JSTL,
-please go to http://java.sun.com/products/jstl.
+please go to http://jcp.org/en/jsr/detail?id=52 .
 
 ---------------------------------------------------------------------------
 LIBRARY DEPENDENCIES
