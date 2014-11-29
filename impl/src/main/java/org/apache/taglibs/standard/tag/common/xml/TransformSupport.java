@@ -17,43 +17,29 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.Writer;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.taglibs.standard.resources.Resources;
-import org.apache.taglibs.standard.tag.common.core.ImportSupport;
 import org.apache.taglibs.standard.tag.common.core.Util;
+import org.apache.taglibs.standard.util.UnclosableWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * <p>Support for tag handlers for &lt;transform&gt;, the XML transformation
@@ -79,24 +65,14 @@ public abstract class TransformSupport extends BodyTagSupport {
     private String var;                 // 'var' attribute
     private int scope;                  // processed 'scope' attr
     private Transformer t;              // actual Transformer
-    private TransformerFactory tf;      // reusable factory
-    private DocumentBuilder db;         // reusable factory
+    private XmlUtil.JstlEntityResolver entityResolver;
+    private XmlUtil.JstlUriResolver uriResolver;
 
 
     //*********************************************************************
     // Constructor and initialization
 
     public TransformSupport() {
-        try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
-            dbf.setValidating(false);
-            db = dbf.newDocumentBuilder();
-            tf = TransformerFactory.newInstance();
-        } catch (ParserConfigurationException e) {
-            throw (AssertionError) new AssertionError("Unable to create DocumentBuilder").initCause(e);
-        }
-
         init();
     }
 
@@ -106,7 +82,6 @@ public abstract class TransformSupport extends BodyTagSupport {
         xmlSystemId = xsltSystemId = null;
         var = null;
         result = null;
-        tf.setURIResolver(null);
         scope = PageContext.PAGE_SCOPE;
     }
 
@@ -117,36 +92,69 @@ public abstract class TransformSupport extends BodyTagSupport {
     @Override
     public int doStartTag() throws JspException {
         // set up transformer in the start tag so that nested <param> tags can set parameters directly
-        t = getTransformer(xslt, xsltSystemId);
+        if (xslt == null) {
+            throw new JspTagException(Resources.getMessage("TRANSFORM_XSLT_IS_NULL"));
+        }
+
+        Source source;
+        try {
+            if (xslt instanceof Source) {
+                source = (Source) xslt;
+            } else if (xslt instanceof String) {
+                String s = (String) xslt;
+                s = s.trim();
+                if (s.length() == 0) {
+                    throw new JspTagException(Resources.getMessage("TRANSFORM_XSLT_IS_EMPTY"));
+                }
+                source = XmlUtil.newSAXSource(new StringReader(s), xsltSystemId, entityResolver);
+            } else if (xslt instanceof Reader) {
+                source = XmlUtil.newSAXSource((Reader) xslt, xsltSystemId, entityResolver);
+            } else {
+                throw new JspTagException(Resources.getMessage("TRANSFORM_XSLT_UNSUPPORTED_TYPE", xslt.getClass()));
+            }
+        } catch (SAXException e) {
+            throw new JspException(e);
+        }
+
+        try {
+            t = XmlUtil.newTransformer(source);
+            t.setURIResolver(uriResolver);
+        } catch (TransformerConfigurationException e) {
+            throw new JspTagException(e);
+        } catch (RuntimeException e) {
+            throw e;
+        }
         return EVAL_BODY_BUFFERED;
     }
 
     @Override
     public int doEndTag() throws JspException {
-        Source source = xmlSpecified ? getSourceFromXmlAttribute() : getDocumentFromBodyContent();
 
         try {
-            //************************************
-            // Conduct the transformation
+            Source source = xmlSpecified ? getSourceFromXmlAttribute() : getSourceFromBodyContent();
 
-            // we can assume at most one of 'var' or 'result' is specified
-            if (result != null)
-            // we can write directly to the Result
-            {
-                t.transform(source, result);
-            } else if (var != null) {
-                // we need a Document
-                Document d = db.newDocument();
+            // Conduct the transformation
+            if (var != null) {
+                // Save the result to var.
+                Document d = XmlUtil.newEmptyDocument();
                 Result doc = new DOMResult(d);
                 t.transform(source, doc);
                 pageContext.setAttribute(var, d, scope);
             } else {
-                Result page = new StreamResult(new SafeWriter(pageContext.getOut()));
-                t.transform(source, page);
+                // Write to out if result is not specified.
+                Result out = result;
+                if (out == null) {
+                    out = new StreamResult(new UnclosableWriter(pageContext.getOut()));
+                }
+                t.transform(source, out);
             }
             return EVAL_PAGE;
         } catch (TransformerException ex) {
             throw new JspException(ex);
+        } catch (SAXException e) {
+            throw new JspException(e);
+        } finally {
+            t = null;
         }
     }
 
@@ -161,7 +169,8 @@ public abstract class TransformSupport extends BodyTagSupport {
     @Override
     public void setPageContext(PageContext pageContext) {
         super.setPageContext(pageContext);
-        tf.setURIResolver(pageContext == null ? null : new JstlUriResolver(pageContext));
+        uriResolver = pageContext == null ? null : new XmlUtil.JstlUriResolver(pageContext);
+        entityResolver = pageContext == null ? null : new XmlUtil.JstlEntityResolver(pageContext);
     }
 
 
@@ -180,64 +189,12 @@ public abstract class TransformSupport extends BodyTagSupport {
     // Utility methods
 
     /**
-     * Wraps systemId with a "jstl:" prefix to prevent the parser from
-     * thinking that the URI is truly relative and resolving it against
-     * the current directory in the filesystem.
-     */
-    private static String wrapSystemId(String systemId) {
-        if (systemId == null) {
-            return "jstl:";
-        } else if (ImportSupport.isAbsoluteUrl(systemId)) {
-            return systemId;
-        } else {
-            return ("jstl:" + systemId);
-        }
-    }
-
-    /**
-     * Create a Transformer from the xslt attribute.
-     *
-     * @param xslt     the xslt attribute
-     * @param systemId the systemId for the transform
-     * @return an XSLT transformer
-     * @throws JspException if there was a problem creating the transformer
-     */
-    Transformer getTransformer(Object xslt, String systemId) throws JspException {
-        if (xslt == null) {
-            throw new JspTagException(Resources.getMessage("TRANSFORM_XSLT_IS_NULL"));
-        }
-        Source source;
-        if (xslt instanceof Source) {
-            source = (Source) xslt;
-        } else {
-            if (xslt instanceof String) {
-                String s = (String) xslt;
-                s = s.trim();
-                if (s.length() == 0) {
-                    throw new JspTagException(Resources.getMessage("TRANSFORM_XSLT_IS_EMPTY"));
-                }
-                xslt = new StringReader(s);
-            }
-            if (xslt instanceof Reader) {
-                source = getSource((Reader) xslt, systemId);
-            } else {
-                throw new JspTagException(Resources.getMessage("TRANSFORM_XSLT_UNSUPPORTED_TYPE", xslt.getClass()));
-            }
-        }
-        try {
-            return tf.newTransformer(source);
-        } catch (TransformerConfigurationException e) {
-            throw new JspTagException(e);
-        }
-    }
-
-    /**
      * Return the Source for a document specified in the "doc" or "xml" attribute.
      *
      * @return the document Source
      * @throws JspTagException if there is a problem with the attribute
      */
-    Source getSourceFromXmlAttribute() throws JspTagException {
+    Source getSourceFromXmlAttribute() throws JspTagException, SAXException {
         Object xml = this.xml;
         if (xml == null) {
             throw new JspTagException(Resources.getMessage("TRANSFORM_XML_IS_NULL"));
@@ -261,10 +218,10 @@ public abstract class TransformSupport extends BodyTagSupport {
             if (s.length() == 0) {
                 throw new JspTagException(Resources.getMessage("TRANSFORM_XML_IS_EMPTY"));
             }
-            return getSource(new StringReader(s), xmlSystemId);
+            return XmlUtil.newSAXSource(new StringReader(s), xmlSystemId, entityResolver);
         }
         if (xml instanceof Reader) {
-            return getSource((Reader) xml, xmlSystemId);
+            return XmlUtil.newSAXSource((Reader) xml, xmlSystemId, entityResolver);
         }
         if (xml instanceof Node) {
             return new DOMSource((Node) xml, xmlSystemId);
@@ -278,7 +235,7 @@ public abstract class TransformSupport extends BodyTagSupport {
      * @return the document Source
      * @throws JspTagException if there is a problem with the body content
      */
-    Source getDocumentFromBodyContent() throws JspTagException {
+    Source getSourceFromBodyContent() throws JspTagException, SAXException {
         if (bodyContent == null) {
             throw new JspTagException(Resources.getMessage("TRANSFORM_BODY_IS_NULL"));
         }
@@ -290,31 +247,7 @@ public abstract class TransformSupport extends BodyTagSupport {
         if (s.length() == 0) {
             throw new JspTagException(Resources.getMessage("TRANSFORM_BODY_IS_EMPTY"));
         }
-        return getSource(new StringReader(s), xmlSystemId);
-    }
-
-    /**
-     * Create a Source from a Reader
-     *
-     * @param reader   the Reader to read
-     * @param systemId the systemId for the document
-     * @return a SAX Source
-     * @throws JspTagException if there is a problem creating the Source
-     */
-    Source getSource(Reader reader, String systemId) throws JspTagException {
-        try {
-            // explicitly go through SAX to maintain control
-            // over how relative external entities resolve
-            XMLReader xr = XMLReaderFactory.createXMLReader();
-            xr.setEntityResolver(new ParseSupport.JstlEntityResolver(pageContext));
-            InputSource s = new InputSource(reader);
-            s.setSystemId(wrapSystemId(systemId));
-            Source source = new SAXSource(xr, s);
-            source.setSystemId(wrapSystemId(systemId));
-            return source;
-        } catch (SAXException e) {
-            throw new JspTagException(e);
-        }
+        return XmlUtil.newSAXSource(new StringReader(s), xmlSystemId, entityResolver);
     }
 
 
@@ -328,109 +261,4 @@ public abstract class TransformSupport extends BodyTagSupport {
     public void setScope(String scope) {
         this.scope = Util.getScope(scope);
     }
-
-
-    //*********************************************************************
-    // Private utility classes
-
-    /**
-     * A Writer based on a wrapped Writer but ignoring requests to
-     * close() and flush() it.  (Someone must have wrapped the
-     * toilet in my office similarly...)
-     */
-    private static class SafeWriter extends Writer {
-        // TODO: shouldn't we be delegating all methods?
-        private Writer w;
-
-        public SafeWriter(Writer w) {
-            this.w = w;
-        }
-
-        @Override
-        public void close() {
-        }
-
-        @Override
-        public void flush() {
-        }
-
-        @Override
-        public void write(char[] cbuf, int off, int len) throws IOException {
-            w.write(cbuf, off, len);
-        }
-    }
-
-    //*********************************************************************
-    // JSTL-specific URIResolver class
-
-    /**
-     * Lets us resolve relative external entities.
-     */
-    private static class JstlUriResolver implements URIResolver {
-        private final PageContext ctx;
-
-        public JstlUriResolver(PageContext ctx) {
-            this.ctx = ctx;
-        }
-
-        public Source resolve(String href, String base)
-                throws TransformerException {
-
-            // pass if we don't have a systemId
-            if (href == null) {
-                return null;
-            }
-
-            // remove "jstl" marker from 'base'
-            // NOTE: how 'base' is determined varies among different Xalan
-            // xsltc implementations
-            int index;
-            if (base != null && (index = base.indexOf("jstl:")) != -1) {
-                base = base.substring(index + 5);
-            }
-
-            // we're only concerned with relative URLs
-            if (ImportSupport.isAbsoluteUrl(href)
-                    || (base != null && ImportSupport.isAbsoluteUrl(base))) {
-                return null;
-            }
-
-            // base is relative; remove everything after trailing '/'
-            if (base == null || base.lastIndexOf("/") == -1) {
-                base = "";
-            } else {
-                base = base.substring(0, base.lastIndexOf("/") + 1);
-            }
-
-            // concatenate to produce the real URL we're interested in
-            String target = base + href;
-
-            // for relative URLs, load and wrap the resource.
-            // don't bother checking for 'null' since we specifically want
-            // the parser to fail if the resource doesn't exist
-            InputStream s;
-            if (target.startsWith("/")) {
-                s = ctx.getServletContext().getResourceAsStream(target);
-                if (s == null) {
-                    throw new TransformerException(
-                            Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
-                                    href));
-                }
-            } else {
-                String pagePath =
-                        ((HttpServletRequest) ctx.getRequest()).getServletPath();
-                String basePath =
-                        pagePath.substring(0, pagePath.lastIndexOf("/"));
-                s = ctx.getServletContext().getResourceAsStream(
-                        basePath + "/" + target);
-                if (s == null) {
-                    throw new TransformerException(
-                            Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY",
-                                    href));
-                }
-            }
-            return new StreamSource(s);
-        }
-    }
-
 }

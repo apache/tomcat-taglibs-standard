@@ -21,7 +21,6 @@ import java.io.InputStream;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -45,10 +44,7 @@ public class ExprSupportTest {
 
     @BeforeClass
     public static void loadXml() throws Exception {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        dbf.setValidating(false);
-        DocumentBuilder db = dbf.newDocumentBuilder();
+        DocumentBuilder db = XmlUtil.newDocumentBuilder();
         InputStream is = ExprSupportTest.class.getResourceAsStream("test.xml");
         try {
             test = db.parse(is);

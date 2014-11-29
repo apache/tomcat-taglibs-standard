@@ -25,6 +25,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.util.UrlUtil;
 
 /**
  * <p>Support for tag handlers for &lt;url&gt;, the URL creation
@@ -110,7 +111,7 @@ public abstract class UrlSupport extends BodyTagSupport
         result = params.aggregateParams(baseUrl);
 
         // if the URL is relative, rewrite it
-        if (!ImportSupport.isAbsoluteUrl(result)) {
+        if (!UrlUtil.isAbsoluteUrl(result)) {
             HttpServletResponse response =
                     ((HttpServletResponse) pageContext.getResponse());
             result = response.encodeURL(result);
@@ -144,7 +145,7 @@ public abstract class UrlSupport extends BodyTagSupport
             String url, String context, PageContext pageContext)
             throws JspException {
         // don't touch absolute URLs
-        if (ImportSupport.isAbsoluteUrl(url)) {
+        if (UrlUtil.isAbsoluteUrl(url)) {
             return url;
         }
 

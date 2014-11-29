@@ -23,6 +23,8 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.apache.taglibs.standard.util.UrlUtil;
+
 /**
  * <p>Support for tag handlers for &lt;redirect&gt;, JSTL 1.0's tag
  * for redirecting to a new URL (with optional query parameters).</p>
@@ -108,7 +110,7 @@ public abstract class RedirectSupport extends BodyTagSupport
         // if the URL is relative, rewrite it with 'redirect' encoding rules
         HttpServletResponse response =
                 ((HttpServletResponse) pageContext.getResponse());
-        if (!ImportSupport.isAbsoluteUrl(result)) {
+        if (!UrlUtil.isAbsoluteUrl(result)) {
             result = response.encodeRedirectURL(result);
         }
 

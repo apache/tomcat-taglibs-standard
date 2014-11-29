@@ -47,6 +47,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TryCatchFinally;
 
 import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.util.UrlUtil;
 
 /**
  * <p>Support for tag handlers for &lt;import&gt;, the general-purpose
@@ -61,23 +62,6 @@ public abstract class ImportSupport extends BodyTagSupport
 
     //*********************************************************************
     // Public constants
-
-    /**
-     * <p>Valid characters in a scheme.</p>
-     * <p>RFC 1738 says the following:</p>
-     * <blockquote>
-     * Scheme names consist of a sequence of characters. The lower
-     * case letters "a"--"z", digits, and the characters plus ("+"),
-     * period ("."), and hyphen ("-") are allowed. For resiliency,
-     * programs interpreting URLs should treat upper case letters as
-     * equivalent to lower case in scheme names (e.g., allow "HTTP" as
-     * well as "http").
-     * </blockquote>
-     * <p>We treat as absolute any URL that begins with such a scheme name,
-     * followed by a colon.</p>
-     */
-    public static final String VALID_SCHEME_CHARS =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+.-";
 
     /**
      * Default character encoding for response.
@@ -141,7 +125,7 @@ public abstract class ImportSupport extends BodyTagSupport
         }
 
         // Record whether our URL is absolute or relative
-        isAbsoluteUrl = isAbsoluteUrl();
+        isAbsoluteUrl = UrlUtil.isAbsoluteUrl(url);
 
         try {
             // If we need to expose a Reader, we've got to do it right away
@@ -579,45 +563,9 @@ public abstract class ImportSupport extends BodyTagSupport
         return urlWithParams;
     }
 
-    /**
-     * Returns <tt>true</tt> if our current URL is absolute,
-     * <tt>false</tt> otherwise.
-     */
-    private boolean isAbsoluteUrl() throws JspTagException {
-        return isAbsoluteUrl(url);
-    }
-
 
     //*********************************************************************
     // Public utility methods
-
-    /**
-     * Returns <tt>true</tt> if our current URL is absolute,
-     * <tt>false</tt> otherwise.
-     */
-    public static boolean isAbsoluteUrl(String url) {
-        // a null URL is not absolute, by our definition
-        if (url == null) {
-            return false;
-        }
-
-        // do a fast, simple check first
-        int colonPos;
-        if ((colonPos = url.indexOf(":")) == -1) {
-            return false;
-        }
-
-        // if we DO have a colon, make sure that every character
-        // leading up to it is a valid scheme character
-        for (int i = 0; i < colonPos; i++) {
-            if (VALID_SCHEME_CHARS.indexOf(url.charAt(i)) == -1) {
-                return false;
-            }
-        }
-
-        // if so, we've got an absolute url
-        return true;
-    }
 
     /**
      * Strips a servlet session ID from <tt>url</tt>.  The session ID

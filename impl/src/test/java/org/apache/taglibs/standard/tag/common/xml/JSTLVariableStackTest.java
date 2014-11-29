@@ -20,10 +20,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.apache.xml.utils.QName;
 import org.apache.xpath.XPathContext;
@@ -32,16 +34,12 @@ import org.apache.xpath.objects.XNodeSetForDOM;
 import org.apache.xpath.objects.XNumber;
 import org.apache.xpath.objects.XObjectFactory;
 import org.apache.xpath.objects.XString;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  */
@@ -156,11 +154,7 @@ public class JSTLVariableStackTest {
         Assert.assertTrue(XObjectFactory.create(1234, xpathContext) instanceof XNumber);
         Assert.assertTrue(XObjectFactory.create("Hello", xpathContext) instanceof XString);
 
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        dbf.setValidating(false);
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document d = db.newDocument();
+        Document d = XmlUtil.newEmptyDocument();
         Element root = d.createElement("root");
         XNodeSetForDOM xo = (XNodeSetForDOM) XObjectFactory.create(root, xpathContext);
         Assert.assertEquals(root, xo.object());

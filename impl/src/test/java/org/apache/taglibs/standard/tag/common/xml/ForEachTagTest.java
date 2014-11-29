@@ -20,41 +20,33 @@ import java.io.InputStream;
 
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.IterationTag;
-import javax.servlet.jsp.tagext.Tag;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPathConstants;
 
-import org.apache.xpath.XPath;
-import org.apache.xpath.XPathContext;
-import org.apache.xpath.objects.XObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import sun.security.krb5.internal.TGSRep;
 
+import org.apache.xpath.XPath;
+import org.apache.xpath.XPathContext;
+import org.apache.xpath.objects.XObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  */
 public class ForEachTagTest {
     private static Document test;
-    private static DocumentBuilderFactory dbf;
 
     @BeforeClass
     public static void loadXml() throws Exception {
-        dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        dbf.setValidating(false);
-        DocumentBuilder db = dbf.newDocumentBuilder();
+        DocumentBuilder db = XmlUtil.newDocumentBuilder();
         InputStream is = ExprSupportTest.class.getResourceAsStream("test.xml");
         try {
             test = db.parse(is);
@@ -126,8 +118,7 @@ public class ForEachTagTest {
     public void testIterationPerformance() throws Exception {
         // create a large document
         final int SIZE = 200000;
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        test = db.newDocument();
+        test = XmlUtil.newEmptyDocument();
         Element root = test.createElement("root");
         test.appendChild(root);
         for (int i = 0; i < SIZE; i++) {

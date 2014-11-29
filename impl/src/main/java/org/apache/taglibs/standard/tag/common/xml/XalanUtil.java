@@ -19,9 +19,6 @@ package org.apache.taglibs.standard.tag.common.xml;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.xpath.VariableStack;
@@ -31,21 +28,11 @@ import org.apache.xpath.objects.XNodeSet;
 import org.apache.xpath.objects.XNumber;
 import org.apache.xpath.objects.XObject;
 import org.apache.xpath.objects.XString;
-import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 /**
  */
 public class XalanUtil {
-    private static final DocumentBuilderFactory dbf;
-
-    static {
-        // from Java5 on DocumentBuilderFactory is thread safe and hence can be cached
-        dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        dbf.setValidating(false);
-    }
-
     /**
      * Return the XPathContext to be used for evaluating expressions.
      *
@@ -67,26 +54,9 @@ public class XalanUtil {
         XPathContext context = new XPathContext(false);
         VariableStack variableStack = new JSTLVariableStack(pageContext);
         context.setVarStack(variableStack);
-        int dtm = context.getDTMHandleFromNode(newEmptyDocument());
+        int dtm = context.getDTMHandleFromNode(XmlUtil.newEmptyDocument());
         context.pushCurrentNodeAndExpression(dtm, dtm);
         return context;
-    }
-
-    /**
-     * Create a new empty document.
-     *
-     * This method always allocates a new document as its root node might be
-     * exposed to other tags and potentially be mutated.
-     *
-     * @return a new empty document
-     */
-    private static Document newEmptyDocument() {
-        try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            return db.newDocument();
-        } catch (ParserConfigurationException e) {
-            throw new AssertionError();
-        }
     }
 
     /**
