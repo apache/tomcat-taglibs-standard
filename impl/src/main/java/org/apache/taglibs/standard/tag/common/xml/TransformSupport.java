@@ -121,8 +121,6 @@ public abstract class TransformSupport extends BodyTagSupport {
             t.setURIResolver(uriResolver);
         } catch (TransformerConfigurationException e) {
             throw new JspTagException(e);
-        } catch (RuntimeException e) {
-            throw e;
         }
         return EVAL_BODY_BUFFERED;
     }

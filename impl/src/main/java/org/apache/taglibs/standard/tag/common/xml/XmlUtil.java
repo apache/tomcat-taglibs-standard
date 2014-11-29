@@ -112,6 +112,8 @@ public class XmlUtil {
 
     static Transformer newTransformer(Source source) throws TransformerConfigurationException {
         Transformer transformer = stf.newTransformer(source);
+        // Although newTansformer() is not meant to, Xalan returns null if the XSLT is invalid
+        // rather than throwing TransformerConfigurationException. Trap that here.
         if (transformer == null) {
             throw new TransformerConfigurationException("newTransformer returned null");
         }
