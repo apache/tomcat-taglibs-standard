@@ -34,6 +34,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.xml.dtm.DTMIterator;
+import org.apache.xpath.CachedXPathAPI;
 import org.apache.xpath.XPath;
 import org.apache.xpath.XPathContext;
 import org.apache.xpath.objects.XObject;
@@ -46,6 +47,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.traversal.NodeIterator;
 
 /**
  */
@@ -141,11 +143,11 @@ public class ForEachTagTest {
             tag.doFinally();
         }
         time += System.nanoTime();
-        System.err.println("time = " + time/1000000 + "ms.");
+        System.err.println("time = " + time / 1000000 + "ms.");
         assertEquals("199999", result.str());
     }
 
-    @Ignore
+    @Ignore("Takes < 1s to run")
     @Test
     public void xalanPerformance() throws Exception{
         Document doc = newBenchmarkDocument(200000);
@@ -180,7 +182,30 @@ public class ForEachTagTest {
         assertEquals("199999", result.str());
     }
 
-    @Ignore
+    @Ignore("Takes > 20s to run")
+    @Test
+    public void cachedAPIPerformance() throws Exception{
+        Document doc = newBenchmarkDocument(200000);
+        expect(pageContext.findAttribute("doc")).andStubReturn(doc);
+        replay(pageContext);
+
+        Node result = null;
+        CachedXPathAPI api = new CachedXPathAPI();
+        api.getXPathContext().setVarStack(new JSTLVariableStack(pageContext));
+
+        long time = -System.nanoTime();
+        NodeIterator iterator = api.selectNodeIterator(XmlUtil.newEmptyDocument(), "$doc/root/a");
+        Node node = iterator.nextNode();
+        while (node != null) {
+            result = api.selectSingleNode(node, ".");
+            node = iterator.nextNode();
+        }
+        time += System.nanoTime();
+        System.err.println("time = " + time/1000000 + "ms.");
+        assertEquals("199999", result.getTextContent());
+    }
+
+    @Ignore("Takes > 20s to run")
     @Test
     public void xpathPerformance() throws Exception {
         final Document doc = newBenchmarkDocument(200000);
