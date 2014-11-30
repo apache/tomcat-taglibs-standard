@@ -19,6 +19,10 @@ package org.apache.taglibs.standard.tag.common.xml;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.concurrent.Callable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
@@ -50,38 +54,48 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Utilities for working with JAXP and SAX.
  */
 public class XmlUtil {
-    private static final DocumentBuilderFactory dbf;
-    private static final SAXTransformerFactory stf;
-
+    /* Cache factory classes when this class is initialized (since Java1.5 factories are required
+     * to be thread safe).
+     *
+     * As JavaEE 5 requires JSTL to be provided by the container we use our ClassLoader to locate
+     * the implementations rather than the application's. As we don't know the actual implementation
+     * class in use we can't use the newInstance() variant that allows the ClassLoader to be
+     * specified so we use the no-arg form and coerce the TCCL (which may be restricted by the
+     * AccessController).
+     */
+    private static final DocumentBuilderFactory PARSER_FACTORY;
+    private static final SAXTransformerFactory TRANSFORMER_FACTORY;
     static {
-        // from Java5 on DocumentBuilderFactory is thread safe and hence can be cached
-        dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        dbf.setValidating(false);
         try {
-            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            PARSER_FACTORY = runWithOurClassLoader(new Callable<DocumentBuilderFactory>() {
+                public DocumentBuilderFactory call() throws ParserConfigurationException {
+                    return DocumentBuilderFactory.newInstance();
+                }
+            }, ParserConfigurationException.class);
+            PARSER_FACTORY.setNamespaceAware(true);
+            PARSER_FACTORY.setValidating(false);
+            PARSER_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (ParserConfigurationException e) {
-            throw new AssertionError("Parser does not support secure processing");
-        }
-
-        TransformerFactory tf = TransformerFactory.newInstance();
-        if (!(tf instanceof SAXTransformerFactory)) {
-            throw new AssertionError("TransformerFactory does not support SAX");
+            throw new ExceptionInInitializerError(e);
         }
         try {
-            tf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            TRANSFORMER_FACTORY = runWithOurClassLoader(new Callable<SAXTransformerFactory>() {
+                public SAXTransformerFactory call() throws TransformerConfigurationException {
+                    TransformerFactory tf = TransformerFactory.newInstance();
+                    if (!(tf instanceof SAXTransformerFactory)) {
+                        throw new TransformerConfigurationException("TransformerFactory does not support SAX");
+                    }
+                    return (SAXTransformerFactory) tf;
+                }
+            }, TransformerConfigurationException.class);
+            TRANSFORMER_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (TransformerConfigurationException e) {
-            throw new AssertionError("TransformerFactory does not support secure processing");
+            throw new ExceptionInInitializerError(e);
         }
-        stf = (SAXTransformerFactory) tf;
     }
-
 
     /**
      * Create a new empty document.
-     *
-     * This method always allocates a new document as its root node might be
-     * exposed to other tags and potentially be mutated.
      *
      * @return a new empty document
      */
@@ -96,9 +110,9 @@ public class XmlUtil {
      */
     static DocumentBuilder newDocumentBuilder() {
         try {
-            return dbf.newDocumentBuilder();
+            return PARSER_FACTORY.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            throw new AssertionError();
+            throw (Error) new AssertionError().initCause(e);
         }
     }
 
@@ -107,15 +121,21 @@ public class XmlUtil {
      * @return a new TransformerHandler
      */
     static TransformerHandler newTransformerHandler() throws TransformerConfigurationException {
-        return stf.newTransformerHandler();
+        return TRANSFORMER_FACTORY.newTransformerHandler();
     }
 
+    /**
+     * Create a new Transformer from an XSLT.
+     * @param source the source of the XSLT.
+     * @return a new Transformer
+     * @throws TransformerConfigurationException if there was a problem creating the Transformer from the XSLT
+     */
     static Transformer newTransformer(Source source) throws TransformerConfigurationException {
-        Transformer transformer = stf.newTransformer(source);
-        // Although newTansformer() is not meant to, Xalan returns null if the XSLT is invalid
-        // rather than throwing TransformerConfigurationException. Trap that here.
+        Transformer transformer = TRANSFORMER_FACTORY.newTransformer(source);
+        // Although newTansformer() is not allowed to return null, Xalan does.
+        // Trap that here by throwing the expected TransformerConfigurationException.
         if (transformer == null) {
-            throw new TransformerConfigurationException("newTransformer returned null");
+            throw new TransformerConfigurationException("newTransformer returned null. XSLT may be invalid.");
         }
         return transformer;
     }
@@ -142,7 +162,11 @@ public class XmlUtil {
      * @throws SAXException if there was a problem creating the reader
      */
     static XMLReader newXMLReader(JstlEntityResolver entityResolver) throws SAXException {
-        XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+        XMLReader xmlReader = runWithOurClassLoader(new Callable<XMLReader>() {
+            public XMLReader call() throws SAXException {
+                return XMLReaderFactory.createXMLReader();
+            }
+        }, SAXException.class);
         xmlReader.setEntityResolver(entityResolver);
         return xmlReader;
     }
@@ -276,6 +300,46 @@ public class XmlUtil {
                 throw new TransformerException(Resources.getMessage("UNABLE_TO_RESOLVE_ENTITY", href));
             }
             return new StreamSource(s);
+        }
+    }
+
+    /**
+     * Performs an action using this Class's ClassLoader as the Thread context ClassLoader.
+     *
+     * @param action the action to perform
+     * @param allowed an Exception that might be thrown by the action
+     * @param <T> the type of the result
+     * @param <E> the type of the allowed Exception
+     * @return the result of the action
+     * @throws E if the action threw the allowed Exception
+     */
+    private static <T, E extends Exception> T runWithOurClassLoader(final Callable<T> action, Class<E> allowed) throws E {
+        PrivilegedExceptionAction<T> actionWithClassloader = new PrivilegedExceptionAction<T>() {
+            public T run() throws Exception {
+                ClassLoader original = Thread.currentThread().getContextClassLoader();
+                ClassLoader ours = XmlUtil.class.getClassLoader();
+                // Don't override the TCCL if it is not needed.
+                if (original == ours) {
+                    return action.call();
+                } else {
+                    try {
+                        Thread.currentThread().setContextClassLoader(ours);
+                        return action.call();
+                    } finally {
+                        Thread.currentThread().setContextClassLoader(original);
+                    }
+                }
+            }
+        };
+        try {
+            return AccessController.doPrivileged(actionWithClassloader);
+        } catch (PrivilegedActionException e) {
+            Throwable cause = e.getCause();
+            if (allowed.isInstance(cause)) {
+                throw allowed.cast(cause);
+            } else {
+                throw (Error) new AssertionError().initCause(cause);
+            }
         }
     }
 }
