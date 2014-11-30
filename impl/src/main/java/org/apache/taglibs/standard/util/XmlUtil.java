@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.taglibs.standard.tag.common.xml;
+package org.apache.taglibs.standard.util;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -42,7 +42,6 @@ import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.taglibs.standard.resources.Resources;
-import org.apache.taglibs.standard.util.UrlUtil;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -99,7 +98,7 @@ public class XmlUtil {
      *
      * @return a new empty document
      */
-    static Document newEmptyDocument() {
+    public static Document newEmptyDocument() {
         return newDocumentBuilder().newDocument();
     }
 
@@ -108,7 +107,7 @@ public class XmlUtil {
      *
      * @return a new, configured DocumentBuilder
      */
-    static DocumentBuilder newDocumentBuilder() {
+    public static DocumentBuilder newDocumentBuilder() {
         try {
             return PARSER_FACTORY.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
@@ -120,7 +119,7 @@ public class XmlUtil {
      * Create a new TransformerHandler.
      * @return a new TransformerHandler
      */
-    static TransformerHandler newTransformerHandler() throws TransformerConfigurationException {
+    public static TransformerHandler newTransformerHandler() throws TransformerConfigurationException {
         return TRANSFORMER_FACTORY.newTransformerHandler();
     }
 
@@ -130,7 +129,7 @@ public class XmlUtil {
      * @return a new Transformer
      * @throws TransformerConfigurationException if there was a problem creating the Transformer from the XSLT
      */
-    static Transformer newTransformer(Source source) throws TransformerConfigurationException {
+    public static Transformer newTransformer(Source source) throws TransformerConfigurationException {
         Transformer transformer = TRANSFORMER_FACTORY.newTransformer(source);
         // Although newTansformer() is not allowed to return null, Xalan does.
         // Trap that here by throwing the expected TransformerConfigurationException.
@@ -149,7 +148,7 @@ public class XmlUtil {
      * @param systemId the system id
      * @return a configured InputSource
      */
-    static InputSource newInputSource(Reader reader, String systemId) {
+    public static InputSource newInputSource(Reader reader, String systemId) {
         InputSource source = new InputSource(reader);
         source.setSystemId(wrapSystemId(systemId));
         return source;
@@ -161,7 +160,7 @@ public class XmlUtil {
      * @return a new XMLReader
      * @throws SAXException if there was a problem creating the reader
      */
-    static XMLReader newXMLReader(JstlEntityResolver entityResolver) throws SAXException {
+    public static XMLReader newXMLReader(JstlEntityResolver entityResolver) throws SAXException {
         XMLReader xmlReader = runWithOurClassLoader(new Callable<XMLReader>() {
             public XMLReader call() throws SAXException {
                 return XMLReaderFactory.createXMLReader();
@@ -180,7 +179,7 @@ public class XmlUtil {
      * @return a new SAXSource
      * @throws SAXException if there was a problem creating the source
      */
-    static SAXSource newSAXSource(Reader reader, String systemId, JstlEntityResolver entityResolver)  throws SAXException {
+    public static SAXSource newSAXSource(Reader reader, String systemId, JstlEntityResolver entityResolver)  throws SAXException {
         SAXSource source = new SAXSource(newXMLReader(entityResolver), new InputSource(reader));
         source.setSystemId(wrapSystemId(systemId));
         return source;
@@ -204,7 +203,7 @@ public class XmlUtil {
     /**
      * JSTL-specific implementation of EntityResolver.
      */
-    static class JstlEntityResolver implements EntityResolver {
+    public static class JstlEntityResolver implements EntityResolver {
         private final PageContext ctx;
 
         public JstlEntityResolver(PageContext ctx) {
@@ -249,7 +248,7 @@ public class XmlUtil {
     /**
      * JSTL-specific implementation of URIResolver.
      */
-    static class JstlUriResolver implements URIResolver {
+    public static class JstlUriResolver implements URIResolver {
         private final PageContext ctx;
 
         public JstlUriResolver(PageContext ctx) {

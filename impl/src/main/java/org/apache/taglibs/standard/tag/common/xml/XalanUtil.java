@@ -21,6 +21,7 @@ import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.xml.transform.TransformerException;
 
+import org.apache.taglibs.standard.util.XmlUtil;
 import org.apache.xpath.VariableStack;
 import org.apache.xpath.XPathContext;
 import org.apache.xpath.objects.XBoolean;

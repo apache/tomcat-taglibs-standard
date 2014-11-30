@@ -32,6 +32,7 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.apache.taglibs.standard.resources.Resources;
 import org.apache.taglibs.standard.tag.common.core.Util;
+import org.apache.taglibs.standard.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

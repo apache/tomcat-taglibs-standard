@@ -37,6 +37,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.taglibs.standard.resources.Resources;
 import org.apache.taglibs.standard.tag.common.core.Util;
 import org.apache.taglibs.standard.util.UnclosableWriter;
+import org.apache.taglibs.standard.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;

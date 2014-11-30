@@ -33,6 +33,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.apache.taglibs.standard.util.XmlUtil;
 import org.apache.xml.dtm.DTMIterator;
 import org.apache.xpath.CachedXPathAPI;
 import org.apache.xpath.XPath;

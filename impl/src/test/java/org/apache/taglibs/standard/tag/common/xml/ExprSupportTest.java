@@ -25,6 +25,8 @@ import javax.xml.parsers.DocumentBuilder;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import org.apache.taglibs.standard.util.XmlUtil;
 import org.w3c.dom.Document;
 
 import static org.easymock.EasyMock.createMock;
