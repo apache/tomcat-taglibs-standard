@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package javax.servlet.jsp.jstl.tlv;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -94,10 +94,8 @@ public class PermittedTaglibsTLV extends TagLibraryValidator {
     // Validation entry point
 
     @Override
-    public synchronized ValidationMessage[] validate(
-            String prefix, String uri, PageData page) {
+    public synchronized ValidationMessage[] validate(String prefix, String uri, PageData page) {
         try {
-
             // initialize
             this.uri = uri;
             permittedTaglibs = readConfiguration();
@@ -106,10 +104,7 @@ public class PermittedTaglibsTLV extends TagLibraryValidator {
             DefaultHandler h = new PermittedTaglibsHandler();
 
             // parse the page
-            SAXParserFactory f = SAXParserFactory.newInstance();
-            f.setValidating(true);
-            SAXParser p = f.newSAXParser();
-            p.parse(page.getInputStream(), h);
+            ParserUtil.parse(page, h);
 
             if (failed) {
                 return vmFromString(

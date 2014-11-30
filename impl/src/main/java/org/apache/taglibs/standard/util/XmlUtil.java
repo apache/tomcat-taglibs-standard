@@ -167,6 +167,7 @@ public class XmlUtil {
             }
         }, SAXException.class);
         xmlReader.setEntityResolver(entityResolver);
+        xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         return xmlReader;
     }
 

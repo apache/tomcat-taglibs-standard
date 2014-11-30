@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package javax.servlet.jsp.jstl.tlv;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import javax.servlet.jsp.tagext.PageData;
 import javax.servlet.jsp.tagext.TagLibraryValidator;
 import javax.servlet.jsp.tagext.ValidationMessage;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
@@ -105,36 +103,18 @@ public class ScriptFreeTLV extends TagLibraryValidator {
      *         containing one or more messages indicating why the page is not valid.
      */
     @Override
-    public ValidationMessage[] validate
-            (String prefix, String uri, PageData page) {
-        InputStream in = null;
-        SAXParser parser;
-        MyContentHandler handler = new MyContentHandler();
+    public ValidationMessage[] validate(String prefix, String uri, PageData page) {
         try {
-            synchronized (factory) {
-                parser = factory.newSAXParser();
-            }
-            in = page.getInputStream();
-            parser.parse(in, handler);
-        }
-        catch (ParserConfigurationException e) {
+            MyContentHandler handler = new MyContentHandler();
+            ParserUtil.parse(page, handler);
+            return handler.reportResults();
+        } catch (ParserConfigurationException e) {
+            return vmFromString(e.toString());
+        } catch (SAXException e) {
+            return vmFromString(e.toString());
+        } catch (IOException e) {
             return vmFromString(e.toString());
         }
-        catch (SAXException e) {
-            return vmFromString(e.toString());
-        }
-        catch (IOException e) {
-            return vmFromString(e.toString());
-        }
-        finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                }
-            }
-        }
-        return handler.reportResults();
     }
 
     /**

@@ -18,6 +18,7 @@
 package org.apache.taglibs.standard.tlv;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -30,13 +31,13 @@ import javax.servlet.jsp.tagext.PageData;
 import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagLibraryValidator;
 import javax.servlet.jsp.tagext.ValidationMessage;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.util.XmlUtil;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -149,11 +150,18 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
             DefaultHandler h = getHandler();
 
             // parse the page
-            SAXParserFactory f = SAXParserFactory.newInstance();
-            f.setValidating(false);
-            f.setNamespaceAware(true);
-            SAXParser p = f.newSAXParser();
-            p.parse(page.getInputStream(), h);
+            XMLReader xmlReader = XmlUtil.newXMLReader(null);
+            xmlReader.setContentHandler(h);
+            InputStream inputStream = page.getInputStream();
+            try {
+                xmlReader.parse(new InputSource(inputStream));
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    // Suppressed.
+                }
+            }
 
             if (messageVector.size() == 0) {
                 return null;
@@ -162,8 +170,6 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
             }
 
         } catch (SAXException ex) {
-            return vmFromString(ex.toString());
-        } catch (ParserConfigurationException ex) {
             return vmFromString(ex.toString());
         } catch (IOException ex) {
             return vmFromString(ex.toString());
