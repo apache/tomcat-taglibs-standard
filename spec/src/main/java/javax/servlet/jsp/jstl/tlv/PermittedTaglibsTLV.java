@@ -17,7 +17,6 @@
 package javax.servlet.jsp.jstl.tlv;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -26,8 +25,6 @@ import javax.servlet.jsp.tagext.PageData;
 import javax.servlet.jsp.tagext.TagLibraryValidator;
 import javax.servlet.jsp.tagext.ValidationMessage;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -52,17 +49,18 @@ public class PermittedTaglibsTLV extends TagLibraryValidator {
     // Constants
 
     // parameter names
-    private final String PERMITTED_TAGLIBS_PARAM = "permittedTaglibs";
+    private static final String PERMITTED_TAGLIBS_PARAM = "permittedTaglibs";
 
     // URI for "<jsp:root>" element
-    private final String JSP_ROOT_URI = "http://java.sun.com/JSP/Page";
+    private static final String JSP_ROOT_URI = "http://java.sun.com/JSP/Page";
 
     // local name of "<jsp:root>" element
-    private final String JSP_ROOT_NAME = "root";
+    private static final String JSP_ROOT_NAME = "root";
 
     // QName for "<jsp:root>" element
-    private final String JSP_ROOT_QN = "jsp:root";
+    private static final String JSP_ROOT_QN = "jsp:root";
 
+    private static final PageParser parser = new PageParser(false);
 
     //*********************************************************************
     // Validation and configuration state (protected)
@@ -104,7 +102,7 @@ public class PermittedTaglibsTLV extends TagLibraryValidator {
             DefaultHandler h = new PermittedTaglibsHandler();
 
             // parse the page
-            ParserUtil.parse(page, h);
+            parser.parse(page, h);
 
             if (failed) {
                 return vmFromString(

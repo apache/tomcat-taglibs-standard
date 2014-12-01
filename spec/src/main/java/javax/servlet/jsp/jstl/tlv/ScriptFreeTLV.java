@@ -17,14 +17,12 @@
 package javax.servlet.jsp.jstl.tlv;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 import javax.servlet.jsp.tagext.PageData;
 import javax.servlet.jsp.tagext.TagLibraryValidator;
 import javax.servlet.jsp.tagext.ValidationMessage;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -53,22 +51,13 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Shawn Bayern (minor changes)
  */
 public class ScriptFreeTLV extends TagLibraryValidator {
+
+    private static final PageParser parser = new PageParser(true);
+
     private boolean allowDeclarations = false;
     private boolean allowScriptlets = false;
     private boolean allowExpressions = false;
     private boolean allowRTExpressions = false;
-    private SAXParserFactory factory;
-
-    /**
-     * Constructs a new validator instance.
-     * Initializes the parser factory to create non-validating, namespace-aware
-     * SAX parsers.
-     */
-    public ScriptFreeTLV() {
-        factory = SAXParserFactory.newInstance();
-        factory.setValidating(false);
-        factory.setNamespaceAware(true);
-    }
 
     /**
      * Sets the values of the initialization parameters, as supplied in the TLD.
@@ -106,7 +95,7 @@ public class ScriptFreeTLV extends TagLibraryValidator {
     public ValidationMessage[] validate(String prefix, String uri, PageData page) {
         try {
             MyContentHandler handler = new MyContentHandler();
-            ParserUtil.parse(page, handler);
+            parser.parse(page, handler);
             return handler.reportResults();
         } catch (ParserConfigurationException e) {
             return vmFromString(e.toString());
@@ -191,7 +180,7 @@ public class ScriptFreeTLV extends TagLibraryValidator {
         public ValidationMessage[] reportResults() {
             if (declarationCount + scriptletCount + expressionCount
                     + rtExpressionCount > 0) {
-                StringBuffer results = new StringBuffer("JSP page contains ");
+                StringBuilder results = new StringBuilder("JSP page contains ");
                 boolean first = true;
                 if (declarationCount > 0) {
                     results.append(Integer.toString(declarationCount));

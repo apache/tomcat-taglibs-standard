@@ -35,14 +35,15 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * Support class for working with the SAX Parser.
  */
-class ParserUtil {
+class PageParser {
 
-    private static final SAXParserFactory PARSER_FACTORY;
-    static {
-        PARSER_FACTORY = AccessController.doPrivileged(new PrivilegedAction<SAXParserFactory>() {
+    private final SAXParserFactory parserFactory;
+
+    PageParser(boolean namespaceAware) {
+        parserFactory = AccessController.doPrivileged(new PrivilegedAction<SAXParserFactory>() {
             public SAXParserFactory run() {
                 ClassLoader original = Thread.currentThread().getContextClassLoader();
-                ClassLoader ours = ParserUtil.class.getClassLoader();
+                ClassLoader ours = PageParser.class.getClassLoader();
                 try {
                     if (original != ours) {
                         Thread.currentThread().setContextClassLoader(ours);
@@ -56,8 +57,9 @@ class ParserUtil {
             }
         });
         try {
-            PARSER_FACTORY.setValidating(true);
-            PARSER_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            parserFactory.setNamespaceAware(namespaceAware);
+            parserFactory.setValidating(false);
+            parserFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (ParserConfigurationException e) {
             throw new ExceptionInInitializerError(e);
         } catch (SAXNotRecognizedException e) {
@@ -67,11 +69,8 @@ class ParserUtil {
         }
     }
 
-    private ParserUtil() {
-    }
-
-    static void parse(PageData pageData, DefaultHandler handler) throws ParserConfigurationException, SAXException, IOException {
-        SAXParser parser = PARSER_FACTORY.newSAXParser();
+    void parse(PageData pageData, DefaultHandler handler) throws ParserConfigurationException, SAXException, IOException {
+        SAXParser parser = parserFactory.newSAXParser();
         InputStream is = pageData.getInputStream();
         try {
             parser.parse(is, handler);
