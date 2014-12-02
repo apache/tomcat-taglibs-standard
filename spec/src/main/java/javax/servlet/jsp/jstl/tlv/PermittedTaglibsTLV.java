@@ -18,6 +18,7 @@ package javax.servlet.jsp.jstl.tlv;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -40,6 +41,10 @@ import org.xml.sax.helpers.DefaultHandler;
  * to tag libraries permitted to be imported on the page in addition to the tag
  * library that references PermittedTaglibsTLV (which is allowed implicitly).
  * </ul>
+ * <p>This implementation only detects tag libraries declared on the {@code <jsp:root>} element,
+ * including libraries in regular JSP files or JSP Documents with a specific {@code <jsp:root>}.
+ * It does not detect libraries declared on other elements as supported by JSP 2.0.
+ * </p>
  *
  * @author Shawn Bayern
  */
@@ -62,56 +67,31 @@ public class PermittedTaglibsTLV extends TagLibraryValidator {
 
     private static final PageParser parser = new PageParser(false);
 
-    //*********************************************************************
-    // Validation and configuration state (protected)
-
-    private Set permittedTaglibs;        // what URIs are allowed?
-    private boolean failed;            // did the page fail?
-    private String uri;                // our taglib's URI
-
-    //*********************************************************************
-    // Constructor and lifecycle management
+    private final Set<String> permittedTaglibs;        // what URIs are allowed?
 
     public PermittedTaglibsTLV() {
-        super();
-        init();
-    }
-
-    private void init() {
-        permittedTaglibs = null;
+        permittedTaglibs = new HashSet<String>();
     }
 
     @Override
-    public void release() {
-        super.release();
-        init();
-    }
-
-
-    //*********************************************************************
-    // Validation entry point
-
-    @Override
-    public synchronized ValidationMessage[] validate(String prefix, String uri, PageData page) {
-        try {
-            // initialize
-            this.uri = uri;
-            permittedTaglibs = readConfiguration();
-
-            // get a handler
-            DefaultHandler h = new PermittedTaglibsHandler();
-
-            // parse the page
-            parser.parse(page, h);
-
-            if (failed) {
-                return vmFromString(
-                        "taglib " + prefix + " (" + uri + ") allows only the "
-                                + "following taglibs to be imported: " + permittedTaglibs);
-            } else {
-                return null;
+    public void setInitParameters(Map<String, Object> initParams) {
+        super.setInitParameters(initParams);
+        permittedTaglibs.clear();
+        String uris = (String) initParams.get(PERMITTED_TAGLIBS_PARAM);
+        if (uris != null) {
+            StringTokenizer st = new StringTokenizer(uris);
+            while (st.hasMoreTokens()) {
+                permittedTaglibs.add(st.nextToken());
             }
+        }
+    }
 
+    @Override
+    public ValidationMessage[] validate(String prefix, String uri, PageData page) {
+        try {
+            PermittedTaglibsHandler h = new PermittedTaglibsHandler(prefix, uri);
+            parser.parse(page, h);
+            return h.getResult();
         } catch (SAXException ex) {
             return vmFromString(ex.toString());
         } catch (ParserConfigurationException ex) {
@@ -125,78 +105,62 @@ public class PermittedTaglibsTLV extends TagLibraryValidator {
     //*********************************************************************
     // Utility functions
 
-    /**
-     * Returns Set of permitted taglibs, based on configuration data.
-     */
-    private Set readConfiguration() {
-
-        // initialize the Set
-        Set s = new HashSet();
-
-        // get the space-separated list of taglibs
-        String uris = (String) getInitParameters().get(PERMITTED_TAGLIBS_PARAM);
-
-        // separate the list into individual uris and store them
-        StringTokenizer st = new StringTokenizer(uris);
-        while (st.hasMoreTokens()) {
-            s.add(st.nextToken());
-        }
-
-        // return the new Set
-        return s;
-
-    }
-
     // constructs a ValidationMessage[] from a single String and no ID
-
     private ValidationMessage[] vmFromString(String message) {
-        return new ValidationMessage[]{
-                new ValidationMessage(null, message)
-        };
+        return new ValidationMessage[]{new ValidationMessage(null, message)};
     }
-
-
-    //*********************************************************************
-    // SAX handler
 
     /**
      * The handler that provides the base of our implementation.
      */
     private class PermittedTaglibsHandler extends DefaultHandler {
+        private final String prefix;
+        private final String uri;
 
-        // if the element is <jsp:root>, check its "xmlns:" attributes
+        private boolean failed;
 
+        public PermittedTaglibsHandler(String prefix, String uri) {
+            this.prefix = prefix;
+            this.uri = uri;
+        }
+
+        // TODO: https://issues.apache.org/bugzilla/show_bug.cgi?id=57290 (JSP2.0 Documents)
+        // If we had a way of determining if a namespace referred to a taglib as opposed to being
+        // part of XML output we might be able to simplify this using startPrefixMapping events.
         @Override
-        public void startElement(
-                String ns, String ln, String qn, Attributes a) {
+        public void startElement(String ns, String ln, String qn, Attributes a) {
+            // look at namespaces declared on the <jsp:root> element
+            if (qn.equals(JSP_ROOT_QN) || (ns.equals(JSP_ROOT_URI) && ln.equals(JSP_ROOT_NAME))) {
+                for (int i = 0; i < a.getLength(); i++) {
+                    String name = a.getQName(i);
 
-            // ignore all but <jsp:root>
-            if (!qn.equals(JSP_ROOT_QN) &&
-                    (!ns.equals(JSP_ROOT_URI) || !ln.equals(JSP_ROOT_NAME))) {
-                return;
-            }
+                    // ignore non-namespace attributes
+                    if (!name.startsWith("xmlns:")) {
+                        continue;
+                    }
 
-            // for <jsp:root>, check the attributes
-            for (int i = 0; i < a.getLength(); i++) {
-                String name = a.getQName(i);
+                    String value = a.getValue(i);
+                    // ignore any declaration for our taglib or the JSP namespace
+                    if (value.equals(uri) || value.equals(JSP_ROOT_URI)) {
+                        continue;
+                    }
 
-                // ignore non-namespace attributes, and xmlns:jsp
-                if (!name.startsWith("xmlns:") || name.equals("xmlns:jsp")) {
-                    continue;
-                }
-
-                String value = a.getValue(i);
-                // ignore our own namespace declaration
-                if (value.equals(uri)) {
-                    continue;
-                }
-
-                // otherwise, ensure that 'value' is in 'permittedTaglibs' set
-                if (!permittedTaglibs.contains(value)) {
-                    failed = true;
+                    // otherwise, ensure that 'value' is in 'permittedTaglibs' set
+                    if (!permittedTaglibs.contains(value)) {
+                        failed = true;
+                    }
                 }
             }
         }
-    }
 
+        private ValidationMessage[] getResult() {
+            if (failed) {
+                return vmFromString(
+                        "taglib " + prefix + " (" + uri + ") allows only the "
+                                + "following taglibs to be imported: " + permittedTaglibs);
+            } else {
+                return null;
+            }
+        }
+    }
 }
