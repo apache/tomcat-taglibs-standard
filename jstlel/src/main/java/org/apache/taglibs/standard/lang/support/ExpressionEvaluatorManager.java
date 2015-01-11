@@ -17,7 +17,8 @@
 
 package org.apache.taglibs.standard.lang.support;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -25,6 +26,7 @@ import javax.servlet.jsp.tagext.Tag;
 
 import org.apache.taglibs.standard.lang.jstl.Coercions;
 import org.apache.taglibs.standard.lang.jstl.ELException;
+import org.apache.taglibs.standard.lang.jstl.Evaluator;
 import org.apache.taglibs.standard.lang.jstl.Logger;
 
 /**
@@ -42,23 +44,22 @@ public class ExpressionEvaluatorManager {
     //*********************************************************************
     // Constants
 
-    public static final String EVALUATOR_CLASS =
-            "org.apache.taglibs.standard.lang.jstl.Evaluator";
-    // private static final String EVALUATOR_PARAMETER =
-    //    "javax.servlet.jsp.jstl.temp.ExpressionEvaluatorClass";
+    public static final String EVALUATOR_CLASS = "org.apache.taglibs.standard.lang.jstl.Evaluator";
 
     //*********************************************************************
     // Internal, static state
 
-    private static HashMap nameMap = new HashMap();
-    private static Logger logger = new Logger(System.out);
+    private static final ExpressionEvaluator EVALUATOR = new Evaluator();
+    private static final ConcurrentMap<String, ExpressionEvaluator> nameMap =
+            new ConcurrentHashMap<String, ExpressionEvaluator>();
+    static {
+        nameMap.put(EVALUATOR_CLASS, EVALUATOR);
+    }
 
-    //*********************************************************************
-    // Public static methods
+    private static final Logger logger = new Logger(System.out);
 
     /**
-     * Invokes the evaluate() method on the "active" ExpressionEvaluator
-     * for the given pageContext.
+     * Invokes the evaluate() method on the "active" ExpressionEvaluator for the given pageContext.
      */
     public static Object evaluate(String attributeName,
                                   String expression,
@@ -67,17 +68,12 @@ public class ExpressionEvaluatorManager {
                                   PageContext pageContext)
             throws JspException {
 
-        // the evaluator we'll use
-        ExpressionEvaluator target = getEvaluatorByName(EVALUATOR_CLASS);
-
         // delegate the call
-        return (target.evaluate(
-                attributeName, expression, expectedType, tag, pageContext));
+        return (EVALUATOR.evaluate(attributeName, expression, expectedType, tag, pageContext));
     }
 
     /**
-     * Invokes the evaluate() method on the "active" ExpressionEvaluator
-     * for the given pageContext.
+     * Invokes the evaluate() method on the "active" ExpressionEvaluator for the given pageContext.
      */
     public static Object evaluate(String attributeName,
                                   String expression,
@@ -85,58 +81,38 @@ public class ExpressionEvaluatorManager {
                                   PageContext pageContext)
             throws JspException {
 
-        // the evaluator we'll use
-        ExpressionEvaluator target = getEvaluatorByName(EVALUATOR_CLASS);
-
-        // delegate the call
-        return (target.evaluate(
-                attributeName, expression, expectedType, null, pageContext));
+        return evaluate(attributeName, expression, expectedType, null, pageContext);
     }
 
     /**
      * Gets an ExpressionEvaluator from the cache, or seeds the cache
      * if we haven't seen a particular ExpressionEvaluator before.
      */
-    public static ExpressionEvaluator getEvaluatorByName(String name)
-            throws JspException {
-
-        Object oEvaluator = nameMap.get(name);
-        if (oEvaluator != null) {
-            return ((ExpressionEvaluator) oEvaluator);
-        }
+    @Deprecated
+    public static ExpressionEvaluator getEvaluatorByName(String name) throws JspException {
         try {
-            synchronized (nameMap) {
-                oEvaluator = nameMap.get(name);
-                if (oEvaluator != null) {
-                    return ((ExpressionEvaluator) oEvaluator);
-                }
-                ExpressionEvaluator e = (ExpressionEvaluator)
-                        Class.forName(name).newInstance();
-                nameMap.put(name, e);
-                return (e);
+            ExpressionEvaluator evaluator = nameMap.get(name);
+            if (evaluator == null) {
+                nameMap.putIfAbsent(name, (ExpressionEvaluator) Class.forName(name).newInstance());
+                evaluator = nameMap.get(name);
             }
+            return evaluator;
         } catch (ClassCastException ex) {
             // just to display a better error message
-            throw new JspException("invalid ExpressionEvaluator: " +
-                    ex.toString(), ex);
+            throw new JspException("invalid ExpressionEvaluator: " + name, ex);
         } catch (ClassNotFoundException ex) {
-            throw new JspException("couldn't find ExpressionEvaluator: " +
-                    ex.toString(), ex);
+            throw new JspException("couldn't find ExpressionEvaluator: " + name, ex);
         } catch (IllegalAccessException ex) {
-            throw new JspException("couldn't access ExpressionEvaluator: " +
-                    ex.toString(), ex);
+            throw new JspException("couldn't access ExpressionEvaluator: " + name, ex);
         } catch (InstantiationException ex) {
-            throw new JspException(
-                    "couldn't instantiate ExpressionEvaluator: " +
-                            ex.toString(), ex);
+            throw new JspException("couldn't instantiate ExpressionEvaluator: " + name, ex);
         }
     }
 
     /**
      * Performs a type conversion according to the EL's rules.
      */
-    public static Object coerce(Object value, Class classe)
-            throws JspException {
+    public static Object coerce(Object value, Class classe) throws JspException {
         try {
             // just delegate the call
             return Coercions.coerce(value, classe, logger);
@@ -145,4 +121,13 @@ public class ExpressionEvaluatorManager {
         }
     }
 
+    /**
+     * Validates an expression.
+     * @param attributeName the name of the attribute containing the expression
+     * @param expression the expression to validate
+     * @return null an error message or null of the expression is valid
+     */
+    public static String validate(String attributeName, String expression) {
+        return EVALUATOR.validate(attributeName, expression);
+    }
 } 

@@ -43,8 +43,7 @@ public interface ExpressionEvaluator {
 
     /**
      * Translation time validation of an expression.
-     * This method will return a null String if the expression
-     * is valid; otherwise an error message.
+     * This method will return a null String if the expression is valid; otherwise an error message.
      */
     public String validate(String attributeName,
                            String expression);

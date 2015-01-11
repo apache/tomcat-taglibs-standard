@@ -16,34 +16,17 @@
  */
 package org.apache.taglibs.standard.tlv.el;
 
-import javax.servlet.jsp.JspException;
-
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluator;
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 
 /**
  */
 public class ValidationUtil {
-    static String validateExpression(
-            String elem, String att, String expr) {
+    static String validateExpression(String elem, String att, String expr) {
 
-        // let's just use the cache kept by the ExpressionEvaluatorManager
-        ExpressionEvaluator current;
-        try {
-            current =
-                    ExpressionEvaluatorManager.getEvaluatorByName(
-                            ExpressionEvaluatorManager.EVALUATOR_CLASS);
-        } catch (JspException ex) {
-            // (using JspException here feels ugly, but it's what EEM uses)
-            return ex.getMessage();
+        String response = ExpressionEvaluatorManager.validate(att, expr);
+        if (response != null) {
+            response = "tag = '" + elem + "' / attribute = '" + att + "': " + response;
         }
-
-        String response = current.validate(att, expr);
-        if (response == null) {
-            return response;
-        } else {
-            return "tag = '" + elem + "' / attribute = '" + att + "': "
-                    + response;
-        }
+        return response;
     }
 }

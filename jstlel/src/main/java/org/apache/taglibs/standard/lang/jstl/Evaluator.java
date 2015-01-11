@@ -76,11 +76,9 @@ public class Evaluator
             return
                     MessageFormat.format
                             (Constants.ATTRIBUTE_PARSE_EXCEPTION,
-                                    new Object[]{
-                                            "" + pAttributeName,
-                                            "" + pAttributeValue,
-                                            exc.getMessage()
-                                    });
+                                    "" + pAttributeName,
+                                    "" + pAttributeValue,
+                                    exc.getMessage());
         }
     }
 
@@ -109,12 +107,10 @@ public class Evaluator
             throw new JspException
                     (MessageFormat.format
                             (Constants.ATTRIBUTE_EVALUATION_EXCEPTION,
-                                    new Object[]{
-                                            "" + pAttributeName,
-                                            "" + pAttributeValue,
-                                            exc.getMessage(),
-                                            exc.getRootCause()
-                                    }), exc.getRootCause());
+                                    "" + pAttributeName,
+                                    "" + pAttributeValue,
+                                    exc.getMessage(),
+                                    exc.getRootCause()), exc.getRootCause());
         }
     }
 
@@ -154,11 +150,9 @@ public class Evaluator
             throw new JspException
                     (MessageFormat.format
                             (Constants.ATTRIBUTE_PARSE_EXCEPTION,
-                                    new Object[]{
-                                            "test",
-                                            "" + pAttributeValue,
-                                            exc.getMessage()
-                                    }));
+                                    "test",
+                                    "" + pAttributeValue,
+                                    exc.getMessage()));
         }
     }
 
