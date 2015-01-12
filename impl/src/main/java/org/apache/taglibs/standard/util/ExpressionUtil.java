@@ -50,4 +50,38 @@ public class ExpressionUtil {
         JspApplicationContext appContext = JspFactory.getDefaultFactory().getJspApplicationContext(pageContext.getServletContext());
         return appContext.getExpressionFactory();
     }
+
+    /**
+     * Evaluate a value expression. To support optional attributes, if the expression is null then
+     * null will be returned.
+     *
+     * @param expression the expression
+     * @param pageContext the context for the JSP
+     * @param <T> the expected type of the expression
+     * @return the result of evaluating the expression
+     */
+    public static <T> T evaluate(ValueExpression expression, PageContext pageContext) {
+        if (expression == null) {
+            return null;
+        }
+        @SuppressWarnings("unchecked")
+        T value = (T) expression.getValue(pageContext.getELContext());
+        return value;
+    }
+
+    public static boolean evaluate(ValueExpression expression, PageContext pageContext, boolean fallback) {
+        if (expression == null) {
+            return fallback;
+        }
+        Boolean result = (Boolean) expression.getValue(pageContext.getELContext());
+        return result == null ? fallback : result.booleanValue();
+    }
+
+    public static int evaluate(ValueExpression expression, PageContext pageContext, int fallback) {
+        if (expression == null) {
+            return fallback;
+        }
+        Integer result = (Integer) expression.getValue(pageContext.getELContext());
+        return result == null ? fallback : result.intValue();
+    }
 }
