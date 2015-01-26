@@ -1,3 +1,9 @@
+Changes in 1.2.2 release
+
+57433 Double-check locking in ExpressionEvaluatorManager
+57427 1.0 TLDs are missing from -compat jar
+57289 XML factories should be located using the JSTL library's ClassLoader
+
 Changes in 1.2.1 release
 - Documentation cleanup
 
