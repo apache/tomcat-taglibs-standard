@@ -218,7 +218,8 @@ public class ForEachTagTest {
                 return doc;
             }
         };
-        XPathFactory factory = XPathFactory.newInstance(XPathFactory.DEFAULT_OBJECT_MODEL_URI, "com.sun.org.apache.xpath.internal.jaxp.XPathFactoryImpl", null);
+        // XPathFactory factory = XPathFactory.newInstance(XPathFactory.DEFAULT_OBJECT_MODEL_URI, "com.sun.org.apache.xpath.internal.jaxp.XPathFactoryImpl", null);
+        XPathFactory factory = XPathFactory.newInstance(XPathFactory.DEFAULT_OBJECT_MODEL_URI);
         System.out.println("factory.getClass() = " + factory.getClass());
         factory.setXPathVariableResolver(resolver);
         XPathExpression select = factory.newXPath().compile("$doc/root/a");
