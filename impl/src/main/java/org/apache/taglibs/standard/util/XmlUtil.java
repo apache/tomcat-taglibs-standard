@@ -29,7 +29,6 @@ import javax.servlet.jsp.PageContext;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
@@ -51,7 +50,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * Utilities for working with JAXP and SAX.
@@ -102,6 +100,7 @@ public class XmlUtil {
                     return SAXParserFactory.newInstance();
                 }
             }, RuntimeException.class);
+            SAXPARSER_FACTORY.setNamespaceAware(true);
             SAXPARSER_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (ParserConfigurationException e) {
             throw new ExceptionInInitializerError(e);
