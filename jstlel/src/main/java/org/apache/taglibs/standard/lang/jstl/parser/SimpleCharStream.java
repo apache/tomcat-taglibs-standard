@@ -6,6 +6,7 @@ package org.apache.taglibs.standard.lang.jstl.parser;
  * contain only ASCII characters (without unicode processing).
  */
 
+@SuppressWarnings("ALL")
 public final class SimpleCharStream
 {
   public static final boolean staticFlag = false;

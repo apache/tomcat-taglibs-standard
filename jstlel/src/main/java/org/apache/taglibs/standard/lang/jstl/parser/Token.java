@@ -5,6 +5,7 @@ package org.apache.taglibs.standard.lang.jstl.parser;
  * Describes the input token stream.
  */
 
+@SuppressWarnings("ALL")
 public class Token {
 
   /**
