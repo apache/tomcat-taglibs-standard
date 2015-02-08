@@ -44,7 +44,6 @@ public final class IteratedExpression {
         Undefined, ACollection, AnIterator, AnEnumeration, AMap, AString
     }
 
-    ;
     private TypesEnum type = TypesEnum.Undefined;
 
     /**
