@@ -26,6 +26,7 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.TransformerHandler;
@@ -159,6 +160,8 @@ public abstract class ParseSupport extends BodyTagSupport {
         } catch (SAXException e) {
             throw new JspException(e);
         } catch (TransformerConfigurationException e) {
+            throw new JspException(e);
+        } catch (ParserConfigurationException e) {
             throw new JspException(e);
         }
     }

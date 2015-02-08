@@ -29,7 +29,9 @@ import javax.servlet.jsp.PageContext;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -46,6 +48,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -64,6 +68,7 @@ public class XmlUtil {
      */
     private static final DocumentBuilderFactory PARSER_FACTORY;
     private static final SAXTransformerFactory TRANSFORMER_FACTORY;
+    private static final SAXParserFactory SAXPARSER_FACTORY;
     static {
         try {
             PARSER_FACTORY = runWithOurClassLoader(new Callable<DocumentBuilderFactory>() {
@@ -89,6 +94,20 @@ public class XmlUtil {
             }, TransformerConfigurationException.class);
             TRANSFORMER_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (TransformerConfigurationException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+        try {
+            SAXPARSER_FACTORY = runWithOurClassLoader(new Callable<SAXParserFactory>() {
+                public SAXParserFactory call() {
+                    return SAXParserFactory.newInstance();
+                }
+            }, RuntimeException.class);
+            SAXPARSER_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            throw new ExceptionInInitializerError(e);
+        } catch (SAXNotRecognizedException e) {
+            throw new ExceptionInInitializerError(e);
+        } catch (SAXNotSupportedException e) {
             throw new ExceptionInInitializerError(e);
         }
     }
@@ -156,18 +175,15 @@ public class XmlUtil {
 
     /**
      * Create an XMLReader that resolves entities using JSTL semantics.
-     * @param entityResolver for resolving using JSTL semamtics
+     * @param entityResolver for resolving using JSTL semantics
      * @return a new XMLReader
+     * @throws ParserConfigurationException if there was a configuration problem creating the reader
      * @throws SAXException if there was a problem creating the reader
      */
-    public static XMLReader newXMLReader(JstlEntityResolver entityResolver) throws SAXException {
-        XMLReader xmlReader = runWithOurClassLoader(new Callable<XMLReader>() {
-            public XMLReader call() throws SAXException {
-                return XMLReaderFactory.createXMLReader();
-            }
-        }, SAXException.class);
+    public static XMLReader newXMLReader(JstlEntityResolver entityResolver)
+            throws ParserConfigurationException, SAXException {
+        XMLReader xmlReader = SAXPARSER_FACTORY.newSAXParser().getXMLReader();
         xmlReader.setEntityResolver(entityResolver);
-        xmlReader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         return xmlReader;
     }
 
@@ -178,9 +194,11 @@ public class XmlUtil {
      * @param systemId the system id
      * @param entityResolver for resolving using JSTL semamtics
      * @return a new SAXSource
+     * @throws ParserConfigurationException if there was a configuration problem creating the source
      * @throws SAXException if there was a problem creating the source
      */
-    public static SAXSource newSAXSource(Reader reader, String systemId, JstlEntityResolver entityResolver)  throws SAXException {
+    public static SAXSource newSAXSource(Reader reader, String systemId, JstlEntityResolver entityResolver)
+            throws ParserConfigurationException, SAXException {
         SAXSource source = new SAXSource(newXMLReader(entityResolver), new InputSource(reader));
         source.setSystemId(wrapSystemId(systemId));
         return source;

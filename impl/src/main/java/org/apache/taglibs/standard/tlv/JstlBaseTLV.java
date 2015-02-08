@@ -31,6 +31,7 @@ import javax.servlet.jsp.tagext.PageData;
 import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagLibraryValidator;
 import javax.servlet.jsp.tagext.ValidationMessage;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.taglibs.standard.resources.Resources;
 import org.apache.taglibs.standard.util.XmlUtil;
@@ -172,6 +173,8 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
         } catch (SAXException ex) {
             return vmFromString(ex.toString());
         } catch (IOException ex) {
+            return vmFromString(ex.toString());
+        } catch (ParserConfigurationException ex) {
             return vmFromString(ex.toString());
         }
     }

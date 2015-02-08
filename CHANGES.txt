@@ -1,3 +1,7 @@
+Changes in 1.2.3 release
+
+57547 Fix regression with running on older JREs
+
 Changes in 1.2.2 release [WITHDRAWN due to regressions in older JREs]
 
 57433 Double-check locking in ExpressionEvaluatorManager

@@ -25,6 +25,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -115,6 +116,8 @@ public abstract class TransformSupport extends BodyTagSupport {
             }
         } catch (SAXException e) {
             throw new JspException(e);
+        } catch (ParserConfigurationException e) {
+            throw new JspException(e);
         }
 
         try {
@@ -151,6 +154,8 @@ public abstract class TransformSupport extends BodyTagSupport {
         } catch (TransformerException ex) {
             throw new JspException(ex);
         } catch (SAXException e) {
+            throw new JspException(e);
+        } catch (ParserConfigurationException e) {
             throw new JspException(e);
         } finally {
             t = null;
@@ -193,7 +198,7 @@ public abstract class TransformSupport extends BodyTagSupport {
      * @return the document Source
      * @throws JspTagException if there is a problem with the attribute
      */
-    Source getSourceFromXmlAttribute() throws JspTagException, SAXException {
+    Source getSourceFromXmlAttribute() throws JspTagException, SAXException, ParserConfigurationException {
         Object xml = this.xml;
         if (xml == null) {
             throw new JspTagException(Resources.getMessage("TRANSFORM_XML_IS_NULL"));
@@ -234,7 +239,7 @@ public abstract class TransformSupport extends BodyTagSupport {
      * @return the document Source
      * @throws JspTagException if there is a problem with the body content
      */
-    Source getSourceFromBodyContent() throws JspTagException, SAXException {
+    Source getSourceFromBodyContent() throws JspTagException, SAXException, ParserConfigurationException {
         if (bodyContent == null) {
             throw new JspTagException(Resources.getMessage("TRANSFORM_BODY_IS_NULL"));
         }
