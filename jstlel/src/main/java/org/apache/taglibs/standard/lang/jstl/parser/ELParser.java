@@ -46,7 +46,7 @@ import org.apache.taglibs.standard.lang.jstl.ValueSuffix;
  * @author Shawn Bayern
  */
 
-@SuppressWarnings("ALL")
+@SuppressWarnings("all") // Ignore warnings in generated code
 public class ELParser implements ELParserConstants {
 
   public static void main(String args[])
