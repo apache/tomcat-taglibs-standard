@@ -67,26 +67,25 @@ public class JstlCoreTLV extends JstlBaseTLV {
     // Constants
 
     // tag names
-    private final String CHOOSE = "choose";
-    private final String WHEN = "when";
-    private final String OTHERWISE = "otherwise";
-    private final String EXPR = "out";
-    private final String SET = "set";
-    private final String IMPORT = "import";
-    private final String URL = "url";
-    private final String REDIRECT = "redirect";
-    private final String PARAM = "param";
-    // private final String EXPLANG = "expressionLanguage";
-    private final String TEXT = "text";
+    private static final String CHOOSE = "choose";
+    private static final String WHEN = "when";
+    private static final String OTHERWISE = "otherwise";
+    private static final String EXPR = "out";
+    private static final String SET = "set";
+    private static final String IMPORT = "import";
+    private static final String URL = "url";
+    private static final String REDIRECT = "redirect";
+    private static final String PARAM = "param";
+    private static final String TEXT = "text";
 
     // attribute names
-    private final String VALUE = "value";
-    private final String DEFAULT = "default";
-    private final String VAR_READER = "varReader";
+    private static final String VALUE = "value";
+    private static final String DEFAULT = "default";
+    private static final String VAR_READER = "varReader";
 
     // alternative identifiers for tags
-    private final String IMPORT_WITH_READER = "import varReader=''";
-    private final String IMPORT_WITHOUT_READER = "import var=''";
+    private static final String IMPORT_WITH_READER = "import varReader=''";
+    private static final String IMPORT_WITHOUT_READER = "import var=''";
 
 
     //*********************************************************************

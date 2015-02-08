@@ -64,7 +64,7 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     // Constants
 
     // parameter names
-    private final String EXP_ATT_PARAM = "expressionAttributes";
+    private static final String EXP_ATT_PARAM = "expressionAttributes";
 
     // attributes
     protected static final String VAR = "var";

@@ -38,18 +38,18 @@ public class JstlSqlTLV extends JstlBaseTLV {
     // Constants
 
     // tag names
-    private final String SETDATASOURCE = "setDataSource";
-    private final String QUERY = "query";
-    private final String UPDATE = "update";
-    private final String TRANSACTION = "transaction";
-    private final String PARAM = "param";
-    private final String DATEPARAM = "dateParam";
+    private static final String SETDATASOURCE = "setDataSource";
+    private static final String QUERY = "query";
+    private static final String UPDATE = "update";
+    private static final String TRANSACTION = "transaction";
+    private static final String PARAM = "param";
+    private static final String DATEPARAM = "dateParam";
 
-    private final String JSP_TEXT = "jsp:text";
+    private static final String JSP_TEXT = "jsp:text";
 
     // attribute names
-    private final String SQL = "sql";
-    private final String DATASOURCE = "dataSource";
+    private static final String SQL = "sql";
+    private static final String DATASOURCE = "dataSource";
 
 
     //*********************************************************************

@@ -71,17 +71,17 @@ public class JstlXmlTLV extends JstlBaseTLV {
     // Constants
 
     // tag names
-    private final String CHOOSE = "choose";
-    private final String WHEN = "when";
-    private final String OTHERWISE = "otherwise";
-    private final String PARSE = "parse";
-    private final String PARAM = "param";
-    private final String TRANSFORM = "transform";
-    private final String JSP_TEXT = "jsp:text";
+    private static final String CHOOSE = "choose";
+    private static final String WHEN = "when";
+    private static final String OTHERWISE = "otherwise";
+    private static final String PARSE = "parse";
+    private static final String PARAM = "param";
+    private static final String TRANSFORM = "transform";
+    private static final String JSP_TEXT = "jsp:text";
 
     // attribute names
-    private final String VALUE = "value";
-    private final String SOURCE = "xml";
+    private static final String VALUE = "value";
+    private static final String SOURCE = "xml";
 
 
     //*********************************************************************

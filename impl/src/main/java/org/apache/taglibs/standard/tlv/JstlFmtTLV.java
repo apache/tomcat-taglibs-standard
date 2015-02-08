@@ -70,23 +70,22 @@ public class JstlFmtTLV extends JstlBaseTLV {
     // Constants
 
     // tag names
-    private final String SETLOCALE = "setLocale";
-    private final String SETBUNDLE = "setBundle";
-    private final String SETTIMEZONE = "setTimeZone";
-    private final String BUNDLE = "bundle";
-    private final String MESSAGE = "message";
-    private final String MESSAGE_PARAM = "param";
-    private final String FORMAT_NUMBER = "formatNumber";
-    private final String PARSE_NUMBER = "parseNumber";
-    private final String PARSE_DATE = "parseDate";
-    // private final String EXPLANG = "expressionLanguage";
-    private final String JSP_TEXT = "jsp:text";
+    private static final String SETLOCALE = "setLocale";
+    private static final String SETBUNDLE = "setBundle";
+    private static final String SETTIMEZONE = "setTimeZone";
+    private static final String BUNDLE = "bundle";
+    private static final String MESSAGE = "message";
+    private static final String MESSAGE_PARAM = "param";
+    private static final String FORMAT_NUMBER = "formatNumber";
+    private static final String PARSE_NUMBER = "parseNumber";
+    private static final String PARSE_DATE = "parseDate";
+    private static final String JSP_TEXT = "jsp:text";
 
     // attribute names
-    private final String EVAL = "evaluator";
-    private final String MESSAGE_KEY = "key";
-    private final String BUNDLE_PREFIX = "prefix";
-    private final String VALUE = "value";
+    private static final String EVAL = "evaluator";
+    private static final String MESSAGE_KEY = "key";
+    private static final String BUNDLE_PREFIX = "prefix";
+    private static final String VALUE = "value";
 
 
     //*********************************************************************
