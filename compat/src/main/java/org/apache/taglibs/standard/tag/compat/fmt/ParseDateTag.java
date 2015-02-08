@@ -17,8 +17,6 @@
 
 package org.apache.taglibs.standard.tag.compat.fmt;
 
-import java.util.Date;
-
 import javax.el.ValueExpression;
 import javax.servlet.jsp.JspException;
 

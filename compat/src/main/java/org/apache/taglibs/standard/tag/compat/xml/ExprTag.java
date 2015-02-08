@@ -20,7 +20,6 @@ package org.apache.taglibs.standard.tag.compat.xml;
 import javax.el.ValueExpression;
 import javax.servlet.jsp.JspException;
 
-import org.apache.taglibs.standard.tag.common.sql.ParamTagSupport;
 import org.apache.taglibs.standard.tag.common.xml.ExprSupport;
 import org.apache.taglibs.standard.util.ExpressionUtil;
 

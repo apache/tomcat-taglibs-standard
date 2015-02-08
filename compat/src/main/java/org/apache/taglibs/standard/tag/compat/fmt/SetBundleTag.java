@@ -20,7 +20,6 @@ package org.apache.taglibs.standard.tag.compat.fmt;
 import javax.el.ValueExpression;
 import javax.servlet.jsp.JspException;
 
-import org.apache.taglibs.standard.tag.common.fmt.BundleSupport;
 import org.apache.taglibs.standard.tag.common.fmt.SetBundleSupport;
 import org.apache.taglibs.standard.util.ExpressionUtil;
 
