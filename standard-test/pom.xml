@@ -23,11 +23,11 @@
   <parent>
     <groupId>org.apache.taglibs</groupId>
     <artifactId>taglibs-parent</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>3</version>
   </parent>
 
   <artifactId>taglibs-standard-test</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2.3-SNAPSHOT</version>
   <name>Apache Standard Taglib Cactus Tests</name>
   <packaging>war</packaging>
 
@@ -61,12 +61,12 @@
     <dependency>
       <groupId>org.apache.taglibs</groupId>
       <artifactId>taglibs-standard-impl</artifactId>
-      <version>1.2-SNAPSHOT</version>
+      <version>1.2.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.taglibs</groupId>
       <artifactId>taglibs-standard-spec</artifactId>
-      <version>1.2-SNAPSHOT</version>
+      <version>1.2.3-SNAPSHOT</version>
     </dependency>
 
     <!-- dependencies of the above -->
@@ -148,8 +148,8 @@
         <artifactId>cactus.integration.maven2</artifactId>
         <version>1.8.1</version>
         <configuration>
-          <srcFile>target/taglibs-standard-test-1.2-SNAPSHOT.war</srcFile>
-          <destFile>target/cactus-taglibs-standard-test-1.2-SNAPSHOT.war</destFile>
+          <srcFile>target/taglibs-standard-test-1.2.3-SNAPSHOT.war</srcFile>
+          <destFile>target/cactus-taglibs-standard-test-1.2.3-SNAPSHOT.war</destFile>
         </configuration>
         <executions>
           <execution>
@@ -213,7 +213,7 @@
             <configuration>
               <scanIntervalSeconds>0</scanIntervalSeconds>
               <daemon>true</daemon>
-              <webApp>target/cactus-taglibs-standard-test-1.2-SNAPSHOT.war</webApp>
+              <webApp>target/cactus-taglibs-standard-test-1.2.3-SNAPSHOT.war</webApp>
             </configuration>
           </execution>
           <execution>
