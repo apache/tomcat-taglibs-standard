@@ -57,7 +57,6 @@ public abstract class BundleSupport extends BodyTagSupport {
     //*********************************************************************
     // Private state
 
-    private Locale fallbackLocale;
     private LocalizationContext locCtxt;
 
 
