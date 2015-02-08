@@ -17,7 +17,8 @@
 
 package javax.servlet.jsp.jstl.tlv;
 
-import java.io.StringBufferInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,8 +28,8 @@ import javax.servlet.jsp.tagext.ValidationMessage;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import org.easymock.EasyMock;
+
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
@@ -50,10 +51,10 @@ public class PermittedTaglibsTLVTest {
     }
 
     @Test
-    public void tagPermittedWhenDeclaredAtRoot() {
+    public void tagPermittedWhenDeclaredAtRoot() throws UnsupportedEncodingException {
         initParams.put("permittedTaglibs", "urn:test");
         String xmlView = "<jsp:root xmlns:jsp='http://java.sun.com/JSP/Page' xmlns:x='urn:test' xmlns:p='http://jakarta.apache.org/taglibs/standard/permittedTaglibs'></jsp:root>";
-        expect(page.getInputStream()).andStubReturn(new StringBufferInputStream(xmlView));
+        expect(page.getInputStream()).andStubReturn(new ByteArrayInputStream(xmlView.getBytes("UTF-8")));
 
         replay(page);
         tlv.setInitParameters(initParams);
@@ -62,10 +63,10 @@ public class PermittedTaglibsTLVTest {
     }
 
     @Test
-    public void tagNotPermittedWhenDeclaredAtRoot() {
+    public void tagNotPermittedWhenDeclaredAtRoot() throws UnsupportedEncodingException {
         initParams.put("permittedTaglibs", "urn:none");
         String xmlView = "<jsp:root xmlns:jsp='http://java.sun.com/JSP/Page' xmlns:x='urn:test' xmlns:p='http://jakarta.apache.org/taglibs/standard/permittedTaglibs'></jsp:root>";
-        expect(page.getInputStream()).andStubReturn(new StringBufferInputStream(xmlView));
+        expect(page.getInputStream()).andStubReturn(new ByteArrayInputStream(xmlView.getBytes("UTF-8")));
 
         replay(page);
         tlv.setInitParameters(initParams);
@@ -76,7 +77,7 @@ public class PermittedTaglibsTLVTest {
 
     @Ignore("https://issues.apache.org/bugzilla/show_bug.cgi?id=57290")
     @Test
-    public void tagNotPermittedWhenDeclaredInPage() {
+    public void tagNotPermittedWhenDeclaredInPage() throws UnsupportedEncodingException {
         initParams.put("permittedTaglibs", "urn:none");
         // In the page for this XML view, 'd' and 'x' are taglibs but 'o' is not
         String xmlView = "<?xml version='1.0' encoding='UTF-8' ?>\n" +
@@ -86,7 +87,7 @@ public class PermittedTaglibsTLVTest {
                 "  <x:hello xmlns:x='urn:jsptagdir:/WEB-INF/tags/test' jsp:id='3'/>\n" +
                 "</o:doc>\n" +
                 "</jsp:root>";
-        expect(page.getInputStream()).andStubReturn(new StringBufferInputStream(xmlView));
+        expect(page.getInputStream()).andStubReturn(new ByteArrayInputStream(xmlView.getBytes("UTF-8")));
 
         replay(page);
         tlv.setInitParameters(initParams);
