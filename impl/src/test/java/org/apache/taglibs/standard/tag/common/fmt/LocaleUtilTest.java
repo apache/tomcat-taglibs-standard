@@ -23,8 +23,6 @@ import java.util.Locale;
 
 public class LocaleUtilTest {
 
-    private static final Locale DEFAULT = Locale.getDefault();
-
     @Test
     public void testLocaleWithLanguage() {
         Assert.assertEquals(new Locale("fr"), LocaleUtil.parseLocale("fr", null));
