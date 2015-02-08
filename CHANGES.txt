@@ -1,6 +1,7 @@
 Changes in 1.2.3 release
 
 57547 Fix regression with running on older JREs
+57548 Update library version number printed by Version class
 
 Changes in 1.2.2 release [WITHDRAWN due to regressions in older JREs]
 
