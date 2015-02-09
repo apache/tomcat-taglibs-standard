@@ -41,9 +41,9 @@ ADD DEPENDENCIES TO A WEB APPLICATION
 
 To use this distribution with your own web applications, add the following JAR
 files to the '/WEB-INF/lib' directory of your application:
-   - taglibs-standard-spec-1.2.1.jar
-   - taglibs-standard-impl-1.2.1.jar
-   - taglibs-standard-jstlel-1.2.1.jar
+   - taglibs-standard-spec-1.2.3.jar
+   - taglibs-standard-impl-1.2.3.jar
+   - taglibs-standard-jstlel-1.2.3.jar
    - xalan-2.7.1.jar
    - serializer-2.7.1.jar
 
@@ -57,12 +57,12 @@ your pom.xml file:
     <dependency>
       <groupId>org.apache.taglibs</groupId>
       <artifactId>taglibs-standard-spec</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.taglibs</groupId>
       <artifactId>taglibs-standard-impl</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.3</version>
     </dependency>
 
 ---------------------------------------------------------------------------
