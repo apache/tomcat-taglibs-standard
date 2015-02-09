@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------
-Apache Standard Tag Library 1.2.1 -- SOURCE DISTRIBUTION
+Apache Standard Tag Library 1.2.3 -- SOURCE DISTRIBUTION
 ---------------------------------------------------------------------------
 Thanks for downloading the source code for the Apache Software Foundation's
 implementation of the JavaServer Pages(tm)(JSP) Standard Tag Library (JSTL)
