@@ -17,9 +17,9 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
-import org.apache.taglibs.standard.resources.Resources;
-
 import java.util.Locale;
+
+import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * Utility functions for working with Locales.

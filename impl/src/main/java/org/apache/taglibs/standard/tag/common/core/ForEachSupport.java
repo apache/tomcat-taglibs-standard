@@ -17,7 +17,13 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
-import org.apache.taglibs.standard.resources.Resources;
+import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 import javax.el.ValueExpression;
 import javax.servlet.jsp.JspTagException;
@@ -25,8 +31,8 @@ import javax.servlet.jsp.jstl.core.IndexedValueExpression;
 import javax.servlet.jsp.jstl.core.IteratedExpression;
 import javax.servlet.jsp.jstl.core.IteratedValueExpression;
 import javax.servlet.jsp.jstl.core.LoopTagSupport;
-import java.lang.reflect.Array;
-import java.util.*;
+
+import org.apache.taglibs.standard.resources.Resources;
 
 /**
  * <p>Support for tag handlers for &lt;forEach&gt;, the core iteration
