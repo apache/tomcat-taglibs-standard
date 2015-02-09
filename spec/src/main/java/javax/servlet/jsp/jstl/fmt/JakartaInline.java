@@ -229,7 +229,7 @@ class JakartaInline {
                  *     - avail locale must be equal to preferred locale
                  *     - avail country must be empty or equal to preferred country
                  *       (the equality match might have failed on the variant)
-		 */
+                 */
                 if (pref.getLanguage().equals(avail.getLanguage())
                         && ("".equals(avail.getCountry()) || pref.getCountry().equals(avail.getCountry()))) {
                     /*

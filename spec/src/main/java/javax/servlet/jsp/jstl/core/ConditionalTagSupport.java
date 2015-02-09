@@ -148,7 +148,7 @@ public abstract class ConditionalTagSupport
 
     private void exposeVariables() {
         if (var != null) {
-            pageContext.setAttribute(var, new Boolean(result), scope);
+            pageContext.setAttribute(var, Boolean.valueOf(result), scope);
         }
     }
 
