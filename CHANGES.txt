@@ -1,8 +1,9 @@
 Changes in 1.2.3 release
 
-57547 Fix regression with running on older JREs
-57548 Update library version number printed by Version class
+57560 Check protocol when resolving on older JREs
 57549 Fix reference to old SNAPSHOT version of taglibs-build-tools in pom files.
+57548 Update library version number printed by Version class
+57547 Fix regression with running on older JREs
 
 Changes in 1.2.2 release [WITHDRAWN due to regressions in older JREs]
 

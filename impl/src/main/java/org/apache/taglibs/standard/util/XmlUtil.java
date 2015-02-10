@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.concurrent.Callable;
@@ -109,6 +110,27 @@ public class XmlUtil {
         } catch (SAXNotSupportedException e) {
             throw new ExceptionInInitializerError(e);
         }
+    }
+
+    private static final String SP_ALLOWED_PROTOCOLS = "org.apache.taglibs.standard.xml.accessExternalEntity";
+    private static final String ALLOWED_PROTOCOLS = AccessController.doPrivileged(new PrivilegedAction<String>() {
+        public String run() {
+            String defaultProtocols = System.getSecurityManager() == null ? "all" : "";
+            return System.getProperty(SP_ALLOWED_PROTOCOLS, defaultProtocols);
+        }
+    });
+
+    static void checkProtocol(String allowedProtocols, String uri) {
+        if ("all".equalsIgnoreCase(allowedProtocols)) {
+            return;
+        }
+        String protocol = UrlUtil.getScheme(uri);
+        for (String allowed : allowedProtocols.split(",")) {
+            if (allowed.trim().equalsIgnoreCase(protocol)) {
+                return;
+            }
+        }
+        throw new SecurityException("Access to external URI not allowed: " + uri);
     }
 
     /**
@@ -219,7 +241,7 @@ public class XmlUtil {
     }
 
     /**
-     * JSTL-specific implementation of EntityResolver.
+     * JSTL-specific implementation of EntityResolver, used by parsers.
      */
     public static class JstlEntityResolver implements EntityResolver {
         private final PageContext ctx;
@@ -242,6 +264,7 @@ public class XmlUtil {
 
             // we're only concerned with relative URLs
             if (UrlUtil.isAbsoluteUrl(systemId)) {
+                checkProtocol(ALLOWED_PROTOCOLS, systemId);
                 return null;
             }
 
@@ -264,7 +287,7 @@ public class XmlUtil {
     }
 
     /**
-     * JSTL-specific implementation of URIResolver.
+     * JSTL-specific implementation of URIResolver, used by transformers.
      */
     public static class JstlUriResolver implements URIResolver {
         private final PageContext ctx;
@@ -289,8 +312,12 @@ public class XmlUtil {
             }
 
             // we're only concerned with relative URLs
-            if (UrlUtil.isAbsoluteUrl(href)
-                    || (base != null && UrlUtil.isAbsoluteUrl(base))) {
+            if (UrlUtil.isAbsoluteUrl(href)) {
+                checkProtocol(ALLOWED_PROTOCOLS, href);
+                return null;
+            }
+            if (base != null && UrlUtil.isAbsoluteUrl(base)) {
+                checkProtocol(ALLOWED_PROTOCOLS, base);
                 return null;
             }
 

@@ -77,4 +77,19 @@ public class UrlUtil {
         // if so, we've got an absolute url
         return true;
     }
+
+    public static String getScheme(CharSequence url) {
+        StringBuilder scheme = new StringBuilder();
+        for (int i = 0; i < url.length(); i++) {
+            char ch = url.charAt(i);
+            if (ch == ':') {
+                String result = scheme.toString();
+                if (!"jar".equals(result)) {
+                    return result;
+                }
+            }
+            scheme.append(ch);
+        }
+        throw new IllegalArgumentException("No scheme found: " + url);
+    }
 }
