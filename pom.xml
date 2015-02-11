@@ -29,7 +29,7 @@
   <packaging>pom</packaging>
 
   <artifactId>taglibs-standard</artifactId>
-  <version>1.2.3</version>
+  <version>1.2.4-SNAPSHOT</version>
   <name>Apache Standard Taglib</name>
 
   <inceptionYear>2001</inceptionYear>
@@ -40,9 +40,9 @@
   <url>http://tomcat.apache.org/taglibs/standard-${project.version}</url>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.3</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/tags/taglibs-standard-1.2.3</developerConnection>
-    <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/tags/taglibs-standard-1.2.3</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk</developerConnection>
+    <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk</url>
   </scm>
 
   <ciManagement>
