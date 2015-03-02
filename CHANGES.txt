@@ -1,3 +1,6 @@
+Changes in 1.2.4 release
+37466 Reverted changes that overrode HTTP method when importing local resources.
+
 Changes in 1.2.3 release
 
 57560 Check protocol when resolving on older JREs
