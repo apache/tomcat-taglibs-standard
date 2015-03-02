@@ -37,7 +37,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.jsp.JspException;
@@ -285,24 +284,21 @@ public abstract class ImportSupport extends BodyTagSupport
             }
 
             // from this context, get a dispatcher
-            RequestDispatcher rd =
-                    c.getRequestDispatcher(stripSession(targetUrl));
+            RequestDispatcher rd = c.getRequestDispatcher(stripSession(targetUrl));
             if (rd == null) {
                 throw new JspTagException(stripSession(targetUrl));
             }
 
-            // include the resource, using our custom wrapper
+            // Wrap the response so we capture the capture the output.
+            // This relies on the underlying container to return content even if this is a HEAD
+            // request. Some containers (e.g. Tomcat versions without the fix for
+            // https://bz.apache.org/bugzilla/show_bug.cgi?id=57601 ) may not do that.
             ImportResponseWrapper irw =
-                    new ImportResponseWrapper(
-                            (HttpServletResponse) pageContext.getResponse());
+                    new ImportResponseWrapper((HttpServletResponse) pageContext.getResponse());
 
-            ImportRequestWrapper wrappedRequest =
-                    new ImportRequestWrapper(
-                            (HttpServletRequest) pageContext.getRequest());
-
-            // spec mandates specific error handling form include()
+            // spec mandates specific error handling from include()
             try {
-                rd.include(wrappedRequest, irw);
+                rd.include(pageContext.getRequest(), irw);
             } catch (IOException ex) {
                 throw new JspException(ex);
             } catch (RuntimeException ex) {
@@ -384,22 +380,6 @@ public abstract class ImportSupport extends BodyTagSupport
                         Resources.getMessage("IMPORT_ABS_ERROR", target, ex), ex);
             }
         }
-    }
-
-    /**
-     * Wraps requests to allow us to enforce the method to be GET
-     */
-    private class ImportRequestWrapper extends HttpServletRequestWrapper {
-
-        public ImportRequestWrapper(HttpServletRequest request) {
-            super(request);
-        }
-
-        @Override
-        public String getMethod() {
-            return "GET";
-        }
-
     }
 
     /**
