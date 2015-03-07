@@ -19,6 +19,7 @@ package org.apache.taglibs.standard.util;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.security.AccessControlException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
@@ -113,12 +114,25 @@ public class XmlUtil {
     }
 
     private static final String SP_ALLOWED_PROTOCOLS = "org.apache.taglibs.standard.xml.accessExternalEntity";
-    private static final String ALLOWED_PROTOCOLS = AccessController.doPrivileged(new PrivilegedAction<String>() {
-        public String run() {
-            String defaultProtocols = System.getSecurityManager() == null ? "all" : "";
-            return System.getProperty(SP_ALLOWED_PROTOCOLS, defaultProtocols);
+    private static final String ALLOWED_PROTOCOLS = initAllowedProtocols();
+
+    private static String initAllowedProtocols() {
+        if (System.getSecurityManager() == null) {
+            return System.getProperty(SP_ALLOWED_PROTOCOLS, "all");
+        } else {
+            final String defaultProtocols = "";
+            try {
+                return AccessController.doPrivileged(new PrivilegedAction<String>() {
+                    public String run() {
+                        return System.getProperty(SP_ALLOWED_PROTOCOLS, defaultProtocols);
+                    }
+                });
+            } catch (AccessControlException e) {
+                // Fall back to the default i.e. none.
+                return defaultProtocols;
+            }
         }
-    });
+    }
 
     static void checkProtocol(String allowedProtocols, String uri) {
         if ("all".equalsIgnoreCase(allowedProtocols)) {
@@ -130,7 +144,7 @@ public class XmlUtil {
                 return;
             }
         }
-        throw new SecurityException("Access to external URI not allowed: " + uri);
+        throw new AccessControlException("Access to external URI not allowed: " + uri);
     }
 
     /**
