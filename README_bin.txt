@@ -92,11 +92,16 @@ The 1.2 version of the Standard Taglib has been tested using Tomcat 7.0.57
 and should work in any compliant JSP 2.1 (or later) container.
 
 In version 1.2.3 and later, the XML libraries enable FEATURE_SECURE_PROCESSING
-when parsing and transforming. A new system property
+when parsing and transforming. The system property
+
   org.apache.taglibs.standard.xml.accessExternalEntity
+
 can be used to further restrict the protocols over which external entities can
 be resolved. When a SecurityManager is enabled this will, by default, allow
-access to no protocols.
+access to no protocols. Permission must be granted to the taglibs-standard-impl
+library to read this property.
+
+  permission java.util.PropertyPermission "org.apache.taglibs.standard.xml.accessExternalEntity", "read";
 
 ---------------------------------------------------------------------------
 COMMENTS AND QUESTIONS
