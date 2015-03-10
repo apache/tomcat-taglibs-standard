@@ -106,6 +106,7 @@
                 <exclude>DEPENDENCIES</exclude>
                 <exclude>README_bin.txt</exclude>
                 <exclude>README_src.txt</exclude>
+                <exclude>RELEASING</exclude>
               </excludes>
             </configuration>
           </plugin>
