@@ -1,4 +1,8 @@
-Changes in 1.2.4 release
+Changes in 1.2.5 release
+- Set version identifiers correctly, no other changes.
+
+Changes in 1.2.4 release (not released due to incorrect version numbers)
+
 57673 AccessControlException accessing org.apache.taglibs.standard.xml.accessExternalEntity
 37466 Reverted changes that overrode HTTP method when importing local resources.
 

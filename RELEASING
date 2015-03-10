@@ -1,0 +1,42 @@
+The project is configured to be released using the Maven Release Plugin.
+
+Some manual steps are required before performing a release build.
+
+* Update the version strings in README_bin.txt and README_src.tst
+* Update the version number in the Version class
+* Update the version number in the VersionTest class
+Commit these changes.
+
+Push the Maven Artifacts to the Apache Staging Repository:
+$ mvn release:prepare -Papache-release -DautoVersionSubmodules=true
+$ mvn release:perform
+
+Don't forget to close the staging repository prior to the vote.
+
+Stage the Apache download repository at
+  https://dist.apache.org/repos/dist/dev/tomcat/taglibs
+with the following files:
+NOTICE
+README_bin.txt
+README_src.txt
+taglibs-standard-1.2.x-source-release.zip
+taglibs-standard-1.2.x-source-release.zip.asc
+taglibs-standard-1.2.x-source-release.zip.md5
+taglibs-standard-1.2.x-source-release.zip.sha1
+taglibs-standard-compat-1.2.x.jar
+taglibs-standard-compat-1.2.x.jar.asc
+taglibs-standard-compat-1.2.x.jar.md5
+taglibs-standard-compat-1.2.x.jar.sha1
+taglibs-standard-impl-1.2.x.jar
+taglibs-standard-impl-1.2.x.jar.asc
+taglibs-standard-impl-1.2.x.jar.md5
+taglibs-standard-impl-1.2.x.jar.sha1
+taglibs-standard-jstlel-1.2.x.jar
+taglibs-standard-jstlel-1.2.x.jar.asc
+taglibs-standard-jstlel-1.2.x.jar.md5
+taglibs-standard-jstlel-1.2.x.jar.sha1
+taglibs-standard-spec-1.2.x.jar
+taglibs-standard-spec-1.2.x.jar.asc
+taglibs-standard-spec-1.2.x.jar.md5
+taglibs-standard-spec-1.2.x.jar.sha1
+

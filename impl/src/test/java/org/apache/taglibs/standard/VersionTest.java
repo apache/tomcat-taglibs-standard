@@ -45,43 +45,43 @@ public class VersionTest
 
     public void testGetDevelopmentVersionNum() {
         int expectedReturn = 0;
-        int actualReturn = version.getDevelopmentVersionNum();
+        int actualReturn = Version.getDevelopmentVersionNum();
         assertEquals("return value", expectedReturn, actualReturn);
     }
 
     public void testGetMaintenanceVersionNum() {
-        int expectedReturn = 3;
-        int actualReturn = version.getMaintenanceVersionNum();
+        int expectedReturn = 5;
+        int actualReturn = Version.getMaintenanceVersionNum();
         assertEquals("return value", expectedReturn, actualReturn);
     }
 
     public void testGetMajorVersionNum() {
         int expectedReturn = 1;
-        int actualReturn = version.getMajorVersionNum();
+        int actualReturn = Version.getMajorVersionNum();
         assertEquals("return value", expectedReturn, actualReturn);
     }
 
     public void testGetProduct() {
         String expectedReturn = "standard-taglib";
-        String actualReturn = version.getProduct();
+        String actualReturn = Version.getProduct();
         assertEquals("return value", expectedReturn, actualReturn);
     }
 
     public void testGetReleaseVersionNum() {
         int expectedReturn = 2;
-        int actualReturn = version.getReleaseVersionNum();
+        int actualReturn = Version.getReleaseVersionNum();
         assertEquals("return value", expectedReturn, actualReturn);
     }
 
     public void testGetVersion() {
-        String expectedReturn = "standard-taglib 1.2.3";
-        String actualReturn = version.getVersion();
+        String expectedReturn = "standard-taglib 1.2.5";
+        String actualReturn = Version.getVersion();
         assertEquals("return value", expectedReturn, actualReturn);
     }
 
     public void testMain() {
         String[] argv = null;
-        version.main(argv);
+        Version.main(argv);
     }
 
 }
