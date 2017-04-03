@@ -121,7 +121,7 @@ public abstract class TransformSupport extends BodyTagSupport {
         }
 
         try {
-            t = XmlUtil.newTransformer(source);
+            t = XmlUtil.newTransformer(source, uriResolver);
             t.setURIResolver(uriResolver);
         } catch (TransformerConfigurationException e) {
             throw new JspTagException(e);

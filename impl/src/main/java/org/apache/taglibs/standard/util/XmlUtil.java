@@ -25,7 +25,6 @@ import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.concurrent.Callable;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.PageContext;
 import javax.xml.XMLConstants;
@@ -183,14 +182,23 @@ public class XmlUtil {
      * @return a new Transformer
      * @throws TransformerConfigurationException if there was a problem creating the Transformer from the XSLT
      */
-    public static Transformer newTransformer(Source source) throws TransformerConfigurationException {
-        Transformer transformer = TRANSFORMER_FACTORY.newTransformer(source);
-        // Although newTansformer() is not allowed to return null, Xalan does.
-        // Trap that here by throwing the expected TransformerConfigurationException.
-        if (transformer == null) {
-            throw new TransformerConfigurationException("newTransformer returned null. XSLT may be invalid.");
+    public static Transformer newTransformer(Source source, JstlUriResolver uriResolver) throws TransformerConfigurationException {
+        synchronized (TRANSFORMER_FACTORY) {
+            final URIResolver original = TRANSFORMER_FACTORY.getURIResolver();
+            try {
+                TRANSFORMER_FACTORY.setURIResolver(uriResolver);
+                Transformer transformer = TRANSFORMER_FACTORY.newTransformer(source);
+                // Although newTransformer() is not allowed to return null, Xalan does.
+                // Trap that here by throwing the expected TransformerConfigurationException.
+                if (transformer == null) {
+                    throw new TransformerConfigurationException("newTransformer returned null. XSLT may be invalid.");
+                }
+                return transformer;
+            } finally {
+                //restore URI resolver on factory to what was before
+                TRANSFORMER_FACTORY.setURIResolver(original);
+            }
         }
-        return transformer;
     }
 
     /**
