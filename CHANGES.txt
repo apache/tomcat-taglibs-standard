@@ -1,4 +1,4 @@
-Changes in x release
+Changes in 1.2.6 release
 60950 JSTL TransformSupport XSL import not finding relative path
 
 Changes in 1.2.5 release

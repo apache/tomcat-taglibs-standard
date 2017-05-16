@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------
-Apache Standard Tag Library 1.2.5 -- BINARY DISTRIBUTION
+Apache Standard Tag Library 1.2.6 -- BINARY DISTRIBUTION
 ---------------------------------------------------------------------------
 Thanks for downloading this release of the Standard tag library, 
 an implementation of the JavaServer Pages(tm)(JSP) 
