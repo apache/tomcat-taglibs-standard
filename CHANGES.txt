@@ -1,5 +1,6 @@
 Changes in 1.2.6 release
 60950 JSTL TransformSupport XSL import not finding relative path
+57434 Race condition in EL1.0 validation
 
 Changes in 1.2.5 release
 - Set version identifiers correctly, no other changes.

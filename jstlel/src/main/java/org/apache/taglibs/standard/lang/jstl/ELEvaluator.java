@@ -102,13 +102,13 @@ public class ELEvaluator {
      * growth.
      * <p>NOTE: use LinkedHashmap if a dependency on J2SE 1.4+ is ok
      */
-    static Map sCachedExpressionStrings = null;
+    private static Map sCachedExpressionStrings = null;
 
     /**
      * The mapping from ExpectedType to Maps mapping literal String to
      * parsed value *
      */
-    static Map sCachedExpectedTypes = new HashMap();
+    private static final Map sCachedExpectedTypes = new HashMap();
 
     /**
      * The static Logger *
@@ -123,11 +123,12 @@ public class ELEvaluator {
     /**
      * Flag if the cache should be bypassed *
      */
-    boolean mBypassCache;
+    private volatile boolean mBypassCache;
 
     /**
      * The PageContext *
      */
+    // TODO: Find a better way to override the expression cache size that does not need this field.
     PageContext pageContext;
 
 
@@ -256,40 +257,46 @@ public class ELEvaluator {
             return "";
         }
 
-        if (!(mBypassCache) && (sCachedExpressionStrings == null)) {
-            createExpressionStringMap();
+        if (mBypassCache) {
+            return parseExpressionUncached(pExpressionString);
         }
+
+        Map cache = getOrCreateExpressionStringMap(pageContext);
 
         // See if it's in the cache
-        Object ret =
-                mBypassCache ?
-                        null :
-                        sCachedExpressionStrings.get(pExpressionString);
+        Object ret = cache.get(pExpressionString);
+        if (ret != null) {
+            return ret;
+        }
 
-        if (ret == null) {
-            // Parse the expression
+        ret = parseExpressionUncached(pExpressionString);
+        cache.put(pExpressionString, ret);
+        return ret;
+    }
+
+    /**
+     * Parse an expression string bypassing the cache.
+     *
+     * This allows expressions to be validated at translation time without polluting the cache.
+     *
+     * @param pExpressionString the text to parse
+     * @return the parse result
+     * @throws ELException if there was a problem parsing the expression text
+     */
+    public Object parseExpressionUncached(String pExpressionString) throws ELException {
+        try {
             Reader r = new StringReader(pExpressionString);
             ELParser parser = new ELParser(r);
-            try {
-                ret = parser.ExpressionString();
-                if (!mBypassCache) {
-                    sCachedExpressionStrings.put(pExpressionString, ret);
-                }
-            }
-            catch (ParseException exc) {
-                throw new ELException
-                        (formatParseException(pExpressionString,
-                                exc));
-            }
-            catch (TokenMgrError exc) {
-                // Note - this should never be reached, since the parser is
-                // constructed to tokenize any input (illegal inputs get
-                // parsed to <BADLY_ESCAPED_STRING_LITERAL> or
-                // <ILLEGAL_CHARACTER>
-                throw new ELException(exc.getMessage());
-            }
+            return parser.ExpressionString();
+        } catch (ParseException exc) {
+            throw new ELException(formatParseException(pExpressionString, exc));
+        } catch (TokenMgrError exc) {
+            // Note - this should never be reached, since the parser is
+            // constructed to tokenize any input (illegal inputs get
+            // parsed to <BADLY_ESCAPED_STRING_LITERAL> or
+            // <ILLEGAL_CHARACTER>
+            throw new ELException(exc.getMessage());
         }
-        return ret;
     }
 
     //-------------------------------------
@@ -358,31 +365,35 @@ public class ELEvaluator {
      * Creates LRU map of expression strings. If context parameter
      * specifying cache size is present use that as the maximum size
      * of the LRU map otherwise use default.
+     *
+     * TODO: Using the context parameter means the cache is sized based on the configuration
+     * of the first web application that calls this. This might be a problem if this jar is
+     * installed in the application server's classpath rather than the application's.
      */
-    private synchronized void createExpressionStringMap() {
-        if (sCachedExpressionStrings != null) {
-            return;
-        }
+    private static synchronized Map getOrCreateExpressionStringMap(PageContext pageContext) {
+        if (sCachedExpressionStrings == null) {
 
-        final int maxSize;
-        if ((pageContext != null) && (pageContext.getServletContext() != null)) {
-            String value = pageContext.getServletContext().getInitParameter(EXPR_CACHE_PARAM);
-            if (value != null) {
-                maxSize = Integer.valueOf(value);
+            final int maxSize;
+            if ((pageContext != null) && (pageContext.getServletContext() != null)) {
+                String value = pageContext.getServletContext().getInitParameter(EXPR_CACHE_PARAM);
+                if (value != null) {
+                    maxSize = Integer.valueOf(value);
+                } else {
+                    maxSize = MAX_SIZE;
+                }
             } else {
                 maxSize = MAX_SIZE;
             }
-        } else {
-            maxSize = MAX_SIZE;
-        }
 
-        // fall through if it couldn't find the parameter
-        sCachedExpressionStrings = Collections.synchronizedMap(new LinkedHashMap() {
-            @Override
-            protected boolean removeEldestEntry(Map.Entry eldest) {
-                return size() > maxSize;
-            }
-        });
+            // fall through if it couldn't find the parameter
+            sCachedExpressionStrings = Collections.synchronizedMap(new LinkedHashMap() {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry eldest) {
+                    return size() > maxSize;
+                }
+            });
+        }
+        return sCachedExpressionStrings;
     }
 
     //-------------------------------------

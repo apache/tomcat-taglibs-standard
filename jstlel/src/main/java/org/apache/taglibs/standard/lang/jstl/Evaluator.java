@@ -67,9 +67,7 @@ public class Evaluator
     public String validate(String pAttributeName,
                            String pAttributeValue) {
         try {
-            sEvaluator.setBypassCache(true);
-            sEvaluator.parseExpressionString(pAttributeValue);
-            sEvaluator.setBypassCache(false);
+            sEvaluator.parseExpressionUncached(pAttributeValue);
             return null;
         }
         catch (ELException exc) {
