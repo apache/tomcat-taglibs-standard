@@ -78,6 +78,7 @@
     <module>impl</module>
     <module>compat</module>
     <module>jstlel</module>
+    <module>standard-examples</module>
 <!--
     <module>standard-test</module>
 -->
