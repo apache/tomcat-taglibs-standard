@@ -17,11 +17,11 @@
 
 package org.apache.taglibs.standard.tag.common.fmt;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.core.Config;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
-import javax.servlet.jsp.tagext.TagSupport;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.jstl.core.Config;
+import jakarta.servlet.jsp.jstl.fmt.LocalizationContext;
+import jakarta.servlet.jsp.tagext.TagSupport;
 
 import org.apache.taglibs.standard.tag.common.core.Util;
 

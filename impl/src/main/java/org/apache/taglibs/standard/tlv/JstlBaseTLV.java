@@ -27,10 +27,10 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.servlet.jsp.tagext.PageData;
-import javax.servlet.jsp.tagext.TagData;
-import javax.servlet.jsp.tagext.TagLibraryValidator;
-import javax.servlet.jsp.tagext.ValidationMessage;
+import jakarta.servlet.jsp.tagext.PageData;
+import jakarta.servlet.jsp.tagext.TagData;
+import jakarta.servlet.jsp.tagext.TagLibraryValidator;
+import jakarta.servlet.jsp.tagext.ValidationMessage;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.taglibs.standard.resources.Resources;

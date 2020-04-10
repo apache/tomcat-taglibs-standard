@@ -20,7 +20,7 @@ import org.apache.cactus.ServletTestCase;
 import org.apache.cactus.WebResponse;
 import org.apache.taglibs.standard.testutil.TestUtil;
 
-import javax.servlet.RequestDispatcher;
+import jakarta.servlet.RequestDispatcher;
 import java.io.StringReader;
 
 /**

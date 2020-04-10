@@ -17,9 +17,9 @@
 
 package org.apache.taglibs.standard.tag.compat.fmt;
 
-import javax.el.ValueExpression;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
+import jakarta.el.ValueExpression;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.apache.taglibs.standard.tag.common.fmt.MessageSupport;
 import org.apache.taglibs.standard.util.ExpressionUtil;

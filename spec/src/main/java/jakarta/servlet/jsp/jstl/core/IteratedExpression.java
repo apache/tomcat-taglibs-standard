@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package javax.servlet.jsp.jstl.core;
+package jakarta.servlet.jsp.jstl.core;
 
 import java.util.Collection;
 import java.util.Enumeration;
@@ -27,8 +27,8 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.el.ELContext;
-import javax.el.ValueExpression;
+import jakarta.el.ELContext;
+import jakarta.el.ValueExpression;
 
 /**
  * Helper class for accessing members of a deferred expression result by index.

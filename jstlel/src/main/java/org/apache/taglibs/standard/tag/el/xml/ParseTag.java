@@ -17,7 +17,7 @@
 
 package org.apache.taglibs.standard.tag.el.xml;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.taglibs.standard.tag.common.core.NullAttributeException;
 import org.apache.taglibs.standard.tag.common.xml.ParseSupport;

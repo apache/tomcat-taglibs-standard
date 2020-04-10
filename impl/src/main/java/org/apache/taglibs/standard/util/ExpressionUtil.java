@@ -16,11 +16,11 @@
  */
 package org.apache.taglibs.standard.util;
 
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-import javax.servlet.jsp.JspApplicationContext;
-import javax.servlet.jsp.JspFactory;
-import javax.servlet.jsp.PageContext;
+import jakarta.el.ExpressionFactory;
+import jakarta.el.ValueExpression;
+import jakarta.servlet.jsp.JspApplicationContext;
+import jakarta.servlet.jsp.JspFactory;
+import jakarta.servlet.jsp.PageContext;
 
 /**
  * Helper functions for working with EL expressions.

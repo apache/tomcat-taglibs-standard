@@ -22,7 +22,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 /**
  * <p>String repository for Reader/Writer.

@@ -17,8 +17,8 @@
 
 package org.apache.taglibs.standard.tag.compat.xml;
 
-import javax.el.ValueExpression;
-import javax.servlet.jsp.JspException;
+import jakarta.el.ValueExpression;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.taglibs.standard.tag.common.xml.ParseSupport;
 import org.apache.taglibs.standard.util.ExpressionUtil;

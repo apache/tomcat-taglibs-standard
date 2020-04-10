@@ -20,8 +20,8 @@ package org.apache.taglibs.standard.tlv;
 import java.util.Set;
 import java.util.Stack;
 
-import javax.servlet.jsp.tagext.PageData;
-import javax.servlet.jsp.tagext.ValidationMessage;
+import jakarta.servlet.jsp.tagext.PageData;
+import jakarta.servlet.jsp.tagext.ValidationMessage;
 
 import org.apache.taglibs.standard.resources.Resources;
 import org.xml.sax.Attributes;

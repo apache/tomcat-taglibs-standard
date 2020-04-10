@@ -19,7 +19,7 @@ package org.apache.taglibs.standard.examples.taglib;
 
 import java.lang.reflect.Array;
 
-import javax.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.JspTagException;
 
 /**
  * <p>Exmaples taglib Functions</p>

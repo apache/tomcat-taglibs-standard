@@ -17,7 +17,7 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
-import javax.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.JspTagException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.taglibs.standard.tag.common.core.WhenTagSupport;

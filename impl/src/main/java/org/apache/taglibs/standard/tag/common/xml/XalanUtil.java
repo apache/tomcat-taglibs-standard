@@ -16,9 +16,9 @@
  */
 package org.apache.taglibs.standard.tag.common.xml;
 
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.jsp.tagext.TagSupport;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.Tag;
+import jakarta.servlet.jsp.tagext.TagSupport;
 import javax.xml.transform.TransformerException;
 
 import org.apache.taglibs.standard.util.XmlUtil;

@@ -17,7 +17,7 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
-import javax.servlet.jsp.tagext.TagSupport;
+import jakarta.servlet.jsp.tagext.TagSupport;
 
 /**
  * <p>Tag handler for &lt;declaregt; in JSTL.  This tag handler is

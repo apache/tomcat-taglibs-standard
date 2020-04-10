@@ -22,12 +22,12 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.core.Config;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
-import javax.servlet.jsp.tagext.BodyTagSupport;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.jstl.core.Config;
+import jakarta.servlet.jsp.jstl.fmt.LocalizationContext;
+import jakarta.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.taglibs.standard.tag.common.core.Util;
 
@@ -136,12 +136,12 @@ public abstract class BundleSupport extends BodyTagSupport {
      * <p>Check if a match exists between the ordered set of preferred
      * locales and the available locales, for the given base name.
      * The set of preferred locales consists of a single locale
-     * (if the <tt>javax.servlet.jsp.jstl.fmt.locale</tt> configuration
+     * (if the <tt>jakarta.servlet.jsp.jstl.fmt.locale</tt> configuration
      * setting is present) or is equal to the client's preferred locales
      * determined from the client's browser settings.
      * <p>If no match was found in the previous step, check if a match
      * exists between the fallback locale (given by the
-     * <tt>javax.servlet.jsp.jstl.fmt.fallbackLocale</tt> configuration
+     * <tt>jakarta.servlet.jsp.jstl.fmt.fallbackLocale</tt> configuration
      * setting) and the available locales, for the given base name.
      *
      * @param pc       Page in which the resource bundle with the

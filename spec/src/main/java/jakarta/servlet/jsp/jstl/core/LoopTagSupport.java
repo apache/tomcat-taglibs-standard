@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-package javax.servlet.jsp.jstl.core;
+package jakarta.servlet.jsp.jstl.core;
 
-import javax.el.ELContext;
-import javax.el.ValueExpression;
-import javax.el.VariableMapper;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.IterationTag;
-import javax.servlet.jsp.tagext.TagSupport;
-import javax.servlet.jsp.tagext.TryCatchFinally;
+import jakarta.el.ELContext;
+import jakarta.el.ValueExpression;
+import jakarta.el.VariableMapper;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.IterationTag;
+import jakarta.servlet.jsp.tagext.TagSupport;
+import jakarta.servlet.jsp.tagext.TryCatchFinally;
 
 /**
  * <p>Base support class to facilitate implementation of iteration tags.</p>
@@ -177,7 +177,7 @@ public abstract class LoopTagSupport
      * @return the java.lang.Object to use in the next round of iteration
      * @throws java.util.NoSuchElementException
      *          if next() is called but no new elements are available
-     * @throws javax.servlet.jsp.JspTagException
+     * @throws jakarta.servlet.jsp.JspTagException
      *          for other, unexpected exceptions
      */
     protected abstract Object next() throws JspTagException;
@@ -192,7 +192,7 @@ public abstract class LoopTagSupport
      *
      * @return <tt>true</tt> if there is at least one more item to iterate
      *         over, <tt>false</tt> otherwise
-     * @throws javax.servlet.jsp.JspTagException
+     * @throws jakarta.servlet.jsp.JspTagException
      *
      * @see #next
      */
@@ -204,7 +204,7 @@ public abstract class LoopTagSupport
      * Subclasses can assume that prepare() will be called once for
      * each invocation of doStartTag() in the superclass.</p>
      *
-     * @throws javax.servlet.jsp.JspTagException
+     * @throws jakarta.servlet.jsp.JspTagException
      *
      */
     protected abstract void prepare() throws JspTagException;

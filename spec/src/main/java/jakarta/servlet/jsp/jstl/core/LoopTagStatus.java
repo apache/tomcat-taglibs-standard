@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package javax.servlet.jsp.jstl.core;
+package jakarta.servlet.jsp.jstl.core;
 
 /**
  * <p>Exposes the current status of

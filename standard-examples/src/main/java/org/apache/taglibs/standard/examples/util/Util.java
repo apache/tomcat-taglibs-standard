@@ -25,7 +25,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 /**
  * <p>Utility class for examples webapp.

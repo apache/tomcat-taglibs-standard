@@ -18,7 +18,7 @@
 package org.apache.taglibs.standard.tag.el.sql;
 
 import java.sql.*;
-import javax.servlet.jsp.*;
+import jakarta.servlet.jsp.*;
 import org.apache.cactus.*;
 import org.apache.taglibs.standard.testutil.TestUtil;
 

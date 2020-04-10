@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package javax.servlet.jsp.jstl.fmt;
+package jakarta.servlet.jsp.jstl.fmt;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

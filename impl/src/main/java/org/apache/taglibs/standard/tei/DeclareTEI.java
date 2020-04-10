@@ -17,9 +17,9 @@
 
 package org.apache.taglibs.standard.tei;
 
-import javax.servlet.jsp.tagext.TagData;
-import javax.servlet.jsp.tagext.TagExtraInfo;
-import javax.servlet.jsp.tagext.VariableInfo;
+import jakarta.servlet.jsp.tagext.TagData;
+import jakarta.servlet.jsp.tagext.TagExtraInfo;
+import jakarta.servlet.jsp.tagext.VariableInfo;
 
 /**
  * <p>An implementation of TagExtraInfo provided for &lt;declare&gt;.

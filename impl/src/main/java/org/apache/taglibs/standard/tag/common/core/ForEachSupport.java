@@ -25,12 +25,12 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import javax.el.ValueExpression;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.core.IndexedValueExpression;
-import javax.servlet.jsp.jstl.core.IteratedExpression;
-import javax.servlet.jsp.jstl.core.IteratedValueExpression;
-import javax.servlet.jsp.jstl.core.LoopTagSupport;
+import jakarta.el.ValueExpression;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.jstl.core.IndexedValueExpression;
+import jakarta.servlet.jsp.jstl.core.IteratedExpression;
+import jakarta.servlet.jsp.jstl.core.IteratedValueExpression;
+import jakarta.servlet.jsp.jstl.core.LoopTagSupport;
 
 import org.apache.taglibs.standard.resources.Resources;
 
@@ -43,11 +43,11 @@ import org.apache.taglibs.standard.resources.Resources;
  * <p>Localized here is the logic for handling the veritable smorgasbord
  * of types supported by &lt;forEach&gt;, including arrays,
  * Collections, and others.  To see how the actual iteration is controlled,
- * review the javax.servlet.jsp.jstl.core.LoopTagSupport class instead.
+ * review the jakarta.servlet.jsp.jstl.core.LoopTagSupport class instead.
  * </p>
  *
  * @author Shawn Bayern
- * @see javax.servlet.jsp.jstl.core.LoopTagSupport
+ * @see jakarta.servlet.jsp.jstl.core.LoopTagSupport
  */
 public abstract class ForEachSupport extends LoopTagSupport {
     protected Iterator items;              // our 'digested' items

@@ -18,7 +18,7 @@ package org.apache.taglibs.standard.tag.el.sql;
 
 import java.util.Date;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.tag.common.sql.DateParamTagSupport;

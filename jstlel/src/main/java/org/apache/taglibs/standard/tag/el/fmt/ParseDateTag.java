@@ -19,7 +19,7 @@ package org.apache.taglibs.standard.tag.el.fmt;
 
 import java.util.Locale;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.tag.common.fmt.LocaleUtil;

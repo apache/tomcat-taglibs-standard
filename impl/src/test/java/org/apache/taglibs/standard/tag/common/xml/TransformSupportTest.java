@@ -16,7 +16,7 @@
  */
 package org.apache.taglibs.standard.tag.common.xml;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import org.junit.Before;
 import org.junit.Test;

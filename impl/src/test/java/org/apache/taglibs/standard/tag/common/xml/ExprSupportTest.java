@@ -18,8 +18,8 @@ package org.apache.taglibs.standard.tag.common.xml;
 
 import java.io.InputStream;
 
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.JspWriter;
+import jakarta.servlet.jsp.PageContext;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.junit.Before;

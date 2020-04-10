@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package javax.servlet.jsp.jstl.fmt;
+package jakarta.servlet.jsp.jstl.fmt;
 
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.PageContext;
 
 /**
  * Class which exposes the locale-determination logic for resource bundles
@@ -40,7 +40,7 @@ public class LocaleSupport {
      * Retrieves the localized message corresponding to the given key.
      * <p> The given key is looked up in the resource bundle of the default
      * I18N localization context, which is retrieved from the
-     * <tt>javax.servlet.jsp.jstl.fmt.localizationContext</tt> configuration
+     * <tt>jakarta.servlet.jsp.jstl.fmt.localizationContext</tt> configuration
      * setting.
      * <p> If the configuration setting is empty, or the default I18N
      * localization context does not contain any resource bundle, or the given
@@ -84,7 +84,7 @@ public class LocaleSupport {
      * <p> See the specification of the &lt;fmt:message&gt; action for a description
      * of how parametric replacement is implemented.
      * <p> The localized message is retrieved as in
-     * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String) getLocalizedMessage(pageContext, key)}.
+     * {@link #getLocalizedMessage(jakarta.servlet.jsp.PageContext,java.lang.String) getLocalizedMessage(pageContext, key)}.
      *
      * @param pageContext the page in which to get the localized message
      *                    corresponding to the given key
@@ -105,7 +105,7 @@ public class LocaleSupport {
      * <p> See the specification of the &lt;fmt:message&gt; action for a description
      * of how parametric replacement is implemented.
      * <p> The localized message is retrieved as in
-     * {@link #getLocalizedMessage(javax.servlet.jsp.PageContext,java.lang.String, java.lang.String) getLocalizedMessage(pageContext, key, basename)}.
+     * {@link #getLocalizedMessage(jakarta.servlet.jsp.PageContext,java.lang.String, java.lang.String) getLocalizedMessage(pageContext, key, basename)}.
      *
      * @param pageContext the page in which to get the localized message
      *                    corresponding to the given key

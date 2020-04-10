@@ -17,7 +17,7 @@
 
 package org.apache.taglibs.standard.lang.jstl;
 
-import javax.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.PageContext;
 
 /**
  * <p>This is the JSTL-specific implementation of VariableResolver.

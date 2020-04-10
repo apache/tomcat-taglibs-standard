@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package javax.servlet.jsp.jstl.fmt;
+package jakarta.servlet.jsp.jstl.fmt;
 
 import java.util.Enumeration;
 import java.util.Locale;
@@ -23,10 +23,10 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.jstl.core.Config;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.jstl.core.Config;
 
 class JakartaInline {
 
@@ -78,12 +78,12 @@ class JakartaInline {
      * <p>Check if a match exists between the ordered set of preferred
      * locales and the available locales, for the given base name.
      * The set of preferred locales consists of a single locale
-     * (if the <tt>javax.servlet.jsp.jstl.fmt.locale</tt> configuration
+     * (if the <tt>jakarta.servlet.jsp.jstl.fmt.locale</tt> configuration
      * setting is present) or is equal to the client's preferred locales
      * determined from the client's browser settings.
      * <p>If no match was found in the previous step, check if a match
      * exists between the fallback locale (given by the
-     * <tt>javax.servlet.jsp.jstl.fmt.fallbackLocale</tt> configuration
+     * <tt>jakarta.servlet.jsp.jstl.fmt.fallbackLocale</tt> configuration
      * setting) and the available locales, for the given base name.
      *
      * @param pageContext Page in which the resource bundle with the
@@ -317,7 +317,7 @@ class JakartaInline {
     /*
      * Stores the given locale in the response object of the given page
      * context, and stores the locale's associated charset in the
-     * javax.servlet.jsp.jstl.fmt.request.charset session attribute, which
+     * jakarta.servlet.jsp.jstl.fmt.request.charset session attribute, which
      * may be used by the <requestEncoding> action in a page invoked by a
      * form included in the response to set the request charset to the same as
      * the response charset (this makes it possible for the container to
@@ -433,5 +433,5 @@ class JakartaInline {
     // === END OF COPY FROM SetLocaleSupport TO SUPPORT BundleSupport ===
 
     static final String REQUEST_CHAR_SET =
-            "javax.servlet.jsp.jstl.fmt.request.charset";
+            "jakarta.servlet.jsp.jstl.fmt.request.charset";
 }

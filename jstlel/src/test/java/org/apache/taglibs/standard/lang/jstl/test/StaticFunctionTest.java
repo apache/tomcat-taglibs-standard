@@ -31,7 +31,7 @@ public class StaticFunctionTest extends TestCase {
 
     public void testFunctions() throws Exception {
 
-        System.setProperty("javax.servlet.jsp.functions.allowed", "true");
+        System.setProperty("jakarta.servlet.jsp.functions.allowed", "true");
         Map m = getSampleMethodMap();
         Evaluator e = new Evaluator();
         Object o;

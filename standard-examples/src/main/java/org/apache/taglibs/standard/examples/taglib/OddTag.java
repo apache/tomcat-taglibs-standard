@@ -17,10 +17,10 @@
 
 package org.apache.taglibs.standard.examples.taglib;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.core.LoopTag;
-import javax.servlet.jsp.tagext.TagSupport;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.jstl.core.LoopTag;
+import jakarta.servlet.jsp.tagext.TagSupport;
 
 /**
  * <p>Tag handler for &lt;odd&gt;

@@ -17,7 +17,7 @@
 
 package org.apache.taglibs.standard.tag.rt.fmt;
 
-import javax.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.JspTagException;
 
 import org.apache.taglibs.standard.tag.common.fmt.SetTimeZoneSupport;
 

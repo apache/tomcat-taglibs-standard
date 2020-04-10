@@ -17,7 +17,7 @@
 
 package org.apache.taglibs.standard.tag.rt.xml;
 
-import javax.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.JspTagException;
 
 import org.apache.taglibs.standard.tag.common.xml.ParseSupport;
 import org.xml.sax.XMLFilter;

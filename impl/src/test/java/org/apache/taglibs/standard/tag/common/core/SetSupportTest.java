@@ -18,16 +18,16 @@ package org.apache.taglibs.standard.tag.common.core;
 
 import java.util.Map;
 
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-import javax.el.VariableMapper;
-import javax.servlet.jsp.JspApplicationContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspFactory;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.BodyContent;
+import jakarta.el.ELContext;
+import jakarta.el.ExpressionFactory;
+import jakarta.el.ValueExpression;
+import jakarta.el.VariableMapper;
+import jakarta.servlet.jsp.JspApplicationContext;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspFactory;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.BodyContent;
 
 import org.apache.taglibs.standard.resources.Resources;
 import org.junit.After;

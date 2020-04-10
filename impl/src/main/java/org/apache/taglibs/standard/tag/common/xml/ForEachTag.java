@@ -17,9 +17,9 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.core.LoopTagSupport;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.jstl.core.LoopTagSupport;
 import javax.xml.transform.TransformerException;
 
 import org.apache.xml.dtm.DTMIterator;
@@ -31,7 +31,7 @@ import org.apache.xpath.objects.XObject;
  * Implementation of &lt;x:forEach&gt; tag using low-level Xalan API.
  *
  * @author Shawn Bayern
- * @see javax.servlet.jsp.jstl.core.LoopTagSupport
+ * @see jakarta.servlet.jsp.jstl.core.LoopTagSupport
  */
 public class ForEachTag extends LoopTagSupport {
 

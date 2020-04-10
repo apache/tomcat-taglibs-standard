@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import javax.servlet.jsp.JspWriter;
+import jakarta.servlet.jsp.JspWriter;
 
 import org.junit.Assert;
 import org.junit.Before;

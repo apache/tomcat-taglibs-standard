@@ -16,7 +16,7 @@
  */
 package org.apache.taglibs.standard.tag.common.fmt;
 
-import javax.servlet.jsp.tagext.BodyContent;
+import jakarta.servlet.jsp.tagext.BodyContent;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;

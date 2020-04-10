@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package javax.servlet.jsp.jstl.sql;
+package jakarta.servlet.jsp.jstl.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * <p>Supports the creation of a javax.servlet.jsp.jstl.sql.Result object
+ * <p>Supports the creation of a jakarta.servlet.jsp.jstl.sql.Result object
  * from a source java.sql.ResultSet object. A Result object makes it much
  * easier for page authors to access and manipulate the data resulting
  * from a SQL query.</p>

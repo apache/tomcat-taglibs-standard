@@ -21,9 +21,9 @@ import java.text.DateFormat;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.PageContext;
 
 import org.apache.taglibs.standard.resources.Resources;
 

@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.PageContext;
 
 import org.apache.taglibs.standard.lang.jstl.parser.ELParser;
 import org.apache.taglibs.standard.lang.jstl.parser.ParseException;

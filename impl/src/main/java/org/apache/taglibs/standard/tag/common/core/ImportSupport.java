@@ -17,6 +17,22 @@
 
 package org.apache.taglibs.standard.tag.common.core;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.WriteListener;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.BodyTagSupport;
+import jakarta.servlet.jsp.tagext.TryCatchFinally;
+import org.apache.taglibs.standard.resources.Resources;
+import org.apache.taglibs.standard.util.UrlUtil;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,22 +47,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.servlet.jsp.tagext.TryCatchFinally;
-
-import org.apache.taglibs.standard.resources.Resources;
-import org.apache.taglibs.standard.util.UrlUtil;
 
 /**
  * <p>Support for tag handlers for &lt;import&gt;, the general-purpose
@@ -426,9 +426,29 @@ public abstract class ImportSupport extends BodyTagSupport
          * A ServletOutputStream we convey, tied to this Writer.
          */
         private ServletOutputStream sos = new ServletOutputStream() {
+
+            private WriteListener writeListener;
+
             @Override
             public void write(int b) throws IOException {
-                bos.write(b);
+                try {
+                    bos.write(b);
+                } catch ( Exception e ) {
+                    if(this.writeListener!=null) {
+                        this.writeListener.onError( e );
+                    }
+                    throw new IOException(e);
+                }
+            }
+
+            @Override
+            public boolean isReady() {
+                return true;
+            }
+
+            @Override
+            public void setWriteListener( WriteListener writeListener ) {
+                this.writeListener = writeListener;
             }
         };
 

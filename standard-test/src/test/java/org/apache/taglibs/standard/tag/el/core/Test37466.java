@@ -18,7 +18,7 @@
 package org.apache.taglibs.standard.tag.el.core;
 
 import java.net.*;
-import javax.servlet.http.*;
+import jakarta.servlet.http.*;
 import org.apache.cactus.*;
 import org.apache.taglibs.standard.testutil.TestUtil;
 

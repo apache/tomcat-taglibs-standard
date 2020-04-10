@@ -19,9 +19,9 @@ package org.apache.taglibs.standard.tag.common.xml;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.PageContext;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.jsp.PageContext;
 import javax.xml.transform.TransformerException;
 
 import org.apache.taglibs.standard.resources.Resources;

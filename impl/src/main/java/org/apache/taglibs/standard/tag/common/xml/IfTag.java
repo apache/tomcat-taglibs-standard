@@ -17,8 +17,8 @@
 
 package org.apache.taglibs.standard.tag.common.xml;
 
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.jstl.core.ConditionalTagSupport;
 import javax.xml.transform.TransformerException;
 
 import org.apache.xpath.XPath;

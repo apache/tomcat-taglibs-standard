@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javax.servlet.jsp.jstl.tlv;
+package jakarta.servlet.jsp.jstl.tlv;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import javax.servlet.jsp.tagext.PageData;
+import jakarta.servlet.jsp.tagext.PageData;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;

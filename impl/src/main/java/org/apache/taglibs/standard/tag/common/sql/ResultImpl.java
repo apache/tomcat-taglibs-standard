@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import javax.servlet.jsp.jstl.sql.Result;
+import jakarta.servlet.jsp.jstl.sql.Result;
 
 /**
  * <p>This class creates a cached version of a <tt>ResultSet</tt>.
@@ -33,7 +33,7 @@ import javax.servlet.jsp.jstl.sql.Result;
  * returing an array of <tt>Row</tt> objects containing a <tt>Column</tt>
  * instance for each column in the row.</p>
  * <p>Note -- this is a private copy for the RI to avoid making the
- * corresponding class in javax.servlet.* public.</p>
+ * corresponding class in jakarta.servlet.* public.</p>
  *
  * @author Hans Bergsten
  * @author Justyna Horwat

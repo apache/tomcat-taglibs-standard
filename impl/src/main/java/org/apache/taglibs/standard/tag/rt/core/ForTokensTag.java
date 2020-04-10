@@ -17,9 +17,9 @@
 
 package org.apache.taglibs.standard.tag.rt.core;
 
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.core.LoopTag;
-import javax.servlet.jsp.tagext.IterationTag;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.jstl.core.LoopTag;
+import jakarta.servlet.jsp.tagext.IterationTag;
 
 import org.apache.taglibs.standard.tag.common.core.ForTokensSupport;
 

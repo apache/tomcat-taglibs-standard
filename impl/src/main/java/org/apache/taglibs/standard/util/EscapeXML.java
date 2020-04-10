@@ -19,7 +19,7 @@ package org.apache.taglibs.standard.util;
 import java.io.IOException;
 import java.io.Reader;
 
-import javax.servlet.jsp.JspWriter;
+import jakarta.servlet.jsp.JspWriter;
 
 /**
  * Handles escaping of characters that could be interpreted as XML markup.

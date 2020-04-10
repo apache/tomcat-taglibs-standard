@@ -19,7 +19,7 @@ package org.apache.taglibs.standard.functions;
 import java.util.Arrays;
 import java.util.Collections;
 
-import javax.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.JspTagException;
 
 import org.apache.taglibs.standard.resources.Resources;
 import org.junit.Assert;

@@ -17,8 +17,8 @@
 
 package org.apache.taglibs.standard.tag.el.fmt;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.apache.taglibs.standard.tag.common.fmt.MessageSupport;

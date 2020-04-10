@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-package javax.servlet.jsp.jstl.tlv;
+package jakarta.servlet.jsp.jstl.tlv;
 
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.jsp.tagext.PageData;
-import javax.servlet.jsp.tagext.ValidationMessage;
+import jakarta.servlet.jsp.tagext.PageData;
+import jakarta.servlet.jsp.tagext.ValidationMessage;
 
 import org.junit.Before;
 import org.junit.Ignore;

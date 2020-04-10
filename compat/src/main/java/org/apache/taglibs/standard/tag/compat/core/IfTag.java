@@ -16,9 +16,9 @@
  */
 package org.apache.taglibs.standard.tag.compat.core;
 
-import javax.el.ValueExpression;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+import jakarta.el.ValueExpression;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.jstl.core.ConditionalTagSupport;
 
 import org.apache.taglibs.standard.util.ExpressionUtil;
 

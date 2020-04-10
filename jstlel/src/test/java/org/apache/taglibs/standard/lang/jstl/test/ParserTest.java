@@ -26,7 +26,7 @@ import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
-import javax.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspException;
 
 import junit.framework.TestCase;
 import org.apache.taglibs.standard.lang.jstl.Evaluator;
@@ -52,7 +52,7 @@ public class ParserTest extends TestCase {
     @Test
     public void testParser() throws IOException {
         try {
-            System.setProperty("javax.servlet.jsp.functions.allowed", "true");
+            System.setProperty("jakarta.servlet.jsp.functions.allowed", "true");
             BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("parserTests.txt"), UTF8));
             CharArrayWriter writer = new CharArrayWriter();
             PrintWriter out = new PrintWriter(writer);
@@ -68,7 +68,7 @@ public class ParserTest extends TestCase {
             actual.close();
             expected.close();
         } finally {
-            System.clearProperty("javax.servlet.jsp.functions.allowed");
+            System.clearProperty("jakarta.servlet.jsp.functions.allowed");
         }
     }
 

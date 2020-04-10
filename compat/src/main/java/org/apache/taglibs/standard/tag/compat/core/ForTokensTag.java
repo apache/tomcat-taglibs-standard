@@ -16,8 +16,8 @@
  */
 package org.apache.taglibs.standard.tag.compat.core;
 
-import javax.el.ValueExpression;
-import javax.servlet.jsp.JspException;
+import jakarta.el.ValueExpression;
+import jakarta.servlet.jsp.JspException;
 
 import org.apache.taglibs.standard.tag.common.core.ForTokensSupport;
 import org.apache.taglibs.standard.util.ExpressionUtil;

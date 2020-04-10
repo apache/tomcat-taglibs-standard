@@ -16,8 +16,8 @@
  */
 package org.apache.taglibs.standard.tag.common.xml;
 
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.Tag;
 
 import org.apache.xpath.XPath;
 import org.apache.xpath.XPathContext;

@@ -18,8 +18,8 @@ package org.apache.taglibs.standard.tag.common.xml;
 
 import java.io.InputStream;
 
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.IterationTag;
+import jakarta.servlet.jsp.PageContext;
+import jakarta.servlet.jsp.tagext.IterationTag;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.xpath.XPathConstants;

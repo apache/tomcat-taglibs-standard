@@ -755,7 +755,7 @@ public class ELParser implements ELParserConstants {
       ;
     }
     jj_consume_token(RPAREN);
-    String allowed = System.getProperty("javax.servlet.jsp.functions.allowed");
+    String allowed = System.getProperty("jakarta.servlet.jsp.functions.allowed");
     if (allowed == null || !allowed.equalsIgnoreCase("true"))
       {if (true) throw new ParseException("EL functions are not supported.");}
     {if (true) return new FunctionInvocation(qualifiedName, argumentList);}

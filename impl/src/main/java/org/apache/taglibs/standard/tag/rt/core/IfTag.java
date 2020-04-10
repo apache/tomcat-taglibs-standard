@@ -17,7 +17,7 @@
 
 package org.apache.taglibs.standard.tag.rt.core;
 
-import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+import jakarta.servlet.jsp.jstl.core.ConditionalTagSupport;
 
 /**
  * <p>Tag handler for &lt;if&gt; in JSTL's rtexprvalue library.  Because

@@ -19,11 +19,11 @@ package org.apache.taglibs.standard.tag.common.core;
 
 import java.util.StringTokenizer;
 
-import javax.el.ValueExpression;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.core.IteratedExpression;
-import javax.servlet.jsp.jstl.core.IteratedValueExpression;
-import javax.servlet.jsp.jstl.core.LoopTagSupport;
+import jakarta.el.ValueExpression;
+import jakarta.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.jstl.core.IteratedExpression;
+import jakarta.servlet.jsp.jstl.core.IteratedValueExpression;
+import jakarta.servlet.jsp.jstl.core.LoopTagSupport;
 
 /**
  * <p>Support for tag handlers for &lt;forTokens&gt;, the tokenizing
@@ -33,7 +33,7 @@ import javax.servlet.jsp.jstl.core.LoopTagSupport;
  * class.</p>
  *
  * @author Shawn Bayern
- * @see javax.servlet.jsp.jstl.core.LoopTagSupport
+ * @see jakarta.servlet.jsp.jstl.core.LoopTagSupport
  */
 
 public abstract class ForTokensSupport extends LoopTagSupport {

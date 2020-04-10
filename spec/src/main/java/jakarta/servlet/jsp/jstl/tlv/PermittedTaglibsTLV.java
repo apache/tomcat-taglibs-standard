@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javax.servlet.jsp.jstl.tlv;
+package jakarta.servlet.jsp.jstl.tlv;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -22,9 +22,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.servlet.jsp.tagext.PageData;
-import javax.servlet.jsp.tagext.TagLibraryValidator;
-import javax.servlet.jsp.tagext.ValidationMessage;
+import jakarta.servlet.jsp.tagext.PageData;
+import jakarta.servlet.jsp.tagext.TagLibraryValidator;
+import jakarta.servlet.jsp.tagext.ValidationMessage;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.Attributes;

@@ -17,12 +17,12 @@
  *  under the License.
  */
 
-package javax.servlet.jsp.jstl.core;
+package jakarta.servlet.jsp.jstl.core;
 
 import java.io.Serializable;
 
-import javax.el.ELContext;
-import javax.el.ValueExpression;
+import jakarta.el.ELContext;
+import jakarta.el.ValueExpression;
 
 /**
  * ValueExpression that refers to a specific member of an indexed variable.

@@ -17,7 +17,7 @@
 
 package org.apache.taglibs.standard.examples.taglib;
 
-import javax.servlet.jsp.JspTagException;
+import jakarta.servlet.jsp.JspTagException;
 
 /**
  * <p>NullAttributeException is a JspTagException that will be thrown
