@@ -33,11 +33,4 @@
 
     <description>Build tool settings common to all Standard Taglib modules</description>
 
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/build-tools</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/build-tools
-        </developerConnection>
-        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk/build-tools</url>
-    </scm>
-
 </project>

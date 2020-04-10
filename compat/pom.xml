@@ -19,167 +19,136 @@
     Generate the examples war
     Enable Cactus tests
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.apache.taglibs</groupId>
-        <artifactId>taglibs-standard</artifactId>
-        <version>1.2.6-SNAPSHOT</version>
-    </parent>
-
-    <artifactId>taglibs-standard-compat</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.taglibs</groupId>
+    <artifactId>taglibs-standard</artifactId>
     <version>1.2.6-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+  </parent>
 
-    <name>Apache Standard Taglib 1.0 Compatibility</name>
+  <artifactId>taglibs-standard-compat</artifactId>
+  <version>1.2.6-SNAPSHOT</version>
+  <packaging>bundle</packaging>
 
-    <inceptionYear>2001</inceptionYear>
-    <description>
-        Supports JSTL 1.0 tags using the Servlet container's EL implementation.
-    </description>
+  <name>Apache Standard Taglib 1.0 Compatibility</name>
 
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/compat</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk/compat
-        </developerConnection>
-        <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk/compat</url>
-    </scm>
+  <description>
+    Supports JSTL 1.0 tags using the Servlet container's EL implementation.
+  </description>
 
-    <developers>
-        <developer><name>Pierre Delisle</name></developer>
-        <developer><name>Shawn Bayern</name></developer>
-        <developer><name>Nathan Abramson</name></developer>
-        <developer><name>Hans Bergsten</name></developer>
-        <developer><name>Scott Hasse</name></developer>
-        <developer><name>Justyna Horwat</name></developer>
-        <developer><name>Mark Kolb</name></developer>
-        <developer><name>Jan Luehe</name></developer>
-        <developer><name>Glenn Nielsen</name></developer>
-        <developer><name>Dmitri Plotnikov</name></developer>
-        <developer><name>Felipe Leme</name></developer>
-        <developer><name>Henri Yandell</name></developer>
-        <developer><name>Bjorn Townsend</name></developer>
-    </developers>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.taglibs</groupId>
+      <artifactId>taglibs-standard-spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.taglibs</groupId>
+      <artifactId>taglibs-standard-impl</artifactId>
+    </dependency>
 
-    <contributors>
-        <contributor><name>Robert Goff</name></contributor>
-    </contributors>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.el</groupId>
+      <artifactId>el-api</artifactId>
+      <version>1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.1</version>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.taglibs</groupId>
-            <artifactId>taglibs-standard-spec</artifactId>
-            <version>1.2.6-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.taglibs</groupId>
-            <artifactId>taglibs-standard-impl</artifactId>
-            <version>1.2.6-SNAPSHOT</version>
-        </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>el-api</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>xalan</groupId>
-            <artifactId>xalan</artifactId>
-            <version>2.7.1</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <excludeDependencies>true</excludeDependencies>
+          <instructions>
+            <Export-Package>*;version="1.2"</Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <configLocation>../build-tools/src/main/resources/taglibs/checkstyle.xml</configLocation>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <version>3.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <excludeDependencies>true</excludeDependencies>
-                    <instructions>
-                        <Export-Package>*;version="1.2"</Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <configLocation>../build-tools/src/main/resources/taglibs/checkstyle.xml</configLocation>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <targetJdk>${maven.compiler.target}</targetJdk>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>pmd</report>
-                            <report>cpd</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>taglist-maven-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>javancss-maven-plugin</artifactId>
-                <version>2.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <threshold>Normal</threshold>
-                    <effort>Default</effort>
-                    <!--          <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile> -->
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <targetJdk>${maven.compiler.target}</targetJdk>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>pmd</report>
+              <report>cpd</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>taglist-maven-plugin</artifactId>
+        <version>2.4</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javancss-maven-plugin</artifactId>
+        <version>2.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>2.3.1</version>
+        <configuration>
+          <threshold>Normal</threshold>
+          <effort>Default</effort>
+          <!--          <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile> -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
 
 
 </project>
