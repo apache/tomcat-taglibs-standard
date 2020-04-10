@@ -40,9 +40,9 @@
   <url>http://tomcat.apache.org/taglibs/standard-${project.version}</url>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/tomcat/taglibs/standard/trunk</developerConnection>
-    <url>http://svn.apache.org/viewvc/tomcat/taglibs/standard/trunk</url>
+    <connection>scm:git:https://github.com/apache/tomcat-taglibs-standard</connection>
+    <developerConnection>scm:git:https://github.com/apache/tomcat-taglibs-standard</developerConnection>
+    <url>https://github.com/apache/tomcat-taglibs-standard</url>
   </scm>
 
   <ciManagement>
