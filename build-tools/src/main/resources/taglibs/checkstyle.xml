@@ -24,7 +24,9 @@
   <!-- http://checkstyle.sourceforge.net/config_coding.html                  -->
 
   <!-- Whitespace -->
-  <module name="FileTabCharacter"/>
+  <module name="FileTabCharacter">
+    <property name="fileExtensions" value="java,xml"/>
+  </module>
 
   <module name="TreeWalker">
     <!-- Coding -->
