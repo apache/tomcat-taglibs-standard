@@ -91,7 +91,7 @@ public class BinaryOperatorExpression
      * Returns the expression in the expression language syntax
      */
     public String getExpressionString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("(");
         buf.append(mExpression.getExpressionString());
         for (int i = 0; i < mOperators.size(); i++) {

@@ -73,7 +73,7 @@ public class FunctionInvocation
      * Returns the expression in the expression language syntax
      */
     public String getExpressionString() {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         b.append(functionName);
         b.append("(");
         Iterator i = argumentList.iterator();

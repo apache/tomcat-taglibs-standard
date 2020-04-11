@@ -79,7 +79,7 @@ public class ComplexValue
      * Returns the expression in the expression language syntax
      */
     public String getExpressionString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(mPrefix.getExpressionString());
 
         for (int i = 0; mSuffixes != null && i < mSuffixes.size(); i++) {

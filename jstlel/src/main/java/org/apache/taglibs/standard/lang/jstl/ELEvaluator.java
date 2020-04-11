@@ -407,7 +407,7 @@ public class ELEvaluator {
     static String formatParseException(String pExpressionString,
                                        ParseException pExc) {
         // Generate the String of expected tokens
-        StringBuffer expectedBuf = new StringBuffer();
+        StringBuilder expectedBuf = new StringBuilder();
         int maxSize = 0;
         boolean printedOne = false;
 
@@ -431,7 +431,7 @@ public class ELEvaluator {
         String expected = expectedBuf.toString();
 
         // Generate the String of encountered tokens
-        StringBuffer encounteredBuf = new StringBuffer();
+        StringBuilder encounteredBuf = new StringBuilder();
         Token tok = pExc.currentToken.next;
         for (int i = 0; i < maxSize; i++) {
             if (i != 0) {
@@ -463,7 +463,7 @@ public class ELEvaluator {
      * literal.
      */
     static String addEscapes(String str) {
-        StringBuffer retval = new StringBuffer();
+        StringBuilder retval = new StringBuilder();
         char ch;
         for (int i = 0; i < str.length(); i++) {
             switch (str.charAt(i)) {

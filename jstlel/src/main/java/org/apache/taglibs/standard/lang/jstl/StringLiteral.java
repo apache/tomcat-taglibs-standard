@@ -59,7 +59,7 @@ public class StringLiteral
      * Parses the given token into the literal value
      */
     public static String getValueFromToken(String pToken) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int len = pToken.length() - 1;
         boolean escaping = false;
         for (int i = 1; i < len; i++) {
@@ -91,7 +91,7 @@ public class StringLiteral
 
         // Escaping is needed
         else {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             buf.append('\"');
             int len = pValue.length();
             for (int i = 0; i < len; i++) {

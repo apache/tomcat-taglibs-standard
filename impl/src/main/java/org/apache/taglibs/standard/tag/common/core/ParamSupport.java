@@ -170,7 +170,7 @@ public abstract class ParamSupport extends BodyTagSupport {
             // Collections.reverse(this.values);
 
             // build a string from the parameter list
-            StringBuffer newParams = new StringBuffer();
+            StringBuilder newParams = new StringBuilder();
             for (int i = 0; i < names.size(); i++) {
                 newParams.append(names.get(i) + "=" + values.get(i));
                 if (i < (names.size() - 1)) {
@@ -184,7 +184,7 @@ public abstract class ParamSupport extends BodyTagSupport {
                 if (questionMark == -1) {
                     return (url + "?" + newParams);
                 } else {
-                    StringBuffer workingUrl = new StringBuffer(url);
+                    StringBuilder workingUrl = new StringBuilder(url);
                     workingUrl.insert(questionMark + 1, (newParams + "&"));
                     return workingUrl.toString();
                 }

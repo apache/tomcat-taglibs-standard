@@ -189,7 +189,7 @@ public class Address {
      * Return a String representation of this object.
      */
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(line1).append(" ");
         sb.append(city).append(" ");
         sb.append(country);

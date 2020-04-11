@@ -62,7 +62,7 @@ public class Functions {
         }
         */
         try {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             int count = Array.getLength(obj);
             for (int i = 0; i < count; i++) {
                 buf.append(Array.get(obj, i).toString());

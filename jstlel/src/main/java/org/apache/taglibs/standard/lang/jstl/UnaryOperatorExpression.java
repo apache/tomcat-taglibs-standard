@@ -92,7 +92,7 @@ public class UnaryOperatorExpression
      * Returns the expression in the expression language syntax
      */
     public String getExpressionString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("(");
         if (mOperator != null) {
             buf.append(mOperator.getOperatorSymbol());

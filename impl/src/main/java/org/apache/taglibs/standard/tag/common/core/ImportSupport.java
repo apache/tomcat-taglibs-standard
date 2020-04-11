@@ -240,7 +240,7 @@ public abstract class ImportSupport extends BodyTagSupport
         if (isAbsoluteUrl) {
             // for absolute URLs, delegate to our peer
             BufferedReader r = new BufferedReader(acquireReader());
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             int i;
 
             // under JIT, testing seems to show this simple loop is as fast
@@ -574,7 +574,7 @@ public abstract class ImportSupport extends BodyTagSupport
      * and either EOS or a subsequent ';' (exclusive).
      */
     public static String stripSession(String url) {
-        StringBuffer u = new StringBuffer(url);
+        StringBuilder u = new StringBuilder(url);
         int sessionStart;
         while ((sessionStart = u.toString().indexOf(";jsessionid=")) != -1) {
             int sessionEnd = u.toString().indexOf(";", sessionStart + 1);

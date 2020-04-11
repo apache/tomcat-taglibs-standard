@@ -65,7 +65,7 @@ public class ExpressionString {
                            String defaultPrefix,
                            Logger pLogger)
             throws ELException {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < mElements.length; i++) {
             Object elem = mElements[i];
             if (elem instanceof String) {
@@ -91,7 +91,7 @@ public class ExpressionString {
      * Returns the expression in the expression language syntax
      */
     public String getExpressionString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < mElements.length; i++) {
             Object elem = mElements[i];
             if (elem instanceof String) {
