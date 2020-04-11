@@ -170,11 +170,7 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
                 return vmFromVector(messageVector);
             }
 
-        } catch (SAXException ex) {
-            return vmFromString(ex.toString());
-        } catch (IOException ex) {
-            return vmFromString(ex.toString());
-        } catch (ParserConfigurationException ex) {
+        } catch (SAXException|IOException|ParserConfigurationException ex) {
             return vmFromString(ex.toString());
         }
     }
@@ -279,10 +275,7 @@ public abstract class JstlBaseTLV extends TagLibraryValidator {
     // returns true if the 'var' attribute is empty
 
     protected boolean hasEmptyVar(Attributes a) {
-        if ("".equals(a.getValue(VAR))) {
-            return true;
-        }
-        return false;
+        return "".equals(a.getValue(VAR));
     }
 
     // returns true if the 'scope' attribute is present without 'var'

@@ -114,9 +114,7 @@ public abstract class TransformSupport extends BodyTagSupport {
             } else {
                 throw new JspTagException(Resources.getMessage("TRANSFORM_XSLT_UNSUPPORTED_TYPE", xslt.getClass()));
             }
-        } catch (SAXException e) {
-            throw new JspException(e);
-        } catch (ParserConfigurationException e) {
+        } catch (SAXException|ParserConfigurationException e) {
             throw new JspException(e);
         }
 
@@ -151,11 +149,7 @@ public abstract class TransformSupport extends BodyTagSupport {
                 t.transform(source, out);
             }
             return EVAL_PAGE;
-        } catch (TransformerException ex) {
-            throw new JspException(ex);
-        } catch (SAXException e) {
-            throw new JspException(e);
-        } catch (ParserConfigurationException e) {
+        } catch (TransformerException|SAXException|ParserConfigurationException e) {
             throw new JspException(e);
         } finally {
             t = null;

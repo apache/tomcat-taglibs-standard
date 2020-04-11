@@ -27,6 +27,8 @@ import jakarta.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.taglibs.standard.resources.Resources;
 import org.apache.taglibs.standard.util.UrlUtil;
 
+import java.io.IOException;
+
 /**
  * <p>Support for tag handlers for &lt;url&gt;, the URL creation
  * and rewriting tag in JSTL 1.0.</p>
@@ -123,7 +125,7 @@ public abstract class UrlSupport extends BodyTagSupport
         } else {
             try {
                 pageContext.getOut().print(result);
-            } catch (java.io.IOException ex) {
+            } catch (IOException ex) {
                 throw new JspTagException(ex.toString(), ex);
             }
         }

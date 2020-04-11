@@ -104,11 +104,7 @@ public class XmlUtil {
             }, RuntimeException.class);
             SAXPARSER_FACTORY.setNamespaceAware(true);
             SAXPARSER_FACTORY.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        } catch (ParserConfigurationException e) {
-            throw new ExceptionInInitializerError(e);
-        } catch (SAXNotRecognizedException e) {
-            throw new ExceptionInInitializerError(e);
-        } catch (SAXNotSupportedException e) {
+        } catch (ParserConfigurationException|SAXNotRecognizedException|SAXNotSupportedException e) {
             throw new ExceptionInInitializerError(e);
         }
     }

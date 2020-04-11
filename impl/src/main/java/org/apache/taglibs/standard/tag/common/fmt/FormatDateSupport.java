@@ -127,7 +127,7 @@ public abstract class FormatDateSupport extends TagSupport {
             // Set time zone
             TimeZone tz = null;
             if ((timeZone instanceof String)
-                    && ((String) timeZone).equals("")) {
+                    && timeZone.equals("")) {
                 timeZone = null;
             }
             if (timeZone != null) {

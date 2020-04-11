@@ -18,6 +18,7 @@
 package org.apache.taglibs.standard.tag.common.core;
 
 import java.text.DateFormat;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -159,7 +160,7 @@ public class Util {
             // No header for "accept-language". Simply return
             // a new empty enumeration.
             // System.out.println("Null accept-language");
-            return new Vector().elements();
+            return Collections.emptyEnumeration();
         } else if (values.hasMoreElements()) {
             // At least one "accept-language". Simply return
             // the enumeration returned by request.getLocales().

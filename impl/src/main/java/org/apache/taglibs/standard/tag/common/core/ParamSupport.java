@@ -127,8 +127,8 @@ public abstract class ParamSupport extends BodyTagSupport {
         //*********************************
         // Private state
 
-        private List names = new LinkedList();
-        private List values = new LinkedList();
+        private List<String> names = new LinkedList();
+        private List<String> values = new LinkedList();
         private boolean done = false;
 
         //*********************************
@@ -172,7 +172,7 @@ public abstract class ParamSupport extends BodyTagSupport {
             // build a string from the parameter list
             StringBuilder newParams = new StringBuilder();
             for (int i = 0; i < names.size(); i++) {
-                newParams.append(names.get(i) + "=" + values.get(i));
+                newParams.append(names.get(i)).append('=').append(values.get(i));
                 if (i < (names.size() - 1)) {
                     newParams.append("&");
                 }

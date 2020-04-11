@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.Locale;
 
 import jakarta.servlet.jsp.JspException;
@@ -319,25 +320,9 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
         }
 
         if (code != null) {
-            Object[] methodArgs = new Object[1];
+            Currency currency = Currency.getInstance( code );
+            formatter.setCurrency( currency );
 
-            /*
-            * java.util.Currency.getInstance()
-            */
-            Method m = currencyClass.getMethod("getInstance",
-                    GET_INSTANCE_PARAM_TYPES);
-            methodArgs[0] = code;
-            Object currency = m.invoke(null, methodArgs);
-
-            /*
-            * java.text.NumberFormat.setCurrency()
-            */
-            Class[] paramTypes = new Class[1];
-            paramTypes[0] = currencyClass;
-            Class numberFormatClass = Class.forName("java.text.NumberFormat");
-            m = numberFormatClass.getMethod("setCurrency", paramTypes);
-            methodArgs[0] = currency;
-            m.invoke(formatter, methodArgs);
         } else {
             /*
             * Let potential ClassCastException propagate up (will almost

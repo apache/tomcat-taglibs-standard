@@ -113,7 +113,6 @@ public abstract class BundleSupport extends BodyTagSupport {
      * @param pc Page in which to look up the default I18N localization context
      */
     public static LocalizationContext getLocalizationContext(PageContext pc) {
-        LocalizationContext locCtxt = null;
 
         Object obj = Config.find(pc, Config.FMT_LOCALIZATION_CONTEXT);
         if (obj == null) {
@@ -121,13 +120,11 @@ public abstract class BundleSupport extends BodyTagSupport {
         }
 
         if (obj instanceof LocalizationContext) {
-            locCtxt = (LocalizationContext) obj;
-        } else {
-            // localization context is a bundle basename
-            locCtxt = getLocalizationContext(pc, (String) obj);
+            return (LocalizationContext) obj;
         }
+        // localization context is a bundle basename
+        return getLocalizationContext(pc, (String) obj);
 
-        return locCtxt;
     }
 
     /**
@@ -230,7 +227,6 @@ public abstract class BundleSupport extends BodyTagSupport {
 
     private static LocalizationContext findMatch(PageContext pageContext,
                                                  String basename) {
-        LocalizationContext locCtxt = null;
 
         // Determine locale from client's browser settings.
 
@@ -239,12 +235,11 @@ public abstract class BundleSupport extends BodyTagSupport {
             Locale pref = (Locale) enum_.nextElement();
             ResourceBundle match = findMatch(basename, pref);
             if (match != null) {
-                locCtxt = new LocalizationContext(match, pref);
-                break;
+                return new LocalizationContext(match, pref);
             }
         }
 
-        return locCtxt;
+        return null;
     }
 
     /*
@@ -315,18 +310,16 @@ public abstract class BundleSupport extends BodyTagSupport {
     }
 
     private static ClassLoader getClassLoaderCheckingPrivilege() {
-        ClassLoader cl;
         SecurityManager sm = System.getSecurityManager();
         if (sm == null) {
-            cl = Thread.currentThread().getContextClassLoader();
-        } else {
-            cl = java.security.AccessController.doPrivileged(
+            return Thread.currentThread().getContextClassLoader();
+        }
+            return java.security.AccessController.doPrivileged(
                     new java.security.PrivilegedAction<ClassLoader>() {
                         public ClassLoader run() {
                             return Thread.currentThread().getContextClassLoader();
                         }
                     });
-        }
-        return cl;
+
     }
 }

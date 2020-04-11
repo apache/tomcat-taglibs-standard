@@ -299,9 +299,7 @@ public abstract class ImportSupport extends BodyTagSupport
             // spec mandates specific error handling from include()
             try {
                 rd.include(pageContext.getRequest(), irw);
-            } catch (IOException ex) {
-                throw new JspException(ex);
-            } catch (RuntimeException ex) {
+            } catch (IOException | RuntimeException ex) {
                 throw new JspException(ex);
             } catch (ServletException ex) {
                 Throwable rc = ex.getRootCause();

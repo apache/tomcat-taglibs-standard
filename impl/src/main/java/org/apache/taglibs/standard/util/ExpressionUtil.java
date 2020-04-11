@@ -74,7 +74,7 @@ public class ExpressionUtil {
             return fallback;
         }
         Boolean result = (Boolean) expression.getValue(pageContext.getELContext());
-        return result == null ? fallback : result.booleanValue();
+        return result == null ? fallback : result;
     }
 
     public static int evaluate(ValueExpression expression, PageContext pageContext, int fallback) {
@@ -82,6 +82,6 @@ public class ExpressionUtil {
             return fallback;
         }
         Integer result = (Integer) expression.getValue(pageContext.getELContext());
-        return result == null ? fallback : result.intValue();
+        return result == null ? fallback : result;
     }
 }

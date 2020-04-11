@@ -231,11 +231,7 @@ public abstract class SetSupport extends BodyTagSupport {
                 }
                 try {
                     m.invoke(target, convertToExpectedType(result, m));
-                } catch (ELException ex) {
-                    throw new JspTagException(ex);
-                } catch (IllegalAccessException ex) {
-                    throw new JspTagException(ex);
-                } catch (InvocationTargetException ex) {
+                } catch (ELException|IllegalAccessException|InvocationTargetException ex) {
                     throw new JspTagException(ex);
                 }
                 return;

@@ -59,7 +59,7 @@ public class JSTLVariableStack extends VariableStack {
     // map prefixes to scopes
     private static final Map<String, Scope> SCOPES;
     static {
-        SCOPES = new HashMap<String, Scope>(8);
+        SCOPES = new HashMap<>(8);
         SCOPES.put(PARAM_PREFIX, Scope.PARAM);
         SCOPES.put(HEADER_PREFIX, Scope.HEADER);
         SCOPES.put(COOKIE_PREFIX, Scope.COOKIE);

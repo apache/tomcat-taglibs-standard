@@ -157,11 +157,7 @@ public abstract class ParseSupport extends BodyTagSupport {
             return o;
         } catch (IOException e) {
             throw new JspException(e);
-        } catch (SAXException e) {
-            throw new JspException(e);
-        } catch (TransformerConfigurationException e) {
-            throw new JspException(e);
-        } catch (ParserConfigurationException e) {
+        } catch (SAXException|TransformerConfigurationException|ParserConfigurationException e) {
             throw new JspException(e);
         }
     }
@@ -174,9 +170,7 @@ public abstract class ParseSupport extends BodyTagSupport {
             DocumentBuilder db = XmlUtil.newDocumentBuilder();
             db.setEntityResolver(entityResolver);
             return db.parse(s);
-        } catch (SAXException e) {
-            throw new JspException(e);
-        } catch (IOException e) {
+        } catch (SAXException|IOException e) {
             throw new JspException(e);
         }
     }
