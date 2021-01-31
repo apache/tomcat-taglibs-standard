@@ -172,7 +172,7 @@ public abstract class FormatNumberSupport extends BodyTagSupport {
                 pageContext,
                 this,
                 true,
-                NumberFormat.getAvailableLocales());
+                SetLocaleSupport.numberLocales);
 
         if (loc != null) {
             // Create formatter
