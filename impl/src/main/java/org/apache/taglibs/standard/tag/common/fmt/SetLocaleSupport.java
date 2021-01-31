@@ -234,10 +234,18 @@ public abstract class SetLocaleSupport extends TagSupport {
      */
     static Locale[] availableFormattingLocales;
 
+    /**
+     * Setup the number formatting locales that will be used
+     * by {@link FormatNumberSupport#doEndTag()}
+     * and {@link ParseNumberSupport#doEndTag()}
+     * to prevent excessive memory allocations
+     */
+    static Locale[] numberLocales;
+
     static {
         Locale[] dateLocales = DateFormat.getAvailableLocales();
-        Locale[] numberLocales = NumberFormat.getAvailableLocales();
         List<Locale> locales = new ArrayList<Locale>(dateLocales.length);
+        numberLocales = NumberFormat.getAvailableLocales();
         for (Locale dateLocale : dateLocales) {
             for (Locale numberLocale : numberLocales) {
                 if (dateLocale.equals(numberLocale)) {
