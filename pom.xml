@@ -258,4 +258,17 @@
       </snapshots>
     </repository>
   </repositories>
+
+  <profiles>
+    <profile>
+      <id>java9+</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <!-- Tests use reflection -->
+        <surefire.argLine>--add-opens java.base/java.lang=ALL-UNNAMED</surefire.argLine>
+      </properties>
+    </profile>
+  </profiles>
 </project>
