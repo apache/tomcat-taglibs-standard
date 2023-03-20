@@ -132,7 +132,7 @@ public abstract class ParseNumberSupport extends BodyTagSupport {
                     pageContext,
                     this,
                     false,
-                    NumberFormat.getAvailableLocales());
+                    SetLocaleSupport.numberLocales);
         }
         if (loc == null) {
             throw new JspException(
